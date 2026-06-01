@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh issue *)",
+      "Bash(go tool *)",
+      "Bash(go get *)",
+      "Bash(go generate *)",
+      "Bash(go build *)",
+      "Bash(go mod *)",
+      "Bash(go test *)",
+      "Bash(go vet *)",
+      "PowerShell(gh issue *)",
+      "Bash(go fmt *)",
+      "Bash(gh pr *)",
+      "Bash(curl *)",
+      "Bash(docker compose *)",
+      "Bash(git checkout *)",
+      "Bash(spectral lint *)",
+      "Bash(npx @stoplight/spectral-cli lint docs/api/ABAC_API.yaml)",
+      "Bash(grep -E \"--- \\(PASS|FAIL\\)\")",
+      "Bash(bash tests/feature/Attribute_Based_Access_Control-ABAC/scripts/ST-000022_API_Test.sh)",
+      "Bash(bash tests/feature/Attribute_Based_Access_Control-ABAC/scripts/ST-000023_API_Test.sh)",
+      "Bash(gh api *)",
+      "Bash(gh milestone *)",
+      "Bash(go doc *)",
+      "Bash(go list *)",
+      "Bash(npx spectral *)",
+      "Bash(node_modules/.bin/spectral lint *)",
+      "Bash(bash *)",
+      "Bash(git pull *)",
+      "Bash(git fetch *)",
+      "Bash(npm install *)",
+      "Bash(docker pull *)",
+      "Bash(docker exec fun-authorization-sandbox-keycloak-1 *)",
+      "Bash(node *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

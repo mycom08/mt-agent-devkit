@@ -1,0 +1,34 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test artifacts
+coverage
+coverage_repo
+*.out
+*.test
+tmp_coverage
+coverage_service
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+vendor/
+
+# Sandbox environment overrides (never commit real credentials)
+.env
+docker/sandbox/.env
+
+# Temporary files
+**/tmp
