@@ -1,6 +1,6 @@
 # Refine Sprint Workflow
 
-Triggered by: `"refine sprint"` or `"/refine-sprint"` in CLAUDE.md
+Triggered by: `"refine sprint"` in CLAUDE.md
 
 **Sprint identification:** Read `Product_Backlog.md` to find the sprint marked `🔲 Planned`. That sprint's stories (labeled `sprint-N` + `status:backlog` on GitHub) are the target set.
 

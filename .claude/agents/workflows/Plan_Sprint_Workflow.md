@@ -1,6 +1,6 @@
 # Plan Next Sprint Workflow
 
-Triggered by: `"plan next sprint"` or `"/plan-sprint"` in CLAUDE.md
+Triggered by: `"plan next sprint"` or `"plan sprint"` in CLAUDE.md
 
 **Sprint Capacity:** 60 points (update this value to change capacity)
 
