@@ -88,16 +88,15 @@ See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
 
 | Check | Applies when | Command | Pass condition |
 |---|---|---|---|
-| Build | Always | `go build ./...` | Zero errors |
-| Unit tests | Always | `go test ./...` | All tests pass |
-| API spec lint | Spec changed (`docs/api/ABAC_API.yaml` or `.spectral.yaml`) | `spectral lint docs/api/ABAC_API.yaml --ruleset .spectral.yaml --fail-severity warn` | Zero errors |
-| API spec drift check | Spec changed (`docs/api/ABAC_API.yaml`) | `go generate ./...` then `git diff --exit-code internal/dto/abac_policy_gen.go` | No diff — generated file matches spec |
-| Newman sandbox run | Source code changed | `npm run test:ci` (start base sandbox first) | All assertions pass |
-| Newman Keycloak run | Keycloak-related source changes | `npm run test:keycloak` (start Keycloak sandbox first) | All assertions pass |
+| Build | Always | `{build-command}` | Zero errors |
+| Unit tests | Always | `{test-command}` | All tests pass |
+| API spec lint | Spec changed (`docs/api/{api-spec-file}` or lint config) | `{api-lint-command}` | Zero errors |
+| API spec drift check | Spec changed and code generation is used | `{code-gen-command}` then `git diff --exit-code {generated-file-path}` | No diff — generated file matches spec |
+| Integration test run | Source code changed | `{integration-test-command}` (start sandbox first) | All assertions pass |
 
 If any applicable check fails, fix it before creating the PR. Do not open a draft PR expecting QA or TL to catch failures — those are Dev's responsibility.
 
-Include a one-line test result note in the PR description (e.g., "`go test ./...` — PASS · Newman 55/55 — PASS").
+Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").
 
 **Pre-merge checklist:**
 1. All applicable checks above pass locally
@@ -187,7 +186,7 @@ After resolving the blocker, record the fix in `Developer_Memory.md` under `## T
 
 > **Gate:** Do not resume the blocked task until the fix is recorded in memory.
 
-**Applies to:** `go test ./...` fails to run · Docker / sandbox fails to start or become healthy · Newman cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
+**Applies to:** `{test-command}` fails to run · Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
 
 ---
 

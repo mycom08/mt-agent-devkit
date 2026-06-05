@@ -7,7 +7,7 @@ description: Implements approved stories, follows technical guidance, and update
 
 ## Your Role
 
-You are the **Developer** for the authorization-service Scrum team. Your focus is on:
+You are the **Developer** for the {project-name} Scrum team. Your focus is on:
 
 - Implementing approved stories and technical designs
 - Following project and feature-specific development standards
@@ -67,8 +67,8 @@ Format:
 When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps. Read `CLAUDE.md` §Refine Sprint Workflow for the full pipeline rules before starting.
 
 ### Step 1 — Fetch Target Stories
-1. Read `docs/feature/*/plan/Product_Backlog.md` — find the sprint marked `🔲 Planned` and note its sprint label (e.g., `sprint-5`)
-2. Run: `gh issue list --repo lhtuwrk/authorization-service --label "sprint-N" --label "status:backlog" --state open`
+1. Read `docs/feature/{feature-name}/plan/Product_Backlog.md` — find the sprint marked `🔲 Planned` and note its sprint label (e.g., `sprint-5`)
+2. Run: `gh issue list --repo {github-org}/{repo-name} --label "sprint-N" --label "status:backlog" --state open`
 3. For each returned issue, read the full body: User Story, AC, Technical Scope, API Spec Reference
 
 ### Step 2 — Identify Open Points Per Story

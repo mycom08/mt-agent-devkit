@@ -48,7 +48,7 @@ See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
 **Before testing:**
 - Always create a test scenario document first — do not begin testing without it
 - Place it under `docs/feature/<feature_name>/test-scenarios/` using `Title_Case_With_Underscores`
-- The scenario must cover: happy path, error cases, edge cases (empty values, invalid input, multi-tenant isolation)
+- The scenario must cover: happy path, error cases, edge cases (empty values, invalid input, data isolation)
 
 **Integration tests:**
 - Always check whether integration tests exist for the story
@@ -57,7 +57,7 @@ See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
 - Record integration test results (pass/fail + evidence) as a Comment on the GitHub Issue
 
 **Integration test script failures — fix or block, never workaround:**
-- The designated test script (`.sh` file under `tests/feature/`) is the only accepted method for integration testing — do not substitute PowerShell scripts, inline curl commands, or any other approach
+- The designated test script under `tests/feature/` is the only accepted method for integration testing — do not substitute ad-hoc commands or other approaches
 - If the script fails, diagnose the root cause and fix it (wrong auth, missing env var, incorrect base URL, script bug, etc.)
 - If the root cause cannot be fixed by QA (e.g., a service defect or missing implementation), post a blocker comment on the GitHub Issue and stop — do not mark the story as passed
 - **Never work around a failing script** by running tests through a different tool or method — a workaround hides real failures and produces false confidence
@@ -68,26 +68,25 @@ See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
 - Only read implementation code when a test has already failed and you need to trace the root cause — treat it as a debugging tool, not a design input
 
 **API testing:**
-- Test all API endpoints using `curl`
-- When a story requires more than one curl call, create a shell script (`.sh`) to run them all
+- Test all API endpoints using `curl` or an equivalent HTTP client
+- When a story requires more than one call, create a script to run them all
 - Place the script under `tests/feature/<feature_name>/scripts/` using `Title_Case_With_Underscores` (e.g., `ST-XXXXXX_API_Test.sh`)
-- The script must be runnable as-is — include base URL variable, required headers, and a clear echo label before each request
+- The script must be runnable as-is — include base URL variable, required headers, and a clear label before each request
 
-**Credential encoding in test scripts:**
-When a test script uses Basic Auth, always encode the credentials to Base64 explicitly — never pass raw credentials via `-u user:password`:
+**Credential handling in test scripts:**
+When a test script uses Basic Auth, always encode the credentials explicitly — never pass raw credentials as a plain string:
 ```bash
 CREDENTIALS=$(echo -n "$DEV_USER:$DEV_PASSWORD" | base64)
 AUTH_HEADER="Authorization: Basic $CREDENTIALS"
 # then use: -H "$AUTH_HEADER"
 ```
-Read `DEV_USER` and `DEV_PASSWORD` from `docker/sandbox/.env` (or fall back to compose defaults). Never hardcode credential values directly in the script.
+Read credentials from `{sandbox-env-file}` (or fall back to sandbox defaults). Never hardcode credential values directly in the script.
 
 **Pre-flight auth check (mandatory before any API test):**
-Before running any API test script or curl call, determine the active auth mode:
-1. Check `OIDC_ENABLED` in `docker/sandbox/docker-compose.yml` (or `.env` in the same folder)
-2. **If `OIDC_ENABLED=false`** → service uses HTTP Basic Auth; resolve credentials from `docker/sandbox/.env` (`SANDBOX_DEV_USER` / `SANDBOX_DEV_PASSWORD`), fall back to compose defaults (`dev-user` / `dev-password`), encode to Base64, and send as `Authorization: Basic <base64>`
-3. **If `OIDC_ENABLED=true`** → service uses OIDC; obtain a Bearer token via the OIDC flow before testing
-4. If a test script uses the wrong auth method or raw `-u` credentials, fix it before running — never rely on the script's bundled auth assumption
+Before running any API test script or HTTP call, determine the active auth mode from the sandbox config files (`{sandbox-docker-compose-file}` and `{sandbox-env-file}`):
+- If Basic Auth is active: resolve credentials from the env file, encode to Base64
+- If token-based auth is active: obtain a bearer token via the configured auth flow before testing
+- Never rely on the script's bundled auth assumption — always derive from the sandbox config
 
 ---
 
@@ -125,10 +124,10 @@ Once all Acceptance Criteria are ticked and QA sign-off is complete, QA **must**
 
 After all story Acceptance Criteria are verified and before giving merge sign-off, QA **must** run the full Newman automation suite to confirm no regression was introduced:
 
-1. Ensure the sandbox is running: `docker compose -f docker/sandbox/docker-compose.yml up -d`
+1. Ensure the sandbox is running: `{sandbox-start-command}`
 2. Run the full automation suite:
    ```bash
-   cd tests/feature/Attribute_Based_Access_Control-ABAC/automation && npm run test:ci
+   {automation-suite-command}
    ```
 3. **If all tests pass** → proceed with merge sign-off
 4. **If any test fails** → post a regression comment on the story issue tagging **Dev**; treat as a QA failure and loop back to Dev for a fix before re-running automation
@@ -145,13 +144,13 @@ When QA is the story Implementer (not validator), run the applicable local check
 
 | Change type | Required local check |
 |---|---|
-| Go source code changed | `go test ./...` must pass AND run `npm run test:ci` against the base sandbox; all assertions must pass |
-| Newman collection or environment file changed | Run the relevant Newman suite against the sandbox; all assertions must pass |
+| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
+| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
 | Both source and tests changed | Both checks above required |
 | CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
 | Docs or config only | Exempt |
 
-Include a one-line test result note in the PR description (e.g., "Newman 42/42 — PASS").
+Include a one-line test result note in the PR description (e.g., "integration tests — PASS").
 
 > **Gate:** Do not open a PR until all applicable checks pass.
 
@@ -193,7 +192,7 @@ After resolving the blocker, record the fix in `QA_Memory.md` under `## Troubles
 
 > **Gate:** Do not resume the blocked task until the fix is recorded in memory.
 
-**Applies to:** Docker / sandbox fails to start or become healthy · Newman cannot connect · test script errors · `go test ./...` fails to run · CI YAML errors · auth/credential failures in test scripts
+**Applies to:** Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · `{test-command}` fails to run · CI YAML errors · auth/credential failures in test scripts
 
 ---
 

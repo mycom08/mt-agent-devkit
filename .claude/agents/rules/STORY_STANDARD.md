@@ -1,7 +1,7 @@
 # Story Standard
 
 **Applies to:** All agents (Developer, TL, QA, PO, BA)  
-**Location:** GitHub Issues in repository `lhtuwrk/authorization-service`  
+**Location:** GitHub Issues in repository `{github-org}/{repo-name}`  
 **Issue title format:** `[ST-XXXXXX][FEATURE] Story Title`
 
 ---
@@ -75,7 +75,7 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 - Full technical specifications
 
 ### Technical Details Live In:
-- `docs/feature/[Feature]/technical/` — ABAC_Technical_Implementation.md, ABAC_Database_Schema.md
+- `docs/feature/[Feature]/technical/` — `{Feature}_Technical_Implementation.md`, `{Feature}_Database_Schema.md`
 - Link from story AC: "See Technical Implementation Section 2.1 for field definitions"
 - NOT embedded in story body
 
@@ -238,7 +238,7 @@ Scripts live in `tests/feature/<feature_name>/scripts/ST-XXXXXX_<description>.sh
 
 ## 8. Technical Doc Divergence Rule
 
-If during implementation you discover that a **technical document** (e.g., `ABAC_Technical_Implementation.md`, `ABAC_Strategic_Analysis.md`) is **inaccurate, contradictory, or ambiguous**:
+If during implementation you discover that a **technical document** (e.g., `{Feature}_Technical_Implementation.md`, `{Feature}_Strategic_Analysis.md`) is **inaccurate, contradictory, or ambiguous**:
 
 1. **Do NOT silently deviate.** Implementing different behavior without flagging the doc gap creates hidden divergence that surfaces late in review.
 2. **Post immediately in the story Comment**, tag TL, describe the discrepancy and which doc section is affected.
@@ -246,9 +246,9 @@ If during implementation you discover that a **technical document** (e.g., `ABAC
 
 | Severity | Action | Example |
 |----------|--------|---------|
-| **Blocks correct implementation** | [BLOCKING] Stop. Post issue comment. Wait for TL to fix doc. | "Default decision says ALLOW in §1 but DENY in Strategic Analysis — which is correct?" |
-| **Does not affect current story** | [NON-BLOCKING] Post issue comment. Continue work. TL fixes doc after story. | "Flow diagram is simplified but engine evaluates differently — doc needs update" |
-| **Ambiguous, not wrong** | [NON-BLOCKING] Post issue comment. Ask TL to clarify before implementing. | "Doc says 'fail-secure' but doesn't define behavior for no_match" |
+| **Blocks correct implementation** | [BLOCKING] Stop. Post issue comment. Wait for TL to fix doc. | "Doc says X in §1 but contradicts §3 — which is correct?" |
+| **Does not affect current story** | [NON-BLOCKING] Post issue comment. Continue work. TL fixes doc after story. | "Flow diagram is simplified but implementation behaves differently — doc needs update" |
+| **Ambiguous, not wrong** | [NON-BLOCKING] Post issue comment. Ask TL to clarify before implementing. | "Doc says 'fail-secure' but doesn't define behavior for the no-match case" |
 
 **Never copy incorrect doc text into code comments.** If the doc is wrong and you know the correct behavior, say so in the thread — don't propagate the error.
 
@@ -298,28 +298,25 @@ Use comments for:
 **Stories** are GitHub Issues — no file naming needed. Issue title format: `[ST-XXXXXX][FEATURE] Title In Title Case`
 
 ✅ Good issue titles:
-- `[ST-000001][ABAC] ABAC Policy API Contract`
-- `[ST-000004][ABAC] Types And Interfaces`
+- `[ST-000001][FEATURE] API Contract Design`
+- `[ST-000004][FEATURE] Types And Interfaces`
 
 ❌ Bad issue titles:
 - `ST-000001` (no title, no feature)
-- `ABAC story` (no ID)
+- `feature story` (no ID)
 
 **Source code files:** Use descriptive names
 
-❌ Bad:
-- `interface.go` — Too generic, which interface?
-- `types.go` — Too generic, what types?
-- `helpers.go` — Too generic, what helpers?
-- `errors.go`, `utils.go`
+❌ Bad (too generic):
+- `interface.{ext}`, `types.{ext}`, `helpers.{ext}`, `errors.{ext}`, `utils.{ext}`
 
-✅ Good:
-- `rule_evaluator.go` — Implements RuleEvaluator interface
-- `evaluation_types.go` — Types used in evaluation
-- `condition_helpers.go` — Helper functions for conditions
-- `validation_errors.go` — Validation error definitions
+✅ Good (descriptive):
+- `user_validator.{ext}` — validates user input
+- `payment_processor.{ext}` — processes payments
+- `auth_middleware.{ext}` — authentication middleware
+- `token_parser.{ext}` — parses auth tokens
 
-**Rule:** Name file after its **primary interface/struct**, use snake_case. Avoid generic names.
+**Rule:** Name file after its **primary interface/struct**, use the project's file naming convention. Avoid generic names.
 
 ---
 
@@ -369,11 +366,11 @@ Applies to all implementer roles (Developer, Technical Lead, QA, Business Analys
 
 - [ ] Issue label: `status:review`
 - [ ] API spec verified — implementation matches spec for all affected endpoints (`docs/api/`)
-- [ ] If `docs/api/ABAC_API.yaml` or `.spectral.yaml` changed: spec lint passes and spec drift check passes — see agent-specific rules for exact commands
+- [ ] If `docs/api/{api-spec-file}` or lint config changed: spec lint passes and spec drift check passes — see agent-specific rules for exact commands
 - [ ] Self-checked all AC locally — each criterion confirmed met (do **NOT** tick checkboxes; PO ticks only)
-- [ ] Integration test script exists at `tests/feature/<feature_name>/scripts/ST-XXXXXX_*.sh`
-- [ ] Integration test script passes when run via Git Bash
-- [ ] Service starts locally (`go run ./cmd/server`)
+- [ ] Integration test script exists at `tests/feature/<feature_name>/scripts/ST-XXXXXX_*`
+- [ ] Integration test script passes
+- [ ] Service starts locally (`{service-start-command}`)
 - [ ] Source files have good names (no `interface.go`, etc.)
 - [ ] Code follows Development Standard
 - [ ] PR created with story ID in title: `[ST-XXXXXX][FEATURE] ...`
@@ -402,10 +399,10 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 
 ## 13. Story Creation Template
 
-When creating a new story, **create a GitHub Issue** in `lhtuwrk/authorization-service` with:
+When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name}` with:
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
-**Labels:** `status:backlog`, feature label (e.g., `feature:abac`), sprint label (e.g., `sprint-5`), phase label (e.g., `phase-2`)  
+**Labels:** `status:backlog`, feature label (e.g., `{feature-label}`), sprint label (e.g., `sprint-5`), phase label (e.g., `phase-2`)  
 **Assignee:** TBD (set when moving to Ready)
 
 **Issue body:**
@@ -432,7 +429,7 @@ When creating a new story, **create a GitHub Issue** in `lhtuwrk/authorization-s
 
 ## API Spec Reference
 
-[List affected endpoints and link to spec file, e.g. `docs/api/ABAC_API.yaml` §2.3 — or "N/A" if no API changes]
+[List affected endpoints and link to spec file, e.g. `docs/api/{api-spec-file}` §2.3 — or "N/A" if no API changes]
 
 ## Technical Scope
 

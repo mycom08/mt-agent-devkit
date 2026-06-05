@@ -81,7 +81,7 @@ Scope decision or AC clarification.
 ## 13. Story Creation Template
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
-**Labels:** `status:backlog`, `feature:abac`, `sprint-N`, `phase-N`  
+**Labels:** `status:backlog`, `{feature-label}`, `sprint-N`, `phase-N`  
 **Assignee:** Responsible agent role (not "TBD")
 
 ```markdown

@@ -12,7 +12,7 @@ Do these **in order** before any design or review work:
 1. **Read Project Priming** — `.claude/agents/context/PROJECT_PRIMING.md`
 2. **Read Story Standard (TL)** — `.claude/agents/rules/STORY_STANDARD_TL.md`
 3. **Read your Working Record** — `.claude/agents/working-record/Technical_Lead_Working_Record.md`
-4. **Read the relevant GitHub Issues** — filter by `feature:abac` label for the current task
+4. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
 ---
 
@@ -57,8 +57,8 @@ See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
 
 **When evaluating approaches:**
 - Always consider: backward compatibility, performance, security, team capability
-- Reference existing patterns in codebase (Go, Chi, Casbin, GORM)
-- Focus on Phase 1 MVP scope; do not over-engineer for Phase 2
+- Reference existing patterns in codebase ({language}, {framework}, {key libraries})
+- Focus on current phase MVP scope; do not over-engineer for future phases
 
 **When making recommendations:**
 - Provide rationale — why this choice over alternatives?
@@ -67,30 +67,28 @@ See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
 - Flag security and performance concerns early
 
 **API design:**
-- Follow existing `/api/v1/` pattern
-- Every endpoint must have request/response JSON schemas with examples
+- Follow existing API versioning pattern
+- Every endpoint must have request/response schemas with examples
 - Specify status codes, validation rules, and error handling
-- Ensure multi-tenant isolation (`tenant_id` in all queries)
-- Maintain backward compatibility with existing `/check` endpoint
+- Ensure data isolation (tenant or access-scope boundaries in all queries)
+- Maintain backward compatibility with existing public endpoints
 
-**Key design questions to address for any ABAC change:**
-- How to test ABAC policies in isolation?
-- Policy validation and error handling?
-- Audit trail for attribute-based decisions?
-- Monitoring & debugging attribute evaluation?
-- Migration & coexistence — RBAC + ABAC together?
-  - Policy version/generation to distinguish RBAC vs ABAC?
-  - Gradual rollout strategy?
-  - Performance impact of mixed policy sets?
+**Key design questions to address for any feature change:**
+- How to test the feature's behavior in isolation?
+- Input validation and error handling approach?
+- Audit trail and observability requirements?
+- Migration and coexistence with existing behavior?
+- Gradual rollout strategy if applicable?
+- Performance impact of the change?
 
 **Technical constraints (non-negotiable):**
-- Go 1.24+, PostgreSQL 14+
-- Maintain REST API stability
+- {language-version}+, {database-version}+
+- Maintain API stability
 - Keep request/response payloads manageable
-- Support multi-tenant isolation (domain-aware)
+- Support data isolation requirements
 
 **Deliverables expected per design task:**
-- Proposed architecture or Casbin model extension
+- Proposed architecture or system model
 - API contract changes with examples
 - Storage schema design
 - Implementation roadmap with risk assessment
@@ -180,14 +178,14 @@ When TL is the story Implementer (not reviewer), run the applicable local checks
 
 | Change type | Required local check |
 |---|---|
-| Go source code changed | `go test ./...` must pass AND run `npm run test:ci` against the base sandbox; all assertions must pass |
-| API spec changed (`docs/api/ABAC_API.yaml` or `.spectral.yaml`) | `spectral lint docs/api/ABAC_API.yaml --ruleset .spectral.yaml --fail-severity warn` (zero errors) AND `go generate ./...` then `git diff --exit-code internal/dto/abac_policy_gen.go` (no diff) |
-| Newman collection or environment file changed | Run the relevant Newman suite against the sandbox; all assertions must pass |
+| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
+| API spec changed (`docs/api/{api-spec-file}` or lint config) | `{api-lint-command}` (zero errors) AND `{code-gen-command}` then `git diff --exit-code {generated-file-path}` (no diff) — skip code-gen check if project does not use spec-driven generation |
+| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
 | Both source and tests changed | Both checks above required |
 | CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
 | Docs or config only | Exempt |
 
-Include a one-line test result note in the PR description (e.g., "`go test ./...` — PASS · Newman 55/55 — PASS").
+Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").
 
 > **Gate:** Do not open a PR until all applicable checks pass.
 
@@ -221,7 +219,7 @@ After resolving the blocker, record the fix in `Technical_Lead_Memory.md` under 
 
 > **Gate:** Do not resume the blocked task until the fix is recorded in memory.
 
-**Applies to:** `go test ./...` fails to run · Docker / sandbox fails to start or become healthy · Newman cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
+**Applies to:** `{test-command}` fails to run · Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
 
 ---
 

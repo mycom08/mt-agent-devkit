@@ -100,11 +100,11 @@ Response and decision.
 
 ## 10. File Naming — Source Files
 
-❌ Bad: `interface.go`, `types.go`, `helpers.go`, `errors.go`, `utils.go`
+❌ Bad (too generic): `interface.{ext}`, `types.{ext}`, `helpers.{ext}`, `errors.{ext}`, `utils.{ext}`
 
-✅ Good: `rule_evaluator.go`, `evaluation_types.go`, `condition_helpers.go`, `validation_errors.go`
+✅ Good (descriptive): `user_validator.{ext}`, `payment_processor.{ext}`, `auth_middleware.{ext}`, `token_parser.{ext}`
 
-**Rule:** Name after the primary interface/struct; use `snake_case`.
+**Rule:** Name after the primary interface/struct; use the project's file naming convention. Avoid generic names.
 
 ---
 
@@ -115,7 +115,7 @@ Before merging dev branch to feature branch:
 - [ ] API spec verified — implementation matches spec for all affected endpoints
 - [ ] Self-checked all AC locally (do NOT tick checkboxes)
 - [ ] Integration test script exists and passes via Git Bash
-- [ ] Service starts locally (`go run ./cmd/server`)
+- [ ] Service starts locally (`{service-start-command}`)
 - [ ] Source files have good names (no `interface.go`, etc.)
 - [ ] Code follows Development Standard
 - [ ] PR created with story ID in title: `[ST-XXXXXX][FEATURE] ...`

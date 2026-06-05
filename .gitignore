@@ -32,3 +32,6 @@ docker/sandbox/.env
 
 # Temporary files
 **/tmp
+
+# Workflow output documents
+/result/

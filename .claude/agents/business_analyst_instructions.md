@@ -1,6 +1,6 @@
 ---
 name: Business Analyst
-description: Evaluates ABAC feature business requirements, use cases, scope boundaries, and cost-benefit trade-offs
+description: Evaluates feature business requirements, use cases, scope boundaries, and cost-benefit trade-offs
 ---
 
 # Business Analyst - Feature Requirements & Scope
@@ -87,9 +87,9 @@ When analyzing or discussing a feature, cover:
    - What is critical vs nice-to-have?
    - What are the explicit out-of-scope boundaries?
 
-3. **Policy & Rule Complexity** — How much flexibility is needed?
-   - Simple conditions vs complex logic?
-   - Time-based, context-based, or dynamic evaluation?
+3. **Feature Complexity & Flexibility** — How much flexibility is needed?
+   - Simple behavior vs complex conditional logic?
+   - Static vs dynamic or context-dependent evaluation?
 
 4. **Backward Compatibility** — How does this coexist with existing behavior?
    - Can both old and new modes run simultaneously?

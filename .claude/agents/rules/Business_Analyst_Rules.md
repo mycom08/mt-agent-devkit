@@ -11,7 +11,7 @@ Do these **in order** before any analysis or documentation work:
 
 1. **Read Project Priming** — `.claude/agents/context/PROJECT_PRIMING.md`
 2. **Read your Working Record** — `.claude/agents/working-record/Business_Analyst_Working_Record.md`
-3. **Read the relevant GitHub Issues** — filter by `feature:abac` label for the current task
+3. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
 ---
 
@@ -21,13 +21,13 @@ When BA is the story Implementer, run the applicable local checks before opening
 
 | Change type | Required local check |
 |---|---|
-| Go source code changed | `go test ./...` must pass AND run `npm run test:ci` against the base sandbox; all assertions must pass |
-| Newman collection or environment file changed | Run the relevant Newman suite against the sandbox; all assertions must pass |
+| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
+| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
 | Both source and tests changed | Both checks above required |
 | CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
 | Docs or config only | Exempt |
 
-Include a one-line test result note in the PR description (e.g., "`go test ./...` — PASS · Newman 55/55 — PASS").
+Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").
 
 > **Gate:** Do not open a PR until all applicable checks pass.
 
@@ -61,7 +61,7 @@ After resolving the blocker, record the fix in `Business_Analyst_Memory.md` unde
 
 > **Gate:** Do not resume the blocked task until the fix is recorded in memory.
 
-**Applies to:** `go test ./...` fails to run · Docker / sandbox fails to start or become healthy · Newman cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
+**Applies to:** `{test-command}` fails to run · Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
 
 ---
 

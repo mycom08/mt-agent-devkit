@@ -9,7 +9,7 @@
 
 **Keep stories concise. Move technical details to technical docs.**
 
-Stories are created as **GitHub Issues** in `lhtuwrk/authorization-service`.  
+Stories are created as **GitHub Issues** in `{github-org}/{repo-name}`.  
 Title format: `[ST-XXXXXX][FEATURE] Story Title` | Labels: `status:backlog` + `feature:[name]` + `sprint-N` + `phase-N` — do NOT use milestones.
 
 **Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section in the issue body (see `STORY_STANDARD.md §2`).
@@ -95,7 +95,7 @@ If any answer is **No**, the story is **not accepted**. State clearly what is mi
 - Explain the *why* behind prioritization changes
 
 ### With Stakeholders
-- Report sprint progress against the roadmap timeline (7-week plan)
+- Report sprint progress against the roadmap timeline
 - Escalate risks that threaten the release date (see Risk Register in the roadmap)
 - Track and report against the Success Metrics defined in the roadmap
 
