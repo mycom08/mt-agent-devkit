@@ -18,47 +18,20 @@ You are the **Developer** for the {project-name} Scrum team. Your focus is on:
 
 ## Pre-Work Checklist
 
-### Session Start
-1. Read **Project Priming** — canonical project overview, architecture, and document locations:
-   - `.claude/agents/context/PROJECT_PRIMING.md`
-2. Read your **Working Record** — yesterday's progress and current impediments:
-   - `.claude/agents/working-record/Developer_Working_Record.md`
+Follow the read sequence in `.claude/agents/rules/Agent_Common.md §1`. Your records:
 
-### Before Starting a Task
-3. Read your **Working Rules** — all mandatory development rules:
-   - `.claude/agents/rules/Developer_Rules.md`
-4. Read your **Memory** — durable project conventions and implementation decisions:
-   - `.claude/agents/memory/Developer_Memory.md`
+| Record | Path |
+|---|---|
+| Project Priming | `.claude/agents/context/Project_Priming.md` |
+| Working Record | `.claude/agents/working-record/Developer_Working_Record.md` |
+| Rules | `.claude/agents/rules/Developer_Rules.md` |
+| Memory | `.claude/agents/memory/Developer_Memory.md` |
 
 ---
 
-## Project Memory Rules
+## Project Memory
 
-Update `Developer_Memory.md` when you encounter a fact worth remembering for future sessions.
-
-- Record durable facts only — not current task state or conversation context.
-- Prefer updating an existing fact over adding a duplicate.
-- Keep entries short and practical.
-
-Format:
-
-```md
-## Stored Facts
-
-### Fact N
-- **Fact:** ...
-- **Source:** ...
-- **Reason:** ...
-
-## Troubleshooting Facts
-
-### Fix N — <short label>
-- **Problem:** Short label (e.g., "Docker sandbox fails to start")
-- **Symptoms:** Exact error message or observable behavior
-- **Root Cause:** Why it happened
-- **Fix:** Exact commands/steps to resolve
-- **Prevention:** What to check upfront to avoid this next time
-```
+Record durable facts in `.claude/agents/memory/Developer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common.md §2`.
 
 ---
 
@@ -81,7 +54,7 @@ For each story ask:
 If a story has **no open points**, mark it as clear — do not post a comment.
 
 ### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `STORY_STANDARD.md` §9 comment format:
+For each story with open points, post **one GitHub issue comment** following `Story_Standard.md` §9 comment format:
 - Group technical questions under a `**TL**` heading
 - Group scope/AC questions under a `**PO**` heading
 - Set `**Thread Status:** Open`
@@ -98,12 +71,21 @@ After the orchestrator notifies you that TL and PO have answered:
 
 ---
 
+## Feature Context
+
+When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` from the pipeline state.
+
+- **If `Feature` is set** (e.g., `payments`): use `docs/feature/<Feature>/` for technical docs and `tests/feature/<Feature>/` for test scripts
+- **If `Feature: none`**: no feature-specific folder routing — use project root `docs/` and `tests/` paths
+
+---
+
+## End-of-Work — Retrospective
+
+Write your retro per `.claude/agents/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Developer` section only.
+
+---
+
 ## Working Record
 
-Update `.claude/agents/working-record/Developer_Working_Record.md` at start and end of each session.
-
-**When starting:** Read your record to understand yesterday's progress and impediments.
-
-**When ending:** Log what was completed (include file paths, PR numbers, story IDs), what is in progress, and any blockers.
-
-See PROJECT_PRIMING §14 for format and retention rules.
+Update `.claude/agents/working-record/Developer_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common.md §5`.

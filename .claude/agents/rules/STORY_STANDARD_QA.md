@@ -1,6 +1,6 @@
-# Story Standard — QA View
+﻿# Story Standard — QA View
 
-> Role-specific excerpt from `.claude/agents/rules/STORY_STANDARD.md` (v1.8). Read this instead of the full file.
+> QA working rules for story work. This is your day-to-day reference. `.claude/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
 
 ---
 
@@ -83,20 +83,15 @@ Test results and findings per AC.
 
 ---
 
-## 15. GitHub Issue CLI — PowerShell Safety Rule
+## 15. Shell Command Rules — Permissions and Tool Choice
 
-**Never** pass multi-line or backtick-containing Markdown via `--body "..."`. Always write to a temp file:
+**Always use Bash (not PowerShell) for all `gh` CLI calls.** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. PowerShell `.NET` methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a permission prompt regardless of allow-list entries, and PowerShell interprets backticks as escape characters, silently corrupting Markdown. Never prepend `cd /path` to a command; the working directory is already set.
 
-```powershell
-$body = @'
-...content...
-'@
+For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
 
-$tmp = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tmp, $body, [System.Text.Encoding]::UTF8)
-gh issue edit <number> --body-file $tmp
-gh issue comment <number> --body-file $tmp
-Remove-Item $tmp
+```bash
+gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
+gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
 ```
 
-**Applies to:** `gh issue edit`, `gh issue create`, `gh issue comment` — any call with backticks, checkboxes, or multi-line content.
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.

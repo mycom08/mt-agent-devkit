@@ -9,7 +9,7 @@
 
 Do these **in order** before any analysis or documentation work:
 
-1. **Read Project Priming** — `.claude/agents/context/PROJECT_PRIMING.md`
+1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
 2. **Read your Working Record** — `.claude/agents/working-record/Business_Analyst_Working_Record.md`
 3. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
@@ -35,33 +35,13 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 
 ## 3. Stage-Transition Commit (mandatory before handoff)
 
-Before signaling completion to the orchestrator and handing off to the next stage, BA **must** commit any updates to working record or memory files made during the session:
-
-- **What to commit:** Changes to your Working Record or any agent memory files
-- **Commit message:** `Agent: <short description>` — total length under 50 characters
-- **Examples:** `Agent: Update working record`, `Agent: Update BA memory`
-- Push the commit before reporting stage completion to the orchestrator
-
-> **Gate:** Do not signal stage completion until the commit is pushed.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
 ## 4. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-When you cannot run tests, start the sandbox, or execute scripts due to an environment or tooling error, follow these steps in order.
-
-**Step 1 — Check memory first**
-Before diagnosing, scan `Business_Analyst_Memory.md` for a matching entry under `## Troubleshooting Facts`. If a fix is recorded, apply it directly — do not re-diagnose.
-
-**Step 2 — Diagnose and fix**
-If no match, identify the root cause and fix it properly. Do not work around it or skip the failing step.
-
-**Step 3 — Save to memory (mandatory)**
-After resolving the blocker, record the fix in `Business_Analyst_Memory.md` under `## Troubleshooting Facts` before resuming work. Use the format defined in `business_analyst_instructions.md`.
-
-> **Gate:** Do not resume the blocked task until the fix is recorded in memory.
-
-**Applies to:** `{test-command}` fails to run · Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
 ---
 

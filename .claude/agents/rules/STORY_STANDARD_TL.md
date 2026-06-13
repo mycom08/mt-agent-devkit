@@ -1,6 +1,6 @@
-# Story Standard — Technical Lead View
+﻿# Story Standard — Technical Lead View
 
-> Role-specific excerpt from `.claude/agents/rules/STORY_STANDARD.md` (v1.8). Read this instead of the full file.
+> Technical Lead working rules for story work. This is your day-to-day reference. `.claude/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
 
 ---
 
@@ -23,11 +23,39 @@ Story body contains: `**Assigned:**` field above `## User Story`, `## Acceptance
 
 ---
 
+## 4. TL as Implementer
+
+When `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation):
+
+### Status: In Progress → Review
+1. Remove `status:in-progress`, add `status:review`
+2. Create PR with title: `[ST-XXXXXX][FEATURE] Story title`
+3. **Add PR link to issue Deliverables section** — edit the issue body to include the PR URL under `## Deliverables` (use `gh issue edit --body-file`)
+4. Post a brief comment on the story notifying the Developer reviewer:
+
+   ```
+   ## PR ready for peer review
+   **Thread Status:** Open
+   **Area:** Implementation
+
+   **TL - YYYY-MM-DD**
+   PR #NNN opened for peer review. <one-line summary of changes>
+
+   **Next:** Developer
+   ```
+
+### Status: Review → In Progress (Developer feedback)
+1. Address all CR items in the branch
+2. Push new commits
+3. Re-request review via issue comment
+
+---
+
 ## 7. Role Boundaries
 
 | Role | Can Do | Cannot Do |
 |------|--------|-----------|
-| **TL** | Review code, approve PR, discuss technical design | Tick AC, test, clarify scope, implement |
+| **TL** | Review code, approve PR, discuss technical design, implement when assigned | Tick AC, test, clarify scope |
 
 **Red Flags:** TL ticking AC checkboxes; TL commenting on scope (PO only); TL self-approving PR (GitHub blocks it — use `gh pr comment` instead).
 
@@ -66,20 +94,23 @@ Technical decision or review feedback.
 
 ---
 
-## 15. GitHub Issue CLI — PowerShell Safety Rule
+## 12. Reviewer Gate — before approving a PR
 
-**Never** pass multi-line or backtick-containing Markdown via `--body "..."`. Always write to a temp file:
+- [ ] All CI checks on the PR have **finished** — do not review while CI is still running
+- [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
+- [ ] Code review criteria pass (per `Technical_Lead_Rules.md` §2)
 
-```powershell
-$body = @'
-...content...
-'@
+---
 
-$tmp = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tmp, $body, [System.Text.Encoding]::UTF8)
-gh issue edit <number> --body-file $tmp
-gh issue comment <number> --body-file $tmp
-Remove-Item $tmp
+## 15. Shell Command Rules — Permissions and Tool Choice
+
+**Always use Bash (not PowerShell) for all `gh` CLI calls.** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. PowerShell `.NET` methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a permission prompt regardless of allow-list entries, and PowerShell interprets backticks as escape characters, silently corrupting Markdown. Never prepend `cd /path` to a command; the working directory is already set.
+
+For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
+
+```bash
+gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
+gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
 ```
 
-**Applies to:** `gh issue edit`, `gh issue create`, `gh issue comment` — any call with backticks, checkboxes, or multi-line content.
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.

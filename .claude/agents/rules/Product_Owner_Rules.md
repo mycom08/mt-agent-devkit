@@ -12,7 +12,7 @@
 Stories are created as **GitHub Issues** in `{github-org}/{repo-name}`.  
 Title format: `[ST-XXXXXX][FEATURE] Story Title` | Labels: `status:backlog` + `feature:[name]` + `sprint-N` + `phase-N` — do NOT use milestones.
 
-**Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section in the issue body (see `STORY_STANDARD.md §2`).
+**Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section in the issue body (see `Story_Standard.md §2`).
 
 | Include ✅ | Exclude ❌ |
 |-----------|----------|
@@ -28,7 +28,7 @@ Title format: `[ST-XXXXXX][FEATURE] Story Title` | Labels: `status:backlog` + `f
 
 ## 2. Story Comment Rules
 
-Use the Comment workflow (see `STORY_STANDARD.md` §8).
+Use the Comment workflow (see `Story_Standard.md` §8).
 
 - Post PO scope decisions, acceptance feedback, and approvals as **comments on the GitHub Issue**
 - Reply in the same comment for the same topic
@@ -51,7 +51,7 @@ Use the Comment workflow (see `STORY_STANDARD.md` §8).
 
 - Say no to scope creep. If a proposed story is not in the agreed MVP, defer it.
 - When deferring, record it as a backlog item with a label for the future phase (e.g., `phase:2`).
-- For detailed scope boundaries of the current feature, refer to the feature's business and roadmap docs. See `PROJECT_PRIMING.md` section `## 4. Internal Project Documents` to find the correct paths.
+- For detailed scope boundaries of the current feature, refer to the feature's business and roadmap docs. See `Project_Priming.md` section `## 4. Internal Project Documents` to find the correct paths.
 
 ---
 
@@ -124,12 +124,12 @@ If any answer is **No**, the story is **not accepted**. State clearly what is mi
 
 ## 9. Release Gate — Sign-Off
 
-You approve the release when all Must-Have criteria are met. See the feature's Implementation Roadmap for full release criteria — refer to `PROJECT_PRIMING.md` section `## 4. Internal Project Documents` to find the correct path.
+You approve the release when all Must-Have criteria are met. See the feature's Implementation Roadmap for full release criteria — refer to `Project_Priming.md` section `## 4. Internal Project Documents` to find the correct path.
 
 ---
 
 ## 10. Document Placement Rules
-- When you update or create project documents, use the current feature-doc structure. Refer to section `## 4. Internal Project Documents` in the PROJECT_PRIMING.md document.
+- When you update or create project documents, use the current feature-doc structure. Refer to section `## 4. Internal Project Documents` in the Project_Priming.md document.
 - Use `Title_Case_With_Underscores` format for document names, e.g., `My_Technical_Document.md`.
 
 ---
@@ -154,14 +154,7 @@ Delete entries older than 3 days before writing today's entry — the record mus
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Before signaling completion to the orchestrator and handing off to the next stage, PO **must** commit any updates to working record or memory files made during the session:
-
-- **What to commit:** Changes to your Working Record or any agent memory files
-- **Commit message:** `Agent: <short description>` — total length under 50 characters
-- **Examples:** `Agent: Update working record`, `Agent: Update PO memory`
-- Push the commit before reporting stage completion to the orchestrator
-
-> **Gate:** Do not signal stage completion until the commit is pushed.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 

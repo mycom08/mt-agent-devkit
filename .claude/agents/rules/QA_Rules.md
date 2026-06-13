@@ -9,8 +9,8 @@
 
 Do these **in order** before any testing or validation work:
 
-1. **Read Project Priming** — `.claude/agents/context/PROJECT_PRIMING.md`
-2. **Read Story Standard (QA)** — `.claude/agents/rules/STORY_STANDARD_QA.md`
+1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
+2. **Read Story Standard (QA)** — `.claude/agents/rules/Story_Standard_QA.md`
 3. **Read your Working Record** — `.claude/agents/working-record/QA_Working_Record.md`
 4. **Read the relevant GitHub Issues** — filter by `status:testing` label for the current task
 
@@ -37,7 +37,7 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 - Move story label to `status:done` after the PR is merged
 - If AC cannot be validated (missing impl, env issue), post a blocker Comment and keep in `status:testing`
 
-See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
+See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ---
 
@@ -92,7 +92,7 @@ Before running any API test script or HTTP call, determine the active auth mode 
 
 ## 5. Document Placement
 
-- Place all new documents in the correct feature-doc subfolder — see `PROJECT_PRIMING.md §4`
+- Place all new documents in the correct feature-doc subfolder — see `Project_Priming.md §4`
 - Use `Title_Case_With_Underscores` for all document file names (e.g., `My_Technical_Document.md`)
 - Test scenario docs go under `docs/feature/<feature_name>/test-scenarios/`
 
@@ -103,7 +103,7 @@ Before running any API test script or HTTP call, determine the active auth mode 
 - Post QA findings, acceptance gaps, regression risks, and sign-off notes as **comments on the GitHub Issue**
 - Reply in the same comment when retesting or validating the same issue
 - Do not create standalone review-note files for normal story discussion
-- See `PROJECT_PRIMING.md §13` for the full Comment format
+- See `Project_Priming.md §13` for the full Comment format
 
 ---
 
@@ -122,7 +122,7 @@ Once all Acceptance Criteria are ticked and QA sign-off is complete, QA **must**
 
 ## 8. Automation Regression Run (mandatory after AC pass)
 
-After all story Acceptance Criteria are verified and before giving merge sign-off, QA **must** run the full Newman automation suite to confirm no regression was introduced:
+After all story Acceptance Criteria are verified and before giving merge sign-off, QA **must** run the full automation regression suite to confirm no regression was introduced:
 
 1. Ensure the sandbox is running: `{sandbox-start-command}`
 2. Run the full automation suite:
@@ -166,33 +166,13 @@ Include a one-line test result note in the PR description (e.g., "integration te
 
 ## 11. Stage-Transition Commit (mandatory before handoff)
 
-Before signaling completion to the orchestrator and handing off to the next stage, QA **must** commit any updates to working record or memory files made during the session:
-
-- **What to commit:** Changes to your Working Record or any agent memory files
-- **Commit message:** `Agent: <short description>` — total length under 50 characters
-- **Examples:** `Agent: Update working record`, `Agent: Update QA memory`
-- Push the commit before reporting stage completion to the orchestrator
-
-> **Gate:** Do not signal stage completion until the commit is pushed.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
 ## 12. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-When you cannot start the sandbox, run Newman, or execute test scripts due to an environment or tooling error, follow these steps in order.
-
-**Step 1 — Check memory first**
-Before diagnosing, scan `QA_Memory.md` for a matching entry under `## Troubleshooting Facts`. If a fix is recorded, apply it directly — do not re-diagnose.
-
-**Step 2 — Diagnose and fix**
-If no match, identify the root cause and fix it properly. Do not work around it or skip the failing step.
-
-**Step 3 — Save to memory (mandatory)**
-After resolving the blocker, record the fix in `QA_Memory.md` under `## Troubleshooting Facts` before resuming work. Use the format defined in `qa_instructions.md`.
-
-> **Gate:** Do not resume the blocked task until the fix is recorded in memory.
-
-**Applies to:** Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · `{test-command}` fails to run · CI YAML errors · auth/credential failures in test scripts
+On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
 ---
 

@@ -1,4 +1,4 @@
-# Story Standard
+﻿# Story Standard
 
 **Applies to:** All agents (Developer, TL, QA, PO, BA)  
 **Location:** GitHub Issues in repository `{github-org}/{repo-name}`  
@@ -64,7 +64,7 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 - **High-level acceptance criteria:** WHAT the feature does, not HOW
 - **Business value** and constraints
 - **Success definition** (testable outcomes)
-- **Reference to technical docs:** "See Section 2 of ABAC_Technical_Implementation.md for details"
+- **Reference to technical docs:** "See Section 2 of <Feature>_Technical_Implementation.md for details"
 
 ### DO NOT Include in Story
 - Field-by-field struct/database definitions
@@ -75,7 +75,7 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 - Full technical specifications
 
 ### Technical Details Live In:
-- `docs/feature/[Feature]/technical/` — `{Feature}_Technical_Implementation.md`, `{Feature}_Database_Schema.md`
+- `docs/feature/[Feature]/technical/` — <Feature>_Technical_Implementation.md, <Feature>_Database_Schema.md
 - Link from story AC: "See Technical Implementation Section 2.1 for field definitions"
 - NOT embedded in story body
 
@@ -99,7 +99,7 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 ```markdown
 - [ ] `Rule` type defined with all required fields (see Technical Implementation Section 2)
 - [ ] Supports soft-delete and audit trail
-- [ ] Extensible format for multiple rule syntaxes (JSON Phase 1, Casbin Phase 2)
+- [ ] Rule format supports extensibility for future evaluation modes
 ```
 
 ---
@@ -124,7 +124,7 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 **Action:**
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
 2. Run integration test script in Git Bash: `bash tests/feature/.../ST-XXXXXX_*.sh` (see `docs/wiki/Testing_Guidelines.md`)
-3. Source files follow naming standard (no `interface.go`, `helpers.go`, `types.go`)
+3. Source files follow naming standard (no generic names like `utils`, `helpers`, `types`)
 4. Create PR from dev branch → **feature branch** (NOT master); title: `[ST-XXXXXX][FEATURE] Story title`
 5. Remove label `status:in-progress`, add label `status:review`
 6. Request reviewer in issue Comment
@@ -238,7 +238,7 @@ Scripts live in `tests/feature/<feature_name>/scripts/ST-XXXXXX_<description>.sh
 
 ## 8. Technical Doc Divergence Rule
 
-If during implementation you discover that a **technical document** (e.g., `{Feature}_Technical_Implementation.md`, `{Feature}_Strategic_Analysis.md`) is **inaccurate, contradictory, or ambiguous**:
+If during implementation you discover that a **technical document** (e.g., `<Feature>_Technical_Implementation.md`, `<Feature>_Strategic_Analysis.md`) is **inaccurate, contradictory, or ambiguous**:
 
 1. **Do NOT silently deviate.** Implementing different behavior without flagging the doc gap creates hidden divergence that surfaces late in review.
 2. **Post immediately in the story Comment**, tag TL, describe the discrepancy and which doc section is affected.
@@ -246,9 +246,9 @@ If during implementation you discover that a **technical document** (e.g., `{Fea
 
 | Severity | Action | Example |
 |----------|--------|---------|
-| **Blocks correct implementation** | [BLOCKING] Stop. Post issue comment. Wait for TL to fix doc. | "Doc says X in §1 but contradicts §3 — which is correct?" |
-| **Does not affect current story** | [NON-BLOCKING] Post issue comment. Continue work. TL fixes doc after story. | "Flow diagram is simplified but implementation behaves differently — doc needs update" |
-| **Ambiguous, not wrong** | [NON-BLOCKING] Post issue comment. Ask TL to clarify before implementing. | "Doc says 'fail-secure' but doesn't define behavior for the no-match case" |
+| **Blocks correct implementation** | [BLOCKING] Stop. Post issue comment. Wait for TL to fix doc. | "Default decision says ALLOW in §1 but DENY in Strategic Analysis — which is correct?" |
+| **Does not affect current story** | [NON-BLOCKING] Post issue comment. Continue work. TL fixes doc after story. | "Flow diagram is simplified but engine evaluates differently — doc needs update" |
+| **Ambiguous, not wrong** | [NON-BLOCKING] Post issue comment. Ask TL to clarify before implementing. | "Doc says 'fail-secure' but doesn't define behavior for no_match" |
 
 **Never copy incorrect doc text into code comments.** If the doc is wrong and you know the correct behavior, say so in the thread — don't propagate the error.
 
@@ -298,25 +298,20 @@ Use comments for:
 **Stories** are GitHub Issues — no file naming needed. Issue title format: `[ST-XXXXXX][FEATURE] Title In Title Case`
 
 ✅ Good issue titles:
-- `[ST-000001][FEATURE] API Contract Design`
-- `[ST-000004][FEATURE] Types And Interfaces`
+- `[ST-XXXXXX][FEATURE] User Permission Check API Contract`
+- `[ST-XXXXXX][FEATURE] Data Export Service`
 
 ❌ Bad issue titles:
 - `ST-000001` (no title, no feature)
-- `feature story` (no ID)
+- `Feature story` (no ID)
 
 **Source code files:** Use descriptive names
 
-❌ Bad (too generic):
-- `interface.{ext}`, `types.{ext}`, `helpers.{ext}`, `errors.{ext}`, `utils.{ext}`
+❌ Bad: `utils`, `helpers`, `types`, `errors`, `interface` — too generic
 
-✅ Good (descriptive):
-- `user_validator.{ext}` — validates user input
-- `payment_processor.{ext}` — processes payments
-- `auth_middleware.{ext}` — authentication middleware
-- `token_parser.{ext}` — parses auth tokens
+✅ Good: `rule_evaluator`, `policy_validator`, `condition_parser`, `auth_errors` — named after the primary responsibility
 
-**Rule:** Name file after its **primary interface/struct**, use the project's file naming convention. Avoid generic names.
+**Rule:** Name file after its **primary interface/struct/responsibility**, use the project's naming convention. Avoid generic names.
 
 ---
 
@@ -366,12 +361,12 @@ Applies to all implementer roles (Developer, Technical Lead, QA, Business Analys
 
 - [ ] Issue label: `status:review`
 - [ ] API spec verified — implementation matches spec for all affected endpoints (`docs/api/`)
-- [ ] If `docs/api/{api-spec-file}` or lint config changed: spec lint passes and spec drift check passes — see agent-specific rules for exact commands
+- [ ] If any file in `docs/api/` or `.spectral.yaml` changed: spec lint passes and spec drift check passes — see agent-specific rules for exact commands
 - [ ] Self-checked all AC locally — each criterion confirmed met (do **NOT** tick checkboxes; PO ticks only)
-- [ ] Integration test script exists at `tests/feature/<feature_name>/scripts/ST-XXXXXX_*`
-- [ ] Integration test script passes
-- [ ] Service starts locally (`{service-start-command}`)
-- [ ] Source files have good names (no `interface.go`, etc.)
+- [ ] Integration test script exists at `tests/feature/<feature_name>/scripts/ST-XXXXXX_*.sh`
+- [ ] Integration test script passes when run via Git Bash
+- [ ] Service starts locally (`{start-server-command}`)
+- [ ] Source files have good names (no generic names like `utils`, `helpers`, `types`)
 - [ ] Code follows Development Standard
 - [ ] PR created with story ID in title: `[ST-XXXXXX][FEATURE] ...`
 - [ ] PR targets the **feature branch** — NOT master
@@ -402,8 +397,11 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name}` with:
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
-**Labels:** `status:backlog`, feature label (e.g., `{feature-label}`), sprint label (e.g., `sprint-5`), phase label (e.g., `phase-2`)  
+**Labels (feature story):** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`  
+**Labels (non-feature story):** `status:backlog`, `sprint-N`  
 **Assignee:** TBD (set when moving to Ready)
+
+> Omit the sprint label if no sprint is assigned yet. Use `feature:` and `phase-` labels only when the story belongs to a named feature — sprint and backlog stories that are not part of a feature carry only `status:backlog` and `sprint-N`.
 
 **Issue body:**
 
@@ -429,7 +427,7 @@ When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name
 
 ## API Spec Reference
 
-[List affected endpoints and link to spec file, e.g. `docs/api/{api-spec-file}` §2.3 — or "N/A" if no API changes]
+[List affected endpoints and link to the relevant spec file in `docs/api/` — or "N/A" if no API changes]
 
 ## Technical Scope
 
@@ -463,50 +461,58 @@ When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name
 
 ---
 
-## 15. GitHub Issue CLI Editing — PowerShell Safety Rule
+## 15. Shell Command Rules — Permissions and Tool Choice
 
-**Applies to:** All agents editing issue bodies or posting comments via `gh` CLI on Windows/PowerShell.
+**Applies to:** All agents running shell commands (Bash or PowerShell tool).
 
-### The Problem
+### Rule 1 — Never prepend `cd` to a command
 
-In PowerShell, the backtick ( `` ` `` ) is the escape character. Any `` `r ``, `` `n ``, or `` `t `` sequence inside a `--body "..."` inline string is interpreted as a carriage return, newline, or tab — silently corrupting backtick-fenced code, AC checkboxes, and multi-line content.
+The working directory is automatically set to the project root for every tool call. Prepending `cd "/path/to/project"` to a command creates a compound command that breaks allow-list matching.
 
-Example of what goes wrong:
+```bash
+# WRONG — compound command won't match allow-list patterns
+cd "/path/to/project"; git status --short ".claude/"
 
-```
-# Intended:  - [ ] `rule_data` field uses `x-go-type: json.RawMessage`
-# Actual:    - [ ] `rule_data` field uses `x-go-type: json.RawMessage
-#            ule_data` field ...          ← `r treated as carriage return
-```
-
-### The Rule: Always Use `--body-file` for Issue Bodies and Comments
-
-**Never** pass multi-line or backtick-containing Markdown via `--body "..."`. Always write to a temp file first:
-
-```powershell
-$body = @'
-## Acceptance Criteria
-
-- [ ] `oapi-codegen` installed as a Go development tool
-- [ ] `rule_data` field uses `x-go-type: json.RawMessage`
-'@
-
-$tmp = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tmp, $body, [System.Text.Encoding]::UTF8)
-gh issue edit <number> --body-file $tmp
-gh issue comment <number> --body-file $tmp   # same pattern for comments
-Remove-Item $tmp
+# CORRECT — run the command directly
+git status --short ".claude/"
 ```
 
-**Why `WriteAllText` with explicit UTF-8?** `Set-Content` may add a BOM or alter line endings. `WriteAllText` is reliable.
+This applies to both Bash and PowerShell tool calls.
 
-**Applies to:** `gh issue edit`, `gh issue create`, `gh issue comment` — any call where the body contains backticks, checkboxes, or spans multiple lines.
+### Rule 2 — Always use Bash for all `gh` CLI calls
+
+**Never** use PowerShell for `gh` commands. Reasons:
+
+1. `Bash(gh issue *)`, `Bash(gh pr *)`, and `Bash(gh label *)` are pre-approved in the project allow-list — no permission prompt.
+2. PowerShell interprets backticks as escape characters, silently corrupting Markdown when passed via `--body "..."`.
+3. PowerShell scripts that call .NET methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a separate permission prompt regardless of allow-list entries.
+
+### Posting a Comment or Editing an Issue Body
+
+For short, single-line bodies with no backticks:
+```bash
+gh issue comment <number> --repo {github-org}/{repo-name} --body "Simple text"
+```
+
+For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
+```bash
+gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
+gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
+```
+
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.
+
+### Changing Labels
+
+```bash
+gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done" --remove-label "status:testing"
+```
 
 ---
 
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.1 — §4 renamed to "Implementer Workflow (all roles)"; dev branch + PR target rules apply to TL, QA, BA; §12 adds PR-targets-feature-branch bullet (2026-05-29)
+**Version:** 2.3 — §15 adds Rule 1 (no `cd` prefix on commands); §15 Rule 2 consolidates GitHub CLI Bash-always rule (2026-06-04)
 
 This is the single source of truth for story workflow across all agents.

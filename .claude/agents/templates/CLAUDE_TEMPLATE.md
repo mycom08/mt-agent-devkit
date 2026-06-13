@@ -3,7 +3,11 @@
 ## Project Overview
 
 {{PROJECT_DESCRIPTION}}
-Canonical project context: `.claude/agents/context/PROJECT_PRIMING.md`
+Canonical project context: `.claude/agents/context/Project_Priming.md`
+
+**Mode:** {{MODE}}
+
+> Agents must read `**Mode:**` at the start of every workflow. When `Mode: strict`, follow strict-mode paths throughout (local MD files, local branches — no GitHub/MCP calls). See `.claude/agents/rules/Strict_Mode_Story_Guide.md` for the full operation substitution reference.
 
 ---
 
@@ -59,6 +63,17 @@ Trigger: user says **"continue sprint"**
 
 The orchestrator runs the [Shared Pipeline Stages](#shared-pipeline-stages) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable. Pipeline completes when no more `status:ready` stories exist.
 
+**If `Mode: strict` — sprint branch setup (run once before first story):**
+1. Identify the sprint name from the first `status:ready` story's `**Sprint:**` field (e.g., `sprint-1`)
+2. Check if the sprint dev branch exists: `git branch --list sprint-N-dev`
+   - Exists → `git checkout sprint-N-dev`
+   - Missing → `git checkout -b sprint-N-dev` (from the user's current branch)
+3. Store `Sprint Branch: sprint-N-dev` in the pipeline state file
+
+**If `Mode: strict` — story discovery** (replaces `gh issue list --label "status:ready"`):
+- Glob `.claude/agents/docs/stories/*.md`, read each file, filter by `**Status:** ready`
+- Sort by `**Sprint:**` then by story ID (ascending) to preserve expected order
+
 ### Pipeline State
 
 The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to support resumption after unexpected termination.
@@ -102,16 +117,19 @@ The orchestrator runs the [Shared Pipeline Stages](#shared-pipeline-stages) for 
 
 ### Stage Entry Check (run before anything else)
 
-Read the story's current GitHub label and route:
+**If `Mode: github`** — read the story's current GitHub label and route:
 
 | Story label | Entry point |
 |---|---|
 | `status:ready` or `status:in-progress` | Stage 0 — Implementer Routing |
 | `status:review` | Stage 2 — Review |
 | `status:testing` | Stage 3 — QA Validation |
+| `status:blocked` | Stop — notify user to run `resume story ST-XXXXXX` |
 | `status:done` | Stop — story is already closed; notify user |
 
-> If the story label is missing or unrecognised, stop and notify the user before proceeding.
+**If `Mode: strict`** — read `**Status:**` field from `.claude/agents/docs/stories/ST-XXXXXX.md` and route using the same table (status values match — see `Strict_Mode_Story_Guide.md`).
+
+> If the status is missing or unrecognised, stop and notify the user before proceeding.
 
 ### Start Story Pipeline Rules
 - Targets only the story specified in the trigger command
@@ -199,7 +217,7 @@ Read `.claude/agents/workflows/Plan_Sprint_Workflow.md` for the complete pipelin
 Trigger: user says **"analyze requirement: \<brief description\>"** or **"analyze \<brief description\>"**
 
 The text after the trigger keyword is the initial requirement context. Example:
-> `analyze users should be able to define custom ABAC policies via a UI`
+> `analyze users should be able to invite team members and manage their permissions`
 
 Output is written to `/result/analyst/`. The key deliverable for developers is `summary.md` — a plain-language overview with architecture diagrams, key decisions, and implementation roadmap.
 
@@ -209,4 +227,6 @@ Read `.claude/agents/workflows/Analyst_Workflow.md` for the complete pipeline be
 
 ## PR Approval Rule
 
-GitHub blocks self-approval. Always use `gh pr comment <number>` to post review verdicts — never `gh pr review --approve`.
+**If `Mode: github`:** GitHub blocks self-approval. Always use `gh pr comment <number>` to post review verdicts — never `gh pr review --approve`.
+
+**If `Mode: strict`:** No PRs. The reviewer writes their verdict to the local review-record file at `.claude/agents/docs/reviews/ST-XXXXXX_review.md` and appends a summary comment to the story MD `## Comments` section. See `Strict_Mode_Story_Guide.md` for the review-record format.

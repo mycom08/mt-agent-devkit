@@ -54,7 +54,7 @@ Backlog → Ready → In Progress → Review → Testing → Done
 - All discussions happen as **comments** on the GitHub Issue — never in the body
 - One topic per comment thread
 
-For the full workflow (status transitions, role boundaries, AC rules, merge gate, comment format): `.claude/agents/rules/STORY_STANDARD.md`
+For the full workflow (status transitions, role boundaries, AC rules, merge gate, comment format): `.claude/agents/rules/Story_Standard.md`
 
 ---
 

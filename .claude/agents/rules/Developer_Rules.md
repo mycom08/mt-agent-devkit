@@ -11,11 +11,11 @@ Before writing a single line of code on any story, Dev **must** read:
 
 | Document | Path |
 |---|---|
-| Story Standard (Dev) | `.claude/agents/rules/STORY_STANDARD_DEV.md` |
+| Story Standard (Dev) | `.claude/agents/rules/Story_Standard_Dev.md` |
 
 The key Development Standards rules are already embedded in §4–§6 of this document (naming, testing, git workflow). Only read `docs/wiki/Development_Standards.md` if you encounter a specific convention question not covered here.
 
-> **Gate:** Do not begin implementation until `STORY_STANDARD_DEV.md` has been read in the current session.
+> **Gate:** Do not begin implementation until `Story_Standard_Dev.md` has been read in the current session.
 
 ---
 
@@ -49,7 +49,18 @@ Once all blocking questions are resolved:
 2. Create your dev branch: `ST-XXXXXX/short-description` (branch off feature branch)
 3. Begin implementation
 
-> If the story is complex, follow the design-first rule — refer to section `Design first before Implementation` in `PROJECT_PRIMING.md`.
+**Clean Code (source code stories only):**
+
+If the story involves writing or modifying source code files, read before writing any code:
+- `.claude/agents/rules/Clean_Code_Rules.md`
+
+Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
+
+**Design-first rule — check this before writing any code or tests:**
+
+If the story is complex (8+ points, multiple layers, data model changes, third-party integration, security-sensitive logic, or breaking API contract), draft a design and post it as a GitHub Issue comment for TL review. Tag **TL** in the comment. TL approval is confirmed when TL replies with **"Design approved"**. Do not proceed until that exact phrase appears.
+
+> If the story is complex, follow the design-first rule — refer to `Project_Priming.md` §Design First.
 
 ---
 
@@ -61,22 +72,22 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 - Cannot merge without: TL approval + QA sign-off on dev branch + local tests passing.
 - **Do NOT tick Acceptance Criteria** — AC is owned by QA. Ticking AC yourself is a role violation.
 
-See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
+See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ---
 
 ## 4. Code Quality & Naming
 
-**Source files:** Use descriptive names. Do NOT use:
-- `interface.go`, `helpers.go`, `types.go`, `errors.go`, `utils.go`
+**Source files:** Use descriptive names. Do NOT use generic names:
+- `utils`, `helpers`, `types`, `errors`, `interface`
 
-✅ Good examples:
-- `rule_evaluator.go` — implements RuleEvaluator interface
-- `condition_helpers.go` — helpers for conditions
-- `evaluation_types.go` — types used in evaluation
-- `validation_errors.go` — validation error definitions
+✅ Good examples (named after primary responsibility):
+- `rule_evaluator` — implements the rule evaluation logic
+- `condition_parser` — parses condition expressions
+- `policy_validator` — validates policy input
+- `auth_errors` — defines auth-specific error types
 
-**Rule:** Name files after their primary interface/struct; use `snake_case`.
+**Rule:** Name files after their primary interface/struct/responsibility; use the project's naming convention.
 
 **Story files:** Stories are GitHub Issues — title format `[ST-XXXXXX][FEATURE] Title In Title Case`. No `.md` story files.
 
@@ -160,39 +171,19 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 ## 9. Stage-Transition Commit (mandatory before handoff)
 
-Before signaling completion to the orchestrator and handing off to the next stage, Dev **must** commit any updates to working record or memory files made during the session:
-
-- **What to commit:** Changes to your Working Record or any agent memory files
-- **Commit message:** `Agent: <short description>` — total length under 50 characters
-- **Examples:** `Agent: Update working record`, `Agent: Update dev memory`
-- Push the commit before reporting stage completion to the orchestrator
-
-> **Gate:** Do not signal stage completion until the commit is pushed.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
 ## 10. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-When you cannot run tests, start the sandbox, or execute scripts due to an environment or tooling error, follow these steps in order.
-
-**Step 1 — Check memory first**
-Before diagnosing, scan `Developer_Memory.md` for a matching entry under `## Troubleshooting Facts`. If a fix is recorded, apply it directly — do not re-diagnose.
-
-**Step 2 — Diagnose and fix**
-If no match, identify the root cause and fix it properly. Do not work around it or skip the failing step.
-
-**Step 3 — Save to memory (mandatory)**
-After resolving the blocker, record the fix in `Developer_Memory.md` under `## Troubleshooting Facts` before resuming work. Use the format defined in `developer_instructions.md`.
-
-> **Gate:** Do not resume the blocked task until the fix is recorded in memory.
-
-**Applies to:** `{test-command}` fails to run · Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
 ---
 
 ## 11. Peer Review (when Dev acts as reviewer for a TL-implemented story)
 
-When the orchestrator assigns Dev as peer reviewer, follow `STORY_STANDARD.md` §12 Reviewer Gate, then apply this checklist:
+When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard.md` §12 Reviewer Gate, then apply this checklist:
 
 **Review checklist:**
 - Verify the PR follows naming conventions, commit message format, and test coverage rules from §4–§5
@@ -204,6 +195,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `STORY_STANDARD.md` �
 
 ## Version
 
-**Version:** 2.6 — §11 Peer Review: removed redundant CI gate line; section now defers to STORY_STANDARD.md §12  
+**Version:** 2.6 — §11 Peer Review: removed redundant CI gate line; section now defers to Story_Standard.md §12  
 **Previous:** 2.4 — §5 Testing: spec lint and drift check required when API spec changes  
 **Created:** 2026-04-24

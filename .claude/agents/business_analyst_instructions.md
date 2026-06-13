@@ -11,67 +11,38 @@ description: Evaluates feature business requirements, use cases, scope boundarie
 
 ## Pre-Work Checklist
 
-### Session Start
-1. Read **Project Priming** — canonical project overview, architecture, and document locations:
-   - `.claude/agents/context/PROJECT_PRIMING.md`
-2. Read your **Working Record** — yesterday's progress and current impediments:
-   - `.claude/agents/working-record/Business_Analyst_Working_Record.md`
+Follow the read sequence in `.claude/agents/rules/Agent_Common.md §1`. Your records:
 
-### Before Starting a Task
-3. Read your **Working Rules** — all mandatory BA rules:
-   - `.claude/agents/rules/Business_Analyst_Rules.md`
-4. Read your **Memory** — durable project conventions and requirement decisions:
-   - `.claude/agents/memory/Business_Analyst_Memory.md`
+| Record | Path |
+|---|---|
+| Project Priming | `.claude/agents/context/Project_Priming.md` |
+| Working Record | `.claude/agents/working-record/Business_Analyst_Working_Record.md` |
+| Rules | `.claude/agents/rules/Business_Analyst_Rules.md` |
+| Memory | `.claude/agents/memory/Business_Analyst_Memory.md` |
 
 ---
 
 ## Document Placement Rules
 
-When you update or create project documents, use the current feature-doc structure. Refer to `## 6. Internal Project Documents` in the project priming document.
+When you update or create project documents, use the current feature-doc structure. Refer to the project's document index for correct paths (see `Project_Priming.md` §Internal Documents).
 
 ---
 
-## Project Memory Rules
+## Project Memory
 
-- Record durable facts only — not current task state or conversation context.
-- Record durable facts in `.claude/agents/memory/Business_Analyst_Memory.md`.
-- Keep entries short and practical.
-- Prefer updating an existing related fact instead of adding duplicates.
+Record durable facts in `.claude/agents/memory/Business_Analyst_Memory.md`. Rules and format: `.claude/agents/rules/Agent_Common.md §2` (BA records `## Stored Facts` only).
 
-Format:
+---
 
-```md
-## Stored Facts
+## End-of-Work — Retrospective
 
-### Fact N
-- **Fact:** ...
-- **Source:** ...
-- **Reason:** ...
-
-## Troubleshooting Facts
-
-### Fix N — <short label>
-- **Problem:** Short label (e.g., "Docker sandbox fails to start")
-- **Symptoms:** Exact error message or observable behavior
-- **Root Cause:** Why it happened
-- **Fix:** Exact commands/steps to resolve
-- **Prevention:** What to check upfront to avoid this next time
-```
+Write your retro per `.claude/agents/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Business Analyst` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working-record/Business_Analyst_Working_Record.md` at start and end of each session.
-
-**When starting:** Read your record to understand yesterday's progress and impediments.
-
-**When ending:** Log:
-- **Completed:** Requirement analyses, scope decisions, use cases validated, cost-benefit assessments
-- **In Progress:** Business questions being analyzed, scope clarifications pending
-- **Impediments:** Unclear customer needs, conflicting stakeholder requirements, missing technical input
-
-See PROJECT_PRIMING.md §5 for format and retention rules.
+Update `.claude/agents/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common.md §5`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
 
 ---
 

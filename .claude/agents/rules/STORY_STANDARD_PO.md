@@ -1,6 +1,6 @@
-# Story Standard — Product Owner View
+﻿# Story Standard — Product Owner View
 
-> Role-specific excerpt from `.claude/agents/rules/STORY_STANDARD.md` (v1.8). Read this instead of the full file.
+> Product Owner working rules for story work. This is your day-to-day reference. `.claude/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
 
 ---
 
@@ -81,8 +81,14 @@ Scope decision or AC clarification.
 ## 13. Story Creation Template
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
-**Labels:** `status:backlog`, `{feature-label}`, `sprint-N`, `phase-N`  
 **Assignee:** Responsible agent role (not "TBD")
+
+**Labels — feature story:** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`  
+**Labels — non-feature story:** `status:backlog`, `sprint-N`  
+**Labels — bug/defect story:** `status:backlog`, `bug`, `sprint-N` (add `feature:<name>` and `phase-N` if the bug is tied to a specific feature)
+
+> Omit the sprint label if the story has not been assigned to a sprint yet. Sprint and backlog stories are not scoped to a feature; use `feature:` and `phase-` labels only when the story is part of a named feature.  
+> Add `bug` to any story that reports a defect, regression, unexpected system behaviour, or infrastructure failure — even if it also carries a `feature:` label.
 
 ```markdown
 **Phase:** [Phase/Sprint]  
@@ -116,34 +122,35 @@ Scope decision or AC clarification.
 
 ---
 
+## 13a. AC Authoring Rules (apply when drafting or refining ACs)
+
+- **API surface:** Every endpoint, field, or behavior named in an AC must exist in the API spec or be explicitly in scope for the same sprint. If it does not yet exist, note the dependency explicitly in the AC text (e.g., "after ST-XXXXXX merges") or split the work into a separate story.
+- **Unit-test AC for new service logic:** If the story introduces new or modified service-layer methods, include an explicit AC: `- [ ] Unit tests added for all new service methods (empty-input guard, error path, happy path)`.
+- **Test ordering for collection changes:** If an AC requires adding or reordering an automated test item, include a note on execution-order dependencies relative to sibling tests (e.g., "TC-08 must execute before TC-07 which deletes the resource").
+- **Scoped-removal ACs:** If an AC removes, cleans up, or replaces a symbol, comment, or pattern across a named set of files, end the AC line with: `"Files outside this list are out of scope for this story."` This prevents Dev and QA from treating unlisted occurrences as missed violations rather than intentional deferrals.
+
+---
+
 ## 14. AC Checkbox Rules
 
 - `- [ ]` = Not yet signed off
 - `- [x]` = Signed off by **PO** after QA confirms
 
-**PO:** After receiving QA confirmation, tick each AC checkbox `[x]` in the issue body. Always use `--body-file` (see §15) to avoid PowerShell corruption.
+**PO:** After receiving QA confirmation, tick each AC checkbox `[x]` in the issue body. Always use `--body-file` (see §15).
+
+**Authoritative verification signal:** The closing signal for AC ticking is QA's final testing-pass comment on the story issue, or a merged PR where QA has previously posted sign-off. A Developer or TL comment alone is not sufficient. When multiple agent comments exist on the issue, locate the QA sign-off comment specifically before ticking any checkbox.
 
 ---
 
-## 15. GitHub Issue CLI — PowerShell Safety Rule
+## 15. Shell Command Rules — Permissions and Tool Choice
 
-**Never** pass multi-line or backtick-containing Markdown via `--body "..."`. Always write to a temp file:
+**Always use Bash (not PowerShell) for all `gh` CLI calls.** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. Never prepend `cd /path` to a command; the working directory is already set.
 
-```powershell
-$body = @'
-## Acceptance Criteria
+For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
 
-- [ ] `field` uses `x-go-type: json.RawMessage`
-- [x] Criterion already ticked
-'@
-
-$tmp = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tmp, $body, [System.Text.Encoding]::UTF8)
-gh issue edit <number> --body-file $tmp
-gh issue comment <number> --body-file $tmp
-Remove-Item $tmp
+```bash
+gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
+gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
 ```
 
-**Why `WriteAllText` with explicit UTF-8?** `Set-Content` may add a BOM or alter line endings. `WriteAllText` is reliable.
-
-**Applies to:** `gh issue edit`, `gh issue create`, `gh issue comment` — any call where body contains backticks, checkboxes, or spans multiple lines.
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.

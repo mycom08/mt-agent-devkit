@@ -9,8 +9,8 @@
 
 Do these **in order** before any design or review work:
 
-1. **Read Project Priming** — `.claude/agents/context/PROJECT_PRIMING.md`
-2. **Read Story Standard (TL)** — `.claude/agents/rules/STORY_STANDARD_TL.md`
+1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
+2. **Read Story Standard (TL)** — `.claude/agents/rules/Story_Standard_TL.md`
 3. **Read your Working Record** — `.claude/agents/working-record/Technical_Lead_Working_Record.md`
 4. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
@@ -24,7 +24,7 @@ Do these **in order** before any design or review work:
 3. If no PR is linked, ask Dev to link it before proceeding — do not review unlinked PRs
 
 **Review checklist:**
-- **CI gate (mandatory first step):** See `STORY_STANDARD.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
+- **CI gate (mandatory first step):** See `Story_Standard.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
 - Check: naming conventions, tenant isolation, error format, test coverage, migration correctness
 - **Approve** the PR on GitHub when all criteria pass; leave blocking comments if they do not
@@ -49,7 +49,7 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 - Move story to `status:testing` after you approve the PR and it is merged
 - Only QA ticks Acceptance Criteria — do not mark AC complete yourself
 
-See `STORY_STANDARD.md` §4 for the full workflow and gate conditions.
+See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ---
 
@@ -124,7 +124,7 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 
 ## 6. Document Placement
 
-- Place all new documents in the correct feature-doc subfolder — see `PROJECT_PRIMING.md §4`
+- Place all new documents in the correct feature-doc subfolder — see `Project_Priming.md §4`
 - Use `Title_Case_With_Underscores` for all document file names (e.g., `My_Technical_Document.md`)
 - Context-anchoring notes go under `docs/feature/<feature_name>/questions/` unless another subfolder fits better
 
@@ -135,7 +135,7 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 - Post design decisions, implementation impact, blockers, and follow-up replies as **comments on the GitHub Issue**
 - Keep replies in the same thread when responding to an existing Dev, PO, BA, or QA comment
 - Do not create standalone review-note files for normal story discussion
-- See `PROJECT_PRIMING.md §13` for the full Comment format
+- See `Project_Priming.md §13` for the full Comment format
 
 ---
 
@@ -193,33 +193,13 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Before signaling completion to the orchestrator and handing off to the next stage, TL **must** commit any updates to working record or memory files made during the session:
-
-- **What to commit:** Changes to your Working Record or any agent memory files
-- **Commit message:** `Agent: <short description>` — total length under 50 characters
-- **Examples:** `Agent: Update working record`, `Agent: Update TL memory`
-- Push the commit before reporting stage completion to the orchestrator
-
-> **Gate:** Do not signal stage completion until the commit is pushed.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
 ## 14. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-When you cannot run tests, start the sandbox, or execute scripts due to an environment or tooling error, follow these steps in order.
-
-**Step 1 — Check memory first**
-Before diagnosing, scan `Technical_Lead_Memory.md` for a matching entry under `## Troubleshooting Facts`. If a fix is recorded, apply it directly — do not re-diagnose.
-
-**Step 2 — Diagnose and fix**
-If no match, identify the root cause and fix it properly. Do not work around it or skip the failing step.
-
-**Step 3 — Save to memory (mandatory)**
-After resolving the blocker, record the fix in `Technical_Lead_Memory.md` under `## Troubleshooting Facts` before resuming work. Use the format defined in `technical_lead_instructions.md`.
-
-> **Gate:** Do not resume the blocked task until the fix is recorded in memory.
-
-**Applies to:** `{test-command}` fails to run · Docker / sandbox fails to start or become healthy · integration test suite cannot connect · test script errors · CI YAML errors · auth/credential failures in test scripts
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
 ---
 

@@ -102,7 +102,7 @@ Each `.puml` file must be referenced from the relevant markdown document with a 
 
 ```markdown
 ![Policy Evaluation Flow](diagrams/policy_evaluation_flow.puml)
-> *Diagram: policy_evaluation_flow.puml — ABAC evaluation sequence from API request to decision*
+> *Diagram: user_auth_flow.puml — User authentication sequence from request to response*
 ```
 
 The agent writing the diagram decides which format to use based on what communicates the design most clearly for that specific diagram.

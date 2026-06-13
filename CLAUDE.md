@@ -42,13 +42,15 @@ Resuming keeps the agent's full prior context so it can act on feedback immediat
 
 When any spawned agent completes and returns to the orchestrator, it **must** limit its summary to **5 bullets max**:
 
-1. What was done
-2. Key outcome (completed / blocked / failed)
-3. Files or documents written (if applicable)
+1. Story ID + what was done (e.g., "ST-000025 — PR #86 opened")
+2. Key outcome (approved / blocked / passed / failed)
+3. PR or commit reference if applicable
 4. Any blockers or open items
 5. Next action required (if any)
 
 Detailed activity logs go in the agent's Working Record — not in the orchestrator message. The orchestrator relays a brief status update to the user after each stage.
+
+**Agent observations (optional):** After the 5 bullets, an agent may append an `**Observations:**` section listing any workflow friction it encountered — unclear instructions, gaps in the rules, edge cases not covered. One line per item. The orchestrator appends each observation to the `Observations:` field in the pipeline state file, prefixed with the agent role (e.g., `[Developer] <observation>`). Agents should only report genuine friction, not commentary on their own work.
 
 ---
 
@@ -68,11 +70,22 @@ This devkit has two workflows of its own. All sprint execution workflows (`conti
 |---|---|---|
 | `workflow help` | — | Show this reference |
 | `analyze <requirement>` | `analyze requirement: <text>` | Analyse a project idea from scratch — produces business, technical, and planning documents plus diagrams |
-| `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project |
+| `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project (prompts for mode) |
 
 ---
 
-### Typical first-time flow
+### Modes
+
+| Mode | When to use |
+|---|---|
+| **github** (default) | Project has GitHub Issues, PRs, and Actions. Full integration. |
+| **strict** | No GitHub/MCP required. Local repo only. Stories and docs stored locally under `.claude/agents/` (gitignored). No pushes to remote — you control all merges. |
+
+`init project` asks which mode you want. The choice is written to the generated `CLAUDE.md` as `**Mode:** strict` or `**Mode:** github` and drives all workflow behavior in the target project.
+
+---
+
+### Typical first-time flow — GitHub mode
 
 ```
 1. analyze <your idea>
@@ -80,14 +93,33 @@ This devkit has two workflows of its own. All sprint execution workflows (`conti
                 business_requirements.md, testing_plan.md, diagrams/
 
 2. init project <path/to/your/project>
-   └─ Injects: CLAUDE.md (with sprint workflows), agent instructions,
-               rules, memory files, working records
+   └─ Select: github
+   └─ Injects: CLAUDE.md, agent instructions, rules, memory files, working records
 
 3. In your project — open Claude Code and use:
-   plan sprint       → plan the first sprint
-   continue sprint   → run the full sprint pipeline
-   start story ST-XXXXX  → run a single story
-   refine sprint     → refine backlog before a sprint
+   plan next sprint     → plan the first sprint (creates GitHub Issues)
+   continue sprint      → run the full sprint pipeline
+   start story ST-XXXXX → run a single story
+   refine sprint        → refine backlog before a sprint
+```
+
+### Typical first-time flow — Strict mode
+
+```
+1. analyze <your idea>                   (optional)
+
+2. init project <path/to/your/project>
+   └─ Select: strict
+   └─ Injects: CLAUDE.md (mode: strict), agent files (all gitignored)
+   └─ Creates: .claude/agents/docs/ structure + story_counter.txt
+
+3. In your project — open Claude Code and use:
+   create stories       → create stories as local MD files
+   plan next sprint     → plan sprint from local backlog
+   continue sprint      → run the full sprint pipeline
+                          (auto-creates sprint-N-dev branch; you merge it when done)
+   start story ST-XXXXX → run a single story
+   refine sprint        → refine backlog before a sprint
 ```
 
 ---
@@ -111,19 +143,41 @@ Output is written to `/result/analyst/`. Start with `summary.md`.
 
 ### What `init project` produces
 
-Scaffolds these files into the target project:
+Scaffolds these files into the target project. The exact structure depends on the selected mode.
 
+**GitHub mode:**
 ```
 <project>/
-├── CLAUDE.md                          ← Sprint workflow commands for your project
+├── CLAUDE.md                          ← Mode: github + sprint workflow commands
+├── .gitignore                         ← .claude/agents/tmp/ + /result/ added
 └── .claude/agents/
-    ├── context/PROJECT_PRIMING.md     ← Project cheat sheet for agents
-    ├── instructions/                  ← One file per agent role (5 files)
+    ├── context/Project_Priming.md
+    ├── instructions/                  ← 5 agent instruction files
     ├── rules/                         ← Story standard + per-role rules
     ├── memory/                        ← Blank agent memory files (5 files)
     ├── working-record/                ← Blank working records (5 files)
     ├── workflows/                     ← Sprint workflow files
-    └── templates/CLAUDE_TEMPLATE.md  ← Template used to generate CLAUDE.md
+    └── templates/CLAUDE_TEMPLATE.md
+```
+
+**Strict mode:**
+```
+<project>/
+├── CLAUDE.md                          ← Mode: strict + sprint workflow commands
+├── .gitignore                         ← .claude/agents/ (entire folder) + /result/ added
+└── .claude/agents/                    ← entirely gitignored
+    ├── context/Project_Priming.md
+    ├── instructions/                  ← 5 agent instruction files
+    ├── rules/                         ← Story standard + per-role rules + Strict_Mode_Story_Guide.md
+    ├── memory/                        ← Blank agent memory files (5 files)
+    ├── working-record/                ← Blank working records (5 files)
+    ├── workflows/                     ← Sprint workflow files
+    ├── templates/CLAUDE_TEMPLATE.md
+    └── docs/                          ← All agent-generated data (stories, reviews, sprints)
+        ├── stories/                   ← ST-XXXXXX.md files
+        ├── sprints/                   ← Sprint overview files
+        ├── reviews/                   ← Local review-record files (replaces PRs)
+        └── story_counter.txt          ← Auto-increment ID counter (starts at 0)
 ```
 
 ---
