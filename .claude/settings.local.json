@@ -38,7 +38,9 @@
       "Bash(Select-Object FullName)",
       "Bash(Sort-Object FullName)",
       "Bash(Format-Table -AutoSize)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(Test-Path C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service\\\\.claude\" -Recurse -Force | Where-Object { !$_.PSIsContainer } | Select-Object -ExpandProperty FullName)"
     ]
   }
 }

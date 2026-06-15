@@ -4,6 +4,8 @@ Triggered by: `"init project"` or `"init project [path]"` in CLAUDE.md
 
 Scaffolds all Claude Code agent files in a target project. Scans the project's tech stack and structure, generates customized agent files, asks the user for permission, then writes everything in place.
 
+All template source files live under `.claude/agents/templates/` in this devkit.
+
 ---
 
 ## Pipeline State
@@ -79,73 +81,123 @@ Summarize findings to the user in 5 bullets max before proceeding to Stage 2.
 
 ## Stage 2 — Content Generation
 
-Generate customized versions of all agent scaffold files, adapting content to the scanned project context. Replace all ABAC/authorization-service-specific content with content appropriate for the target project.
+Generate customized versions of all agent scaffold files by reading the source templates from `.claude/agents/templates/` and adapting their content to the scanned project context. Replace all placeholder or example-specific content with content appropriate for the target project.
+
+### Source template paths (in this devkit)
+
+| Template file | Target path in generated project |
+|---|---|
+| `templates/CLAUDE_template.md` | `CLAUDE.md` (root) |
+| `templates/context/Project_Priming_template.md` | `.claude/agents/context/Project_Priming.md` |
+| `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` |
+| `templates/instructions/*_instructions_template.md` (×5) | `.claude/agents/[role]_instructions.md` |
+| `templates/rules/*_template.md` (×16) | `.claude/agents/rules/[name].md` |
+| `templates/workflows/*_Workflow_template.md` (×8) | `.claude/agents/workflows/[name].md` |
+
+> **Strip the `_template` suffix** when writing to the target project. The suffix is devkit-only — generated files use clean names.
 
 ### Files to generate
 
-#### `CLAUDE.md` content block
+#### `CLAUDE.md`
 
-**Source:** `.claude/agents/templates/CLAUDE_TEMPLATE.md` in this devkit.
+**Source:** `templates/CLAUDE_template.md`
 
 If `CLAUDE.md` exists at `TARGET_PROJECT` root → generate a **CLAUDE.md addition** (a block to append, not a full replacement).
 If `CLAUDE.md` does not exist → generate a **full CLAUDE.md**.
 
-Read `CLAUDE_TEMPLATE.md` and adapt it for the target project:
+Adapt the template:
 - Replace `{{PROJECT_NAME}}` with the detected project name
 - Replace `{{PROJECT_DESCRIPTION}}` with a 1–2 sentence description of the project's purpose and tech stack, derived from the Stage 1 scan
 - Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
-- Adapt story labels in Sprint Workflow rules if the project uses different label conventions (keep the same defaults if unknown)
+- Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `CLAUDE.md`
+- Replace `{{DEVKIT_VERSION}}` with the content of `version.txt` at the devkit root
 - All other content is copied verbatim from the template
+
+#### `.claude/agents/context/Document_Index.md`
+
+**Source:** `templates/context/Document_Index_template.md`
+
+Adapt to the target project:
+- Replace `{{PROJECT_NAME}}` with the detected project name
+- Replace `{{DATE}}` with today's date
+- Update the API Specification row with the actual spec path or repo reference (if found during Stage 1 scan)
+- Update any document paths that differ from the generic defaults (e.g., if the project uses `src/docs/` instead of `docs/`)
+- If `Mode: strict` — add the strict-mode agent working files to the Agent Working Files table:
+
+| What | Path |
+|---|---|
+| Stories | `.claude/agents/docs/stories/ST-XXXXXX.md` |
+| Review Records | `.claude/agents/docs/reviews/ST-XXXXXX_review.md` |
+| Story Counter | `.claude/agents/docs/story_counter.txt` |
+
+---
 
 #### `.claude/agents/context/Project_Priming.md`
 
-Adapt the priming document to the target project:
+**Source:** `templates/context/Project_Priming_template.md`
+
+Adapt to the target project:
 - §1 Project Overview: project name, language, framework, purpose, key architectural patterns, database if applicable, auth mechanism if applicable
 - §2 Glossary: define terms specific to the target project's domain (keep PO, TL, Dev, QA, BA)
-- §3 Story Workflow: GitHub Issues format, status labels (keep the same label conventions)
-- §4 Design First: copy verbatim (applies to any project)
-- §5 Agent Working Records: copy verbatim
+- §3 Story Workflow: status flow and label conventions
+- §4–§5: copy verbatim (applies to any project)
 - §6 Internal Project Documents: adapt document paths to fit the target project's `docs/` structure; if unknown, use generic placeholders
 - §7 Key Directories: list the actual directories found in Stage 1
 - §8 Tech Stack: list the detected language, framework, and key dependency versions
-- §9–§12 API Standards, Core API, Architectural Patterns, Current State: adapt to detected API style (REST/GraphQL/gRPC); use generic patterns if no API detected
-- §13–§15 Local Sandbox, Reference Links: include Docker setup if detected; leave as placeholder otherwise
+- §9–§12: adapt to detected API style (REST/GraphQL/gRPC); use generic patterns if no API detected
+- §13–§15: include Docker setup if detected; leave as placeholder otherwise
 
 #### Agent instruction files (5 files)
 
+**Source:** `templates/instructions/[role]_instructions_template.md`
+**Target:** `.claude/agents/[role]_instructions.md` (strip `_template` suffix; files go at the root of `.claude/agents/`, not in a subdirectory)
+
 For each agent (`business_analyst`, `developer`, `product_owner`, `qa`, `technical_lead`):
-- Copy the structure from this devkit's corresponding instruction file
-- Replace ABAC-specific references (e.g., "ABAC feature", `go test ./...`, Newman, Casbin) with the target project's equivalent tools and conventions
+- Copy the structure from the template
+- Replace example-project-specific references with the target project's equivalent tools and conventions
 - Keep all session management, memory, and working record rules verbatim
-- Adapt pre-PR gates to the detected test/build tooling (e.g., `npm test`, `pytest`, `cargo test`, `go test`)
+- Adapt pre-PR gates to the detected test/build tooling (e.g., `npm test`, `pytest`, `cargo test`, `./mvnw test`)
 
-#### Memory files (5 files)
+#### Rules files (16 files)
 
-Generate blank memory files with the correct frontmatter for each agent:
-```markdown
-# {Agent} Memory
+**Source:** `templates/rules/*_template.md`
+**Target:** `.claude/agents/rules/[name].md` (strip `_template` suffix)
 
-No facts recorded yet.
-```
-
-#### Rules files
-
-Copy all rules files from this devkit. Replace ABAC/Go-specific tooling references:
+Copy all rules files. Replace example-project-specific tooling references:
 - `Developer_Rules.md` — adapt §2 (pre-PR gate commands) to detected tooling
 - `QA_Rules.md` — adapt §4 (testing rules) to detected test framework
 - `Technical_Lead_Rules.md` — adapt §4 (design standards) to detected tech stack
 - `Product_Owner_Rules.md` — copy verbatim (tool-agnostic)
 - `Business_Analyst_Rules.md` — copy verbatim (tool-agnostic)
 - `Story_Standard*.md` — copy all verbatim (tool-agnostic)
+- All other rules files — copy verbatim
 
-#### Workflow files (5 files)
+#### Workflow files (8 files)
 
-Copy all workflow files verbatim:
-- `Analyst_Workflow.md`
+**Source:** `templates/workflows/*_Workflow_template.md` + `templates/workflows/Workflow_Guide_template.md`
+**Target:** `.claude/agents/workflows/[name].md` (strip `_template` suffix)
+
+Copy all scrum team workflow files verbatim:
+- `Create_Stories_Workflow.md`
 - `Plan_Sprint_Workflow.md`
 - `Refine_Sprint_Workflow.md`
-- `Init_Project_Workflow.md`
-- `templates/CLAUDE_TEMPLATE.md` → copy to `.claude/agents/templates/CLAUDE_TEMPLATE.md` in the target project
+- `Resume_Story_Workflow.md`
+- `Shared_Pipeline_Stages.md`
+- `Sprint_Workflow.md`
+- `Start_Story_Workflow.md`
+- `Update_Agents_Workflow.md`
+- `Workflow_Guide.md`
+
+> **Do not copy** `Analyst_Workflow.md` or `Init_Project_Workflow.md` — these are devkit-internal workflows and have no place in the target project.
+
+#### Memory files (5 files)
+
+Generate blank memory files:
+```markdown
+# {Agent} Memory
+
+No facts recorded yet.
+```
 
 #### Working record files (5 files)
 
@@ -161,7 +213,7 @@ Generate blank working record files:
 
 #### `.gitignore` additions
 
-**If `Mode: github`** — prepare this block:
+**If `Mode: github`:**
 ```
 # Claude Code agent temp files
 .claude/agents/tmp/
@@ -170,7 +222,7 @@ Generate blank working record files:
 /result/
 ```
 
-**If `Mode: strict`** — prepare this block instead:
+**If `Mode: strict`:**
 ```
 # Claude Code agent files — all agent infrastructure and docs are local-only
 .claude/agents/
@@ -178,8 +230,6 @@ Generate blank working record files:
 # Workflow output documents
 /result/
 ```
-
-In strict mode the entire `.claude/agents/` tree is gitignored — no agent files (rules, instructions, stories, memory, working records, retros) are ever committed to the project.
 
 ---
 
@@ -204,12 +254,21 @@ Do not proceed to Stage 4 until the user explicitly confirms.
 
 Write all generated files to `TARGET_PROJECT`:
 
-1. Create directories as needed: `.claude/agents/context/`, `.claude/agents/memory/`, `.claude/agents/rules/`, `.claude/agents/working-record/`, `.claude/agents/workflows/`, `.claude/agents/tmp/`
-2. **If `Mode: strict`** — also create: `.claude/agents/docs/stories/`, `.claude/agents/docs/sprints/`, `.claude/agents/docs/reviews/`; write `.claude/agents/docs/story_counter.txt` containing `0`.
+1. Create directories as needed:
+   `.claude/agents/context/`, `.claude/agents/memory/`,
+   `.claude/agents/rules/`, `.claude/agents/working-record/`, `.claude/agents/workflows/`,
+   `.claude/agents/retros/`, `.claude/agents/tmp/`
+   Write a `.gitkeep` placeholder inside `.claude/agents/retros/` so the directory is tracked in git.
+2. **If `Mode: strict`** — also create:
+   `.claude/agents/docs/stories/`, `.claude/agents/docs/sprints/`, `.claude/agents/docs/reviews/`;
+   write `.claude/agents/docs/story_counter.txt` containing `0`.
+   Write `.claude/agents/devkit_version.txt` containing the current devkit version (read from `version.txt` at the devkit root).
+
+   **If `Mode: github`** — also write `.claude/agents/devkit_version.txt` containing the current devkit version.
 3. For `CLAUDE.md`:
    - If appending → add the generated block at the end of the existing file with a `---` separator
    - If creating → write the full file
-4. Write each generated file to its target path.
+4. Write each generated file to its target path (with clean name — no `_template` suffix).
 5. Append the `.gitignore` additions (or create `.gitignore` if missing).
 6. Report to the user:
    - Files written (count and list)
@@ -243,6 +302,9 @@ Next steps:
 4. Open Claude Code in your project and type:
    workflow help
    to see all available commands.
+
+5. To sync future devkit improvements into this project, type:
+   update agents
 ```
 
 **If `Mode: strict`** — display:
@@ -268,6 +330,9 @@ Next steps:
 5. Open Claude Code in your project and type:
    workflow help
    to see all available commands.
+
+6. To sync future devkit improvements into this project, type:
+   update agents
 ```
 
 ---
@@ -279,4 +344,6 @@ Next steps:
 - **No assumptions about tech stack** — if the scan is inconclusive, use generic placeholders and note what needs manual completion
 - **Stop on path error** — if `TARGET_PROJECT` does not exist or is not accessible, stop immediately and report
 - **CLAUDE.md is additive** — never overwrite an existing CLAUDE.md in full; always append the orchestrator block
+- **Strip `_template` suffix** — all files written to the target project use clean names without the suffix
+- **Never copy devkit-internal files** — `Analyst_Workflow.md` and `Init_Project_Workflow.md` are devkit-only; never write them to the target project
 - **State file cleanup** — always delete the state file after successful Stage 4 completion or user cancellation

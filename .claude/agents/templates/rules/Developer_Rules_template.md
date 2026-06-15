@@ -56,11 +56,23 @@ If the story involves writing or modifying source code files, read before writin
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
+**For Clean Code or refactor stories** (title or scope contains "Clean Code", "refactor", or "violation"): read `Clean_Code_Rules.md` **in full** before touching any file — do not limit reading to chapters that appear relevant by violation label. Chapter scope is not always obvious from violation names alone.
+
 **Design-first rule — check this before writing any code or tests:**
 
 If the story is complex (8+ points, multiple layers, data model changes, third-party integration, security-sensitive logic, or breaking API contract), draft a design and post it as a GitHub Issue comment for TL review. Tag **TL** in the comment. TL approval is confirmed when TL replies with **"Design approved"**. Do not proceed until that exact phrase appears.
 
 > If the story is complex, follow the design-first rule — refer to `Project_Priming.md` §Design First.
+
+**Live user instruction conflicts (mandatory rule during implementation):**
+
+If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread (by PO, TL, or the user themselves), the live instruction takes precedence. When this happens:
+
+1. Acknowledge the conflict explicitly — state what the prior decision was and what the new instruction is
+2. Proceed with the live instruction
+3. Document the override in the PR description so the reviewer understands why the prior decision was not followed
+
+Do not silently follow the old decision, and do not block awaiting re-confirmation — the user's live instruction is the authoritative signal.
 
 ---
 
@@ -89,6 +101,10 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Rule:** Name files after their primary interface/struct/responsibility; use the project's naming convention.
 
+**Shared helper scope rule:** When introducing or modifying a helper used by more than one handler or module, identify all callers before writing the change. If the modification alters behavior for existing callers (e.g., stricter validation, new required parameter), document the blast radius in the PR description and confirm with TL before proceeding — do not assume a broader change is safe.
+
+**Caller-trace rule:** Before changing a function/method signature, return type, type name, or extracting a concrete type into an interface, trace all callers first (use `grep -rn "FuncName" .` or Grep tool). Document the affected call sites in the PR description. Do not make any such change without confirming every caller is updated.
+
 **Story files:** Stories are GitHub Issues — title format `[ST-XXXXXX][FEATURE] Title In Title Case`. No `.md` story files.
 
 ---
@@ -112,10 +128,11 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 **Pre-merge checklist:**
 1. All applicable checks above pass locally
 2. Source files follow naming convention above
-3. PR created with title `[ST-XXXXXX][FEATURE] Story title`
-4. TL has reviewed and approved PR
-5. QA has tested on the dev branch and ticked all AC
-6. Update story label to `status:done` after merge
+3. **For rename/refactor stories** (story title or scope contains "rename", "refactor", or changes a function/class/constant name): run `grep -rn "<old-name>" docs/` and update any stale references found before opening the PR
+4. PR created with title `[ST-XXXXXX][FEATURE] Story title`
+5. TL has reviewed and approved PR
+6. QA has tested on the dev branch and ticked all AC
+7. Update story label to `status:done` after merge
 
 ---
 
@@ -183,7 +200,7 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## 11. Peer Review (when Dev acts as reviewer for a TL-implemented story)
 
-When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard.md` §12 Reviewer Gate, then apply this checklist:
+When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.md` §12 Reviewer Gate, then apply this checklist:
 
 **Review checklist:**
 - Verify the PR follows naming conventions, commit message format, and test coverage rules from §4–§5

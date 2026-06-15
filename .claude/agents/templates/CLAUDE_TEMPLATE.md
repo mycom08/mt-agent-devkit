@@ -6,6 +6,8 @@
 Canonical project context: `.claude/agents/context/Project_Priming.md`
 
 **Mode:** {{MODE}}
+**Devkit source:** {{DEVKIT_SOURCE_URL}}
+**Devkit version:** {{DEVKIT_VERSION}}
 
 > Agents must read `**Mode:**` at the start of every workflow. When `Mode: strict`, follow strict-mode paths throughout (local MD files, local branches — no GitHub/MCP calls). See `.claude/agents/rules/Strict_Mode_Story_Guide.md` for the full operation substitution reference.
 
@@ -57,6 +59,24 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ---
 
+## Workflows
+
+Quick-reference routing table. The orchestrator reads the trigger from the user's message and dispatches accordingly.
+
+| Trigger | Handled by |
+|---|---|
+| `continue sprint` | Sprint Workflow — inline below |
+| `start story ST-XXXXXX` | Start Story Workflow — inline below |
+| `refine sprint` | `.claude/agents/workflows/Refine_Sprint_Workflow.md` |
+| `plan next sprint` / `plan sprint` | `.claude/agents/workflows/Plan_Sprint_Workflow.md` |
+| `create stories` | `.claude/agents/workflows/Create_Stories_Workflow.md` |
+| `resume story ST-XXXXXX` | `.claude/agents/workflows/Resume_Story_Workflow.md` |
+| `workflow help` | `.claude/agents/workflows/Workflow_Guide.md` |
+| `analyze <requirement>` | `.claude/agents/workflows/Analyst_Workflow.md` |
+| `update agents` | `.claude/agents/workflows/Update_Agents_Workflow.md` |
+
+---
+
 ## Sprint Workflow
 
 Trigger: user says **"continue sprint"**
@@ -86,8 +106,15 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
 ```markdown
 # Sprint Pipeline State
 **Story:** ST-XXXXXX
-**Stage:** <0 | 1 | 2 | 3 | 4>
+**Stage:** <0 | 1 | 2 | 3 | 4 | 5>
 **Implementer:** <Developer | Technical Lead | QA | Business Analyst>
+**Type:** <behavioral | non-behavioral>
+**Feature:** <feature-name or none>
+**Phase:** <phase-number or none>
+**Sprint:** sprint-N
+**Sprint Branch:** sprint-N-dev
+**Story Branch:** story/<id>-<slug>
+**Docs SHA:** <git short SHA captured at Stage 0>
 **Loop Impl→Reviewer:** <count>
 **Loop Impl→QA:** <count>
 **Sessions:**
@@ -96,9 +123,12 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
 - qa_session: <agentId or empty>
 - po_session: <agentId or empty>
 **Updated:** YYYY-MM-DDTHH:MM
+**Observations:**
 ```
 
-**Write rules:** Create/overwrite at Stage 0 entry of each new story. Update `Stage` + `Updated` after each transition. Update `Sessions` on spawn only. Update loop counts at each retry cycle start. Delete after final story is closed.
+> `Sprint Branch` and `Story Branch` are strict-mode only fields. In GitHub mode write `Sprint Branch: n/a` and `Story Branch: n/a`.
+
+**Write rules:** Create/overwrite at Stage 0 entry of each new story. Update `Stage` + `Updated` after each transition. Update `Sessions` on spawn only. Update loop counts at each retry cycle start. Append one-line bullets to `Observations:` whenever the orchestrator makes a judgment call not covered by the workflow. Delete after final story is closed.
 
 ### Sprint Pipeline Rules
 - Each stage must complete before the next starts

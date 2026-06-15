@@ -4,6 +4,10 @@
 
 A devkit that injects a complete AI Scrum team setup into any project. It provides two workflows of its own: **Analyst** (idea-to-plan analysis) and **Init Project** (scaffold the AI Scrum team into a target project). All sprint execution workflows live in the generated `CLAUDE.md` that `init project` places into the target project.
 
+**Devkit source:** https://raw.githubusercontent.com/YOUR_ORG/mt-agent-devkit/main
+
+> Update this URL to your actual GitHub raw content base URL before running `init project`. It is embedded into every target project so they can run `update agents` without needing the devkit.
+
 ---
 
 ## Agent Roster
@@ -12,11 +16,11 @@ Each specialized agent must read its instruction file before starting any work.
 
 | Agent | Instruction File |
 |---|---|
-| Technical Lead | `.claude/agents/technical_lead_instructions.md` |
-| Developer | `.claude/agents/developer_instructions.md` |
-| QA | `.claude/agents/qa_instructions.md` |
-| Product Owner | `.claude/agents/product_owner_instructions.md` |
-| Business Analyst | `.claude/agents/business_analyst_instructions.md` |
+| Technical Lead | `.claude/agents/templates/instructions/technical_lead_instructions_template.md` |
+| Developer | `.claude/agents/templates/instructions/developer_instructions_template.md` |
+| QA | `.claude/agents/templates/instructions/qa_instructions_template.md` |
+| Product Owner | `.claude/agents/templates/instructions/product_owner_instructions_template.md` |
+| Business Analyst | `.claude/agents/templates/instructions/business_analyst_instructions_template.md` |
 
 Agent memory, rules, working records, and context live under `.claude/agents/`.
 
@@ -156,8 +160,7 @@ Scaffolds these files into the target project. The exact structure depends on th
     ├── rules/                         ← Story standard + per-role rules
     ├── memory/                        ← Blank agent memory files (5 files)
     ├── working-record/                ← Blank working records (5 files)
-    ├── workflows/                     ← Sprint workflow files
-    └── templates/CLAUDE_TEMPLATE.md
+    └── workflows/                     ← Sprint workflow files
 ```
 
 **Strict mode:**
@@ -172,7 +175,6 @@ Scaffolds these files into the target project. The exact structure depends on th
     ├── memory/                        ← Blank agent memory files (5 files)
     ├── working-record/                ← Blank working records (5 files)
     ├── workflows/                     ← Sprint workflow files
-    ├── templates/CLAUDE_TEMPLATE.md
     └── docs/                          ← All agent-generated data (stories, reviews, sprints)
         ├── stories/                   ← ST-XXXXXX.md files
         ├── sprints/                   ← Sprint overview files
@@ -213,7 +215,7 @@ Trigger: user says **"init project"** or **"init project [path]"**
 
 The optional `[path]` argument is the absolute path to the target project. If omitted, the workflow asks the user.
 
-Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/CLAUDE_TEMPLATE.md` and all supporting agent files.
+Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/CLAUDE_template.md` and all supporting agent files.
 
 Read `.claude/agents/workflows/Init_Project_Workflow.md` for the complete pipeline before executing.
 

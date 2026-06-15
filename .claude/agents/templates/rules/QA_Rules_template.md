@@ -88,11 +88,33 @@ Before running any API test script or HTTP call, determine the active auth mode 
 - If token-based auth is active: obtain a bearer token via the configured auth flow before testing
 - Never rely on the script's bundled auth assumption — always derive from the sandbox config
 
+**Test failure policy — any failure blocks sign-off:**
+When any test fails — regardless of the reason (environment configuration, source code bug, authentication issue, missing data, or any other cause) — QA must:
+1. Post a blocker comment on the GitHub Issue describing the failure and its cause, tagging **Dev**
+2. Keep the story in `status:testing`
+3. Not sign off or tick any AC until every test passes
+
+The reason for the failure does not change this rule. "The failure is environmental" or any equivalent judgement is not a valid justification to proceed with sign-off.
+
+**No excluded or disabled tests:**
+Every test present in a test class or suite must pass. Tests must not be commented out or disabled while remaining in the codebase. If a test is known to be broken:
+1. Remove it from the test class entirely
+2. Create a backlog story to fix the underlying issue and restore the test
+
+A test that exists but is expected to fail is a failing test.
+
+**Field-removal stories (immutability enforcement):**
+When a story removes or marks fields as immutable on an endpoint request body (structural rejection, validation constraints, etc.), QA must verify BOTH branches explicitly:
+- (a) **Omit the removed field** → request succeeds (200 or spec-defined success status)
+- (b) **Include the removed field** → request is rejected (400 or spec-defined error code)
+
+A happy-path test alone is not sufficient — the rejection branch must be a separate, explicit test case.
+
 ---
 
 ## 5. Document Placement
 
-- Place all new documents in the correct feature-doc subfolder — see `Project_Priming.md §4`
+- Place all new documents in the correct feature-doc subfolder — see `.claude/agents/context/Document_Index.md` for paths
 - Use `Title_Case_With_Underscores` for all document file names (e.g., `My_Technical_Document.md`)
 - Test scenario docs go under `docs/feature/<feature_name>/test-scenarios/`
 
@@ -156,7 +178,19 @@ Include a one-line test result note in the PR description (e.g., "integration te
 
 ---
 
-## 10. Reporting & Blockers
+## 10. Live User Instruction Conflicts (when acting as Implementer)
+
+If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread (by PO, TL, or the user themselves), the live instruction takes precedence. When this happens:
+
+1. Acknowledge the conflict explicitly — state what the prior decision was and what the new instruction is
+2. Proceed with the live instruction
+3. Document the override in the PR description so the reviewer understands why the prior decision was not followed
+
+Do not silently follow the old decision, and do not block awaiting re-confirmation — the user's live instruction is the authoritative signal.
+
+---
+
+## 11. Reporting & Blockers
 
 - Keep working record updates short and fact-based (story IDs, test results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
@@ -164,13 +198,13 @@ Include a one-line test result note in the PR description (e.g., "integration te
 
 ---
 
-## 11. Stage-Transition Commit (mandatory before handoff)
+## 12. Stage-Transition Commit (mandatory before handoff)
 
 Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
-## 12. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
+## 13. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
 On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
@@ -178,6 +212,6 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 2.1 — §12 Troubleshooting Protocol: mandatory diagnose-fix-record loop for tooling/environment blockers  
-**Previous:** 2.0 — §9 Pre-PR Gate: mandatory local checks before opening a PR when acting as Implementer  
+**Version:** 3.2 — §4: test failure policy, no excluded tests, field-removal coverage added; §5: Document_Index.md reference; §10: live user instruction conflict rule added  
+**Previous:** 2.1 — §12 Troubleshooting Protocol: mandatory diagnose-fix-record loop for tooling/environment blockers  
 **Created:** 2026-05-01

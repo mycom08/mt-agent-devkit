@@ -24,6 +24,15 @@ Title format: `[ST-XXXXXX][FEATURE] Story Title` | Labels: `status:backlog` + `f
 
 **Story length:** 2-3 pages. If 4+ pages, move technical detail to technical docs.
 
+**Documentation stories — AC depth signal:** When writing AC for a documentation story, each criterion must state the expected depth explicitly. Do not rely on section titles alone. Examples of acceptable depth signals:
+- "Each section contains at least one paragraph explaining the concept in plain language"
+- "Each major section includes at least one code or config example"
+- "Document is self-contained — a reader unfamiliar with the codebase can follow it without cross-referencing source files"
+
+Without a depth signal, the implementer must guess, which produces either thin summaries or unnecessarily deep dives.
+
+**PATCH/PUT stories — field mutability gate:** Before marking a story `status:ready`, every field in the request schema must have its mutability explicitly stated in the AC. For each field: is it mutable (can be changed after creation) or immutable (excluded from updates)? Ambiguous mutability is a blocking gap — resolve it at story creation, not during refinement or development.
+
 ---
 
 ## 2. Story Comment Rules

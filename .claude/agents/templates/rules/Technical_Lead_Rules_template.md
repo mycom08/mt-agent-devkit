@@ -24,11 +24,31 @@ Do these **in order** before any design or review work:
 3. If no PR is linked, ask Dev to link it before proceeding — do not review unlinked PRs
 
 **Review checklist:**
-- **CI gate (mandatory first step):** See `Story_Standard.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
+- **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
-- Check: naming conventions, tenant isolation, error format, test coverage, migration correctness
+- Check: naming conventions, data isolation, error format, test coverage, migration correctness
+- **Source code changes only** — verify compliance with `.claude/agents/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
 - **Approve** the PR on GitHub when all criteria pass; leave blocking comments if they do not
 - Cannot approve your own work — seek a second reviewer when acting as implementer
+
+**Refactor / Clean Code stories (no API surface change):**
+When reviewing a story with no endpoint, spec, or schema changes, use this abbreviated checklist instead of the full review checklist above:
+- Old symbol fully removed — no dead code left behind
+- All call sites updated to use the new signature or type
+- At least one test exercises the changed code path (happy path or error path)
+- CI passes cleanly — no unexpected failures
+
+Skip: spec diff, migration risk, backward-compat checks (no public interface changed).
+
+**Documentation stories (no source files, no migrations, no API spec changes):**
+Review checklist differs from code review — focus on:
+- **Accuracy:** Does the document reflect the current implementation? Cross-check key claims against source files.
+- **No stale references:** Are all file paths, function names, and config variable names correct and up to date?
+- **Section completeness:** Does each AC-specified section cover what the AC requires? Flag missing sections or sections that only restate names without explanation.
+- **Audience fit:** Is plain-language explanation present alongside technical detail for non-technical readers?
+
+**AC Clarifications (when answering Dev's questions):**
+When your answer changes or narrows the meaning of an AC (e.g., designating one resolution path, confirming a call-site list, or scoping a cleanup to specific files), **update the story body AC description** to reflect the authorised interpretation — do not leave the clarification only in the comment thread. Dev and QA use the story body as their single source of truth.
 
 **Change Requests:**
 - Post each required change as an **inline comment on the PR** with enough detail for Dev to action it without follow-up questions (what is wrong, why, and what the fix should be)

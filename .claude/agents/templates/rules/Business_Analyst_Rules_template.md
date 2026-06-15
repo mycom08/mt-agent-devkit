@@ -33,13 +33,24 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 
 ---
 
-## 3. Stage-Transition Commit (mandatory before handoff)
+## 3. Story Comment Rules
+
+When posting comments on GitHub Issues:
+
+- Post all BA clarifications, scope notes, and follow-up replies as **comments on the GitHub Issue** — do not create standalone files for normal discussion
+- Reply in the same comment thread when following up on the same topic — do not open a new comment for each follow-up
+- Follow the Comment Standard in `Story_Standard.md §9` for thread format and field usage
+- Never reference stories with just a bare number — always use `ST-XXXXXX` format
+
+---
+
+## 4. Stage-Transition Commit (mandatory before handoff)
 
 Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
-## 4. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
+## 5. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
 On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
@@ -47,6 +58,6 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 1.1 — §4 Troubleshooting Protocol: mandatory diagnose-fix-record loop for tooling/environment blockers  
-**Previous:** 1.0 — Initial rules file  
+**Version:** 1.2 — §3 Story Comment Rules added  
+**Previous:** 1.1 — §5 Troubleshooting Protocol: mandatory diagnose-fix-record loop for tooling/environment blockers  
 **Created:** 2026-05-25
