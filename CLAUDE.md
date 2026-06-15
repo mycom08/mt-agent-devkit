@@ -68,13 +68,14 @@ No agents are spawned. The orchestrator prints the following reference directly 
 
 ### mt-agent-devkit — Available Commands
 
-This devkit has two workflows of its own. All sprint execution workflows (`continue sprint`, `start story`, `plan sprint`, etc.) are injected into your target project by `init project` — they do not exist here.
+This devkit has three workflows of its own. All sprint execution workflows (`continue sprint`, `start story`, `plan sprint`, etc.) are injected into your target project by `init project` — they do not exist here.
 
 | Command | Alias | What it does |
 |---|---|---|
 | `workflow help` | — | Show this reference |
 | `analyze <requirement>` | `analyze requirement: <text>` | Analyse a project idea from scratch — produces business, technical, and planning documents plus diagrams |
 | `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project (prompts for mode) |
+| `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project |
 
 ---
 
@@ -218,6 +219,18 @@ The optional `[path]` argument is the absolute path to the target project. If om
 Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/CLAUDE_template.md` and all supporting agent files.
 
 Read `.claude/agents/workflows/Init_Project_Workflow.md` for the complete pipeline before executing.
+
+---
+
+## Update Project Workflow
+
+Trigger: user says **"update project"** or **"update project [path]"**
+
+The optional `[path]` argument is the absolute path to an already-initialized target project. If omitted, the workflow asks the user.
+
+Applies the current local devkit templates to the target project using the same merge strategy as `update agents` — but reads from local files instead of GitHub. Uses `changes.json` to resolve only the files that changed between the project's installed version and the current devkit version, with automatic full-scan fallback if a version entry is missing.
+
+Read `.claude/agents/workflows/Update_Project_Workflow.md` for the complete pipeline before executing.
 
 ---
 

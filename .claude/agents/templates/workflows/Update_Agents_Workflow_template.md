@@ -27,19 +27,39 @@ If either field is missing or contains a placeholder URL, stop and notify the us
 
 ---
 
-## Stage 1 — Preview Changes
+## Stage 1 — Resolve Changed Files
 
-Before writing anything, fetch and inspect each file in the update scope (see Stage 2 for the full list). For each file:
-- Fetch the latest template content from `{DEVKIT_SOURCE_URL}`
-- Compare against the local file
-- Classify as: **overwrite**, **merge**, or **skip**
+Fetch `{DEVKIT_SOURCE_URL}/changes.json` to determine which files need updating.
 
-Report a summary to the user:
+Collect every version between `CURRENT_VERSION` (exclusive) and `LATEST_VERSION` (inclusive) in ascending order. For each version:
+
+| Condition | Action |
+|---|---|
+| Version key exists in `changes.json` AND file list is non-empty | Add listed files to the **targeted update set** |
+| Version key exists in `changes.json` AND file list is empty `[]` | No files changed in this version — skip |
+| Version key is **missing** from `changes.json` | **Trigger full scan** — fetch and compare all template files |
+
+Deduplicate the targeted update set after collecting across all versions.
+
+**If full scan was triggered**, notify the user:
+> _"No change manifest found for one or more versions — running full scan to ensure nothing is missed."_
+
+After resolving, report the update plan to the user before writing anything:
 
 ```
-Files to overwrite:   rules/ (N files), workflows/ (N files)
-Files to merge:       instructions/ (5 files), CLAUDE.md
-Files to skip:        Project_Priming.md, memory/ (5 files), working-record/ (5 files)
+Update plan: v{CURRENT_VERSION} → v{LATEST_VERSION}
+
+Files to update (targeted):        ← if changes.json resolved cleanly
+  - CLAUDE.md (merge)
+  - rules/Developer_Rules.md (overwrite)
+  ...
+
+  — or —
+
+Full scan triggered (N files)      ← if any version was missing from changes.json
+  Files to overwrite:  rules/ (N), workflows/ (N)
+  Files to merge:      instructions/ (5), CLAUDE.md
+  Files to skip:       Project_Priming.md, memory/ (5), working-record/ (5)
 ```
 
 Then ask: **"Proceed with update? Reply yes to apply or no to cancel."**
@@ -51,80 +71,56 @@ Then ask: **"Proceed with update? Reply yes to apply or no to cancel."**
 
 ## Stage 2 — Apply Updates
 
-Apply updates file by file according to the merge strategy below. After each file is written, log it. If any file fails, log the error and continue with the remaining files — do not abort the entire update.
+Apply only the files resolved in Stage 1. Each file is processed according to its merge strategy below. Log each file as it is written. If any file fails, log the error and continue — do not abort the entire update.
 
-### Rules files — Overwrite
+### Merge strategy by file type
 
-**Source path pattern:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/rules/{filename}_template.md`
-**Target path:** `.claude/agents/rules/{filename}.md`
+#### Rules files — Overwrite
 
-Fetch each rules file and write it verbatim to the target path. These files contain no project-specific content.
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/rules/{filename}_template.md`
+**Target:** `.claude/agents/rules/{filename}.md`
 
-Files:
-- `Agent_Common.md`
-- `Blocked_Request.md`
-- `Business_Analyst_Rules.md`
-- `CICD_Validation_Guide.md`
-- `Clean_Code_Rules.md`
-- `Developer_Rules.md`
-- `Product_Owner_Rules.md`
-- `QA_Rules.md`
-- `Retro_Rules.md`
-- `Story_Standard.md`
-- `Story_Standard_Dev.md`
-- `Story_Standard_PO.md`
-- `Story_Standard_QA.md`
-- `Story_Standard_TL.md`
-- `Strict_Mode_Story_Guide.md` (only if `Mode: strict`)
-- `Technical_Lead_Rules.md`
+Fetch and write verbatim. No project-specific content lives here.
 
-### Workflow files — Overwrite
+Applies to: `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, and `Strict_Mode_Story_Guide.md` (only if `Mode: strict`).
 
-**Source path pattern:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/workflows/{filename}_template.md`
-**Target path:** `.claude/agents/workflows/{filename}.md`
+#### Workflow files — Overwrite
 
-Fetch each workflow file and write it verbatim. These files contain no project-specific content.
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/workflows/{filename}_template.md`
+**Target:** `.claude/agents/workflows/{filename}.md`
 
-Files:
-- `Create_Stories_Workflow.md`
-- `Plan_Sprint_Workflow.md`
-- `Refine_Sprint_Workflow.md`
-- `Resume_Story_Workflow.md`
-- `Shared_Pipeline_Stages.md`
-- `Sprint_Workflow.md`
-- `Start_Story_Workflow.md`
-- `Update_Agents_Workflow.md` ← this file itself
-- `Workflow_Guide.md`
+Fetch and write verbatim. No project-specific content lives here.
 
-### Instruction files — Merge
+Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Update_Agents_Workflow.md` (this file), `Workflow_Guide.md`.
 
-**Source path pattern:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/instructions/{role}_instructions_template.md`
-**Target path:** `.claude/agents/instructions/{role}_instructions.md`
+#### Instruction files — Merge
 
-For each instruction file, the merge strategy is:
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/instructions/{role}_instructions_template.md`
+**Target:** `.claude/agents/instructions/{role}_instructions.md`
 
 1. Fetch the latest template
 2. Read the existing local file
-3. Identify which sections in the local file contain **project-specific content** — these are sections that reference the project's actual tech stack, frameworks, tooling, commands, file paths, or conventions. They were generated or edited during `init project`.
-4. Identify which sections are **pure role logic** — generic rules, workflow steps, memory/record instructions that apply to any project.
-5. Apply the updated template's role-logic sections verbatim; preserve the local project-specific sections unchanged.
-6. If the updated template adds a **new section** that does not exist locally → append it. If the new section is role-logic, append it verbatim. If it requires project-specific content, append it with `[UPDATE REQUIRED]` placeholders and notify the user.
+3. Identify **project-specific sections** — sections referencing the project's actual tech stack, frameworks, tooling, commands, file paths, or conventions (written or edited during `init project`)
+4. Identify **role-logic sections** — generic rules, workflow steps, memory/record instructions that apply to any project
+5. Apply updated role-logic sections verbatim; preserve project-specific sections unchanged
+6. New sections added by the template → append verbatim if role-logic; append with `[UPDATE REQUIRED]` placeholder if project-specific, and notify the user
 
-### CLAUDE.md — Merge
+#### CLAUDE.md — Merge
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/CLAUDE_template.md`
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/CLAUDE_TEMPLATE.md`
 
 1. Fetch the latest template
 2. Read the existing local `CLAUDE.md`
-3. Preserve these fields from the local file — never overwrite them:
+3. **Preserve** — never overwrite:
    - `**Mode:**`
    - `**Devkit source:**`
-   - `**Devkit version:**` (this will be updated in Stage 3)
-   - The `## Project Overview` content (project name and description)
-4. Replace all orchestrator sections verbatim from the updated template:
+   - `**Devkit version:**` (updated in Stage 3)
+   - `## Project Overview` content
+4. **Replace verbatim** from the updated template:
+   - `## Agent File Integrity`
    - `## Agent Session Management`
    - `## Agent Completion Reports`
-   - `## Workflows` routing table (re-add the `update agents` row after replacing)
+   - `## Workflows` routing table (preserve `update agents` row)
    - `## Sprint Workflow`
    - `## Start Story Workflow`
    - `## Shared Pipeline Stages`
@@ -132,21 +128,46 @@ For each instruction file, the merge strategy is:
    - `## Plan Next Sprint Workflow`
    - `## Analyst Workflow`
    - `## PR Approval Rule`
-5. If the updated template adds a new top-level section not present locally → append it after the last existing section.
+5. New top-level sections in the template not present locally → append after the last existing section
 
-### Project_Priming.md — Skip
+#### Project_Priming.md — Skip
 
 Never fetch or modify. This file is 100% project-specific.
 
-### Memory files — Skip (append new sections only)
+#### Memory files — Skip (append new sections only)
 
-Never overwrite. If the latest template version adds a new named section (identified by a `##` heading) that does not exist in the local memory file → append it empty at the end of the file.
+Never overwrite. If the template adds a new `##` section not present locally → append it empty at the end of the file.
 
-### Working-record files — Skip (append new sections only)
+#### Working-record files — Skip (append new sections only)
 
 Same rule as memory files.
 
-### devkit_version.txt — Never touch during update (updated in Stage 3)
+### Cleanup — Remove Stale Files
+
+After all updates are applied, scan each managed directory and flag any file not in the known expected set.
+
+**Expected files — `rules/`:**
+`Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
+
+**Expected files — `workflows/`:**
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Update_Agents_Workflow.md`, `Workflow_Guide.md`
+
+Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
+
+If any unexpected files are found, report them to the user:
+
+```
+Stale files found:
+  rules/Developer_Rules_template.md
+  workflows/Token_Probe_Workflow.md
+
+These files are not part of the devkit structure. Remove them? Reply yes to delete or no to keep.
+```
+
+- **yes** → delete the listed files and log each deletion
+- **no** → leave them in place; note them in the completion report
+
+If no unexpected files are found, skip this step silently.
 
 ---
 
@@ -160,10 +181,7 @@ Same rule as memory files.
 Update complete: v{CURRENT_VERSION} → v{LATEST_VERSION}
 
 Updated:
-  - rules/         (N files overwritten)
-  - workflows/     (N files overwritten)
-  - instructions/  (5 files merged)
-  - CLAUDE.md      (orchestrator sections replaced)
+  - <list each file written>
 
 Skipped (project-owned):
   - Project_Priming.md
@@ -182,6 +200,7 @@ Skipped (project-owned):
 - **Never write before user confirms** in Stage 1
 - **Never overwrite** `Project_Priming.md`, `memory/`, `working-record/`, or `docs/`
 - **Fail safe on network error** — if any fetch fails, log it and skip that file; never write partial content
-- **Log every file written** — the user should be able to see exactly what changed
+- **Missing version in changes.json = full scan** — never silently skip an unknown version
+- **Log every file written** — the user must be able to see exactly what changed
 - **Merge preserves project content** — when in doubt about whether a section is project-specific, keep the local version and notify the user
 - **This file updates itself** — `Update_Agents_Workflow.md` is in the overwrite list; the new version takes effect after this run completes
