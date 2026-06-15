@@ -12,5 +12,8 @@
   ],
   "0.0.5": [
     ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+  ],
+  "0.0.6": [
+    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
   ]
 }

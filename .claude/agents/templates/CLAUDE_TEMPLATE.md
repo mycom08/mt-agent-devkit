@@ -102,7 +102,7 @@ Quick-reference routing table. The orchestrator reads the trigger from the user'
 | `resume story ST-XXXXXX` | `.claude/agents/workflows/Resume_Story_Workflow.md` |
 | `workflow help` | `.claude/agents/workflows/Workflow_Guide.md` |
 | `analyze <requirement>` | `.claude/agents/workflows/Analyst_Workflow.md` |
-| `update agents` | `.claude/agents/workflows/Update_Agents_Workflow.md` |
+| `sync devkit` | `.claude/agents/workflows/Sync_Devkit_Workflow.md` |
 
 ---
 
