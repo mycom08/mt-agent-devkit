@@ -1,6 +1,6 @@
-# Update Agents Workflow
+# Sync Devkit Workflow
 
-Triggered by: `"update agents"` in the target project's CLAUDE.md
+Triggered by: `"sync devkit"` in the target project's CLAUDE.md
 
 Fetches the latest agent template files from the devkit GitHub repository and applies them to this project, preserving all project-specific content.
 
@@ -91,7 +91,7 @@ Applies to: `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`
 
 Fetch and write verbatim. No project-specific content lives here.
 
-Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Update_Agents_Workflow.md` (this file), `Workflow_Guide.md`.
+Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md` (this file), `Workflow_Guide.md`.
 
 #### Instruction files — Merge
 
@@ -120,7 +120,7 @@ Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Spr
    - `## Agent File Integrity`
    - `## Agent Session Management`
    - `## Agent Completion Reports`
-   - `## Workflows` routing table (preserve `update agents` row)
+   - `## Workflows` routing table (preserve `sync devkit` row)
    - `## Sprint Workflow`
    - `## Start Story Workflow`
    - `## Shared Pipeline Stages`
@@ -150,7 +150,7 @@ After all updates are applied, scan each managed directory and flag any file not
 `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
 
 **Expected files — `workflows/`:**
-`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Update_Agents_Workflow.md`, `Workflow_Guide.md`
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
 
@@ -158,8 +158,7 @@ If any unexpected files are found, report them to the user:
 
 ```
 Stale files found:
-  rules/Developer_Rules_template.md
-  workflows/Token_Probe_Workflow.md
+  workflows/Update_Agents_Workflow.md
 
 These files are not part of the devkit structure. Remove them? Reply yes to delete or no to keep.
 ```
@@ -178,7 +177,7 @@ If no unexpected files are found, skip this step silently.
 3. Report completion to the user:
 
 ```
-Update complete: v{CURRENT_VERSION} → v{LATEST_VERSION}
+Sync complete: v{CURRENT_VERSION} → v{LATEST_VERSION}
 
 Updated:
   - <list each file written>
@@ -203,4 +202,4 @@ Skipped (project-owned):
 - **Missing version in changes.json = full scan** — never silently skip an unknown version
 - **Log every file written** — the user must be able to see exactly what changed
 - **Merge preserves project content** — when in doubt about whether a section is project-specific, keep the local version and notify the user
-- **This file updates itself** — `Update_Agents_Workflow.md` is in the overwrite list; the new version takes effect after this run completes
+- **This file updates itself** — `Sync_Devkit_Workflow.md` is in the overwrite list; the new version takes effect after this run completes

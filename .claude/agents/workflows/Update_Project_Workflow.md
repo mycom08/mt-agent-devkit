@@ -2,7 +2,7 @@
 
 Triggered by: `"update project [path]"` in the devkit's CLAUDE.md
 
-Applies the current local devkit templates to an already-initialized target project, using the same merge strategy as the `update agents` command that runs inside target projects. Uses local template files directly — no GitHub fetch required.
+Applies the current local devkit templates to an already-initialized target project, using the same merge strategy as the `sync devkit` command that runs inside target projects. Uses local template files directly — no GitHub fetch required.
 
 ---
 
@@ -115,7 +115,7 @@ Files: all workflow template files except `Analyst_Workflow.md` and `Init_Projec
    - `## Agent File Integrity`
    - `## Agent Session Management`
    - `## Agent Completion Reports`
-   - `## Workflows` routing table (preserve `update agents` row)
+   - `## Workflows` routing table (preserve `sync devkit` row)
    - `## Sprint Workflow`
    - `## Start Story Workflow`
    - `## Shared Pipeline Stages`
@@ -145,7 +145,7 @@ After all updates are applied, scan each managed directory in `TARGET_PROJECT` a
 `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
 
 **Expected files — `workflows/`:**
-`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Update_Agents_Workflow.md`, `Workflow_Guide.md`
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
 

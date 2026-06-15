@@ -106,10 +106,10 @@ Applies the current local devkit templates to an already-initialized target proj
 
 There are two ways to sync devkit improvements into an already-initialized project.
 
-### From inside the target project — `update agents`
+### From inside the target project — `sync devkit`
 
 ```
-update agents
+sync devkit
 ```
 
 Fetches the latest templates directly from the devkit GitHub repository. Compares `**Devkit version:**` in `CLAUDE.md` against `version.txt` on GitHub. If an update is available, resolves which files changed via `changes.json`, shows a preview, and asks for confirmation before writing anything.
@@ -145,7 +145,7 @@ When you change template files, bump the version and record what changed so targ
 
 | File | Purpose |
 |---|---|
-| `version.txt` | Current devkit version (e.g. `0.0.3`) — fetched by `update agents` to detect updates |
+| `version.txt` | Current devkit version (e.g. `0.0.3`) — fetched by `sync devkit` to detect updates |
 | `changes.json` | Maps each version to the list of template files that changed in that release |
 
 ### `changes.json` format
@@ -164,7 +164,7 @@ When you change template files, bump the version and record what changed so targ
 
 - Empty array `[]` — no template files changed in this version (devkit-internal changes only)
 - File list — only template files that get deployed to target projects; devkit-internal files (`Update_Project_Workflow.md`, `changes.json`, `Init_Project_Workflow.md`, etc.) are never listed
-- Missing version key — `update agents` falls back to a full scan automatically; this is safe but less efficient
+- Missing version key — `sync devkit` falls back to a full scan automatically; this is safe but less efficient
 
 ### Release checklist
 

@@ -75,7 +75,7 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 | `workflow help` | — | Show this reference |
 | `analyze <requirement>` | `analyze requirement: <text>` | Analyse a project idea from scratch — produces business, technical, and planning documents plus diagrams |
 | `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project (prompts for mode) |
-| `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project |
+| `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project (same logic as `sync devkit` but uses local files) |
 
 ---
 

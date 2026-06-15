@@ -185,7 +185,7 @@ Copy all scrum team workflow files verbatim:
 - `Shared_Pipeline_Stages.md`
 - `Sprint_Workflow.md`
 - `Start_Story_Workflow.md`
-- `Update_Agents_Workflow.md`
+- `Sync_Devkit_Workflow.md`
 - `Workflow_Guide.md`
 
 > **Do not copy** `Analyst_Workflow.md` or `Init_Project_Workflow.md` — these are devkit-internal workflows and have no place in the target project.
@@ -304,7 +304,7 @@ Next steps:
    to see all available commands.
 
 5. To sync future devkit improvements into this project, type:
-   update agents
+   sync devkit
 ```
 
 **If `Mode: strict`** — display:
@@ -332,7 +332,7 @@ Next steps:
    to see all available commands.
 
 6. To sync future devkit improvements into this project, type:
-   update agents
+   sync devkit
 ```
 
 ---
