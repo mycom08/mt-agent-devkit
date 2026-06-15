@@ -162,7 +162,7 @@ If any unexpected files are found, report them to the user:
 ```
 Stale files found in {TARGET_PROJECT}:
   rules/Developer_Rules_template.md
-  workflows/Token_Probe_Workflow.md
+
 
 These files are not part of the devkit structure. Remove them? Reply yes to delete or no to keep.
 ```

@@ -102,11 +102,18 @@ Update your Working Record at the start and end of each session.
 
 ## 6. Stage-Transition Commit (implementer & reviewer roles)
 
-Before signaling completion to the orchestrator, commit any **agent memory file** changes made during the session:
+Before signaling completion to the orchestrator, commit any **agent memory file** changes made during the session.
 
+**If `Mode: github`:**
 - Commit memory files only — the Working Record is gitignored and must not be committed
+- Never commit any file under `.claude/agents/` other than memory files
 - Commit message: `Agent: <short description>` — under 50 characters (e.g., `Agent: Update QA memory`)
 - If no memory files changed, skip the commit — do not create an empty commit
 - Push before reporting stage completion
 
-> **Gate:** Do not signal stage completion until the commit is pushed (if applicable).
+**If `Mode: strict`:**
+- The entire `.claude/agents/` folder is gitignored — never run `git add` on any file under it
+- Skip this commit step entirely — no commit, no push
+- Report stage completion immediately after completing the work
+
+> **Gate (github mode only):** Do not signal stage completion until the commit is pushed (if applicable).

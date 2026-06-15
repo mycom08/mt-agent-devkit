@@ -145,13 +145,19 @@ You approve the release when all Must-Have criteria are met. See the feature's I
 
 ## 11. Project Plan Commit (mandatory after any plan update)
 
-After creating or updating any project plan file (Sprint Overviews, Product Backlog, Implementation Roadmap, or any file under `docs/feature/<feature_name>/plan/`), PO **must** immediately commit and push the change before continuing:
+After creating or updating any project plan file (Sprint Overviews, Product Backlog, Implementation Roadmap, or any file under `docs/feature/<feature_name>/plan/`), PO **must** immediately commit and push the change before continuing.
 
+**If `Mode: github`:**
 - **Commit message:** `Agent: <short description>` — total length under 50 characters
 - **Examples:** `Agent: Update sprint 3 overview`, `Agent: Update backlog`
 - Commit each plan file update as soon as it is written — do not batch multiple plan changes into one deferred commit
+- Push before continuing
 
-> **Gate:** Never leave plan file changes uncommitted while continuing other work.
+**If `Mode: strict`:**
+- Plan files live under `.claude/agents/docs/` which is gitignored — never run `git add` on any file under `.claude/agents/`
+- Skip the commit step entirely — write the file and continue immediately
+
+> **Gate (github mode only):** Never leave plan file changes uncommitted while continuing other work.
 
 ---
 

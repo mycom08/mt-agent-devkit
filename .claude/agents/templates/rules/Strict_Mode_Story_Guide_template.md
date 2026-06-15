@@ -242,3 +242,6 @@ Quick lookup for all GitHub → strict-mode equivalents used in workflows.
 | `gh label list \| grep "sprint-"` | Glob `docs/stories/*.md`, collect unique `**Sprint:**` values |
 | CI run URL in PR | Not required — CI gate skipped in strict mode |
 | `gh issue create` | Increment counter, write story MD |
+| `Agent: <message>` commit prefix | **Never use** — commit messages follow the project's own style |
+| `git add .claude/agents/...` | **Never do this** — entire `.claude/agents/` is gitignored |
+| Commit memory/working-record/docs | **Never commit agent files** — they are local-only by design |

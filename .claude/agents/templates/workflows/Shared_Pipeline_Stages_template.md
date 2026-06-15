@@ -4,18 +4,6 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
-## Token Accounting (all stages)
-
-The orchestrator logs subagent token usage so doc and workflow changes can be measured over time. This tracks **subagent** tokens only (the orchestrator's own thread is not captured) — that is where agent read-cost lives.
-
-- **At Stage 0 entry:** capture `docs_sha` = `git rev-parse --short HEAD` and store it in the pipeline state file (`Docs SHA:` field).
-- **Every time a spawned or resumed agent returns** (Stages 1–4, including retry loops): read the `<usage>` block from the agent's completion and append one row to `.claude/agents/retros/token_ledger.csv`:
-  ```
-  <ISO-timestamp>,<docs_sha>,<story_id>,<stage-number>,<agent_role>,<subagent_tokens>,<tool_uses>,<duration_ms>
-  ```
-- If a return carries no `<usage>` block, skip the row — do not guess values.
-- Fast-path stages that spawn **no** agent log **no** row. That absence is the saving and is intentional — do not synthesize a row for skipped spawns.
-
 ---
 
 ## Stage 0 — Implementer Routing
@@ -200,8 +188,6 @@ After the implementer reports completion, append a bullet to `Observations:` for
 
 Append a bullet to `Observations:` for each item that did **not** happen:
 
-- `[token-waste]` Correct path taken — fast path for `non-behavioral`, behavioral path for `behavioral`?
-- `[token-waste]` If fast path: all ACs confirmed from diff without spawning a reviewer agent?
 - `[skipped-step]` If behavioral path: `reviewer_session` saved in state file immediately after spawn?
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
@@ -262,8 +248,6 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 Append a bullet to `Observations:` for each item that did **not** happen:
 
-- `[token-waste]` If `non-behavioral` + Stage 2 fast path: was AC re-verification skipped entirely?
-- `[token-waste]` If `non-behavioral` + Stage 2 behavioral path: were ACs confirmable from files alone without falling through to the QA agent?
 - `[skipped-step]` If QA agent spawned: `qa_session` saved in state file immediately after spawn?
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
@@ -299,7 +283,6 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 Append a bullet to `Observations:` for each item that did **not** happen:
 
-- `[token-waste]` If `non-behavioral`: orchestrator executed closure directly without spawning PO?
 - `[skipped-step]` If behavioral: `po_session` saved in state file immediately after spawn?
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after every stage transition (verify all 4)?
 - `[skipped-step]` All spawned session IDs recorded immediately (impl, reviewer if spawned, qa if spawned, po if spawned)?

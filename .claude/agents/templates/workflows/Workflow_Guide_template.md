@@ -35,7 +35,6 @@ Steps 1–3 are **pre-sprint setup**. Step 4 is the **execution loop** — run i
 | `continue sprint` | Stories are `ready` and you want to run the full pipeline |
 | `start story ST-XXXXXX` | You want to run the pipeline for one specific story only |
 | `resume story ST-XXXXXX` | A story is `blocked` and you have provided the missing information |
-| `token probe` | Measure each role's onboarding read-cost (subagent tokens) before/after a docs change |
 | `workflow help` | Show this guide |
 
 ---

@@ -57,7 +57,6 @@ Quick lookup for all project documents and external references. Update this file
 | What | Path |
 |---|---|
 | Sprint Retro Summaries | `.claude/agents/retros/sprint_N_summary.md` |
-| Token Ledger | `.claude/agents/retros/token_ledger.csv` |
 
 ---
 

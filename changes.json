@@ -15,5 +15,14 @@
   ],
   "0.0.6": [
     ".claude/agents/templates/CLAUDE_TEMPLATE.md"
+  ],
+  "0.0.7": [
+    ".claude/agents/templates/rules/Agent_Common_template.md",
+    ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+    ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
+    ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md",
+    ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
+    ".claude/agents/templates/workflows/Workflow_Guide_template.md",
+    ".claude/agents/templates/context/Document_Index_template.md"
   ]
 }
