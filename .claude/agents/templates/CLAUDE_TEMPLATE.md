@@ -29,6 +29,35 @@ Agent memory, rules, working records, and context live under `.claude/agents/`.
 
 ---
 
+## Agent File Integrity
+
+**Agents and the orchestrator must never create, modify, or delete agent infrastructure files during sprint work or any other workflow.**
+
+Protected paths — read-only for all agents and the orchestrator at all times:
+
+| Path | Contents |
+|---|---|
+| `.claude/agents/*_instructions.md` | Role instruction files |
+| `.claude/agents/rules/` | All rules files |
+| `.claude/agents/workflows/` | All workflow files |
+| `.claude/agents/context/` | Project priming and document index |
+| `.claude/agents/devkit_version.txt` | Installed devkit version stamp |
+
+Writable paths during normal work:
+
+| Path | Who writes | What |
+|---|---|---|
+| `.claude/agents/memory/` | Each agent | Their own memory file only |
+| `.claude/agents/working-record/` | Each agent | Their own working record only |
+| `.claude/agents/tmp/` | Orchestrator | Pipeline state files |
+| `.claude/agents/docs/` | All agents | Stories, sprints, reviews (strict mode only) |
+
+**The only operation that may update protected paths is `update agents`**, which is triggered explicitly by the user and handled exclusively by `Update_Agents_Workflow.md`. No agent, no workflow, and no orchestrator logic may modify these files for any other reason — including fixes, improvements, or adjustments discovered during sprint work.
+
+If an agent identifies an error or improvement needed in a rules or workflow file, it must report it to the user as an observation — never self-correct by editing the file.
+
+---
+
 ## Agent Session Management
 
 The orchestrator tracks the `agentId` returned by every spawned agent. On loop-back, always prefer resuming over spawning:
@@ -136,6 +165,7 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
 - **Session reuse** — always resume an existing session before spawning
 - Report pipeline status to the user after each stage
 - If any agent is blocked, stop and report to the user before continuing
+- **Agent files are read-only** — no agent or orchestrator step may write to instructions, rules, workflows, or context files; see [Agent File Integrity](#agent-file-integrity)
 
 ---
 
@@ -166,6 +196,7 @@ The orchestrator runs the [Shared Pipeline Stages](#shared-pipeline-stages) for 
 - Loop limit: max 3 Impl→Reviewer or Impl→QA cycles before escalating to the user
 - **Session reuse** — always resume an existing session before spawning
 - **Pipeline stops after Stage 4 completes for the targeted story**
+- **Agent files are read-only** — no agent or orchestrator step may write to instructions, rules, workflows, or context files; see [Agent File Integrity](#agent-file-integrity)
 
 ---
 
