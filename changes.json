@@ -2,5 +2,8 @@
   "0.0.1": [],
   "0.0.2": [
     ".claude/agents/templates/CLAUDE_TEMPLATE.md"
+  ],
+  "0.0.3": [
+    ".claude/agents/templates/workflows/Update_Agents_Workflow_template.md"
   ]
 }

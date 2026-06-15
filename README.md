@@ -94,6 +94,88 @@ init project [path]
 ```
 Scaffolds all agent files into a target project. Prompts for mode (github / strict). Safe by default — asks for confirmation before writing.
 
+### Update Project
+```
+update project [path]
+```
+Applies the current local devkit templates to an already-initialized target project. Uses `changes.json` to resolve only the files that changed since the project's installed version, with automatic full-scan fallback if a version entry is missing. Reads from local files — no GitHub fetch required, works offline.
+
+---
+
+## Keeping projects up to date
+
+There are two ways to sync devkit improvements into an already-initialized project.
+
+### From inside the target project — `update agents`
+
+```
+update agents
+```
+
+Fetches the latest templates directly from the devkit GitHub repository. Compares `**Devkit version:**` in `CLAUDE.md` against `version.txt` on GitHub. If an update is available, resolves which files changed via `changes.json`, shows a preview, and asks for confirmation before writing anything.
+
+Best for: project teams who don't have the devkit locally.
+
+### From inside the devkit — `update project [path]`
+
+```
+update project /path/to/your-project
+```
+
+Same logic but uses local devkit template files instead of fetching from GitHub. Useful for applying changes before pushing a new devkit version, or when working offline.
+
+Best for: devkit maintainers updating projects on their own machine.
+
+### What both workflows do
+
+- **Overwrite** `rules/` and `workflows/` — pure devkit logic, no project content
+- **Merge** `instructions/` and `CLAUDE.md` — preserve project-specific sections, update role-logic sections
+- **Skip** `Project_Priming.md`, `memory/`, `working-record/`, `docs/` — project-owned, never touched
+- **Clean up** stale files in `rules/` and `workflows/` — reports unexpected files and asks before deleting
+
+After a successful update, `**Devkit version:**` in `CLAUDE.md` and `.claude/agents/devkit_version.txt` are updated to the new version.
+
+---
+
+## Devkit versioning (for maintainers)
+
+When you change template files, bump the version and record what changed so target projects know exactly what to update.
+
+### Files to maintain
+
+| File | Purpose |
+|---|---|
+| `version.txt` | Current devkit version (e.g. `0.0.3`) — fetched by `update agents` to detect updates |
+| `changes.json` | Maps each version to the list of template files that changed in that release |
+
+### `changes.json` format
+
+```json
+{
+  "0.0.1": [],
+  "0.0.2": [
+    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
+  ],
+  "0.0.3": [
+    ".claude/agents/templates/workflows/Update_Agents_Workflow_template.md"
+  ]
+}
+```
+
+- Empty array `[]` — no template files changed in this version (devkit-internal changes only)
+- File list — only template files that get deployed to target projects; devkit-internal files (`Update_Project_Workflow.md`, `changes.json`, `Init_Project_Workflow.md`, etc.) are never listed
+- Missing version key — `update agents` falls back to a full scan automatically; this is safe but less efficient
+
+### Release checklist
+
+```
+1. Make your changes to template files under .claude/agents/templates/
+2. Bump version.txt (e.g. 0.0.3 → 0.0.4)
+3. Add the new version entry to changes.json listing only changed template files
+4. Commit and push
+5. Optionally run: update project /path/to/project  ← to update local projects immediately
+```
+
 ---
 
 ## Sprint workflows (available after `init project`)
@@ -237,27 +319,20 @@ your-project/
 mt-agent-devkit/
 ├── CLAUDE.md                          ← orchestrator triggers and pipeline rules
 ├── README.md
+├── version.txt                        ← current devkit version stamp
+├── changes.json                       ← per-version list of changed template files
 └── .claude/
     └── agents/
-        ├── context/PROJECT_PRIMING.md ← sample priming (authorization service)
-        ├── memory/                    ← sample memory files
-        ├── rules/                     ← all rule files (story standards, per-role, strict-mode guide)
-        ├── working-record/            ← sample working records
-        ├── workflows/                 ← all workflow definitions
+        ├── workflows/                 ← devkit-internal workflow definitions
         │   ├── Analyst_Workflow.md
-        │   ├── Sprint_Workflow.md
-        │   ├── Start_Story_Workflow.md
-        │   ├── Shared_Pipeline_Stages.md
-        │   ├── Plan_Sprint_Workflow.md
-        │   ├── Refine_Sprint_Workflow.md
-        │   ├── Create_Stories_Workflow.md
-        │   ├── Resume_Story_Workflow.md
         │   ├── Init_Project_Workflow.md
-        │   ├── Token_Probe_Workflow.md
-        │   └── Workflow_Guide.md
-        ├── templates/
-        │   └── CLAUDE_TEMPLATE.md     ← sprint workflow template for target projects
-        └── *_instructions.md          ← per-role instruction files (5 files)
+        │   └── Update_Project_Workflow.md
+        └── templates/                 ← source templates for target projects
+            ├── CLAUDE_TEMPLATE.md
+            ├── context/               ← Project_Priming + Document_Index templates
+            ├── instructions/          ← per-role instruction templates (5 files)
+            ├── rules/                 ← all rule templates (16 files)
+            └── workflows/             ← sprint workflow templates (9 files)
 ```
 
-The sample files are adapted from a Go-based authorization service. When you run `init project`, the workflow replaces all project-specific content with content matched to your target project's tech stack.
+When you run `init project`, all files under `templates/` are adapted to the target project's tech stack and written with clean names (no `_template` suffix). Devkit-internal workflows (`Analyst_Workflow.md`, `Init_Project_Workflow.md`, `Update_Project_Workflow.md`) are never copied to target projects.
