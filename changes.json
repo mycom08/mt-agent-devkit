@@ -9,5 +9,8 @@
   "0.0.4": [
     ".claude/agents/templates/CLAUDE_TEMPLATE.md",
     ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+  ],
+  "0.0.5": [
+    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
   ]
 }
