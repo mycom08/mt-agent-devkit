@@ -232,6 +232,23 @@ Read `.claude/agents/workflows/Update_Project_Workflow.md` for the complete pipe
 
 ---
 
+## Sprint Workflows (Devkit)
+
+The devkit runs its own sprint workflows using the AI Scrum team under `.claude/agents/working/`. Trigger routing:
+
+| Trigger | File |
+|---|---|
+| `continue sprint` | `.claude/agents/working/workflows/Sprint_Workflow.md` |
+| `start story ST-XXXXXX` | `.claude/agents/working/workflows/Start_Story_Workflow.md` |
+| `refine sprint` | `.claude/agents/working/workflows/Refine_Sprint_Workflow.md` |
+| `plan next sprint` | `.claude/agents/working/workflows/Plan_Sprint_Workflow.md` |
+| `create stories` | `.claude/agents/working/workflows/Create_Stories_Workflow.md` |
+| `resume story ST-XXXXXX` | `.claude/agents/working/workflows/Resume_Story_Workflow.md` |
+
+> `workflow help` (without further context) shows the devkit command reference above, not the sprint guide. If the user asks for sprint workflow help, read `.claude/agents/working/workflows/Workflow_Guide.md` and present it.
+
+---
+
 ## PR Approval Rule
 
 GitHub blocks self-approval. Always use `gh pr comment <number>` to post review verdicts — never `gh pr review --approve`.

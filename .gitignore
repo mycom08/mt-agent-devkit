@@ -35,3 +35,7 @@ docker/sandbox/.env
 
 # Workflow output documents
 /result/
+
+# Agent working files — not tracked (session state, working records)
+.claude/agents/working/working-record/
+.claude/agents/working/tmp/
