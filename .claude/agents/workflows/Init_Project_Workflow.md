@@ -190,6 +190,15 @@ Copy all scrum team workflow files verbatim:
 
 > **Do not copy** `Analyst_Workflow.md` or `Init_Project_Workflow.md` — these are devkit-internal workflows and have no place in the target project.
 
+#### Version check scripts (2 files)
+
+**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`
+**Target:** `.claude/agents/scripts/check_devkit_version.ps1`, `.claude/agents/scripts/check_devkit_version.sh`
+
+Copy both scripts verbatim. These power the `SessionStart` hook that notifies users when a new devkit version is available.
+
+---
+
 #### Memory files (5 files)
 
 Generate blank memory files:
@@ -257,7 +266,7 @@ Write all generated files to `TARGET_PROJECT`:
 1. Create directories as needed:
    `.claude/agents/context/`, `.claude/agents/memory/`,
    `.claude/agents/rules/`, `.claude/agents/working-record/`, `.claude/agents/workflows/`,
-   `.claude/agents/retros/`, `.claude/agents/tmp/`
+   `.claude/agents/scripts/`, `.claude/agents/retros/`, `.claude/agents/tmp/`
    Write a `.gitkeep` placeholder inside `.claude/agents/retros/` so the directory is tracked in git.
 2. **If `Mode: strict`** — also create:
    `.claude/agents/docs/stories/`, `.claude/agents/docs/sprints/`, `.claude/agents/docs/reviews/`;
@@ -270,7 +279,43 @@ Write all generated files to `TARGET_PROJECT`:
    - If creating → write the full file
 4. Write each generated file to its target path (with clean name — no `_template` suffix).
 5. Append the `.gitignore` additions (or create `.gitignore` if missing).
-6. Report to the user:
+6. Inject the devkit update-check `SessionStart` hook into `.claude/settings.json` in the target project:
+   - If `.claude/settings.json` already exists → read it and **merge** the `SessionStart` hook under `hooks` (do not remove existing hooks or keys)
+   - If it does not exist → create it with only the hook block
+
+   Detect the target OS from Stage 1 (`.ps1` files, Windows-style paths, PowerShell config → Windows; otherwise Unix):
+
+   **Windows:**
+   ```json
+   {
+     "hooks": {
+       "SessionStart": [
+         {
+           "matcher": "startup",
+           "hooks": [{ "type": "command", "command": "powershell -File .claude/agents/scripts/check_devkit_version.ps1", "timeout": 10 }]
+         }
+       ]
+     }
+   }
+   ```
+
+   **Mac / Linux:**
+   ```json
+   {
+     "hooks": {
+       "SessionStart": [
+         {
+           "matcher": "startup",
+           "hooks": [{ "type": "command", "command": "bash .claude/agents/scripts/check_devkit_version.sh", "timeout": 10 }]
+         }
+       ]
+     }
+   }
+   ```
+
+   If OS cannot be determined, default to the Unix form.
+
+7. Report to the user:
    - Files written (count and list)
    - Mode selected (`strict` or `github`)
    - Any files skipped (if "Skip existing" was chosen in Stage 1)

@@ -1,6 +1,8 @@
 # Sync Devkit Workflow
 
-Triggered by: `"sync devkit"` in the target project's CLAUDE.md
+Triggered by: `"sync devkit"` or `"sync devkit --auto"` in the target project's CLAUDE.md
+
+The `--auto` flag skips the Stage 1 user confirmation. The update plan is still printed but no reply is required before writing begins.
 
 Fetches the latest agent template files from the devkit GitHub repository and applies them to this project, preserving all project-specific content.
 
@@ -31,12 +33,35 @@ If either field is missing or contains a placeholder URL, stop and notify the us
 
 Fetch `{DEVKIT_SOURCE_URL}/changes.json` to determine which files need updating.
 
+### changes.json format
+
+Two formats are supported. Entries for older versions use a plain array; entries for v0.0.8 and later use an object:
+
+```json
+{
+  "0.0.7": [".claude/agents/templates/..."],
+  "0.0.8": {
+    "files": [".claude/agents/templates/..."],
+    "descriptions": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Added auto-approve, checksums, WebFetch fallback"
+    },
+    "checksums": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:abc123"
+    }
+  }
+}
+```
+
+When parsing, if the version value is an array → treat as `files` only (no descriptions or checksums). If it is an object → read `files`, `descriptions`, and `checksums` fields.
+
+### Resolving the file set
+
 Collect every version between `CURRENT_VERSION` (exclusive) and `LATEST_VERSION` (inclusive) in ascending order. For each version:
 
 | Condition | Action |
 |---|---|
-| Version key exists in `changes.json` AND file list is non-empty | Add listed files to the **targeted update set** |
-| Version key exists in `changes.json` AND file list is empty `[]` | No files changed in this version — skip |
+| Version key exists AND file list is non-empty | Add listed files to the **targeted update set** |
+| Version key exists AND file list is empty | No files changed in this version — skip |
 | Version key is **missing** from `changes.json` | **Trigger full scan** — fetch and compare all template files |
 
 Deduplicate the targeted update set after collecting across all versions.
@@ -44,19 +69,31 @@ Deduplicate the targeted update set after collecting across all versions.
 **If full scan was triggered**, notify the user:
 > _"No change manifest found for one or more versions — running full scan to ensure nothing is missed."_
 
+### Checksum pre-filter (overwrite-strategy files only)
+
+For each file in the targeted update set that uses the **overwrite** strategy (workflow files, script files), and where `changes.json` provides a checksum for that file:
+
+1. Read the local installed file
+2. Compute its SHA-256
+3. If it matches the checksum in `changes.json` → mark the file as **skip (already up to date)** and exclude it from the write set
+
+This avoids fetching and rewriting files whose content is already current.
+
+### Update plan
+
 After resolving, report the update plan to the user before writing anything:
 
 ```
 Update plan: v{CURRENT_VERSION} → v{LATEST_VERSION}
 
-Files to update (targeted):        ← if changes.json resolved cleanly
+Files to update (targeted):
   - CLAUDE.md (merge)
-  - rules/Developer_Rules.md (overwrite)
-  ...
+  - rules/Developer_Rules.md (overwrite) — Added strict-mode gate    ← description shown when available
+  - workflows/Sprint_Workflow.md (skip — already up to date)          ← checksum match
 
   — or —
 
-Full scan triggered (N files)      ← if any version was missing from changes.json
+Full scan triggered (N files)
   Files to overwrite:  rules/ (N), workflows/ (N)
   Files to merge:      instructions/ (5), CLAUDE.md
   Files to skip:       Project_Priming.md, memory/ (5), working-record/ (5)
@@ -67,11 +104,23 @@ Then ask: **"Proceed with update? Reply yes to apply or no to cancel."**
 - **yes** → proceed to Stage 2
 - **no** → stop; no files written
 
+**If `--auto` flag was passed**, skip the confirmation and proceed to Stage 2 immediately after printing the update plan.
+
 ---
 
 ## Stage 2 — Apply Updates
 
 Apply only the files resolved in Stage 1. Each file is processed according to its merge strategy below. Log each file as it is written. If any file fails, log the error and continue — do not abort the entire update.
+
+### Fetch strategy
+
+Use WebFetch to retrieve all remote files. If a fetched file appears truncated or summarized — content is abnormally short, contains ellipsis, or is missing sections that are expected based on the file type — fall back to Bash curl:
+
+```bash
+curl -sf "{DEVKIT_SOURCE_URL}/path/to/file"
+```
+
+If both WebFetch and curl fail for a file, log the failure and skip that file; do not write partial content.
 
 ### Merge strategy by file type
 
@@ -100,6 +149,21 @@ Applies to: `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`
 Fetch and write verbatim. No project-specific content lives here.
 
 Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md` (this file), `Workflow_Guide.md`.
+
+#### Script files — Overwrite
+
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/scripts/check_devkit_version.ps1`
+          `{DEVKIT_SOURCE_URL}/.claude/agents/templates/scripts/check_devkit_version.sh`
+**Target:** `.claude/agents/scripts/check_devkit_version.ps1`
+          `.claude/agents/scripts/check_devkit_version.sh`
+
+Fetch and write verbatim. Create `.claude/agents/scripts/` if it does not exist.
+
+#### Settings hook — Inject if missing
+
+Check `.claude/settings.json` for the devkit update-check hook:
+- If a `SessionStart` entry whose command references `check_devkit_version` already exists → skip
+- If missing → inject it using the same OS-detection logic as `init project` Stage 4 step 6 (merge into existing `settings.json`, or create it if absent)
 
 #### Instruction files — Merge
 
@@ -142,6 +206,10 @@ Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Spr
 
 Never fetch or modify. This file is 100% project-specific.
 
+#### context/Document_Index.md — Skip (append new sections only)
+
+Never overwrite. This file is project-specific (document paths, API spec location, agent working file references). If the template adds a new `##` section not present locally → append it empty at the end of the file. The `Last Updated` field is maintained by agents during normal workflow execution, not by sync.
+
 #### Memory files — Skip (append new sections only)
 
 Never overwrite. If the template adds a new `##` section not present locally → append it empty at the end of the file.
@@ -160,6 +228,9 @@ After all updates are applied, scan each managed directory and flag any file not
 **Expected files — `workflows/`:**
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
+**Expected files — `scripts/`:**
+`check_devkit_version.ps1`, `check_devkit_version.sh`
+
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
 
 If any unexpected files are found, report them to the user:
@@ -175,6 +246,20 @@ These files are not part of the devkit structure. Remove them? Reply yes to dele
 - **no** → leave them in place; note them in the completion report
 
 If no unexpected files are found, skip this step silently.
+
+**Missing expected files:** After checking for unexpected files, also check the reverse — any file in the expected set that is absent from the local directory. Report them to the user:
+
+```
+Missing expected files:
+  rules/Blocked_Request.md
+
+These files are part of the devkit structure but were not found locally. Restore them? Reply yes to fetch and write or no to skip.
+```
+
+- **yes** → fetch each missing file from the devkit source and write it using the appropriate merge strategy
+- **no** → leave them absent; note them in the completion report
+
+If no expected files are missing, skip this step silently.
 
 ---
 
@@ -204,10 +289,13 @@ Skipped (project-owned):
 
 ## Pipeline Rules
 
-- **Never write before user confirms** in Stage 1
-- **Never overwrite** `Project_Priming.md`, `memory/`, `working-record/`, or `docs/`
+- **Never write before user confirms** in Stage 1 — unless `--auto` flag was passed
+- **Never overwrite** `Project_Priming.md`, `context/Document_Index.md`, `memory/`, `working-record/`, or `docs/`
 - **Fail safe on network error** — if any fetch fails, log it and skip that file; never write partial content
+- **WebFetch fallback** — if WebFetch returns truncated or summarized content, retry with `curl -sf`; never write content that appears incomplete
 - **Missing version in changes.json = full scan** — never silently skip an unknown version
+- **Checksum skip is silent** — files skipped due to checksum match are listed in the update plan as "already up to date" but do not appear in the final written-files report
 - **Log every file written** — the user must be able to see exactly what changed
 - **Merge preserves project content** — when in doubt about whether a section is project-specific, keep the local version and notify the user
+- **Report both unexpected and missing files** in cleanup — unexpected files may be stale; missing files may indicate a broken install
 - **This file updates itself** — `Sync_Devkit_Workflow.md` is in the overwrite list; the new version takes effect after this run completes

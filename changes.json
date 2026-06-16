@@ -24,5 +24,20 @@
     ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
     ".claude/agents/templates/workflows/Workflow_Guide_template.md",
     ".claude/agents/templates/context/Document_Index_template.md"
-  ]
+  ],
+  "0.0.8": {
+    "files": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1",
+      ".claude/agents/templates/scripts/check_devkit_version.sh"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Added auto-approve flag, changes.json description/checksum format, WebFetch curl fallback, Document_Index skip strategy, missing expected files check",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1": "New: SessionStart hook script for devkit version notification (Windows)",
+      ".claude/agents/templates/scripts/check_devkit_version.sh": "New: SessionStart hook script for devkit version notification (Mac/Linux)"
+    },
+    "checksums": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:06b72804f4de9e9dcae811e8425aa61987d2e88a52f604c5e6892136e9c06ed4"
+    }
+  }
 }

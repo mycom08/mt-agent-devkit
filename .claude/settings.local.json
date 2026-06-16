@@ -42,5 +42,19 @@
       "Bash(Test-Path C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service *)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service\\\\.claude\" -Recurse -Force | Where-Object { !$_.PSIsContainer } | Select-Object -ExpandProperty FullName)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"Write-Output '{\\\"systemMessage\\\": \\\"Session started in mt-agent-devkit. Type workflow help to see available commands.\\\"}'\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }
