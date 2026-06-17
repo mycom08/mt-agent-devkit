@@ -88,6 +88,8 @@ When the orchestrator asks you to run the **Plan Next Sprint** workflow, execute
 
 The orchestrator always passes `feature_name` (a feature name such as `payments`, or `none`). Use it to drive all path and label decisions below.
 
+> **Status rule — plan sprint does NOT promote to `status:ready`.** After sprint planning, every story must remain `status:backlog`. Promoting stories to `status:ready` is exclusively the responsibility of the `refine sprint` workflow Stage 4, after implementers confirm all questions are resolved. Never change `status:backlog` to `status:ready` during this task.
+
 ### Step 1 — Verify Current Sprint Is Done
 - **Feature sprint** (`feature_name` is set):
   1. Read `docs/feature/<feature_name>/plan/Product_Backlog.md` — identify the sprint marked `🔄 In Progress`
@@ -136,7 +138,7 @@ After the orchestrator confirms all answers are filled in:
 - For stories without GitHub Issues: create issues following `Story_Standard_PO.md` §13 — use `--body-file` (see §15 for PowerShell safety rule)
   - **Feature story labels:** `status:backlog` + `feature:<feature_name>` + `phase-N` + `sprint-N`
   - **Non-feature story labels:** `status:backlog` + `sprint-N`
-- For stories that already have GitHub Issues: confirm labels are correct
+- For stories that already have GitHub Issues: add `sprint-N` label if missing — **do not change `status:backlog` to `status:ready`**
 - Delete `.claude/agents/tmp/PO_questions.md` if it exists
 - Update your Working Record with what was planned
 

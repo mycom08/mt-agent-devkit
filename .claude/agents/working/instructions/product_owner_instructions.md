@@ -83,6 +83,8 @@ After Dev has confirmed all open points are resolved, check each story in the ta
 
 When the orchestrator asks you to run the **Plan Next Sprint** workflow, read `CLAUDE.md` for the full pipeline rules before starting. The orchestrator always passes `feature_name`.
 
+> **Status rule — plan sprint does NOT promote to `status:ready`.** After sprint planning, every story must remain `status:backlog`. Promoting stories to `status:ready` is exclusively the responsibility of the `refine sprint` workflow Stage 4, after implementers confirm all questions are resolved. Never change `status:backlog` to `status:ready` during this task.
+
 ### Step 1 — Verify Current Sprint Is Done
 - Run `gh issue list --repo mycom08/mt-agent-devkit --label "status:in-progress" --label "status:review" --label "status:testing" --state open`
 - If any story is NOT done: report the open story IDs to the orchestrator and stop.
@@ -102,8 +104,9 @@ After the orchestrator confirms all answers are filled in, verify every `A:` fie
 2. Update `docs/plan/Product_Backlog.md`
 3. For stories without GitHub Issues: create issues following `Story_Standard_PO.md` §13 — use `--body-file`
    - Labels: `status:backlog` + `sprint-N`
-4. Delete `.claude/agents/working/tmp/PO_questions.md` if it exists
-5. Update your Working Record
+4. For stories that already have GitHub Issues: add `sprint-N` label if missing — **do not change `status:backlog` to `status:ready`**
+5. Delete `.claude/agents/working/tmp/PO_questions.md` if it exists
+6. Update your Working Record
 
 ---
 
