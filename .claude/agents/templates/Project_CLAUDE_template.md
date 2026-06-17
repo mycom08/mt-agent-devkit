@@ -1,0 +1,82 @@
+# {{PROJECT_NAME}} — Project Orchestrator
+
+## Overview
+
+This is the **project orchestrator folder** for a multi-repo build managed by mt-agent-devkit. It coordinates story creation and sprint planning across all repos in the project.
+
+**Mode:** {{MODE}}
+
+> This folder is **not** a scrum team. It does not have `continue sprint`, `plan next sprint`, `refine sprint`, or `start story` triggers. Those live in each individual repo's `CLAUDE.md`. Run sprint workflows from inside the relevant repo folder.
+
+---
+
+## Repo Roster
+
+The following repos belong to this project. All paths are absolute.
+
+{{REPOS}}
+
+> Canonical repo structure: `/result/build/repo_structure.md`
+
+---
+
+## Workflows
+
+| Trigger | What it does |
+|---|---|
+| `build software` | Phase 2 — coordinate story creation and sprint planning across all repos |
+| `workflow help` | Show this project orchestrator command reference |
+
+---
+
+## Build Software Workflow
+
+Trigger: user says **"build software"**
+
+This is Phase 2 of the `build software` pipeline. It assumes Phase 1 (Stages 1–3) is complete and all repos have been scaffolded (Stage 4 done). It reads `build_state.md` and `repo_structure.md`, then coordinates `create stories` and `plan next sprint` across all repos.
+
+Read `.claude/agents/workflows/Build_Software_Project_Workflow.md` for the complete pipeline before executing.
+
+---
+
+## Workflow Help
+
+Trigger: user says **"workflow help"**
+
+No agents are spawned. Print the following reference directly to the user.
+
+---
+
+### {{PROJECT_NAME}} Project Orchestrator — Available Commands
+
+This is the project orchestrator for a multi-repo build. Sprint execution commands are **not** available here — they live inside each repo.
+
+| Command | What it does |
+|---|---|
+| `build software` | Phase 2: coordinate story creation and sprint planning across all repos |
+| `workflow help` | Show this reference |
+
+**To run sprint workflows, open a Claude Code session inside the target repo:**
+
+{{REPOS}}
+
+> Each repo has its own `CLAUDE.md` with `continue sprint`, `start story`, `plan next sprint`, and all other scrum team commands.
+
+---
+
+## Agent File Integrity
+
+**Agents and the orchestrator must never create, modify, or delete agent infrastructure files during any workflow.**
+
+Protected paths — read-only at all times:
+
+| Path | Contents |
+|---|---|
+| `.claude/agents/workflows/` | All workflow files |
+
+Writable paths:
+
+| Path | Who writes | What |
+|---|---|---|
+| `.claude/agents/tmp/` | Orchestrator | Pipeline state files |
+| `.claude/agents/docs/` | Orchestrator | Build state, split docs |
