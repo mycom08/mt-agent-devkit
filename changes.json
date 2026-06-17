@@ -50,5 +50,12 @@
     "checksums": {
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:06b72804f4de9e9dcae811e8425aa61987d2e88a52f604c5e6892136e9c06ed4"
     }
+  },
+  "0.1.1": {
+    "new": [
+      ".claude/agents/templates/Project_CLAUDE_template.md",
+      ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md"
+    ],
+    "modified": []
   }
 }

@@ -309,6 +309,7 @@ your-project/
 ### GitHub mode only
 - [GitHub CLI](https://cli.github.com/) (`gh`) — authenticated and pointing at your project's repo
 - A GitHub repository with Issues enabled
+- `build software` also requires `gh` CLI authenticated — it creates GitHub repositories and projects during Stage 4
 
 ### Strict mode
 - No additional tools required — works with a local git repo only
