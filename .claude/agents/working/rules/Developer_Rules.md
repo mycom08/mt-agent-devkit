@@ -25,6 +25,7 @@ Before writing any file, regardless of story status, Dev **must** read:
 
 1. User Story, all Acceptance Criteria, Technical Scope, and any linked technical docs
 2. All existing comments on the GitHub Issue — PO and TL may have already added context
+3. **If the story modifies or appends to an existing file:** read that file now. While reading, note any stale placeholders, forward references, or superseded instructions that the new implementation will make incorrect — fix them as part of your implementation, not as a separate task.
 
 ### Step 2 — Identify and raise questions
 

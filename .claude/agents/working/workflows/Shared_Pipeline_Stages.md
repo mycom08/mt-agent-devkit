@@ -97,8 +97,6 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
-**Pre-spawn: review Technical Scope for existing-file modifications.** If the story modifies or appends to an existing file, read that file before writing the spawn prompt. Identify any stale placeholder text, forward references, or content that the new implementation will supersede — and include explicit instructions in the spawn prompt to update or remove them. Do not leave this to the implementer's judgment.
-
 1. **Spawn** the agent matching the `Implementer` role
 2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
