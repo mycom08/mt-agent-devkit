@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-A devkit that injects a complete AI Scrum team setup into any project. It provides two workflows of its own: **Analyst** (idea-to-plan analysis) and **Init Project** (scaffold the AI Scrum team into a target project). All sprint execution workflows live in the generated `CLAUDE.md` that `init project` places into the target project.
+A devkit that injects a complete AI Scrum team setup into any project. It provides three workflows of its own: **Analyst** (idea-to-plan analysis), **Init Project** (scaffold the AI Scrum team into a target project), and **Build Software** (end-to-end workflow from idea analysis through repo initialisation). All sprint execution workflows live in the generated `CLAUDE.md` that `init project` places into the target project.
 
 **Devkit source:** https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main
 
@@ -74,6 +74,7 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 | `analyze <requirement>` | `analyze requirement: <text>` | Analyse a project idea from scratch — produces business, technical, and planning documents plus diagrams |
 | `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project (prompts for mode) |
 | `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project (same logic as `sync devkit` but uses local files) |
+| `build software <idea>` | — | End-to-end workflow: analyze idea, plan repo structure, split docs per repo, initialise repos, and wire the AI Scrum team (Stages 1–3 available; Stages 4–5 in a future release) |
 
 ---
 
@@ -229,6 +230,25 @@ The optional `[path]` argument is the absolute path to an already-initialized ta
 Applies the current local devkit templates to the target project using the same merge strategy as `update agents` — but reads from local files instead of GitHub. Uses `changes.json` to resolve only the files that changed between the project's installed version and the current devkit version, with automatic full-scan fallback if a version entry is missing.
 
 Read `.claude/agents/workflows/Update_Project_Workflow.md` for the complete pipeline before executing.
+
+---
+
+## Build Software Workflow
+
+Trigger: user says **"build software \<idea\>"**
+
+The text after the trigger keyword is the user's idea. If omitted, the workflow asks the user for a one-line description before starting.
+
+End-to-end workflow that takes a software idea from raw description through to initialised repositories with a wired AI Scrum team:
+
+- **Stage 1** — Runs the full `analyze` workflow; produces all analyst documents in `/result/analyst/`
+- **Stage 2** — Orchestrator reads `architecture.md` and produces `/result/build/repo_structure.md` (repo decision + table)
+- **Stage 3** — Parallel agents split `implementation_roadmap.md` and `architecture.md` per repo; full summary docs copied to all repos
+- **Stages 4–5** — Repo initialisation and Scrum team wiring (implemented in ST-000003)
+
+Pipeline state is stored in `.claude/agents/tmp/build_software_state.md`. Running `build software` when the state file exists automatically resumes from the last completed stage.
+
+Read `.claude/agents/workflows/Build_Software_Workflow.md` for the complete pipeline before executing.
 
 ---
 
