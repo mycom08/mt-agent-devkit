@@ -92,12 +92,15 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 Include a one-line check result note in the PR description (e.g., "bash -n check — PASS on all .sh files").
 
+**CHANGELOG.md rule:** Before opening any PR, add a bullet entry to `CHANGELOG.md` under `## [Unreleased]`. If `CHANGELOG.md` does not yet exist, create it using the standard format (see any existing entry as a template). Never skip this step — the first story that touches the repo is responsible for creating the file if absent.
+
 **Pre-merge checklist:**
 1. All applicable checks above pass
 2. PR created with title `[ST-XXXXXX][DEVKIT] Story title`
-3. TL has reviewed and approved PR
-4. QA has validated all AC on the dev branch
-5. Update story label to `status:done` after merge
+3. `CHANGELOG.md` updated with a bullet entry before opening PR
+4. TL has reviewed and approved PR
+5. QA has validated all AC on the dev branch
+6. Update story label to `status:done` after merge
 
 ---
 

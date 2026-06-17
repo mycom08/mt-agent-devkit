@@ -63,6 +63,8 @@ A story in `status:backlog` is ready for implementation only when **all** blocki
 - All PO scope/AC questions answered (your responsibility)
 - All TL technical/design questions answered (confirm with TL)
 
+**AC synchronisation (mandatory before setting status:ready):** If TL's refinement answers override or supersede any wording in the story's Acceptance Criteria, update the story body to reflect the binding decision before setting `status:ready`. Do not leave the AC body contradicting the decided implementation approach — the implementer reads the AC, not the comment thread.
+
 **When both conditions are met**, update the story label from `status:backlog` to `status:ready`.
 
 ---
