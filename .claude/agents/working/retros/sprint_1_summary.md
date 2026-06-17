@@ -41,3 +41,16 @@
 ### What Worked Well
 - Having `Init_Project_Workflow.md` as a prerequisite read made the inline scaffold steps immediately clear — no guesswork on what "execute init-project-equivalent steps inline" meant
 - Two-path structure (Path A Monolith / Path B Multi-Repo) in Stage 4 cleanly mirrors the pattern established in Stages 2–3
+
+---
+
+## ST-000005 — [ST-000005][DEVKIT] Wire build software Trigger + Update changes.json + Version Bump
+**Date:** 2026-06-17
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[context]` `changes.json` has inconsistent formats across older entries; story prescribed the `new`/`modified` format but no rule documented it — **Fix applied:** `changes.json` format rule added to Developer_Rules.md §4
+
+### What Worked Well
+- Pre-work read sequence identified that ST-000002 had already wired the CLAUDE.md trigger — prevented duplicate work
+- Working Record key decisions section confirmed the target version (0.1.1) without needing to re-derive it

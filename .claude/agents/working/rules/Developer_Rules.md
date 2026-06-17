@@ -101,6 +101,15 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Workflow files:** Use `Title_Case_With_Underscores` — `Sprint_Workflow_template.md`, `Sync_Devkit_Workflow_template.md`.
 
+**`changes.json` format:** New version entries must use the `new`/`modified` key format:
+```json
+"X.Y.Z": {
+  "new": ["<relative-path-to-new-file>"],
+  "modified": ["<relative-path-to-modified-file>"]
+}
+```
+Older entries in the file use different formats — ignore them. Always use `new`/`modified` for any entry you write.
+
 **Rules files:** `Title_Case_With_Underscores` — `Developer_Rules_template.md`, `Agent_Common_template.md`.
 
 **General rule:** Name files after their primary purpose. No generic names.
