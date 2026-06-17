@@ -8,6 +8,15 @@ All notable changes to mt-agent-devkit are documented here.
 
 ---
 
+## [0.1.2]
+
+### Changed
+- `Product_Owner_Rules_template.md` — AC synchronisation rule: PO must update story body before `status:ready` when TL decisions override AC wording
+- `Developer_Rules_template.md` — stale-content check on existing-file reads; mid-implementation consultation procedure (both GitHub and strict mode)
+- `Shared_Pipeline_Stages_template.md` — mid-implementation consultation orchestrator loop (both GitHub and strict mode)
+
+---
+
 ## [0.1.1]
 
 ### Added

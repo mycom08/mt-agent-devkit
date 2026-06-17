@@ -57,5 +57,13 @@
       ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md"
     ],
     "modified": []
+  },
+  "0.1.2": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
+    ]
   }
 }
