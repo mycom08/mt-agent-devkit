@@ -231,11 +231,12 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 | Source | Destination |
 |--------|-------------|
+| `/result/analyst/architecture.md` | `/result/build/<repo-name>/architecture.md` |
 | `/result/analyst/summary.md` | `/result/build/<repo-name>/summary.md` |
 | `/result/analyst/testing_plan.md` | `/result/build/<repo-name>/testing_plan.md` |
 | `/result/analyst/business_requirements.md` | `/result/build/<repo-name>/business_requirements.md` |
 
-> `architecture.md` is NOT copied in full — the architecture splitter (Agent B) produces a filtered version per repo. The user can always reference the full version at `/result/analyst/architecture.md`.
+> Both a full copy and a filtered version of `architecture.md` exist per repo. The full copy (`/result/build/<repo-name>/architecture.md`) is placed here for completeness and is the authoritative reference. The filtered version (`/result/build/<repo-name>/architecture_<repo-name>.md`), produced by Agent B, is an additional quick-reference artifact scoped to that repo's components — it does not replace the full copy.
 
 ### Completion
 
@@ -251,6 +252,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    <list each repo and its output files>
 
    The following docs were copied to all repos unchanged:
+   - architecture.md
    - summary.md
    - testing_plan.md
    - business_requirements.md
@@ -268,6 +270,6 @@ After both agents complete, the orchestrator copies the following files from `/r
 - **Adjustment loop** — if the user requests changes to `repo_structure.md` at the Stage 2 gate, apply and re-present before asking for confirmation again
 - **Orchestrator-direct for Stage 2** — no agent spawn; orchestrator writes `repo_structure.md` inline
 - **Parallel Stage 3 spawns** — Agent A and Agent B are spawned in a single orchestrator message; never sequentially
-- **Full-copy docs are never filtered** — `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
+- **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
 - **Stop on blocker** — if any agent reports a blocking issue, stop and report to the user before continuing
 - **Completion reports** — each spawned agent returns its results to the orchestrator; orchestrator relays a brief status to the user after each stage
