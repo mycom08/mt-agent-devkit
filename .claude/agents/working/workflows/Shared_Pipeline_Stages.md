@@ -97,6 +97,8 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
+**Pre-spawn: review Technical Scope for existing-file modifications.** If the story modifies or appends to an existing file, read that file before writing the spawn prompt. Identify any stale placeholder text, forward references, or content that the new implementation will supersede — and include explicit instructions in the spawn prompt to update or remove them. Do not leave this to the implementer's judgment.
+
 1. **Spawn** the agent matching the `Implementer` role
 2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
@@ -109,6 +111,36 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 10. Agent writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 11. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 12. On completion → proceed to Stage 2
+
+### Mid-Implementation Consultation Procedure (orchestrator executes when Developer reports a question)
+
+When the implementer returns with a mid-implementation consultation report instead of a completion report:
+
+1. **Read the report** — identify `Owner` (TL / PO / both) and the specific `Question`.
+
+2. **Spawn or resume the answering agent(s):**
+   - If `Owner` is TL → spawn/resume Technical Lead with the question and story context
+   - If `Owner` is PO → spawn/resume Product Owner with the question and story context
+   - If `Owner` is both → spawn both in parallel (single orchestrator message)
+
+   Spawn prompt must include:
+   - Story ID and GitHub Issue number
+   - The Developer's exact question and decision needed (from the report)
+   - Where the Developer paused (from the report)
+   - Instruction: *"The Developer has already posted the question as a comment on the GitHub Issue. Read that comment, then post your answer as a reply comment on the same issue — this keeps the full decision trail on the story. Then report your answer back to the orchestrator in one clear sentence."*
+
+3. **Collect the answer(s).** If both TL and PO are consulted, wait for both before resuming the Developer.
+
+4. **Resume the implementer** via `SendMessage` to `impl_session` (spawn new if expired). Pass:
+   - The answer(s) from TL and/or PO
+   - A reminder of where they paused
+   - Instruction to continue implementation
+
+5. **Do not change story label** — it remains `status:in-progress` throughout.
+
+6. **Loop limit:** counts toward the story's Impl→Reviewer loop limit if the consultation causes a re-review cycle; does not count otherwise.
+
+> **Distinguish from Blocked Story Procedure:** Use this when the question can be answered by TL or PO from existing context. Use the Blocked Story Procedure only when the answer requires input that no internal agent can provide (external system access, user preference, credentials, etc.).
 
 ### Blocked Story Procedure (agent executes when external input is required)
 
