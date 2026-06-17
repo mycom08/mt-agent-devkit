@@ -100,8 +100,24 @@ Files: all workflow template files except `Analyst_Workflow.md` and `Init_Projec
 **Source:** `.claude/agents/templates/instructions/{role}_instructions_template.md` (local devkit)
 **Target:** `{TARGET_PROJECT}/.claude/agents/instructions/{role}_instructions.md`
 
+#### Path structure detection (run once before any instruction file is written)
+
+Check whether the target project uses the old flat structure or the current subdirectory structure:
+
+- **New structure (current):** `.claude/agents/instructions/` directory exists → write to `.claude/agents/instructions/{role}_instructions.md` as normal
+- **Old flat structure:** `.claude/agents/instructions/` does not exist but `.claude/agents/{role}_instructions.md` files exist → **migrate first**:
+  1. Create `.claude/agents/instructions/`
+  2. Move all flat `.claude/agents/*_instructions.md` files into it
+  3. In `{TARGET_PROJECT}/CLAUDE.md`:
+     - Update the Agent Roster table paths from `.claude/agents/{role}_instructions.md` → `.claude/agents/instructions/{role}_instructions.md`
+     - Update the Agent File Integrity path entry from `.claude/agents/*_instructions.md` → `.claude/agents/instructions/`
+  4. Notify the user: _"Migrated instruction files from flat structure to `instructions/` subdirectory and updated CLAUDE.md paths."_
+  5. Then proceed with the normal merge to the new path
+
+#### Merge steps
+
 1. Read the local template
-2. Read the existing file in the target project
+2. Read the existing file in the target project (at the resolved path from the detection step above)
 3. Identify **project-specific sections** — sections referencing the project's actual tech stack, frameworks, tooling, commands, file paths, or conventions
 4. Identify **role-logic sections** — generic rules, workflow steps, memory/record instructions that apply to any project
 5. Apply updated role-logic sections verbatim; preserve project-specific sections unchanged
