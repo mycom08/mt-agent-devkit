@@ -25,6 +25,17 @@
     ".claude/agents/templates/workflows/Workflow_Guide_template.md",
     ".claude/agents/templates/context/Document_Index_template.md"
   ],
+  "0.0.9": {
+    "files": [
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix: added explicit status rule forbidding status:ready promotion during plan sprint; tightened Step 5 label guidance for existing stories"
+    },
+    "checksums": {
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "sha256:c4126e365c5cac60cff9b8ff372ede2d9c2f5f4cde1c9a78a23b962d35101363"
+    }
+  },
   "0.0.8": {
     "files": [
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
