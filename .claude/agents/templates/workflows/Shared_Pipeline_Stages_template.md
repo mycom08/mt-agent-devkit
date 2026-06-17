@@ -128,6 +128,40 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 12. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 13. On completion → proceed to Stage 2
 
+### Mid-Implementation Consultation Procedure (orchestrator executes when Developer reports a question)
+
+When the implementer returns with a mid-implementation consultation report instead of a completion report:
+
+1. **Read the report** — identify `Owner` (TL / PO / both) and the specific `Question`.
+
+2. **Spawn or resume the answering agent(s):**
+   - If `Owner` is TL → spawn/resume Technical Lead with the question and story context
+   - If `Owner` is PO → spawn/resume Product Owner with the question and story context
+   - If `Owner` is both → spawn both in parallel (single orchestrator message)
+
+   Spawn prompt must include:
+   - Story ID and GitHub Issue number
+   - The Developer's exact question and decision needed (from the report)
+   - Where the Developer paused (from the report)
+   - Instruction: *"The Developer has already recorded the question on the story. Read it, then post your answer on the same story to keep the full decision trail:*
+     - ***GitHub mode:** reply as a comment on the GitHub Issue*
+     - ***Strict mode:** append a comment entry to the story MD `## Comments` section*
+     
+     *Then report your answer back to the orchestrator in one clear sentence."*
+
+3. **Collect the answer(s).** If both TL and PO are consulted, wait for both before resuming the Developer.
+
+4. **Resume the implementer** via `SendMessage` to `impl_session` (spawn new if expired). Pass:
+   - The answer(s) from TL and/or PO
+   - A reminder of where they paused
+   - Instruction to continue implementation
+
+5. **Do not change story label** — it remains `status:in-progress` throughout.
+
+6. **Loop limit:** counts toward the story's Impl→Reviewer loop limit if the consultation causes a re-review cycle; does not count otherwise.
+
+> **Distinguish from Blocked Story Procedure:** Use this when the question can be answered by TL or PO from existing context. Use the Blocked Story Procedure only when the answer requires input that no internal agent can provide (external system access, user preference, credentials, etc.).
+
 ### Blocked Story Procedure (agent executes when external input is required)
 
 1. Resolve **who to tag** following the lookup order in `.claude/agents/rules/Blocked_Request_Template.md` § Step 1 — if no match is found, report back to the orchestrator to ask the user before proceeding

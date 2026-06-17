@@ -27,6 +27,7 @@ Before writing any code, regardless of story status, Dev **must** read:
 
 1. User Story, all Acceptance Criteria, Technical Scope, and any linked technical docs
 2. All existing comments on the GitHub Issue — PO and TL may have already added context
+3. **If the story modifies or appends to an existing file:** read that file now. While reading, note any stale placeholders, forward references, or superseded instructions that the new implementation will make incorrect — fix them as part of your implementation, not as a separate task.
 
 ### Step 2 — Identify and raise questions
 
@@ -63,6 +64,38 @@ Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or 
 If the story is complex (8+ points, multiple layers, data model changes, third-party integration, security-sensitive logic, or breaking API contract), draft a design and post it as a GitHub Issue comment for TL review. Tag **TL** in the comment. TL approval is confirmed when TL replies with **"Design approved"**. Do not proceed until that exact phrase appears.
 
 > If the story is complex, follow the design-first rule — refer to `Project_Priming.md` §Design First.
+
+**Mid-implementation consultation (when a question surfaces during implementation):**
+
+If you encounter an unclear AC, scope ambiguity, or technical decision point while implementing — and making a judgment call is not appropriate — do NOT use the Blocked Story Procedure and do NOT ask the user. Instead:
+
+1. Identify who owns the question:
+   - Scope or AC question → **PO**
+   - Technical or design question → **TL**
+   - Both → **PO + TL**
+2. Record the question on the story:
+   - **GitHub mode:** post a comment on the GitHub Issue tagging the right role(s)
+   - **Strict mode:** append a comment entry to the story MD `## Comments` section tagging the right role(s)
+
+   Use the format:
+   ```
+   **Mid-implementation question — [TL / PO / both]**
+   <specific question — one clear sentence>
+   **Decision needed:** <what answer would unblock you>
+   ```
+3. Report back to the orchestrator using this format:
+   ```
+   Mid-implementation consultation needed — ST-XXXXXX
+   Owner: <TL / PO / both>
+   Question: <same question as posted on issue>
+   Decision needed: <same decision needed>
+   Implementation paused at: <brief description of where you stopped>
+   Question recorded on story: posted
+   ```
+4. Do NOT change the story label. The orchestrator will spawn or resume TL and/or PO to answer in the issue thread, then resume you with their response.
+5. When the orchestrator resumes you with the answer: read it, apply it, and continue implementation from where you paused.
+
+> Use this for genuine ambiguities that would otherwise require a judgment call affecting scope or design. Do not use it for implementation details you can reasonably decide yourself.
 
 **Live user instruction conflicts (mandatory rule during implementation):**
 

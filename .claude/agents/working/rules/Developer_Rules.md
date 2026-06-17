@@ -71,7 +71,7 @@ If you encounter an unclear AC, scope ambiguity, or technical decision point whi
    Question: <same question as posted on issue>
    Decision needed: <same decision needed>
    Implementation paused at: <brief description of where you stopped>
-   Issue comment: posted
+   Question recorded on story: posted
    ```
 4. Do NOT change the story label. The orchestrator will spawn or resume TL and/or PO to answer in the issue thread, then resume you with their response.
 5. When the orchestrator resumes you with the answer: read it, apply it, and continue implementation from where you paused.
