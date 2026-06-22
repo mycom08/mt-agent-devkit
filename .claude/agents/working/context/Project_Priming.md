@@ -8,7 +8,7 @@
 
 **Purpose:** Gives any project a fully wired AI agent team (Developer, TL, QA, PO, BA) plus sprint workflow files. Developers trigger the devkit once (`init project`), then run `continue sprint` or `start story` inside their project using the injected workflows.
 
-**Status:** 🔄 Active development — v0.0.8
+**Status:** 🔄 Active development — see `version.txt` for current version
 
 **Key traits:** Markdown-first, no compiled artifact, no runtime service. All deliverables are `.md` template files, `.ps1`/`.sh` scripts, and workflow instruction files.
 

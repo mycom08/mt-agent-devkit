@@ -1,5 +1,14 @@
 # mt-agent-devkit — Claude Code Instructions
 
+## Orchestrator Startup
+
+Before doing anything else, read the following files to understand the project context:
+
+1. `.claude/agents/working/context/Project_Priming.md` — project overview, glossary, architecture, and current state
+2. `version.txt` — current devkit version
+
+---
+
 ## Project Overview
 
 A devkit that injects a complete AI Scrum team setup into any project. It provides three workflows of its own: **Analyst** (idea-to-plan analysis), **Init Project** (scaffold the AI Scrum team into a target project), and **Build Software** (end-to-end workflow from idea analysis through repo initialisation). All sprint execution workflows live in the generated `CLAUDE.md` that `init project` places into the target project.

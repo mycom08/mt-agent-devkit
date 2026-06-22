@@ -40,7 +40,19 @@
       "Bash(Format-Table -AutoSize)",
       "Bash(git add *)",
       "Bash(Test-Path C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service *)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service\\\\.claude\" -Recurse -Force | Where-Object { !$_.PSIsContainer } | Select-Object -ExpandProperty FullName)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\services\\\\cp-tenant-service\\\\.claude\" -Recurse -Force | Where-Object { !$_.PSIsContainer } | Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Path . -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(xargs -I {} head -30 {})",
+      "Bash(gh label *)",
+      "Bash(mkdir -p \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\tools\\\\mt-agent-devkit\\\\.claude\\\\agents\\\\working\\\\docs\\\\sprints\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\mycom\\\\tools\\\\mt-agent-devkit\\\\.claude\\\\agents\\\\working\\\\docs\\\\plan\")",
+      "Bash(Remove-Item \"C:/Users/Admin/Desktop/work/mycom/tools/mt-agent-devkit/.claude/agents/tmp/issue4_comment.md\" -Force)",
+      "Bash(sed -i 's/- \\\\[ \\\\]/- [x]/g' /tmp/issue4_body.txt)",
+      "Bash(sed -i 's/- \\\\[ \\\\]/- [x]/g' /tmp/issue3_body.txt)",
+      "Bash(powershell -File \".claude/agents/scripts/check_devkit_version.ps1\")",
+      "PowerShell(Set-Location \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\fun-authorization\\\\authorization-service\"; powershell -File \".claude\\\\agents\\\\scripts\\\\check_devkit_version.ps1\"; Write-Output \"Exit: $LASTEXITCODE\")"
     ]
   },
   "hooks": {
