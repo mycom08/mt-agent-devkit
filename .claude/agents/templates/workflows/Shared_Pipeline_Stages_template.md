@@ -117,7 +117,7 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 7. **CI/CD check:**
    - **GitHub mode:** if the story's Technical Scope includes any file under `.github/workflows/`, the implementer **must** follow `.claude/agents/rules/CICD_Validation_Guide.md` before opening a PR
    - **Strict mode:** CI gate is skipped entirely — no CI validation required
-8. **Deletion pre-check** — if the story involves deleting files: before executing any `git rm` or file deletion, record the planned deletions:
+8. **Deletion pre-check** — if the story involves deleting files (housekeeping, cleanup, or any story whose scope lists files to remove): before executing any `git rm` or file deletion, record the planned deletions, then proceed immediately. This gives the reviewer and user a visible record of what was removed and why.
    - **GitHub mode:** post a comment on the GitHub Issue listing every file planned for deletion
    - **Strict mode:** append a comment entry to the story MD `## Comments` section listing every file planned for deletion
 9. Agent implements and updates working record; commits use the format `<external-id> [ST-XXXXXX]: <message>` or `ST-XXXXXX: <message>` (see `Strict_Mode_Story_Guide.md` §Commit Message Format)
@@ -202,7 +202,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
      - **GitHub mode:** post approval as `gh pr comment` on the PR
      - **Strict mode:** update review-record MD `**Status:** approved` and `## Verdict` section; append approval comment entry to story MD `## Comments`
      → proceed to Stage 3 without spawning a reviewer agent
-   - **Any AC requires domain knowledge not derivable from the diff or reference files** → fall back to the behavioral path below for full TL review
+   - **Any AC requires domain knowledge not derivable from the diff or reference files** (runtime behaviour, architecture, external system specifics) → fall back to the behavioral path below for full TL review
 3. If changes are needed, resume Implementer via `impl_session` (spawn new if expired); re-run this fast path on completion
 
 ### Behavioral path (`Type: behavioral`)
@@ -238,7 +238,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - **GitHub mode:** use `gh pr diff` or Read tool
    - **Strict mode:** use `git diff sprint-N-dev...story/<branch>` and Read tool
    - **Every AC confirmed** → record QA sign-off; execute the **Merge Procedure** below; proceed to Stage 4
-   - **Any AC requires domain knowledge not derivable from the files** → fall back to the behavioral path below for full QA agent validation
+   - **Any AC requires domain knowledge not derivable from the files** (runtime behaviour, architecture, external system specifics) → fall back to the behavioral path below for full QA agent validation
 4. If AC issues found, resume Implementer via `impl_session` (spawn new if expired); re-run this fast path on completion
 
 **Record QA sign-off:**

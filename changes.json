@@ -65,5 +65,24 @@
       ".claude/agents/templates/rules/Developer_Rules_template.md",
       ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
     ]
+  },
+  "0.1.3": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/CLAUDE_TEMPLATE.md",
+      ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md",
+      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md",
+      ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md",
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Refactor: removed inline workflow content; replaced with clean routing table pointing to workflow files",
+      ".claude/agents/templates/workflows/Sprint_Workflow_template.md": "Fix: Observations write rule now requires agent role prefix on agent-reported items",
+      ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md": "Fix: added next-sprint resolution logic for both GitHub mode (gh issue list jq numeric sort + gh label list warning) and strict mode (glob + numeric parse)",
+      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md": "Fix: Stage 4 step 4 — explicit feature/non-feature story label sub-bullets instead of implicit conditional",
+      ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md": "Fix: replaced gh label list | grep (alphabetical sort bug) with gh issue list jq numeric sort for non-feature sprint identification; added gh label list warning",
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md": "Fix: deletion pre-check — added trigger examples and proceed-immediately rationale; Stage 2 and Stage 3 fast-path fallback — added domain knowledge examples"
+    }
   }
 }

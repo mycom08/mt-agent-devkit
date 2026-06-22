@@ -93,7 +93,9 @@ Before spawning any agent, the orchestrator resolves the sprint context.
      - **GitHub mode:** GitHub issue labels are the only artifact — no Sprint Overview file needed
      - **Strict mode:** create `.claude/agents/docs/sprints/sprint_N_overview.md` listing selected story IDs, titles, points, and total capacity used
 4. PO creates stories for any backlog items that do not yet have a story record:
-   - **GitHub mode:** create GitHub Issues following `Story_Standard_PO.md` §13; labels: `status:backlog` + `feature:<feature_name>` (if feature) + `phase-N` (if feature) + `sprint-N`; create `sprint-N` label first if it does not exist; use `--body-file` pattern per §15
+   - **GitHub mode:** create GitHub Issues following `Story_Standard_PO.md` §13; use `--body-file` pattern per §15; create `sprint-N` label first if it does not exist; apply labels:
+     - **Feature story:** `status:backlog` + `feature:<feature_name>` + `phase-N` + `sprint-N`
+     - **Non-feature story:** `status:backlog` + `sprint-N`
    - **Strict mode:** for each new story, increment `story_counter.txt`, write `.claude/agents/docs/stories/ST-XXXXXX.md` with `**Status:** backlog`, `**Sprint:** sprint-N`, `**Feature:**` and `**Phase:**` fields set; report file paths to PO
 5. PO deletes `.claude/agents/tmp/PO_questions.md` if it exists
 6. PO updates Working Record
