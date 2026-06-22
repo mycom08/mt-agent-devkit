@@ -49,11 +49,19 @@ When the orchestrator asks you to close a story, this is a **lightweight task** 
 Then execute:
 1. Read the full story issue body — review all AC checkboxes
 2. Read the QA/TL comment threads to confirm all AC have been verified and passing
+
+**If `Mode: github`:**
 3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (§15)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo {github-org}/{repo-name}`
-6. Write your retrospective section to `.claude/agents/retros/ST-XXXXXX_retro.md` — read `.claude/agents/rules/Retro_Rules.md` for format; overwrite the `## Product Owner` section only
-7. Update your Working Record only if there is a durable fact worth recording — skip the update entirely if there is nothing new
+
+**If `Mode: strict`:**
+3. Edit `**Status:** done` in `.claude/agents/docs/stories/ST-XXXXXX.md`
+4. Append a closure entry to the story MD `## Comments` section: `"Story accepted — all AC verified. Closed."`
+
+Then (both modes):
+- Write your retrospective section to `.claude/agents/retros/ST-XXXXXX_retro.md` — read `.claude/agents/rules/Retro_Rules.md` for format; overwrite the `## Product Owner` section only
+- Update your Working Record only if there is a durable fact worth recording — skip the update entirely if there is nothing new
 
 ---
 

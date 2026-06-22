@@ -101,7 +101,6 @@ Read the linked file before executing any workflow.
 | `refine sprint` | `.claude/agents/workflows/Refine_Sprint_Workflow.md` |
 | `plan next sprint` / `plan sprint` | `.claude/agents/workflows/Plan_Sprint_Workflow.md` |
 | `create stories` | `.claude/agents/workflows/Create_Stories_Workflow.md` |
-| `analyze <requirement>` | `.claude/agents/workflows/Analyst_Workflow.md` |
 | `sync devkit` | `.claude/agents/workflows/Sync_Devkit_Workflow.md` |
 
 Sprint and Start Story workflows share pipeline stages — see `.claude/agents/workflows/Shared_Pipeline_Stages.md`.
