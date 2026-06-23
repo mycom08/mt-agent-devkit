@@ -118,7 +118,7 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 
 #### `CLAUDE.md`
 
-**Source:** `templates/CLAUDE_template.md`
+**Source:** `templates/{mode}/CLAUDE_template.md`
 
 If `CLAUDE.md` exists at `TARGET_PROJECT` root → generate a **CLAUDE.md addition** (a block to append, not a full replacement).
 If `CLAUDE.md` does not exist → generate a **full CLAUDE.md**.
