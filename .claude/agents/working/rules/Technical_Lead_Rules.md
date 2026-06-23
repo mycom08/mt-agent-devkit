@@ -37,6 +37,8 @@ Review checklist differs — focus on:
 - **No stale references:** Are all file paths, section references, and placeholder names correct?
 - **Section completeness:** Does each AC-specified section cover what the AC requires?
 - **Backward compatibility:** Will existing target projects that have already run `init project` continue to work after `sync devkit`?
+- **File deletions / renames:** If the story deletes or renames files, confirm the original is absent from the branch tree — do not rely on the diff alone; verify via `gh api repos/mycom08/mt-agent-devkit/git/trees/{ref}?recursive=1` or `git ls-tree` on the PR branch.
+- **Path-reference stories:** If the story updates file path references inside a workflow or rules file, grep that file for the old path string before approving: `grep -n "old_path" <file>`. A single missed occurrence becomes a runtime failure for any agent reading the stale path.
 
 **AC Clarifications:**
 When your answer changes or narrows the meaning of an AC, **update the story body AC description** to reflect the authorised interpretation.
@@ -80,6 +82,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 - Every new template section must have a clear purpose; avoid adding sections agents won't use
 - Every new workflow stage must have a clear completion signal
 - Ensure `changes.json` is updated when template files change — this enables `sync devkit` to apply targeted updates
+- `changes.json` tracks **template files deployed to target projects only** (under `.claude/agents/templates/`). Devkit-internal workflow files (`.claude/agents/workflows/`) are **not tracked** — edit them in-place with no `changes.json` entry.
 
 **Key design questions for any devkit change:**
 - Does this require a `changes.json` entry for `sync devkit` to pick it up?

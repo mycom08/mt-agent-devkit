@@ -46,6 +46,8 @@ Review checklist differs from code review — focus on:
 - **No stale references:** Are all file paths, function names, and config variable names correct and up to date?
 - **Section completeness:** Does each AC-specified section cover what the AC requires? Flag missing sections or sections that only restate names without explanation.
 - **Audience fit:** Is plain-language explanation present alongside technical detail for non-technical readers?
+- **File deletions / renames:** If the story deletes or renames files, confirm the original is absent from the branch tree — do not rely on the diff alone; verify via the GitHub API or `git ls-tree` on the PR branch.
+- **Path-reference stories:** If the story updates file path references inside a document, grep that file for the old path string before approving: `grep -n "old_path" <file>`. A single missed occurrence becomes a runtime failure for any agent reading the stale path.
 
 **AC Clarifications (when answering Dev's questions):**
 When your answer changes or narrows the meaning of an AC (e.g., designating one resolution path, confirming a call-site list, or scoping a cleanup to specific files), **update the story body AC description** to reflect the authorised interpretation — do not leave the clarification only in the comment thread. Dev and QA use the story body as their single source of truth.

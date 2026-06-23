@@ -118,7 +118,7 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 
 #### `CLAUDE.md`
 
-**Source:** `templates/{mode}/CLAUDE_template.md`
+**Source:** `templates/{mode}/CLAUDE_template.md` ← must match the Stage 2 source table entry above; run `grep -n "CLAUDE_template" Init_Project_Workflow.md` when updating to catch all occurrences
 
 If `CLAUDE.md` exists at `TARGET_PROJECT` root → generate a **CLAUDE.md addition** (a block to append, not a full replacement).
 If `CLAUDE.md` does not exist → generate a **full CLAUDE.md**.

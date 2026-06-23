@@ -102,7 +102,7 @@ Update at **start of session** and **end of session**. Keep 3 most recent days.
 | Agent working files | `.claude/agents/working/` |
 | Analyst output | `result/analyst/` |
 | Version | `version.txt` |
-| Change manifest | `changes.json` |
+| Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.claude/agents/templates/`); devkit-internal workflows (`.claude/agents/workflows/`) are excluded |
 
 ---
 
