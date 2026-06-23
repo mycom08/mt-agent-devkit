@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/workflows/Sprint_Workflow_template.md, templates/strict/workflows/Sprint_Workflow_template.md -->
+
+<!-- SHARED-START -->
 # Sprint Workflow
 
 Triggered by: `"continue sprint"` or `"/sprint"` in CLAUDE.md
@@ -44,20 +47,6 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
 
 ---
 
-## Strict-Mode Pre-Flight (run once before first story — strict mode only)
-
-1. Identify the sprint name from the first `status:ready` story's `**Sprint:**` field (e.g., `sprint-1`)
-2. Check if the sprint dev branch exists: `git branch --list sprint-N-dev`
-   - Exists → `git checkout sprint-N-dev`
-   - Missing → `git checkout -b sprint-N-dev` (from the user's current branch at invocation time)
-3. Store `Sprint Branch: sprint-N-dev` in the pipeline state file
-
-**Story discovery (strict mode):** Glob `.claude/agents/docs/stories/*.md`, read each file, filter by `**Status:** ready`. Sort by `**Sprint:**` field then by story ID (ascending). Process in that order.
-
-**Story discovery (GitHub mode):** `gh issue list --label "status:ready"` as before.
-
----
-
 ## Pipeline Rules
 
 - **ST-XXXXXX stories only** — skip any story whose ID does not match the `ST-XXXXXX` format
@@ -68,7 +57,6 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
 - Report pipeline status to the user after each stage
 - If any agent is blocked, stop and report to the user before continuing
 - **Stage 5 (Retrospective)** — after Stage 4's observation check completes, check the Stage 5 heading in `Shared_Pipeline_Stages.md`: if `[BETA: enabled]`, run Stage 5; if `[BETA: disabled]`, skip and proceed to the next story (Stage 0).
-- **Strict-mode sprint complete notification** — when no more `status:ready` stories remain and before Batch Retro Review: notify the user: `"Sprint N complete. All stories merged into sprint-N-dev. Review and merge that branch into your own branch when ready — agents will not push or merge further."` Then proceed to Batch Retro Review.
 - **Sprint end** — when no more `status:ready` stories remain:
   1. **Batch Retro Review** — process each story's retro file one by one in story order. For each:
      a. Read `.claude/agents/retros/ST-XXXXXX_retro.md`
@@ -106,3 +94,4 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
      — Complete all stories before moving to step 2.
   2. **Sprint Consolidated Summary** — read the completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
   3. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
+<!-- SHARED-END -->

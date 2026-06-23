@@ -143,12 +143,21 @@ Applies to: `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`
 
 #### Workflow files — Overwrite
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/workflows/{filename}_template.md`
+**Source (split — mode-specific):** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/{mode}/workflows/{filename}_template.md`
+**Source (non-split):** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/workflows/{filename}_template.md`
 **Target:** `.claude/agents/workflows/{filename}.md`
 
-Fetch and write verbatim. No project-specific content lives here.
+Read `**Mode:**` from this project's `CLAUDE.md` to resolve `{mode}` (`github` or `strict`).
 
-Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md` (this file), `Workflow_Guide.md`.
+For split candidates, fetch the mode-specific variant. Also fetch the referenced shared file at `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/workflows/{name}_Shared_template.md`. Combine: shared `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block first, then any non-comment content from the mode-specific variant. Write the combined result verbatim.
+
+**Split candidates (fetch from `templates/{mode}/workflows/`):**
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`
+
+**Non-split (fetch from `templates/workflows/`):**
+`Sync_Devkit_Workflow.md` (this file), `Workflow_Guide.md`
+
+Applies to all 9 files listed above.
 
 #### Script files — Overwrite
 
@@ -179,7 +188,7 @@ Check `.claude/settings.json` for the devkit update-check hook:
 
 #### CLAUDE.md — Merge
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/CLAUDE_TEMPLATE.md`
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/CLAUDE_Shared_template.md` (use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content)
 
 1. Fetch the latest template
 2. Read the existing local `CLAUDE.md`

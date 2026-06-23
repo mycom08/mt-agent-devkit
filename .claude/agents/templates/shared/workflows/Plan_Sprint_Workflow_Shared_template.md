@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/workflows/Plan_Sprint_Workflow_template.md, templates/strict/workflows/Plan_Sprint_Workflow_template.md -->
+
+<!-- SHARED-START -->
 # Plan Next Sprint Workflow
 
 Triggered by: `"plan next sprint [feature-name]"` or `"/plan-sprint [feature-name]"` in CLAUDE.md
@@ -118,3 +121,4 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 - **Completion reports** — each agent returns max 5 bullets; details go in Working Records. Agents may append an optional `**Observations:**` section for workflow friction (unclear instructions, rule gaps, uncovered edge cases); orchestrator appends each item to `plan_observations.md`, prefixed with the agent role
 - **Stop conditions** — current sprint not done; next-sprint draft already exists; questions unresolved after 3 cycles; scope decision requires user judgment
 - **Observations** — whenever the orchestrator makes a judgment call not covered by this workflow, append a one-line bullet to `.claude/agents/tmp/plan_observations.md` (create the file if it does not exist). These are reviewed at the end of Stage 4.
+<!-- SHARED-END -->

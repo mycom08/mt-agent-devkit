@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/workflows/Resume_Story_Workflow_template.md, templates/strict/workflows/Resume_Story_Workflow_template.md -->
+
+<!-- SHARED-START -->
 # Resume Blocked Story Workflow
 
 Triggered by: `"resume story ST-XXXXXX"` or `"/resume-story ST-XXXXXX"` in CLAUDE.md
@@ -28,3 +31,4 @@ Use this when a story has `status:blocked` and the required external information
 4. **If info is still incomplete:**
    - Append an updated comment entry to the story MD `## Comments` section listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request_Template.md` as the template)
    - Notify the user what is still needed before the story can proceed
+<!-- SHARED-END -->

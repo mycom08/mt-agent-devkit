@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/CLAUDE_template.md, templates/strict/CLAUDE_template.md -->
+
+<!-- SHARED-START -->
 # {{PROJECT_NAME}} — Claude Code Instructions
 
 ## Project Overview
@@ -112,3 +115,4 @@ Sprint and Start Story workflows share pipeline stages — see `.claude/agents/w
 **If `Mode: github`:** GitHub blocks self-approval. Always use `gh pr comment <number>` to post review verdicts — never `gh pr review --approve`.
 
 **If `Mode: strict`:** No PRs. The reviewer writes their verdict to the local review-record file at `.claude/agents/docs/reviews/ST-XXXXXX_review.md` and appends a summary comment to the story MD `## Comments` section. See `Strict_Mode_Story_Guide.md` for the review-record format.
+<!-- SHARED-END -->

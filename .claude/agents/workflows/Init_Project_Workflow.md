@@ -87,12 +87,30 @@ Generate customized versions of all agent scaffold files by reading the source t
 
 | Template file | Target path in generated project |
 |---|---|
-| `templates/CLAUDE_template.md` | `CLAUDE.md` (root) |
+| `templates/{mode}/CLAUDE_template.md` (shared content from `templates/shared/CLAUDE_Shared_template.md`) | `CLAUDE.md` (root) |
 | `templates/context/Project_Priming_template.md` | `.claude/agents/context/Project_Priming.md` |
 | `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` |
 | `templates/instructions/*_instructions_template.md` (×5) | `.claude/agents/[role]_instructions.md` |
 | `templates/rules/*_template.md` (×16) | `.claude/agents/rules/[name].md` |
-| `templates/workflows/*_Workflow_template.md` (×8) | `.claude/agents/workflows/[name].md` |
+| `templates/{mode}/workflows/*_Workflow_template.md` (×7 split) + `templates/workflows/*_Workflow_template.md` (×3 non-split) | `.claude/agents/workflows/[name].md` |
+
+Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
+
+**Split candidates (read from `templates/{mode}/workflows/`):**
+- `Sprint_Workflow_template.md`
+- `Shared_Pipeline_Stages_template.md`
+- `Start_Story_Workflow_template.md`
+- `Resume_Story_Workflow_template.md`
+- `Create_Stories_Workflow_template.md`
+- `Plan_Sprint_Workflow_template.md`
+- `Refine_Sprint_Workflow_template.md`
+
+**Non-split (read from `templates/workflows/`):**
+- `Sync_Devkit_Workflow_template.md`
+- `Workflow_Guide_template.md`
+- `Build_Software_Project_Workflow_template.md` (not deployed to target projects)
+
+**CLAUDE.md generation:** Read `templates/shared/CLAUDE_Shared_template.md` for the full content. The mode-specific file at `templates/{mode}/CLAUDE_template.md` contains only a reference comment — use the shared file's `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block as the actual template content.
 
 > **Strip the `_template` suffix** when writing to the target project. The suffix is devkit-only — generated files use clean names.
 
@@ -100,7 +118,7 @@ Generate customized versions of all agent scaffold files by reading the source t
 
 #### `CLAUDE.md`
 
-**Source:** `templates/CLAUDE_template.md`
+**Source:** `templates/{mode}/CLAUDE_template.md`
 
 If `CLAUDE.md` exists at `TARGET_PROJECT` root → generate a **CLAUDE.md addition** (a block to append, not a full replacement).
 If `CLAUDE.md` does not exist → generate a **full CLAUDE.md**.
@@ -172,21 +190,24 @@ Copy all rules files. Replace example-project-specific tooling references:
 - `Story_Standard*.md` — copy all verbatim (tool-agnostic)
 - All other rules files — copy verbatim
 
-#### Workflow files (8 files)
+#### Workflow files (9 files)
 
-**Source:** `templates/workflows/*_Workflow_template.md` + `templates/workflows/Workflow_Guide_template.md`
+**Source (split — mode-specific):** `templates/{mode}/workflows/*_Workflow_template.md`
+**Source (non-split — shared):** `templates/workflows/*_Workflow_template.md`
 **Target:** `.claude/agents/workflows/[name].md` (strip `_template` suffix)
 
-Copy all scrum team workflow files verbatim:
-- `Create_Stories_Workflow.md`
-- `Plan_Sprint_Workflow.md`
-- `Refine_Sprint_Workflow.md`
-- `Resume_Story_Workflow.md`
-- `Shared_Pipeline_Stages.md`
-- `Sprint_Workflow.md`
-- `Start_Story_Workflow.md`
-- `Sync_Devkit_Workflow.md`
-- `Workflow_Guide.md`
+For split candidates, read from `templates/{mode}/workflows/`. Each mode-specific variant opens with a `<!-- Shared logic: ... -->` comment pointing to the shared file. For the full content, also read the referenced `templates/shared/workflows/*_Shared_template.md` and use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block as the base content — the mode-specific file's non-comment text is appended after it.
+
+Copy all scrum team workflow files verbatim to target:
+- `Create_Stories_Workflow.md` — split; source from `templates/{mode}/workflows/`
+- `Plan_Sprint_Workflow.md` — split; source from `templates/{mode}/workflows/`
+- `Refine_Sprint_Workflow.md` — split; source from `templates/{mode}/workflows/`
+- `Resume_Story_Workflow.md` — split; source from `templates/{mode}/workflows/`
+- `Shared_Pipeline_Stages.md` — split; source from `templates/{mode}/workflows/`
+- `Sprint_Workflow.md` — split; source from `templates/{mode}/workflows/`
+- `Start_Story_Workflow.md` — split; source from `templates/{mode}/workflows/`
+- `Sync_Devkit_Workflow.md` — non-split; source from `templates/workflows/`
+- `Workflow_Guide.md` — non-split; source from `templates/workflows/`
 
 > **Do not copy** `Analyst_Workflow.md` or `Init_Project_Workflow.md` — these are devkit-internal workflows and have no place in the target project.
 

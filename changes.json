@@ -95,5 +95,63 @@
       ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Fix: removed analyze <requirement> row from Workflows table (Analyst_Workflow is devkit-only, not deployed to target projects)",
       ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix: Story Closure Task steps 3-5 now mode-conditional (github: issue close via gh; strict: edit local story MD + append closure comment)"
     }
+  },
+  "0.1.5": {
+    "new": [
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/github/CLAUDE_template.md",
+      ".claude/agents/templates/strict/CLAUDE_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Shared_Pipeline_Stages_template.md",
+      ".claude/agents/templates/strict/workflows/Shared_Pipeline_Stages_template.md",
+      ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Start_Story_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Start_Story_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Resume_Story_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Resume_Story_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Resume_Story_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Create_Stories_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Create_Stories_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Plan_Sprint_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Refine_Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Refine_Sprint_Workflow_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "New: shared CLAUDE.md template content (mode-neutral); replaces CLAUDE_TEMPLATE.md",
+      ".claude/agents/templates/github/CLAUDE_template.md": "New: github-mode CLAUDE.md variant (references shared file)",
+      ".claude/agents/templates/strict/CLAUDE_template.md": "New: strict-mode CLAUDE.md variant (references shared file)",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "New: shared Sprint Workflow content",
+      ".claude/agents/templates/github/workflows/Sprint_Workflow_template.md": "New: github-mode Sprint Workflow variant",
+      ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md": "New: strict-mode Sprint Workflow variant",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "New: shared Shared Pipeline Stages content",
+      ".claude/agents/templates/github/workflows/Shared_Pipeline_Stages_template.md": "New: github-mode Shared Pipeline Stages variant",
+      ".claude/agents/templates/strict/workflows/Shared_Pipeline_Stages_template.md": "New: strict-mode Shared Pipeline Stages variant",
+      ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md": "New: shared Start Story Workflow content",
+      ".claude/agents/templates/github/workflows/Start_Story_Workflow_template.md": "New: github-mode Start Story Workflow variant",
+      ".claude/agents/templates/strict/workflows/Start_Story_Workflow_template.md": "New: strict-mode Start Story Workflow variant (adds strict pre-flight)",
+      ".claude/agents/templates/shared/workflows/Resume_Story_Workflow_Shared_template.md": "New: shared Resume Story Workflow content",
+      ".claude/agents/templates/github/workflows/Resume_Story_Workflow_template.md": "New: github-mode Resume Story Workflow variant",
+      ".claude/agents/templates/strict/workflows/Resume_Story_Workflow_template.md": "New: strict-mode Resume Story Workflow variant",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "New: shared Create Stories Workflow content",
+      ".claude/agents/templates/github/workflows/Create_Stories_Workflow_template.md": "New: github-mode Create Stories Workflow variant",
+      ".claude/agents/templates/strict/workflows/Create_Stories_Workflow_template.md": "New: strict-mode Create Stories Workflow variant",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "New: shared Plan Sprint Workflow content",
+      ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md": "New: github-mode Plan Sprint Workflow variant",
+      ".claude/agents/templates/strict/workflows/Plan_Sprint_Workflow_template.md": "New: strict-mode Plan Sprint Workflow variant",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "New: shared Refine Sprint Workflow content",
+      ".claude/agents/templates/github/workflows/Refine_Sprint_Workflow_template.md": "New: github-mode Refine Sprint Workflow variant",
+      ".claude/agents/templates/strict/workflows/Refine_Sprint_Workflow_template.md": "New: strict-mode Refine Sprint Workflow variant",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Update: workflow files section now uses mode-specific paths templates/{mode}/workflows/ for split candidates"
+    }
   }
 }
