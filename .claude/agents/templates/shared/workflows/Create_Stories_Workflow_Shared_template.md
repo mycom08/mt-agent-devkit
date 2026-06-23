@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/workflows/Create_Stories_Workflow_template.md, templates/strict/workflows/Create_Stories_Workflow_template.md -->
+
+<!-- SHARED-START -->
 # Create Stories Workflow
 
 Triggered by: `"create stories"` or `"/create-stories"` in CLAUDE.md
@@ -62,3 +65,4 @@ For each confirmed story:
    - `**Sprint:**` — set if user provided a sprint, omit the line if blank
    - `**Feature:**` / `**Phase:**` — set from Step 3
 4. Report created story file paths to the user (e.g., `.claude/agents/docs/stories/ST-000001.md`)
+<!-- SHARED-END -->

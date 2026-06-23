@@ -8,6 +8,13 @@ All notable changes to mt-agent-devkit are documented here.
 
 ---
 
+## [0.1.5]
+
+### Added
+- [ST-000006] Split 8 mixed templates into mode-specific variants: `templates/github/` and `templates/strict/` each contain `CLAUDE_template.md` and 7 workflow variants; shared content extracted to `templates/shared/` and `templates/shared/workflows/` using `<!-- SHARED-START -->` / `<!-- SHARED-END -->` markers. `Init_Project_Workflow.md` and `Update_Project_Workflow.md` Stage 2 source paths updated to `templates/{mode}/` for split candidates. `Sync_Devkit_Workflow_template.md` Stage 2 fetch URLs updated to use `{DEVKIT_SOURCE_URL}/.claude/agents/templates/{mode}/workflows/` for split candidates. Original 7 workflow templates and root `CLAUDE_TEMPLATE.md` deleted via `git rm`.
+
+---
+
 ## [0.1.2]
 
 ### Changed

@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/workflows/Refine_Sprint_Workflow_template.md, templates/strict/workflows/Refine_Sprint_Workflow_template.md -->
+
+<!-- SHARED-START -->
 # Refine Sprint Workflow
 
 Triggered by: `"refine sprint"` or `"/refine-sprint"` in CLAUDE.md
@@ -133,3 +136,4 @@ After all implementer agents report back, check: **did every agent report all th
 - **Loop limit** — max 3 Impl→TL/PO cycles per story before escalating to user; track counts in state file
 - **Comment discipline** — one comment thread per topic per story; no new threads for follow-up on the same question
 - **Completion reports** — each agent returns max 5 bullets to the orchestrator; details go in Working Records. Agents may append an optional `**Observations:**` section for workflow friction (unclear instructions, rule gaps, uncovered edge cases); orchestrator appends each item to `Observations:` in the state file, prefixed with the agent role
+<!-- SHARED-END -->

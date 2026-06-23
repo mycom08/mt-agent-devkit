@@ -1,3 +1,6 @@
+<!-- Included by: templates/github/workflows/Shared_Pipeline_Stages_template.md, templates/strict/workflows/Shared_Pipeline_Stages_template.md -->
+
+<!-- SHARED-START -->
 # Shared Pipeline Stages
 
 Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_Story_Workflow.md). Session IDs are maintained by the orchestrator across stages.
@@ -354,3 +357,4 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 After completing Stage 5 → **for `continue sprint`: proceed to next story (Stage 0). For `start story`: proceed to Retro Review.**
+<!-- SHARED-END -->

@@ -88,12 +88,21 @@ Files: all rules template files. Include `Strict_Mode_Story_Guide.md` only if th
 
 ### Workflow files — Overwrite
 
-**Source:** `.claude/agents/templates/workflows/{filename}_template.md` (local devkit)
+**Source (split — mode-specific):** `.claude/agents/templates/{mode}/workflows/{filename}_template.md` (local devkit)
+**Source (non-split):** `.claude/agents/templates/workflows/{filename}_template.md` (local devkit)
 **Target:** `{TARGET_PROJECT}/.claude/agents/workflows/{filename}.md`
 
-Read locally and write verbatim. No project-specific content lives here.
+Read `**Mode:**` from `{TARGET_PROJECT}/CLAUDE.md` to resolve `{mode}` (`github` or `strict`).
 
-Files: all workflow template files except `Analyst_Workflow.md` and `Init_Project_Workflow.md` (devkit-internal — never written to target projects).
+For split candidates, read from `templates/{mode}/workflows/`. For the full deployed content, read both the mode-specific variant and its referenced `templates/shared/workflows/*_Shared_template.md`. Combine: shared `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block first, then any mode-specific content from the variant (non-comment lines). Write the combined result verbatim to the target.
+
+**Split candidates (source from `templates/{mode}/workflows/`):**
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`
+
+**Non-split (source from `templates/workflows/`):**
+`Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
+
+Files: all workflow files listed above. Never write `Analyst_Workflow.md` or `Init_Project_Workflow.md` (devkit-internal — never written to target projects).
 
 ### Instruction files — Merge
 
@@ -125,7 +134,7 @@ Check whether the target project uses the old flat structure or the current subd
 
 ### CLAUDE.md — Merge
 
-**Source:** `.claude/agents/templates/CLAUDE_TEMPLATE.md` (local devkit)
+**Source:** `.claude/agents/templates/shared/CLAUDE_Shared_template.md` (local devkit — use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content)
 **Target:** `{TARGET_PROJECT}/CLAUDE.md`
 
 1. Read the local template
