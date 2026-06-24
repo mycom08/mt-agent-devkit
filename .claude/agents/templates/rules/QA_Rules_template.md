@@ -50,10 +50,19 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 - Place it under `docs/feature/<feature_name>/test-scenarios/` using `Title_Case_With_Underscores`
 - The scenario must cover: happy path, error cases, edge cases (empty values, invalid input, data isolation)
 
+**Coverage audit — new behavior requires dedicated test cases:**
+Before signing off, for every behavior the story adds or changes, ask: *does a named test case exist whose primary purpose is to verify this specific behavior?*
+- Existing tests that happen to pass through the new behavior as a side effect do **not** count as coverage
+- Tests updated to stop failing are regression fixes — they cover the *change*, not the *new behavior*
+- If any new behavior lacks a dedicated test case (happy path and primary error path), add one before proceeding
+
+This rule applies regardless of the service architecture, language, or testing framework in use.
+
 **Integration tests:**
 - Always check whether integration tests exist for the story
 - If integration tests can be run, **they must be run** — no exceptions
 - The only valid reasons to skip: the story is API-contract only, **or** TL has explicitly stated not to run them in a Story comment
+- If you encounter a constraint not covered by the above reasons (e.g., auth mechanism incompatibility, mode-gated endpoints, missing sandbox configuration), you **must not skip unilaterally** — report the constraint to the user and await their decision before proceeding. If the user directs you to escalate to TL, post a comment on the GitHub Issue tagging **TL**, describe the constraint, and await TL's explicit reply. Quote the approved decision (user or TL) in the QA sign-off comment.
 - Record integration test results (pass/fail + evidence) as a Comment on the GitHub Issue
 
 **Integration test script failures — fix or block, never workaround:**
@@ -212,6 +221,6 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 3.2 — §4: test failure policy, no excluded tests, field-removal coverage added; §5: Document_Index.md reference; §10: live user instruction conflict rule added  
-**Previous:** 2.1 — §12 Troubleshooting Protocol: mandatory diagnose-fix-record loop for tooling/environment blockers  
+**Version:** 3.3 — §4: coverage audit rule added — new behavior requires dedicated test cases; regression fixes do not count as coverage  
+**Previous:** 3.2 — §4: test failure policy, no excluded tests, field-removal coverage added; §5: Document_Index.md reference; §10: live user instruction conflict rule added  
 **Created:** 2026-05-01

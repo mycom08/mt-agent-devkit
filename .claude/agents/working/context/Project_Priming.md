@@ -170,13 +170,41 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-## 15. Reference Links
+## 15. How to Update a Template
+
+When a rule, workflow, or instruction file needs to change, update the source template in `.claude/agents/templates/` — never edit a target project's installed copy directly.
+
+**Steps (always in this order):**
+
+1. **Edit the template file** under `.claude/agents/templates/` (e.g., `.claude/agents/templates/rules/QA_Rules_template.md`)
+2. **Bump the patch version** in `version.txt` (e.g., `0.1.5` → `0.1.6`)
+3. **Append a new entry** to `changes.json` — place it **after** the previous version entry (at the end of the object, before the closing `}`):
+
+```json
+"0.1.6": {
+  "new": [],
+  "modified": [
+    ".claude/agents/templates/rules/QA_Rules_template.md"
+  ],
+  "descriptions": {
+    ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: one-line summary of what changed and why"
+  }
+}
+```
+
+Use `"new"` for files added for the first time; `"modified"` for files that already existed. Both can be non-empty in the same entry.
+
+> Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Entries must be appended in ascending version order — inserting out of order will cause `sync devkit` to skip or double-apply changes.
+
+---
+
+## 16. Reference Links
 
 1. **GitHub repo** — https://github.com/mycom08/mt-agent-devkit
 2. **Raw content base URL** — https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main
 
 ---
 
-**Document Version:** 1.0
-**Last Updated:** 2026-06-16
+**Document Version:** 1.1
+**Last Updated:** 2026-06-24
 **Audience:** Development team, architects, AI agents

@@ -153,5 +153,18 @@
       ".claude/agents/templates/strict/workflows/Refine_Sprint_Workflow_template.md": "New: strict-mode Refine Sprint Workflow variant",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Update: workflow files section now uses mode-specific paths templates/{mode}/workflows/ for split candidates"
     }
+  },
+  "0.1.6": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/QA_Rules_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §4 coverage audit rule — updating broken tests is a regression fix, not new coverage; new behavior requires dedicated test cases regardless of architecture. Fix: §4 integration test skip — QA must report unlisted skip constraints to user first, then escalate to TL if directed",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix: §5 spec-first rule — when story has an API Spec Reference section, update the spec before writing any implementation code",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 3 merge gate — add explicit warning that the Merge Procedure fires only at behavioral path step 9, not at Stage 3 entry"
+    }
   }
 }

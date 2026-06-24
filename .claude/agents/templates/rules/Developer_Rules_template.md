@@ -154,6 +154,9 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 | API spec drift check | Spec changed and code generation is used | `{code-gen-command}` then `git diff --exit-code {generated-file-path}` | No diff — generated file matches spec |
 | Integration test run | Source code changed | `{integration-test-command}` (start sandbox first) | All assertions pass |
 
+**Spec-first rule — when story has an API Spec Reference section:**
+When the story's **API Spec Reference** section names one or more endpoints, update the API spec **before** writing any implementation code. Run codegen immediately after the spec update and commit both as the first working commit on the branch. This ensures the spec is the source of truth and prevents a spec-update CR cycle.
+
 If any applicable check fails, fix it before creating the PR. Do not open a draft PR expecting QA or TL to catch failures — those are Dev's responsibility.
 
 Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").

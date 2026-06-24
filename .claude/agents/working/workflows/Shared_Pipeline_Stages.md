@@ -196,6 +196,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ## Stage 3 — QA Validation
 
+> **Merge gate — behavioral stories:** The Merge Procedure fires only at behavioral path step 9 — after QA confirms automation passes. Do NOT execute it at Stage 3 entry or immediately after Stage 2 approval.
+
 1. **If `Implementer` is `QA`** → skip QA validation; orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
