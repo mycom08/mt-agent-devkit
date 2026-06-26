@@ -97,7 +97,7 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
-1. **Spawn** the agent matching the `Implementer` role
+1. **Spawn** the agent matching the `Implementer` role (**model: sonnet**)
 2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
 4. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
@@ -117,9 +117,9 @@ When the implementer returns with a mid-implementation consultation report inste
 1. **Read the report** — identify `Owner` (TL / PO / both) and the specific `Question`.
 
 2. **Spawn or resume the answering agent(s):**
-   - If `Owner` is TL → spawn/resume Technical Lead with the question and story context
-   - If `Owner` is PO → spawn/resume Product Owner with the question and story context
-   - If `Owner` is both → spawn both in parallel (single orchestrator message)
+   - If `Owner` is TL → spawn/resume Technical Lead (**model: sonnet**) with the question and story context
+   - If `Owner` is PO → spawn/resume Product Owner (**model: sonnet**) with the question and story context
+   - If `Owner` is both → spawn both in parallel (**model: sonnet** for each) (single orchestrator message)
 
    Spawn prompt must include:
    - Story ID and GitHub Issue number
@@ -177,8 +177,8 @@ After the implementer reports completion, append a bullet to `Observations:` for
 ### Behavioral path (`Type: behavioral`)
 
 1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `agentId` as `reviewer_session`
-   - Default: **Technical Lead** reviews
-   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review
+   - Default: **Technical Lead** reviews (**model: opus**)
+   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: sonnet**)
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
@@ -212,7 +212,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-5. **Spawn** QA agent; save its `agentId` as `qa_session`
+5. **Spawn** QA agent (**model: sonnet**); save its `agentId` as `qa_session`
 6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules.md`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
 8. **If story AC issues found** → resume Implementer via `SendMessage` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `SendMessage` to `qa_session`** to revalidate (spawn new if expired)
@@ -249,7 +249,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-1. **Spawn** Product Owner agent; save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
+1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
    - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
    - `.claude/agents/working/rules/Product_Owner_Rules.md`

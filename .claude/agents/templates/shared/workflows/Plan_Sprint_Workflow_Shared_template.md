@@ -22,7 +22,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 ## Stage 1 — Current Sprint Verification (PO)
 
-1. **Spawn** Product Owner agent; save its `agentId` as `po_session`; pass `feature_name`
+1. **Spawn** Product Owner agent (**model: sonnet**); save its `agentId` as `po_session`; pass `feature_name`
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory + rules)
 3. PO checks the active sprint:
    - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; read its `Sprint_N_Overview.md`
@@ -75,7 +75,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 ## Stage 3 — Question Resolution (other agents)
 
 1. Orchestrator reads `PO_questions.md` to identify which agents have assigned questions
-2. **Spawn or resume** each required agent **in parallel** (reuse existing sessions):
+2. **Spawn or resume** each required agent **in parallel** (**model: sonnet** for new spawns) (reuse existing sessions):
    - Track sessions as `tl_session`, `ba_session`, `dev_session`, `qa_session` as needed
 3. Each agent reads `PO_questions.md`, locates their assigned questions, fills in the `A:` field inline — no separate file
 4. Each agent saves the file and signals completion to the orchestrator (max 5-bullet summary)

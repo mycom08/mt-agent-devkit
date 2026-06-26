@@ -8,6 +8,13 @@ All notable changes to mt-agent-devkit are documented here.
 
 ---
 
+## [0.1.7]
+
+### Changed
+- [ST-000007] Wire per-workflow model assignments into all agent spawn calls across devkit-level workflows (`Analyst_Workflow.md`, `Build_Software_Workflow.md`), sprint workflows (`Shared_Pipeline_Stages.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`), and their shared template equivalents. Model rule: TL doing evaluation/design → `opus`; all other agents → `sonnet`; PO story closure (Stage 4 behavioral) → `haiku`.
+
+---
+
 ## [0.1.5]
 
 ### Added

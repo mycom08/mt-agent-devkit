@@ -42,7 +42,7 @@ The orchestrator maintains `.claude/agents/working/tmp/refine_pipeline_state.md`
 
 1. Orchestrator fetches all stories in the target sprint (using the story fetch method above), reads each story's `**Assigned:**` field, and groups stories by assignee role
 2. **Orchestrator pre-fetches full story content** and passes it directly in each agent prompt — agents do not need to re-fetch stories
-3. **Spawn** one agent per role that has assigned stories; save session IDs to state file as `dev_session`, `tl_session`, `qa_session`, `ba_session`. If all stories belong to one role, spawn a single agent — no parallel spawn needed. If multiple roles are present, spawn them in parallel simultaneously.
+3. **Spawn** one agent per role that has assigned stories (**model: sonnet** for Developer/QA/Business Analyst; **model: opus** for Technical Lead); save session IDs to state file as `dev_session`, `tl_session`, `qa_session`, `ba_session`. If all stories belong to one role, spawn a single agent — no parallel spawn needed. If multiple roles are present, spawn them in parallel simultaneously.
 4. Each agent reads its own instruction files (instructions + memory + rules)
 5. Each agent reviews the story bodies passed in the prompt and performs two mandatory checks per story:
    - **API surface check:** For every endpoint, field, or behavior referenced in the ACs, confirm it exists in the project's API spec (check `docs/api/` or equivalent) or is explicitly scoped for delivery within the same sprint. If not found, flag as an open question to TL.
@@ -68,9 +68,9 @@ After all implementer agents report back, check: **did every agent report all th
 ## Stage 2 — TL and PO Answer Questions
 
 1. Orchestrator collates all implementer reports to determine which agents have tagged questions
-2. **Spawn or resume** TL first (reuse `tl_session` if active); save/update `tl_session` in state file
+2. **Spawn or resume** TL (**model: opus**) first (reuse `tl_session` if active); save/update `tl_session` in state file
 3. TL answers all technical questions across all stories in a single pass and signals completion
-4. **Then spawn or resume** PO (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions
+4. **Then spawn or resume** PO (**model: sonnet**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions
 5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC: PO updates the issue body (`--body-file` per `Story_Standard_PO.md` §15)
 6. Each agent appends answers in the same comment thread — does not open new threads for the same topic
 7. Each agent signals completion to the orchestrator (max 5-bullet summary)
