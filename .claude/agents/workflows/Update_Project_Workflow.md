@@ -170,6 +170,34 @@ Never overwrite. If the local template adds a new `##` section not present in th
 
 Same rule as memory files.
 
+### Wiki files — Merge (append new sections only)
+
+**Source:** `.claude/agents/templates/wiki/*_template.md` (local devkit)  
+**Target:** `{TARGET_PROJECT}/docs/wiki/`
+
+Wiki files are project-owned — never overwrite existing content.
+
+**If a wiki file already exists in the target project:**
+1. Read the local template
+2. Read the existing wiki file
+3. Identify any `##` section heading in the template that is **not present** in the local file
+4. Append each missing section with its heading and an `[UPDATE REQUIRED]` placeholder body, then notify the user
+5. Sections already present → leave untouched
+
+**If a wiki file does not exist in the target project:**
+1. Ask the user once (covering all missing wiki files):
+   > "Some wiki docs are missing from `{TARGET_PROJECT}/docs/wiki/`. Do you have existing guidelines I can refer to — such as a Confluence page, a README section, or existing doc files?
+   >
+   > - Reply with **file path(s)** to any existing guideline documents
+   > - Or reply `no` to write placeholder templates"
+2. **If the user provides paths** → read those files and use them as reference to fill `{{PLACEHOLDER}}` markers in the templates before writing
+3. **If the user replies `no`** → write the template with all `{{PLACEHOLDER}}` values replaced by `[UPDATE REQUIRED]` markers; notify the user to fill them in
+
+**Expected wiki files:**
+`Testing_Guidelines.md`, `Development_Standards.md`, `Code_Review_Checklist.md`, `{Language}_Style_Guide.md` (name varies by project)
+
+> The language style guide file name is project-specific. If no style guide file exists, write `Language_Style_Guide.md` as the fallback.
+
 ### Cleanup — Remove Stale Files
 
 After all updates are applied, scan each managed directory in `TARGET_PROJECT` and flag any file not in the known expected set.
@@ -227,7 +255,7 @@ Skipped (project-owned):
 ## Pipeline Rules
 
 - **Never write before user confirms** in Stage 1
-- **Never overwrite** `Project_Priming.md`, `memory/`, `working-record/`, or `docs/`
+- **Never overwrite** `Project_Priming.md`, `memory/`, `working-record/`, or any file under `docs/` — wiki files use the merge strategy above (append new sections only)
 - **Missing version in changes.json = full scan** — never silently skip an unknown version
 - **Log every file written** — the user must be able to see exactly what changed
 - **Merge preserves project content** — when in doubt about whether a section is project-specific, keep the existing file and notify the user
