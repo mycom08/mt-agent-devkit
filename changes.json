@@ -159,12 +159,18 @@
     "modified": [
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
-      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md"
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers → sonnet; Stage 2 TL reviewer → opus; Stage 2 Dev peer reviewer → sonnet; Stage 3 QA → sonnet; Stage 4 PO behavioral → haiku; mid-impl consultation agents → sonnet)",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers → sonnet; Stage 2 TL reviewer → opus; Stage 2 Dev peer reviewer → sonnet; Stage 3 QA → sonnet; Stage 4 PO behavioral → haiku; mid-impl consultation agents → sonnet). Fix: Stage 2 step 6 — add explicit status:testing label step and do-not-merge warning before proceeding to Stage 3",
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (PO → sonnet; question-answering agents → sonnet)",
-      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA → sonnet; Stage 1/2 TL → opus; Stage 2 PO → sonnet)"
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA → sonnet; Stage 1/2 TL → opus; Stage 2 PO → sonnet)",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix: §2 PR Approval — remove 'ready to merge' phrase; add explicit no-merge instruction. Fix: §3 — status:testing set before merge, not after",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix: §1 Testing row — status:testing set after TL approval and before merge (QA tests dev branch)",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §8 — add no-skip rule requiring escalation to user if sandbox/automation cannot be run; self-approval of skip is not permitted"
     }
   },
   "0.1.6": {

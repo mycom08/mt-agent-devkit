@@ -219,7 +219,10 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD; appends summary comment entry to story MD `## Comments`
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
-6. **If approved** → proceed to Stage 3
+6. **If approved:**
+   - **GitHub mode:** update the story label to `status:testing` — do this immediately, before proceeding to Stage 3. QA tests on the dev branch before merge; the label signals QA to begin
+   - **Do NOT execute the Merge Procedure here** — it fires only after QA automation passes (Stage 3 behavioral path step 9). TL approval is not a merge signal
+   → proceed to Stage 3
 
 ### Orchestrator Observation Check — Stage 2
 

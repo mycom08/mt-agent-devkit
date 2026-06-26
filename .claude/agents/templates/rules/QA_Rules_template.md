@@ -165,6 +165,8 @@ After all story Acceptance Criteria are verified and before giving merge sign-of
 
 > **Gate:** Do not give merge sign-off until the automation suite passes. A story that breaks existing automation is not QA-complete, even if its own AC all pass.
 
+> **No-skip rule:** QA cannot skip or self-approve skipping the automation run for any reason. If the sandbox cannot be started or the automation suite cannot be run, post a blocker comment on the story immediately and escalate to the user. Do not give merge sign-off until the user explicitly approves the skip or the issue is resolved. "Sandbox not in scope for this session" is not a valid justification.
+
 ---
 
 ## 9. Pre-PR Gate (when acting as Implementer)

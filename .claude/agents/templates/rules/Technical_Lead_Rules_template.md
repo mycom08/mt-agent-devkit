@@ -57,9 +57,10 @@ When your answer changes or narrows the meaning of an AC (e.g., designating one 
 - After posting all PR inline comments, post a **brief notify comment on the GitHub Issue** (e.g., "CR raised on PR #XX — N items require changes before approval")
 
 **PR Approval:**
-- When approving, post a **brief comment on the GitHub Issue** to notify the team (e.g., "PR #XX approved — ready to merge")
+- When approving, post a **brief comment on the GitHub Issue** to notify the team (e.g., "PR #XX approved — moving to status:testing for QA")
+- **Do NOT instruct the orchestrator or Dev to merge** — merging is the orchestrator's responsibility and happens only after QA automation passes
 
-**You are the merge gate.** No PR merges without your explicit approval.
+**You are the review gate, not the merge gate.** Your approval moves the story to QA testing. The orchestrator merges after QA passes.
 
 ---
 
@@ -68,7 +69,7 @@ When your answer changes or narrows the meaning of an AC (e.g., designating one 
 Story status: `Backlog → Ready → In Progress → Review → Testing → Done`
 
 - Move story to `status:review` when Dev opens a PR and tags you
-- Move story to `status:testing` after you approve the PR and it is merged
+- Move story to `status:testing` after you approve the PR — **before** it is merged (QA tests the dev branch; merge happens only after QA automation passes)
 - Only QA ticks Acceptance Criteria — do not mark AC complete yourself
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.

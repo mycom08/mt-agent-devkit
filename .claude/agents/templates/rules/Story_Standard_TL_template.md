@@ -12,7 +12,7 @@
 | Ready | PO | After assigning to Developer |
 | In Progress | Developer | Dev branch created |
 | **Review** | Developer | After PR created — **TL reviews here** |
-| **Testing** | TL (notifies QA) | After TL approval & merge |
+| **Testing** | TL (notifies QA) | After TL approval — **before** merge (QA tests dev branch) |
 | Done | PO | After all AC pass |
 
 ---
