@@ -211,6 +211,28 @@ Copy all scrum team workflow files verbatim to target:
 
 > **Do not copy** `Analyst_Workflow.md` or `Init_Project_Workflow.md` — these are devkit-internal workflows and have no place in the target project.
 
+#### Wiki documentation files (4 files)
+
+**Source:** `templates/wiki/*_template.md`  
+**Target:** `docs/wiki/` in the target project
+
+Generate four wiki documents by filling every `{{PLACEHOLDER}}` in each template with content derived from the Stage 1 tech stack scan. If a `docs/wiki/` file **already exists** in the target project → **skip it** without overwriting.
+
+| Template | Target file | Placeholder guidance |
+|---|---|---|
+| `Testing_Guidelines_template.md` | `docs/wiki/Testing_Guidelines.md` | Fill test framework, test run commands, directory structure, coverage thresholds, and automation suite details from detected test tooling and CI config |
+| `Development_Standards_template.md` | `docs/wiki/Development_Standards.md` | Fill branch naming format, commit format, lint/format commands, file structure, error handling patterns, and logging conventions from detected language and tooling |
+| `Code_Review_Checklist_template.md` | `docs/wiki/Code_Review_Checklist.md` | Fill code quality, security, and conventions checklists from detected language and framework; adapt TL review criteria to the detected tech stack |
+| `Language_Style_Guide_template.md` | `docs/wiki/{Language}_Style_Guide.md` | Name the file after the detected primary language (e.g., `Go_Style_Guide.md`, `TypeScript_Style_Guide.md`); fill all naming, error handling, concurrency, and design pattern sections from that language's idioms. Fall back to `Language_Style_Guide.md` if language cannot be determined |
+
+**Placeholder fill rules:**
+- Replace every `{{PLACEHOLDER}}` with real, specific content — no empty sections, no `[TODO]` markers
+- Use actual commands, paths, and conventions detected from the project scan
+- If a specific detail cannot be determined from the scan, use the most common convention for the detected language/framework and add a brief `<!-- verify: ... -->` comment for the user
+- `{{DATE}}` → today's date in `YYYY-MM-DD` format
+- `{{PROJECT_NAME}}` → detected project name
+- `{{LANGUAGE}}` → detected primary language (e.g., `Go`, `TypeScript`, `Python`)
+
 #### Version check scripts (2 files)
 
 **Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`
@@ -287,6 +309,7 @@ Write all generated files to `TARGET_PROJECT`:
 1. Create directories as needed:
    `.claude/agents/context/`, `.claude/agents/memory/`,
    `.claude/agents/rules/`, `.claude/agents/working-record/`, `.claude/agents/workflows/`,
+   `docs/wiki/`,
    `.claude/agents/scripts/`, `.claude/agents/retros/`, `.claude/agents/tmp/`
    Write a `.gitkeep` placeholder inside `.claude/agents/retros/` so the directory is tracked in git.
 2. **If `Mode: strict`** — also create:

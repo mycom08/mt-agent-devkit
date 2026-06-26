@@ -1,4 +1,22 @@
 {
+  "0.1.9": {
+    "new": [
+      ".claude/agents/templates/wiki/Testing_Guidelines_template.md",
+      ".claude/agents/templates/wiki/Development_Standards_template.md",
+      ".claude/agents/templates/wiki/Code_Review_Checklist_template.md",
+      ".claude/agents/templates/wiki/Language_Style_Guide_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/wiki/Testing_Guidelines_template.md": "New: wiki template for Testing_Guidelines.md — sections with {{PLACEHOLDER}} markers filled by init project from tech stack scan",
+      ".claude/agents/templates/wiki/Development_Standards_template.md": "New: wiki template for Development_Standards.md — git branching, commit format, testing standards, linting, file structure",
+      ".claude/agents/templates/wiki/Code_Review_Checklist_template.md": "New: wiki template for Code_Review_Checklist.md — developer pre-PR checklist and TL review criteria",
+      ".claude/agents/templates/wiki/Language_Style_Guide_template.md": "New: wiki template for {Language}_Style_Guide.md — naming, error handling, concurrency, design patterns per detected language",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Feat: add wiki files merge strategy — new template sections appended with [UPDATE REQUIRED]; existing project content never overwritten"
+    }
+  },
   "0.1.8": {
     "new": [],
     "modified": [

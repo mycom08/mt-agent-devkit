@@ -220,6 +220,26 @@ Never overwrite. If the template adds a new `##` section not present locally →
 
 Same rule as memory files.
 
+#### Wiki files — Merge (append new sections only)
+
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/wiki/*_template.md`  
+**Target:** `docs/wiki/` in the target project
+
+Wiki files are project-owned — never overwrite existing content. Apply this merge strategy:
+
+1. Fetch the latest template version
+2. Read the existing local wiki file
+3. Identify any `##` section heading in the template that is **not present** in the local file
+4. Append each missing section at the end of the local file with its heading and an `[UPDATE REQUIRED]` placeholder body, then notify the user
+5. Sections already present in the local file → leave untouched
+
+If a wiki file does not exist locally → fetch and write the template verbatim (same as `init project` would have generated it, without placeholder filling since there is no project scan at sync time — the user must fill `[UPDATE REQUIRED]` markers manually).
+
+**Expected wiki files:**
+`Testing_Guidelines.md`, `Development_Standards.md`, `Code_Review_Checklist.md`, `{Language}_Style_Guide.md` (name varies by project)
+
+> The language style guide file name is project-specific (e.g., `Go_Style_Guide.md`). Sync does not rename existing style guide files. If no style guide file exists, write `Language_Style_Guide.md` as the fallback.
+
 ### Cleanup — Remove Stale Files
 
 After all updates are applied, scan each managed directory and flag any file not in the known expected set.
