@@ -1,99 +1,43 @@
 {
-  "0.0.1": [],
-  "0.0.2": [
-    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
-  ],
-  "0.0.3": [
-    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
-  ],
-  "0.0.4": [
-    ".claude/agents/templates/CLAUDE_TEMPLATE.md",
-    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
-  ],
-  "0.0.5": [
-    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
-  ],
-  "0.0.6": [
-    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
-  ],
-  "0.0.7": [
-    ".claude/agents/templates/rules/Agent_Common_template.md",
-    ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
-    ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
-    ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md",
-    ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
-    ".claude/agents/templates/workflows/Workflow_Guide_template.md",
-    ".claude/agents/templates/context/Document_Index_template.md"
-  ],
-  "0.0.9": {
-    "files": [
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md"
-    ],
-    "descriptions": {
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix: added explicit status rule forbidding status:ready promotion during plan sprint; tightened Step 5 label guidance for existing stories"
-    },
-    "checksums": {
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "sha256:c4126e365c5cac60cff9b8ff372ede2d9c2f5f4cde1c9a78a23b962d35101363"
-    }
-  },
-  "0.0.8": {
-    "files": [
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
-      ".claude/agents/templates/scripts/check_devkit_version.ps1",
-      ".claude/agents/templates/scripts/check_devkit_version.sh"
-    ],
-    "descriptions": {
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Added auto-approve flag, changes.json description/checksum format, WebFetch curl fallback, Document_Index skip strategy, missing expected files check",
-      ".claude/agents/templates/scripts/check_devkit_version.ps1": "New: SessionStart hook script for devkit version notification (Windows)",
-      ".claude/agents/templates/scripts/check_devkit_version.sh": "New: SessionStart hook script for devkit version notification (Mac/Linux)"
-    },
-    "checksums": {
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:06b72804f4de9e9dcae811e8425aa61987d2e88a52f604c5e6892136e9c06ed4"
-    }
-  },
-  "0.1.1": {
-    "new": [
-      ".claude/agents/templates/Project_CLAUDE_template.md",
-      ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md"
-    ],
-    "modified": []
-  },
-  "0.1.2": {
+  "0.1.8": {
     "new": [],
     "modified": [
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 2 step 6 — add explicit status:testing label step and do-not-merge warning before proceeding to Stage 3",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix: §2 PR Approval — remove 'ready to merge' phrase; add explicit no-merge instruction. Fix: §3 — status:testing set before merge, not after",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix: §1 Testing row — status:testing set after TL approval and before merge (QA tests dev branch)",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §8 — add no-skip rule requiring escalation to user if sandbox/automation cannot be run; self-approval of skip is not permitted"
+    }
+  },
+  "0.1.7": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers → sonnet; Stage 2 TL reviewer → opus; Stage 2 Dev peer reviewer → sonnet; Stage 3 QA → sonnet; Stage 4 PO behavioral → haiku; mid-impl consultation agents → sonnet)",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (PO → sonnet; question-answering agents → sonnet)",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA → sonnet; Stage 1/2 TL → opus; Stage 2 PO → sonnet)"
+    }
+  },
+  "0.1.6": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/QA_Rules_template.md",
       ".claude/agents/templates/rules/Developer_Rules_template.md",
-      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
-    ]
-  },
-  "0.1.3": {
-    "new": [],
-    "modified": [
-      ".claude/agents/templates/CLAUDE_TEMPLATE.md",
-      ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
-      ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md",
-      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md",
-      ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md",
-      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Refactor: removed inline workflow content; replaced with clean routing table pointing to workflow files",
-      ".claude/agents/templates/workflows/Sprint_Workflow_template.md": "Fix: Observations write rule now requires agent role prefix on agent-reported items",
-      ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md": "Fix: added next-sprint resolution logic for both GitHub mode (gh issue list jq numeric sort + gh label list warning) and strict mode (glob + numeric parse)",
-      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md": "Fix: Stage 4 step 4 — explicit feature/non-feature story label sub-bullets instead of implicit conditional",
-      ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md": "Fix: replaced gh label list | grep (alphabetical sort bug) with gh issue list jq numeric sort for non-feature sprint identification; added gh label list warning",
-      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md": "Fix: deletion pre-check — added trigger examples and proceed-immediately rationale; Stage 2 and Stage 3 fast-path fallback — added domain knowledge examples"
-    }
-  },
-  "0.1.4": {
-    "new": [],
-    "modified": [
-      ".claude/agents/templates/CLAUDE_TEMPLATE.md",
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md"
-    ],
-    "descriptions": {
-      ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Fix: removed analyze <requirement> row from Workflows table (Analyst_Workflow is devkit-only, not deployed to target projects)",
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix: Story Closure Task steps 3-5 now mode-conditional (github: issue close via gh; strict: edit local story MD + append closure comment)"
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §4 coverage audit rule — updating broken tests is a regression fix, not new coverage; new behavior requires dedicated test cases regardless of architecture. Fix: §4 integration test skip — QA must report unlisted skip constraints to user first, then escalate to TL if directed",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix: §5 spec-first rule — when story has an API Spec Reference section, update the spec before writing any implementation code",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 3 merge gate — add explicit warning that the Merge Procedure fires only at behavioral path step 9, not at Stage 3 entry"
     }
   },
   "0.1.5": {
@@ -154,36 +98,101 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Update: workflow files section now uses mode-specific paths templates/{mode}/workflows/ for split candidates"
     }
   },
-  "0.1.7": {
+  "0.1.4": {
     "new": [],
     "modified": [
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
-      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
-      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md",
-      ".claude/agents/templates/rules/QA_Rules_template.md"
+      ".claude/agents/templates/CLAUDE_TEMPLATE.md",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers → sonnet; Stage 2 TL reviewer → opus; Stage 2 Dev peer reviewer → sonnet; Stage 3 QA → sonnet; Stage 4 PO behavioral → haiku; mid-impl consultation agents → sonnet). Fix: Stage 2 step 6 — add explicit status:testing label step and do-not-merge warning before proceeding to Stage 3",
-      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (PO → sonnet; question-answering agents → sonnet)",
-      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA → sonnet; Stage 1/2 TL → opus; Stage 2 PO → sonnet)",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix: §2 PR Approval — remove 'ready to merge' phrase; add explicit no-merge instruction. Fix: §3 — status:testing set before merge, not after",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix: §1 Testing row — status:testing set after TL approval and before merge (QA tests dev branch)",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §8 — add no-skip rule requiring escalation to user if sandbox/automation cannot be run; self-approval of skip is not permitted"
+      ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Fix: removed analyze <requirement> row from Workflows table (Analyst_Workflow is devkit-only, not deployed to target projects)",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix: Story Closure Task steps 3-5 now mode-conditional (github: issue close via gh; strict: edit local story MD + append closure comment)"
     }
   },
-  "0.1.6": {
+  "0.1.3": {
     "new": [],
     "modified": [
-      ".claude/agents/templates/rules/QA_Rules_template.md",
-      ".claude/agents/templates/rules/Developer_Rules_template.md",
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
+      ".claude/agents/templates/CLAUDE_TEMPLATE.md",
+      ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md",
+      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md",
+      ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md",
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §4 coverage audit rule — updating broken tests is a regression fix, not new coverage; new behavior requires dedicated test cases regardless of architecture. Fix: §4 integration test skip — QA must report unlisted skip constraints to user first, then escalate to TL if directed",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix: §5 spec-first rule — when story has an API Spec Reference section, update the spec before writing any implementation code",
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 3 merge gate — add explicit warning that the Merge Procedure fires only at behavioral path step 9, not at Stage 3 entry"
+      ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Refactor: removed inline workflow content; replaced with clean routing table pointing to workflow files",
+      ".claude/agents/templates/workflows/Sprint_Workflow_template.md": "Fix: Observations write rule now requires agent role prefix on agent-reported items",
+      ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md": "Fix: added next-sprint resolution logic for both GitHub mode (gh issue list jq numeric sort + gh label list warning) and strict mode (glob + numeric parse)",
+      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md": "Fix: Stage 4 step 4 — explicit feature/non-feature story label sub-bullets instead of implicit conditional",
+      ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md": "Fix: replaced gh label list | grep (alphabetical sort bug) with gh issue list jq numeric sort for non-feature sprint identification; added gh label list warning",
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md": "Fix: deletion pre-check — added trigger examples and proceed-immediately rationale; Stage 2 and Stage 3 fast-path fallback — added domain knowledge examples"
     }
-  }
+  },
+  "0.1.2": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md"
+    ]
+  },
+  "0.1.1": {
+    "new": [
+      ".claude/agents/templates/Project_CLAUDE_template.md",
+      ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md"
+    ],
+    "modified": []
+  },
+  "0.0.9": {
+    "files": [
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix: added explicit status rule forbidding status:ready promotion during plan sprint; tightened Step 5 label guidance for existing stories"
+    },
+    "checksums": {
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "sha256:c4126e365c5cac60cff9b8ff372ede2d9c2f5f4cde1c9a78a23b962d35101363"
+    }
+  },
+  "0.0.8": {
+    "files": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1",
+      ".claude/agents/templates/scripts/check_devkit_version.sh"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Added auto-approve flag, changes.json description/checksum format, WebFetch curl fallback, Document_Index skip strategy, missing expected files check",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1": "New: SessionStart hook script for devkit version notification (Windows)",
+      ".claude/agents/templates/scripts/check_devkit_version.sh": "New: SessionStart hook script for devkit version notification (Mac/Linux)"
+    },
+    "checksums": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:06b72804f4de9e9dcae811e8425aa61987d2e88a52f604c5e6892136e9c06ed4"
+    }
+  },
+  "0.0.7": [
+    ".claude/agents/templates/rules/Agent_Common_template.md",
+    ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+    ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
+    ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md",
+    ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
+    ".claude/agents/templates/workflows/Workflow_Guide_template.md",
+    ".claude/agents/templates/context/Document_Index_template.md"
+  ],
+  "0.0.6": [
+    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
+  ],
+  "0.0.5": [
+    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+  ],
+  "0.0.4": [
+    ".claude/agents/templates/CLAUDE_TEMPLATE.md",
+    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+  ],
+  "0.0.3": [
+    ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+  ],
+  "0.0.2": [
+    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
+  ],
+  "0.0.1": []
 }
