@@ -216,19 +216,55 @@ Copy all scrum team workflow files verbatim to target:
 **Source:** `templates/wiki/*_template.md`  
 **Target:** `docs/wiki/` in the target project
 
-Generate four wiki documents by filling every `{{PLACEHOLDER}}` in each template with content derived from the Stage 1 tech stack scan. If a `docs/wiki/` file **already exists** in the target project → **skip it** without overwriting.
+Wiki files are project-owned — always check before generating.
 
-| Template | Target file | Placeholder guidance |
-|---|---|---|
-| `Testing_Guidelines_template.md` | `docs/wiki/Testing_Guidelines.md` | Fill test framework, test run commands, directory structure, coverage thresholds, and automation suite details from detected test tooling and CI config |
-| `Development_Standards_template.md` | `docs/wiki/Development_Standards.md` | Fill branch naming format, commit format, lint/format commands, file structure, error handling patterns, and logging conventions from detected language and tooling |
-| `Code_Review_Checklist_template.md` | `docs/wiki/Code_Review_Checklist.md` | Fill code quality, security, and conventions checklists from detected language and framework; adapt TL review criteria to the detected tech stack |
-| `Language_Style_Guide_template.md` | `docs/wiki/{Language}_Style_Guide.md` | Name the file after the detected primary language (e.g., `Go_Style_Guide.md`, `TypeScript_Style_Guide.md`); fill all naming, error handling, concurrency, and design pattern sections from that language's idioms. Fall back to `Language_Style_Guide.md` if language cannot be determined |
+**Step 1 — Check which files are missing**
+
+Scan `docs/wiki/` in the target project. For each of the four expected files:
+
+| Template | Target file |
+|---|---|
+| `Testing_Guidelines_template.md` | `docs/wiki/Testing_Guidelines.md` |
+| `Development_Standards_template.md` | `docs/wiki/Development_Standards.md` |
+| `Code_Review_Checklist_template.md` | `docs/wiki/Code_Review_Checklist.md` |
+| `Language_Style_Guide_template.md` | `docs/wiki/{Language}_Style_Guide.md` |
+
+If a file **already exists** → **skip it**. Only proceed for files that are missing.
+
+If **all four files exist** → skip this section entirely.
+
+**Step 2 — Ask the user about existing guidelines**
+
+If one or more files are missing, ask:
+
+> "I'll generate the missing wiki docs (`docs/wiki/`). Do you have any existing guidelines for this project I can refer to — such as a Confluence page, a README section, or existing docs files?
+>
+> - Reply with the **file path(s)** to any existing guideline documents (e.g., `docs/old-standards.md`)
+> - Or reply `no` to generate from the project scan alone"
+
+Wait for the user's reply before proceeding.
+
+**Step 3 — Collect reference material (if provided)**
+
+If the user provided file paths → read each file and use its content as reference material when filling placeholders. The reference files set the baseline for conventions; the project scan fills in anything not covered.
+
+If the user replied `no` → use only the Stage 1 project scan as the source.
+
+**Step 4 — Generate missing files**
+
+For each missing wiki file, fill every `{{PLACEHOLDER}}` in the template using the reference material (if any) and the Stage 1 scan:
+
+| Placeholder guidance | |
+|---|---|
+| `Testing_Guidelines.md` | Test framework, test run commands, directory structure, coverage thresholds, automation suite — from reference docs and detected test tooling/CI config |
+| `Development_Standards.md` | Branch naming, commit format, lint/format commands, file structure, error handling patterns, logging — from reference docs and detected language/tooling |
+| `Code_Review_Checklist.md` | Code quality, security, and conventions checklists; TL review criteria — adapted from reference docs and detected tech stack |
+| `{Language}_Style_Guide.md` | Naming, error handling, concurrency, design patterns — from reference docs and detected language idioms. File named after detected language (e.g., `Go_Style_Guide.md`); falls back to `Language_Style_Guide.md` if undetermined |
 
 **Placeholder fill rules:**
-- Replace every `{{PLACEHOLDER}}` with real, specific content — no empty sections, no `[TODO]` markers
-- Use actual commands, paths, and conventions detected from the project scan
-- If a specific detail cannot be determined from the scan, use the most common convention for the detected language/framework and add a brief `<!-- verify: ... -->` comment for the user
+- Replace every `{{PLACEHOLDER}}` with real, specific content — no empty sections, no unfilled markers
+- Use actual commands, paths, and conventions from reference material and the project scan
+- If a detail cannot be determined from either source, use the most common convention for the detected language/framework and add a `<!-- verify: ... -->` comment for the user
 - `{{DATE}}` → today's date in `YYYY-MM-DD` format
 - `{{PROJECT_NAME}}` → detected project name
 - `{{LANGUAGE}}` → detected primary language (e.g., `Go`, `TypeScript`, `Python`)
