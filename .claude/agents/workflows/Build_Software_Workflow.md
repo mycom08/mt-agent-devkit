@@ -163,7 +163,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 
 ### Agent Spawns (parallel — send in a single orchestrator message)
 
-Spawn **two general-purpose agents** in the same message:
+Spawn **two general-purpose agents** (**model: sonnet**) in the same message:
 
 ---
 

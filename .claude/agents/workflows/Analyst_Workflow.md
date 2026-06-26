@@ -49,7 +49,7 @@ The orchestrator conducts the entire Q&A loop directly using the natural convers
 5. Orchestrator asks the next question, explicitly building on all prior answers
 6. Repeat steps 4–5 until the orchestrator judges it has sufficient information for a complete spec (all features, constraints, open decisions, and non-functional requirements covered)
 7. Orchestrator writes the full Q&A log to `/result/analyst/elicitation_notes.md`
-8. **Spawn** BA agent; save its `agentId` as `ba_session`
+8. **Spawn** BA agent (**model: sonnet**); save its `agentId` as `ba_session`
 9. BA reads `business_analyst_instructions.md` + its memory files + `elicitation_notes.md`
 10. BA writes:
     - `spec.md` — the full elicited specification
@@ -135,7 +135,7 @@ Agents omit a section entirely if they have nothing to add to it.
 
 ### Stage 2a — Initial Analysis (TL and PO in parallel)
 
-1. **Spawn** TL agent and PO agent in the **same orchestrator message** — they run in parallel
+1. **Spawn** TL agent (**model: opus**) and PO agent (**model: sonnet**) in the **same orchestrator message** — they run in parallel
    - Save TL `agentId` as `tl_session`; save PO `agentId` as `po_session`
 2. TL reads `spec.md` + `business_requirements.md`:
    - Writes `architecture.md` covering: architecture choices, component design, data handling details, error handling strategies, and any alternatives considered. Embeds Mermaid diagrams inline. Writes PlantUML diagrams as separate `.puml` files under `diagrams/` and links them from `architecture.md`.
@@ -264,12 +264,12 @@ flowchart TD
 ### Stage 2b — User Discussion (questions and suggestions)
 
 1. Orchestrator reads `discussion.md`; if the file does not exist or is empty → skip to Stage 2c
-2. **Spawn or resume** BA via `ba_session`; BA reads `discussion.md` and answers only the questions it can definitively resolve from `spec.md` and `business_requirements.md` — writes answers inline beneath each question; marks unanswerable questions `NEEDS_USER`; does not touch the `Suggestions` sections
+2. **Spawn or resume** BA (**model: sonnet**) via `ba_session`; BA reads `discussion.md` and answers only the questions it can definitively resolve from `spec.md` and `business_requirements.md` — writes answers inline beneath each question; marks unanswerable questions `NEEDS_USER`; does not touch the `Suggestions` sections
 3. Orchestrator collects all remaining `NEEDS_USER` questions and all `SUGGEST` items from `discussion.md`
 4. Orchestrator presents each item to the user **one at a time** in this order: questions first, then suggestions
    - For questions: ask the user directly and record the answer
    - For suggestions: present the suggestion with its rationale and ask the user to accept, reject, or modify
-5. After all items are addressed, orchestrator **resumes TL and PO in parallel** (via saved sessions or spawns new) with a summary of all user answers and decisions; TL and PO update their documents accordingly
+5. After all items are addressed, orchestrator **resumes TL and PO in parallel** (via saved sessions; if session expired spawn new: TL **model: opus**, PO **model: sonnet**) with a summary of all user answers and decisions; TL and PO update their documents accordingly
 6. Orchestrator increments `Discussion Cycle` in the state file
 7. **Loop limit:** Max 2 discussion cycles. After cycle 2 → orchestrator records any remaining unresolved items as open decisions and continues to Stage 2c
 
@@ -279,14 +279,14 @@ flowchart TD
 
 **BA finalises requirements:**
 
-1. **Spawn or resume** BA via `ba_session`
+1. **Spawn or resume** BA (**model: sonnet**) via `ba_session`
 2. BA reads all output documents (`business_requirements.md`, `architecture.md`, `testing_plan.md`, `implementation_roadmap.md`) and the resolved `discussion.md`
 3. BA updates `business_requirements.md` to reflect any decisions made during Stage 2b
 4. BA reports completion to the orchestrator (max 5 bullets)
 
 **TL writes human-readable summary:**
 
-5. **Resume** TL via `tl_session` (spawn new if expired); TL reads all finalised output documents and writes `/result/analyst/summary.md`.
+5. **Resume** TL via `tl_session` (spawn new if expired: **model: opus**); TL reads all finalised output documents and writes `/result/analyst/summary.md`.
 
    **Writing goal:** Anyone — developer, product manager, or stakeholder — who has never seen this feature should be able to read `summary.md` alone and understand what is being built, why the architecture is shaped the way it is, and what the delivery plan looks like. Write in plain language — no agent-speak, no placeholder prose. Every section must contain real content.
 

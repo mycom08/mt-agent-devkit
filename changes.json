@@ -154,6 +154,19 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Update: workflow files section now uses mode-specific paths templates/{mode}/workflows/ for split candidates"
     }
   },
+  "0.1.7": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers → sonnet; Stage 2 TL reviewer → opus; Stage 2 Dev peer reviewer → sonnet; Stage 3 QA → sonnet; Stage 4 PO behavioral → haiku; mid-impl consultation agents → sonnet)",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (PO → sonnet; question-answering agents → sonnet)",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA → sonnet; Stage 1/2 TL → opus; Stage 2 PO → sonnet)"
+    }
+  },
   "0.1.6": {
     "new": [],
     "modified": [
