@@ -227,6 +227,33 @@ Never overwrite. If the template adds a new `##` section not present locally →
 
 Same rule as memory files.
 
+#### Wiki files — Merge (append new sections only)
+
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/wiki/*_template.md`  
+**Target:** `docs/wiki/` in the target project
+
+Wiki files are project-owned — never overwrite existing content. Apply this merge strategy:
+
+1. Fetch the latest template version
+2. Read the existing local wiki file
+3. Identify any `##` section heading in the template that is **not present** in the local file
+4. Append each missing section at the end of the local file with its heading and an `[UPDATE REQUIRED]` placeholder body, then notify the user
+5. Sections already present in the local file → leave untouched
+
+**If a wiki file does not exist locally:**
+1. Ask the user once (covering all missing wiki files):
+   > "Some wiki docs are missing (`docs/wiki/`). Do you have existing guidelines I can refer to — such as a Confluence page, a README section, or existing doc files?
+   >
+   > - Reply with **file path(s)** to any existing guideline documents
+   > - Or reply `no` to write placeholder templates"
+2. **If the user provides paths** → read those files and use them as reference to fill `{{PLACEHOLDER}}` markers in the templates before writing
+3. **If the user replies `no`** → fetch and write the template with all `{{PLACEHOLDER}}` values replaced by `[UPDATE REQUIRED]` markers; notify the user to fill them in
+
+**Expected wiki files:**
+`Testing_Guidelines.md`, `Development_Standards.md`, `Code_Review_Checklist.md`, `{Language}_Style_Guide.md` (name varies by project)
+
+> The language style guide file name is project-specific (e.g., `Go_Style_Guide.md`). Sync does not rename existing style guide files. If no style guide file exists, write `Language_Style_Guide.md` as the fallback.
+
 ### Cleanup — Remove Stale Files
 
 After all updates are applied, scan each managed directory and flag any file not in the known expected set.

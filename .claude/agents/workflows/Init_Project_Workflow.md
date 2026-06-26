@@ -211,6 +211,64 @@ Copy all scrum team workflow files verbatim to target:
 
 > **Do not copy** `Analyst_Workflow.md` or `Init_Project_Workflow.md` — these are devkit-internal workflows and have no place in the target project.
 
+#### Wiki documentation files (4 files)
+
+**Source:** `templates/wiki/*_template.md`  
+**Target:** `docs/wiki/` in the target project
+
+Wiki files are project-owned — always check before generating.
+
+**Step 1 — Check which files are missing**
+
+Scan `docs/wiki/` in the target project. For each of the four expected files:
+
+| Template | Target file |
+|---|---|
+| `Testing_Guidelines_template.md` | `docs/wiki/Testing_Guidelines.md` |
+| `Development_Standards_template.md` | `docs/wiki/Development_Standards.md` |
+| `Code_Review_Checklist_template.md` | `docs/wiki/Code_Review_Checklist.md` |
+| `Language_Style_Guide_template.md` | `docs/wiki/{Language}_Style_Guide.md` |
+
+If a file **already exists** → **skip it**. Only proceed for files that are missing.
+
+If **all four files exist** → skip this section entirely.
+
+**Step 2 — Ask the user about existing guidelines**
+
+If one or more files are missing, ask:
+
+> "I'll generate the missing wiki docs (`docs/wiki/`). Do you have any existing guidelines for this project I can refer to — such as a Confluence page, a README section, or existing docs files?
+>
+> - Reply with the **file path(s)** to any existing guideline documents (e.g., `docs/old-standards.md`)
+> - Or reply `no` to generate from the project scan alone"
+
+Wait for the user's reply before proceeding.
+
+**Step 3 — Collect reference material (if provided)**
+
+If the user provided file paths → read each file and use its content as reference material when filling placeholders. The reference files set the baseline for conventions; the project scan fills in anything not covered.
+
+If the user replied `no` → use only the Stage 1 project scan as the source.
+
+**Step 4 — Generate missing files**
+
+For each missing wiki file, fill every `{{PLACEHOLDER}}` in the template using the reference material (if any) and the Stage 1 scan:
+
+| Placeholder guidance | |
+|---|---|
+| `Testing_Guidelines.md` | Test framework, test run commands, directory structure, coverage thresholds, automation suite — from reference docs and detected test tooling/CI config |
+| `Development_Standards.md` | Branch naming, commit format, lint/format commands, file structure, error handling patterns, logging — from reference docs and detected language/tooling |
+| `Code_Review_Checklist.md` | Code quality, security, and conventions checklists; TL review criteria — adapted from reference docs and detected tech stack |
+| `{Language}_Style_Guide.md` | Naming, error handling, concurrency, design patterns — from reference docs and detected language idioms. File named after detected language (e.g., `Go_Style_Guide.md`); falls back to `Language_Style_Guide.md` if undetermined |
+
+**Placeholder fill rules:**
+- Replace every `{{PLACEHOLDER}}` with real, specific content — no empty sections, no unfilled markers
+- Use actual commands, paths, and conventions from reference material and the project scan
+- If a detail cannot be determined from either source, use the most common convention for the detected language/framework and add a `<!-- verify: ... -->` comment for the user
+- `{{DATE}}` → today's date in `YYYY-MM-DD` format
+- `{{PROJECT_NAME}}` → detected project name
+- `{{LANGUAGE}}` → detected primary language (e.g., `Go`, `TypeScript`, `Python`)
+
 #### Version check scripts (2 files)
 
 **Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`
@@ -287,6 +345,7 @@ Write all generated files to `TARGET_PROJECT`:
 1. Create directories as needed:
    `.claude/agents/context/`, `.claude/agents/memory/`,
    `.claude/agents/rules/`, `.claude/agents/working-record/`, `.claude/agents/workflows/`,
+   `docs/wiki/`,
    `.claude/agents/scripts/`, `.claude/agents/retros/`, `.claude/agents/tmp/`
    Write a `.gitkeep` placeholder inside `.claude/agents/retros/` so the directory is tracked in git.
 2. **If `Mode: strict`** — also create:
