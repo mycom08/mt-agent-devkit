@@ -2,9 +2,11 @@
   "0.1.10": {
     "new": [],
     "modified": [
+      ".claude/agents/templates/rules/Retro_Rules_template.md",
       ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md"
     ],
     "descriptions": {
+      ".claude/agents/templates/rules/Retro_Rules_template.md": "Fix: add Privacy Rule section — signal items must not reference project names, repo names, domain-specific paths, business logic terms, or client identifiers; includes bad/good phrasing examples",
       ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Fix: Stage 1 — add step-positioning check; implementers must flag AC boundary-only positioning in multi-step sequences as an open question to PO"
     }
   },
