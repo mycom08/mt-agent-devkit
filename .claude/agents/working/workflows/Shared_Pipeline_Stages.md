@@ -243,7 +243,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
 1. Orchestrator executes closure directly — no PO agent spawn:
-   - Tick all AC checkboxes in the issue body (`gh issue edit` with `--body-file`); update label to `status:done`; close the issue
+   - Tick all AC checkboxes in the issue body (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
 2. **Sprint Workflow only:** promote next `status:ready` story if applicable
 3. **Start Story Workflow:** pipeline ends here
 
@@ -254,7 +254,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
    - `.claude/agents/working/rules/Product_Owner_Rules.md`
    - `.claude/agents/working/memory/Product_Owner_Memory.md`
-3. PO verifies acceptance and closes the story: tick AC checkboxes (`gh issue edit` with `--body-file`); update label to `status:done`; close the issue
+3. PO verifies acceptance and closes the story: tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
 4. PO writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 5. **Sprint Workflow only:** PO updates backlog — promotes next `status:ready` story if applicable: update GitHub Issue label
 6. **Start Story Workflow:** pipeline ends here — PO does NOT promote the next story

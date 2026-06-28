@@ -300,7 +300,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
 1. Orchestrator executes closure directly — no PO agent spawn:
-   - **GitHub mode:** tick all AC checkboxes in the issue body (`gh issue edit` with `--body-file`); update label to `status:done`; close the issue
+   - **GitHub mode:** tick all AC checkboxes in the issue body (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` directly in the story MD file; edit `**Status:** done`
 2. **Sprint Workflow only:** promote next `status:ready` story if applicable
 3. **Start Story Workflow:** pipeline ends here
@@ -313,7 +313,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - `.claude/agents/rules/Product_Owner_Rules.md`
    - `.claude/agents/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:
-   - **GitHub mode:** tick AC checkboxes (`gh issue edit` with `--body-file`); update label to `status:done`; close the issue
+   - **GitHub mode:** tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` in the story MD; edit `**Status:** done`; append PO closure comment entry to story MD `## Comments`
 4. PO writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 5. **Sprint Workflow only:** PO updates backlog — promotes next `status:ready` story if applicable
