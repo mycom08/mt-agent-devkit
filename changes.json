@@ -1,4 +1,13 @@
 {
+  "0.1.12": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Feat: add Devkit Contribution step at sprint end — privacy scan of sprint summary Findings sections, user opt-in to share via gh issue create or local export file fallback"
+    }
+  },
   "0.1.10": {
     "new": [],
     "modified": [

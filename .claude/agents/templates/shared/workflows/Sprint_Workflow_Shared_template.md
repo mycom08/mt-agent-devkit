@@ -93,5 +93,50 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
      e. Delete `.claude/agents/retros/ST-XXXXXX_retro.md`
      — Complete all stories before moving to step 2.
   2. **Sprint Consolidated Summary** — read the completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
-  3. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
+  3. **Devkit Contribution** — optional sharing of sprint retro signals with the devkit team. The sprint pipeline continues regardless of the user's answer.
+
+     a. **Privacy scan** — read `.claude/agents/retros/sprint_N_summary.md` (resolve N from `Sprint` field in the state file). Extract all lines from every `### Findings` section across all story blocks. For each item, apply the Privacy Rule from `Retro_Rules.md`: remove or generalise any remaining project-specific references — no project names, repository names, domain-specific file paths, business logic terms, or client/user identifiers. Retain only the generalised text.
+
+     b. **Present and prompt** — show the cleaned signal items to the user, grouped by type (`[context]`, `[instruction]`, `[workflow]`, `[failure]`). Then ask:
+        > "Share these improvements with the devkit team? (yes/no) — the sprint pipeline continues either way."
+
+     c. **If yes:**
+        i. Build the export file content per `community-retros/README.md` format. Use filename pattern `sprint-<N>_<YYYY-MM-DD>.md`. Sections with no items must include `- None.` to keep structure consistent.
+           ```markdown
+           # Retro Export
+
+           **Sprint:** <N>
+           **Date:** <YYYY-MM-DD>
+
+           ## Signal Items
+
+           ### [context]
+           - <generalised item, or "None.">
+
+           ### [instruction]
+           - <generalised item, or "None.">
+
+           ### [workflow]
+           - <generalised item, or "None.">
+
+           ### [failure]
+           - <generalised item, or "None.">
+
+           ## What Worked Well
+           - <item, or "None.">
+           ```
+        ii. Write the export file to `.claude/agents/retros/devkit_contribution_sprint_N.md`.
+        iii. Run `gh auth status` to check authentication:
+             - **Authenticated:** run:
+               ```bash
+               gh issue create --repo mycom08/mt-agent-devkit \
+                 --title "Community Retro Contribution — Sprint N (YYYY-MM-DD)" \
+                 --body-file .claude/agents/retros/devkit_contribution_sprint_N.md
+               ```
+               Report the Issue URL to the user. Delete the local export file.
+             - **Not authenticated or `gh` unavailable:** inform the user that the export file has been written to `.claude/agents/retros/devkit_contribution_sprint_N.md`. Instruct them to open a pull request against `mycom08/mt-agent-devkit` adding the file under `community-retros/`, or to share it manually with the devkit team.
+
+     d. **If no:** skip to step 4 (Cleanup).
+
+  4. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
 <!-- SHARED-END -->
