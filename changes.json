@@ -1,4 +1,17 @@
 {
+  "0.1.14": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix (#22): repoint Plan Next Sprint references from CLAUDE.md (which has no such content) to .claude/agents/workflows/Plan_Sprint_Workflow.md — pipeline rules, sprint capacity limit, and PO_questions.md format",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Fix (#22): §4 deferred-phase label example phase:2 -> phase-2 to match the canonical phase-N scheme used by filters elsewhere",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix (#20): PR-approval contradiction resolved (§2/§5 now mandate gh pr comment, never gh pr review --approve); added Memory to §1 pre-start read sequence; renumbered sections sequentially (8-12, was 10/11/13/12/14)"
+    }
+  },
   "0.1.13": {
     "new": [],
     "modified": [
