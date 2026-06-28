@@ -26,6 +26,8 @@ Title format: `[ST-XXXXXX][DEVKIT] Story Title` | Labels: `status:backlog` + `sp
 
 **Documentation stories — AC depth signal:** When writing AC for a documentation or template story, each criterion must state the expected depth explicitly.
 
+**Version-bump AC rule:** When a story requires a `version.txt` bump, write the AC as "`version.txt` bumped" — do not specify the exact target version number. Version numbers are assigned at implementation time; predicting them in the AC creates a mismatch whenever a prior story lands first and shifts the number.
+
 ---
 
 ## 2. Story Comment Rules

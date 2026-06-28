@@ -54,7 +54,10 @@
       "Bash(powershell -File \".claude/agents/scripts/check_devkit_version.ps1\")",
       "PowerShell(Set-Location \"C:\\\\Users\\\\Admin\\\\Desktop\\\\work\\\\fun-authorization\\\\authorization-service\"; powershell -File \".claude\\\\agents\\\\scripts\\\\check_devkit_version.ps1\"; Write-Output \"Exit: $LASTEXITCODE\")",
       "Bash(not exist *)",
-      "Bash(rm *)"
+      "Bash(rm *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git commit *)"
     ]
   },
   "hooks": {
