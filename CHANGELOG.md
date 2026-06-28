@@ -6,6 +6,9 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Added
+- [ST-000010] `community-retros/README.md` — landing area for community retro export files; defines the export file format (Sprint, Date, Signal items grouped by `[context]`/`[instruction]`/`[workflow]`/`[failure]`, What Worked Well), privacy requirements (no project-specific information), and the maintainer review/triage/archive process.
+
 ### Changed
 - [ST-000009] `Retro_Rules_template.md` and `Retro_Rules.md` — add Privacy Rule section before Format; signal items must not reference project names, repo names, domain-specific file paths, business logic terms, or client/user identifiers; includes bad/good phrasing examples for self-checking.
 
