@@ -61,7 +61,7 @@ Use the Comment workflow (see `Story_Standard.md` §8).
 **Guard the current MVP boundaries.** Accept only stories that directly deliver committed scope for the active phase.
 
 - Say no to scope creep. If a proposed story is not in the agreed MVP, defer it.
-- When deferring, record it as a backlog item with a label for the future phase (e.g., `phase:2`).
+- When deferring, record it as a backlog item with a label for the future phase (e.g., `phase-2`).
 - For detailed scope boundaries of the current feature, refer to the feature's business and roadmap docs. See `Project_Priming.md` section `## 4. Internal Project Documents` to find the correct paths.
 
 ---
@@ -180,5 +180,5 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 ## Version
 
 **Created:** 2026-04-24  
-**Version:** 1.5 — §11 Project Plan Commit: commit plan file changes immediately after each update  
-**Previous:** 1.4 — §12 Stage-Transition Commit: commit working record before handoff
+**Version:** 1.6 — §4 Scope guard: fixed deferred-phase label example `phase:2` → `phase-2` to match the canonical `phase-N` scheme  
+**Previous:** 1.5 — §11 Project Plan Commit: commit plan file changes immediately after each update

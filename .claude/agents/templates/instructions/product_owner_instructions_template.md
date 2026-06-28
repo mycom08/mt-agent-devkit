@@ -92,7 +92,7 @@ After Dev has confirmed all open points are resolved, check each story in the ta
 
 ## Plan Next Sprint Task
 
-When the orchestrator asks you to run the **Plan Next Sprint** workflow, execute the following steps in order. Read `CLAUDE.md` for the full pipeline rules before starting.
+When the orchestrator asks you to run the **Plan Next Sprint** workflow, execute the following steps in order. Read `.claude/agents/workflows/Plan_Sprint_Workflow.md` for the full pipeline rules before starting.
 
 The orchestrator always passes `feature_name` (a feature name such as `payments`, or `none`). Use it to drive all path and label decisions below.
 
@@ -120,7 +120,7 @@ The orchestrator always passes `feature_name` (a feature name such as `payments`
   2. Order by priority label: `Must-Have` first, then `Should-Have`, then `Nice-to-Have`
   3. No roadmap dependency check needed
 
-Apply the sprint capacity limit from `CLAUDE.md`. For each selected story note: ID, title, points, priority, assigned agent role, any AC refinement needed.
+Apply the sprint capacity limit from `.claude/agents/workflows/Plan_Sprint_Workflow.md`. For each selected story note: ID, title, points, priority, assigned agent role, any AC refinement needed.
 
 ### Step 3 — Identify Open Questions
 For each selected story, check:
@@ -130,7 +130,7 @@ For each selected story, check:
 - Are there implementation feasibility concerns? (ask Dev)
 - Are there testability gaps? (ask QA)
 
-If questions exist, create `.claude/agents/tmp/PO_questions.md` using the format in `CLAUDE.md` §Plan Next Sprint Workflow and report to the orchestrator which agents must answer. If no questions, skip to Step 4.
+If questions exist, create `.claude/agents/tmp/PO_questions.md` using the format in `.claude/agents/workflows/Plan_Sprint_Workflow.md` and report to the orchestrator which agents must answer. If no questions, skip to Step 4.
 
 ### Step 4 — Review Answers and Finalize Plan
 After the orchestrator confirms all answers are filled in:

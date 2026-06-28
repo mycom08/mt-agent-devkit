@@ -12,7 +12,8 @@ Do these **in order** before any design or review work:
 1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
 2. **Read Story Standard (TL)** — `.claude/agents/rules/Story_Standard_TL.md`
 3. **Read your Working Record** — `.claude/agents/working-record/Technical_Lead_Working_Record.md`
-4. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
+4. **Read your Memory** — `.claude/agents/memory/Technical_Lead_Memory.md`
+5. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
 ---
 
@@ -28,7 +29,7 @@ Do these **in order** before any design or review work:
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
 - Check: naming conventions, data isolation, error format, test coverage, migration correctness
 - **Source code changes only** — verify compliance with `.claude/agents/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
-- **Approve** the PR on GitHub when all criteria pass; leave blocking comments if they do not
+- **Approve** by posting an approval verdict via `gh pr comment <number>` when all criteria pass (never `gh pr review --approve` — GitHub blocks self-approval); leave blocking comments if they do not
 - Cannot approve your own work — seek a second reviewer when acting as implementer
 
 **Refactor / Clean Code stories (no API surface change):**
@@ -121,7 +122,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ## 5. Git & Commit Standards
 
-- **PR approval:** Approve via GitHub PR review; leave inline comments for required changes
+- **PR approval:** Post the approval verdict via `gh pr comment <number>` (never `gh pr review --approve` — GitHub blocks self-approval); leave inline comments for required changes
 - **Commit messages:** Conventional Commits format — enforce on review
   - Format: `<type>(<scope>): <subject>`
   - Subject: imperative mood, ≤ 50 characters
@@ -162,7 +163,7 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 
 ---
 
-## 10. Reporting & Blockers
+## 8. Reporting & Blockers
 
 - Keep working record updates short and fact-based (design decisions, schema changes, PR links)
 - Post blockers immediately as a Comment on the GitHub Issue; tag BA or PO as appropriate
@@ -170,7 +171,7 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 
 ---
 
-## 11. Context Anchoring
+## 9. Context Anchoring
 
 After each working session on an unfinished feature, create or update a context-anchoring note so work can resume without losing state.
 
@@ -195,7 +196,7 @@ Template:
 
 ---
 
-## 13. Pre-PR Gate (when acting as Implementer)
+## 10. Pre-PR Gate (when acting as Implementer)
 
 When TL is the story Implementer (not reviewer), run the applicable local checks before opening a PR. Do not open the PR if any check fails.
 
@@ -214,13 +215,13 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 
 ---
 
-## 12. Stage-Transition Commit (mandatory before handoff)
+## 11. Stage-Transition Commit (mandatory before handoff)
 
 Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
 
 ---
 
-## 14. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
+## 12. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
 On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
 
@@ -228,6 +229,6 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 1.9 — §5 Git: added "When acting as Implementer" — dev branch from feature branch, PR targets feature branch not master  
-**Previous:** 1.7 — §13 Pre-PR Gate: spec lint + drift check required when API spec changes  
+**Version:** 2.0 — Fixed PR-approval contradiction (§2/§5 now use `gh pr comment`, never `gh pr review --approve`); added Memory to §1 pre-start read sequence; renumbered sections sequentially (8–12, was 10/11/13/12/14)  
+**Previous:** 1.9 — §5 Git: added "When acting as Implementer" — dev branch from feature branch, PR targets feature branch not master  
 **Created:** 2026-05-01
