@@ -1,20 +1,13 @@
 {
-  "0.1.14": {
-    "new": [],
-    "modified": [
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
-    ],
-    "descriptions": {
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 4 closure — remove all status:* labels before adding status:done; prevents ghost labels when story passes through multiple statuses (e.g. status:review left after status:done set)"
-    }
-  },
   "0.1.13": {
     "new": [],
     "modified": [
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md"
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Fix: add Version-bump AC rule — write 'version.txt bumped' without predicting the target number; predicting causes AC/implementation mismatch when a prior story shifts the version"
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Fix: add Version-bump AC rule — write 'version.txt bumped' without predicting the target number; predicting causes AC/implementation mismatch when a prior story shifts the version",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 4 closure — remove all status:* labels before adding status:done; prevents ghost labels when story passes through multiple statuses (e.g. status:review left after status:done set)"
     }
   },
   "0.1.12": {
