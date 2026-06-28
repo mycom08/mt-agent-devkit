@@ -11,6 +11,8 @@
 - **Cross-project gh commands:** always use `--repo <slug>` explicitly — never rely on working directory git remote.
 - **build software resume:** same trigger (`build software`) auto-detects state file at entry; Stage = last completed stage in state file; jump to Stage+1.
 - **Retro marker placement:** `<!-- retro-adapted: preserve on sync -->` instruction belongs only in Stage 5 retro application step of Shared_Pipeline_Stages_template.md. Not on every stage.
+- **Devkit Contribution privacy-scan source (ST-000011):** scan `.claude/agents/retros/sprint_N_summary.md` `### Findings` sections — NOT individual retro files (deleted at Batch Retro Review step 1e). Summary is the only durable, resumption-safe aggregate; resolve N from pipeline-state `Sprint` field.
+- **Devkit Contribution access model (ST-000011):** authenticated path = issue-based (`gh issue create` on mycom08/mt-agent-devkit with ST-000010 export as body), uniform for all users (no push access / fork / write-detection needed). NOT PR/fork-based. Local-file fallback unchanged. AC reworded PR→Issue (PO owns the AC change).
 
 ## Troubleshooting Facts
 

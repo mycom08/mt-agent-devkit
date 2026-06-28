@@ -47,6 +47,7 @@ The orchestrator maintains `.claude/agents/working/tmp/refine_pipeline_state.md`
 5. Each agent reviews the story bodies passed in the prompt and performs two mandatory checks per story:
    - **API surface check:** For every endpoint, field, or behavior referenced in the ACs, confirm it exists in the project's API spec (check `docs/api/` or equivalent) or is explicitly scoped for delivery within the same sprint. If not found, flag as an open question to TL.
    - **Unit-test AC check:** If the story introduces new service-layer methods or functions, confirm an explicit unit-test AC is present (e.g., "Unit tests added for all new service methods"). If missing, flag as an open question to PO.
+   - **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
 6. For each story with open points, the agent records questions: post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format; technical/design questions → tag **TL**; scope/AC questions → tag **PO**; a single comment per story may contain questions for both agents
 7. Stories with no open points require no comment — agent marks them as clear internally
 8. Each agent reports to orchestrator: which stories have comments filed (agents tagged), which stories are already clear

@@ -1,4 +1,13 @@
 {
+  "0.1.10": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Fix: Stage 1 — add step-positioning check; implementers must flag AC boundary-only positioning in multi-step sequences as an open question to PO"
+    }
+  },
   "0.1.9": {
     "new": [
       ".claude/agents/templates/wiki/Testing_Guidelines_template.md",
