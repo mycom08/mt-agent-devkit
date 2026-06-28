@@ -6,6 +6,9 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Changed
+- [ST-000009] `Retro_Rules_template.md` and `Retro_Rules.md` — add Privacy Rule section before Format; signal items must not reference project names, repo names, domain-specific file paths, business logic terms, or client/user identifiers; includes bad/good phrasing examples for self-checking.
+
 ---
 
 ## [0.1.7]

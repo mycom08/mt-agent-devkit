@@ -56,6 +56,27 @@ Only report observations that arose **directly from your work on this story**. D
 
 ---
 
+## Privacy Rule
+
+Signal items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) must be written in **generic, project-neutral language**. Do not reference:
+
+- Project names or repo names
+- Domain-specific file paths (e.g., `src/billing/invoices/`, `apps/core/models/user.py`)
+- Business logic terms specific to the current project (e.g., "invoice approval flow", "ABAC policy editor")
+- Client names, user identifiers, or environment-specific identifiers
+
+**Why:** Retrospective signals feed the devkit improvement process. Domain-specific references make signals non-transferable and may expose client or project details.
+
+**Self-check — before writing a signal item, ask:** "Could this bullet appear unchanged in a retro for a completely different project?"
+
+**Bad (project-specific):**
+> `[workflow]` The `src/billing/invoices/` path was missing from the sprint summary — the privacy scan step skipped it
+
+**Good (generic):**
+> `[workflow]` A domain-specific subdirectory was absent from the sprint summary — the privacy scan step did not detect it; add an explicit path-enumeration step
+
+---
+
 ## Format
 
 Overwrite the `*(pending)*` placeholders in your section only. Do not touch other agents' sections.
