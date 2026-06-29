@@ -1,12 +1,12 @@
 # Community Retrospectives
 
-This folder is the landing area for retro export files contributed by teams using mt-agent-devkit in their target projects. Maintainers read these files, identify recurring patterns, and apply improvements back to the devkit templates and workflow files.
+This folder holds retro export files contributed by teams using mt-agent-devkit in their target projects. Contributions arrive as **GitHub Issues** on `mycom08/mt-agent-devkit`; maintainers triage them, identify recurring patterns, apply improvements back to the devkit templates and workflow files, and archive the processed exports here.
 
 ---
 
 ## Purpose
 
-When a sprint closes in a target project, the QA agent runs a privacy-filtered export of the sprint retrospective signals and deposits a structured Markdown file here (via a pull request or direct push). Over time these files accumulate signals from many different projects and teams — giving maintainers a broad, anonymised view of where the devkit's rules, instructions, and workflows need improvement.
+When a sprint closes in a target project, the QA agent runs a privacy-filtered export of the sprint retrospective signals and submits it as a GitHub Issue on `mycom08/mt-agent-devkit`. Submitting via an Issue means the contributing agent needs no clone or write access to this repo — only the ability to open an issue. Over time these contributions accumulate signals from many different projects and teams — giving maintainers a broad, anonymised view of where the devkit's rules, instructions, and workflows need improvement.
 
 No individual project's context should ever appear in these files. They are a distillation of process observations, not a record of what any team built.
 
@@ -113,9 +113,9 @@ This requirement mirrors the Privacy Rule in `Retro_Rules.md` that applies to al
 
 ## Maintainer Review Process
 
-### Step 1 — Read and triage incoming files
+### Step 1 — Read and triage incoming contributions
 
-Open each new export file. Skim the **Signal Items** sections first. For each signal item:
+List incoming contributions with `gh issue list --repo mycom08/mt-agent-devkit --label "retro:contribution" --state open`, or run the `apply retros` devkit workflow to scan and triage them automatically. Open each contribution Issue (titled `Community Retro Contribution — Sprint N (YYYY-MM-DD)`). Skim the **Signal Items** sections first. For each signal item:
 
 1. Check it passes the privacy rule (no project-specific references).
 2. Assign it to a source file: which devkit file would need to change to address this signal?
@@ -147,19 +147,21 @@ For each approved template change:
 4. Update `CHANGELOG.md` under `[Unreleased]`.
 5. Open a PR and tag a second maintainer for review.
 
-### Step 4 — Archive the export file
+### Step 4 — Archive the export and close the Issue
 
-After processing, move the export file to `community-retros/archive/` so it does not appear in future triage passes. Do not delete it — archived files are the audit trail.
+After processing, save the export content to `community-retros/archive/sprint-<N>_<YYYY-MM-DD>.md` (commit it in the same PR as the template fix), then close the contribution Issue with a comment linking the PR. Do not delete the archived file — it is the audit trail.
 
 ---
 
 ## Contributing an Export File
 
+Contributions are submitted as **GitHub Issues**, not pull requests — this avoids requiring contributing agents to clone the devkit or hold write access to this repo.
+
 Target project users who want to contribute:
 
 1. Ensure the QA agent has run the sprint privacy scan and produced a filtered export file.
 2. Verify the file passes the privacy requirements above.
-3. Open a pull request targeting the `main` branch of `mycom08/mt-agent-devkit`, adding the export file under `community-retros/`.
-4. The PR description should state the sprint number and date — nothing else about the project.
+3. Open a GitHub Issue on `mycom08/mt-agent-devkit` with the title `Community Retro Contribution — Sprint N (YYYY-MM-DD)`, the `retro:contribution` label, and the export file content as the body. The sprint workflow does this automatically via `gh issue create --label "retro:contribution"` when `gh` is authenticated.
+4. The Issue should contain only the sprint number, date, and the privacy-filtered signal items — nothing else about the project.
 
-Maintainers will review and merge the PR within the next triage cycle.
+Maintainers will triage the Issue, apply any resulting template fixes, archive the export under `community-retros/archive/`, and close the Issue within the next triage cycle.

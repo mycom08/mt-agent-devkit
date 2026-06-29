@@ -7,7 +7,13 @@ All notable changes to mt-agent-devkit are documented here.
 ## [Unreleased]
 
 ### Added
+- `Apply_Retros_Workflow.md` (devkit-internal) — new `apply retros` / `process retros` workflow: scans `retro:contribution` Issues on `mycom08/mt-agent-devkit`, aggregates and prioritises signals (critical `[failure]` guardrails → token/efficiency → workflow correctness → recurring → clarity), lets the user pick which to apply, edits templates directly, bumps the version once, then archives and closes the processed Issues. Wired into devkit `CLAUDE.md` (routing section + `workflow help` table).
+- New GitHub label `retro:contribution` to mark and group community retro contribution Issues.
 - [ST-000011] `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — add Devkit Contribution step at sprint end (step 3, before Cleanup): privacy scan of `sprint_N_summary.md` Findings sections, user opt-in prompt, `gh issue create` on `mycom08/mt-agent-devkit` if authenticated, local export file fallback at `.claude/agents/retros/devkit_contribution_sprint_N.md` if not.
+
+### Changed
+- `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — `gh issue create` for retro contributions now adds `--label "retro:contribution"` so contributed retros are scannable as a group.
+- `community-retros/README.md` — reference the `retro:contribution` label in the contributor and maintainer flows; point maintainers to the `apply retros` workflow for triage.
 - [ST-000010] `community-retros/README.md` — landing area for community retro export files; defines the export file format (Sprint, Date, Signal items grouped by `[context]`/`[instruction]`/`[workflow]`/`[failure]`, What Worked Well), privacy requirements (no project-specific information), and the maintainer review/triage/archive process.
 
 ### Changed

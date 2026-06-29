@@ -1,4 +1,13 @@
 {
+  "0.1.15": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Feat: Devkit Contribution step now adds the retro:contribution label on gh issue create so retro issues are scannable as a group (supports the apply retros workflow)"
+    }
+  },
   "0.1.14": {
     "new": [],
     "modified": [

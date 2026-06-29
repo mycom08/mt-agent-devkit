@@ -128,6 +128,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
                ```bash
                gh issue create --repo mycom08/mt-agent-devkit \
                  --title "Community Retro Contribution — Sprint N (YYYY-MM-DD)" \
+                 --label "retro:contribution" \
                  --body-file .claude/agents/working/retros/devkit_contribution_sprint_N.md
                ```
                Report the Issue URL to the user. Delete the local export file.
