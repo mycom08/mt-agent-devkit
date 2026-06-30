@@ -1,0 +1,21 @@
+name: Validate Templates
+
+on:
+  push:
+    branches:
+      - ci-validation
+  pull_request:
+    paths:
+      - ".claude/agents/templates/**"
+      - ".claude/agents/workflows/**"
+
+jobs:
+  layer1-validate:
+    name: Layer-1 invariant check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run validate_templates.py
+        run: python scripts/validate_templates.py

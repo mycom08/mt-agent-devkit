@@ -7,6 +7,11 @@ All notable changes to mt-agent-devkit are documented here.
 ## [Unreleased]
 
 ### Added
+- [ST-000016] `scripts/validate_templates.py` — Layer-1 corpus invariant validator for `.claude/agents/templates/**` and `.claude/agents/workflows/**`; enforces 6 deterministic checks (reference integrity, placeholder well-formedness, shared-block include integrity, retired-trigger guard, manifest integrity, Markdown well-formedness); exits non-zero on any hard violation; known-issue notes printed as `[KNOWN_ISSUE]` without affecting exit code.
+- [ST-000016] `scripts/test/fixtures/bad/` — 5 intentionally-broken fixture files (one per per-file invariant class); validated by `scripts/test/run.sh`; invariant #4 uses `--test-retired-trigger` flag so the real seed remains empty.
+- [ST-000016] `scripts/test/run.sh` — fixture self-test runner; asserts each bad fixture produces at least one `[ERROR]` line.
+- [ST-000016] `.github/workflows/validate-templates.yml` — CI gate (repo's first GitHub Actions workflow); triggers on PRs touching `templates/**` or `workflows/**`; runs `python scripts/validate_templates.py`.
+- [ST-000016] `docs/Template_Test_Strategy.md` — 3-layer test strategy (Layer-1 static, Layer-2 deployment, Layer-3 behavioral); documents all 6 invariants, risk tiers A/B/C, coverage model, AC-as-oracle pattern, and Layer-2/3 roadmap.
 - `Apply_Retros_Workflow.md` (devkit-internal) — new `apply retros` / `process retros` workflow: scans `retro:contribution` Issues on `mycom08/mt-agent-devkit`, aggregates and prioritises signals (critical `[failure]` guardrails → token/efficiency → workflow correctness → recurring → clarity), lets the user pick which to apply, edits templates directly, bumps the version once, then archives and closes the processed Issues. Wired into devkit `CLAUDE.md` (routing section + `workflow help` table).
 - New GitHub label `retro:contribution` to mark and group community retro contribution Issues.
 - [ST-000011] `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — add Devkit Contribution step at sprint end (step 3, before Cleanup): privacy scan of `sprint_N_summary.md` Findings sections, user opt-in prompt, `gh issue create` on `mycom08/mt-agent-devkit` if authenticated, local export file fallback at `.claude/agents/retros/devkit_contribution_sprint_N.md` if not.
