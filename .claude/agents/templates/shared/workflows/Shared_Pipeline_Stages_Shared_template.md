@@ -302,8 +302,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 1. Orchestrator executes closure directly — no PO agent spawn:
    - **GitHub mode:** tick all AC checkboxes in the issue body (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` directly in the story MD file; edit `**Status:** done`
-2. **Sprint Workflow only:** promote next `status:ready` story if applicable
-3. **Start Story Workflow:** pipeline ends here
+2. **Start Story Workflow:** pipeline ends here
 
 ### Behavioral path (`Type: behavioral`)
 
@@ -316,10 +315,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - **GitHub mode:** tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` in the story MD; edit `**Status:** done`; append PO closure comment entry to story MD `## Comments`
 4. PO writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
-5. **Sprint Workflow only:** PO updates backlog — promotes next `status:ready` story if applicable
-   - **GitHub mode:** update GitHub Issue label
-   - **Strict mode:** edit `**Status:** in-progress` (or `ready` → `in-progress`) in the next story's MD file
-6. **Start Story Workflow:** pipeline ends here — PO does NOT promote the next story
+5. **Start Story Workflow:** pipeline ends here
 
 ### Orchestrator Observation Check — Stage 4
 

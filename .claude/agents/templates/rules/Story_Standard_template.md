@@ -20,7 +20,7 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | **Ready** | Assigned, ready to start | PO | After assigning story to Developer | `status:ready` |
 | **In Progress** | Active development | Developer | Dev branch created | `status:in-progress` |
 | **Review** | Dev complete, awaiting TL code review | Developer | After creating PR | `status:review` |
-| **Testing** | Code approved, QA testing | QA | After TL approval & merge | `status:testing` |
+| **Testing** | Code approved, QA testing | TL | After TL PR approval | `status:testing` |
 | **Done** | Verified complete | PO | After all AC pass and PO ticks | `status:done` |
 | **Hotfix** | Bug found after Done; fix in progress | Developer | After hotfix branch created | `status:hotfix` |
 
@@ -33,6 +33,8 @@ Backlog → Ready → In Progress → Review → Testing → Done
 Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 
 > **Rule:** `**Assigned:**` is **mandatory** — the responsible agent role must be set when the story is created. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must always appear **above** the `## User Story` section.
+>
+> **Note — two separate "assignee" concepts:** The `**Assigned:**` field in the issue body (an agent role) drives pipeline routing and must always be set. It is distinct from the **GitHub Issue Assignee** (a GitHub user account set in the sidebar), which may be left unset in agent-driven workflows.
 
 ```markdown
 **Phase:** [Phase/Sprint]  **Points:** [1-13]  **Priority:** Must/Should/Nice  
@@ -139,12 +141,7 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 2. Push new commits
 3. Re-request review in issue Comment
 
-### Status: Review → Testing (after TL approval)
-**When:** TL approves PR  
-**Action:**
-1. Remove label `status:review`, add label `status:testing`
-2. Add PR/commit links in issue Deliverables section (edit issue body)
-3. Notify QA in issue Comment
+> **Note:** Moving the story to `status:testing` is **TL's action** — TL sets the label immediately after approving the PR (see `Technical_Lead_Rules.md §3`). The Implementer does not change the label after opening the PR.
 
 ---
 
@@ -389,6 +386,7 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 ### Merge Gate
 
 - [ ] TL has reviewed and approved PR ✓
+- [ ] QA has signed off on all AC ✓
 - [ ] PR review status shows "Approved"
 
 **Only then:** Merge dev to feature branch
@@ -402,7 +400,7 @@ When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
 **Labels (feature story):** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`  
 **Labels (non-feature story):** `status:backlog`, `sprint-N`  
-**Assignee:** TBD (set when moving to Ready)
+**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 
 > Omit the sprint label if no sprint is assigned yet. Use `feature:` and `phase-` labels only when the story belongs to a named feature — sprint and backlog stories that are not part of a feature carry only `status:backlog` and `sprint-N`.
 

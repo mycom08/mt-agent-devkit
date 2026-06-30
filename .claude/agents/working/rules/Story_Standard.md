@@ -20,7 +20,7 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | **Ready** | Assigned, ready to start | PO | After assigning story to implementer | `status:ready` |
 | **In Progress** | Active development | Implementer | Dev branch created | `status:in-progress` |
 | **Review** | Dev complete, awaiting TL code review | Implementer | After creating PR | `status:review` |
-| **Testing** | Code approved, QA testing | QA | After TL approval & merge | `status:testing` |
+| **Testing** | Code approved, QA testing | TL | After TL PR approval | `status:testing` |
 | **Done** | Verified complete | PO | After all AC pass and PO ticks | `status:done` |
 | **Hotfix** | Bug found after Done; fix in progress | Implementer | After hotfix branch created | `status:hotfix` |
 
@@ -33,6 +33,8 @@ Backlog → Ready → In Progress → Review → Testing → Done
 Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 
 > **Rule:** `**Assigned:**` is **mandatory** — the responsible agent role must be set when the story is created. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must always appear **above** the `## User Story` section.
+>
+> **Note — two separate "assignee" concepts:** The `**Assigned:**` field in the issue body (an agent role) drives pipeline routing and must always be set. It is distinct from the **GitHub Issue Assignee** (a GitHub user account set in the sidebar), which may be left unset in agent-driven workflows.
 
 ```markdown
 **Phase:** [Phase/Sprint]  **Points:** [1-13]  **Priority:** Must/Should/Nice  
@@ -104,12 +106,7 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 2. Push new commits
 3. Re-request review in issue Comment
 
-### Status: Review → Testing (after TL approval)
-**When:** TL approves PR  
-**Action:**
-1. Remove label `status:review`, add label `status:testing`
-2. Add PR/commit links in issue Deliverables section (edit issue body)
-3. Notify QA in issue Comment
+> **Note:** Moving the story to `status:testing` is **TL's action** — TL sets the label immediately after approving the PR (see `Technical_Lead_Rules.md §3`). The Implementer does not change the label after opening the PR.
 
 ---
 
@@ -236,6 +233,13 @@ Response and decision.
 - [ ] No CI check is in a **failed** state
 - [ ] Review criteria pass (per agent-specific rules)
 
+### Merge Gate
+
+- [ ] TL has reviewed and approved PR ✓
+- [ ] QA has signed off on all AC ✓
+
+**Only then:** Merge dev branch to main
+
 ---
 
 ## 13. Story Creation Template
@@ -244,7 +248,7 @@ When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit
 
 **Issue title:** `[ST-XXXXXX][DEVKIT] Clear Title`  
 **Labels:** `status:backlog`, `sprint-N`  
-**Assignee:** Responsible agent role (not "TBD")
+**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 
 **Issue body:**
 

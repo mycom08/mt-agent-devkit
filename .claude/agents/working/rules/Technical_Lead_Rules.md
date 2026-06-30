@@ -59,7 +59,7 @@ When your answer changes or narrows the meaning of an AC, **update the story bod
 Story status: `Backlog → Ready → In Progress → Review → Testing → Done`
 
 - Move story to `status:review` when Dev opens a PR and tags you
-- Move story to `status:testing` after you approve the PR and it is merged
+- Move story to `status:testing` after you approve the PR (before it is merged — QA tests the dev branch; merge happens only after QA passes)
 - Only QA ticks Acceptance Criteria — do not mark AC complete yourself
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
