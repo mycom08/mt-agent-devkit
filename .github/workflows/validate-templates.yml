@@ -1,6 +1,9 @@
 name: Validate Templates
 
 on:
+  push:
+    branches:
+      - ci-validation
   pull_request:
     paths:
       - ".claude/agents/templates/**"
