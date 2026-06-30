@@ -12,7 +12,7 @@
 | **Ready** | **PO** | After assigning to implementer | `status:ready` |
 | In Progress | Implementer | Dev branch created | `status:in-progress` |
 | Review | Implementer | After PR created | `status:review` |
-| Testing | QA | After TL approval | `status:testing` |
+| Testing | TL | After TL PR approval | `status:testing` |
 | **Done** | **PO** | After all AC pass and checkboxes ticked | `status:done` |
 
 ---
@@ -35,6 +35,8 @@
 ```
 
 `**Assigned:**` is **mandatory** — must appear **above** `## User Story`. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted.
+
+> **Note — two separate "assignee" concepts:** The `**Assigned:**` field in the issue body (an agent role) drives pipeline routing and must always be set. It is distinct from the **GitHub Issue Assignee** (a GitHub user account set in the sidebar), which may be left unset in agent-driven workflows.
 
 Status is tracked via GitHub Issue labels — not inside the body. Discussions happen as **comments** only.
 
@@ -81,7 +83,7 @@ Scope decision or AC clarification.
 ## 13. Story Creation Template
 
 **Issue title:** `[ST-XXXXXX][DEVKIT] Clear Title`  
-**Assignee:** Responsible agent role (not "TBD")
+**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 
 **Labels:** `status:backlog`, `sprint-N`  
 **Labels — bug/defect story:** `status:backlog`, `bug`, `sprint-N`

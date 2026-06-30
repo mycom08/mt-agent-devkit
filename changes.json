@@ -1,4 +1,17 @@
 {
+  "0.1.17": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Fix (RF-001/002/004): §1 Testing row owner corrected to TL (was QA); §4 Implementer Workflow — remove conflicting Review→Testing step (TL owns status:testing); §2 add note distinguishing GitHub Issue Assignee (user account) from body Assigned field (agent role); §12 Merge Gate — add QA sign-off requirement alongside TL approval; §13 clarify GitHub Assignee is optional/may be unset",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "Fix (RF-004): §1 Testing row owner corrected to TL (was QA); §2 add note distinguishing GitHub Issue Assignee (user account) from body Assigned field (agent role); §13 clarify GitHub Assignee is optional/may be unset",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix (RF-013): Stage 4 non-behavioral and behavioral paths — remove promote-next-story steps; next-story routing delegated to Stage 0 (Story Discovery)"
+    }
+  },
   "0.1.16": {
     "new": [],
     "modified": [

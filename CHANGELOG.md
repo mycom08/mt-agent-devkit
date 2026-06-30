@@ -6,6 +6,13 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Fixed
+- [ST-000012] `Story_Standard_template.md` and `Story_Standard.md` — RF-001: §1 Testing row "Who Changes" corrected to TL (was QA); §4 Implementer Workflow: remove conflicting Review→Testing subsection (TL owns `status:testing`, not the Implementer).
+- [ST-000012] `Story_Standard_template.md` and `Story_Standard.md` — RF-002: §12 Merge Gate now includes QA sign-off requirement alongside TL approval.
+- [ST-000012] `Story_Standard_template.md`, `Story_Standard_PO_template.md`, and working mirrors — RF-004: §2/§13 clarify that the GitHub Issue Assignee (GitHub user account, may be unset) is distinct from the body `**Assigned:**` field (agent role, mandatory); remove the "TBD" Assignee instruction that contradicted the mandatory-Assigned rule.
+- [ST-000012] `Shared_Pipeline_Stages_Shared_template.md` and `Shared_Pipeline_Stages.md` — RF-013: Stage 4 non-behavioral and behavioral paths no longer pre-set the next story to `in-progress`; next-story routing is delegated to Stage 0 (Story Discovery).
+- [ST-000012] `Technical_Lead_Rules.md` (working mirror) — RF-001: §3 corrected to "before it is merged" (was "after merge") to match the canonical owner statement in `Technical_Lead_Rules_template.md`.
+
 ### Added
 - [ST-000016] `scripts/validate_templates.py` — Layer-1 corpus invariant validator for `.claude/agents/templates/**` and `.claude/agents/workflows/**`; enforces 6 deterministic checks (reference integrity, placeholder well-formedness, shared-block include integrity, retired-trigger guard, manifest integrity, Markdown well-formedness); exits non-zero on any hard violation; known-issue notes printed as `[KNOWN_ISSUE]` without affecting exit code.
 - [ST-000016] `scripts/test/fixtures/bad/` — 5 intentionally-broken fixture files (one per per-file invariant class); validated by `scripts/test/run.sh`; invariant #4 uses `--test-retired-trigger` flag so the real seed remains empty.
