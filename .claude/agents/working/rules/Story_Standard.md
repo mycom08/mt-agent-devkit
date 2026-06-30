@@ -233,6 +233,8 @@ Response and decision.
 - [ ] No CI check is in a **failed** state
 - [ ] Review criteria pass (per agent-specific rules)
 
+> **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
+
 ### Merge Gate
 
 - [ ] TL has reviewed and approved PR ✓

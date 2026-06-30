@@ -1,4 +1,13 @@
 {
+  "0.1.18": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Feat (ST-000012 retro): §12 reviewer checklist adds the flag-vs-block rule — a contradiction introduced by the PR blocks approval; a pre-existing problem in an out-of-scope file is approved and recorded as a follow-up story instead"
+    }
+  },
   "0.1.17": {
     "new": [],
     "modified": [

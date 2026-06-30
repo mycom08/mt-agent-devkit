@@ -24,6 +24,8 @@ All notable changes to mt-agent-devkit are documented here.
 - [ST-000011] `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — add Devkit Contribution step at sprint end (step 3, before Cleanup): privacy scan of `sprint_N_summary.md` Findings sections, user opt-in prompt, `gh issue create` on `mycom08/mt-agent-devkit` if authenticated, local export file fallback at `.claude/agents/retros/devkit_contribution_sprint_N.md` if not.
 
 ### Changed
+- [ST-000012 retro] `Story_Standard_template.md` and `Story_Standard.md` — §12 reviewer checklist adds the flag-vs-block rule: a contradiction introduced by the PR blocks approval; a pre-existing problem in an out-of-scope file is approved and recorded as a follow-up story.
+- `Project_Priming.md §15` (devkit-internal) — document the dual-update + pre-edit drift-check between templates and their working mirrors.
 - `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — `gh issue create` for retro contributions now adds `--label "retro:contribution"` so contributed retros are scannable as a group.
 - `community-retros/README.md` — reference the `retro:contribution` label in the contributor and maintainer flows; point maintainers to the `apply retros` workflow for triage.
 - [ST-000010] `community-retros/README.md` — landing area for community retro export files; defines the export file format (Sprint, Date, Signal items grouped by `[context]`/`[instruction]`/`[workflow]`/`[failure]`, What Worked Well), privacy requirements (no project-specific information), and the maintainer review/triage/archive process.

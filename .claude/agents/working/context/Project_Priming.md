@@ -174,6 +174,8 @@ Not applicable — no Docker or sandbox environment.
 
 When a rule, workflow, or instruction file needs to change, update the source template in `.claude/agents/templates/` — never edit a target project's installed copy directly.
 
+> **Dual-update + drift check:** Many templates have a devkit working mirror under `.claude/agents/working/` (e.g. `templates/rules/Story_Standard_template.md` ↔ `working/rules/Story_Standard.md`). Update **both** copies in the same change. Before editing, diff the mirror against its template (`git diff --no-index <template> <mirror>`, or read them side by side) and flag any **pre-existing** divergence — fix it in scope or record it as a follow-up story, so the two copies don't silently drift.
+
 **Steps (always in this order):**
 
 1. **Edit the template file** under `.claude/agents/templates/` (e.g., `.claude/agents/templates/rules/QA_Rules_template.md`)

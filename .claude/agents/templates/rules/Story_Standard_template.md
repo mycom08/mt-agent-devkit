@@ -381,6 +381,8 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 - [ ] No CI check is in a **failed** state — if any check failed, post a comment on the PR noting the failing check and ask the implementer to fix it; do not approve until CI is green
 - [ ] Code review criteria pass (per agent-specific rules)
 
+> **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
+
 **Only then:** Approve the PR
 
 ### Merge Gate
@@ -514,6 +516,6 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.4 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (2026-06-30)
+**Version:** 2.5 — §12 reviewer checklist adds the flag-vs-block rule (PR-introduced contradiction blocks; pre-existing out-of-scope problem is approved + flagged as follow-up) (2026-06-30)
 
 This is the single source of truth for story workflow across all agents.

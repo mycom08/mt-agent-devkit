@@ -30,3 +30,32 @@
 - `version.txt` — bumped 0.1.15 → 0.1.16
 - `changes.json` — added 0.1.16 entry (both template files above)
 - *(Not applied — user declined: QA Rules §4/§8 timing + blast-radius shortcut)*
+
+---
+
+## ST-000012 — Resolve story-workflow status, gate & assignee contradictions (RF-001/002/004/013)
+**Date:** 2026-06-30
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[context]` The four RF items each touched a cross-role file plus its working mirror; confirming no new contradictions required reading all six files before editing — a read-set not called out in the story scope *(TL)*
+- `[instruction]` The working copy of `Technical_Lead_Rules.md` had silently drifted from its template (§3 "after merge" vs "before merge"); no drift detection exists between templates and working mirrors *(TL)*
+- `[workflow]` For stories that list template/mirror pairs, add a drift-check: read each mirror against its template before editing and flag pre-existing out-of-scope divergence *(TL)*
+- `[instruction]` AC phrased "verify X is the canonical statement (adjust if needed)" should name the working-mirror counterpart to check, not just the template *(TL)*
+- `[context]` Review instruction was broader than the formal AC scope; a residual contradiction was found in out-of-scope files, forcing a block-vs-flag judgment call *(Dev)*
+- `[instruction]` Technical Scope omitted the role-view files (`Story_Standard_Dev`) yet the review implied a full-repo scan — scope and review expectations were misaligned *(Dev)*
+- `[workflow]` A consistency story fixing the main cross-role file should state in its AC whether the role-view files (Dev/PO/QA views) are in scope *(Dev)*
+- `[instruction]` Review guidance should state: pre-existing contradiction in an out-of-scope file = flag as follow-up, don't block; contradiction introduced by the PR = block *(Dev)*
+
+### What Worked Well
+- Design-first gate (recording the `status:testing` ownership decision before any edit) prevented mid-implementation second-guessing and left a clear rationale trail on the issue *(TL)*
+- The Layer-1 validator confirmed the SHARED-block and reference integrity were unaffected by the surgical edits — no new invariant violations *(TL)*
+- Grepping all `.md` files for `status:testing` gave a comprehensive "nothing elsewhere" verification in a single call *(Dev)*
+- The validator pass acted as a fast-fail safety net for structural regressions even though the changes were purely textual *(Dev)*
+
+### Actions Applied
+- `.claude/agents/templates/rules/Story_Standard_template.md` (+ working copy) — §12 reviewer flag-vs-block rule [P2, ships]
+- `.claude/agents/working/context/Project_Priming.md` §15 — dual-update + pre-edit drift-check note [P4, devkit-internal]
+- `version.txt` 0.1.17 → 0.1.18; `changes.json` 0.1.18 entry; `CHANGELOG.md` updated
+- Created follow-up story **ST-000017** (Issue #36) — extend the RF-001 fix to the Dev/QA/TL role-view files
+- *(Not applied — user declined: P3 consistency-story AC-scoping note)*
