@@ -122,7 +122,8 @@ When QA is the story Implementer, run the applicable local checks before opening
 | `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
 | `.ps1` files changed | PowerShell syntax check — zero parse errors |
 | `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| Docs / template / workflow only | Exempt |
+| `.claude/agents/templates/**` or `.claude/agents/workflows/**` changed | `python scripts/validate_templates.py` + `bash scripts/test/run.sh` — both exit 0 (see `docs/Template_Test_Strategy.md`) |
+| Docs only (no templates, workflows, or scripts) | Exempt |
 
 > **Gate:** Do not open a PR until all applicable checks pass.
 
