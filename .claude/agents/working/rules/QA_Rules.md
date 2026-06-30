@@ -106,7 +106,8 @@ After all story AC are verified, confirm no regression was introduced:
 
 1. Review the changed files and consider the blast radius
 2. Specifically check: does the change affect `init project` behavior? Does it affect `sync devkit`? Does it affect both GitHub and strict mode?
-3. **If regression risk is identified** → post a comment on the story issue tagging **Dev**; treat as a QA failure and loop back for a fix
+3. **For template or workflow changes** (`.claude/agents/templates/**` or `.claude/agents/workflows/**`) → follow `docs/Template_Test_Strategy.md` as the test approach; run the Layer-1 gate (`python scripts/validate_templates.py` + `bash scripts/test/run.sh`, both must exit 0) as the regression suite
+4. **If regression risk is identified** → post a comment on the story issue tagging **Dev**; treat as a QA failure and loop back for a fix
 
 > **Gate:** Do not give merge sign-off until the regression check is complete.
 
