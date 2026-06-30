@@ -1,4 +1,15 @@
 {
+  "0.1.16": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/CICD_Validation_Guide_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Feat (ST-000016 retro): §3 adds guidance to distinguish per-file vs global/aggregate checks when writing fixture-coverage AC (global checks can't be isolated to one per-file fixture); §9 requires reconciling body AC in the same pass when a design-first approval comment narrows or supersedes an AC",
+      ".claude/agents/templates/rules/CICD_Validation_Guide_template.md": "Feat (ST-000016 retro): add notes that PR-triggered CI gates must also include a push:[ci-validation] trigger so the pre-merge validation flow produces a referenceable run, and that gitignored reference paths won't exist on the runner — surface them locally before pushing"
+    }
+  },
   "0.1.15": {
     "new": [],
     "modified": [

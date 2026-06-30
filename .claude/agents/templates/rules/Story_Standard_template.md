@@ -102,6 +102,9 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 - [ ] Rule format supports extensibility for future evaluation modes
 ```
 
+### Specifying Test/Fixture-Coverage AC
+When an AC requires "one negative fixture (or test) per check/invariant," distinguish **per-file checks** (which scan each file and can be exercised by a single bad fixture) from **global/aggregate checks** (which read a single shared manifest or evaluate the corpus as a whole). A global check cannot be isolated to one per-file fixture — exempt it explicitly, or require a parameter-override hook so it stays testable. Say which checks are per-file and which are global so a missing per-file fixture for a global check is not flagged as a coverage gap at review.
+
 ---
 
 ## 4. Implementer Workflow (applies to all implementer roles: Developer, Technical Lead, QA, Business Analyst)
@@ -286,7 +289,7 @@ Use comments for:
 **Rule for comment**:
 - Open a new issue comment only for a new topic.
 - Reply in the same comment when continuing the same issue.
-- When a comment changes scope, acceptance criteria, status, or delivery expectations, update the issue body (AC, Deliverables) to match the resolved decision.
+- When a comment changes scope, acceptance criteria, status, or delivery expectations, update the issue body (AC, Deliverables) to match the resolved decision. This includes a **design-first approval comment that narrows or supersedes an AC** — reconcile the body AC text in the **same pass**, so later-stage reviewers never have to cross-read the body against a separate design thread.
 - Never put discussions inside the issue body. The body is for User Story, AC, and Deliverables only.
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`, `**Dev**`). An `@` prefix triggers a GitHub mention notification to a real user account.
 - **Never use a bare `#` prefix** to reference anything — use the `ST-XXXXXX` format or plain text instead. A bare `#` causes GitHub to create a cross-reference link to an unrelated issue or PR.
@@ -513,6 +516,6 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.3 — §15 adds Rule 1 (no `cd` prefix on commands); §15 Rule 2 consolidates GitHub CLI Bash-always rule (2026-06-04)
+**Version:** 2.4 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (2026-06-30)
 
 This is the single source of truth for story workflow across all agents.

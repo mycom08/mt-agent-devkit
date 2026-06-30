@@ -107,7 +107,36 @@ If the post-merge run fails, create a hotfix branch off master, fix the workflow
 
 ---
 
+## Note — PR-Triggered Gates Still Need a `push: [ci-validation]` Trigger
+
+If your CI gate is **PR-triggered** (`on: pull_request`, often with a `paths:` filter), it will not run when you push to `ci-validation`, so the pre-merge validation flow above produces no referenceable run. Add `ci-validation` as a push trigger alongside the PR trigger so Steps 1–3 work:
+
+```yaml
+on:
+  pull_request:
+    paths: [ ... ]
+  push:
+    branches: [ ci-validation ]
+```
+
+Keep the push trigger permanently — it makes every future change to this gate validatable on `ci-validation`.
+
+---
+
+## Note — Gitignored Reference Paths Won't Exist on the Runner
+
+A check that resolves file paths (references, includes) can pass locally but fail on the runner if a referenced path is **gitignored** — the runner only checks out committed files. Before pushing, surface paths your check depends on that the runner won't have:
+
+```bash
+git ls-files --others --exclude-standard   # untracked but not ignored
+git status --ignored --short               # ignored paths
+```
+
+Either commit the path, add it to the check's known-runtime-path allowlist, or skip it explicitly. Discovering this only after the first CI run is the common failure mode.
+
+---
+
 ## Version
 
-**Version:** 1.1 — Exception added for workflow_dispatch-only workflows (post-merge validation procedure)  
+**Version:** 1.2 — Notes added: PR-triggered gates need a push:[ci-validation] trigger; gitignored reference paths won't exist on the runner  
 **Created:** 2026-06-05

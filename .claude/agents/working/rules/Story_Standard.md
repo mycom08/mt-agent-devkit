@@ -72,6 +72,9 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 - Exact file content to write
 - Algorithm pseudocode
 
+### Specifying Test/Fixture-Coverage AC
+When an AC requires "one negative fixture (or test) per check/invariant," distinguish **per-file checks** (which scan each file and can be exercised by a single bad fixture) from **global/aggregate checks** (which read a single shared manifest or evaluate the corpus as a whole). A global check cannot be isolated to one per-file fixture — exempt it explicitly, or require a parameter-override hook so it stays testable. Say which checks are per-file and which are global so a missing per-file fixture for a global check is not flagged as a coverage gap at review.
+
 ---
 
 ## 4. Implementer Workflow (applies to all implementer roles: Developer, Technical Lead, QA, Business Analyst)
@@ -200,7 +203,7 @@ Response and decision.
 **Rules for comments:**
 - Open a new issue comment only for a new topic.
 - Reply in the same comment when continuing the same issue.
-- When a comment changes AC or delivery expectations, update the issue body to match.
+- When a comment changes AC or delivery expectations — including a **design-first approval comment that narrows or supersedes an AC** — update the issue body in the **same pass** so later-stage reviewers never have to reconcile the body AC against a separate design thread.
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`, `**Dev**`).
 - **Never use a bare `#` prefix** — use the `ST-XXXXXX` format or plain text instead.
 
@@ -324,4 +327,4 @@ gh issue edit <number> --repo mycom08/mt-agent-devkit --add-label "status:done" 
 ## Version
 
 **Created:** 2026-06-16  
-**Version:** 1.0 — Initial devkit-specific version
+**Version:** 1.1 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (ST-000016 retro)

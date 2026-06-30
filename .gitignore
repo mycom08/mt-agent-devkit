@@ -39,3 +39,7 @@ docker/sandbox/.env
 # Agent working files — not tracked (session state, working records)
 .claude/agents/working/working-record/
 .claude/agents/working/tmp/
+
+# Python
+__pycache__/
+*.pyc
