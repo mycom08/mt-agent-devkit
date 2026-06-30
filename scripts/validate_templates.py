@@ -173,12 +173,18 @@ ALLOWLIST_UNTRACKED_TEMPLATES = {
 # Invariant #1A: file-path reference resolution config
 # ---------------------------------------------------------------------------
 
-# Runtime-generated paths: created by agents at runtime, not present in the
-# devkit repo. Skip file-existence checks for paths under these prefixes.
+# Runtime-generated paths: created by agents at runtime or by `init project`,
+# and gitignored in both the devkit repo and target projects. Skip
+# file-existence checks for paths under these prefixes.
 RUNTIME_PATH_PREFIXES = (
     ".claude/agents/tmp/",
     ".claude/agents/docs/",
     ".claude/agents/retros/",
+    # Working-record files: gitignored (.claude/agents/working/working-record/).
+    # Initialized by `init project` and evolve as session state. Never committed.
+    # Templates reference the deployed path (.claude/agents/working-record/) but
+    # the files cannot be verified in CI since they are gitignored.
+    ".claude/agents/working-record/",
 )
 
 # Known-wrong references in the current corpus, tracked for fix in the
