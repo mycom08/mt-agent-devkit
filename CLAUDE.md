@@ -237,7 +237,7 @@ Trigger: user says **"update project"** or **"update project [path]"**
 
 The optional `[path]` argument is the absolute path to an already-initialized target project. If omitted, the workflow asks the user.
 
-Applies the current local devkit templates to the target project using the same merge strategy as `update agents` — but reads from local files instead of GitHub. Uses `changes.json` to resolve only the files that changed between the project's installed version and the current devkit version, with automatic full-scan fallback if a version entry is missing.
+Applies the current local devkit templates to the target project using the same merge strategy as `sync devkit` — but reads from local files instead of GitHub. Uses `changes.json` to resolve only the files that changed between the project's installed version and the current devkit version, with automatic full-scan fallback if a version entry is missing.
 
 Read `.claude/agents/workflows/Update_Project_Workflow.md` for the complete pipeline before executing.
 

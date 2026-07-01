@@ -77,7 +77,11 @@
       "Bash(python scripts/validate_templates.py)",
       "Bash(echo \"validator EXIT=$?\")",
       "Bash(rm .claude/agents/working/retros/ST-000013_retro.md)",
-      "Bash(rm .claude/agents/working/tmp/sprint_pipeline_state.md)"
+      "Bash(rm .claude/agents/working/tmp/sprint_pipeline_state.md)",
+      "Bash(ls .claude/agents/templates/**/Sync_Devkit_Workflow_template.md)",
+      "Bash(find .claude/agents/templates -iname \"*sync_devkit*\")",
+      "Bash(find .claude/agents -iname \"*update_agents*\")",
+      "Bash(rm .claude/agents/working/retros/ST-000014_retro.md)"
     ]
   },
   "hooks": {

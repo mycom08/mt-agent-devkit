@@ -80,3 +80,28 @@
 ### Actions Applied
 - `.claude/agents/working/context/Project_Priming.md` §15 — added dual-update carve-outs: intentionally-diverged mirror (document, don't force-match) and absent mirror (note absence, don't create) [devkit-internal, no version bump]
 - *(Story-shipped changes already merged in PR #37: `Developer_Rules_template.md` §4/§6, `Project_Priming_template.md` §3, `Strict_Mode_Story_Guide_template.md` commit format; version 0.1.18 → 0.1.19)*
+
+---
+
+## ST-000014 — Fix stale references, retro routing & broken sprint query (RF-007/008/009/010/011/012/014)
+**Date:** 2026-07-01
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[workflow]` RF-010 relabeled the BA retro header in instructions but the skeleton (`Shared_Pipeline_Stages`) + `Retro_Rules` heading map still emit `## Implementer — Business Analyst` — a partial fix until the retro subsystem is updated *(Developer/TL)*
+- `[failure]` The 3-label AND `gh issue list` bug (RF-012 root cause) also lives in `product_owner_instructions` Plan-Next-Sprint step, which was out of AC scope — a partial fix leaves a live repeat of the bug *(TL/Developer)*
+- `[workflow]` A rename/reference fix scoped to one file, when the renamed token is emitted/mapped by other files, forces a ship-vs-block judgment at review time; the tracing burden belongs on the implementer, not on the story creator enumerating files up front *(TL/Developer, refined by maintainer)*
+- `[workflow]` Reference-integrity stories need a review step that greps to confirm each new target exists and each old target is absent — text-diff review alone can swap one broken reference for another *(TL)*
+- `[instruction]` `Document_Index` should be the single source for §6 document paths to prevent drift (`Code_Review_Checklist` present in §6 but absent from `Document_Index`) *(TL)*
+
+### What Worked Well
+- Dual-update §15 carve-outs (added in ST-000013) were unambiguous — CLAUDE_Shared (no mirror) and devkit Project_Priming (intentionally diverged) were both correctly handled and documented *(Developer/TL)*
+- The implementer proactively documented the RF-010 and RF-012 downstream issues in the PR body, so the follow-up decision was fully framed before review *(TL)*
+- Full TL review (chosen over the fast path) verified reference targets actually exist (`Sync_Devkit_Workflow`, `Agent_Common §4`, `Document_Index` paths), catching what a text-only diff review would miss *(Orchestrator/TL)*
+
+### Actions Applied
+- `CLAUDE.md` (devkit-internal) — line 240 stale `update agents` → `sync devkit` [no version bump]
+- Created follow-up story **ST-000018** (Issue #39) — fix the same AND-query bug in `product_owner_instructions` Plan-Next-Sprint step (FU-2 / `[failure]`)
+- Created follow-up story **ST-000019** (Issue #40) — add implementer reference-trace rule (implementer-responsibility framing, per maintainer), reconcile reviewer reference-integrity checks between `Technical_Lead_Rules` template/mirror, and align `Document_Index` with Project_Priming §6 (FU-1 reviewer signals + FU-3)
+- *(De-scoped by maintainer — RF-010 retro-skeleton/`Retro_Rules` Analyst-BA header alignment: low priority, not tracked)*
+- *(Story-shipped changes already merged in PR #38: 6 templates + mirrors; version 0.1.19 → 0.1.20)*
