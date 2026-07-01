@@ -31,6 +31,17 @@
 - The reviewer-focus checklist explicitly directed "check whether the CLAUDE template / rules still point at the flat path" — that single instruction is what surfaced the incomplete fix; without it the roster breakage would likely have shipped.
 - Story_Standard §12 "introduced vs pre-existing" gave a clean rule for separating the blocking roster/rules breakage (introduced by the file-move) from the pre-existing non-split-annotation quirk (follow-up).
 
+### Round 2 — Re-review after scope narrowing (RF-016 relocated out)
+#### Impediments & Unclear Points
+- `[process]` None — the scope-narrowing decision (revert one sub-fix, keep the other two, relocate to a new versioned story) was already resolved by PO before this session started, so the re-review had a clean, unambiguous scope.
+
+#### Process Suggestions
+- `[review]` When a PR is re-scoped mid-review (one fix pulled out, others kept), re-verify the *retained* fixes against surrounding unmodified logic (not just re-confirm the old verdict) — a revert touches shared files and can shift line numbers or context around unrelated hunks. Diffing the full file against the base branch (not just the PR's own commit range) is the fastest way to confirm a clean revert with no residue.
+
+#### What Worked Well
+- Diffing the affected file against `main` in full (`git diff main...HEAD -- <file>`) rather than trusting the commit-by-commit history was the fastest way to confirm the revert left zero residue — a single command answered both "is RF-016 gone" and "is anything else different."
+- Re-deriving the RF-015 correctness argument from the *unmodified* surrounding pipeline rules (write-rule wording, resume-rule wording, Stage 5's state-file-deletion design) rather than re-citing the round-1 verdict caught that Stage 5's missing completion-write is intentional (by design, via file deletion) rather than a gap — avoided a false "regression" flag.
+
 ## QA
 ### Impediments & Unclear Points
 *(pending)*
