@@ -6,6 +6,11 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Fixed (internal — devkit operational workflows only, no template/version change)
+- [ST-000015] `Init_Project_Workflow.md` — RF-016: instruction file target path corrected from `.claude/agents/[role]_instructions.md` (flat) to `.claude/agents/instructions/[role]_instructions.md` (subdirectory), matching the path that `Update_Project_Workflow.md` already expects; `.claude/agents/instructions/` added to Stage 4 directory-creation list.
+- [ST-000015] `Init_Project_Workflow.md` — RF-017: workflow source glob in source table broadened from `*_Workflow_template.md` to `*_template.md` so `Shared_Pipeline_Stages_template.md` (which does not end with `_Workflow`) is included; all 7 split workflow files are now captured.
+- [ST-000015] `Build_Software_Workflow.md` — RF-015: Stage 4 and Stage 5 pipeline-state writes moved from stage entry to stage completion; a crash mid-Stage-4 now resumes from Stage 4 (using `build_state.md` per-repo idempotency checks) instead of incorrectly skipping to Stage 5.
+
 ### Fixed
 - [ST-000014] `Plan_Sprint_Workflow_Shared_template.md` and `Plan_Sprint_Workflow.md` — RF-012: Stage 1 step 3 non-feature GitHub mode sprint detection replaced three AND-ed `--label` flags (always returns 0 results) with three separate per-label queries whose results are unioned.
 - [ST-000014] `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — RF-014: sprint-end Devkit Contribution unauthenticated fallback now instructs users to open an Issue labeled `retro:contribution` on `mycom08/mt-agent-devkit` (was: "open a pull request"), so the `apply retros` workflow can find the contribution.
