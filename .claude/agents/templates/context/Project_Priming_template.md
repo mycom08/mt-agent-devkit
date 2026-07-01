@@ -30,7 +30,9 @@
 
 ## 3. Story Workflow
 
-Stories are **GitHub Issues** in `{github-org}/{repo-name}` (label: `{feature-label}`, title format: `[ST-XXXXXX][FEATURE] Title`).
+**GitHub mode:** Stories are **GitHub Issues** in `{github-org}/{repo-name}` (label: `{feature-label}`, title format: `[ST-XXXXXX][FEATURE] Title`).
+
+**Strict mode:** Stories are **local MD files** under `.claude/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues are created. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
 
 **Status flow:**
 
@@ -50,8 +52,9 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | Done | QA + PO | After all AC verified and ticked by PO |
 
 **Collaboration rules:**
-- Story body contains only: User Story, AC, Deliverables
-- All discussions happen as **comments** on the GitHub Issue — never in the body
+- Story body/file contains only: User Story, AC, Deliverables
+- **GitHub mode:** All discussions happen as **comments** on the GitHub Issue — never in the body
+- **Strict mode:** All discussions are appended to the `## Comments` section of the story MD file
 - One topic per comment thread
 
 For the full workflow (status transitions, role boundaries, AC rules, merge gate, comment format): `.claude/agents/rules/Story_Standard.md`

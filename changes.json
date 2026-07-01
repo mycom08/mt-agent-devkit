@@ -1,4 +1,17 @@
 {
+  "0.1.19": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/context/Project_Priming_template.md",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix (RF-005/RF-003 ST-000013): §4 Story files line mode-gated — GitHub mode retains GitHub Issues assertion; Strict mode points to Strict_Mode_Story_Guide.md. §6 Commit Message Rules split into GitHub mode (Conventional Commits) and Strict mode (primary-id format per Strict_Mode_Story_Guide.md) carve-outs; removes vague project-style reference.",
+      ".claude/agents/templates/context/Project_Priming_template.md": "Fix (RF-006 ST-000013): §3 story-workflow opener mode-gated — GitHub mode retains GitHub Issues framing; Strict mode points to local MD files and Strict_Mode_Story_Guide.md. Collaboration rules updated: GitHub mode keeps Issues-comments assertion; Strict mode directs to ## Comments section of story MD.",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "Fix (RF-003 ST-000013): §Commit Message Format — replace vague 'project's own style' with explicit spec: lowercase imperative phrase ≤ 60 characters, match project history or default to lowercase imperative. Operation substitution table updated to reference the Commit Message Format section instead of repeating the style note."
+    }
+  },
   "0.1.18": {
     "new": [],
     "modified": [

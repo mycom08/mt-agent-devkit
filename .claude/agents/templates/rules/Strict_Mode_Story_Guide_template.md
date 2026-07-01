@@ -188,7 +188,7 @@ story/ST-000004-fix-token-refresh
 - **With External ID:** `PROJ-123 [ST-000001]: add login endpoint`
 - **Without External ID:** `ST-000001: add login endpoint`
 
-`<message>` follows the same conventions as the project's existing commit style.
+`<message>` is a lowercase imperative phrase ≤ 60 characters (e.g. `add login endpoint`, not `Added login endpoint`). If the project already has a commit history, match its tense and capitalization conventions; if there is no prior history, use lowercase imperative.
 
 ---
 
@@ -242,6 +242,6 @@ Quick lookup for all GitHub → strict-mode equivalents used in workflows.
 | `gh label list \| grep "sprint-"` | Glob `docs/stories/*.md`, collect unique `**Sprint:**` values |
 | CI run URL in PR | Not required — CI gate skipped in strict mode |
 | `gh issue create` | Increment counter, write story MD |
-| `Agent: <message>` commit prefix | **Never use** — commit messages follow the project's own style |
+| `Agent: <message>` commit prefix | **Never use** — see `## Commit Message Format` above for the correct format |
 | `git add .claude/agents/...` | **Never do this** — entire `.claude/agents/` is gitignored |
 | Commit memory/working-record/docs | **Never commit agent files** — they are local-only by design |
