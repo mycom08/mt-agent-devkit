@@ -97,27 +97,22 @@ Update at **start of session** (read yesterday's context, sync story statuses fr
 
 ## 6. Internal Project Documents
 
-Navigate here for feature context:
+Navigate here for project context:
 
-- **Feature docs root** — `docs/feature/`
-- **Business requirements** — `docs/feature/{feature-name}/business/{Feature}_Requirements_Summary.md`
-- **Technical analysis** — `docs/feature/{feature-name}/technical/{Feature}_Strategic_Analysis.md`
-- **Implementation design** — `docs/feature/{feature-name}/technical/{Feature}_Technical_Implementation.md`
-- **Database schema** — `docs/feature/{feature-name}/technical/{Feature}_Database_Schema.md`
-- **Security checklist** — `docs/feature/{feature-name}/technical/Security_Review_Checklist.md`
-- **Developer guide** — `docs/feature/{feature-name}/developer/{Feature}_Developer_Guide.md`
-- **Operations runbook** — `docs/feature/{feature-name}/operations/{Feature}_Deployment_Runbook.md`
-- **Roadmap** — `docs/feature/{feature-name}/plan/{Feature}_Implementation_Roadmap.md`
-- **Backlog** — `docs/feature/{feature-name}/plan/Product_Backlog.md`
-- **Sprint Plan** — `docs/feature/{feature-name}/plan/Sprint_1_Overview.md`
+- **Business requirements** — `docs/requirements/Business_Requirements.md`
+- **Implementation roadmap** — `docs/plan/Implementation_Roadmap.md`
+- **Product backlog** — `docs/plan/Product_Backlog.md`
+- **Sprint plan** — `docs/sprints/Sprint_N_Overview.md`
+- **Technical analysis** — `docs/technical/Technical_Analysis.md`
+- **Architecture overview** — `docs/technical/Architecture.md`
+- **Development standards** — `docs/wiki/Development_Standards.md`
+- **Code review checklist** — `docs/wiki/Code_Review_Checklist.md`
+- **Testing guidelines** — `docs/wiki/Testing_Guidelines.md`
 - **API spec** — `docs/api/{project-api-spec}.yaml`
-- **Test Scenarios** — `docs/feature/{feature-name}/test-scenarios/` (one file per story)
-- **Test Scripts** — `tests/feature/{feature-name}/scripts/`
-- **Test Reports** — `tests/feature/{feature-name}/report/`
-- **Wiki (project-wide guidelines)**
-  - **Development Standards** — `docs/wiki/Development_Standards.md`
-  - **Code Review Checklist** — `docs/wiki/Code_Review_Checklist.md`
-  - **Testing Guidelines** — `docs/wiki/Testing_Guidelines.md`
+- **Feature docs** — `docs/feature/<feature_name>/`
+- **Test Scenarios** — `docs/feature/<feature_name>/test-scenarios/` (one file per story)
+- **Test Scripts** — `tests/feature/<feature_name>/scripts/`
+- **Test Reports** — `tests/feature/<feature_name>/report/`
 
 Name new or renamed documents in `Title_Case_With_Underscores`, for example `My_Technical_Document.md`.
 

@@ -23,7 +23,12 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory + rules)
 3. PO checks the active sprint:
    - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; read its `Sprint_N_Overview.md`
-   - **Non-feature sprint** (`feature_name: none`): run `gh issue list --label "status:in-progress" --label "status:review" --label "status:testing"` to identify stories in the current sprint; if empty, fall back to `gh issue list --state closed --label "status:done" --limit 1 --json number,title,labels` and read the `sprint-N` label from the most recent done story
+   - **Non-feature sprint** (`feature_name: none`): run three separate queries and union the results to identify in-flight stories:
+       - `gh issue list --repo mycom08/mt-agent-devkit --label "status:in-progress" --state open`
+       - `gh issue list --repo mycom08/mt-agent-devkit --label "status:review" --state open`
+       - `gh issue list --repo mycom08/mt-agent-devkit --label "status:testing" --state open`
+       
+       Any story returned by at least one query is in the current sprint. If the union is empty, fall back to `gh issue list --repo mycom08/mt-agent-devkit --state closed --label "status:done" --limit 1 --json number,title,labels` and read the `sprint-N` label from the most recent done story.
 4. Confirm every story in the current sprint has `status:done` — check GitHub Issues
 5. **If NOT done** → PO reports which stories are still open; orchestrator notifies user and **stops**
 6. **One-Sprint-at-a-Time Guard** (feature sprint only): check whether `Sprint_{N+1}_Overview.md` already exists in `docs/feature/<feature_name>/plan/`. If it does → orchestrator notifies user and **stops**

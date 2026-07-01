@@ -135,7 +135,7 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
                  --body-file .claude/agents/retros/devkit_contribution_sprint_N.md
                ```
                Report the Issue URL to the user. Delete the local export file.
-             - **Not authenticated or `gh` unavailable:** inform the user that the export file has been written to `.claude/agents/retros/devkit_contribution_sprint_N.md`. Instruct them to open a pull request against `mycom08/mt-agent-devkit` adding the file under `community-retros/`, or to share it manually with the devkit team.
+             - **Not authenticated or `gh` unavailable:** inform the user that the export file has been written to `.claude/agents/retros/devkit_contribution_sprint_N.md`. Instruct them to open an Issue labeled `retro:contribution` on `mycom08/mt-agent-devkit` with the export file contents, so the `apply retros` workflow can find it.
 
      d. **If no:** skip to step 4 (Cleanup).
 

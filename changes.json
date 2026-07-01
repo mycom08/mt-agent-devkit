@@ -1,4 +1,23 @@
 {
+  "0.1.20": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/context/Project_Priming_template.md",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md",
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Fix (RF-012 ST-000014): Stage 1 step 3 non-feature GitHub mode — replace single 3-label AND query (always returns 0 results) with three separate per-label queries whose results are unioned to identify in-flight stories.",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Fix (RF-014 ST-000014): sprint-end Devkit Contribution fallback — replace 'open a pull request' instruction with 'open an Issue labeled retro:contribution' so the apply retros workflow can find the contribution.",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "Fix (RF-011 ST-000014): Agent File Integrity section — replace undefined trigger 'update agents' and 'Update_Agents_Workflow.md' with correct trigger 'sync devkit' and 'Sync_Devkit_Workflow.md'.",
+      ".claude/agents/templates/context/Project_Priming_template.md": "Fix (RF-007/RF-008 ST-000014): §6 document paths aligned with Document_Index flat top-level paths (docs/requirements/, docs/plan/, docs/sprints/, docs/technical/, docs/wiki/); Sprint_1_Overview.md parameterized to Sprint_N_Overview.md.",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Fix (RF-009 ST-000014): Story Closure Task retro reference changed from Retro_Rules.md to Agent_Common.md §4, matching all other role instruction files.",
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "Fix (RF-010 ST-000014): retro section header relabeled from '## Implementer — Business Analyst' to '## Analyst — Business Analyst' to reflect the BA's analyst (not implementer) role."
+    }
+  },
   "0.1.19": {
     "new": [],
     "modified": [

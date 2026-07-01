@@ -55,7 +55,7 @@ Writable paths during normal work:
 | `.claude/agents/tmp/` | Orchestrator | Pipeline state files |
 | `.claude/agents/docs/` | All agents | Stories, sprints, reviews (strict mode only) |
 
-**The only operation that may update protected paths is `update agents`**, which is triggered explicitly by the user and handled exclusively by `Update_Agents_Workflow.md`. No agent, no workflow, and no orchestrator logic may modify these files for any other reason — including fixes, improvements, or adjustments discovered during sprint work.
+**The only operation that may update protected paths is `sync devkit`**, which is triggered explicitly by the user and handled exclusively by `Sync_Devkit_Workflow.md`. No agent, no workflow, and no orchestrator logic may modify these files for any other reason — including fixes, improvements, or adjustments discovered during sprint work.
 
 If an agent identifies an error or improvement needed in a rules or workflow file, it must report it to the user as an observation — never self-correct by editing the file.
 

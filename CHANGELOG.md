@@ -7,6 +7,14 @@ All notable changes to mt-agent-devkit are documented here.
 ## [Unreleased]
 
 ### Fixed
+- [ST-000014] `Plan_Sprint_Workflow_Shared_template.md` and `Plan_Sprint_Workflow.md` — RF-012: Stage 1 step 3 non-feature GitHub mode sprint detection replaced three AND-ed `--label` flags (always returns 0 results) with three separate per-label queries whose results are unioned.
+- [ST-000014] `Sprint_Workflow_Shared_template.md` and `Sprint_Workflow.md` — RF-014: sprint-end Devkit Contribution unauthenticated fallback now instructs users to open an Issue labeled `retro:contribution` on `mycom08/mt-agent-devkit` (was: "open a pull request"), so the `apply retros` workflow can find the contribution.
+- [ST-000014] `CLAUDE_Shared_template.md` — RF-011: Agent File Integrity section: undefined trigger `update agents` and `Update_Agents_Workflow.md` replaced with correct `sync devkit` and `Sync_Devkit_Workflow.md`.
+- [ST-000014] `Project_Priming_template.md` — RF-007: §6 document paths replaced deep feature-specific paths with flat top-level paths aligned to `Document_Index_template.md` (`docs/requirements/`, `docs/plan/`, `docs/sprints/`, `docs/technical/`, `docs/wiki/`).
+- [ST-000014] `Project_Priming_template.md` — RF-008: §6 hardcoded `Sprint_1_Overview.md` parameterized to `Sprint_N_Overview.md`.
+- [ST-000014] `product_owner_instructions_template.md` and `product_owner_instructions.md` — RF-009: Story Closure Task retro format reference changed from `Retro_Rules.md` to `Agent_Common.md §4`, matching all other role instruction files.
+- [ST-000014] `business_analyst_instructions_template.md` and `business_analyst_instructions.md` — RF-010: retro section header relabeled from `## Implementer — Business Analyst` to `## Analyst — Business Analyst`.
+
 - [ST-000013] `Developer_Rules_template.md` — RF-005: §4 "Story files" line mode-gated; GitHub mode retains GitHub Issues assertion; Strict mode points to `.claude/agents/docs/stories/ST-XXXXXX.md` and `Strict_Mode_Story_Guide.md`.
 - [ST-000013] `Developer_Rules_template.md` — RF-003: §6 Commit Message Rules split into `**GitHub mode:**` (Conventional Commits + `Story:` footer) and `**Strict mode:**` (`<primary-id> [<secondary-id>]: <message>` per `Strict_Mode_Story_Guide.md`) carve-outs; vague "project's own style" reference removed.
 - [ST-000013] `Project_Priming_template.md` — RF-006: §3 story-workflow opener mode-gated; Collaboration rules updated — GitHub mode keeps Issues-comments assertion; Strict mode directs to `## Comments` section of story MD.

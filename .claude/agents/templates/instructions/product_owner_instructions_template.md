@@ -60,7 +60,7 @@ Then execute:
 4. Append a closure entry to the story MD `## Comments` section: `"Story accepted — all AC verified. Closed."`
 
 Then (both modes):
-- Write your retrospective section to `.claude/agents/retros/ST-XXXXXX_retro.md` — read `.claude/agents/rules/Retro_Rules.md` for format; overwrite the `## Product Owner` section only
+- Write your retrospective section to `.claude/agents/retros/ST-XXXXXX_retro.md` — read `.claude/agents/rules/Agent_Common.md §4` for format; overwrite the `## Product Owner` section only
 - Update your Working Record only if there is a durable fact worth recording — skip the update entirely if there is nothing new
 
 ---
