@@ -90,7 +90,7 @@ Generate customized versions of all agent scaffold files by reading the source t
 | `templates/{mode}/CLAUDE_template.md` (shared content from `templates/shared/CLAUDE_Shared_template.md`) | `CLAUDE.md` (root) |
 | `templates/context/Project_Priming_template.md` | `.claude/agents/context/Project_Priming.md` |
 | `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` |
-| `templates/instructions/*_instructions_template.md` (×5) | `.claude/agents/instructions/[role]_instructions.md` |
+| `templates/instructions/*_instructions_template.md` (×5) | `.claude/agents/[role]_instructions.md` |
 | `templates/rules/*_template.md` (×16) | `.claude/agents/rules/[name].md` |
 | `templates/{mode}/workflows/*_template.md` (×7 split) + `templates/workflows/*_Workflow_template.md` (×3 non-split) | `.claude/agents/workflows/[name].md` |
 
@@ -168,7 +168,7 @@ Adapt to the target project:
 #### Agent instruction files (5 files)
 
 **Source:** `templates/instructions/[role]_instructions_template.md`
-**Target:** `.claude/agents/instructions/[role]_instructions.md` (strip `_template` suffix)
+**Target:** `.claude/agents/[role]_instructions.md` (strip `_template` suffix; files go at the root of `.claude/agents/`, not in a subdirectory)
 
 For each agent (`business_analyst`, `developer`, `product_owner`, `qa`, `technical_lead`):
 - Copy the structure from the template
@@ -343,7 +343,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
 Write all generated files to `TARGET_PROJECT`:
 
 1. Create directories as needed:
-   `.claude/agents/context/`, `.claude/agents/instructions/`, `.claude/agents/memory/`,
+   `.claude/agents/context/`, `.claude/agents/memory/`,
    `.claude/agents/rules/`, `.claude/agents/working-record/`, `.claude/agents/workflows/`,
    `docs/wiki/`,
    `.claude/agents/scripts/`, `.claude/agents/retros/`, `.claude/agents/tmp/`
