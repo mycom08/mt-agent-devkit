@@ -44,24 +44,32 @@
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+*(stage skipped — Type: non-behavioral; Stage 2 used the full behavioral TL review, so per the Stage 3 non-behavioral fast-path rule the orchestrator verified each AC directly against the PR diff and validator output rather than spawning a QA agent)*
 
 ### Process Suggestions
-*(pending)*
+*(stage skipped)*
 
 ### What Worked Well
-*(pending)*
+*(stage skipped)*
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+*(stage skipped — Type: non-behavioral fast path; orchestrator executed closure directly per Stage 4 rules. The scope decision itself — reverting RF-016 and relocating it to versioned story ST-000020 — was made by PO in a prior session, applied via commit 79bfa25 before this session resumed the story)*
 
 ### Process Suggestions
-*(pending)*
+*(stage skipped)*
 
 ### What Worked Well
-*(pending)*
+- Descoping one AC (RF-016) out of a multi-fix story while keeping the other two (RF-015, RF-017) moving, rather than blocking the whole PR, kept delivery unblocked without compromising the "no version bump" constraint.
 
 ## Orchestrator
 ### Observations
-*(pending)*
+- Story was resumed mid-pipeline in a new top-level conversation with no live sub-agent sessions from the prior round (`impl_session`/`reviewer_session` agentIds were unresumable) — treated as expired per the session-reuse rule and re-spawned a fresh Technical Lead for round-2 review instead of attempting a doomed resume.
+- A retro update (TL's round-1 Reviewer section) and a local settings permission entry were left uncommitted in the working tree from the prior session; committed them (`a0a52ae`) before proceeding so the retro file stayed in sync with the review that had already happened.
+- Chose full TL behavioral review over the non-behavioral fast path at Stage 2: RF-015/016/017 are workflow-logic fixes whose correctness depends on cross-file consistency (Update path detection, glob over-capture risk, resume/entry re-entry logic) not derivable from the diff alone.
+- Stage 2 round 1: CHANGES REQUESTED — RF-015 & RF-017 pass; RF-016 incomplete (8 flat-path referrers in versioned templates never updated → permanent scaffold inconsistency). Completing RF-016 required versioned-template edits + version bump, contradicting the "no version bump" AC — escalated for a PO scope decision.
+- PO scope decision (Option B, resolved before this session): RF-016 reverted, relocated to versioned story ST-000020 (Issue #42); RF-015/RF-017 retained in PR #41.
+- Stage 2 round 2: TL re-verified the retained fixes independently (not by trusting the round-1 verdict) and approved; confirmed the revert left no residue via `git diff main...HEAD`.
+- Stage 3: non-behavioral fast path with Stage 2 behavioral — orchestrator verified all 5 remaining ACs directly against `gh pr diff`, `git diff --stat` (version.txt/changes.json untouched), and `validate_templates.py` (exit 0); recorded QA sign-off as an issue comment; RF-016 explicitly called out as relocated, not a sign-off failure.
+- Merge Procedure executed after explicit user confirmation (asked before merging/deleting the branch, per this session's operating norm of confirming shared-state, hard-to-reverse actions) — merged PR #41, deleted remote branch, synced local `main`.
+- Stage 4: closure executed directly (non-behavioral fast path) — issue body ACs updated (RF-016 struck through with relocation note; RF-015/RF-017/bookkeeping ACs ticked), labels moved `status:testing` → `status:done`, issue closed. Note: adding the `status:done` label appears to trigger repo automation that auto-closes the issue — the explicit `gh issue close --comment` call then no-ops on "already closed" and the comment must be posted separately via `gh issue comment`.
