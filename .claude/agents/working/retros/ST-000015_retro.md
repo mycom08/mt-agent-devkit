@@ -18,13 +18,18 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[workflow]` RF-016 was scoped as "devkit-internal, no version bump," but a *complete* fix necessarily edits versioned templates (CLAUDE_Shared roster/integrity, 5 rules "Reference from", Create_Stories_Shared read path). A path-move that changes where files land is almost never containable to the writer alone — it ripples to every reference. The AC's "no version bump" boxed the story into a fix that cannot actually be completed within scope.
+- `[review]` The Developer's `validate_templates.py` exit-0 was cited as "no regressions," but the validator does not check instruction-path consistency between the roster/rules and the actual write location — a clean validator run gave false confidence. The regression (broken fresh-scaffold roster) was only visible via a manual grep of `_instructions` across all templates.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` For any story that changes a file's target *location* (not just its content), add a mandatory step: grep the entire template + workflow corpus for references to the old path before opening the PR, and enumerate every referrer. RF-016 had 8 referrers across 3 file classes; only the writer was updated.
+- `[workflow]` When Update-side migration logic keys off a directory/marker's existence (self-healing "old→new" branch), moving Init to pre-create that marker silently disables the self-heal. Add a guardrail note in Update_Project_Workflow.md: "if Init pre-creates `instructions/`, the migration branch will not fire — Init must then own full scaffold consistency."
+- `[process]` Consider a validator invariant that cross-checks the CLAUDE roster/rules "Reference from" paths against the actual instruction-file target path in Init's source table, so a location/reference divergence fails CI instead of shipping.
 
 ### What Worked Well
-*(pending)*
+- RF-015 and RF-017 were cleanly separable and independently correct — being able to approve two of three RFs on their own merits kept the block precise rather than rejecting the whole PR.
+- The reviewer-focus checklist explicitly directed "check whether the CLAUDE template / rules still point at the flat path" — that single instruction is what surfaced the incomplete fix; without it the roster breakage would likely have shipped.
+- Story_Standard §12 "introduced vs pre-existing" gave a clean rule for separating the blocking roster/rules breakage (introduced by the file-move) from the pre-existing non-split-annotation quirk (follow-up).
 
 ## QA
 ### Impediments & Unclear Points
