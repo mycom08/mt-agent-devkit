@@ -4,6 +4,35 @@
 
 ---
 
+## ST-000015 — Fix devkit-internal workflow bugs: Build/Init/Update (RF-015/016/017)
+**Date:** 2026-07-01
+**Loop counts:** Impl→Reviewer: 2 | Impl→QA: 0
+
+### Findings
+- `[workflow]` RF-016 AC said "fix whichever makes the two consistent" — required reading both `Init_Project_Workflow.md` and `Update_Project_Workflow.md` in full to confirm which side was wrong; a cross-reference note naming the other file as owner/consumer of the shared path would have made it obvious *(Developer)*
+- `[context]` RF-017 source-table annotation said "×7" but the glob only matched 6 — the mismatch between annotation and glob wasn't caught at authoring time *(Developer)*
+- `[workflow]` When two workflow files reference the same path (writer + consumer), add a comment in each naming the other — makes future mismatches visible without a cross-file read *(Developer)*
+- `[workflow]` Pipeline-state write-rules block said "update Stage to the last completed stage" but the body stages wrote at entry, violating its own stated rule — add an explicit "write at completion, never at entry" guardrail line *(Developer)*
+- `[workflow]` RF-016 was scoped "devkit-internal, no version bump," but a complete fix necessarily edits versioned templates — a file-location move is almost never containable to the writer alone, it ripples to every reference *(Technical Lead)*
+- `[workflow]` For any story that changes a file's target location, add a mandatory step: grep the full template+workflow corpus for old-path referrers before opening the PR — RF-016 had 8 referrers, only the writer was updated *(Technical Lead)*
+- `[workflow]` When Update-side migration logic self-heals via a directory-existence check, moving Init to pre-create that directory silently disables the self-heal with no warning anywhere *(Technical Lead)*
+
+### What Worked Well
+- AC explicitly stated which side to fix for RF-016 if ambiguous, reducing decision uncertainty *(Developer)*
+- `validate_templates.py` exit 0 confirmed no regressions from all three edits in one pass *(Developer)*
+- Build_Software Stage 4 resume rules (per-repo idempotency checks) worked cleanly with the completion-point fix, no additional resume-rule changes needed *(Developer)*
+- RF-015 and RF-017 were cleanly separable and independently correct, keeping the review block precise rather than rejecting the whole PR *(Technical Lead)*
+- Story_Standard §12 "introduced vs pre-existing" gave a clean rule for separating the blocking regression from the pre-existing non-split-annotation quirk *(Technical Lead)*
+- Diffing the affected file against `main` in full (not just the PR's commit range) was the fastest way to confirm a re-scoped revert left zero residue *(Technical Lead, round 2)*
+- Re-deriving RF-015's correctness from the unmodified surrounding pipeline rules (rather than re-citing the round-1 verdict) caught that Stage 5's missing completion-write is intentional design, not a gap *(Technical Lead, round 2)*
+- Descoping one AC (RF-016) out of a multi-fix story while keeping the other two moving avoided blocking delivery on an AC that structurally contradicted its own "no version bump" constraint *(Product Owner)*
+
+### Actions Applied
+- Created follow-up story **ST-000020** (Issue #42) — complete RF-016 properly: re-apply the Init instruction-path move plus align all 8 flat-path referrers in versioned templates, with a version bump
+- *(Not applied — user did not respond to the retro-improvement proposal (items A–E: path cross-reference notes, glob/annotation sync check, write-at-completion guardrail, grep-referrers step, self-heal guardrail note); candidates preserved in this summary for future consideration)*
+
+---
+
 ## ST-000016 — Establish template test strategy + Layer-1 validation tool & CI gate
 **Date:** 2026-06-30
 **Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
