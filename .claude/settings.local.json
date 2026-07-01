@@ -70,7 +70,14 @@
       "Bash(git *)",
       "Bash(gh run *)",
       "Bash(echo \"EXIT=$?\")",
-      "Bash(cd *)"
+      "Bash(cd *)",
+      "Bash(sed 's/diff --git a\\\\///; s/ b\\\\/.*//')",
+      "Read(//tmp/**)",
+      "Bash(grep -vE \"^[+-]\\\\s*$\")",
+      "Bash(python scripts/validate_templates.py)",
+      "Bash(echo \"validator EXIT=$?\")",
+      "Bash(rm .claude/agents/working/retros/ST-000013_retro.md)",
+      "Bash(rm .claude/agents/working/tmp/sprint_pipeline_state.md)"
     ]
   },
   "hooks": {

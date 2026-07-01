@@ -175,6 +175,10 @@ Not applicable — no Docker or sandbox environment.
 When a rule, workflow, or instruction file needs to change, update the source template in `.claude/agents/templates/` — never edit a target project's installed copy directly.
 
 > **Dual-update + drift check:** Many templates have a devkit working mirror under `.claude/agents/working/` (e.g. `templates/rules/Story_Standard_template.md` ↔ `working/rules/Story_Standard.md`). Update **both** copies in the same change. Before editing, diff the mirror against its template (`git diff --no-index <template> <mirror>`, or read them side by side) and flag any **pre-existing** divergence — fix it in scope or record it as a follow-up story, so the two copies don't silently drift.
+>
+> **Carve-outs:**
+> - **Intentionally-diverged mirror:** If the working mirror was deliberately rewritten for a different operational context (e.g. the devkit runs GitHub-mode-only while the template is target-project-generic), the two copies are *not* expected to match. Do **not** force the mirror to mirror the template edit — instead note the divergence as intentional (in the PR description and retro) and update the mirror only where the change actually applies to the devkit's context.
+> - **No working mirror exists:** Some templates have no mirror under `.claude/agents/working/` (the file is absent, not merely diverged — e.g. `Strict_Mode_Story_Guide_template.md`, which the GitHub-mode devkit never installs for its own agents). In that case there is nothing to dual-update: note the absence and proceed; do **not** create a mirror the devkit does not use.
 
 **Steps (always in this order):**
 

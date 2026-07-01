@@ -1,6 +1,6 @@
 # Sprint 3 — Retro Summary
 **Sprint:** sprint-3
-**Last Updated:** 2026-06-30
+**Last Updated:** 2026-07-01
 
 ---
 
@@ -59,3 +59,24 @@
 - `version.txt` 0.1.17 → 0.1.18; `changes.json` 0.1.18 entry; `CHANGELOG.md` updated
 - Created follow-up story **ST-000017** (Issue #36) — extend the RF-001 fix to the Dev/QA/TL role-view files
 - *(Not applied — user declined: P3 consistency-story AC-scoping note)*
+
+---
+
+## ST-000013 — Add strict-mode gating to shared rules & priming (RF-003/005/006)
+**Date:** 2026-07-01
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[context]` The dual-update rule was ambiguous when a working mirror was *intentionally* diverged from its template (devkit GitHub-mode-only vs target-project-generic); required a judgment call to skip the mirror update and document the divergence as intentional *(Developer)*
+- `[context]` `Strict_Mode_Story_Guide.md` has no working mirror under `working/rules/` — the story mapped a mirror relationship that doesn't exist for a GitHub-mode devkit *(Developer)*
+- `[instruction]` The dual-update rule should add a carve-out for intentionally-rewritten mirrors: document the divergence rather than flagging it as drift-to-fix *(Developer)*
+- `[instruction]` The dual-update check should state that when a template has no working mirror, note the absence and proceed without creating one *(Developer)*
+
+### What Worked Well
+- The existing mode-gating precedent in `Developer_Rules §2` (`**GitHub mode:**` / `**Strict mode:**` inline labels) gave an unambiguous style to follow — no guessing *(Developer)*
+- `validate_templates.py` passed on the first run, confirming the template edits broke no invariants *(Developer)*
+- Non-behavioral fast path let the orchestrator verify all 5 ACs directly from the diff + reference files, closing the story without spawning TL/QA/PO agents *(Orchestrator)*
+
+### Actions Applied
+- `.claude/agents/working/context/Project_Priming.md` §15 — added dual-update carve-outs: intentionally-diverged mirror (document, don't force-match) and absent mirror (note absence, don't create) [devkit-internal, no version bump]
+- *(Story-shipped changes already merged in PR #37: `Developer_Rules_template.md` §4/§6, `Project_Priming_template.md` §3, `Strict_Mode_Story_Guide_template.md` commit format; version 0.1.18 → 0.1.19)*

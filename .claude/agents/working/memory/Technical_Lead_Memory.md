@@ -14,6 +14,11 @@
 - **Devkit Contribution privacy-scan source (ST-000011):** scan `.claude/agents/retros/sprint_N_summary.md` `### Findings` sections — NOT individual retro files (deleted at Batch Retro Review step 1e). Summary is the only durable, resumption-safe aggregate; resolve N from pipeline-state `Sprint` field.
 - **Devkit Contribution access model (ST-000011):** authenticated path = issue-based (`gh issue create` on mycom08/mt-agent-devkit with ST-000010 export as body), uniform for all users (no push access / fork / write-detection needed). NOT PR/fork-based. Local-file fallback unchanged. AC reworded PR→Issue (PO owns the AC change).
 
+- **status:testing canonical owner (ST-000012):** TL sets `status:testing` immediately after approving the PR and **before** merge. This is the canonical rule per `Technical_Lead_Rules_template.md §3` and `Shared_Pipeline_Stages_Shared_template.md` Stage 2 step 6. Implementer no longer sets this label.
+- **Assignee disambiguation (ST-000012):** Two separate concepts in stories — the GitHub Issue Assignee (GitHub user account, sidebar, may be unset) vs the body `**Assigned:**` field (agent role, drives pipeline routing, mandatory). Story_Standard §2/§13 and Story_Standard_PO §2/§13 now include an explicit note.
+- **Stage 4 next-story routing (ST-000012):** Stage 4 no longer promotes the next story to `in-progress`. Next-story routing is entirely Stage 0's responsibility (Story Discovery). This prevents double-routing in the sprint loop.
+- **Template/working-mirror drift risk:** The working `Technical_Lead_Rules.md §3` had drifted from its template (said "after merge" vs template's "before merge"). Mirrors can drift silently between stories — verify both template and mirror when checking consistency.
+
 ## Troubleshooting Facts
 
 No troubleshooting facts recorded yet.
