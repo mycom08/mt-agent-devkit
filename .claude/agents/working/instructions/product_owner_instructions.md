@@ -51,7 +51,7 @@ Then execute:
 3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (§15)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo mycom08/mt-agent-devkit`
-6. Write your retrospective section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` — read `.claude/agents/working/rules/Retro_Rules.md` for format; overwrite the `## Product Owner` section only
+6. Write your retrospective section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` — read `.claude/agents/working/rules/Agent_Common.md §4` for format; overwrite the `## Product Owner` section only
 7. Update your Working Record only if there is a durable fact worth recording
 
 ---

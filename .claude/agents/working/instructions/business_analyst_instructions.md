@@ -36,7 +36,7 @@ Record durable facts in `.claude/agents/working/memory/Business_Analyst_Memory.m
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Business Analyst` section only.
+Write your retro per `.claude/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
 
 ---
 

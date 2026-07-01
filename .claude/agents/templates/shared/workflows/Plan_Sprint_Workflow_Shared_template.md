@@ -27,7 +27,12 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 3. PO checks the active sprint:
    - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; read its `Sprint_N_Overview.md`
    - **Non-feature sprint** (`feature_name: none`):
-     - **GitHub mode:** run `gh issue list --label "status:in-progress" --label "status:review" --label "status:testing"` to identify stories in the current sprint; if empty, fall back to `gh issue list --state closed --label "status:done" --limit 1 --json number,title,labels` and read the `sprint-N` label from the most recent done story
+     - **GitHub mode:** run three separate queries and union the results to identify in-flight stories:
+       - `gh issue list --label "status:in-progress" --state open`
+       - `gh issue list --label "status:review" --state open`
+       - `gh issue list --label "status:testing" --state open`
+       
+       Any story returned by at least one query is in the current sprint. If the union is empty, fall back to `gh issue list --state closed --label "status:done" --limit 1 --json number,title,labels` and read the `sprint-N` label from the most recent done story.
      - **Strict mode:** glob `.claude/agents/docs/stories/*.md`, filter for `**Status:**` values of `in-progress`, `review`, or `testing` to find the active sprint; if none found, filter for `**Status:** done` and read the `**Sprint:**` field from the most recently created story (highest ID) — that is the current sprint N
 4. Confirm every story in the current sprint has `status:done`:
    - **GitHub mode:** check GitHub Issues
