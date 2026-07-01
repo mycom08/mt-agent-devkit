@@ -81,7 +81,10 @@
       "Bash(ls .claude/agents/templates/**/Sync_Devkit_Workflow_template.md)",
       "Bash(find .claude/agents/templates -iname \"*sync_devkit*\")",
       "Bash(find .claude/agents -iname \"*update_agents*\")",
-      "Bash(rm .claude/agents/working/retros/ST-000014_retro.md)"
+      "Bash(rm .claude/agents/working/retros/ST-000014_retro.md)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(find .claude/agents/working/tmp -iname \"*ST-000015*\" -o -iname \"*pipeline*\")",
+      "Bash(ls .claude/agents/working/tmp)"
     ]
   },
   "hooks": {

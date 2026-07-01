@@ -274,8 +274,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 ### Entry
 
 1. Verify the state file shows `Confirmed: stage2`. If not, stop and report an unexpected state to the user.
-2. Update state file: `Stage: 4`, `Updated: <now>`.
-3. Read `/result/build/repo_structure.md` to determine: `monolith` or `multi-repo`, repo names, and local paths.
+2. Read `/result/build/repo_structure.md` to determine: `monolith` or `multi-repo`, repo names, and local paths.
 
 ### Path A — Monolith
 
@@ -308,7 +307,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-9. Update state file: `GitHub Project URL: <url>`, `Updated: <now>`.
+9. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
 
 10. Proceed to Stage 5.
 
@@ -384,7 +383,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-10. Update state file: `GitHub Project URL: <url>`, `Updated: <now>`.
+10. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
 
 11. Proceed to Stage 5.
 
@@ -396,8 +395,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 ### Entry
 
-1. Update state file: `Stage: 5`, `Updated: <now>`.
-2. Read `/result/build/repo_structure.md` to get the list of repos (monolith = one repo; multi-repo = each sub-repo, excluding the project orchestrator folder).
+1. Read `/result/build/repo_structure.md` to get the list of repos (monolith = one repo; multi-repo = each sub-repo, excluding the project orchestrator folder).
 
 ### Doc Copy (for each repo)
 

@@ -92,7 +92,7 @@ Generate customized versions of all agent scaffold files by reading the source t
 | `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` |
 | `templates/instructions/*_instructions_template.md` (×5) | `.claude/agents/[role]_instructions.md` |
 | `templates/rules/*_template.md` (×16) | `.claude/agents/rules/[name].md` |
-| `templates/{mode}/workflows/*_Workflow_template.md` (×7 split) + `templates/workflows/*_Workflow_template.md` (×3 non-split) | `.claude/agents/workflows/[name].md` |
+| `templates/{mode}/workflows/*_template.md` (×7 split) + `templates/workflows/*_Workflow_template.md` (×3 non-split) | `.claude/agents/workflows/[name].md` |
 
 Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 
