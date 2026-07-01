@@ -7,6 +7,12 @@ All notable changes to mt-agent-devkit are documented here.
 ## [Unreleased]
 
 ### Fixed
+- [ST-000013] `Developer_Rules_template.md` — RF-005: §4 "Story files" line mode-gated; GitHub mode retains GitHub Issues assertion; Strict mode points to `.claude/agents/docs/stories/ST-XXXXXX.md` and `Strict_Mode_Story_Guide.md`.
+- [ST-000013] `Developer_Rules_template.md` — RF-003: §6 Commit Message Rules split into `**GitHub mode:**` (Conventional Commits + `Story:` footer) and `**Strict mode:**` (`<primary-id> [<secondary-id>]: <message>` per `Strict_Mode_Story_Guide.md`) carve-outs; vague "project's own style" reference removed.
+- [ST-000013] `Project_Priming_template.md` — RF-006: §3 story-workflow opener mode-gated; Collaboration rules updated — GitHub mode keeps Issues-comments assertion; Strict mode directs to `## Comments` section of story MD.
+- [ST-000013] `Strict_Mode_Story_Guide_template.md` — RF-003 (support): §Commit Message Format replaces vague "project's own style" with explicit spec: lowercase imperative phrase ≤ 60 characters; operation substitution table entry updated to reference the section.
+
+
 - [ST-000012] `Story_Standard_template.md` and `Story_Standard.md` — RF-001: §1 Testing row "Who Changes" corrected to TL (was QA); §4 Implementer Workflow: remove conflicting Review→Testing subsection (TL owns `status:testing`, not the Implementer).
 - [ST-000012] `Story_Standard_template.md` and `Story_Standard.md` — RF-002: §12 Merge Gate now includes QA sign-off requirement alongside TL approval.
 - [ST-000012] `Story_Standard_template.md`, `Story_Standard_PO_template.md`, and working mirrors — RF-004: §2/§13 clarify that the GitHub Issue Assignee (GitHub user account, may be unset) is distinct from the body `**Assigned:**` field (agent role, mandatory); remove the "TBD" Assignee instruction that contradicted the mandatory-Assigned rule.

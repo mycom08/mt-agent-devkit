@@ -138,7 +138,9 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Caller-trace rule:** Before changing a function/method signature, return type, type name, or extracting a concrete type into an interface, trace all callers first (use `grep -rn "FuncName" .` or Grep tool). Document the affected call sites in the PR description. Do not make any such change without confirming every caller is updated.
 
-**Story files:** Stories are GitHub Issues — title format `[ST-XXXXXX][FEATURE] Title In Title Case`. No `.md` story files.
+**Story files:**
+- **GitHub mode:** Stories are GitHub Issues — title format `[ST-XXXXXX][FEATURE] Title In Title Case`. No `.md` story files are created or tracked.
+- **Strict mode:** Stories are `.md` files under `.claude/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
 
 ---
 
@@ -200,11 +202,8 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 > **Gate:** Do not signal merge completion until the local branch is switched and synced.
 
 **Commit Message Rules:**
-- Format: `<type>(<scope>): <subject>` — Conventional Commits
-- Subject: imperative mood, ≤ 50 characters (`Add …` not `Added …`)
-- Body (when needed): explain *why*, wrap at 72 characters per line
-- Footer: always include `Story: ST-XXXXXX`; add `BREAKING CHANGE:` if applicable
-- See `docs/wiki/Development_Standards.md §2` for the full type list and a complete example
+- **GitHub mode:** Format: `<type>(<scope>): <subject>` (Conventional Commits). Subject: imperative mood, ≤ 50 characters. Body (when needed): explain *why*, wrap at 72 characters. Footer: always include `Story: ST-XXXXXX`. See `docs/wiki/Development_Standards.md §2` for the full type list.
+- **Strict mode:** Format: `<primary-id> [<secondary-id>]: <message>` — see `Strict_Mode_Story_Guide.md §Commit Message Format` for the complete spec. No `Story:` footer, no Conventional Commits type prefix.
 
 ---
 
