@@ -296,13 +296,13 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 6. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
    - Stage 1: scan the repo folder (it is brand-new, so use the product name and description derived from the user's idea and `/result/analyst/summary.md`)
-   - Stage 2: generate all agent scaffold files adapted to the product (CLAUDE.md, Project_Priming.md, Document_Index.md, 5 instruction files, rules files, workflow files, version check scripts, blank memory files, blank working records)
+   - Stage 2: generate all agent scaffold files adapted to the product (CLAUDE.md, README.md, Project_Priming.md, Document_Index.md, 5 instruction files, rules files, workflow files, version check scripts, blank memory files, blank working records)
    - Stage 3: skip the user-confirmation sub-step — you already have user consent from the overall Stage 4 flow
    - Stage 4 equivalent: write all generated files to the repo folder; create required directories; append `.gitignore` additions (github mode); inject `SessionStart` hook into `.claude/settings.json`
 
 7. Run `gh project create` to create a GitHub Project named after the product (from the user's idea). Store the returned project URL.
 
-8. Link the repo to the project: `gh project item-add <project-number> --owner <owner> --url <repo-url>`
+8. Link the repo to the project: `gh project link <project-number> --owner <owner> --repo <owner>/<repo-name>` (**not** `gh project item-add` — that subcommand only accepts Issue/PR URLs and returns "resource not found" for a bare repo URL; `gh project link` is the correct command for attaching a repository to a Project).
 
 9. Write `.claude/agents/docs/build_state.md` inside the repo:
 
@@ -368,9 +368,9 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 5. Link **all repos** (each sub-repo + the project folder repo, if one was created) to the GitHub Project:
    ```
-   gh project item-add <project-number> --owner <owner> --url <sub-repo-url>
+   gh project link <project-number> --owner <owner> --repo <owner>/<sub-repo-name>
    ```
-   Repeat for each repo.
+   Repeat for each repo. (**Not** `gh project item-add` — that subcommand only accepts Issue/PR URLs and returns "resource not found" for a bare repo URL; `gh project link` is the correct command for attaching a repository to a Project.)
 
 6. Go back and fill in `GitHub Project URL` in every sub-repo's `.claude/agents/docs/build_state.md` that was written with an empty placeholder in step 2e.
 
@@ -395,9 +395,19 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-10. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
+10. Commit and push the orchestrator folder's content, so the GitHub repo isn't left empty (the orchestrator folder holds no analysis docs of its own, so it doesn't go through the Stage 5 doc-copy commit — do it here instead):
+    ```
+    cd <orchestrator-folder-path>
+    git add CLAUDE.md .claude .gitignore
+    git commit -m "chore: scaffold project-orchestrator CLAUDE.md + build workflow"
+    git branch -M main
+    git push -u origin main
+    ```
+    > Stage only the orchestrator's own files (`CLAUDE.md`, `.claude/`, `.gitignore`) — never `git add -A` here, since the sub-repo folders live as sibling directories inside the orchestrator folder and are separate git repos with their own remotes, not submodules of this one.
 
-11. Proceed to Stage 5.
+11. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
+
+12. Proceed to Stage 5.
 
 > **Handoff message note:** the Stage 5 handoff message below assumes a project-orchestrator path exists for multi-repo. For the service+api-spec-only case (no orchestrator folder), use the monolith-style handoff instead — "Open a Claude Code session in `<service-repo-path>` and run: `plan next sprint`" — pointing at the REST service repo, not a project-orchestrator folder that doesn't exist.
 
@@ -477,6 +487,15 @@ For each repo in the list:
 
    > For a monolith, `<repo-name>` is the single repo's name slug as recorded in `repo_structure.md`.
 
+4. **Commit and push.** Stage 4 only writes files locally and creates the *remote* GitHub repo (`gh repo create`) — it never commits or pushes, so without this step every scaffolded repo sits empty on GitHub. Now that the repo's content is complete (devkit scaffold + Java skeleton if any + analysis docs just copied above), commit and push it:
+   ```
+   cd <repo-path>
+   git add -A
+   git commit -m "chore: scaffold AI Scrum team devkit + analysis docs"
+   git branch -M main
+   git push -u origin main
+   ```
+
 ### State File Cleanup
 
 After all doc copies complete successfully, delete `.claude/agents/tmp/build_software_state.md`.
@@ -518,6 +537,8 @@ Next step:
 - **Stage 4 is sequential** — scaffold each repo one at a time; do not spawn parallel agents for repo scaffolding
 - **Java skeleton generation is guarded and additive** — only for Java repos with no existing `pom.xml`/`build.gradle`/`build.gradle.kts`/`src/`; never overwrites or runs alongside an existing project; supports both Maven and Gradle (chosen from `architecture.md`, default Maven) but never mixes the two in one repo; generated skeletons use only public Maven Central dependencies, never invented proprietary artifacts
 - **Every Java REST service gets a companion API spec repo** — Stage 2 adds it automatically, ordered before the service in `repo_structure.md`; the service's skeleton depends on the contract repo already existing and stops as a blocker (not a silent workaround) if it's missing; a monolith-with-a-Java-REST-service is routed through Path B for this pair even though `Decision` still reads `monolith`
+- **Use `gh project link`, never `gh project item-add`, to attach a repo to a Project** — `item-add` only accepts Issue/PR URLs and fails with "resource not found" on a bare repo URL; `gh project link <number> --owner <owner> --repo <owner>/<repo>` is the correct command (Path A step 8, Path B step 5)
+- **Every repo gets committed and pushed exactly once, at the end of Stage 5** — Stage 4 only creates the remote (`gh repo create`) and writes files locally; it never commits. The Stage 5 doc-copy loop's commit+push step is what actually populates the GitHub repo, after scaffold + Java skeleton + analysis docs are all in place. The project-orchestrator folder is the one exception — it isn't part of the Stage 5 repo list, so it commits+pushes at the end of Stage 4 Path B instead (step 10). **Resume note:** if a repo shows a complete scaffold on disk but its Stage 4/5 resume check still finds it "incomplete" or its GitHub remote returns an empty tree, check whether it was simply never committed before assuming the scaffold itself needs redoing.
 - **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
 - **Stop on blocker** — if any agent reports a blocking issue, stop and report to the user before continuing
 - **Completion reports** — each spawned agent returns its results to the orchestrator; orchestrator relays a brief status to the user after each stage

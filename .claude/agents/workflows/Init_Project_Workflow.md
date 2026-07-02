@@ -88,6 +88,7 @@ Generate customized versions of all agent scaffold files by reading the source t
 | Template file | Target path in generated project |
 |---|---|
 | `templates/{mode}/CLAUDE_template.md` (shared content from `templates/shared/CLAUDE_Shared_template.md`) | `CLAUDE.md` (root) |
+| `templates/README_template.md` | `README.md` (root) |
 | `templates/context/Project_Priming_template.md` | `.claude/agents/context/Project_Priming.md` |
 | `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` |
 | `templates/instructions/*_instructions_template.md` (×5) | `.claude/agents/[role]_instructions.md` |
@@ -130,6 +131,22 @@ Adapt the template:
 - Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `CLAUDE.md`
 - Replace `{{DEVKIT_VERSION}}` with the content of `version.txt` at the devkit root
 - All other content is copied verbatim from the template
+
+#### `README.md`
+
+**Source:** `templates/README_template.md`
+
+If `README.md` exists at `TARGET_PROJECT` root → do not overwrite it. Instead append an `## AI Scrum Team` section (with a `---` separator) pointing to `CLAUDE.md`, `.claude/agents/context/Project_Priming.md`, and the `workflow help` command — same append-not-replace handling as `CLAUDE.md`.
+If `README.md` does not exist → generate a full README from the template.
+
+Adapt the template:
+- Replace `{{PROJECT_NAME}}` with the detected project name
+- Replace `{{PROJECT_DESCRIPTION}}` with the same 1–2 sentence description used for `CLAUDE.md`
+- Replace `{{TECH_STACK}}` with a short bulleted or comma-separated list of the detected/decided languages, frameworks, and key dependencies (from Stage 1 scan, or from `architecture.md` if this is a brand-new repo scaffolded under Build Software with no code to scan yet)
+- Replace `{{KEY_DIRECTORIES}}` with a short list of the project's top-level directories and their purpose (from Stage 1 scan; for a brand-new repo, use the directories the Java Skeleton Generation step created, or a generic placeholder noting the structure isn't established yet)
+- Replace `{{GETTING_STARTED}}` with real build/run/test commands if determinable (e.g., `./mvnw spring-boot:run`, `npm install && npm start`) — if no code exists yet, say so plainly rather than inventing commands
+- Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `CLAUDE.md`
+- Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
 
 #### `.claude/agents/context/Document_Index.md`
 
@@ -354,7 +371,7 @@ Write all generated files to `TARGET_PROJECT`:
    Write `.claude/agents/devkit_version.txt` containing the current devkit version (read from `version.txt` at the devkit root).
 
    **If `Mode: github`** — also write `.claude/agents/devkit_version.txt` containing the current devkit version.
-3. For `CLAUDE.md`:
+3. For `CLAUDE.md` and `README.md`, each independently:
    - If appending → add the generated block at the end of the existing file with a `---` separator
    - If creating → write the full file
 4. Write each generated file to its target path (with clean name — no `_template` suffix).
@@ -468,7 +485,7 @@ Next steps:
 - **Overwrite transparency** — always list existing files that will be overwritten before asking for confirmation
 - **No assumptions about tech stack** — if the scan is inconclusive, use generic placeholders and note what needs manual completion
 - **Stop on path error** — if `TARGET_PROJECT` does not exist or is not accessible, stop immediately and report
-- **CLAUDE.md is additive** — never overwrite an existing CLAUDE.md in full; always append the orchestrator block
+- **CLAUDE.md and README.md are additive** — never overwrite an existing file of either in full; always append the orchestrator block
 - **Strip `_template` suffix** — all files written to the target project use clean names without the suffix
 - **Never copy devkit-internal files** — `Analyst_Workflow.md` and `Init_Project_Workflow.md` are devkit-only; never write them to the target project
 - **State file cleanup** — always delete the state file after successful Stage 4 completion or user cancellation
