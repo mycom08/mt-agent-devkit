@@ -67,11 +67,11 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 
 ### Execution
 
-3. Invoke the `analyze` workflow by reading `.claude/agents/workflows/Analyst_Workflow.md` and executing the full pipeline with the user's idea as the requirement context. All `/result/analyst/` documents are produced exactly as defined in that workflow — no modification.
+3. Invoke the `analyze` workflow by reading `.claude/agents/workflows/Analyst_Workflow.md` and executing the full pipeline with the user's idea as the requirement context, **including its Stage 2d Review & Feedback Gate** — do not skip or shortcut Stage 2d just because it's being run under Build Software. All `/result/analyst/` documents are produced exactly as defined in that workflow — no modification.
 
    > Do not modify or shorten the Analyst_Workflow pipeline. All documents (`summary.md`, `architecture.md`, `implementation_roadmap.md`, `business_requirements.md`, `testing_plan.md`, `spec.md`, `elicitation_notes.md`, `diagrams/`) must be produced.
 
-4. After the Analyst pipeline completes, update state file: `Stage: 1`, `Updated: <now>`.
+4. After the Analyst pipeline (including Stage 2d) completes, update state file: `Stage: 1`, `Updated: <now>`, and copy `tl_session` / `po_session` / `ba_session` from `analyst_workflow_state.md` (or from the orchestrator's own record of which agents it spawned/resumed during the delegated run, if that file is already gone) into **this** state file's `Sessions` block. This is what keeps those sessions resumable for any later feedback round — `analyst_workflow_state.md` itself is deleted once Stage 2d closes, per the Analyst workflow's own rules.
 
 ### Confirmation Gate
 
@@ -83,13 +83,14 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
    All analysis documents are available in /result/analyst/.
    Start with summary.md for an overview.
 
-   Ready to proceed to Stage 2 (Repo Structure Planning)?
-   Type "yes" to continue or "no" to stop here.
+   If you have any further feedback, share it now — otherwise just say so and I'll continue to Stage 2 (Repo Structure Planning).
    ```
 
-6. If user says **"no"** → stop and inform the user they can resume by running `build software` again (the state file will resume from Stage 2 on next run).
+6. **If the user gives feedback** → route it to the relevant agent (TL for `architecture.md`/`testing_plan.md`, PO for `implementation_roadmap.md`, BA for `business_requirements.md`/`spec.md`) via the sessions saved in this state file (resume; spawn fresh only if expired), apply the change, re-present, and ask again. No loop limit — same pattern as `Analyst_Workflow.md` Stage 2d.
 
-7. If user says **"yes"** → update state file: `Confirmed: stage1`, `Updated: <now>`, then proceed to Stage 2.
+7. If user says to **stop** without giving feedback → stop and inform the user they can resume by running `build software` again (the state file will resume at this same gate on next run).
+
+8. If the user **confirms no further feedback** → update state file: `Confirmed: stage1`, `Updated: <now>`, then proceed to Stage 2.
 
 ---
 
@@ -111,6 +112,8 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
      - `purpose` — one sentence
      - `tech stack` — comma-separated key technologies
      - `local path` — relative path where the user will clone/create this repo (e.g., `./api-service`)
+
+   > **Java REST service ⇒ API spec companion repo (fixed devkit convention, not optional).** For every repo whose tech stack is a Java REST service, add a second repo entry `<repo-name>-api-spec` (purpose: "OpenAPI/Swagger contract for `<repo-name>`", tech stack: "Java, OpenAPI Generator", local path a sibling of the service's own path) **immediately before** that service's row in the table — Stage 4 scaffolds repos in table order, and the service's skeleton depends on the api-spec repo already existing. This applies even when the overall `Decision` is `monolith`: a Java REST service and its contract are always two repos, regardless of how the rest of the system is structured. See `.claude/agents/templates/skeletons/Java_Skeleton_Conventions.md` for why.
 
 3. Write `/result/build/repo_structure.md` using the format below:
 
@@ -186,11 +189,11 @@ For EACH repo:
 3. Write the filtered result to: /result/build/<repo-name>/implementation_roadmap_<repo-name>.md
 
 Filtering rules:
-- Keep the original document structure (headings, tables, dependency graph, release criteria, risks, glossary)
+- Keep the original document structure (headings, tables, dependency graph section, release criteria, risks, glossary)
 - Remove stories, sprints, and sections that have no relevance to this repo
 - If a story spans multiple repos, include it in ALL relevant repos' filtered docs — do not split a story
 - If a section (e.g., Risks, Release Criteria) applies across repos, include a copy in all repos' docs
-- Preserve all Mermaid diagram blocks that include this repo's stories; remove blocks with no relevant nodes
+- The dependency graph is a linked file (`diagrams/dependency_graph.mmd`), not inline — keep the link and caption as-is; do not attempt to split or filter the diagram file itself (the orchestrator copies the whole `diagrams/` folder to every repo separately, see Full-copy docs below)
 - If fewer than 20% of the original content is relevant, note at the top: "> Note: Most roadmap content belongs to other repos. Only directly relevant items are shown."
 
 After writing all files, report: "Roadmap split complete — <N> files written: <list of output paths>"
@@ -217,10 +220,9 @@ For EACH repo:
 3. Write the filtered result to: /result/build/<repo-name>/architecture_<repo-name>.md
 
 Filtering rules:
-- Keep the original document structure (headings, decision sections, component diagrams)
+- Keep the original document structure (headings, decision sections, diagram links)
 - Include all cross-cutting sections (error handling strategy, security model, data handling) in ALL repos' docs
-- For Mermaid diagrams: include diagrams that show this repo's components; add a note "Full system diagram available in /result/analyst/architecture.md" if omitting the full diagram
-- For PlantUML references: include the reference link if the diagram involves this repo; omit otherwise
+- All diagrams are linked files under `diagrams/` (Mermaid `.mmd` or PlantUML `.puml`), never inline — keep the link and caption for any diagram relevant to this repo's components; drop the link (not the file) for diagrams with no relevant nodes, and add a note "Full diagram available in /result/analyst/diagrams/" when omitting one. Do not edit diagram file contents — the orchestrator copies the whole `diagrams/` folder to every repo separately (see Full-copy docs below), so every repo always has access to every diagram file regardless of which links you keep.
 - If fewer than 20% of the original content is relevant, note at the top: "> Note: Most architecture content belongs to other repos. Only directly relevant excerpts are shown."
 
 After writing all files, report: "Architecture split complete — <N> files written: <list of output paths>"
@@ -238,8 +240,11 @@ After both agents complete, the orchestrator copies the following files from `/r
 | `/result/analyst/summary.md` | `/result/build/<repo-name>/summary.md` |
 | `/result/analyst/testing_plan.md` | `/result/build/<repo-name>/testing_plan.md` |
 | `/result/analyst/business_requirements.md` | `/result/build/<repo-name>/business_requirements.md` |
+| `/result/analyst/diagrams/` (entire folder) | `/result/build/<repo-name>/diagrams/` |
 
 > Both a full copy and a filtered version of `architecture.md` exist per repo. The full copy (`/result/build/<repo-name>/architecture.md`) is placed here for completeness and is the authoritative reference. The filtered version (`/result/build/<repo-name>/architecture_<repo-name>.md`), produced by Agent B, is an additional quick-reference artifact scoped to that repo's components — it does not replace the full copy.
+>
+> The entire `diagrams/` folder is copied whole to every repo — never filtered — so every diagram link kept by Agent A/B (or found in the full-copy docs) always resolves.
 
 ### Completion
 
@@ -274,7 +279,8 @@ After both agents complete, the orchestrator copies the following files from `/r
 ### Entry
 
 1. Verify the state file shows `Confirmed: stage2`. If not, stop and report an unexpected state to the user.
-2. Read `/result/build/repo_structure.md` to determine: `monolith` or `multi-repo`, repo names, and local paths.
+2. Read `/result/build/repo_structure.md` to determine repo names and local paths.
+3. **Route by actual row count in the Repos table, not by the `Decision` label** — use Path A only if the table has exactly one row. A `Decision: monolith` architecture that includes a Java REST service has **two** rows (the service + its `-api-spec` companion, per Stage 2's fixed convention) and must use Path B even though `Decision` still reads `monolith`; the `Decision` field describes the overall system's coupling, not literally "one repo".
 
 ### Path A — Monolith
 
@@ -286,17 +292,19 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 4. Run `gh repo create` for the project repo (use the product name from the user's idea as the repo name; prompt the user for visibility — public or private — if not previously specified).
 
-5. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
+5. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if the repo's tech stack (from `/result/analyst/architecture.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below. Skip entirely for non-Java repos or repos that already have code.
+
+6. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
    - Stage 1: scan the repo folder (it is brand-new, so use the product name and description derived from the user's idea and `/result/analyst/summary.md`)
    - Stage 2: generate all agent scaffold files adapted to the product (CLAUDE.md, Project_Priming.md, Document_Index.md, 5 instruction files, rules files, workflow files, version check scripts, blank memory files, blank working records)
    - Stage 3: skip the user-confirmation sub-step — you already have user consent from the overall Stage 4 flow
    - Stage 4 equivalent: write all generated files to the repo folder; create required directories; append `.gitignore` additions (github mode); inject `SessionStart` hook into `.claude/settings.json`
 
-6. Run `gh project create` to create a GitHub Project named after the product (from the user's idea). Store the returned project URL.
+7. Run `gh project create` to create a GitHub Project named after the product (from the user's idea). Store the returned project URL.
 
-7. Link the repo to the project: `gh project item-add <project-number> --owner <owner> --url <repo-url>`
+8. Link the repo to the project: `gh project item-add <project-number> --owner <owner> --url <repo-url>`
 
-8. Write `.claude/agents/docs/build_state.md` inside the repo:
+9. Write `.claude/agents/docs/build_state.md` inside the repo:
 
    ```markdown
    # Build State
@@ -307,9 +315,9 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-9. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
+10. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
 
-10. Proceed to Stage 5.
+11. Proceed to Stage 5.
 
 ---
 
@@ -325,13 +333,15 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    c. Run `gh repo create` for the sub-repo (use `<repo-name>` as the repo slug; same visibility as chosen for other repos).
 
-   d. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
+   d. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below. Skip entirely for non-Java repos or repos that already have code.
+
+   e. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
       - Stage 1: scan the repo folder using the repo's `purpose` and `tech stack` from `repo_structure.md`
       - Stage 2: generate all agent scaffold files adapted to this repo's purpose and tech stack
       - Stage 3: skip the user-confirmation sub-step
       - Stage 4 equivalent: write all generated files; create directories; append `.gitignore` additions; inject `SessionStart` hook
 
-   e. Write `.claude/agents/docs/build_state.md` inside the sub-repo:
+   f. Write `.claude/agents/docs/build_state.md` inside the sub-repo:
 
       ```markdown
       # Build State
@@ -342,9 +352,9 @@ After both agents complete, the orchestrator copies the following files from `/r
       **Analysis Docs:** .claude/agents/docs/analysis/
       ```
 
-   f. Update state file: `Updated: <now>` (repo count is already set from Stage 2).
+   g. Update state file: `Updated: <now>` (repo count is already set from Stage 2).
 
-3. **Project orchestrator folder:**
+3. **Project orchestrator folder** — **skip this step entirely if the only reason there's more than one repo is the Java REST service + API spec companion pattern under an otherwise-`monolith` decision** (i.e. exactly a service + its own `-api-spec` repo, nothing else). In that case there is no real multi-repo product to orchestrate — treat the REST service repo as the product's primary repo (it already gets the full devkit scaffold in step 2e) and proceed directly to step 4 below. For genuine multi-repo systems (independently deployable components beyond just a service+contract pair), create the orchestrator folder:
 
    a. Ask the user for the project orchestrator folder path if not already known: **"Where should I create the project orchestrator folder? Provide an absolute path."**
 
@@ -356,13 +366,15 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 4. Run `gh project create` to create a GitHub Project named after the product. Store the returned project URL.
 
-5. Link **all repos** (each sub-repo + the project folder repo) to the GitHub Project:
+5. Link **all repos** (each sub-repo + the project folder repo, if one was created) to the GitHub Project:
    ```
    gh project item-add <project-number> --owner <owner> --url <sub-repo-url>
    ```
    Repeat for each repo.
 
 6. Go back and fill in `GitHub Project URL` in every sub-repo's `.claude/agents/docs/build_state.md` that was written with an empty placeholder in step 2e.
+
+**Steps 7–9 apply only if a project orchestrator folder was created in step 3** (skip all three for the service+api-spec-only case):
 
 7. Read `.claude/agents/templates/Project_CLAUDE_template.md` and write it to the project orchestrator folder as `CLAUDE.md`, substituting:
    - `{{PROJECT_NAME}}` → product name from user's idea
@@ -386,6 +398,49 @@ After both agents complete, the orchestrator copies the following files from `/r
 10. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
 
 11. Proceed to Stage 5.
+
+> **Handoff message note:** the Stage 5 handoff message below assumes a project-orchestrator path exists for multi-repo. For the service+api-spec-only case (no orchestrator folder), use the monolith-style handoff instead — "Open a Claude Code session in `<service-repo-path>` and run: `plan next sprint`" — pointing at the REST service repo, not a project-orchestrator folder that doesn't exist.
+
+---
+
+### Java Skeleton Generation
+
+**Purpose:** For a brand-new (empty) Java repo, generate a real, buildable starting skeleton — package layout, `pom.xml`/`build.gradle`, and (shape-dependent) an OpenAPI contract, a real domain vertical slice (entity/mapper/repository/service/controller), Liquibase changelog, config — instead of leaving the repo with only the devkit's `.claude/agents/` scaffold and no actual code. Referenced from Path A step 5 and Path B step 2d above.
+
+**Applies only when both are true** (check before spawning anything):
+1. **Tech stack is Java** — the repo's tech stack column in `repo_structure.md` (or `architecture.md` / `architecture_<repo-name>.md`) names Java/Spring Boot/a JVM framework, **or** the repo's purpose names it as the API spec companion of a Java REST service (Stage 2 always tags these that way).
+2. **Repo is code-empty** — the local path has **no** `pom.xml`, **no** `build.gradle`/`build.gradle.kts`, and **no** `src/` directory. Incidental files the earlier Stage 4 steps may already have created (`.git/`, `.claude/`, `CLAUDE.md`, `.gitignore`, `README.md`) do **not** count as "existing project" and do not block generation.
+
+If either condition fails, **skip entirely** — do not touch the repo's code. This is a strict guard: never scaffold over or alongside a user's existing project.
+
+**Ordering matters for the API spec ⇒ REST service pair:** Stage 2 orders the `-api-spec` repo before its REST service in `repo_structure.md`, and Path A/B process repos in table order, so by the time a REST service's turn comes up, its sibling api-spec repo has already been scaffolded and has a real `pom.xml`/`build.gradle` (with real `groupId:artifactId:version`) and a real `.yaml` contract to read.
+
+**Execution (per repo, when both conditions hold):**
+
+1. Spawn **one general-purpose agent** (**model: sonnet**) with a fully self-contained inline prompt (the agent has no memory of this conversation):
+
+   ```
+   Generate a real, buildable Java project skeleton at <repo-path>.
+
+   Read these first, in order:
+   1. .claude/agents/templates/skeletons/Java_Skeleton_Conventions.md — conventions and rules to follow (build tool, layering, DTO/entity/mapping conventions, what NOT to do). This is guidance, not a template to copy — you generate original files that follow these patterns.
+   2. /result/analyst/architecture.md and, if it exists, /result/build/<repo-name>/architecture_<repo-name>.md — the actual project this repo belongs to: real domain entities, real endpoints, the decided Java/Spring Boot versions, any API-contract or persistence decisions already made.
+   3. This repo's purpose and tech stack from /result/build/repo_structure.md.
+
+   Decide the shape from the repo's stated purpose, per Java_Skeleton_Conventions.md: API spec (OpenAPI/Swagger contract for another service, no runtime) vs REST service (backend/API/service, runs standalone) vs pure library (SDK/library/client consumed by other Java code).
+
+   If this repo is a REST service: its sibling API spec repo (named <repo-name>-api-spec) should already exist as a sibling folder — read its pom.xml/build.gradle (for real groupId:artifactId:version) and its .yaml spec (for real operationIds/schema names) before generating, so the service's dependency declaration and controller (implements {Resource}sApi) are correct against the real generated contract. If that sibling repo does NOT exist yet, stop and report this as a blocker rather than inventing local DTOs as a workaround.
+
+   Generate a complete, real skeleton directly into <repo-path> — actual domain entity/resource/endpoint names from architecture.md, not a generic placeholder. Follow every convention in Java_Skeleton_Conventions.md exactly, including the "What the agent must NOT do" section.
+
+   Do not touch anything under <repo-path>/.claude/ or any devkit scaffold files — those are written by a separate step. Only write build files (pom.xml, or build.gradle/build.gradle.kts), the OpenAPI yaml (API spec shape only), and src/.
+
+   Report back: which shape you chose and why, the real entity/resource name(s) used, and the full list of files written (max 5 bullets + observations).
+   ```
+
+2. Agent reports back to the orchestrator (max 5 bullets + observations, per the standard Agent Completion Reports rule).
+3. Orchestrator relays a one-line status to the user (e.g. "Java REST-service skeleton generated for `core-service` — `Tenant` entity, 11 files, wired to `core-service-api-spec`.") and continues to the devkit scaffold step.
+4. **Stop on blocker** — if the agent reports it could not determine a real domain entity/resource from `architecture.md` (e.g. architecture is too abstract to name one), it should still generate the skeleton using the closest reasonable real name from the architecture rather than a generic placeholder, and note the ambiguity in its observations — this is not a blocking condition. A REST service whose sibling api-spec repo is genuinely missing **is** a blocking condition — stop and report to the user rather than working around it.
 
 ---
 
@@ -411,6 +466,7 @@ For each repo in the list:
    | `/result/analyst/architecture.md` | `<repo-path>/.claude/agents/docs/analysis/architecture.md` |
    | `/result/analyst/testing_plan.md` | `<repo-path>/.claude/agents/docs/analysis/testing_plan.md` |
    | `/result/analyst/business_requirements.md` | `<repo-path>/.claude/agents/docs/analysis/business_requirements.md` |
+   | `/result/analyst/diagrams/` (entire folder) | `<repo-path>/.claude/agents/docs/analysis/diagrams/` |
 
 3. Copy the **per-repo split files** from `/result/build/<repo-name>/` into `.claude/agents/docs/analysis/` inside the repo:
 
@@ -455,11 +511,13 @@ Next step:
 
 - **State file first** — always check `.claude/agents/tmp/build_software_state.md` before doing any work; never skip the resume check
 - **Same trigger, auto-resume** — `build software` (with or without an idea) activates resume if the state file exists; no separate resume command
-- **Confirmation gates are mandatory** — never proceed from Stage 1 to 2 or Stage 2 to 3 without an explicit "yes" from the user
+- **Confirmation gates are mandatory** — never proceed from Stage 1 to 2 or Stage 2 to 3 without explicit user confirmation. Stage 1's gate accepts either an open feedback round (looped until resolved, see Stage 1's Confirmation Gate) or a plain confirmation that there's nothing further — it does not require a literal "yes". Stage 2's gate still requires the user to confirm the repo structure explicitly.
 - **Adjustment loop** — if the user requests changes to `repo_structure.md` at the Stage 2 gate, apply and re-present before asking for confirmation again
 - **Orchestrator-direct for Stage 2** — no agent spawn; orchestrator writes `repo_structure.md` inline
 - **Parallel Stage 3 spawns** — Agent A and Agent B are spawned in a single orchestrator message; never sequentially
 - **Stage 4 is sequential** — scaffold each repo one at a time; do not spawn parallel agents for repo scaffolding
+- **Java skeleton generation is guarded and additive** — only for Java repos with no existing `pom.xml`/`build.gradle`/`build.gradle.kts`/`src/`; never overwrites or runs alongside an existing project; supports both Maven and Gradle (chosen from `architecture.md`, default Maven) but never mixes the two in one repo; generated skeletons use only public Maven Central dependencies, never invented proprietary artifacts
+- **Every Java REST service gets a companion API spec repo** — Stage 2 adds it automatically, ordered before the service in `repo_structure.md`; the service's skeleton depends on the contract repo already existing and stops as a blocker (not a silent workaround) if it's missing; a monolith-with-a-Java-REST-service is routed through Path B for this pair even though `Decision` still reads `monolith`
 - **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
 - **Stop on blocker** — if any agent reports a blocking issue, stop and report to the user before continuing
 - **Completion reports** — each spawned agent returns its results to the orchestrator; orchestrator relays a brief status to the user after each stage

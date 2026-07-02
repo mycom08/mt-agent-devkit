@@ -22,7 +22,7 @@ The orchestrator maintains `.claude/agents/tmp/analyst_workflow_state.md` to sup
 ```markdown
 # Analyst Workflow State
 **Topic:** <brief description of the requirement>
-**Stage:** <1 | 2a | 2b | 2c>
+**Stage:** <1 | 2a | 2b | 2c | 2d>
 **Question Count:** <N>
 **Discussion Cycle:** <0 | 1 | 2>
 **Sessions:**
@@ -32,7 +32,7 @@ The orchestrator maintains `.claude/agents/tmp/analyst_workflow_state.md` to sup
 **Updated:** YYYY-MM-DDTHH:MM
 ```
 
-**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each transition. Update `Sessions` on spawn only. Update `Question Count` each Q&A turn. Delete after Stage 2c completes.
+**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each transition. Update `Sessions` on spawn only. Update `Question Count` each Q&A turn. **Delete only after Stage 2d closes with no pending user feedback** — the state file (and its saved `tl_session`/`po_session`/`ba_session`) stays alive through the entire post-completion review loop so agents can be resumed for revisions instead of re-spawned.
 
 ---
 
@@ -77,35 +77,38 @@ BA, TL, and PO analyse the spec and engage the user directly with clarifying que
 | `elicitation_notes.md` | Orchestrator (read-only in Stage 2) | Full Q&A log from Stage 1 |
 | `spec.md` | BA (read-only after Stage 1) | Full elicited specification |
 | `business_requirements.md` | BA | Structured requirements: functional, non-functional, constraints, assumptions, open items |
-| `architecture.md` | TL | Architecture choices, component design, data handling, error handling, alternatives considered. Inline Mermaid diagrams for component/relationship views. References PlantUML diagram files in `diagrams/` for workflow and sequence views. |
+| `architecture.md` | TL | Architecture choices, component design, data handling, error handling, alternatives considered. All diagrams live in `diagrams/` and are referenced by relative link. |
 | `testing_plan.md` | TL | Testing strategy: unit, integration, E2E, acceptance criteria hints |
-| `implementation_roadmap.md` | PO | Phased implementation plan: release goal, sprint breakdown, stories with AC in devkit story standard format, dependency graph, release criteria, risks |
+| `implementation_roadmap.md` | PO | Phased implementation plan: release goal, sprint breakdown, stories with AC in devkit story standard format, dependency graph (linked from `diagrams/`), release criteria, risks |
 | `discussion.md` | TL + PO (shared write) | Questions needing user input and suggestions for the user to consider |
-| `summary.md` | TL (Stage 2c) | Human-readable overview: what is being built, architecture diagram, key decisions, roadmap table, open items |
-| `diagrams/` | TL | PlantUML `.puml` files for workflow and sequence diagrams |
+| `summary.md` | TL (Stage 2c) | Human-readable overview: what is being built, architecture diagram (linked from `diagrams/`), key decisions, roadmap table, open items |
+| `diagrams/` | TL, PO | Every diagram produced by the pipeline — Mermaid (`.mmd`) and PlantUML (`.puml`) files, one file per diagram |
 
 ### Diagram conventions
 
-**Use Mermaid (inline in markdown) for:**
-- Component and service relationship diagrams (`graph LR`, `graph TD`)
+**Every diagram is a separate file under `diagrams/` — never inline in markdown.** This applies everywhere a diagram appears in the pipeline: `summary.md`'s architecture overview, `architecture.md`'s context/component/data-model diagrams, `implementation_roadmap.md`'s dependency graph, and all sequence/workflow diagrams.
+
+**Use Mermaid (`.mmd` files in `diagrams/`) for:**
+- Component and service relationship diagrams (`graph LR`, `graph TD`, `flowchart`)
 - Entity relationship diagrams
 - State machines
-- High-level architecture overview in `summary.md`
+- Dependency graphs
+- High-level architecture overview (linked from `summary.md`)
 
-**Use PlantUML (separate `.puml` files in `diagrams/`) for:**
+**Use PlantUML (`.puml` files in `diagrams/`) for:**
 - API request/response sequence diagrams
 - Detailed workflow and process flows
 - Deployment and infrastructure diagrams
 - Any diagram where PlantUML syntax is significantly clearer than Mermaid
 
-Each `.puml` file must be referenced from the relevant markdown document with a relative link and a brief caption, e.g.:
+Every diagram file (`.mmd` or `.puml`) must be referenced from the relevant markdown document with a relative link and a brief caption, e.g.:
 
 ```markdown
-![Policy Evaluation Flow](diagrams/policy_evaluation_flow.puml)
-> *Diagram: user_auth_flow.puml — User authentication sequence from request to response*
+![Core-service Component View](diagrams/core_service_component_view.mmd)
+> *Diagram: core_service_component_view.mmd — Core-service internal layering: controllers, domain services, repositories*
 ```
 
-The agent writing the diagram decides which format to use based on what communicates the design most clearly for that specific diagram.
+The agent writing the diagram decides Mermaid vs PlantUML based on what communicates the design most clearly for that specific diagram — the file always lives in `diagrams/` regardless of format.
 
 ### `discussion.md` format
 
@@ -138,7 +141,7 @@ Agents omit a section entirely if they have nothing to add to it.
 1. **Spawn** TL agent (**model: opus**) and PO agent (**model: sonnet**) in the **same orchestrator message** — they run in parallel
    - Save TL `agentId` as `tl_session`; save PO `agentId` as `po_session`
 2. TL reads `spec.md` + `business_requirements.md`:
-   - Writes `architecture.md` covering: architecture choices, component design, data handling details, error handling strategies, and any alternatives considered. Embeds Mermaid diagrams inline. Writes PlantUML diagrams as separate `.puml` files under `diagrams/` and links them from `architecture.md`.
+   - Writes `architecture.md` covering: architecture choices, component design, data handling details, error handling strategies, and any alternatives considered. Every diagram (Mermaid `.mmd` or PlantUML `.puml`) is written as a separate file under `diagrams/` and linked from `architecture.md` — never embedded inline.
    - Writes `testing_plan.md` covering: unit, integration, E2E layers, acceptance criteria hints
    - **Proactively suggests** better technical solutions or trade-offs the user may not have considered — writes these to `discussion.md` under `## TL Suggestions`
    - Writes unresolvable questions to `discussion.md` under `## TL Questions`
@@ -214,14 +217,9 @@ The PO writes this document in the same style as a Scrum implementation roadmap.
 
 ## Dependency Graph
 
-{Mermaid flowchart showing story dependencies across phases and sprints}
+{1 sentence introducing the diagram.} See [Dependency Graph](diagrams/dependency_graph.mmd).
 
-```mermaid
-flowchart TD
-    ST1[ST-XXXXXX: Title] --> ST2[ST-XXXXXX: Title]
-    ST1 --> ST3[ST-XXXXXX: Title]
-    ...
-```
+> PO writes the Mermaid flowchart (`flowchart TD`) showing story dependencies across phases and sprints to `diagrams/dependency_graph.mmd` — not inline here.
 
 ---
 
@@ -304,13 +302,13 @@ flowchart TD
 
 {1–2 sentences introducing the diagram — what it shows and why the system is structured this way.}
 
-{Mermaid diagram. Choose the type that best communicates the design:
-- `flowchart TD` for request/data flow
-- `graph LR` for component relationships
-- `sequenceDiagram` for interaction between services/actors
-The diagram must be accurate to architecture.md — do not simplify to the point of being misleading.}
+See [{Diagram Title}](diagrams/{diagram_file}.mmd) — {one-line caption}.
 
-{If a PlantUML diagram in diagrams/ is more appropriate for a specific view, reference it here with a relative link and caption.}
+> TL writes the diagram to a separate file under `diagrams/`, never inline here. Choose the type that best communicates the design:
+> - `flowchart TD` for request/data flow
+> - `graph LR` for component relationships
+> - `sequenceDiagram` for interaction between services/actors (or a PlantUML `.puml` sequence diagram if clearer)
+> The diagram must be accurate to architecture.md — do not simplify to the point of being misleading.
 
 ## Key Technical Decisions
 
@@ -340,8 +338,37 @@ The diagram must be accurate to architecture.md — do not simplify to the point
 ```
 
 6. TL reports completion to the orchestrator (max 5 bullets)
-7. Orchestrator reports the list of all output documents to the user, highlighting `summary.md` as the human-readable starting point
-8. Orchestrator deletes `analyst_workflow_state.md`
+7. Orchestrator updates state file: `Stage: 2c`, `Updated: <now>`, then proceeds to Stage 2d
+
+---
+
+### Stage 2d — Review & Feedback Gate
+
+**Purpose:** Let the user review the finished documents and give feedback in plain conversation — no forced yes/no. If they have none, the workflow simply wraps up; if they do, the relevant agent revises in place and the loop repeats.
+
+1. Orchestrator lists all output documents in `/result/analyst/` and presents:
+
+   ```
+   Analysis complete — all documents are in /result/analyst/.
+   Start with summary.md for the overview.
+
+   Please review and share any feedback — questions, concerns, or changes.
+   If everything looks good, just say so and I'll wrap up here (no need for an explicit "yes").
+   ```
+
+2. Orchestrator waits for the user's response.
+3. **If the user gives feedback** (questions, requested changes, concerns — in any amount, about any document):
+   a. Orchestrator maps each piece of feedback to the owning agent by document: `architecture.md` / `testing_plan.md` → TL; `implementation_roadmap.md` → PO; `business_requirements.md` / `spec.md` → BA. Feedback touching multiple domains goes to each relevant agent.
+   b. Orchestrator **resumes** the relevant agent(s) via their saved session ID(s) in `analyst_workflow_state.md` (spawn fresh only if a session ID is missing or expired — see the orchestrator's general Agent Session Management rule). If more than one agent is needed, resume/spawn them in a single message.
+   c. Each agent deep-verifies the feedback against its owned document(s) before changing anything, applies the agreed changes directly, and reports back (max 5 bullets + observations)
+   d. Orchestrator relays a brief summary of what changed to the user, then returns to step 1 (re-present, ask again)
+4. **If the user confirms no further feedback** → proceed to Completion below.
+5. **No loop limit** — unlike Stage 2b's 2-cycle cap, this is a post-completion wrap-up gate, not a design-discussion cycle. It repeats for as many rounds as the user needs, including across separate sessions, since the state file (and its sessions) stay alive until this gate closes.
+
+**Completion:**
+
+6. Orchestrator updates state file: `Stage: 2d`, `Updated: <now>`
+7. Orchestrator deletes `analyst_workflow_state.md`
 
 ---
 
@@ -354,7 +381,8 @@ The diagram must be accurate to architecture.md — do not simplify to the point
 - **Suggest, don't just implement** — TL and PO must look beyond the literal spec and surface better alternatives; silence on a clearly improvable point is a miss
 - **Diagram format ownership** — the agent writing the diagram chooses Mermaid or PlantUML based on what communicates the design most clearly for that specific diagram; PlantUML diagrams are always separate `.puml` files in `diagrams/`, never inline
 - **File ownership** — TL and PO write to `discussion.md`; BA answers questions inline but does not write suggestions; `spec.md` and `elicitation_notes.md` are read-only in Stage 2
-- **Loop limit** — max 2 discussion cycles in Stage 2b before recording open items and continuing
+- **Loop limit** — max 2 discussion cycles in Stage 2b before recording open items and continuing; Stage 2d's post-completion feedback loop has **no** cycle limit
+- **No forced yes/no at completion** — Stage 2d presents results and invites feedback; the workflow only wraps up (and deletes its state file) once the user confirms nothing further, it never requires a literal "yes"
 - **Stop on blocker** — if any agent reports a blocking issue, orchestrator stops and reports to the user before continuing
 - **Completion reports** — each agent returns max 5 bullets to the orchestrator; details go in Working Records
 - **Independence** — output documents must not reference devkit internals; they must be readable and actionable by any development team
@@ -367,11 +395,11 @@ All documents are written to `/result/analyst/` and remain there after the workf
 
 | Document | Audience | Contents |
 |---|---|---|
-| `summary.md` | **Everyone (start here)** | Human-readable overview: background, architecture diagram, key decisions, delivery plan, open items |
-| `architecture.md` | Developer / TL | Architecture choices, component design, data handling, error handling, alternatives considered. Inline Mermaid diagrams + links to PlantUML files. |
-| `implementation_roadmap.md` | Dev / PO | Phased plan: release goal, sprint breakdown, stories with AC, dependency graph, release criteria, risks, glossary |
+| `summary.md` | **Everyone (start here)** | Human-readable overview: background, architecture diagram (linked from `diagrams/`), key decisions, delivery plan, open items |
+| `architecture.md` | Developer / TL | Architecture choices, component design, data handling, error handling, alternatives considered. Diagrams linked from `diagrams/`, never inline. |
+| `implementation_roadmap.md` | Dev / PO | Phased plan: release goal, sprint breakdown, stories with AC, dependency graph (linked from `diagrams/`), release criteria, risks, glossary |
 | `testing_plan.md` | Dev / QA | Testing strategy: unit, integration, E2E, acceptance criteria hints |
 | `business_requirements.md` | All | Structured requirements: functional, non-functional, constraints, assumptions, open items |
 | `spec.md` | BA / PO | Full formalised specification written by BA |
 | `elicitation_notes.md` | Reference | Full Q&A log from Stage 1 |
-| `diagrams/*.puml` | Developer / TL | PlantUML source files for workflow, sequence, and infrastructure diagrams |
+| `diagrams/*.mmd`, `diagrams/*.puml` | Developer / TL / PO | One file per diagram — Mermaid and PlantUML source for every component, context, sequence, dependency-graph, and infrastructure diagram in the pipeline |
