@@ -30,6 +30,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 **Repo Count:** <number of repos or 0 if not yet determined>
 **Confirmed:** <false | stage1 | stage2>
 **GitHub Project URL:** <url or empty>
+**Scaffolded Repos:** <comma-separated list of repo names whose Stage 4 scaffold (mechanical + adaptive + Java skeleton if any + build_state.md) is fully done, or empty>
 **Sessions:**
 - tl_session: <agentId or empty>
 - po_session: <agentId or empty>
@@ -43,12 +44,13 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - Update `Sessions` when agents are spawned
 - Update `Repo Count` after Stage 2 produces `repo_structure.md`
 - Update `Confirmed` after each user confirmation gate: `false` → `stage1` → `stage2`
+- **Append to `Scaffolded Repos` the moment a repo's `build_state.md` is written** (Path A step 9, Path B step 2f) — before moving to the next repo, before `gh project create`, before anything else. This is what makes Stage 4 resumable from the state file alone.
 
 **Resume rules (per stage):**
 - **Stage 1 — resumed:** Re-run Stage 1 from scratch. The `analyze` workflow manages its own state file (`analyst_workflow_state.md`) and will resume internally if that file exists. After Stage 1 completes, re-confirm with user before Stage 2.
 - **Stage 2 — resumed:** Check if `/result/build/repo_structure.md` already exists. If it does, skip Stage 2 execution and present the existing file to the user for re-confirmation before Stage 3. If it does not exist, run Stage 2 normally.
 - **Stage 3 — resumed:** Check if per-repo split files already exist under `/result/build/<repo-name>/`. If all expected repo folders exist (count from state file `Repo Count`), skip Stage 3. If any are missing, re-run Stage 3 for missing repos only.
-- **Stage 4 — resumed:** Check which repos already have a `git init`-initialized folder **and** contain `.claude/agents/docs/build_state.md`. Skip those repos; continue scaffolding only the remaining ones. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL.
+- **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL.
 - **Stage 5 — resumed:** Check which repos already have `.claude/agents/docs/analysis/` populated (non-empty directory). Skip those; copy docs only to repos where the folder is absent or empty.
 
 ---
@@ -294,11 +296,11 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 5. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if the repo's tech stack (from `/result/analyst/architecture.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below. Skip entirely for non-Java repos or repos that already have code.
 
-6. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
+6. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**:
    - Stage 1: scan the repo folder (it is brand-new, so use the product name and description derived from the user's idea and `/result/analyst/summary.md`)
-   - Stage 2: generate all agent scaffold files adapted to the product (CLAUDE.md, README.md, Project_Priming.md, Document_Index.md, 5 instruction files, rules files, workflow files, version check scripts, blank memory files, blank working records)
+   - **Mechanical tier (orchestrator-direct, one Bash call):** `bash .claude/agents/templates/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes the 8 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook. See `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section for exactly what this covers.
+   - **Adaptive tier (agent, smaller scope now):** spawn a general-purpose agent for only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 5 instruction files, the 8 adaptive rules files, and 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 8 rules files these are (it's not just Developer/QA/TL). Point this agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md` from `/result/build/<repo-name>/`) — only have it read the full `architecture.md` for cross-cutting sections (security model, error handling) the filtered excerpt visibly omits, not as a blanket second read of the same content.
    - Stage 3: skip the user-confirmation sub-step — you already have user consent from the overall Stage 4 flow
-   - Stage 4 equivalent: write all generated files to the repo folder; create required directories; append `.gitignore` additions (github mode); inject `SessionStart` hook into `.claude/settings.json`
 
 7. Run `gh project create` to create a GitHub Project named after the product (from the user's idea). Store the returned project URL.
 
@@ -315,7 +317,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-10. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
+10. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Scaffolded Repos: <repo-name>`, `Updated: <now>`.
 
 11. Proceed to Stage 5.
 
@@ -325,7 +327,13 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 1. **Local paths:** Read each repo's `local path` from `/result/build/repo_structure.md`. For any repo whose `local path` is missing or set to a placeholder, ask the user: **"Provide an absolute local path for repo `<repo-name>`."** Collect all missing paths before continuing.
 
-2. For **each sub-repo** (in order; not parallel — each scaffold step is sequential):
+2. **Determine wave order — dependency-aware, not a blanket sequential list.** The only ordering constraint this workflow ever produces is a Java REST service depending on its own `-api-spec` companion (Stage 2 always places the pair adjacent in `repo_structure.md`, api-spec first). Skip any repo already listed in the state file's `Scaffolded Repos` (resume).
+   - **Wave 1:** every repo with no unresolved dependency — every `-api-spec` repo, plus any repo that isn't part of a Java-service/api-spec pair at all (e.g. `web-service`, `android-app` have no dependency on each other or on the Java repos).
+   - **Wave 2:** every REST service repo whose `-api-spec` companion is in Wave 1 (there are no waves beyond 2 under the current devkit convention — only one dependency edge type exists).
+
+   Run each wave to completion before starting the next. Within a wave, steps a–d below (folder creation, `git init`, `gh repo create`, Java skeleton) run per-repo in the orchestrator — cheap, no agent needed — but **step e's adaptive-tier agent is what actually benefits from parallelism: spawn one agent per repo in the wave, all in a single orchestrator message** (same pattern as Stage 3's Agent A/B parallel spawn). Wait for every agent in the wave to report before moving to the next wave.
+
+   For **each sub-repo** in the current wave:
 
    a. Create the repo sub-folder at the resolved `local path` (if it does not already exist).
 
@@ -335,11 +343,11 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    d. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below. Skip entirely for non-Java repos or repos that already have code.
 
-   e. Read `Init_Project_Workflow.md` and execute its **GitHub-mode scaffold steps** (Stages 1–4) inline for this repo path:
+   e. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**:
       - Stage 1: scan the repo folder using the repo's `purpose` and `tech stack` from `repo_structure.md`
-      - Stage 2: generate all agent scaffold files adapted to this repo's purpose and tech stack
+      - **Mechanical tier (orchestrator-direct, one Bash call, before the parallel agent spawn below):** `bash .claude/agents/templates/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>`
+      - **Adaptive tier (agent — this is the one spawned in parallel across the wave):** only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 5 instruction files, the 8 adaptive rules files, 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 8 rules files. Point the agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md`) — only have it read the full `architecture.md` for cross-cutting sections the filtered excerpt visibly omits.
       - Stage 3: skip the user-confirmation sub-step
-      - Stage 4 equivalent: write all generated files; create directories; append `.gitignore` additions; inject `SessionStart` hook
 
    f. Write `.claude/agents/docs/build_state.md` inside the sub-repo:
 
@@ -352,7 +360,7 @@ After both agents complete, the orchestrator copies the following files from `/r
       **Analysis Docs:** .claude/agents/docs/analysis/
       ```
 
-   g. Update state file: `Updated: <now>` (repo count is already set from Stage 2).
+   g. Update state file: append `<repo-name>` to `Scaffolded Repos`, `Updated: <now>` (repo count is already set from Stage 2). Do this as soon as this repo's own steps a–f finish — do not wait for the rest of the wave — so a crash mid-wave still leaves an accurate resume point.
 
 3. **Project orchestrator folder** — **skip this step entirely if the only reason there's more than one repo is the Java REST service + API spec companion pattern under an otherwise-`monolith` decision** (i.e. exactly a service + its own `-api-spec` repo, nothing else). In that case there is no real multi-repo product to orchestrate — treat the REST service repo as the product's primary repo (it already gets the full devkit scaffold in step 2e) and proceed directly to step 4 below. For genuine multi-repo systems (independently deployable components beyond just a service+contract pair), create the orchestrator folder:
 
@@ -434,7 +442,7 @@ If either condition fails, **skip entirely** — do not touch the repo's code. T
 
    Read these first, in order:
    1. .claude/agents/templates/skeletons/Java_Skeleton_Conventions.md — conventions and rules to follow (build tool, layering, DTO/entity/mapping conventions, what NOT to do). This is guidance, not a template to copy — you generate original files that follow these patterns.
-   2. /result/analyst/architecture.md and, if it exists, /result/build/<repo-name>/architecture_<repo-name>.md — the actual project this repo belongs to: real domain entities, real endpoints, the decided Java/Spring Boot versions, any API-contract or persistence decisions already made.
+   2. /result/build/<repo-name>/architecture_<repo-name>.md if it exists — this is the filtered, repo-scoped excerpt, read it FIRST and primarily. Only read the full /result/analyst/architecture.md for cross-cutting sections (security model, error handling, data handling) the filtered excerpt visibly doesn't cover — don't read both in full, the filtered version exists specifically so you don't have to.
    3. This repo's purpose and tech stack from /result/build/repo_structure.md.
 
    Decide the shape from the repo's stated purpose, per Java_Skeleton_Conventions.md: API spec (OpenAPI/Swagger contract for another service, no runtime) vs REST service (backend/API/service, runs standalone) vs pure library (SDK/library/client consumed by other Java code).
@@ -534,7 +542,10 @@ Next step:
 - **Adjustment loop** — if the user requests changes to `repo_structure.md` at the Stage 2 gate, apply and re-present before asking for confirmation again
 - **Orchestrator-direct for Stage 2** — no agent spawn; orchestrator writes `repo_structure.md` inline
 - **Parallel Stage 3 spawns** — Agent A and Agent B are spawned in a single orchestrator message; never sequentially
-- **Stage 4 is sequential** — scaffold each repo one at a time; do not spawn parallel agents for repo scaffolding
+- **Stage 4 parallelizes within dependency waves, not blanket-sequential** — the only real ordering constraint is a Java REST service depending on its `-api-spec` companion. Repos with no dependency on each other (e.g. `web-service` and `android-app`) scaffold in the same wave, with their adaptive-tier agents spawned in one parallel orchestrator message (same pattern as Stage 3's Agent A/B). Only serialize across an actual dependency edge.
+- **Mechanical tier never goes through an agent** — `scaffold_mechanical.sh` (Bash, orchestrator-direct) handles the 8 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook, for every repo in both Path A and Path B. Only the adaptive-tier files (CLAUDE.md, README.md, Project_Priming.md, Document_Index.md, 5 instructions, 8 adaptive rules files, 4 wiki docs) go through an agent. See `Init_Project_Workflow.md`'s Stage 2 for the full mechanical/adaptive split and why it's not just a `{placeholder}` token scan.
+- **Prefer filtered per-repo docs over full analyst docs in agent prompts** — `architecture_<repo-name>.md` / `implementation_roadmap_<repo-name>.md` exist specifically so Stage 4 agents don't have to read the full unfiltered `architecture.md`/`implementation_roadmap.md`. Only fall back to the full doc for sections the filtered excerpt visibly omits.
+- **`Scaffolded Repos` in the state file is the resume source of truth for Stage 4** — append to it the moment each repo's `build_state.md` is written, before moving to the next repo. Resume reads this list first; filesystem probing is only a fallback for state predating this field.
 - **Java skeleton generation is guarded and additive** — only for Java repos with no existing `pom.xml`/`build.gradle`/`build.gradle.kts`/`src/`; never overwrites or runs alongside an existing project; supports both Maven and Gradle (chosen from `architecture.md`, default Maven) but never mixes the two in one repo; generated skeletons use only public Maven Central dependencies, never invented proprietary artifacts
 - **Every Java REST service gets a companion API spec repo** — Stage 2 adds it automatically, ordered before the service in `repo_structure.md`; the service's skeleton depends on the contract repo already existing and stops as a blocker (not a silent workaround) if it's missing; a monolith-with-a-Java-REST-service is routed through Path B for this pair even though `Decision` still reads `monolith`
 - **Use `gh project link`, never `gh project item-add`, to attach a repo to a Project** — `item-add` only accepts Issue/PR URLs and fails with "resource not found" on a bare repo URL; `gh project link <number> --owner <owner> --repo <owner>/<repo>` is the correct command (Path A step 8, Path B step 5)
