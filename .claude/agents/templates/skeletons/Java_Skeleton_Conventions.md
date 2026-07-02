@@ -150,6 +150,133 @@ dependencies {
 
 ---
 
+## Docker, CI, and README (per shape)
+
+Generated alongside the code in the same skeleton-generation pass — not a separate step, not optional. Use the **real** entity/endpoint/env-var names already decided while generating the code above; never placeholders.
+
+### REST service shape — Dockerfile
+
+**Sibling api-spec dependency note:** every Java REST service under this devkit has a companion `<repo-name>-api-spec` artifact (see "Shared conventions" above) that is **not published anywhere** — it only exists as a sibling folder on disk (e.g. `../<repo-name>-api-spec` relative to the service repo). A Docker build whose context is just the service repo can't see it. So the build stage installs the sibling module first, and the **build context must be the parent directory that contains both sibling repos**, not the service repo itself:
+
+```dockerfile
+# ---- build stage ----
+FROM eclipse-temurin:{{javaVersion}}-jdk AS build
+WORKDIR /workspace
+COPY {{repo-name}}-api-spec ./{{repo-name}}-api-spec
+COPY {{repo-name}} ./{{repo-name}}
+RUN cd {{repo-name}}-api-spec && ./mvnw -B -q install -DskipTests
+RUN cd {{repo-name}} && ./mvnw -B -q package -DskipTests
+# (Gradle equivalent: same two-step COPY + ./gradlew publishToMavenLocal / ./gradlew build -x test)
+
+# ---- runtime stage ----
+FROM eclipse-temurin:{{javaVersion}}-jre
+WORKDIR /app
+RUN useradd --system --create-home appuser
+COPY --from=build /workspace/{{repo-name}}/target/*.jar app.jar
+USER appuser
+EXPOSE {{serverPort}}
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+This `Dockerfile` still lives at `{{repo-name}}/Dockerfile` (inside the service repo, next to its own source) — only the **build context** used to invoke it changes (see compose below). If a REST service shape is ever generated without a sibling api-spec dependency (not the current devkit convention, but keep the logic general), skip the two-repo `COPY`/install steps and build directly like a normal single-repo Dockerfile (`COPY . .` from a `context: .`).
+
+Use the Maven/Gradle wrapper (`mvnw`/`gradlew`) already committed by the skeleton in each repo, never a bare `mvn`/`gradle` the image can't resolve. `{{serverPort}}` is `server.port` from `application.properties` if set, else Spring Boot's default `8080`. Never bake real secrets into the image — runtime config comes from environment variables (see compose below), matching the `${ENV_VAR:default}` placeholders already used in `application.properties`.
+
+### REST service shape — docker-compose.yml
+
+One compose file at the repo root that brings up the service plus every piece of infrastructure the skeleton's `application.properties` actually references by env var — read that file (not `architecture.md` in isolation) to get the exact set: always a database if `spring.datasource.*` is present (Postgres, matching the `postgresql` dependency), plus any additional infra named in `architecture.md`'s tech-stack decision that the properties file also wires up via env var (e.g. an object-store service if `minio.*`-style properties exist, a cache if `redis.*`-style properties exist). Do not invent infra the properties file doesn't reference.
+
+Because the Dockerfile's build context must be the **parent** directory (see above), this repo's own `docker-compose.yml` — meant to be run via `cd {{repo-name}} && docker compose up --build` — points `context` one level up and gives `dockerfile` the repo-relative path:
+
+```yaml
+services:
+  {{service-name}}:
+    build:
+      context: ..
+      dockerfile: {{repo-name}}/Dockerfile
+    ports:
+      - "{{serverPort}}:{{serverPort}}"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/{{db-name}}
+      DB_USERNAME: {{db-name}}
+      DB_PASSWORD: {{db-name}}
+      # ...one env var per ${ENV_VAR:default} placeholder actually present in application.properties
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: {{db-name}}
+      POSTGRES_USER: {{db-name}}
+      POSTGRES_PASSWORD: {{db-name}}
+    volumes:
+      - {{service-name}}-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{db-name}}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  {{service-name}}-db-data:
+```
+Dev-only credentials only (matching the defaults already in `application.properties` / `application-dev.properties`), never anything that looks like a real secret. Add one extra service block (with its own named volume if it's stateful) per additional infra dependency found in the properties file, following the same pattern.
+
+### Single service without a database (e.g. a UI/SSR or processing service with no `spring.datasource.*`)
+
+No docker-compose.yml — a Dockerfile (if containerized) plus a plain start script is enough since there's no multi-container orchestration to do. Add `start.sh` (and `start.ps1` if the target platform is Windows-first) at the repo root: build once if needed, then run the app in the foreground, e.g.:
+```sh
+#!/usr/bin/env sh
+set -e
+./mvnw -B -q package -DskipTests
+java -jar target/*.jar
+```
+
+### API spec shape — no Dockerfile, no compose, no start script
+
+It has no runtime (see "API spec shape" above) — nothing to containerize or start.
+
+### GitHub Actions CI — `.github/workflows/`
+
+**REST service shape** → `.github/workflows/ci.yml`, three jobs:
+- `build-and-test` — `./mvnw -B verify` (or `./gradlew build`): compiles, runs unit tests, packages. This is both the "build" and "unit test" requirement — Maven/Gradle's default lifecycle already runs unit tests as part of `verify`/`build`, so splitting them into two separate mvn/gradle invocations would just recompile twice for no benefit.
+- `lint` — runs `./mvnw -B spotless:check` (or Gradle Spotless equivalent). Add the `spotless-maven-plugin` (or `com.diffplug.spotless` Gradle plugin) to the build file with a standard Java formatter (`googleJavaFormat` or `palantirJavaFormat`) if the skeleton doesn't already declare a linter — this is what makes the CI job non-trivial rather than a no-op.
+- `automation-test` — **stub job, depends on `build-and-test`.** No real Postman/Newman-style API test suite exists yet at skeleton-generation time (there's no story-authored collection to run). Generate the job shell (checkout, `depends_on: build-and-test` via `needs:`) with a single step that echoes `"TODO: no automation test suite yet — add Newman/Postman collections under tests/automation/ and replace this step (see codegen-drift.yml pattern in an API-spec sibling repo for the general CI shape to follow)."` and exits 0. The job exists from day one so the pipeline shape is correct; a later story replaces the stub with real collections, not a whole new job.
+
+**API spec shape** → two workflow files:
+- `.github/workflows/ci.yml` — one `build` job: `./mvnw -B verify` (or `./gradlew build`) to confirm the artifact compiles and the openapi-generator plugin runs cleanly.
+- `.github/workflows/codegen-drift.yml` — verifies the committed spec and its generated output haven't drifted apart:
+  ```yaml
+  name: Codegen Drift Check
+  on:
+    push:
+      paths: ['src/main/resources/api-spec/**', 'pom.xml']
+    pull_request:
+      paths: ['src/main/resources/api-spec/**', 'pom.xml']
+    workflow_dispatch:
+  jobs:
+    drift-check:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-java@v4
+          with:
+            java-version: '{{javaVersion}}'
+            distribution: temurin
+        - name: Regenerate from spec
+          run: ./mvnw -B generate-sources
+        - name: Fail if generated sources differ from what's committed
+          run: git diff --exit-code -- target/generated-sources
+  ```
+  Adjust the `git diff` path if generated sources aren't committed to version control (in that case the drift check is implicitly every CI build regenerating cleanly — still add the job, just drop the `git diff` step and note in a comment that generated sources are gitignored).
+
+**Pure library shape** → `.github/workflows/ci.yml`, one `build-and-test` job only (same command pattern as REST service) — no lint/automation-test jobs unless the library already declares a linter.
+
+### README.md — Getting Started
+
+For the REST-service shape (and any shape with a docker-compose.yml), the generated `{{GETTING_STARTED}}` content must include: the exact `docker compose up --build` command, a short table of the environment variables a real deployment must set (name, purpose, dev default — pulled straight from the `${ENV_VAR:default}` placeholders in `application.properties`), and the port(s) the service listens on. For a single-service-without-db shape, cover the start script instead. For the API spec shape, cover the build/verify command only — there's nothing to run.
+
+---
+
 ## What the agent must NOT do
 
 - Do not invent proprietary-looking internal dependencies (`com.mycom.cp:*` or similar) — only use real, publicly-resolvable Maven Central artifacts.
@@ -160,3 +287,7 @@ dependencies {
 - Do not hand-write request/response DTOs directly in a REST-service skeleton — those come from the sibling API spec artifact's generated model classes. If the sibling api-spec repo doesn't exist yet when generating the REST service, stop and report the blocker rather than inventing local DTOs as a workaround.
 - Do not put `springdoc-openapi-ui`/Swagger-UI-serving dependencies in the API spec project — that belongs in the REST service (the thing that actually runs).
 - Do not generate an API spec YAML with placeholder paths/schemas — use the real endpoints and resource fields from `architecture.md`, matching exactly what the REST-service skeleton implements.
+- Do not add a docker-compose service for infrastructure `application.properties` doesn't actually reference by env var — the properties file is the source of truth for what the service needs at runtime, not a guess from `architecture.md` alone.
+- Do not bake real credentials into a Dockerfile or docker-compose.yml — dev-only defaults matching `application.properties`'s own `${ENV_VAR:default}` placeholders only.
+- Do not write a real Newman/Postman automation-test suite into the `automation-test` CI job — no test collections exist yet at skeleton-generation time; the stub-and-TODO job is the correct output, not an invented fake suite.
+- Do not generate a Dockerfile, docker-compose.yml, start script, or CI workflow for the API spec shape — it has no runtime, there is nothing to containerize, start, or automation-test.

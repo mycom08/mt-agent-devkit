@@ -51,7 +51,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - **Stage 2 — resumed:** Check if `/result/build/repo_structure.md` already exists. If it does, skip Stage 2 execution and present the existing file to the user for re-confirmation before Stage 3. If it does not exist, run Stage 2 normally.
 - **Stage 3 — resumed:** Check if per-repo split files already exist under `/result/build/<repo-name>/`. If all expected repo folders exist (count from state file `Repo Count`), skip Stage 3. If any are missing, re-run Stage 3 for missing repos only.
 - **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL.
-- **Stage 5 — resumed:** Check which repos already have `.claude/agents/docs/analysis/` populated (non-empty directory). Skip those; copy docs only to repos where the folder is absent or empty.
+- **Stage 5 — resumed:** For each repo, check `.claude/agents/docs/analysis/` against the **full expected file list** — `summary.md`, `architecture.md`, `testing_plan.md`, `business_requirements.md`, `diagrams/` (non-empty), `implementation_roadmap_<repo-name>.md`, `architecture_<repo-name>.md`. Skip a repo only if **all seven** are present; a non-empty-but-incomplete folder (e.g. an interrupted copy that only got partway through step 2/3) is **not** done — re-run the Doc Copy steps for that repo, which safely re-copies/overwrites any files already there.
 
 ---
 
@@ -403,19 +403,24 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-10. Commit and push the orchestrator folder's content, so the GitHub repo isn't left empty (the orchestrator folder holds no analysis docs of its own, so it doesn't go through the Stage 5 doc-copy commit — do it here instead):
+10. **Root-level `docker-compose.yml` — full-stack local start.** Check each sub-repo folder for its own `docker-compose.yml` (written by Java Skeleton Generation, REST-service shape only — see Java_Skeleton_Conventions.md). If **zero** sub-repos have one, skip this step entirely (nothing to aggregate). Otherwise, write `<orchestrator-folder-path>/docker-compose.yml` that brings up every dockerized sub-repo together:
+    - For each sub-repo with its own `docker-compose.yml`, add its service(s) here. A Java REST service's own compose file already sets `build.context: ..` / `build.dockerfile: <repo-name>/Dockerfile` (per Java_Skeleton_Conventions.md — its build needs to see the sibling api-spec repo, one level up from the service repo itself). The orchestrator folder **is** that same parent directory, so the transform here is `context: ..` → `context: .` (dockerfile path stays `<repo-name>/Dockerfile` unchanged) — everything else (env vars, ports, `depends_on`, infra services like its db) copies over unchanged from that repo's own compose file. Prefix each infra service/volume name with the owning repo name if two sub-repos would otherwise collide (e.g. two repos both naming their db service `db`).
+    - Repos with no `docker-compose.yml` (no skeleton yet, or a shape that doesn't get one — API spec, pure library, not-yet-scaffolded non-Java repos) are simply absent from this file; it grows to cover them once their own scaffold adds one.
+    - Add a one-line comment at the top of the file: `# Full-stack local start — brings up every dockerized sub-repo together. Repos without their own docker-compose.yml aren't included yet.`
+
+11. Commit and push the orchestrator folder's content, so the GitHub repo isn't left empty (the orchestrator folder holds no analysis docs of its own, so it doesn't go through the Stage 5 doc-copy commit — do it here instead):
     ```
     cd <orchestrator-folder-path>
-    git add CLAUDE.md .claude .gitignore
+    git add CLAUDE.md .claude .gitignore docker-compose.yml
     git commit -m "chore: scaffold project-orchestrator CLAUDE.md + build workflow"
     git branch -M main
     git push -u origin main
     ```
-    > Stage only the orchestrator's own files (`CLAUDE.md`, `.claude/`, `.gitignore`) — never `git add -A` here, since the sub-repo folders live as sibling directories inside the orchestrator folder and are separate git repos with their own remotes, not submodules of this one.
+    > Stage only the orchestrator's own files (`CLAUDE.md`, `.claude/`, `.gitignore`, `docker-compose.yml` if written) — never `git add -A` here, since the sub-repo folders live as sibling directories inside the orchestrator folder and are separate git repos with their own remotes, not submodules of this one. Omit `docker-compose.yml` from the `git add` if step 10 was skipped.
 
-11. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
+12. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
 
-12. Proceed to Stage 5.
+13. Proceed to Stage 5.
 
 > **Handoff message note:** the Stage 5 handoff message below assumes a project-orchestrator path exists for multi-repo. For the service+api-spec-only case (no orchestrator folder), use the monolith-style handoff instead — "Open a Claude Code session in `<service-repo-path>` and run: `plan next sprint`" — pointing at the REST service repo, not a project-orchestrator folder that doesn't exist.
 
@@ -423,7 +428,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 ### Java Skeleton Generation
 
-**Purpose:** For a brand-new (empty) Java repo, generate a real, buildable starting skeleton — package layout, `pom.xml`/`build.gradle`, and (shape-dependent) an OpenAPI contract, a real domain vertical slice (entity/mapper/repository/service/controller), Liquibase changelog, config — instead of leaving the repo with only the devkit's `.claude/agents/` scaffold and no actual code. Referenced from Path A step 5 and Path B step 2d above.
+**Purpose:** For a brand-new (empty) Java repo, generate a real, buildable starting skeleton — package layout, `pom.xml`/`build.gradle`, and (shape-dependent) an OpenAPI contract, a real domain vertical slice (entity/mapper/repository/service/controller), Liquibase changelog, config, Dockerfile/docker-compose/start-script, and `.github/workflows/` CI — instead of leaving the repo with only the devkit's `.claude/agents/` scaffold and no actual code. Referenced from Path A step 5 and Path B step 2d above.
 
 **Applies only when both are true** (check before spawning anything):
 1. **Tech stack is Java** — the repo's tech stack column in `repo_structure.md` (or `architecture.md` / `architecture_<repo-name>.md`) names Java/Spring Boot/a JVM framework, **or** the repo's purpose names it as the API spec companion of a Java REST service (Stage 2 always tags these that way).
@@ -449,15 +454,15 @@ If either condition fails, **skip entirely** — do not touch the repo's code. T
 
    If this repo is a REST service: its sibling API spec repo (named <repo-name>-api-spec) should already exist as a sibling folder — read its pom.xml/build.gradle (for real groupId:artifactId:version) and its .yaml spec (for real operationIds/schema names) before generating, so the service's dependency declaration and controller (implements {Resource}sApi) are correct against the real generated contract. If that sibling repo does NOT exist yet, stop and report this as a blocker rather than inventing local DTOs as a workaround.
 
-   Generate a complete, real skeleton directly into <repo-path> — actual domain entity/resource/endpoint names from architecture.md, not a generic placeholder. Follow every convention in Java_Skeleton_Conventions.md exactly, including the "What the agent must NOT do" section.
+   Generate a complete, real skeleton directly into <repo-path> — actual domain entity/resource/endpoint names from architecture.md, not a generic placeholder. Follow every convention in Java_Skeleton_Conventions.md exactly, including the "Docker, CI, and README (per shape)" section and the "What the agent must NOT do" section — this means also writing the shape-appropriate Dockerfile/docker-compose.yml/start-script and .github/workflows/ CI file(s) in the same pass, not just the Java code.
 
-   Do not touch anything under <repo-path>/.claude/ or any devkit scaffold files — those are written by a separate step. Only write build files (pom.xml, or build.gradle/build.gradle.kts), the OpenAPI yaml (API spec shape only), and src/.
+   Do not touch anything under <repo-path>/.claude/ or any devkit scaffold files — those are written by a separate step. Write build files (pom.xml, or build.gradle/build.gradle.kts), the OpenAPI yaml (API spec shape only), src/, and — per Java_Skeleton_Conventions.md's "Docker, CI, and README" section — Dockerfile/docker-compose.yml/start-script (shape-dependent) and .github/workflows/*.yml. Do not write README.md yourself — leave its content for the adaptive-tier agent (next step), which reads what you wrote here (Dockerfile/compose existence, real env vars) to fill in accurate Getting Started instructions.
 
-   Report back: which shape you chose and why, the real entity/resource name(s) used, and the full list of files written (max 5 bullets + observations).
+   Report back: which shape you chose and why, the real entity/resource name(s) used, and the full list of files written including Docker/CI files (max 5 bullets + observations).
    ```
 
 2. Agent reports back to the orchestrator (max 5 bullets + observations, per the standard Agent Completion Reports rule).
-3. Orchestrator relays a one-line status to the user (e.g. "Java REST-service skeleton generated for `core-service` — `Tenant` entity, 11 files, wired to `core-service-api-spec`.") and continues to the devkit scaffold step.
+3. Orchestrator relays a one-line status to the user (e.g. "Java REST-service skeleton generated for `<repo-name>` — `<Entity>` entity, N files incl. Dockerfile/compose/CI, wired to `<repo-name>-api-spec`.") and continues to the devkit scaffold step.
 4. **Stop on blocker** — if the agent reports it could not determine a real domain entity/resource from `architecture.md` (e.g. architecture is too abstract to name one), it should still generate the skeleton using the closest reasonable real name from the architecture rather than a generic placeholder, and note the ambiguity in its observations — this is not a blocking condition. A REST service whose sibling api-spec repo is genuinely missing **is** a blocking condition — stop and report to the user rather than working around it.
 
 ---
@@ -549,8 +554,9 @@ Next step:
 - **Java skeleton generation is guarded and additive** — only for Java repos with no existing `pom.xml`/`build.gradle`/`build.gradle.kts`/`src/`; never overwrites or runs alongside an existing project; supports both Maven and Gradle (chosen from `architecture.md`, default Maven) but never mixes the two in one repo; generated skeletons use only public Maven Central dependencies, never invented proprietary artifacts
 - **Every Java REST service gets a companion API spec repo** — Stage 2 adds it automatically, ordered before the service in `repo_structure.md`; the service's skeleton depends on the contract repo already existing and stops as a blocker (not a silent workaround) if it's missing; a monolith-with-a-Java-REST-service is routed through Path B for this pair even though `Decision` still reads `monolith`
 - **Use `gh project link`, never `gh project item-add`, to attach a repo to a Project** — `item-add` only accepts Issue/PR URLs and fails with "resource not found" on a bare repo URL; `gh project link <number> --owner <owner> --repo <owner>/<repo>` is the correct command (Path A step 8, Path B step 5)
-- **Every repo gets committed and pushed exactly once, at the end of Stage 5** — Stage 4 only creates the remote (`gh repo create`) and writes files locally; it never commits. The Stage 5 doc-copy loop's commit+push step is what actually populates the GitHub repo, after scaffold + Java skeleton + analysis docs are all in place. The project-orchestrator folder is the one exception — it isn't part of the Stage 5 repo list, so it commits+pushes at the end of Stage 4 Path B instead (step 10). **Resume note:** if a repo shows a complete scaffold on disk but its Stage 4/5 resume check still finds it "incomplete" or its GitHub remote returns an empty tree, check whether it was simply never committed before assuming the scaffold itself needs redoing.
+- **Every repo gets committed and pushed exactly once, at the end of Stage 5** — Stage 4 only creates the remote (`gh repo create`) and writes files locally; it never commits. The Stage 5 doc-copy loop's commit+push step is what actually populates the GitHub repo, after scaffold + Java skeleton + analysis docs are all in place. The project-orchestrator folder is the one exception — it isn't part of the Stage 5 repo list, so it commits+pushes at the end of Stage 4 Path B instead (step 11). **Resume note:** if a repo shows a complete scaffold on disk but its Stage 4/5 resume check still finds it "incomplete" or its GitHub remote returns an empty tree, check whether it was simply never committed before assuming the scaffold itself needs redoing.
 - **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
+- **Root docker-compose aggregates, never invents** — Path B step 10 only copies service definitions that already exist in a sub-repo's own `docker-compose.yml` (written by Java Skeleton Generation); it never fabricates a service for a repo that doesn't have one yet, and is skipped entirely when no sub-repo has Docker artifacts
 - **Stop on blocker** — if any agent reports a blocking issue, stop and report to the user before continuing
 - **Completion reports** — each spawned agent returns its results to the orchestrator; orchestrator relays a brief status to the user after each stage
 - **State file deleted on Stage 5 success** — if Stage 5 fails mid-copy, the state file remains for resume; only delete after all copies complete
