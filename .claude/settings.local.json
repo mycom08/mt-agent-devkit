@@ -84,7 +84,9 @@
       "Bash(rm .claude/agents/working/retros/ST-000014_retro.md)",
       "Bash(echo \"EXIT: $?\")",
       "Bash(find .claude/agents/working/tmp -iname \"*ST-000015*\" -o -iname \"*pipeline*\")",
-      "Bash(ls .claude/agents/working/tmp)"
+      "Bash(ls .claude/agents/working/tmp)",
+      "Bash(grep -n '```mermaid' result/analyst/architecture.md result/analyst/summary.md result/analyst/implementation_roadmap.md)",
+      "Bash(python3 -c ' *)"
     ]
   },
   "hooks": {
