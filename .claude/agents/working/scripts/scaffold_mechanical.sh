@@ -29,7 +29,8 @@ fi
 mkdir -p "$AGENTS/context" "$AGENTS/memory" "$AGENTS/rules" "$AGENTS/working-record" \
          "$AGENTS/workflows" "$AGENTS/scripts" "$AGENTS/retros" "$AGENTS/tmp" "$AGENTS/docs" \
          "$TARGET/docs/wiki"
-touch "$AGENTS/retros/.gitkeep"
+# No .gitkeep for retros/ — it's gitignored below (github mode) or covered by the blanket
+# .claude/agents/ ignore (strict mode), so an empty-dir placeholder would never be committed.
 
 if [[ "$MODE" == "strict" ]]; then
   mkdir -p "$AGENTS/docs/stories" "$AGENTS/docs/sprints" "$AGENTS/docs/reviews"
@@ -126,6 +127,12 @@ if [[ "$MODE" == "github" ]]; then
 
 # Workflow output documents
 /result/
+
+# Agent working records — ephemeral session state, no long-term git value
+.claude/agents/working-record/*_Working_Record.md
+
+# Agent retrospective files — for human review only, not part of the committed codebase
+.claude/agents/retros/
 EOF
 else
   cat >> "$TARGET/.gitignore" <<'EOF'
