@@ -31,6 +31,9 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 **Confirmed:** <false | stage1 | stage2>
 **GitHub Project URL:** <url or empty>
 **Scaffolded Repos:** <comma-separated list of repo names whose Stage 4 scaffold (mechanical + adaptive + Java skeleton if any + build_state.md) is fully done, or empty>
+**Java Skeleton References:** <comma-separated `repo-name=path|default` entries, one per Java-tech-stack repo in `repo_structure.md`, or empty if not yet asked>
+**Java GroupId:** <the shared groupId for every Java repo in this build, e.g. `com.example`, or empty if not yet asked>
+**Java Build Tool:** <maven | gradle, shared by every Java repo in this build, or empty if not yet asked>
 **Sessions:**
 - tl_session: <agentId or empty>
 - po_session: <agentId or empty>
@@ -45,12 +48,13 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - Update `Repo Count` after Stage 2 produces `repo_structure.md`
 - Update `Confirmed` after each user confirmation gate: `false` → `stage1` → `stage2`
 - **Append to `Scaffolded Repos` the moment a repo's `build_state.md` is written** (Path A step 9, Path B step 2f) — before moving to the next repo, before `gh project create`, before anything else. This is what makes Stage 4 resumable from the state file alone.
+- **Populate `Java Skeleton References`, `Java GroupId`, and `Java Build Tool` together, once, at Stage 4 Entry, before any repo folder/agent work begins** (see Stage 4 Entry step 4) — one `Java Skeleton References` entry per Java-tech-stack repo in `repo_structure.md`, plus the single shared `Java GroupId` and `Java Build Tool`. Written in a single batch, never incrementally per-repo.
 
 **Resume rules (per stage):**
 - **Stage 1 — resumed:** Re-run Stage 1 from scratch. The `analyze` workflow manages its own state file (`analyst_workflow_state.md`) and will resume internally if that file exists. After Stage 1 completes, re-confirm with user before Stage 2.
 - **Stage 2 — resumed:** Check if `/result/build/repo_structure.md` already exists. If it does, skip Stage 2 execution and present the existing file to the user for re-confirmation before Stage 3. If it does not exist, run Stage 2 normally.
 - **Stage 3 — resumed:** Check if per-repo split files already exist under `/result/build/<repo-name>/`. If all expected repo folders exist (count from state file `Repo Count`), skip Stage 3. If any are missing, re-run Stage 3 for missing repos only.
-- **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL.
+- **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL. Also check `Java Skeleton References`, `Java GroupId`, and `Java Build Tool`: if any Java-tech-stack repo in `repo_structure.md` has no `Java Skeleton References` entry yet, or `Java GroupId`/`Java Build Tool` is still empty, run Entry step 4 (Java Repo Consultation) before continuing, even if some repos are already scaffolded.
 - **Stage 5 — resumed:** For each repo, check `.claude/agents/docs/analysis/` against the **full expected file list** — `summary.md`, `architecture.md`, `testing_plan.md`, `business_requirements.md`, `diagrams/` (non-empty), `implementation_roadmap_<repo-name>.md`, `architecture_<repo-name>.md`. Skip a repo only if **all seven** are present; a non-empty-but-incomplete folder (e.g. an interrupted copy that only got partway through step 2/3) is **not** done — re-run the Doc Copy steps for that repo, which safely re-copies/overwrites any files already there.
 
 ---
@@ -115,7 +119,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
      - `tech stack` — comma-separated key technologies
      - `local path` — relative path where the user will clone/create this repo (e.g., `./api-service`)
 
-   > **Java REST service ⇒ API spec companion repo (fixed devkit convention, not optional).** For every repo whose tech stack is a Java REST service, add a second repo entry `<repo-name>-api-spec` (purpose: "OpenAPI/Swagger contract for `<repo-name>`", tech stack: "Java, OpenAPI Generator", local path a sibling of the service's own path) **immediately before** that service's row in the table — Stage 4 scaffolds repos in table order, and the service's skeleton depends on the api-spec repo already existing. This applies even when the overall `Decision` is `monolith`: a Java REST service and its contract are always two repos, regardless of how the rest of the system is structured. See `.claude/agents/templates/skeletons/Java_Skeleton_Conventions.md` for why.
+   > **Java REST service ⇒ API spec companion repo (fixed devkit convention, not optional).** For every repo whose tech stack is a Java REST service, add a second repo entry `<repo-name>-api-spec` (purpose: "OpenAPI/Swagger contract for `<repo-name>`", tech stack: "Java, OpenAPI Generator", local path a sibling of the service's own path) **immediately before** that service's row in the table — Stage 4 scaffolds repos in table order, and the service's skeleton depends on the api-spec repo already existing. This applies even when the overall `Decision` is `monolith`: a Java REST service and its contract are always two repos, regardless of how the rest of the system is structured. See `.claude/agents/working/skeletons/java/Java_Skeleton_Conventions.md` for why.
 
 3. Write `/result/build/repo_structure.md` using the format below:
 
@@ -283,6 +287,24 @@ After both agents complete, the orchestrator copies the following files from `/r
 1. Verify the state file shows `Confirmed: stage2`. If not, stop and report an unexpected state to the user.
 2. Read `/result/build/repo_structure.md` to determine repo names and local paths.
 3. **Route by actual row count in the Repos table, not by the `Decision` label** — use Path A only if the table has exactly one row. A `Decision: monolith` architecture that includes a Java REST service has **two** rows (the service + its `-api-spec` companion, per Stage 2's fixed convention) and must use Path B even though `Decision` still reads `monolith`; the `Decision` field describes the overall system's coupling, not literally "one repo".
+4. **Java Repo Consultation (batch, up front — before any repo folder or agent work begins).** Identify every repo row in `repo_structure.md` whose tech stack names Java/Spring Boot/a JVM framework (this includes every `-api-spec` companion repo). If `Java Skeleton References`, `Java GroupId`, and `Java Build Tool` in the state file are already populated, skip this step (resume). If there are no Java repos at all, record nothing and skip this step. Otherwise, ask the user once, listing every Java repo together (label each with a best-guess shape from its purpose text — `-api-spec` suffix ⇒ API spec, "service"/"API"/"backend" ⇒ REST service, "library"/"SDK"/"client" ⇒ library; this label is for the prompt only, the real shape decision still happens inside Java Skeleton Generation):
+
+   ```
+   The following repos will get a generated Java skeleton:
+   - <repo-name> (<guessed shape: REST service | library | API spec>)
+   - ...
+
+   1. Maven or Gradle for these repos? This is shared by every Java repo in this build. Reply with a value, or "default" to use Apache Maven.
+
+   2. What Maven/Gradle groupId should these repos use (e.g. com.acme)? This is shared by every Java repo in this build — one groupId, like a normal multi-artifact product. Reply with a value, or "default" to use com.example.
+      (artifactId needs no separate answer — it's always each repo's own name above, e.g. `tenant-service`, already lowercase-hyphenated per repo_structure.md's naming convention.)
+
+   3. For each repo, do you have an existing local project you'd like me to use as a structural reference (folder layout, naming, module conventions)? The devkit's fixed conventions — no Lombok, MapStruct mapping, layering, Kubernetes-style healthcheck, Spring Security baseline, VERSION/CHANGELOG, GitHub Packages release publishing (see `.claude/agents/working/skeletons/java/`) — always apply regardless; a reference project only informs the parts that convention leaves open.
+
+      Reply per repo with either an absolute local path, or "default" to use the devkit's default conventions with no external reference.
+   ```
+
+   Record the build-tool answer in the state file's `Java Build Tool` field (`maven` or `gradle`; `maven` if the user replied "default"). Record the groupId answer in `Java GroupId` (the literal value, or `com.example` if the user replied "default"). Record each reference-project answer in `Java Skeleton References` as `<repo-name>=<absolute-path>` or `<repo-name>=default`, then proceed. Asking this once, up front, is what lets Path B's parallel wave-spawn (step e below) run without stopping mid-wave for an interactive prompt.
 
 ### Path A — Monolith
 
@@ -294,7 +316,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 4. Run `gh repo create` for the project repo (use the product name from the user's idea as the repo name; prompt the user for visibility — public or private — if not previously specified).
 
-5. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if the repo's tech stack (from `/result/analyst/architecture.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below. Skip entirely for non-Java repos or repos that already have code.
+5. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if the repo's tech stack (from `/result/analyst/architecture.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Skip entirely for non-Java repos or repos that already have code.
 
 6. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**:
    - Stage 1: scan the repo folder (it is brand-new, so use the product name and description derived from the user's idea and `/result/analyst/summary.md`)
@@ -341,7 +363,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    c. Run `gh repo create` for the sub-repo (use `<repo-name>` as the repo slug; same visibility as chosen for other repos).
 
-   d. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below. Skip entirely for non-Java repos or repos that already have code.
+   d. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Skip entirely for non-Java repos or repos that already have code.
 
    e. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**:
       - Stage 1: scan the repo folder using the repo's `purpose` and `tech stack` from `repo_structure.md`
@@ -403,8 +425,8 @@ After both agents complete, the orchestrator copies the following files from `/r
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-10. **Root-level `docker-compose.yml` — full-stack local start.** Check each sub-repo folder for its own `docker-compose.yml` (written by Java Skeleton Generation, REST-service shape only — see Java_Skeleton_Conventions.md). If **zero** sub-repos have one, skip this step entirely (nothing to aggregate). Otherwise, write `<orchestrator-folder-path>/docker-compose.yml` that brings up every dockerized sub-repo together:
-    - For each sub-repo with its own `docker-compose.yml`, add its service(s) here. A Java REST service's own compose file already sets `build.context: ..` / `build.dockerfile: <repo-name>/Dockerfile` (per Java_Skeleton_Conventions.md — its build needs to see the sibling api-spec repo, one level up from the service repo itself). The orchestrator folder **is** that same parent directory, so the transform here is `context: ..` → `context: .` (dockerfile path stays `<repo-name>/Dockerfile` unchanged) — everything else (env vars, ports, `depends_on`, infra services like its db) copies over unchanged from that repo's own compose file. Prefix each infra service/volume name with the owning repo name if two sub-repos would otherwise collide (e.g. two repos both naming their db service `db`).
+10. **Root-level `docker-compose.yml` — full-stack local start.** Check each sub-repo folder for its own `docker-compose.yml` (written by Java Skeleton Generation, REST-service shape only — see `java/Java_Skeleton_REST_Service.md`). If **zero** sub-repos have one, skip this step entirely (nothing to aggregate). Otherwise, write `<orchestrator-folder-path>/docker-compose.yml` that brings up every dockerized sub-repo together:
+    - For each sub-repo with its own `docker-compose.yml`, add its service(s) here. A Java REST service's own compose file already sets `build.context: ..` / `build.dockerfile: <repo-name>/Dockerfile` (per `java/Java_Skeleton_REST_Service.md` — its build needs to see the sibling api-spec repo, one level up from the service repo itself). The orchestrator folder **is** that same parent directory, so the transform here is `context: ..` → `context: .` (dockerfile path stays `<repo-name>/Dockerfile` unchanged) — everything else (env vars, ports, `depends_on`, infra services like its db) copies over unchanged from that repo's own compose file. Prefix each infra service/volume name with the owning repo name if two sub-repos would otherwise collide (e.g. two repos both naming their db service `db`).
     - Repos with no `docker-compose.yml` (no skeleton yet, or a shape that doesn't get one — API spec, pure library, not-yet-scaffolded non-Java repos) are simply absent from this file; it grows to cover them once their own scaffold adds one.
     - Add a one-line comment at the top of the file: `# Full-stack local start — brings up every dockerized sub-repo together. Repos without their own docker-compose.yml aren't included yet.`
 
@@ -445,20 +467,35 @@ If either condition fails, **skip entirely** — do not touch the repo's code. T
    ```
    Generate a real, buildable Java project skeleton at <repo-path>.
 
-   Read these first, in order:
-   1. .claude/agents/templates/skeletons/Java_Skeleton_Conventions.md — conventions and rules to follow (build tool, layering, DTO/entity/mapping conventions, what NOT to do). This is guidance, not a template to copy — you generate original files that follow these patterns.
+   groupId: <the state file's `Java GroupId` value — shared by every Java repo in this build>
+   artifactId: <this repo's own `name` from repo_structure.md — already lowercase-hyphenated>
+   Base package: <groupId>.<artifactId with dashes stripped> — use this exact value everywhere the shape file says `{groupId}.{artifactId-without-dashes}` or `{{SERVICE_PACKAGE_NAME}}`. Do not derive or guess a different groupId/artifactId from architecture.md — these two are fixed for this repo.
+   Build tool: <the state file's `Java Build Tool` value — maven or gradle, shared by every Java repo in this build>. Do not choose a different build tool for this repo even if architecture.md suggests otherwise.
+
+   Reference project for this repo: <the absolute path from this repo's `Java Skeleton References` entry, or the literal text "none — use the default skeleton conventions with no external reference" if the answer was "default">
+
+   Step 1 — read the index and decide the shape:
+   1. .claude/agents/working/skeletons/java/Java_Skeleton_Conventions.md — "When this applies," the shape-decision table, the "Reference project" rule, universal conventions (build tool, Java version, no-Lombok, package root), "Dependency management & GitHub Packages" (every shape publishes to GitHub Packages via CI on push to main), and "Version & Release Management" (every shape gets VERSION `0.0.1-SNAPSHOT`, CHANGELOG.md, and a manually-triggered release.yml — including the API spec shape). All of this applies regardless of which shape you pick below. This is guidance, not a template to copy.
    2. /result/build/<repo-name>/architecture_<repo-name>.md if it exists — this is the filtered, repo-scoped excerpt, read it FIRST and primarily. Only read the full /result/analyst/architecture.md for cross-cutting sections (security model, error handling, data handling) the filtered excerpt visibly doesn't cover — don't read both in full, the filtered version exists specifically so you don't have to.
    3. This repo's purpose and tech stack from /result/build/repo_structure.md.
+   4. Decide the shape from the repo's stated purpose, per the index's shape table: API spec (OpenAPI/Swagger contract for another service, no runtime) vs REST service (backend/API/service, runs standalone) vs pure library (SDK/library/client consumed by other Java code).
 
-   Decide the shape from the repo's stated purpose, per Java_Skeleton_Conventions.md: API spec (OpenAPI/Swagger contract for another service, no runtime) vs REST service (backend/API/service, runs standalone) vs pure library (SDK/library/client consumed by other Java code).
+   Step 2 — read only the one shape file that matches your decision, never the other two:
+   - REST service → .claude/agents/working/skeletons/java/Java_Skeleton_REST_Service.md
+   - Pure library → .claude/agents/working/skeletons/java/Java_Skeleton_Library.md
+   - API spec → .claude/agents/working/skeletons/java/Java_Skeleton_API_Spec.md
+
+   This file is self-contained for its shape: dependencies, entity/DTO/mapping conventions (where applicable), build file, Docker/CI/README/Release-files guidance, and a shape-specific "must not do" list, on top of the universal ones in the index.
+
+   Step 3 — if a reference project path was given above (not "none"): read that project's actual folder structure, build file (`pom.xml`/`build.gradle`), and package layout now, before generating anything. Use it to inform structural/style choices the index and shape file leave open (extra layers, naming, module boundaries) — it never overrides a fixed rule (no Lombok, DTOs as records, MapStruct, layering direction, the healthcheck/security/VERSION+CHANGELOG requirements). If the reference conflicts with a fixed rule, follow the fixed rule and note the deviation in your report.
 
    If this repo is a REST service: its sibling API spec repo (named <repo-name>-api-spec) should already exist as a sibling folder — read its pom.xml/build.gradle (for real groupId:artifactId:version) and its .yaml spec (for real operationIds/schema names) before generating, so the service's dependency declaration and controller (implements {Resource}sApi) are correct against the real generated contract. If that sibling repo does NOT exist yet, stop and report this as a blocker rather than inventing local DTOs as a workaround.
 
-   Generate a complete, real skeleton directly into <repo-path> — actual domain entity/resource/endpoint names from architecture.md, not a generic placeholder. Follow every convention in Java_Skeleton_Conventions.md exactly, including the "Docker, CI, and README (per shape)" section and the "What the agent must NOT do" section — this means also writing the shape-appropriate Dockerfile/docker-compose.yml/start-script and .github/workflows/ CI file(s) in the same pass, not just the Java code.
+   Generate a complete, real skeleton directly into <repo-path> — actual domain entity/resource/endpoint names from architecture.md, not a generic placeholder. Follow every convention in the index and your shape file exactly, including their Docker/CI/README/Release-files sections and both "must not do" lists — this means also writing the shape-appropriate Dockerfile/docker-compose.yml/start-script and .github/workflows/ CI file(s) in the same pass, not just the Java code.
 
-   Do not touch anything under <repo-path>/.claude/ or any devkit scaffold files — those are written by a separate step. Write build files (pom.xml, or build.gradle/build.gradle.kts), the OpenAPI yaml (API spec shape only), src/, and — per Java_Skeleton_Conventions.md's "Docker, CI, and README" section — Dockerfile/docker-compose.yml/start-script (shape-dependent) and .github/workflows/*.yml. Do not write README.md yourself — leave its content for the adaptive-tier agent (next step), which reads what you wrote here (Dockerfile/compose existence, real env vars) to fill in accurate Getting Started instructions.
+   Do not touch anything under <repo-path>/.claude/ or any devkit scaffold files — those are written by a separate step. Write build files (pom.xml, or build.gradle/build.gradle.kts), the OpenAPI yaml (API spec shape only), src/, VERSION, CHANGELOG.md, and — per your shape file's Docker/CI section — Dockerfile/docker-compose.yml/start-script (shape-dependent) and .github/workflows/*.yml (including release.yml, in every shape). Do not write README.md yourself — leave its content for the adaptive-tier agent (next step), which reads what you wrote here (Dockerfile/compose existence, real env vars) to fill in accurate Getting Started instructions.
 
-   Report back: which shape you chose and why, the real entity/resource name(s) used, and the full list of files written including Docker/CI files (max 5 bullets + observations).
+   Report back: which shape you chose and why, the real entity/resource name(s) used, whether a reference project was used and any fixed-rule deviations you overrode from it, and the full list of files written including Docker/CI files (max 5 bullets + observations).
    ```
 
 2. Agent reports back to the orchestrator (max 5 bullets + observations, per the standard Agent Completion Reports rule).
@@ -552,6 +589,7 @@ Next step:
 - **Prefer filtered per-repo docs over full analyst docs in agent prompts** — `architecture_<repo-name>.md` / `implementation_roadmap_<repo-name>.md` exist specifically so Stage 4 agents don't have to read the full unfiltered `architecture.md`/`implementation_roadmap.md`. Only fall back to the full doc for sections the filtered excerpt visibly omits.
 - **`Scaffolded Repos` in the state file is the resume source of truth for Stage 4** — append to it the moment each repo's `build_state.md` is written, before moving to the next repo. Resume reads this list first; filesystem probing is only a fallback for state predating this field.
 - **Java skeleton generation is guarded and additive** — only for Java repos with no existing `pom.xml`/`build.gradle`/`build.gradle.kts`/`src/`; never overwrites or runs alongside an existing project; supports both Maven and Gradle (chosen from `architecture.md`, default Maven) but never mixes the two in one repo; generated skeletons use only public Maven Central dependencies, never invented proprietary artifacts
+- **Reference Project Consultation happens once, up front, per Java repo** (Stage 4 Entry step 4) — the orchestrator asks directly (not a spawned TL/PO agent, consistent with Build Software's existing binding decision to keep Stage 2/4 orchestrator-direct) whether the user has an existing local project to use as a structural reference for each Java repo's skeleton, before any repo folder or agent work begins. Answers go in the state file's `Java Skeleton References` field and are passed into that repo's Java Skeleton Generation agent prompt. A reference project only ever informs structural/style choices `.claude/agents/working/skeletons/java/` leaves open — it never overrides a fixed rule (Lombok, entity/DTO conventions, layering, healthcheck, security baseline, VERSION/CHANGELOG).
 - **Every Java REST service gets a companion API spec repo** — Stage 2 adds it automatically, ordered before the service in `repo_structure.md`; the service's skeleton depends on the contract repo already existing and stops as a blocker (not a silent workaround) if it's missing; a monolith-with-a-Java-REST-service is routed through Path B for this pair even though `Decision` still reads `monolith`
 - **Use `gh project link`, never `gh project item-add`, to attach a repo to a Project** — `item-add` only accepts Issue/PR URLs and fails with "resource not found" on a bare repo URL; `gh project link <number> --owner <owner> --repo <owner>/<repo>` is the correct command (Path A step 8, Path B step 5)
 - **Every repo gets committed and pushed exactly once, at the end of Stage 5** — Stage 4 only creates the remote (`gh repo create`) and writes files locally; it never commits. The Stage 5 doc-copy loop's commit+push step is what actually populates the GitHub repo, after scaffold + Java skeleton + analysis docs are all in place. The project-orchestrator folder is the one exception — it isn't part of the Stage 5 repo list, so it commits+pushes at the end of Stage 4 Path B instead (step 11). **Resume note:** if a repo shows a complete scaffold on disk but its Stage 4/5 resume check still finds it "incomplete" or its GitHub remote returns an empty tree, check whether it was simply never committed before assuming the scaffold itself needs redoing.

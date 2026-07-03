@@ -62,8 +62,10 @@ KNOWN_DOUBLE_BRACE_TOKENS = {
     "ERROR_HANDLING_STANDARDS",
     "ERROR_RESPONSE_FORMAT",
     "FILE_NAMING_STANDARDS",
+    "GETTING_STARTED",
     "INTEGRATION_TEST_COMMANDS",
     "INTEGRATION_TEST_PLACEMENT",
+    "KEY_DIRECTORIES",
     "LANGUAGE",
     "LINT_FORMAT_COMMANDS",
     "LOGGING_STANDARDS",
@@ -81,6 +83,7 @@ KNOWN_DOUBLE_BRACE_TOKENS = {
     "RECOMMENDED_PATTERNS",
     "REPOS",
     "SECURITY_CHECKLIST",
+    "SERVICE_PACKAGE_NAME",
     "START_COMMAND",
     "TEST_FILE_NAMING_CONVENTION",
     "TEST_FILE_ORGANIZATION",
@@ -88,6 +91,7 @@ KNOWN_DOUBLE_BRACE_TOKENS = {
     "TEST_NAMING_CONVENTION",
     "TEST_RUN_COMMAND",
     "TEST_RUN_COMMANDS",
+    "TECH_STACK",
     "TL_MAY_SUGGEST",
     "TL_MUST_PASS",
     "TL_SHOULD_FIX",
@@ -167,6 +171,7 @@ ALLOWLIST_UNTRACKED_TEMPLATES = {
     ".claude/agents/templates/rules/Story_Standard_template.md",
     ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
     ".claude/agents/templates/workflows/Workflow_Guide_template.md",
+    ".claude/agents/templates/README_template.md",
 }
 
 # ---------------------------------------------------------------------------

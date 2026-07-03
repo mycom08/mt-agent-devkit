@@ -124,7 +124,16 @@
       "Bash(mvn -v)",
       "Bash(java -version)",
       "Bash(./mvnw -B -q spotless:apply)",
-      "Bash(docker version *)"
+      "Bash(docker version *)",
+      "Bash(awk 'NR==21' Java_Skeleton_REST_Service.md)",
+      "Bash(awk 'NR==80' Java_Skeleton_REST_Service.md)",
+      "Bash(awk 'NR==35' Java_Skeleton_API_Spec.md)",
+      "Bash(mkdir -p .claude/agents/working/skeletons/java)",
+      "Bash(rmdir .claude/agents/templates/skeletons/java .claude/agents/templates/skeletons)",
+      "Bash(mv .claude/agents/templates/skeletons/java/Java_Skeleton_Conventions.md .claude/agents/working/skeletons/java/Java_Skeleton_Conventions.md)",
+      "Bash(mv .claude/agents/templates/skeletons/java/Java_Skeleton_REST_Service.md .claude/agents/working/skeletons/java/Java_Skeleton_REST_Service.md)",
+      "Bash(mv .claude/agents/templates/skeletons/java/Java_Skeleton_Library.md .claude/agents/working/skeletons/java/Java_Skeleton_Library.md)",
+      "Bash(mv .claude/agents/templates/skeletons/java/Java_Skeleton_API_Spec.md .claude/agents/working/skeletons/java/Java_Skeleton_API_Spec.md)"
     ]
   },
   "hooks": {

@@ -139,6 +139,8 @@ If any answer is **No**, the story is **not accepted**. State clearly what is mi
 
 You approve the release when all Must-Have criteria are met. See the feature's Implementation Roadmap for full release criteria — refer to `Project_Priming.md` section `## 4. Internal Project Documents` to find the correct path.
 
+**For repos using the Java skeleton's release convention** (a `VERSION` file at the repo root — see `Java_Skeleton_Conventions.md`'s "Version & Release Management" if this repo was scaffolded via Build Software): this gate is checked mechanically at the end of every sprint by `Sprint_Workflow.md`'s "Sprint end" → "Release Decision" step. It never cuts a release automatically — it always asks you first, presenting the current `VERSION` and the pending `CHANGELOG.md` entries. Approving means confirming the CHANGELOG section is real and telling the orchestrator to proceed; declining is a normal outcome, not every sprint needs to ship.
+
 ---
 
 ## 10. Document Placement Rules
@@ -180,5 +182,5 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 ## Version
 
 **Created:** 2026-04-24  
-**Version:** 1.6 — §4 Scope guard: fixed deferred-phase label example `phase:2` → `phase-2` to match the canonical `phase-N` scheme  
-**Previous:** 1.5 — §11 Project Plan Commit: commit plan file changes immediately after each update
+**Version:** 1.7 — §9 Release Gate: cross-reference Sprint_Workflow.md's mechanical "Release Decision" step for repos using the Java skeleton's VERSION/CHANGELOG/release.yml convention — asks the user before ever cutting a release  
+**Previous:** 1.6 — §4 Scope guard: fixed deferred-phase label example `phase:2` → `phase-2` to match the canonical `phase-N` scheme

@@ -93,7 +93,19 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
      e. Delete `.claude/agents/retros/ST-XXXXXX_retro.md`
      — Complete all stories before moving to step 2.
   2. **Sprint Consolidated Summary** — read the completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
-  3. **Devkit Contribution** — optional sharing of sprint retro signals with the devkit team. The sprint pipeline continues regardless of the user's answer.
+  3. **Release Decision** — fulfills the PO's Release Gate responsibility (`Product_Owner_Rules.md` §8–9) without requiring a fresh agent spawn, same orchestrator-direct pattern as the other Sprint end steps. Check whether `VERSION` exists at the repo root:
+     - **Does not exist** (non-Java repo, or a repo predating this convention) → nothing to do, skip to step 4.
+     - **Exists** → read `VERSION` and `CHANGELOG.md`. Find the section whose heading matches `VERSION` with its `-SNAPSHOT` suffix stripped (e.g. `VERSION` is `0.0.2-SNAPSHOT` → look for `## [0.0.2]`). If that section has **no** entries under `### Changes`/`### Bug Fixes`, there's nothing release-worthy yet — skip to step 4 without asking.
+     - Otherwise, **ask the user** (never decide this automatically — releasing is not an automatic sprint-end action):
+       > "Sprint complete. This repo is at `<the current VERSION value>`. The current CHANGELOG section has these entries: <list them>. Cut a release now? (yes/no)"
+
+       If the roadmap defines Release Gate criteria, add a one-line note on whether Must-Have criteria currently look met (informational only — the user still decides).
+     - **If no** → skip to step 4. Not shipping a release every sprint is a normal, expected outcome, not a failure state.
+     - **If yes** — **GitHub mode only** (strict mode has no GitHub Actions to trigger `release.yml` against; tell the user releasing isn't available in strict mode and skip to step 4):
+       1. Strip the `-SNAPSHOT` suffix from `VERSION` (e.g. `0.0.2-SNAPSHOT` → `0.0.2`), commit and push directly to `main` — a small mechanical change, no story/PR needed (same class of action as other plan-file commits already made directly, see `Product_Owner_Rules.md` §11).
+       2. Trigger the release workflow: `gh workflow run release.yml --ref main`.
+       3. Report the run back to the user (`gh run list --workflow=release.yml --limit 1`) and note that `release.yml` itself independently validates the tag/CHANGELOG and can still fail — this step only kicks it off, it doesn't guarantee success.
+  4. **Devkit Contribution** — optional sharing of sprint retro signals with the devkit team. The sprint pipeline continues regardless of the user's answer.
 
      a. **Privacy scan** — read `.claude/agents/retros/sprint_N_summary.md` (resolve N from `Sprint` field in the state file). Extract all lines from every `### Findings` section across all story blocks. For each item, apply the Privacy Rule from `Retro_Rules.md`: remove or generalise any remaining project-specific references — no project names, repository names, domain-specific file paths, business logic terms, or client/user identifiers. Retain only the generalised text.
 
@@ -137,7 +149,7 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
                Report the Issue URL to the user. Delete the local export file.
              - **Not authenticated or `gh` unavailable:** inform the user that the export file has been written to `.claude/agents/retros/devkit_contribution_sprint_N.md`. Instruct them to open an Issue labeled `retro:contribution` on `mycom08/mt-agent-devkit` with the export file contents, so the `apply retros` workflow can find it.
 
-     d. **If no:** skip to step 4 (Cleanup).
+     d. **If no:** skip to step 5 (Cleanup).
 
-  4. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
+  5. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
 <!-- SHARED-END -->

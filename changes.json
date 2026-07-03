@@ -1,4 +1,15 @@
 {
+  "0.1.21": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Feat: sprint-end 'Release Decision' step — checks for a Java-skeleton VERSION file, and if the current CHANGELOG section has real entries, asks the user before stripping -SNAPSHOT and triggering release.yml; skips silently if there's nothing release-worthy or VERSION doesn't exist. Never releases automatically.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Feat: §9 Release Gate cross-references the new mechanical Sprint_Workflow.md Release Decision step for Java-skeleton repos."
+    }
+  },
   "0.1.20": {
     "new": [],
     "modified": [
