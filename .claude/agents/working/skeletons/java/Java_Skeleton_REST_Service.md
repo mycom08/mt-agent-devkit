@@ -117,9 +117,11 @@ dependencies {
 
 ## Docker
 
-Generated alongside the code in the same skeleton-generation pass — not a separate step, not optional. Use the **real** entity/endpoint/env-var names already decided while generating the code above; never placeholders.
+Generated alongside the code in the same skeleton-generation pass — not a separate step, not optional, **except when the Docker Consultation in `Build_Software_Workflow.md`'s Stage 4 Entry resolved to skip Docker for this build** (see [`Docker_Conventions.md`](../docker/Docker_Conventions.md), which owns the consultation flow and the file-layout locations referenced throughout this section — read it first). Use the **real** entity/endpoint/env-var names already decided while generating the code above; never placeholders.
 
 ### Dockerfile
+
+Lives at `<repo-name>/docker/Dockerfile` — under the `docker/` subfolder per `Docker_Conventions.md`'s File Layout, not at the repo root.
 
 **Sibling api-spec dependency note:** every Java REST service under this devkit has a companion `<repo-name>-api-spec` artifact that is **not published anywhere** — it only exists as a sibling folder on disk (e.g. `../<repo-name>-api-spec` relative to the service repo). A Docker build whose context is just the service repo can't see it. So the build stage installs the sibling module first, and the **build context must be the parent directory that contains both sibling repos**, not the service repo itself:
 
@@ -145,22 +147,22 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
 ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 The runtime base image (`eclipse-temurin:*-jre`) doesn't include `wget` by default — install it (or use `curl` if preferred) in the runtime stage before the `HEALTHCHECK` line, e.g. `RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf /var/lib/apt/lists/*`.
-This `Dockerfile` still lives at `<repo-name>/Dockerfile` (inside the service repo, next to its own source) — only the **build context** used to invoke it changes (see compose below). If a REST service shape is ever generated without a sibling api-spec dependency (not the current devkit convention, but keep the logic general), skip the two-repo `COPY`/install steps and build directly like a normal single-repo Dockerfile (`COPY . .` from a `context: .`).
+This `Dockerfile` still lives at `<repo-name>/docker/Dockerfile` — only the **build context** used to invoke it changes (see compose below). COPY paths inside the Dockerfile are relative to the build context, not to the Dockerfile's own location, so the two-repo `COPY` lines above are unaffected by which subfolder the Dockerfile itself sits in. If a REST service shape is ever generated without a sibling api-spec dependency (not the current devkit convention, but keep the logic general), skip the two-repo `COPY`/install steps and build directly like a normal single-repo Dockerfile (`COPY . .` from a `context: .`).
 
 Use the Maven/Gradle wrapper (`mvnw`/`gradlew`) already committed by the skeleton in each repo, never a bare `mvn`/`gradle` the image can't resolve. `<serverPort>` is `server.port` from `application.properties` if set, else Spring Boot's default `8080`. Never bake real secrets into the image — runtime config comes from environment variables (see compose below), matching the `${ENV_VAR:default}` placeholders already used in `application.properties`.
 
 ### docker-compose.yml
 
-One compose file at the repo root that brings up the service plus every piece of infrastructure the skeleton's `application.properties` actually references by env var — read that file (not `architecture.md` in isolation) to get the exact set: always a database if `spring.datasource.*` is present (Postgres, matching the `postgresql` dependency), plus any additional infra named in `architecture.md`'s tech-stack decision that the properties file also wires up via env var (e.g. an object-store service if `minio.*`-style properties exist, a cache if `redis.*`-style properties exist). Do not invent infra the properties file doesn't reference.
+One compose file at `<repo-name>/docker/sandbox/docker-compose.yml` (per `Docker_Conventions.md`'s File Layout, not the repo root) that brings up the service plus every piece of infrastructure the skeleton's `application.properties` actually references by env var — read that file (not `architecture.md` in isolation) to get the exact set: always a database if `spring.datasource.*` is present (Postgres, matching the `postgresql` dependency), plus any additional infra named in `architecture.md`'s tech-stack decision that the properties file also wires up via env var (e.g. an object-store service if `minio.*`-style properties exist, a cache if `redis.*`-style properties exist). Do not invent infra the properties file doesn't reference.
 
-Because the Dockerfile's build context must be the **parent** directory (see above), this repo's own `docker-compose.yml` — meant to be run via `cd <repo-name> && docker compose up --build` — points `context` one level up and gives `dockerfile` the repo-relative path:
+Because the Dockerfile's build context must be the **parent** directory containing both this repo and its sibling api-spec repo (see above), and the compose file itself now sits two levels deeper than the repo root (`docker/sandbox/`), `context` needs three `..` segments instead of one to reach that same parent directory — run via `cd <repo-name>/docker/sandbox && docker compose up --build`:
 
 ```yaml
 services:
   <service-name>:
     build:
-      context: ..
-      dockerfile: <repo-name>/Dockerfile
+      context: ../../..
+      dockerfile: <repo-name>/docker/Dockerfile
     ports:
       - "<serverPort>:<serverPort>"
     environment:
@@ -197,13 +199,27 @@ Dev-only credentials only (matching the defaults already in `application.propert
 
 ### Single service without a database (e.g. a UI/SSR or processing service with no `spring.datasource.*`)
 
-No docker-compose.yml — a Dockerfile (if containerized) plus a plain start script is enough since there's no multi-container orchestration to do. The Dockerfile's `HEALTHCHECK` instruction (see above) still applies unchanged — it targets the app's own `/actuator/health/liveness`, not the database. Add `start.sh` (and `start.ps1` if the target platform is Windows-first) at the repo root: build once if needed, then run the app in the foreground, e.g.:
+No docker-compose.yml — there's no multi-container orchestration to do. Two run paths still apply, side by side, per `Docker_Conventions.md`:
+
+**Plain (no Docker):** `start.sh` (and `start.ps1` if the target platform is Windows-first) at the repo root — unaffected by anything below. Build once if needed, then run the app in the foreground:
 ```sh
 #!/usr/bin/env sh
 set -e
 ./mvnw -B -q package -DskipTests
 java -jar target/*.jar
 ```
+
+**Docker-based:** `docker/sandbox/run.sh` (and `run.ps1`) — build the image and run it in the foreground, using the same parent-directory build context as the compose case above (three levels up from `docker/sandbox/`, to see the sibling api-spec repo) and the same env vars a compose file's `environment:` block would set:
+```sh
+#!/usr/bin/env sh
+set -e
+cd "$(dirname "$0")/../../.."
+docker build -f <repo-name>/docker/Dockerfile -t <service-name>:local .
+docker run --rm -p <serverPort>:<serverPort> \
+  # one -e ENV_VAR=default per ${ENV_VAR:default} placeholder actually present in application.properties
+  <service-name>:local
+```
+The Dockerfile's `HEALTHCHECK` instruction (see above) still applies unchanged in both cases — it targets the app's own `/actuator/health/liveness`, not a database.
 
 ---
 
@@ -219,7 +235,7 @@ Four jobs:
 
 ## README.md — Getting Started
 
-The generated `{{GETTING_STARTED}}` content must include: the exact `docker compose up --build` command, a short table of the environment variables a real deployment must set (name, purpose, dev default — pulled straight from the `${ENV_VAR:default}` placeholders in `application.properties`), the port(s) the service listens on, and how to confirm it's up (`curl http://localhost:<serverPort>/actuator/health/liveness`). For a single-service-without-db shape, cover the start script instead (health check still applies the same way).
+Per `Docker_Conventions.md`, this repo also gets a `docker/README.md` documenting the Docker artifacts in detail — the repo-root `README.md`'s `{{GETTING_STARTED}}` content stays short and points to it rather than duplicating it: the plain-JVM path (`start.sh`, or for the with-database shape the fact that Docker is the only way to get the database dependency running locally), a one-line pointer to `docker/README.md` for the containerized run, the port(s) the service listens on, and how to confirm it's up (`curl http://localhost:<serverPort>/actuator/health/liveness`). `docker/README.md` itself carries the exact `cd <repo-name>/docker/sandbox && docker compose up --build` (or `run.sh`) command and the full table of environment variables a real deployment must set (name, purpose, dev default — pulled straight from the `${ENV_VAR:default}` placeholders in `application.properties`).
 
 ---
 
@@ -252,7 +268,7 @@ Generated alongside the code, same pass as everything else. `VERSION` (`0.0.1-SN
   uses: docker/build-push-action@v5
   with:
     context: .
-    file: ./<repo-name>/Dockerfile
+    file: ./<repo-name>/docker/Dockerfile
     push: true
     tags: ghcr.io/<owner>/<repo-name>:<version>
 ```

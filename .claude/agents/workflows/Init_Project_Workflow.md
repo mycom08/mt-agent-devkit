@@ -82,7 +82,7 @@ Summarize findings to the user in 5 bullets max before proceeding to Stage 2.
 ## Stage 2 — Content Generation
 
 Scaffold files split into two tiers (see full detail below):
-- **Mechanical tier** — 8/16 rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `templates/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent.
+- **Mechanical tier** — 8/16 rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent.
 - **Adaptive tier** — `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 5 instruction files, 8/16 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.claude/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
 
 ### Source template paths (in this devkit)
@@ -198,15 +198,15 @@ For each agent (`business_analyst`, `developer`, `product_owner`, `qa`, `technic
 
 #### Mechanical tier — run `scaffold_mechanical.sh` first, before any agent writes a single file
 
-**Source:** `templates/scripts/scaffold_mechanical.sh`
-**Usage:** `bash templates/scripts/scaffold_mechanical.sh <devkit_root> <target_project> <mode:strict|github> [github-org/repo-name]`
+**Source:** `working/scripts/scaffold_mechanical.sh`
+**Usage:** `bash working/scripts/scaffold_mechanical.sh <devkit_root> <target_project> <mode:strict|github> [github-org/repo-name]`
 
 This one script call writes every file (or file family) that needs **zero project-specific judgment** — it was built and content-diffed against real, previously agent-generated scaffolds until every file matched byte-for-byte (the few residual diffs found were agent *drift bugs* — literal template dates silently rewritten to "today," a stray backtick moved — not legitimate adaptations; the script is the more faithful copy). Do not re-derive this list by re-reading the templates and eyeballing them for `{placeholder}` tokens — some files need real adaptation via plain prose with no bracketed token at all (see the Adaptive tier note below), which a token scan alone will miss. If you're ever unsure whether a "verbatim" file actually needs a specific line's content adapted, diff the script's output against a known-good previously-generated repo for that same file, not just against the template.
 
-It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` + `.gitkeep`, `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
+It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` (no `.gitkeep` — gitignored, see below), `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
 - **8 of 16 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`
 - **All 9 workflow files** — the 7 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
-- Both version-check scripts, `devkit_version.txt`, 5 blank memory files, 5 blank working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
+- Both version-check scripts, `devkit_version.txt`, 5 blank memory files, 5 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.claude/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
 
 If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the 8 verbatim rules files are left as literal placeholders — fill them in with a follow-up run once the GitHub repo exists, or leave them (harmless, same convention as workflow files).
 
@@ -360,7 +360,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
 
 1. **Run the mechanical tier first, in one call:**
    ```
-   bash .claude/agents/templates/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
+   bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
    This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 8 verbatim rules files, all 9 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 

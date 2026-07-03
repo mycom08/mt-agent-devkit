@@ -41,6 +41,39 @@ If the user does not supply a reference project (answer is "default"), generate 
 
 ---
 
+## .gitignore additions (every shape)
+
+The mechanical scaffold step already writes devkit-generic entries (`.claude/agents/tmp/`, `/result/`, working-record/retros ignores) to the repo's `.gitignore` before skeleton generation runs. Append the following Java-specific block during skeleton generation — don't replace what's already there:
+
+```gitignore
+# Maven build output
+target/
+
+# Gradle build output (only if this repo uses Gradle)
+build/
+.gradle/
+
+# Java
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local secrets — never commit real credentials
+.env
+docker/sandbox/.env
+```
+
+Include only the block matching this repo's resolved `Build tool` (Maven → `target/`; Gradle → `build/` + `.gradle/`) — never both. The `docker/sandbox/.env` line applies regardless of Docker Preference; it's a no-op if no such file is ever created, and costs nothing to have present.
+
+---
+
 ## Dependency management & GitHub Packages (every shape)
 
 **Every Java repo publishes its build artifact to GitHub Packages — a fixed devkit convention, not optional, regardless of shape.** This is the release/distribution channel; it is separate from, and does not change, how a repo is built locally.
@@ -168,5 +201,6 @@ Two different GitHub-Packages-touching CI jobs exist side by side, for two diffe
 - Do not skip `VERSION`, `CHANGELOG.md`, or `.github/workflows/release.yml` in any shape, including API spec — every generated repo gets all three, regardless of what it does or doesn't otherwise version independently.
 - Do not generate `VERSION` with any value other than `0.0.1-SNAPSHOT` at generation time.
 - Do not use the Keep a Changelog two-permanent-section format for `CHANGELOG.md` — use the single-next-version-heading style in "Version & Release Management" above; `release.yml` validates against it directly and would fail against a different structure.
+- Do not skip the ".gitignore additions" block above, and do not overwrite the devkit-generic entries the mechanical scaffold step already wrote — append, never replace.
 
 Each shape file has its own additional "must not do" list for rules specific to that shape.
