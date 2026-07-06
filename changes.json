@@ -1,4 +1,13 @@
 {
+  "0.1.23": {
+    "new": [
+      ".claude/agents/templates/context/Project_Orchestrator_Priming_template.md"
+    ],
+    "modified": [],
+    "descriptions": {
+      ".claude/agents/templates/context/Project_Orchestrator_Priming_template.md": "Feat: project-orchestrator root now gets its own lightweight Project_Priming.md (product overview, repo structure, orchestrator's role) instead of no priming context at all — written by Build_Software_Workflow.md Stage 4 Path B, orchestrator-direct."
+    }
+  },
   "0.1.22": {
     "new": [],
     "modified": [
