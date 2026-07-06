@@ -1,5 +1,9 @@
 # {{PROJECT_NAME}} — Project Orchestrator
 
+## Orchestrator Startup
+
+Before doing anything else, read `.claude/agents/context/Project_Priming.md` — it has the project overview, repo structure, and this folder's own role. Do this at the start of every session opened here, not just the first one.
+
 ## Overview
 
 This is the **project orchestrator folder** for a multi-repo build managed by mt-agent-devkit. It coordinates story creation and sprint planning across all repos in the project.

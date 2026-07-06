@@ -1,4 +1,13 @@
 {
+  "0.1.24": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/Project_CLAUDE_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/Project_CLAUDE_template.md": "Feat: project-orchestrator CLAUDE.md now has an Orchestrator Startup section requiring Project_Priming.md to be read at the start of every session, mirroring the devkit's own CLAUDE.md pattern."
+    }
+  },
   "0.1.23": {
     "new": [
       ".claude/agents/templates/context/Project_Orchestrator_Priming_template.md"
