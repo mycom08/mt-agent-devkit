@@ -1,4 +1,13 @@
 {
+  "0.1.22": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Fix: §9 Release Gate no longer scopes VERSION/CHANGELOG.md to Java-skeleton repos — both are now a universal devkit convention for every scaffolded repo; only the automated release.yml cut remains Java-specific."
+    }
+  },
   "0.1.21": {
     "new": [],
     "modified": [

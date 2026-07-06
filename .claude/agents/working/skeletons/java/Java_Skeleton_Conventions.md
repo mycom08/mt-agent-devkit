@@ -119,47 +119,11 @@ publish:
 
 ## Version & Release Management (every shape)
 
-**Every generated repo gets a `VERSION` file, a `CHANGELOG.md`, and a manually-triggered `.github/workflows/release.yml` — no exceptions, including the API spec shape** (this overrides any earlier notion that API spec's independent Maven `<version>` was enough on its own; it still versions independently, it just also gets the same VERSION/CHANGELOG/release.yml trio as every other shape). "Release artifact" differs by shape — a Docker image for the REST service shape, a release-version Maven package for library and API spec — see each shape's own Release files section for the exact step.
+**`VERSION` and `CHANGELOG.md` are a devkit-wide convention, not Java-specific** — see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md` for the file format and initial value (`0.0.1-SNAPSHOT`). Both files already exist by the time Java skeleton generation runs (the mechanical scaffold step creates them for every repo, any language, before this step — see "Reordering" in `Build_Software_Workflow.md`'s Java Skeleton Generation section). **Do not recreate either file** — read the existing `VERSION` value (it will be `0.0.1-SNAPSHOT`) to seed `pom.xml`/`build.gradle`'s own `<version>`, and leave `CHANGELOG.md` as scaffolded.
+
+What *is* Java-specific, and what this section still covers, is the manually-triggered `.github/workflows/release.yml` — no exceptions, including the API spec shape (it still versions independently, it just also gets `release.yml` like every other shape). "Release artifact" differs by shape — a Docker image for the REST service shape, a release-version Maven package for library and API spec — see each shape's own Release files section for the exact step.
 
 Adapted from a real internal reference project's release workflow (`lhtuwrk/authorization-service`, `.github/workflows/release.yml` and `CHANGELOG.md`) — branch names, image registry paths, and the dual-branch guard are genericized for any devkit user; the underlying validate → build → tag → bump-forward flow is kept as-is.
-
-### `VERSION`
-
-A single-line file at the repo root, no trailing whitespace, one of two shapes:
-- **Snapshot** (the normal day-to-day state): `x.x.x-SNAPSHOT`. This is what the continuous `publish` job (above) deploys on every push to main.
-- **Release** (only momentarily true, set by hand right before triggering `release.yml`): `x.x.x`, no suffix.
-
-**Initial value at generation time: `0.0.1-SNAPSHOT`** — every shape, no exceptions, always this exact value regardless of what `architecture.md` might otherwise suggest. Stripping the `-SNAPSHOT` suffix to cut an actual release is a deliberate, manual, later action by a human — skeleton generation never produces a non-`-SNAPSHOT` `VERSION`.
-
-### `CHANGELOG.md`
-
-Not [Keep a Changelog](https://keepachangelog.com/)'s two-permanent-section format — this devkit follows the reference project's single-next-version-heading style instead, since `release.yml` validates directly against it:
-
-```markdown
-# Changelog
-
-All notable changes to this project are documented in this file.
-
-## Contribution Convention
-
-After merging a PR to main, the implementer adds a bullet entry under the relevant
-subsection of the current Unreleased version below. Use the following subsections:
-
-- **Changes** — new features, enhancements, refactors, documentation, CI/tooling
-- **Bug Fixes** — defect corrections and hotfixes
-
-Entry format: `- [ST-XXXXXX] Short description of the change.`
-
----
-
-## [0.0.1] - Unreleased
-
-### Changes
-
-### Bug Fixes
-```
-
-The top heading always names the *next* version to be cut (matching `VERSION` once its `-SNAPSHOT` suffix is stripped), suffixed `- Unreleased` until `release.yml` stamps it with the actual release date. `[ST-XXXXXX]` matches this devkit's own story ID convention (`Story_Standard.md`) — target-project developers add one bullet per merged story under `### Changes` or `### Bug Fixes` as they go, so the section is never empty by the time someone wants to release.
 
 ### `.github/workflows/release.yml`
 
@@ -199,9 +163,9 @@ Two different GitHub-Packages-touching CI jobs exist side by side, for two diffe
 - Do not let a user-supplied reference project override a fixed rule in this document or the shape file (Lombok, entity/DTO conventions, layering, healthcheck, security baseline, VERSION/CHANGELOG, GitHub Packages publishing) — a reference project only informs structural/style choices left open. Never copy a reference project's private Maven coordinates into the generated build file.
 - Do not choose the build tool independently per repo, or infer it from `architecture.md` — use the `Build tool` value passed into the generation prompt (see "Build tool" above), the same for every Java repo in this build.
 - Do not skip the `<distributionManagement>`/`maven-publish` GitHub Packages config or its CI `publish` job, in any shape — "release artifacts use GitHub Package" is a fixed devkit convention, not optional.
-- Do not skip `VERSION`, `CHANGELOG.md`, or `.github/workflows/release.yml` in any shape, including API spec — every generated repo gets all three, regardless of what it does or doesn't otherwise version independently.
-- Do not generate `VERSION` with any value other than `0.0.1-SNAPSHOT` at generation time.
-- Do not use the Keep a Changelog two-permanent-section format for `CHANGELOG.md` — use the single-next-version-heading style in "Version & Release Management" above; `release.yml` validates against it directly and would fail against a different structure.
+- Do not skip `.github/workflows/release.yml` in any shape, including API spec — every generated repo gets it, regardless of what it does or doesn't otherwise version independently.
+- Do not recreate `VERSION` or `CHANGELOG.md` — the mechanical scaffold step already created both (universal devkit convention, see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`) before this generation step ever runs. Read `VERSION`'s existing value (`0.0.1-SNAPSHOT`) to seed `pom.xml`/`build.gradle`'s `<version>` — do not invent a different value.
+- Do not use the Keep a Changelog two-permanent-section format for `CHANGELOG.md` — it already uses the single-next-version-heading style (see the shared conventions file); `release.yml` validates against it directly and would fail against a different structure.
 - Do not skip the ".gitignore additions" block above, and do not overwrite the devkit-generic entries the mechanical scaffold step already wrote — append, never replace.
 - Do not leave `mvnw`/`gradlew` at the default non-executable git mode — always run `git update-index --chmod=+x` on the wrapper before the first commit; a non-executable wrapper fails every CI job with `Permission denied`.
 - Do not tell the user "no PAT or extra secret needs creating" as a blanket statement — that only holds for a repo publishing its own package. Any cross-repo private-package read (see `Java_Skeleton_REST_Service.md`'s sibling-dependency section) needs a PAT or an explicit org-level grant; state this in the generation agent's report, don't let the user discover it from a CI failure.

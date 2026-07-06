@@ -320,13 +320,13 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 4. Run `gh repo create` for the project repo (use the product name from the user's idea as the repo name; prompt the user for visibility — public or private — if not previously specified).
 
-5. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if the repo's tech stack (from `/result/analyst/architecture.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Skip entirely for non-Java repos or repos that already have code.
-
-6. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**:
+5. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**. This runs **before** Java skeleton generation (step 6) so that a Java repo already has `.gitignore`, `VERSION`, and `CHANGELOG.md` in place for that step to build on rather than create itself:
    - Stage 1: scan the repo folder (it is brand-new, so use the product name and description derived from the user's idea and `/result/analyst/summary.md`)
-   - **Mechanical tier (orchestrator-direct, one Bash call):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes the 8 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook. See `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section for exactly what this covers.
+   - **Mechanical tier (orchestrator-direct, one Bash call):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes the 8 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, and the `settings.json` hook. See `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section for exactly what this covers.
    - **Adaptive tier (agent, smaller scope now):** spawn a general-purpose agent for only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 5 instruction files, the 8 adaptive rules files, and 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 8 rules files these are (it's not just Developer/QA/TL). Point this agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md` from `/result/build/<repo-name>/`) — only have it read the full `architecture.md` for cross-cutting sections (security model, error handling) the filtered excerpt visibly omits, not as a blanket second read of the same content.
    - Stage 3: skip the user-confirmation sub-step — you already have user consent from the overall Stage 4 flow
+
+6. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if the repo's tech stack (from `/result/analyst/architecture.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Runs after step 5, so `.gitignore`/`VERSION`/`CHANGELOG.md` already exist — the agent appends to/reads them rather than creating them. Skip entirely for non-Java repos or repos that already have code.
 
 7. Run `gh project create` to create a GitHub Project named after the product (from the user's idea). Store the returned project URL.
 
@@ -357,7 +357,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    - **Wave 1:** every repo with no unresolved dependency — every `-api-spec` repo, plus any repo that isn't part of a Java-service/api-spec pair at all (e.g. `web-service`, `android-app` have no dependency on each other or on the Java repos).
    - **Wave 2:** every REST service repo whose `-api-spec` companion is in Wave 1 (there are no waves beyond 2 under the current devkit convention — only one dependency edge type exists).
 
-   Run each wave to completion before starting the next. Within a wave, steps a–d below (folder creation, `git init`, `gh repo create`, Java skeleton) run per-repo in the orchestrator — cheap, no agent needed — but **step e's adaptive-tier agent is what actually benefits from parallelism: spawn one agent per repo in the wave, all in a single orchestrator message** (same pattern as Stage 3's Agent A/B parallel spawn). Wait for every agent in the wave to report before moving to the next wave.
+   Run each wave to completion before starting the next. Within a wave, steps a–c and e below (folder creation, `git init`, `gh repo create`, Java skeleton) run per-repo in the orchestrator — cheap, no agent needed — but **step d's adaptive-tier agent is what actually benefits from parallelism: spawn one agent per repo in the wave, all in a single orchestrator message** (same pattern as Stage 3's Agent A/B parallel spawn). Wait for every agent in the wave to report before moving to the next wave.
 
    For **each sub-repo** in the current wave:
 
@@ -367,13 +367,13 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    c. Run `gh repo create` for the sub-repo (use `<repo-name>` as the repo slug; same visibility as chosen for other repos).
 
-   d. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton before the devkit scaffold step below, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Skip entirely for non-Java repos or repos that already have code.
-
-   e. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**:
+   d. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**. This runs **before** Java skeleton generation (step e) so that a Java repo already has `.gitignore`, `VERSION`, and `CHANGELOG.md` in place for that step to build on rather than create itself:
       - Stage 1: scan the repo folder using the repo's `purpose` and `tech stack` from `repo_structure.md`
-      - **Mechanical tier (orchestrator-direct, one Bash call, before the parallel agent spawn below):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>`
+      - **Mechanical tier (orchestrator-direct, one Bash call, before the parallel agent spawn below):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes `.gitignore`, `VERSION`, `CHANGELOG.md` among its universal outputs (see `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section).
       - **Adaptive tier (agent — this is the one spawned in parallel across the wave):** only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 5 instruction files, the 8 adaptive rules files, 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 8 rules files. Point the agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md`) — only have it read the full `architecture.md` for cross-cutting sections the filtered excerpt visibly omits.
       - Stage 3: skip the user-confirmation sub-step
+
+   e. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Runs after step d, so `.gitignore`/`VERSION`/`CHANGELOG.md` already exist — the agent appends to/reads them rather than creating them. Skip entirely for non-Java repos or repos that already have code.
 
    f. Write `.claude/agents/docs/build_state.md` inside the sub-repo:
 
@@ -388,7 +388,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    g. Update state file: append `<repo-name>` to `Scaffolded Repos`, `Updated: <now>` (repo count is already set from Stage 2). Do this as soon as this repo's own steps a–f finish — do not wait for the rest of the wave — so a crash mid-wave still leaves an accurate resume point.
 
-3. **Project orchestrator folder** — **skip this step entirely if the only reason there's more than one repo is the Java REST service + API spec companion pattern under an otherwise-`monolith` decision** (i.e. exactly a service + its own `-api-spec` repo, nothing else). In that case there is no real multi-repo product to orchestrate — treat the REST service repo as the product's primary repo (it already gets the full devkit scaffold in step 2e) and proceed directly to step 4 below. For genuine multi-repo systems (independently deployable components beyond just a service+contract pair), create the orchestrator folder:
+3. **Project orchestrator folder** — **skip this step entirely if the only reason there's more than one repo is the Java REST service + API spec companion pattern under an otherwise-`monolith` decision** (i.e. exactly a service + its own `-api-spec` repo, nothing else). In that case there is no real multi-repo product to orchestrate — treat the REST service repo as the product's primary repo (it already gets the full devkit scaffold in step 2d) and proceed directly to step 4 below. For genuine multi-repo systems (independently deployable components beyond just a service+contract pair), create the orchestrator folder:
 
    a. Ask the user for the project orchestrator folder path if not already known: **"Where should I create the project orchestrator folder? Provide an absolute path."**
 
@@ -406,9 +406,9 @@ After both agents complete, the orchestrator copies the following files from `/r
    ```
    Repeat for each repo. (**Not** `gh project item-add` — that subcommand only accepts Issue/PR URLs and returns "resource not found" for a bare repo URL; `gh project link` is the correct command for attaching a repository to a Project.)
 
-6. Go back and fill in `GitHub Project URL` in every sub-repo's `.claude/agents/docs/build_state.md` that was written with an empty placeholder in step 2e.
+6. Go back and fill in `GitHub Project URL` in every sub-repo's `.claude/agents/docs/build_state.md` that was written with an empty placeholder in step 2f.
 
-**Steps 7–9 apply only if a project orchestrator folder was created in step 3** (skip all three for the service+api-spec-only case):
+**Steps 7–10 apply only if a project orchestrator folder was created in step 3** (skip all four for the service+api-spec-only case):
 
 7. Read `.claude/agents/templates/Project_CLAUDE_template.md` and write it to the project orchestrator folder as `CLAUDE.md`, substituting:
    - `{{PROJECT_NAME}}` → product name from user's idea
@@ -426,28 +426,42 @@ After both agents complete, the orchestrator copies the following files from `/r
    **GitHub Project URL:** <project-url>
    **Phase:** scaffold
    **Repos:** <comma-separated list of sub-repo names>
-   **Analysis Docs:** .claude/agents/docs/analysis/
+   **Analysis Docs:** docs/
    ```
 
-10. **Whole-project `docker-compose.yml` — full-stack local start.** Skip this step entirely if `Docker Preference` is not `docker`, or if zero sub-repos have their own `docker/sandbox/docker-compose.yml` (written by Java Skeleton Generation, REST-service shape only — see `java/Java_Skeleton_REST_Service.md`) — nothing to aggregate. Otherwise, per `.claude/agents/working/skeletons/docker/Docker_Conventions.md`'s File Layout, write `<orchestrator-folder-path>/docker/sandbox/docker-compose.yml` that brings up every dockerized sub-repo together:
+10. **Doc Copy — project-level analysis docs.** The project-orchestrator folder is not part of Stage 5's per-repo doc-copy loop (Stage 5 Entry explicitly excludes it — see Stage 5 below), so without this step the orchestrator folder never receives any analysis docs at all. These are project-level documents for a human/PO to read, not agent working files, so they go in a plain top-level `docs/` folder — **not** under `.claude/agents/`. Create `<orchestrator-folder-path>/docs/` and copy, flat and unfiltered (no per-repo split — the orchestrator isn't scoped to one repo):
+
+    | Source | Destination |
+    |--------|-------------|
+    | `/result/analyst/summary.md` | `<orchestrator-folder-path>/docs/summary.md` |
+    | `/result/analyst/architecture.md` | `<orchestrator-folder-path>/docs/architecture.md` |
+    | `/result/analyst/testing_plan.md` | `<orchestrator-folder-path>/docs/testing_plan.md` |
+    | `/result/analyst/business_requirements.md` | `<orchestrator-folder-path>/docs/business_requirements.md` |
+    | `/result/analyst/implementation_roadmap.md` (full, unfiltered) | `<orchestrator-folder-path>/docs/implementation_roadmap.md` |
+    | `/result/build/repo_structure.md` | `<orchestrator-folder-path>/docs/repo_structure.md` |
+    | `/result/analyst/diagrams/` (entire folder) | `<orchestrator-folder-path>/docs/diagrams/` |
+
+11. **VERSION + CHANGELOG.md — project-orchestrator root.** This folder never runs `scaffold_mechanical.sh` (that only runs per-repo, in step 5/2d above), so without this step the root never gets these files either. Same universal convention as every repo (see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`): write `<orchestrator-folder-path>/VERSION` containing `0.0.1-SNAPSHOT`, and `<orchestrator-folder-path>/CHANGELOG.md` with the standard header/format, both only if not already present (idempotent, resume-safe).
+
+12. **Whole-project `docker-compose.yml` — full-stack local start.** Skip this step entirely if `Docker Preference` is not `docker`, or if zero sub-repos have their own `docker/sandbox/docker-compose.yml` (written by Java Skeleton Generation, REST-service shape only — see `java/Java_Skeleton_REST_Service.md`) — nothing to aggregate. Otherwise, per `.claude/agents/working/skeletons/docker/Docker_Conventions.md`'s File Layout, write `<orchestrator-folder-path>/docker/sandbox/docker-compose.yml` that brings up every dockerized sub-repo together:
     - For each sub-repo with its own `docker/sandbox/docker-compose.yml`, add its service(s) here. A Java REST service's own compose file sets `build.context: ../../..` / `build.dockerfile: <repo-name>/docker/Dockerfile` (per `java/Java_Skeleton_REST_Service.md` — three levels up from `<repo-name>/docker/sandbox/` reaches the orchestrator root, which contains both this repo and its sibling api-spec repo as immediate children). This aggregation file lives one level shallower — at `<orchestrator-folder-path>/docker/sandbox/docker-compose.yml` directly, with no `<repo-name>/` segment wrapping it — so reaching that same orchestrator root only takes **two** `..` segments, not three: the transform is `context: ../../..` → `context: ../..` (the `dockerfile:` value, `<repo-name>/docker/Dockerfile`, is already expressed relative to the orchestrator root in both files, so it carries over unchanged). Everything else (env vars, ports, `depends_on`, infra services like its db) copies over unchanged from that repo's own compose file. Prefix each infra service/volume name with the owning repo name if two sub-repos would otherwise collide (e.g. two repos both naming their db service `db`).
     - Repos with no `docker/sandbox/docker-compose.yml` (no skeleton yet, a shape that doesn't get one — API spec, pure library, not-yet-scaffolded non-Java repos) are simply absent from this file; it grows to cover them once their own scaffold adds one.
     - Add a one-line comment at the top of the file: `# Full-stack local start — brings up every dockerized sub-repo together. Repos without their own docker-compose.yml aren't included yet.`
     - Also write `<orchestrator-folder-path>/docker/README.md` per `Docker_Conventions.md`, documenting this aggregation compose (the command to run it, which sub-repos are currently included).
 
-11. Commit and push the orchestrator folder's content, so the GitHub repo isn't left empty (the orchestrator folder holds no analysis docs of its own, so it doesn't go through the Stage 5 doc-copy commit — do it here instead):
+13. Commit and push the orchestrator folder's content, so the GitHub repo isn't left empty (the orchestrator folder's own analysis docs and build scaffold never go through Stage 5's per-repo doc-copy commit, since Stage 5 excludes it — do it here instead):
     ```
     cd <orchestrator-folder-path>
-    git add CLAUDE.md .claude .gitignore docker
-    git commit -m "chore: scaffold project-orchestrator CLAUDE.md + build workflow"
+    git add CLAUDE.md .claude .gitignore docs docker VERSION CHANGELOG.md
+    git commit -m "chore: scaffold project-orchestrator CLAUDE.md + build workflow + analysis docs"
     git branch -M main
     git push -u origin main
     ```
-    > Stage only the orchestrator's own files (`CLAUDE.md`, `.claude/`, `.gitignore`, `docker/` if written) — never `git add -A` here, since the sub-repo folders live as sibling directories inside the orchestrator folder and are separate git repos with their own remotes, not submodules of this one. Omit `docker` from the `git add` if step 10 was skipped.
+    > Stage only the orchestrator's own files (`CLAUDE.md`, `.claude/`, `.gitignore`, `docs/`, `docker/` if written, `VERSION`, `CHANGELOG.md`) — never `git add -A` here, since the sub-repo folders live as sibling directories inside the orchestrator folder and are separate git repos with their own remotes, not submodules of this one. Omit `docker` from the `git add` if step 12 was skipped.
 
-12. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
+14. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Updated: <now>`.
 
-13. Proceed to Stage 5.
+15. Proceed to Stage 5.
 
 > **Handoff message note:** the Stage 5 handoff message below assumes a project-orchestrator path exists for multi-repo. For the service+api-spec-only case (no orchestrator folder), use the monolith-style handoff instead — "Open a Claude Code session in `<service-repo-path>` and run: `plan next sprint`" — pointing at the REST service repo, not a project-orchestrator folder that doesn't exist.
 
@@ -601,7 +615,9 @@ Next step:
 - **Use `gh project link`, never `gh project item-add`, to attach a repo to a Project** — `item-add` only accepts Issue/PR URLs and fails with "resource not found" on a bare repo URL; `gh project link <number> --owner <owner> --repo <owner>/<repo>` is the correct command (Path A step 8, Path B step 5)
 - **Every repo gets committed and pushed exactly once, at the end of Stage 5** — Stage 4 only creates the remote (`gh repo create`) and writes files locally; it never commits. The Stage 5 doc-copy loop's commit+push step is what actually populates the GitHub repo, after scaffold + Java skeleton + analysis docs are all in place. The project-orchestrator folder is the one exception — it isn't part of the Stage 5 repo list, so it commits+pushes at the end of Stage 4 Path B instead (step 11). **Resume note:** if a repo shows a complete scaffold on disk but its Stage 4/5 resume check still finds it "incomplete" or its GitHub remote returns an empty tree, check whether it was simply never committed before assuming the scaffold itself needs redoing.
 - **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
-- **Whole-project docker-compose aggregates, never invents** — Path B step 10 only copies service definitions that already exist in a sub-repo's own `docker/sandbox/docker-compose.yml` (written by Java Skeleton Generation); it never fabricates a service for a repo that doesn't have one yet, and is skipped entirely when `Docker Preference` isn't `docker` or no sub-repo has Docker artifacts
+- **Whole-project docker-compose aggregates, never invents** — Path B step 12 only copies service definitions that already exist in a sub-repo's own `docker/sandbox/docker-compose.yml` (written by Java Skeleton Generation); it never fabricates a service for a repo that doesn't have one yet, and is skipped entirely when `Docker Preference` isn't `docker` or no sub-repo has Docker artifacts
+- **Project-orchestrator analysis docs go in `docs/`, never under `.claude/agents/`** — Path B step 10 copies the full analyst docs (summary, architecture, testing plan, business requirements, unfiltered implementation roadmap, repo_structure.md, diagrams/) flat into `<orchestrator-folder-path>/docs/`, since these are project-level documents, not agent working files. This is the orchestrator folder's only source of analysis docs — Stage 5's doc-copy loop explicitly excludes it.
+- **VERSION/CHANGELOG.md are universal, not Java-only** — every scaffolded repo (any language, via `scaffold_mechanical.sh`) and the project-orchestrator root (Path B step 11) get a `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` at scaffold time; see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`. Java skeleton generation no longer creates these itself — it runs after the mechanical scaffold step and only reads/appends.
 - **Docker Consultation happens once, up front, for the whole build** (Stage 4 Entry step 5) — same rationale as the Java Repo Consultation: orchestrator-direct, not a spawned agent, asked before any repo folder or agent work begins so later steps (including Path B's parallel wave-spawn) never stop mid-flow for this. The resolved `Docker Preference` gates every Docker-specific artifact across every repo in the build, Java or not.
 - **Stop on blocker** — if any agent reports a blocking issue, stop and report to the user before continuing
 - **Completion reports** — each spawned agent returns its results to the orchestrator; orchestrator relays a brief status to the user after each stage

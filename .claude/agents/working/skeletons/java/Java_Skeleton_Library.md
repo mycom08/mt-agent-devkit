@@ -54,7 +54,7 @@ Two jobs — `build-and-test` (`./mvnw -B verify` or `./gradlew build`; no lint/
 
 ## Release files — VERSION, CHANGELOG, release.yml
 
-Generated alongside the code, same pass as everything else. `VERSION` (`0.0.1-SNAPSHOT` at generation time) and `CHANGELOG.md` follow `Java_Skeleton_Conventions.md`'s "Version & Release Management" section exactly — read that first. `pom.xml`/`build.gradle`'s own `<version>` matches `VERSION` (`0.0.1-SNAPSHOT`), not a separate clean semver.
+`VERSION` and `CHANGELOG.md` already exist by the time this generation step runs — the mechanical scaffold step creates them universally, for every repo regardless of language (see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`). Do not recreate them; only `.github/workflows/release.yml` is generated here. `pom.xml`/`build.gradle`'s own `<version>` matches the existing `VERSION` value (`0.0.1-SNAPSHOT`), not a separate clean semver.
 
 **`release.yml` step 6 for this shape (build and publish the release artifact):** no Docker image — deploy the release-version Maven/Gradle artifact directly to GitHub Packages, reusing the same `<distributionManagement>`/`maven-publish` config from "Dependency management & GitHub Packages" (the `VERSION`-stripped-to-clean value is what ends up in `pom.xml`/`build.gradle` at this point, so the same `deploy`/`publish` command now pushes a real, non-`SNAPSHOT` release instead of a snapshot):
 ```yaml
@@ -74,6 +74,6 @@ In addition to the universal list in `Java_Skeleton_Conventions.md`:
 - Do not apply the Spring Boot Gradle plugin (`org.springframework.boot`) or `spring-boot-starter-parent` — those are for runnable apps only; libraries use `java-library` (Gradle) or a plain `<packaging>jar</packaging>` POM with no Spring Boot parent (Maven).
 - Do not force REST-service layering (controller/service/repository) onto a library that isn't one.
 - Do not generate a Dockerfile, docker-compose.yml, or start script — a library has no standalone runtime.
-- Do not skip `VERSION`, `CHANGELOG.md`, or `.github/workflows/release.yml` — see "Version & Release Management" in `Java_Skeleton_Conventions.md`.
+- Do not skip `.github/workflows/release.yml` — see "Version & Release Management" in `Java_Skeleton_Conventions.md`. Do not recreate `VERSION`/`CHANGELOG.md` — they already exist (mechanical scaffold step).
 - Do not skip the `<distributionManagement>`/`publish` CI job — "release artifacts use GitHub Package" is a fixed devkit convention, not optional.
-- Do not set `VERSION`/the `pom.xml`/`build.gradle` version to anything other than `0.0.1-SNAPSHOT` at generation time — a plain release version would make the second CI publish onward fail, and would also fail `release.yml`'s own guard against releasing an already-released version.
+- Do not set the `pom.xml`/`build.gradle` version to anything other than the existing `VERSION` file's value (`0.0.1-SNAPSHOT`) at generation time — a plain release version would make the second CI publish onward fail, and would also fail `release.yml`'s own guard against releasing an already-released version.

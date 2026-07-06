@@ -145,7 +145,40 @@ else
 EOF
 fi
 
-# 9. .claude/settings.json SessionStart hook — only handles the "file doesn't exist yet" case,
+# 9. VERSION + CHANGELOG.md — universal devkit convention, every language, idempotent
+#    (skip if already present, e.g. a Java skeleton already wrote them before this ran).
+#    See .claude/agents/working/skeletons/shared/Version_Release_Conventions.md.
+if [[ ! -f "$TARGET/VERSION" ]]; then
+  printf '0.0.1-SNAPSHOT' > "$TARGET/VERSION"
+fi
+
+if [[ ! -f "$TARGET/CHANGELOG.md" ]]; then
+  cat > "$TARGET/CHANGELOG.md" <<'EOF'
+# Changelog
+
+All notable changes to this project are documented in this file.
+
+## Contribution Convention
+
+After merging a PR to main, the implementer adds a bullet entry under the relevant
+subsection of the current Unreleased version below. Use the following subsections:
+
+- **Changes** — new features, enhancements, refactors, documentation, CI/tooling
+- **Bug Fixes** — defect corrections and hotfixes
+
+Entry format: `- [ST-XXXXXX] Short description of the change.`
+
+---
+
+## [0.0.1] - Unreleased
+
+### Changes
+
+### Bug Fixes
+EOF
+fi
+
+# 10. .claude/settings.json SessionStart hook — only handles the "file doesn't exist yet" case,
 #    since merging into arbitrary existing JSON safely needs a real parser, not sed. If the
 #    file already exists, this step is skipped and must be merged separately (this is the
 #    uncommon case for brand-new repos, which is the primary caller of this script).

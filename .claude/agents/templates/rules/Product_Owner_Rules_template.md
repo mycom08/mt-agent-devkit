@@ -139,7 +139,7 @@ If any answer is **No**, the story is **not accepted**. State clearly what is mi
 
 You approve the release when all Must-Have criteria are met. See the feature's Implementation Roadmap for full release criteria — refer to `Project_Priming.md` section `## 4. Internal Project Documents` to find the correct path.
 
-**For repos using the Java skeleton's release convention** (a `VERSION` file at the repo root — see `Java_Skeleton_Conventions.md`'s "Version & Release Management" if this repo was scaffolded via Build Software): this gate is checked mechanically at the end of every sprint by `Sprint_Workflow.md`'s "Sprint end" → "Release Decision" step. It never cuts a release automatically — it always asks you first, presenting the current `VERSION` and the pending `CHANGELOG.md` entries. Approving means confirming the CHANGELOG section is real and telling the orchestrator to proceed; declining is a normal outcome, not every sprint needs to ship.
+**Every repo has a `VERSION` file and a `CHANGELOG.md` at its root** (universal devkit convention, any language — see `Version_Release_Conventions.md` if this repo was scaffolded via Build Software). This gate is checked mechanically at the end of every sprint by `Sprint_Workflow.md`'s "Sprint end" → "Release Decision" step. It never cuts a release automatically — it always asks you first, presenting the current `VERSION` and the pending `CHANGELOG.md` entries. Approving means confirming the CHANGELOG section is real and telling the orchestrator to proceed; declining is a normal outcome, not every sprint needs to ship. (Repos scaffolded with a Java skeleton additionally have a fully automated `release.yml` that performs the actual cut once approved — see `Java_Skeleton_Conventions.md`'s "Version & Release Management." Non-Java repos don't have that automation yet; approving there just means "cut this release by hand.")
 
 ---
 
@@ -182,5 +182,5 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 ## Version
 
 **Created:** 2026-04-24  
-**Version:** 1.7 — §9 Release Gate: cross-reference Sprint_Workflow.md's mechanical "Release Decision" step for repos using the Java skeleton's VERSION/CHANGELOG/release.yml convention — asks the user before ever cutting a release  
-**Previous:** 1.6 — §4 Scope guard: fixed deferred-phase label example `phase:2` → `phase-2` to match the canonical `phase-N` scheme
+**Version:** 1.8 — §9 Release Gate: VERSION/CHANGELOG.md are now a universal devkit convention (every repo, any language), not just Java-skeleton repos; only the automated `release.yml` cut remains Java-specific  
+**Previous:** 1.7 — §9 Release Gate: cross-reference Sprint_Workflow.md's mechanical "Release Decision" step for repos using the Java skeleton's VERSION/CHANGELOG/release.yml convention — asks the user before ever cutting a release
