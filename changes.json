@@ -1,4 +1,16 @@
 {
+  "0.1.25": {
+    "new": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/Project_CLAUDE_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Feat: dedicated, lightweight sync devkit workflow scoped to the project-orchestrator root's 3 owned files (CLAUDE.md merge, Project_Priming.md skip, Build_Software_Project_Workflow.md overwrite) — the full per-repo Sync_Devkit_Workflow.md is too heavy to reuse.",
+      ".claude/agents/templates/Project_CLAUDE_template.md": "Feat: project-orchestrator CLAUDE.md now carries Devkit source/version fields and a sync devkit trigger/section, so an already-scaffolded orchestrator folder can pull in future devkit template updates instead of only being set at build software time."
+    }
+  },
   "0.1.24": {
     "new": [],
     "modified": [
