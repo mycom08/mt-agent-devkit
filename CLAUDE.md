@@ -65,6 +65,18 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ---
 
+## Orchestrator Working Record
+
+**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and format as agent working records (dated entries: **Completed / In Progress / Impediments**; keep the 3 most recent days, delete older entries before writing a new one).
+
+**When to update (append/amend today's entry):**
+- **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, versions bumped, PR/story refs).
+- **On explicit close** — if the user says "end session" or "wrap up", finalize today's entry before ending, even if no stage completed since the last write.
+
+**Trigger:** user says **"report working status"** (aliases: "status report", "daily status"). No agents are spawned — read the record directly and summarize the most recent entry to the user (include earlier retained days only if asked for more history).
+
+---
+
 ## Workflow Help
 
 Trigger: user says **"workflow help"**
