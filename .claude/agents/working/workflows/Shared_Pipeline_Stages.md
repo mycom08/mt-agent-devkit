@@ -110,6 +110,12 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 11. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 12. On completion → proceed to Stage 2
 
+### Stub/TODO Scan & Verification-Only Outcome (implementer executes before step 9)
+
+**Stub/TODO scan (mandatory):** For every file in the story's Technical Scope (and any file the diff touches), grep for stub markers (`TODO`, `FIXME`, "left as", "not part of this scope", "extension point") in content the story's own AC describes as functional. Any hit must be either implemented in this story, or explicitly recorded — visibly, in the issue thread, not just a code comment — as deferred to a **named, existing or newly-created** backlog story. A stub with no owning story is a blocking finding, not an accepted risk.
+
+**Verification-only outcome (self-certified):** If your diff against the target branch touches nothing but docs/changelog (no template, workflow, or script files), mark the story `Outcome: verification-only` in the pipeline state file, in addition to your normal completion report. Stage 2/3 still perform one independent spot-check rather than trusting this tag blindly. If a reviewer/QA spot-check contradicts the tag, that is treated as an implementer accuracy issue in retro.
+
 ### Mid-Implementation Consultation Procedure (orchestrator executes when Developer reports a question)
 
 When the implementer returns with a mid-implementation consultation report instead of a completion report:
@@ -179,8 +185,10 @@ After the implementer reports completion, append a bullet to `Observations:` for
 1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `agentId` as `reviewer_session`
    - Default: **Technical Lead** reviews (**model: opus**)
    - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: sonnet**)
+   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
+   - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules.md §2` for the full checklist).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 6. **If approved** → proceed to Stage 3
@@ -215,6 +223,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 5. **Spawn** QA agent (**model: sonnet**); save its `agentId` as `qa_session`
 6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules.md`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
+   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust it. Skip the test-scenario document per `QA_Rules.md §4`'s verification-only exception.
 8. **If story AC issues found** → resume Implementer via `SendMessage` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `SendMessage` to `qa_session`** to revalidate (spawn new if expired)
 9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (see QA Rules §8–§9)
    - **If automation fails** → QA reports regression failures as a story comment → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
@@ -223,11 +232,14 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
 
+0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo mycom08/mt-agent-devkit`. If any check is `fail`, or any check has not yet reached a `completed` state, **abort the merge** — report the failing/pending check(s) to the user instead of proceeding. This runs regardless of what the reviewer's approval comment claims.
 1. Get the PR branch name: `gh pr view <PR-number> --repo mycom08/mt-agent-devkit --json headRefName --jq '.headRefName'`
 2. Merge the PR: `gh pr merge <PR-number> --repo mycom08/mt-agent-devkit --merge`
 3. Delete the remote dev branch: `git push origin --delete <branch-name>`
 4. Switch local branch to target: `git checkout main`
 5. Pull to sync: `git pull origin main`
+
+> **No-branch-protection note:** on a repo without required-status-checks support, step 0 above is the *only* enforcement that exists — treat it as non-optional baseline pipeline behavior.
 
 ### Orchestrator Observation Check — Stage 3
 
@@ -253,7 +265,10 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
    - `.claude/agents/working/rules/Product_Owner_Rules.md`
    - `.claude/agents/working/memory/Product_Owner_Memory.md`
-3. PO verifies acceptance and closes the story: tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
+3. PO verifies acceptance and closes the story:
+   - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.
+   - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal is the reviewer's final approval plus a confirmed merge — not a separate validator-confirms event.
+   - Tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
 4. PO writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 5. **Start Story Workflow:** pipeline ends here
 

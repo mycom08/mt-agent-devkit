@@ -232,6 +232,7 @@ Response and decision.
 - [ ] All CI checks on the PR have **finished**
 - [ ] No CI check is in a **failed** state
 - [ ] Review criteria pass (per agent-specific rules)
+- [ ] **Paste the literal `gh pr checks <PR-number>` output into the approval comment** — turns "I confirmed CI was green" into an auditable artifact instead of a self-report.
 
 > **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
 

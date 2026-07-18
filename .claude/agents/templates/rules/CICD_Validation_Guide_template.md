@@ -107,6 +107,14 @@ If the post-merge run fails, create a hotfix branch off master, fix the workflow
 
 ---
 
+## Exception — New Check Whose First Red Run Is the Expected, Correct Outcome
+
+If the story adds a **new** CI check whose purpose is to exercise real application behavior end-to-end, an initial red run on `ci-validation` that fails on genuine application assertions (not on the check's own setup/infra) is an acceptable, expected gate outcome — it means the new check is doing its job. Document this in the PR description under **CI Validation**, naming the specific failing assertions the check caught, rather than treating the red run as something to work around or suppress.
+
+This exception does **not** apply to a red run caused by the check's own setup/infra failing before the application code under test ever ran — that is a broken workflow, not a working new check, and must be fixed before opening the PR.
+
+---
+
 ## Note — PR-Triggered Gates Still Need a `push: [ci-validation]` Trigger
 
 If your CI gate is **PR-triggered** (`on: pull_request`, often with a `paths:` filter), it will not run when you push to `ci-validation`, so the pre-merge validation flow above produces no referenceable run. Add `ci-validation` as a push trigger alongside the PR trigger so Steps 1–3 work:
@@ -138,5 +146,6 @@ Either commit the path, add it to the check's known-runtime-path allowlist, or s
 
 ## Version
 
-**Version:** 1.2 — Notes added: PR-triggered gates need a push:[ci-validation] trigger; gitignored reference paths won't exist on the runner  
+**Version:** 1.3 — New exception added: a new check's first red run on genuine application assertions is an expected, acceptable gate outcome  
+**Previous:** 1.2 — Notes added: PR-triggered gates need a push:[ci-validation] trigger; gitignored reference paths won't exist on the runner  
 **Created:** 2026-06-05

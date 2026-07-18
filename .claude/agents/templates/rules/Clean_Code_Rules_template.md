@@ -1,7 +1,7 @@
 # Clean Code Rules
 
 **Applies to:** Developer (before writing source code), Technical Lead (during code review)  
-**Skip for:** documentation-only, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories
+**Skip for:** documentation-only, API spec, Dockerfile, docker-compose, migration SQL, `.github/workflows/`/CI YAML, or config-only stories
 
 ---
 
@@ -205,6 +205,7 @@
 
 ## Version
 
-**Version:** 1.4 — Added §3 Code Comments, §4 Object and Data Structure; renumbered §5–§12  
+**Version:** 1.5 — "Skip for" list now explicitly names `.github/workflows/`/CI YAML files  
+**Previous:** 1.4 — Added §3 Code Comments, §4 Object and Data Structure; renumbered §5–§12  
 **Created:** 2026-06-10  
 **Source:** Clean Code (Robert C. Martin) — All chapters

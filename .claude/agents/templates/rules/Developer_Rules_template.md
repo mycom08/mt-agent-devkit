@@ -146,6 +146,8 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ## 5. Testing & Verification
 
+**Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common.md §7` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
+
 **All applicable checks must pass before opening a PR — no exceptions:**
 
 | Check | Applies when | Command | Pass condition |
@@ -240,6 +242,8 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 **Review checklist:**
 - Verify the PR follows naming conventions, commit message format, and test coverage rules from §4–§5
 - Check for obvious logic errors, missing error handling at system boundaries, and security issues
+- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail of these checks (same rules apply to peer review)
+- **Stub/TODO re-check:** confirm stub markers/trivial-return patterns in AC-functional methods were scanned and any hit has an owning backlog story
 - Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
 - When all criteria pass, post approval as a comment on the PR (GitHub blocks self-approval — use `gh pr comment`)
 
@@ -247,6 +251,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 
 ## Version
 
-**Version:** 2.6 — §11 Peer Review: removed redundant CI gate line; section now defers to Story_Standard.md §12  
-**Previous:** 2.4 — §5 Testing: spec lint and drift check required when API spec changes  
+**Version:** 2.7 — §5: missing-credential cross-reference to `Agent_Common.md §7`; §11 Peer Review: CI-execution/SHA/red-diagnosis and stub/TODO re-check bullets added  
+**Previous:** 2.6 — §11 Peer Review: removed redundant CI gate line; section now defers to Story_Standard.md §12  
 **Created:** 2026-04-24

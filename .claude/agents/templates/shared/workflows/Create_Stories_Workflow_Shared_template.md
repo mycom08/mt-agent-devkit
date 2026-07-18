@@ -30,6 +30,7 @@ Present a draft story list (titles, user story statement, AC, assignee, points) 
 
 Before finalising each draft, apply these two checks:
 - **API surface check:** For every endpoint referenced in the ACs, confirm it exists in the project's API spec (check `docs/api/` or equivalent) or is explicitly scheduled for delivery in the same sprint. If an endpoint does not exist yet, note this in the story and flag it to the user before creating the issue.
+  - **Multi-repo only — contract-review completeness, not just existence:** if the endpoint lives in a sibling contract repo, path-existence in the spec file is not enough. Confirm a **closed, review-scoped** story in the owning repo actually covers that endpoint's schema against this story's needs — not just a same-named "API contract design" dependency. If no such story exists, or an existing one's AC scope doesn't cover the referenced endpoint, flag it to the user before creating the issue — either as a noted blocking dependency or by drafting the missing contract-review story in the owning repo first.
 - **Unit-test AC check:** If the story introduces new service-layer methods or functions, include an explicit AC: `- [ ] Unit tests added for all new service methods (empty-input guard, error path, happy path)`.
 
 ---

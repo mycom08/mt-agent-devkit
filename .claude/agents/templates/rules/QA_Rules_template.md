@@ -49,6 +49,9 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 - Always create a test scenario document first — do not begin testing without it
 - Place it under `docs/feature/<feature_name>/test-scenarios/` using `Title_Case_With_Underscores`
 - The scenario must cover: happy path, error cases, edge cases (empty values, invalid input, data isolation)
+- **Exceptions to the test-scenario document:**
+  - **CI/workflow-only stories** (Technical Scope is `.github/workflows/**` only): capture the CI run URL(s) plus relevant job log excerpts (e.g. a registry-push digest) as the validation artifact instead — there is no meaningful feature-behavior scenario to document.
+  - **Verification-only stories** (`Outcome: verification-only` — see `Shared_Pipeline_Stages.md` Stage 1): zero code/schema diff means there is nothing new to document; skip the test-scenario document.
 
 **Coverage audit — new behavior requires dedicated test cases:**
 Before signing off, for every behavior the story adds or changes, ask: *does a named test case exist whose primary purpose is to verify this specific behavior?*
@@ -58,11 +61,20 @@ Before signing off, for every behavior the story adds or changes, ask: *does a n
 
 This rule applies regardless of the service architecture, language, or testing framework in use.
 
+**Real-fixture test required wherever AC implies external integration:**
+For stories whose AC includes parsing, scraping, or calling a live/external system, require at least one test driven by a captured real-world fixture (e.g. a saved HTML/response snapshot committed to the repo) in addition to any mocked-interface tests. Mocks are correct for testing the surrounding orchestration, but they must never be the *only* evidence that an integration-shaped AC bullet is met — a fixture-based test forces the real implementation to exist, or makes its absence impossible to miss.
+
+**Mock/structural pass ≠ complete:**
+When a story's core purpose is an external integration or encodes researched real-world facts, structural correctness and green CI are necessary but not sufficient. Independently confirm the *substance* (real parsing output, real researched values) — not just that tests pass. A stub that satisfies its interface contract and passes every test through a mocked caller can still ship a missing capability; do not sign off on AC coverage without checking what the code under test actually does when exercised for real.
+
+**Run twice — full batch, then isolated single-scenario — before inspecting persisted output:**
+When integration tests share setup/teardown state (e.g. a shared fixture cleared between scenarios), running the full suite once and then inspecting the datastore afterward can show a stale or misleading picture — a row written by an earlier test can be wiped by a later test's own setup before anyone looks at it, even though every individual test passed. For any story with an elevated verification bar, re-run the specific scenario in isolation before inspecting output, in addition to the full-batch run.
+
 **Integration tests:**
 - Always check whether integration tests exist for the story
 - If integration tests can be run, **they must be run** — no exceptions
 - The only valid reasons to skip: the story is API-contract only, **or** TL has explicitly stated not to run them in a Story comment
-- If you encounter a constraint not covered by the above reasons (e.g., auth mechanism incompatibility, mode-gated endpoints, missing sandbox configuration), you **must not skip unilaterally** — report the constraint to the user and await their decision before proceeding. If the user directs you to escalate to TL, post a comment on the GitHub Issue tagging **TL**, describe the constraint, and await TL's explicit reply. Quote the approved decision (user or TL) in the QA sign-off comment.
+- If you encounter a constraint not covered by the above reasons (e.g., auth mechanism incompatibility, mode-gated endpoints, missing sandbox configuration, **a credential/secret needed for the verification is not available in the working environment — see `Agent_Common.md §7`**), you **must not skip unilaterally** — report the constraint to the user and await their decision before proceeding. If the user directs you to escalate to TL, post a comment on the GitHub Issue tagging **TL**, describe the constraint, and await TL's explicit reply. Quote the approved decision (user or TL) in the QA sign-off comment.
 - Record integration test results (pass/fail + evidence) as a Comment on the GitHub Issue
 
 **Integration test script failures — fix or block, never workaround:**
@@ -167,6 +179,8 @@ After all story Acceptance Criteria are verified and before giving merge sign-of
 
 > **No-skip rule:** QA cannot skip or self-approve skipping the automation run for any reason. If the sandbox cannot be started or the automation suite cannot be run, post a blocker comment on the story immediately and escalate to the user. Do not give merge sign-off until the user explicitly approves the skip or the issue is resolved. "Sandbox not in scope for this session" is not a valid justification.
 
+> **CI-equivalent exception (CI/workflow-only stories):** if the story's Technical Scope is `.github/workflows/**` only, and the CI validation run QA is watching already includes a job equivalent to the local automation suite (e.g. a `build-and-test` job running the same command), cite that passing CI run's job as evidence instead of also running the full local suite — running the identical check three times (locally, plus twice via CI) adds no signal. This is the only recognized exception to the No-skip rule above; it does not apply to any story that touches source, schema, or test files.
+
 ---
 
 ## 9. Pre-PR Gate (when acting as Implementer)
@@ -223,6 +237,6 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 3.3 — §4: coverage audit rule added — new behavior requires dedicated test cases; regression fixes do not count as coverage  
-**Previous:** 3.2 — §4: test failure policy, no excluded tests, field-removal coverage added; §5: Document_Index.md reference; §10: live user instruction conflict rule added  
+**Version:** 3.4 — §4: real-fixture test requirement for external-integration AC, mock/structural-pass-≠-complete rule, run-twice isolation technique, CI/workflow-only and verification-only test-scenario-doc exceptions, missing-credential example added; §8: CI-equivalent exception for CI/workflow-only stories  
+**Previous:** 3.3 — §4: coverage audit rule added — new behavior requires dedicated test cases; regression fixes do not count as coverage  
 **Created:** 2026-05-01

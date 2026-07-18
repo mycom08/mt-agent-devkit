@@ -380,6 +380,7 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 - [ ] All CI checks on the PR have **finished** — do not review while CI is still running
 - [ ] No CI check is in a **failed** state — if any check failed, post a comment on the PR noting the failing check and ask the implementer to fix it; do not approve until CI is green
 - [ ] Code review criteria pass (per agent-specific rules)
+- [ ] **Paste the literal `gh pr checks <PR-number>` output into the approval comment** — this turns "I confirmed CI was green" into an auditable artifact instead of a self-report with nothing to check it against later. Approval comments without this evidence are incomplete.
 
 > **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
 
@@ -516,6 +517,7 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.5 — §12 reviewer checklist adds the flag-vs-block rule (PR-introduced contradiction blocks; pre-existing out-of-scope problem is approved + flagged as follow-up) (2026-06-30)
+**Version:** 2.6 — §12 reviewer checklist requires pasting `gh pr checks <PR#>` output as approval evidence  
+**Previous:** 2.5 — §12 reviewer checklist adds the flag-vs-block rule (PR-introduced contradiction blocks; pre-existing out-of-scope problem is approved + flagged as follow-up) (2026-06-30)
 
 This is the single source of truth for story workflow across all agents.

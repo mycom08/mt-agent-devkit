@@ -66,6 +66,8 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
         - `[instruction]` → agent instruction files (`.claude/agents/*_instructions.md`)
         - `[workflow]` → workflow files (`.claude/agents/workflows/`)
         - `[failure]` → rules or guardrail files (`.claude/agents/rules/`)
+
+        **Routing check for `[context]` items:** before applying a `[context]` item as a priming/memory edit, ask explicitly — *does this note describe a missing capability or limitation in the codebase/test setup (not just process friction), with no existing backlog story that will ever close it?* If yes, route it to backlog creation (draft a new story) instead of, or in addition to, the priming/memory edit — a note filed only as context trivia can leave a real capability gap permanently unowned.
      d. Append a story section to the sprint summary file. Read `Sprint` from the state file: `sprint-N` → `.claude/agents/retros/sprint_N_summary.md`. Create the file if it does not exist:
         ```markdown
         # Sprint N — Retro Summary

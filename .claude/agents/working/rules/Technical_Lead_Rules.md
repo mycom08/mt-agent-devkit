@@ -25,11 +25,26 @@ Do these **in order** before any design or review work:
 
 **Review checklist:**
 - **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
+- **Confirm the check actually executed, not just its conclusion:** open the job log and confirm the target check actually ran before accepting a green/red conclusion at face value. A run that fails at dependency resolution before anything meaningful executes is a different failure mode than a real failure — call it out as such, don't treat it as proof either way.
+- **Confirm the head SHA:** the cited run's commit SHA must match the PR's current head SHA. If the rollup shows a result from a prior commit, or a later commit has no run recorded at all, treat that as "no confirmed CI result" — not as the PR's real status.
+- **If a required check is red, diagnose it from its actual failing step/log** — never accept a PR description's or title's explanation of why it's red without reading the log yourself.
+- **Dependency-pin check:** if the story changes or introduces a version pin, confirm the pinned version is actually resolvable, not just present in a local cache.
 - Verify compliance with the approved implementation design
 - Check: naming conventions, cross-reference correctness, template structure completeness
 - **Source code / script changes only** — verify compliance with `.claude/agents/working/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling) for `.sh` and `.ps1` scripts
+- **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common.md §7`
 - **Approve** via PR comment when all criteria pass; leave blocking comments if they do not
 - Cannot approve your own work — seek Developer peer review
+
+**CI/Workflow stories (Technical Scope is `.github/workflows/**` only):**
+When reviewing a story whose Technical Scope lists only workflow YAML files, use this abbreviated checklist instead of the full review checklist above:
+- Gate-logic correctness (job-level vs. step-level `if` conditions)
+- Secret/credential scope — no widened access beyond what the job needs
+- Blast radius on existing triggers/jobs — confirm no unrelated job's behavior changes
+- Rollback safety — can this be reverted without side effects
+- The CI-execution/SHA/red-check-diagnosis bullets above still apply
+
+Skip: naming conventions, cross-reference correctness, template structure completeness, Clean Code review.
 
 **Documentation / template stories:**
 Review checklist differs — focus on:
@@ -189,5 +204,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.0 — Initial devkit-specific version  
+**Version:** 1.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
+**Previous:** 1.0 — Initial devkit-specific version  
 **Created:** 2026-06-16

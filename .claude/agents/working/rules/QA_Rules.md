@@ -49,6 +49,9 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 - Always create a test scenario document first — do not begin testing without it
 - Place it under `docs/feature/<feature_name>/test-scenarios/` or `docs/sprints/` using `Title_Case_With_Underscores`
 - The scenario must cover: happy path, error cases, edge cases (missing placeholders, incorrect path references, mode-specific behavior)
+- **Exceptions to the test-scenario document:**
+  - **CI/workflow-only stories** (Technical Scope is `.github/workflows/**` only): capture the CI run URL(s) as the validation artifact instead.
+  - **Verification-only stories** (`Outcome: verification-only` — see `Shared_Pipeline_Stages.md` Stage 1): zero diff means there is nothing new to document; skip the test-scenario document.
 
 **Template and workflow validation:**
 - Read every template file changed by the story
@@ -111,6 +114,8 @@ After all story AC are verified, confirm no regression was introduced:
 
 > **Gate:** Do not give merge sign-off until the regression check is complete.
 
+> **CI-equivalent exception (CI/workflow-only stories):** if the story's Technical Scope is `.github/workflows/**` only, and the PR's own CI run already executes an equivalent check (e.g. `validate-templates.yml` running the same `validate_templates.py`), cite that passing CI run as evidence instead of also re-running the Layer-1 gate locally — running the identical check twice adds no signal. Does not apply to any story that touches template or workflow content itself.
+
 ---
 
 ## 9. Pre-PR Gate (when acting as Implementer)
@@ -157,5 +162,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.0 — Initial devkit-specific version  
+**Version:** 1.1 — §4: CI/workflow-only and verification-only test-scenario-doc exceptions; §8: CI-equivalent exception for CI/workflow-only stories  
+**Previous:** 1.0 — Initial devkit-specific version  
 **Created:** 2026-06-16

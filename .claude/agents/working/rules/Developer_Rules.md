@@ -119,6 +119,8 @@ Older entries in the file use different formats — ignore them. Always use `new
 
 ## 5. Pre-PR Gate
 
+**Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common.md §7` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
+
 **All applicable checks must pass before opening a PR — no exceptions:**
 
 | Check | Applies when | Command | Pass condition |
@@ -198,6 +200,7 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 When the orchestrator assigns Dev as peer reviewer:
 - Verify the PR follows naming conventions and pre-PR gate checks from §4–§5
 - Check for obvious logic errors or missing content
+- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail (same rules apply to peer review)
 - Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
 - When all criteria pass, post approval as a comment on the PR (GitHub blocks self-approval — use `gh pr comment`)
 
@@ -205,5 +208,6 @@ When the orchestrator assigns Dev as peer reviewer:
 
 ## Version
 
-**Version:** 1.0 — Initial devkit-specific version  
+**Version:** 1.1 — §11: CI-execution/SHA/red-diagnosis bullet added; §5: missing-credential cross-reference  
+**Previous:** 1.0 — Initial devkit-specific version  
 **Created:** 2026-06-16

@@ -1,7 +1,7 @@
 # Clean Code Rules
 
 **Applies to:** Developer (before writing scripts or structured content), Technical Lead (during code review)  
-**Skip for:** markdown template files, workflow instruction files, documentation-only stories
+**Skip for:** markdown template files, workflow instruction files, `.github/workflows/` CI YAML, documentation-only stories
 
 ---
 
@@ -81,5 +81,6 @@
 
 ## Version
 
-**Version:** 1.0 — Initial devkit-specific version (simplified for Markdown/shell project)  
+**Version:** 1.1 — "Skip for" list now explicitly names `.github/workflows/` CI YAML  
+**Previous:** 1.0 — Initial devkit-specific version (simplified for Markdown/shell project)  
 **Created:** 2026-06-16

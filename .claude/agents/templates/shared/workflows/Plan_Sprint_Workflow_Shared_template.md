@@ -56,6 +56,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 3. PO selects stories up to **60 points** capacity:
    - **If roadmap exists**: respect the roadmap's dependency graph and planned sprint order
    - **If no roadmap**: order candidates by priority label (`Must-Have` first, then `Should-Have`, then `Nice-to-Have`)
+3a. **Multi-repo cross-repo dependency audit** (skip for single-repo projects): before locking the sprint, for every contract/API-spec endpoint the selected stories touch in a sibling repo, verify the owning repo has a **closed, review-scoped** story whose AC actually covers that endpoint — not just a same-named "API contract design" dependency. Surface any gap as a planning blocker the same way other blockers are surfaced (add it to `PO_questions.md` or stop and notify the user, per the severity).
 4. **If all AC and scope are clear** → skip to Stage 4
 5. **If questions remain** → PO creates `.claude/agents/tmp/PO_questions.md` using the format below; proceed to Stage 3
 

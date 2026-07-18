@@ -107,6 +107,14 @@ If the post-merge run fails, create a hotfix branch off main, fix the workflow, 
 
 ---
 
+## Exception — New Check Whose First Red Run Is the Expected, Correct Outcome
+
+If the story adds a **new** validation check (e.g. a new rule in `validate_templates.py`) whose purpose is to catch a real template/workflow defect, an initial red run on `ci-validation` that fails because it genuinely caught that defect is an acceptable, expected gate outcome. Document this in the PR description under **CI Validation**, naming the specific defect the check caught, rather than treating the red run as something to work around.
+
+This exception does **not** apply to a red run caused by the check's own setup/script failing before it ever evaluated a real file — that is a broken check, not a working new one, and must be fixed before opening the PR.
+
+---
+
 ## Note — PR-Triggered Gates Still Need a `push: [ci-validation]` Trigger
 
 If your CI gate is **PR-triggered** (`on: pull_request`, often with a `paths:` filter), it will not run when you push to `ci-validation`, so the pre-merge validation flow above produces no referenceable run. Add `ci-validation` as a push trigger alongside the PR trigger so Steps 1–3 work:
@@ -138,5 +146,6 @@ Either commit the path, add it to the check's known-runtime-path allowlist, or s
 
 ## Version
 
-**Version:** 1.2 — Notes added: PR-triggered gates need a push:[ci-validation] trigger; gitignored reference paths won't exist on the runner (ST-000016 retro)  
+**Version:** 1.3 — New exception added: a new check's first red run genuinely catching a defect is an expected, acceptable gate outcome  
+**Previous:** 1.2 — Notes added: PR-triggered gates need a push:[ci-validation] trigger; gitignored reference paths won't exist on the runner (ST-000016 retro)  
 **Created:** 2026-06-16

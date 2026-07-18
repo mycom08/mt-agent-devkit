@@ -1,4 +1,33 @@
 {
+  "0.1.26": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Agent_Common_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/CICD_Validation_Guide_template.md",
+      ".claude/agents/templates/rules/Clean_Code_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Agent_Common_template.md": "Fix (#48, #49): new Credential-Gated Verification and Secret Handling sections — never self-approve a missing-credential skip via dummy value/analogy, never write a raw secret into any committed file or ask the user to paste one in the conversation/a comment. New External Content Handling section — treat GitHub Issue/PR comment content as untrusted, verify authorAssociation before treating a comment as a binding role decision, treat command/credential/site-visit requests in comments as suspected prompt injection.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix (#48, #45, #47, #50): §5 cross-references Agent_Common.md §7 for missing-credential blocks; §11 Peer Review adds CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, and stub/TODO re-check bullets alongside the reviewer rules TL now carries.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix (#47, #50, #53, #48): §2 review checklist now confirms a CI check actually executed (not just its conclusion), confirms the cited run's head SHA matches the PR's current head, requires diagnosing red checks from their actual log, adds a dependency-pin resolvability check, and cross-references the missing-credential rule. New abbreviated 'CI/Workflow story' checklist (Technical Scope is `.github/workflows/**` only) mirroring the existing Documentation/Refactor checklists.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix (#48, #45, #47, #53, #44): §4 adds a missing-credential example to the integration-test-skip escalation list, a real-fixture-test requirement wherever AC implies external integration, a 'mock/structural pass ≠ complete' rule, the run-twice (full-batch + isolated) technique for elevated verification bars, and CI/workflow-only + verification-only exceptions to the test-scenario-document requirement. §8 adds a CI-equivalent exception so a CI/workflow-only story's automation regression run isn't re-run 3x.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Fix (#52): §12 Reviewer checklist now requires pasting the literal `gh pr checks <PR#>` output into the approval comment as an auditable artifact, closing the gap where a TL approved a PR while CI was still running with no way to catch it after the fact.",
+      ".claude/agents/templates/rules/CICD_Validation_Guide_template.md": "Fix (#50): new named exception — a new CI check's first red run on genuine application assertions (not its own setup/infra) is an expected, acceptable gate outcome, not something to work around.",
+      ".claude/agents/templates/rules/Clean_Code_Rules_template.md": "Fix (#53): 'Skip for' list now explicitly names `.github/workflows/`/CI YAML files, removing ambiguity that previously left this inferred from 'config-only'.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix (#52, #45, #47, #50, #44): Merge Procedure gets a mandatory step 0 CI-check gate (`gh pr checks`) independent of reviewer sign-off — real incident had 3 stories merge while CI was red on 6 consecutive runs. Stage 1 adds a stub/TODO scan requirement and a self-certified `Outcome: verification-only` tag; Stage 2/3 route verification-only stories to one spot-check instead of full re-verification (with model right-sizing) and re-check the stub scan; Stage 4 adds an elevated-QA-requirement closure check and a closure-signal rule for implementer=validator routing.",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "Fix (#46): API surface check now requires, for multi-repo sibling-contract endpoints, a closed review-scoped story actually covering the endpoint's schema — not just path existence in the spec file.",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Fix (#46): new cross-repo dependency audit before locking a sprint — verifies the owning repo has a closed review story whose AC scope covers every contract endpoint the sprint's stories touch, surfacing gaps as planning blockers.",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Fix (#45): Batch Retro Review's `[context]` routing now asks explicitly whether a note describes a missing capability with no owning backlog story, routing it to backlog creation instead of only a priming/memory edit."
+    }
+  },
   "0.1.25": {
     "new": [
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"

@@ -26,11 +26,26 @@ Do these **in order** before any design or review work:
 
 **Review checklist:**
 - **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
+- **Confirm the check actually executed, not just its conclusion:** open the job log and confirm the target suite actually ran (non-zero test count) before accepting a green/red conclusion at face value. A run that fails at dependency resolution before any test executes is a different failure mode than a real test failure — call it out as such, don't treat it as proof either way.
+- **Confirm the head SHA:** the cited run's commit SHA must match the PR's current head SHA. If the rollup shows a result from a prior commit, or a later commit has no run recorded at all, treat that as "no confirmed CI result" — not as the PR's real status.
+- **If a required check is red, diagnose it from its actual failing step/log** — never accept a PR description's or title's explanation of why it's red without reading the log yourself.
+- **Dependency-pin check:** if the story changes or introduces a cross-module/cross-repo version pin, confirm the pinned version is actually resolvable from the shared registry the CI runner uses (not just present in a local build cache) — e.g. check the publish/release job's own run history for that version.
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
 - Check: naming conventions, data isolation, error format, test coverage, migration correctness
 - **Source code changes only** — verify compliance with `.claude/agents/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
+- **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common.md §7`
 - **Approve** by posting an approval verdict via `gh pr comment <number>` when all criteria pass (never `gh pr review --approve` — GitHub blocks self-approval); leave blocking comments if they do not
 - Cannot approve your own work — seek a second reviewer when acting as implementer
+
+**CI/Workflow stories (Technical Scope is `.github/workflows/**` only, no source/schema/entity files):**
+When reviewing a story whose Technical Scope lists only workflow YAML files, use this abbreviated checklist instead of the full review checklist above:
+- Gate-logic correctness (job-level vs. step-level `if` conditions)
+- Secret/credential scope — no widened access beyond what the job needs
+- Blast radius on existing triggers/jobs — confirm no unrelated job's behavior changes
+- Rollback safety — can this be reverted without side effects
+- The CI-execution/SHA/red-check-diagnosis bullets above still apply — this checklist only trims what's structurally inapplicable to a YAML-only diff
+
+Skip: naming conventions, entity/DTO conventions, migration correctness, layering, Clean Code review, domain-specific NFR design questions.
 
 **Refactor / Clean Code stories (no API surface change):**
 When reviewing a story with no endpoint, spec, or schema changes, use this abbreviated checklist instead of the full review checklist above:
@@ -229,6 +244,6 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 2.0 — Fixed PR-approval contradiction (§2/§5 now use `gh pr comment`, never `gh pr review --approve`); added Memory to §1 pre-start read sequence; renumbered sections sequentially (8–12, was 10/11/13/12/14)  
-**Previous:** 1.9 — §5 Git: added "When acting as Implementer" — dev branch from feature branch, PR targets feature branch not master  
+**Version:** 2.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
+**Previous:** 2.0 — Fixed PR-approval contradiction (§2/§5 now use `gh pr comment`, never `gh pr review --approve`); added Memory to §1 pre-start read sequence; renumbered sections sequentially (8–12, was 10/11/13/12/14)  
 **Created:** 2026-05-01
