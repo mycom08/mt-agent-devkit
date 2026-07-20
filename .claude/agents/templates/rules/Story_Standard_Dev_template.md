@@ -131,6 +131,7 @@ Response and decision.
 - When a comment resolves a scope/AC question, update the issue body to match
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`). An `@` prefix triggers a GitHub mention to a real user account.
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text. A bare `#` creates a GitHub cross-reference to an unrelated issue or PR.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, soft cap ~150–200 words; evidence by pointer — full check logs go in your working record, not the thread; corrections state the delta only; no comments about comments; one close-out line per thread. Full rule: `Story_Standard.md §9`.
 
 ---
 

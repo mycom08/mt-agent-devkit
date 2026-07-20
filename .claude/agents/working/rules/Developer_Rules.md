@@ -166,6 +166,7 @@ Tag **TL** in the comment to request review.
 - Format: `<type>(<scope>): <subject>` — Conventional Commits
 - Subject: imperative mood, ≤ 50 characters
 - Footer: always include `Story: ST-XXXXXX`
+- **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`). A reviewer notes a violation in a PR comment but must **not** request changes or trigger a fix-loop over length alone; the rest of the convention remains blocking.
 
 ---
 
@@ -198,7 +199,7 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 ## 11. Peer Review (when Dev acts as reviewer for a TL-implemented story)
 
 When the orchestrator assigns Dev as peer reviewer:
-- Verify the PR follows naming conventions and pre-PR gate checks from §4–§5
+- Verify the PR follows naming conventions and pre-PR gate checks from §4–§5 — except commit subject-line **length**, which is a non-blocking nit per §6: note it in a comment, never request changes over it alone
 - Check for obvious logic errors or missing content
 - **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail (same rules apply to peer review)
 - Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
@@ -208,6 +209,6 @@ When the orchestrator assigns Dev as peer reviewer:
 
 ## Version
 
-**Version:** 1.1 — §11: CI-execution/SHA/red-diagnosis bullet added; §5: missing-credential cross-reference  
-**Previous:** 1.0 — Initial devkit-specific version  
+**Version:** 1.2 — §6: commit subject-line length is a non-blocking style nit; §11: reviewer carve-out for subject length  
+**Previous:** 1.1 — §11: CI-execution/SHA/red-diagnosis bullet added; §5: missing-credential cross-reference  
 **Created:** 2026-06-16

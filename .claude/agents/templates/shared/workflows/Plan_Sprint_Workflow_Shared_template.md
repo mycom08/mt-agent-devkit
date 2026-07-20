@@ -106,6 +106,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
      - **Feature story:** `status:backlog` + `feature:<feature_name>` + `phase-N` + `sprint-N`
      - **Non-feature story:** `status:backlog` + `sprint-N`
    - **Strict mode:** for each new story, increment `story_counter.txt`, write `.claude/agents/docs/stories/ST-XXXXXX.md` with `**Status:** backlog`, `**Sprint:** sprint-N`, `**Feature:**` and `**Phase:**` fields set; report file paths to PO
+   - **Roadmap-sourced stories:** when a story is drafted from a roadmap doc, echo the roadmap's phase number as a separate `**Roadmap Phase:** Phase N — <theme>` line in the body. The roadmap phase is a global, cross-repo thematic sequence; the `sprint-N` label is this repo's own local execution counter (starting at 1) — the two are independent numbering systems and must not be conflated
 5. PO deletes `.claude/agents/tmp/PO_questions.md` if it exists
 6. PO updates Working Record
 7. **Workflow review (orchestrator):** check whether `.claude/agents/tmp/plan_observations.md` exists

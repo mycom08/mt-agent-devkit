@@ -79,6 +79,7 @@ Technical decision or review feedback.
 - Reply in the same thread for the same topic
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**PO**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, soft cap ~150–200 words; evidence by pointer; corrections state the delta only (never re-derive unchanged conclusions); no comments about comments; one close-out line per thread. When a refinement decision goes into the story body: the decision itself, ≤ 5 lines, pointer to the resolving comment — never the full derivation. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
 
 ---
 

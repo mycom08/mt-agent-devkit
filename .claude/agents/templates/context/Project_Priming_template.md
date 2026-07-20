@@ -93,6 +93,8 @@ Update at **start of session** (read yesterday's context, sync story statuses fr
 - **In Progress:** Current work and next priorities
 - **Impediments:** Any blockers, questions, or dependencies (none if clear)
 
+Entries are **bullets, not paragraphs** — one line per item with story ID + outcome + PR/commit ref, hard cap ~100–150 words per day; detail lives in the retro/PR/memory fact by pointer (see `Agent_Common.md §5`).
+
 ---
 
 ## 6. Internal Project Documents

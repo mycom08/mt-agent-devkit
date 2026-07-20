@@ -27,6 +27,13 @@ If either condition is missing, fix it and push the branch filter change to both
 
 ## Validation Steps
 
+**Step 0 — Pre-check: does a `pull_request` trigger already cover this change?**
+
+Before pushing to `ci-validation`, inspect the target workflow's `on:` block:
+
+- **If `on.pull_request` exists with no branch/path restriction narrower than the story's changed paths** (the common case — e.g. `pull_request:` with no `branches:` filter, and no `paths`/`paths-ignore` filter that would exclude this story's changes): **skip the `ci-validation` push entirely.** Open the PR as normal — the `pull_request`-triggered run that fires when the PR opens **is** the pre-merge validation run. Cite that run's URL in the PR's **CI Validation** section instead of a separate `ci-validation` run URL. Pushing to `ci-validation` first would produce a second, identical run against the same commit with no added signal.
+- **If not** (the workflow is `push`-only, or the `pull_request` trigger has a `branches`/`paths` filter that would exclude this story's changes): proceed with Steps 1–3 below — the `ci-validation` push is the only way to get a real pre-PR run.
+
 **Step 1 — Push your workflow changes to `ci-validation`**
 
 ```bash
@@ -56,7 +63,7 @@ Passing run on `ci-validation`: <run-url>
 
 ## Gate
 
-> **Gate:** Do not open a PR for a story touching `.github/workflows/` until a passing run on `ci-validation` is confirmed and its URL is included in the PR description.
+> **Gate:** Do not open a PR for a story touching `.github/workflows/` until a passing run on `ci-validation` is confirmed and its URL is included in the PR description — **unless** Step 0 applies (the `pull_request` trigger already covers the change), in which case the PR's own `pull_request`-triggered run is the validation run: confirm it passes and cite its URL in the **CI Validation** section before requesting review.
 
 ---
 
@@ -146,6 +153,6 @@ Either commit the path, add it to the check's known-runtime-path allowlist, or s
 
 ## Version
 
-**Version:** 1.3 — New exception added: a new check's first red run on genuine application assertions is an expected, acceptable gate outcome  
-**Previous:** 1.2 — Notes added: PR-triggered gates need a push:[ci-validation] trigger; gitignored reference paths won't exist on the runner  
+**Version:** 1.4 — Step 0 pre-check added: skip the `ci-validation` push when the workflow's `pull_request` trigger already covers the change — the PR's own run is the validation run  
+**Previous:** 1.3 — New exception added: a new check's first red run on genuine application assertions is an expected, acceptable gate outcome  
 **Created:** 2026-06-05

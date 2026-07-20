@@ -53,6 +53,10 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 - Merged commit abc123
 ```
 
+**Optional sections** (pointer-style, one line per item): **API Spec Reference**, **Technical Scope** (pointers to technical docs, not embedded detail), **Design Source**. Do not invent other sections.
+
+**One list per concern:** a body may reference related stories in **one** place only — never in both a Background section and a Related section.
+
 **Status** is tracked via the issue label (e.g., `status:in-progress`), not inside the body.  
 **Sprint** is tracked via GitHub Issue labels (e.g., `sprint-5`) — do NOT use milestones.  
 **Discussions** happen as GitHub Issue **comments** — never inside the issue body.
@@ -76,6 +80,16 @@ Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 
 ### Specifying Test/Fixture-Coverage AC
 When an AC requires "one negative fixture (or test) per check/invariant," distinguish **per-file checks** (which scan each file and can be exercised by a single bad fixture) from **global/aggregate checks** (which read a single shared manifest or evaluate the corpus as a whole). A global check cannot be isolated to one per-file fixture — exempt it explicitly, or require a parameter-override hook so it stays testable. Say which checks are per-file and which are global so a missing per-file fixture for a global check is not flagged as a coverage gap at review.
+
+**AC hygiene:** an AC states the **testable requirement only**. Rationale, history, and precedent references go in a comment or linked doc — never inside the AC item.
+
+### Body Amendments (edit-time rules)
+
+These rules govern **editing an existing story body** (refinement outcomes, corrections):
+
+1. **Decisions, not derivations.** A refinement/correction outcome is written into the body as the decision itself — target **≤ 5 lines per decision** — with a pointer to the resolving comment for the full rationale. Never copy the argument into the body.
+2. **The body is always current truth.** No supersession notes, no "*(corrected on \<date\>, replacing…)*" narration — GitHub issue edit history is the audit trail. Rewrite the affected section cleanly.
+3. **Scope rules apply to amendments too.** An edit may not introduce implementation detail (file paths, type/member signatures, algorithm choices) that a fresh body would not be allowed to contain.
 
 ---
 
@@ -196,6 +210,16 @@ Response and decision.
 **Decision:** [What we decided and why]  
 **Next:** [Owner or "None"]
 ```
+
+**Comment-writing standard (all roles):**
+
+1. **Decision-first.** The first line states the decision/outcome. Rationale follows, capped at ~2–3 sentences per point.
+2. **Soft length cap: ~150–200 words per comment.** Exemption: QA validation reports (per-AC evidence) may be longer — thoroughness there is high-signal.
+3. **Evidence by pointer, not transcript.** Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread.
+4. **Corrections state the delta only.** What changed, what didn't, one-line why. Never re-derive conclusions that didn't change.
+5. **No comments about comments.** If a prior comment lacked substance, put the substance in your working record and post one pointer line.
+6. **One close-out per thread.** Post the "resolved / ready" hand-off line once; never restate it in later comments.
+7. **Recommended default format** — compact bullets: claim → source checked → verdict. Not a license for thinner review.
 
 **Rules for comments:**
 - Open a new issue comment only for a new topic.

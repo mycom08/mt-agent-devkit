@@ -206,6 +206,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 **Commit Message Rules:**
 - **GitHub mode:** Format: `<type>(<scope>): <subject>` (Conventional Commits). Subject: imperative mood, ≤ 50 characters. Body (when needed): explain *why*, wrap at 72 characters. Footer: always include `Story: ST-XXXXXX`. See `docs/wiki/Development_Standards.md §2` for the full type list.
 - **Strict mode:** Format: `<primary-id> [<secondary-id>]: <message>` — see `Strict_Mode_Story_Guide.md §Commit Message Format` for the complete spec. No `Story:` footer, no Conventional Commits type prefix.
+- **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`), not just the text after the colon. A reviewer who finds a length violation notes it in a PR comment but must **not** withhold approval, request changes, or trigger a fix-loop over length alone. Everything else in the commit-message convention (type/scope format, imperative mood, `Story:` footer, body wrap) remains blocking.
 
 ---
 
@@ -240,7 +241,7 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.md` §12 Reviewer Gate, then apply this checklist:
 
 **Review checklist:**
-- Verify the PR follows naming conventions, commit message format, and test coverage rules from §4–§5
+- Verify the PR follows naming conventions, commit message format, and test coverage rules from §4–§5 — except commit subject-line **length**, which is a non-blocking nit per §6: note it in a comment, never request changes over it alone
 - Check for obvious logic errors, missing error handling at system boundaries, and security issues
 - **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail of these checks (same rules apply to peer review)
 - **Stub/TODO re-check:** confirm stub markers/trivial-return patterns in AC-functional methods were scanned and any hit has an owning backlog story
@@ -251,6 +252,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 
 ## Version
 
-**Version:** 2.7 — §5: missing-credential cross-reference to `Agent_Common.md §7`; §11 Peer Review: CI-execution/SHA/red-diagnosis and stub/TODO re-check bullets added  
-**Previous:** 2.6 — §11 Peer Review: removed redundant CI gate line; section now defers to Story_Standard.md §12  
+**Version:** 2.8 — §6: commit subject-line length is a non-blocking style nit (limit covers entire header line); §11: reviewer carve-out for subject length  
+**Previous:** 2.7 — §5: missing-credential cross-reference to `Agent_Common.md §7`; §11 Peer Review: CI-execution/SHA/red-diagnosis and stub/TODO re-check bullets added  
 **Created:** 2026-04-24

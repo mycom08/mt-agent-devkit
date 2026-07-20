@@ -44,6 +44,8 @@ Ask the user: **"Do these stories belong to a feature? If yes, provide the featu
 
 Also ask: **"Which sprint should these stories be assigned to? (e.g., sprint-1, or leave blank if not yet scheduled)"**
 
+> **Roadmap phase vs sprint label:** if the stories come from a roadmap doc, its `Phase:` numbers are a global, cross-repo thematic sequence — independent of this repo's `sprint-N` labels, which count this repo's own executed sprints starting at 1. When drafting from a roadmap, echo the source phase as a `**Roadmap Phase:** Phase N — <theme>` line in the story body; never copy the roadmap phase number into the sprint label.
+
 ---
 
 ## Step 4 — Create Stories

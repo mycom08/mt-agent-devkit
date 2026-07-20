@@ -107,6 +107,7 @@ Rules:
 - Always append — never delete or overwrite existing comment entries
 - Include role name and ISO timestamp on the header line
 - Keep entries concise — details go in the agent's Working Record
+- **Writing standard (same as GitHub-mode `Story_Standard.md §9`):** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, soft cap ~150–200 words per entry (QA per-AC validation reports exempt); evidence by pointer, full check logs in your Working Record; corrections state the delta only; no entries about prior entries; one close-out line per story hand-off
 
 ---
 

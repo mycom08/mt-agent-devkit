@@ -179,12 +179,14 @@ The PO writes this document in the same style as a Scrum implementation roadmap.
 
 ---
 
-## Sprint Planning Overview
+## Phase Planning Overview
+
+> **Naming rule:** the roadmap's thematic units are **Phases** (`Phase 0` = design/discovery, then `Phase 1`, `Phase 2`, …) — a single global, cross-repo sequence. Never name them "Sprint N": each repo's GitHub `sprint-N` labels are a **per-repo local execution counter** assigned by `plan next sprint`/`create stories` (starting at 1 for that repo's own first executed sprint), independent of this roadmap's numbering. Using "Sprint" for both reads as a contradiction on every story whose repo doesn't start at the global sequence's first theme.
 
 | Phase | Duration | Focus | Story Points | Deliverable |
 |-------|----------|-------|--------------|-------------|
-| **Design** | Week N | API / design spec | N pts | {deliverable} |
-| **Sprint 1** | Week N–N | {focus area} | N pts | {deliverable} |
+| **Phase 0 — Design** | Week N | API / design spec | N pts | {deliverable} |
+| **Phase 1** | Week N–N | {focus area} | N pts | {deliverable} |
 | ... | | | | |
 
 ---
@@ -207,7 +209,7 @@ The PO writes this document in the same style as a Scrum implementation roadmap.
 
 ---
 
-## Sprint N: {Title}
+## Phase N: {Title}
 
 **Goal:** {goal sentence}
 **Story Points:** N
@@ -327,12 +329,12 @@ See [{Diagram Title}](diagrams/{diagram_file}.mmd) — {one-line caption}.
 
 ## Delivery Plan
 
-{Brief narrative paragraph summarising scope and timeline, followed by the sprint table.}
+{Brief narrative paragraph summarising scope and timeline, followed by the phase table.}
 
 | Phase | Duration | Focus | Points | Key Deliverable |
 |-------|----------|-------|--------|-----------------|
-| Design | Week N | {focus} | N | {deliverable} |
-| Sprint 1 | Week N–N | {focus} | N | {deliverable} |
+| Phase 0 — Design | Week N | {focus} | N | {deliverable} |
+| Phase 1 | Week N–N | {focus} | N | {deliverable} |
 
 ## Non-Functional Requirements
 {Only include NFRs with real implications for how code is written — performance budgets, security constraints, data isolation rules. Skip generic boilerplate.}

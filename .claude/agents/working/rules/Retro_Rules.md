@@ -50,6 +50,15 @@ If nothing: write `- None.`
 
 ---
 
+## Writing Rules
+
+1. **Lesson-first bullets.** Each bullet leads with the lesson/finding; evidence is a one-line pointer (PR/commit/comment reference), never an embedded verification narrative. Soft cap ~3 sentences per bullet.
+2. **Shared story-level lessons.** A lesson that applies across roles goes **once** in a `## Story-Level Lessons` section at the top of the retro file (written by whichever role records it first; later roles may refine it in place). Your own section references it — never restates it in full.
+3. **Reinforced lessons are pointers.** If a lesson already exists in this retro, a prior retro, or a memory fact, record it as a one-line `Reinforces: <pointer>` entry — never a fresh derivation.
+4. **Addenda state the delta.** A fix-loop addendum records what the loop **changed** about the retro's conclusions — not a replay of the verification performed, which belongs in the PR/issue record.
+
+---
+
 ## Scope Rule
 
 Only report observations that arose **directly from your work on this story**. Do not carry over observations from other stories worked in the same session.

@@ -197,6 +197,7 @@ For EACH repo:
 3. Write the filtered result to: /result/build/<repo-name>/implementation_roadmap_<repo-name>.md
 
 Filtering rules:
+- Add this note directly under the filtered doc's H1 title: "> **Phase numbering note:** `Phase:` numbers in this document are a global, cross-repo thematic sequence from the project roadmap. They are independent of this repo's own GitHub `sprint-N` labels, which are assigned locally by `plan next sprint`/`create stories` starting at 1 for this repo's first executed sprint."
 - Keep the original document structure (headings, tables, dependency graph section, release criteria, risks, glossary)
 - Remove stories, sprints, and sections that have no relevance to this repo
 - If a story spans multiple repos, include it in ALL relevant repos' filtered docs — do not split a story

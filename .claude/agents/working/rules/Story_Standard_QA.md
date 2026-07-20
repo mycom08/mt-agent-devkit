@@ -69,6 +69,7 @@ Validation results and findings per AC.
 - Reply in the same thread when re-validating or following up on the same issue
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
+- **Writing standard:** decision-first (first line = the verdict), evidence by pointer, corrections state the delta only, no comments about comments, one close-out line per thread. **Exemption:** your per-AC validation reports may exceed the general ~150–200 word cap — thorough per-AC evidence is high-signal and expected. Full rule: `Story_Standard.md §9`.
 
 ---
 

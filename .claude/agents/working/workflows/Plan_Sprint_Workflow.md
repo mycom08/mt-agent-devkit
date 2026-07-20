@@ -92,6 +92,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
    - **Non-feature sprint**: GitHub issue labels are the only artifact — no Sprint Overview file needed
 4. PO creates stories for any backlog items that do not yet have a story record:
    - Create GitHub Issues following `Story_Standard_PO.md` §13; labels: `status:backlog` + `feature:<feature_name>` (if feature) + `phase-N` (if feature) + `sprint-N`; create `sprint-N` label first if it does not exist; use `--body-file` pattern per §15
+   - **Roadmap-sourced stories:** echo the roadmap's phase as a `**Roadmap Phase:** Phase N — <theme>` line in the body — the roadmap phase (global thematic sequence) and the `sprint-N` label (this repo's local execution counter) are independent numbering systems
 5. PO deletes `.claude/agents/working/tmp/PO_questions.md` if it exists
 6. PO updates Working Record
 7. **Workflow review (orchestrator):** check whether `.claude/agents/working/tmp/plan_observations.md` exists
