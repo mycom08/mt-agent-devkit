@@ -202,6 +202,21 @@ Use `"new"` for files added for the first time; `"modified"` for files that alre
 
 > Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Entries must be appended in ascending version order — inserting out of order will cause `sync devkit` to skip or double-apply changes.
 
+### 15a. Adding a New Agent Role (Nth Role)
+
+Adding a role to the roster is a corpus-wide ripple, not a two-file change. Beyond the role's own instruction/rules template pair, check every existing enumeration of the current role list:
+
+- `Story_Standard_template.md` (+ PO variant) — `**Assigned:**` valid-values list
+- `Product_Owner_Rules_template.md` — roadmap `**Assigned:**` rule
+- `Create_Stories_Workflow_Shared_template.md`, `Sprint_Workflow_Shared_template.md` — implementer-role enumerations
+- `CLAUDE_Shared_template.md` — Agent Roster table
+- Devkit-internal file-count tables/prose in `Init_Project_Workflow.md`, `Build_Software_Workflow.md`, `Update_Project_Workflow.md`, `Sync_Devkit_Workflow*` (both the "Applies to" and separate "Expected files — rules/" enumerations — these are two distinct lists, easy to update only one)
+- `scaffold_mechanical.sh`'s role loops (memory + working-record)
+
+Grep the existing role list (e.g. `grep -rn "Developer\`, \`Technical Lead\`, \`QA\`, \`Business Analyst\`"`) across `templates/` and `working/` before starting, rather than relying on the AC to name every file.
+
+**Working-record mirror:** a new role's working-record file is never created at scaffold time for the devkit's own team — `.claude/agents/working/working-record/` is gitignored (root `.gitignore`). Only `instructions/`, `rules/`, `memory/` mirrors need to exist; the working-record file is created at runtime on first use, never committed.
+
 ---
 
 ## 16. Reference Links

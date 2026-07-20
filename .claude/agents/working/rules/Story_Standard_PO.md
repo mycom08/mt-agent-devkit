@@ -115,6 +115,10 @@ Scope decision or AC clarification.
 [Filled in after work complete: PR links, commits, artifacts]
 ```
 
+**Writing AC for a devkit workflow stage (devkit-internal, no target-project equivalent):**
+- **State detection in terms of what's actually on disk at that stage, not a downstream concept.** A stage that runs before a later pipeline boundary exists (e.g. Analyst Stage 2a runs before Build Software's repo-splitting) cannot gate on that downstream concept ("any repo's tech stack") — phrase the AC against the artifacts genuinely available at that point (e.g. "the spec names a UI-bearing surface"), or the Developer has to reword it mid-design.
+- **When two same-sprint stories restructure the same workflow section, name the land order in Technical Scope.** Don't rely on a Developer-initiated cross-reference comment to surface the sequencing question — state which story lands first and how the sections compose once both are merged.
+
 ---
 
 ## 14. AC Checkbox Rules
