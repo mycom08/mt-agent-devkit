@@ -28,6 +28,7 @@ Each specialized agent must read its instruction file before starting any work.
 | QA | `.claude/agents/working/instructions/qa_instructions.md` |
 | Product Owner | `.claude/agents/working/instructions/product_owner_instructions.md` |
 | Business Analyst | `.claude/agents/working/instructions/business_analyst_instructions.md` |
+| UI/UX Designer | `.claude/agents/working/instructions/ui_ux_designer_instructions.md` |
 
 Agent memory, rules, working records, and context live under `.claude/agents/working/`.
 

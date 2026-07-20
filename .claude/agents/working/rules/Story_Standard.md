@@ -1,6 +1,6 @@
 # Story Standard
 
-**Applies to:** All agents (Developer, TL, QA, PO, BA)  
+**Applies to:** All agents (Developer, TL, QA, PO, BA, UI/UX Designer)  
 **Location:** GitHub Issues in repository `mycom08/mt-agent-devkit`  
 **Issue title format:** `[ST-XXXXXX][DEVKIT] Story Title`
 
@@ -32,13 +32,13 @@ Backlog → Ready → In Progress → Review → Testing → Done
 
 Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 
-> **Rule:** `**Assigned:**` is **mandatory** — the responsible agent role must be set when the story is created. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must always appear **above** the `## User Story` section.
+> **Rule:** `**Assigned:**` is **mandatory** — the responsible agent role must be set when the story is created. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. "TBD" is not permitted. The `**Assigned:**` field must always appear **above** the `## User Story` section.
 >
 > **Note — two separate "assignee" concepts:** The `**Assigned:**` field in the issue body (an agent role) drives pipeline routing and must always be set. It is distinct from the **GitHub Issue Assignee** (a GitHub user account set in the sidebar), which may be left unset in agent-driven workflows.
 
 ```markdown
 **Phase:** [Phase/Sprint]  **Points:** [1-13]  **Priority:** Must/Should/Nice  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
 
 ## User Story
 > As a **[who]**, I want **[what]**, so that **[why]**.
@@ -93,7 +93,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 
 ---
 
-## 4. Implementer Workflow (applies to all implementer roles: Developer, Technical Lead, QA, Business Analyst)
+## 4. Implementer Workflow (applies to all implementer roles: Developer, Technical Lead, QA, Business Analyst, UI/UX Designer)
 
 ### Status: Ready → In Progress
 **When:** Starting work on the story  
@@ -187,6 +187,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 | **TL** | Review code, approve PR, discuss technical design | Tick AC, test, clarify scope |
 | **QA** | Test AC, report test results in Comment, notify PO when all AC pass | Tick AC, review code, approve stories |
 | **BA** | Align requirements with AC, flag scope creep | Tick AC, approve code, implement |
+| **UI/UX Designer** | Turn a wireframe/backlog story into a runnable prototype, write PR, ask for guidance, self-check AC before marking ready | Tick AC, answer scope questions, review code, ship a static-only mockup as the final deliverable |
 
 ---
 
@@ -283,7 +284,7 @@ When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit
 **Phase:** [Phase/Sprint]  
 **Story Points:** [1-13]  
 **Priority:** Must-Have | Should-Have | Nice-to-Have  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
 
 ## User Story
 
@@ -358,4 +359,5 @@ gh issue edit <number> --repo mycom08/mt-agent-devkit --add-label "status:done" 
 ## Version
 
 **Created:** 2026-06-16  
-**Version:** 1.1 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (ST-000016 retro)
+**Version:** 1.2 — §2, §4, §7, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row (ST-000021)  
+**Previous:** 1.1 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (ST-000016 retro)

@@ -6,6 +6,9 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Added (v0.1.29 — UI/UX Designer agent role)
+- [ST-000021] New sixth agent role: `ui_ux_designer_instructions_template.md` + `UI_UX_Designer_Rules_template.md` (+ working mirrors, blank memory/working-record scaffold entries) — turns a wireframe/backlog story into a **runnable** prototype (real routes/components wired to a local mock backend), never a static mockup. `Init_Project_Workflow.md` and `scaffold_mechanical.sh` now copy the role's files for both github and strict mode; `CLAUDE_Shared_template.md`'s Agent Roster gains the row. `Story_Standard_template.md`, `Story_Standard_PO_template.md`, `Product_Owner_Rules_template.md`, `Create_Stories_Workflow_Shared_template.md`, and `Sprint_Workflow_Shared_template.md` (+ working mirrors) add `UI/UX Designer` to every `**Assigned:**`/role-boundary/implementer-role enumeration. Workflow *integration* (Analyst Stage 2a, roadmap rule, Build Software companion-repo convention) is deferred to ST-000022.
+
 ### Fixed (v0.1.28 — CI noise on non-code pushes)
 - `Agent_Common_template.md` (+ working mirror) — §6 stage-transition memory commits now append `[skip ci]` in the commit body so memory-only pushes stop triggering CI; head-commit semantics documented (push pending code commits separately first).
 - `Developer_Rules_template.md` (+ working mirror) — §6 docs-only pushes (`docs/**`, `*.md`, `.claude/agents/**`) append `[skip ci]`; never used on pushes containing code, config, or build-file changes.

@@ -7,6 +7,9 @@
 - `.github/workflows/validate-templates.yml` (ST-000016): triggers on `push: branches: [ci-validation]` AND `pull_request: paths: [templates/**, workflows/**]`. The push trigger satisfies CICD_Validation_Guide requirement for pre-merge ci-validation run. First workflow in the repo.
 - CICD guide requirement: workflows must have `on.push.branches: [ci-validation]` OR no branch filter. PR-only workflows need the push trigger added permanently to enable ci-validation gate.
 
+- Adding a 6th agent role (ST-000021, UI/UX Designer) touches every existing enumeration of the 5 roles, not just the 2 new role files: `Story_Standard_template.md` (+PO variant), `Product_Owner_Rules_template.md`, `Create_Stories_Workflow_Shared_template.md`, `Sprint_Workflow_Shared_template.md`, `CLAUDE_Shared_template.md` roster, plus devkit-internal `Init_Project_Workflow.md`/`Build_Software_Workflow.md`/`Update_Project_Workflow.md`/`Sync_Devkit_Workflow*` file-count tables and `scaffold_mechanical.sh`'s two role loops (memory + working-record). Find them with `grep -rn "Developer\`, \`Technical Lead\`, \`QA\`, \`Business Analyst\`\|Developer | Technical Lead | QA | Business Analyst"` across templates/ and working/ before starting a similar story.
+- `.claude/agents/working/working-record/` is gitignored for the devkit's own team (root `.gitignore`) — a new role's working-record file is created at runtime, never committed; only `instructions/`, `rules/`, `memory/` mirrors need to be created and staged.
+
 ## Troubleshooting Facts
 
 - Working-record files (`.claude/agents/working-record/`) referenced in instruction templates are gitignored in the devkit. They fail reference-integrity checks in CI (runner can't find them via Root 2 since the gitignored files aren't checked out). Fix: add `.claude/agents/working-record/` to RUNTIME_PATH_PREFIXES. This was discovered only after the first ci-validation run (not catchable locally).

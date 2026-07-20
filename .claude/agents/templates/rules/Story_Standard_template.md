@@ -1,6 +1,6 @@
 ﻿# Story Standard
 
-**Applies to:** All agents (Developer, TL, QA, PO, BA)  
+**Applies to:** All agents (Developer, TL, QA, PO, BA, UI/UX Designer)  
 **Location:** GitHub Issues in repository `{github-org}/{repo-name}`  
 **Issue title format:** `[ST-XXXXXX][FEATURE] Story Title`
 
@@ -32,13 +32,13 @@ Backlog → Ready → In Progress → Review → Testing → Done
 
 Stories live as **GitHub Issues**. The issue body uses this Markdown structure:
 
-> **Rule:** `**Assigned:**` is **mandatory** — the responsible agent role must be set when the story is created. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must always appear **above** the `## User Story` section.
+> **Rule:** `**Assigned:**` is **mandatory** — the responsible agent role must be set when the story is created. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. "TBD" is not permitted. The `**Assigned:**` field must always appear **above** the `## User Story` section.
 >
 > **Note — two separate "assignee" concepts:** The `**Assigned:**` field in the issue body (an agent role) drives pipeline routing and must always be set. It is distinct from the **GitHub Issue Assignee** (a GitHub user account set in the sidebar), which may be left unset in agent-driven workflows.
 
 ```markdown
 **Phase:** [Phase/Sprint]  **Points:** [1-13]  **Priority:** Must/Should/Nice  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
 
 ## User Story
 > As a **[who]**, I want **[what]**, so that **[why]**.
@@ -123,7 +123,7 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 
 ---
 
-## 4. Implementer Workflow (applies to all implementer roles: Developer, Technical Lead, QA, Business Analyst)
+## 4. Implementer Workflow (applies to all implementer roles: Developer, Technical Lead, QA, Business Analyst, UI/UX Designer)
 
 ### Status: Ready → In Progress
 **When:** Starting work on the story  
@@ -241,6 +241,7 @@ Scripts live in `tests/feature/<feature_name>/scripts/ST-XXXXXX_<description>.sh
 | **TL** | Review code, approve PR, discuss technical design | Tick AC, test, clarify scope, implement |
 | **QA** | Test AC, report test results in Comment, notify PO when all AC pass | Tick AC, review code, approve stories |
 | **BA** | Align requirements with AC, flag scope creep | Tick AC, approve code, implement |
+| **UI/UX Designer** | Turn a wireframe/backlog story into a runnable prototype, write PR, ask for guidance, self-check AC before marking ready | Tick AC, answer scope questions, review code, ship a static-only mockup as the final deliverable |
 
 **Red Flags (violations):**
 - TL, QA, Dev, or BA ticking AC checkboxes (only PO, after QA confirms)
@@ -370,7 +371,7 @@ Use comments for:
 
 ### PO Responsibilities
 - Create stories with clear AC
-- **Set assignee to the responsible agent role when creating the story — valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not allowed**
+- **Set assignee to the responsible agent role when creating the story — valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. "TBD" is not allowed**
 - Move story to Ready when assigned
 - Clarify AC in Comments if questions arise
 - Tick AC checkboxes in issue body after QA confirms each criterion
@@ -433,13 +434,13 @@ When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name
 
 **Issue body:**
 
-> `**Assigned:**` must be one of the agent roles — not "TBD". Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. Set it at story creation and place it above `## User Story`.
+> `**Assigned:**` must be one of the agent roles — not "TBD". Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. Set it at story creation and place it above `## User Story`.
 
 ```markdown
 **Phase:** [Phase/Sprint]  
 **Story Points:** [1-13]  
 **Priority:** Must-Have | Should-Have | Nice-to-Have  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
 
 ## User Story
 
@@ -541,7 +542,7 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.7 — §2: optional sections legitimized (Technical Scope / API Spec Reference / Design Source) + one-list-per-concern; §3: AC hygiene + Body Amendments edit-time rules; §9: comment-writing standard (decision-first, capped, evidence by pointer)  
-**Previous:** 2.6 — §12 reviewer checklist requires pasting `gh pr checks <PR#>` output as approval evidence
+**Version:** 2.8 — §2, §7, §11, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row  
+**Previous:** 2.7 — §2: optional sections legitimized (Technical Scope / API Spec Reference / Design Source) + one-list-per-concern; §3: AC hygiene + Body Amendments edit-time rules; §9: comment-writing standard (decision-first, capped, evidence by pointer)
 
 This is the single source of truth for story workflow across all agents.

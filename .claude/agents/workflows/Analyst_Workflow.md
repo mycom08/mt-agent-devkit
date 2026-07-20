@@ -199,7 +199,7 @@ The PO writes this document in the same style as a Scrum implementation roadmap.
 > **Standard:** {any design-first rules relevant to the project}
 
 ### [ST-XXXXXX] {Story Title In Title Case}
-**Points:** N | **Priority:** P0/P1/P2 | **Assigned:** {Developer | Technical Lead | QA | Business Analyst}
+**Points:** N | **Priority:** P0/P1/P2 | **Assigned:** {Developer | Technical Lead | QA | Business Analyst | UI/UX Designer}
 
 **Acceptance Criteria:**
 - [ ] {criterion}
