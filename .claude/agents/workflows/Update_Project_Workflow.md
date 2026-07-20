@@ -242,8 +242,8 @@ Updated:
 
 Skipped (project-owned):
   - Project_Priming.md
-  - memory/        (5 files)
-  - working-record/ (5 files)
+  - memory/        (6 files)
+  - working-record/ (6 files)
 
 [If any [UPDATE REQUIRED] placeholders were inserted]:
   Action needed: N instruction sections need project-specific content.

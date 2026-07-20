@@ -12,7 +12,7 @@
 Stories are created as **GitHub Issues** in `{github-org}/{repo-name}`.  
 Title format: `[ST-XXXXXX][FEATURE] Story Title` | Labels: `status:backlog` + `feature:[name]` + `sprint-N` + `phase-N` — do NOT use milestones.
 
-**Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section in the issue body (see `Story_Standard.md §2`).
+**Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section in the issue body (see `Story_Standard.md §2`).
 
 | Include ✅ | Exclude ❌ |
 |-----------|----------|

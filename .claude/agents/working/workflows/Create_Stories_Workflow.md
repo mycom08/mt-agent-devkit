@@ -11,7 +11,7 @@ The orchestrator acts as PO — read `.claude/agents/working/instructions/produc
 Ask the user to describe the work they need stories for. Collect until scope is clear:
 - What problem or goal each story addresses
 - Acceptance criteria for each story
-- Which agent role implements it (`Developer`, `Technical Lead`, `QA`, `Business Analyst`)
+- Which agent role implements it (`Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`)
 - Estimated story points (1–13)
 - Target sprint (if known)
 

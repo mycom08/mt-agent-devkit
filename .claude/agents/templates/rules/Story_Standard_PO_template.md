@@ -21,7 +21,7 @@
 
 ```markdown
 **Phase:** [Phase/Sprint]  **Points:** [1-13]  **Priority:** Must/Should/Nice  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
 
 ## User Story
 > As a **[who]**, I want **[what]**, so that **[why]**.
@@ -34,7 +34,7 @@
 - PR #123
 ```
 
-`**Assigned:**` is **mandatory** — must appear **above** `## User Story`. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted.
+`**Assigned:**` is **mandatory** — must appear **above** `## User Story`. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. "TBD" is not permitted.
 
 > **Note — two separate "assignee" concepts:** The `**Assigned:**` field in the issue body (an agent role) drives pipeline routing and must always be set. It is distinct from the **GitHub Issue Assignee** (a GitHub user account set in the sidebar), which may be left unset in agent-driven workflows.
 
@@ -97,7 +97,7 @@ Scope decision or AC clarification.
 **Phase:** [Phase/Sprint]  
 **Story Points:** [1-13]  
 **Priority:** Must-Have | Should-Have | Nice-to-Have  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
 
 ## User Story
 

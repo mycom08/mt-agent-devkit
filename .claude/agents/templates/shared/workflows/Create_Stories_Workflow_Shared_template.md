@@ -14,7 +14,7 @@ The orchestrator acts as PO — read `.claude/agents/product_owner_instructions.
 Ask the user to describe the work they need stories for. Collect until scope is clear:
 - What problem or goal each story addresses
 - Acceptance criteria for each story
-- Which agent role implements it (`Developer`, `Technical Lead`, `QA`, `Business Analyst`)
+- Which agent role implements it (`Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`)
 - Estimated story points (1–13)
 - Target sprint (if known). If the user says "next sprint" without a number, resolve it:
   - **GitHub mode:** run `gh issue list --state closed --limit 5 --json labels,closedAt --jq 'sort_by(.closedAt) | reverse | [.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'` to find the highest sprint on recently closed issues, then add 1. **Do not use `gh label list` — it sorts alphabetically, making `sprint-3` appear higher than `sprint-13`.**

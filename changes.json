@@ -1,4 +1,30 @@
 {
+  "0.1.29": {
+    "new": [
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "New (#57, ST-000021): sixth agent role — UI/UX Designer — turns a wireframe/backlog story into a runnable prototype (real routes/components + local mock backend), never a static mockup.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "New (#57, ST-000021): UI/UX Designer working rules — story pre-start steps, runnable-prototype standard (§4), pre-PR gate, git workflow.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Enhancement (#57, ST-000021): §2, §4, §7, §11, §13 add `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Enhancement (#57, ST-000021): §Assignee rule valid-values list gains `UI/UX Designer`.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "Enhancement (#57, ST-000021): Assigned valid-values lines and story-creation template gain `UI/UX Designer`.",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "Enhancement (#57, ST-000021): Agent Roster table gains the UI/UX Designer row.",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "Enhancement (#57, ST-000021): implementer-role list gains `UI/UX Designer`.",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Enhancement (#57, ST-000021): Implementer role list gains `UI/UX Designer`.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Enhancement (#57, ST-000021): memory/working-record file counts updated from 5 to 6 for the new sixth role."
+    }
+  },
   "0.1.28": {
     "new": [],
     "modified": [

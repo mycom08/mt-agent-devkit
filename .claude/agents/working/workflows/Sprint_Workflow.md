@@ -19,7 +19,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 # Sprint Pipeline State
 **Story:** ST-XXXXXX
 **Stage:** <0 | 1 | 2 | 3 | 4 | 5>
-**Implementer:** <Developer | Technical Lead | QA | Business Analyst>
+**Implementer:** <Developer | Technical Lead | QA | Business Analyst | UI/UX Designer>
 **Type:** <behavioral | non-behavioral>
 **Feature:** <feature-name or none>
 **Phase:** <phase-number or none>

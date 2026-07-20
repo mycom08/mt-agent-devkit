@@ -12,7 +12,7 @@
 Stories are created as **GitHub Issues** in `mycom08/mt-agent-devkit`.  
 Title format: `[ST-XXXXXX][DEVKIT] Story Title` | Labels: `status:backlog` + `sprint-N` — do NOT use milestones.
 
-**Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section.
+**Assignee rule:** Every story must have the responsible agent role in the `**Assigned:**` field at creation time. Valid values: `Developer`, `Technical Lead`, `QA`, `Business Analyst`, `UI/UX Designer`. "TBD" is not permitted. The `**Assigned:**` field must appear **above** the `## User Story` section.
 
 | Include ✅ | Exclude ❌ |
 |-----------|----------|

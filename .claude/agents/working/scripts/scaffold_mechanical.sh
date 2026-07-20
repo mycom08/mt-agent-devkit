@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Writes every scaffold file that needs zero project-specific judgment — pure copy or
 # fixed-token substitution. Run this BEFORE generating the adaptive-tier files (CLAUDE.md,
-# README.md, Project_Priming.md, Document_Index.md, 5 instruction files, 8 rules files that
+# README.md, Project_Priming.md, Document_Index.md, 6 instruction files, 9 rules files that
 # need real adaptation, 4 wiki docs) so an LLM agent never has to touch content it would
 # only reproduce byte-for-byte.
 #
@@ -105,15 +105,26 @@ cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.
 cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"
 
 # 6. Blank memory files
-for role in Business_Analyst Developer Product_Owner QA Technical_Lead; do
-  role_label="${role//_/ }"
+# Note: role_label is derived from role by replacing "_" with " " -- UI_UX_Designer is the one
+# exception (its underscores are a filename-safe stand-in for "UI/UX", not word breaks), so its
+# label is set explicitly rather than derived.
+for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
+  if [[ "$role" == "UI_UX_Designer" ]]; then
+    role_label="UI/UX Designer"
+  else
+    role_label="${role//_/ }"
+  fi
   printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
 done
 
 # 7. Blank working-record files
 TODAY="$(date +%Y-%m-%d)"
-for role in Business_Analyst Developer Product_Owner QA Technical_Lead; do
-  role_label="${role//_/ }"
+for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
+  if [[ "$role" == "UI_UX_Designer" ]]; then
+    role_label="UI/UX Designer"
+  else
+    role_label="${role//_/ }"
+  fi
   printf '# %s Working Record\n\n## %s\n**Completed:** —\n**In Progress:** —\n**Impediments:** —\n' \
     "$role_label" "$TODAY" > "$AGENTS/working-record/${role}_Working_Record.md"
 done
