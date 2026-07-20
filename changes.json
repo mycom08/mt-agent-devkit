@@ -1,4 +1,20 @@
 {
+  "0.1.31": {
+    "new": [
+      ".claude/agents/templates/rules/Logging_Standard_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Logging_Standard_template.md": "New (#64, ST-000023): codified logging standard — four log levels (ERROR/WARN/INFO/DEBUG) with conventional semantics, 'use with weight' rule, single-log rule (log once at the handling layer, full stack trace only at ERROR), sensitive-data prohibition, and a default Java log-pattern example the deploying agent adapts to the target project's tech stack. 10th of 19 rules files; adaptive tier (log-format section needs real per-project adaptation).",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Enhancement (#64, ST-000023): §2 adds a one-line trigger pointer to `Logging_Standard.md` for source code stories.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Enhancement (#64, ST-000023): §4 adds a one-line trigger pointer to `Logging_Standard.md` for source code stories.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Enhancement (#64, ST-000023): 'Applies to' (rules files — adapt to mode) and 'Expected files — rules/' lists gain `Logging_Standard.md` so `sync devkit` delivers and preserves the new file instead of flagging it stale."
+    }
+  },
   "0.1.30": {
     "new": [
       ".claude/agents/templates/rules/UI_Prototype_Rules_template.md"
