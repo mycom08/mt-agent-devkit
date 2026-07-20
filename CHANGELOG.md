@@ -6,6 +6,11 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Fixed (v0.1.28 — CI noise on non-code pushes)
+- `Agent_Common_template.md` (+ working mirror) — §6 stage-transition memory commits now append `[skip ci]` in the commit body so memory-only pushes stop triggering CI; head-commit semantics documented (push pending code commits separately first).
+- `Developer_Rules_template.md` (+ working mirror) — §6 docs-only pushes (`docs/**`, `*.md`, `.claude/agents/**`) append `[skip ci]`; never used on pushes containing code, config, or build-file changes.
+- (internal, no changes.json entry) `Java_Skeleton_REST_Service.md`, `Java_Skeleton_Library.md` — generated `ci.yml` triggers are now path-filtered (`paths-ignore: ['.claude/**', '**.md', 'docs/**']`), matching the filtering the API-spec shape already had; required-status-checks caveat documented. Repos generated before v0.1.28 need a one-time manual edit of their `ci.yml` to add the same `paths-ignore` block.
+
 ### Changed (v0.1.27 — enhancement batch)
 - [Enhancement #55] `Developer_Rules_template.md` (+ working mirror) — commit subject-line length demoted to a non-blocking style nit: reviewers note it, never request changes or trigger a fix-loop over length alone; the ≤50-char limit explicitly covers the entire `type(scope): subject` header line. Motivated by two consecutive full fix-loops (~193K tokens) over zero-functional-impact violations.
 - [Enhancement #58] `Story_Standard_template.md`, `Story_Standard_{Dev,TL,QA,PO}_template.md`, `Strict_Mode_Story_Guide_template.md` (+ working mirrors) — comment-writing standard: decision-first format, ~150–200-word soft cap (QA per-AC validation reports exempt), evidence by pointer with full check logs in the working record, delta-only corrections, no comments-about-comments, one close-out per thread, compact-bullet default format.

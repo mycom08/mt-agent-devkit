@@ -237,6 +237,19 @@ The Dockerfile's `HEALTHCHECK` instruction (see above) still applies unchanged i
 
 ## GitHub Actions CI — `.github/workflows/ci.yml`
 
+**Triggers — always path-filtered.** Agent memory commits (`.claude/agents/memory/`), README/docs edits, and other non-code changes must not burn CI runs:
+
+```yaml
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['.claude/**', '**.md', 'docs/**']
+  pull_request:
+    paths-ignore: ['.claude/**', '**.md', 'docs/**']
+```
+
+> **Required-checks caveat (note it in the completion report):** if the project later marks any of these jobs as a *required* status check, docs-only PRs will wait forever on checks that never start. Either keep the jobs non-required, or add a trivially-passing fallback workflow with the same job names triggered on the inverse `paths:` filter.
+
 Four jobs:
 - `build-and-test` — `./mvnw -B verify` (or `./gradlew build`): compiles, runs unit tests, packages. This is both the "build" and "unit test" requirement — Maven/Gradle's default lifecycle already runs unit tests as part of `verify`/`build`, so splitting them into two separate mvn/gradle invocations would just recompile twice for no benefit. **Needs `permissions: packages: read`** and the same `actions/setup-java@v4` `server-id: github` wiring as the publish job below — this is what lets it resolve the sibling API spec dependency from GitHub Packages (see "Resolving the sibling API spec dependency" above); without it this job cannot resolve that dependency at all.
 - `lint` — runs `./mvnw -B spotless:check` (or Gradle Spotless equivalent). Add the `spotless-maven-plugin` (or `com.diffplug.spotless` Gradle plugin) to the build file with a standard Java formatter (`googleJavaFormat` or `palantirJavaFormat`) if the skeleton doesn't already declare a linter — this is what makes the CI job non-trivial rather than a no-op. **JDK-formatter compatibility check:** `palantirJavaFormat` (and to a lesser extent `googleJavaFormat`) hooks into javac's internal APIs, which have broken before on very new JDK releases — as of this writing, `spotless-maven-plugin` 2.44.3's bundled `palantirJavaFormat` throws `NoSuchMethodError` against JDK 25. If the universal convention's default Java version is a recent release, verify the formatter actually runs before finalizing the skeleton (or note the risk in the agent's report). If it's broken, don't downgrade the whole project's Java version to work around a linter — instead pin **only** the `lint` job's `actions/setup-java` step to an older stable LTS (e.g. `21`) while every other job stays on the real target version; Spotless only checks source-text formatting, not runtime bytecode compatibility, so this is safe unless the source uses preview syntax newer than the pinned version.

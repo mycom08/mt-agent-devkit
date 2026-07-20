@@ -207,6 +207,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 - **GitHub mode:** Format: `<type>(<scope>): <subject>` (Conventional Commits). Subject: imperative mood, ≤ 50 characters. Body (when needed): explain *why*, wrap at 72 characters. Footer: always include `Story: ST-XXXXXX`. See `docs/wiki/Development_Standards.md §2` for the full type list.
 - **Strict mode:** Format: `<primary-id> [<secondary-id>]: <message>` — see `Strict_Mode_Story_Guide.md §Commit Message Format` for the complete spec. No `Story:` footer, no Conventional Commits type prefix.
 - **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`), not just the text after the colon. A reviewer who finds a length violation notes it in a PR comment but must **not** withhold approval, request changes, or trigger a fix-loop over length alone. Everything else in the commit-message convention (type/scope format, imperative mood, `Story:` footer, body wrap) remains blocking.
+- **Docs-only pushes skip CI (github mode):** when every file in the push is non-code (`docs/**`, `*.md`, `.claude/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
 
 ---
 
@@ -252,6 +253,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 
 ## Version
 
-**Version:** 2.8 — §6: commit subject-line length is a non-blocking style nit (limit covers entire header line); §11: reviewer carve-out for subject length  
+**Version:** 2.9 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
 **Previous:** 2.7 — §5: missing-credential cross-reference to `Agent_Common.md §7`; §11 Peer Review: CI-execution/SHA/red-diagnosis and stub/TODO re-check bullets added  
 **Created:** 2026-04-24

@@ -167,6 +167,7 @@ Tag **TL** in the comment to request review.
 - Subject: imperative mood, ≤ 50 characters
 - Footer: always include `Story: ST-XXXXXX`
 - **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`). A reviewer notes a violation in a PR comment but must **not** request changes or trigger a fix-loop over length alone; the rest of the convention remains blocking.
+- **Docs-only pushes skip CI:** when every file in the push is non-code (`docs/**`, `*.md`, `.claude/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
 
 ---
 
@@ -209,6 +210,6 @@ When the orchestrator assigns Dev as peer reviewer:
 
 ## Version
 
-**Version:** 1.2 — §6: commit subject-line length is a non-blocking style nit; §11: reviewer carve-out for subject length  
+**Version:** 1.3 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
 **Previous:** 1.1 — §11: CI-execution/SHA/red-diagnosis bullet added; §5: missing-credential cross-reference  
 **Created:** 2026-06-16

@@ -48,6 +48,8 @@ Every library skeleton gets one — what it does, how to add it as a dependency 
 
 ## GitHub Actions CI — `.github/workflows/ci.yml`
 
+**Triggers — always path-filtered** so agent memory commits (`.claude/agents/memory/`) and README/docs edits don't trigger CI: `on: push: {branches: [main], paths-ignore: ['.claude/**', '**.md', 'docs/**']}` and `pull_request: {paths-ignore: ['.claude/**', '**.md', 'docs/**']}`. Same required-checks caveat as the REST-service shape: jobs behind `paths-ignore` must stay non-required, or need a same-name trivially-passing fallback workflow on the inverse `paths:` filter.
+
 Two jobs — `build-and-test` (`./mvnw -B verify` or `./gradlew build`; no lint/automation-test jobs unless the library already declares a linter) and `publish` (deploys to GitHub Packages on push to `main` — exact job shape is in `Java_Skeleton_Conventions.md`'s "Dependency management & GitHub Packages" section, copy it as-is, adjusting only the endpoint URL to this repo's own name).
 
 ---

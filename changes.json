@@ -1,4 +1,15 @@
 {
+  "0.1.28": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Agent_Common_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Agent_Common_template.md": "Fix: §6 stage-transition memory commits append [skip ci] in the commit body so memory-only pushes stop triggering CI; head-commit semantics documented (push pending code commits separately first).",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix: §6 docs-only pushes (docs/, *.md, .claude/agents/) append [skip ci] so non-code changes stop triggering CI; never used on pushes containing code, config, or build-file changes."
+    }
+  },
   "0.1.27": {
     "new": [],
     "modified": [
