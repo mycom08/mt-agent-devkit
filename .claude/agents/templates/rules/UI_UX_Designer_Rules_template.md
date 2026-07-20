@@ -106,6 +106,8 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Handoff note (mandatory in the PR description):** State plainly which parts are mock-only (backend responses, auth, data) so Developer knows exactly what still needs a real implementation.
 
+**Reference-only + mock-case rules:** see `.claude/agents/rules/UI_Prototype_Rules.md` for what the paired real repo may (and must not) reuse from this prototype.
+
 ---
 
 ## 5. Testing & Verification (Pre-PR Gate)
@@ -182,5 +184,6 @@ On any tooling/environment blocker (prototype won't start, mock backend won't ru
 
 ## Version
 
-**Version:** 1.0 — initial version
+**Version:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022)
+**Previous:** 1.0 — initial version
 **Created:** 2026-07-20

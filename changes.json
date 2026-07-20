@@ -1,4 +1,24 @@
 {
+  "0.1.30": {
+    "new": [
+      ".claude/agents/templates/rules/UI_Prototype_Rules_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/UI_Prototype_Rules_template.md": "New (#57, ST-000022): shared reference-only + mock-case rules for repos paired with a Build Software UI/UX prototype companion repo — per-role Dev/TL/QA/UI-UX-Designer sections. Mechanical-tier verbatim (9th of 9).",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Enhancement (#57, ST-000022): §2 adds a one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Enhancement (#57, ST-000022): §2 adds a one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Enhancement (#57, ST-000022): §4 adds a one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "Enhancement (#57, ST-000022): §4 adds a one-line trigger pointer to `UI_Prototype_Rules.md`.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Fix + enhancement (#57, ST-000022): 'Expected files — rules/' and mode-adapt 'Applies to' lists were missing `UI_UX_Designer_Rules.md` (pre-existing gap from ST-000021) — added, along with the new `UI_Prototype_Rules.md`. Also fixes the stale `instructions/ (5)`/`memory/ (5)`/`working-record/ (5)` example counts to 6."
+    }
+  },
   "0.1.29": {
     "new": [
       ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md",

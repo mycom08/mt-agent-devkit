@@ -106,6 +106,8 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Handoff note (mandatory in the PR description):** State plainly which parts are mock-only (backend responses, auth, data) so Developer knows exactly what still needs a real implementation.
 
+**Reference-only + mock-case rules:** see `.claude/agents/working/rules/UI_Prototype_Rules.md` for what the paired real repo may (and must not) reuse from this prototype. Not applicable to the devkit's own repo (markdown-only, no UI-bearing companion repos), but this mirror stays in sync with the template per Project_Priming §15.
+
 ---
 
 ## 5. Testing & Verification (Pre-PR Gate)
@@ -174,5 +176,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.0 — initial version
+**Version:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022; intentionally-diverged mirror note, devkit itself has no UI-bearing repos)
+**Previous:** 1.0 — initial version
 **Created:** 2026-07-20

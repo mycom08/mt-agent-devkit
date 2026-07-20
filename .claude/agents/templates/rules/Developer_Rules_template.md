@@ -57,6 +57,10 @@ If the story involves writing or modifying source code files, read before writin
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
+**UI Prototype reference (UI-bearing repos only):**
+
+If this repo has (or is paired with) a `-ui-prototype` companion repo, read `.claude/agents/rules/UI_Prototype_Rules.md` before implementing any screen with a prototype counterpart — it governs what may (and must not) be reused from the prototype.
+
 **For Clean Code or refactor stories** (title or scope contains "Clean Code", "refactor", or "violation"): read `Clean_Code_Rules.md` **in full** before touching any file — do not limit reading to chapters that appear relevant by violation label. Chapter scope is not always obvious from violation names alone.
 
 **Design-first rule — check this before writing any code or tests:**
@@ -253,6 +257,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 
 ## Version
 
-**Version:** 2.9 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
-**Previous:** 2.7 — §5: missing-credential cross-reference to `Agent_Common.md §7`; §11 Peer Review: CI-execution/SHA/red-diagnosis and stub/TODO re-check bullets added  
+**Version:** 2.10 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
+**Previous:** 2.9 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
 **Created:** 2026-04-24

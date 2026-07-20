@@ -49,7 +49,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - Update `Sessions` when agents are spawned
 - Update `Repo Count` after Stage 2 produces `repo_structure.md`
 - Update `Confirmed` after each user confirmation gate: `false` → `stage1` → `stage2`
-- **Append to `Scaffolded Repos` the moment a repo's `build_state.md` is written** (Path A step 9, Path B step 2f) — before moving to the next repo, before `gh project create`, before anything else. This is what makes Stage 4 resumable from the state file alone.
+- **Append to `Scaffolded Repos` the moment a repo's `build_state.md` is written** (Path A step 9, Path B step 2g) — before moving to the next repo, before `gh project create`, before anything else. This is what makes Stage 4 resumable from the state file alone.
 - **Populate `Java Skeleton References`, `Java GroupId`, and `Java Build Tool` together, once, at Stage 4 Entry, before any repo folder/agent work begins** (see Stage 4 Entry step 4) — one `Java Skeleton References` entry per Java-tech-stack repo in `repo_structure.md`, plus the single shared `Java GroupId` and `Java Build Tool`. Written in a single batch, never incrementally per-repo.
 - **Populate `Docker Preference` once, at Stage 4 Entry, before any repo folder/agent work begins** (see Stage 4 Entry step 5) — a single shared answer for every repo in the build, not asked per-repo.
 
@@ -58,7 +58,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - **Stage 2 — resumed:** Check if `/result/build/repo_structure.md` already exists. If it does, skip Stage 2 execution and present the existing file to the user for re-confirmation before Stage 3. If it does not exist, run Stage 2 normally.
 - **Stage 3 — resumed:** Check if per-repo split files already exist under `/result/build/<repo-name>/`. If all expected repo folders exist (count from state file `Repo Count`), skip Stage 3. If any are missing, re-run Stage 3 for missing repos only.
 - **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL. Also check `Java Skeleton References`, `Java GroupId`, and `Java Build Tool`: if any Java-tech-stack repo in `repo_structure.md` has no `Java Skeleton References` entry yet, or `Java GroupId`/`Java Build Tool` is still empty, run Entry step 4 (Java Repo Consultation) before continuing, even if some repos are already scaffolded. Also check `Docker Preference`: if it's still empty, run Entry step 5 (Docker Consultation) before continuing.
-- **Stage 5 — resumed:** For each repo, check `.claude/agents/docs/analysis/` against the **full expected file list** — `summary.md`, `architecture.md`, `testing_plan.md`, `business_requirements.md`, `diagrams/` (non-empty), `implementation_roadmap_<repo-name>.md`, `architecture_<repo-name>.md`. Skip a repo only if **all seven** are present; a non-empty-but-incomplete folder (e.g. an interrupted copy that only got partway through step 2/3) is **not** done — re-run the Doc Copy steps for that repo, which safely re-copies/overwrites any files already there.
+- **Stage 5 — resumed:** For each repo, check `.claude/agents/docs/analysis/` against the **full expected file list** — `summary.md`, `architecture.md`, `testing_plan.md`, `business_requirements.md`, `diagrams/` (non-empty), `implementation_roadmap_<repo-name>.md`, `architecture_<repo-name>.md`, plus `ui_design.md` **if and only if** `/result/analyst/ui_design.md` exists (conditional — a repo from a build with no detected UI layer never gets this file, so its absence there doesn't mean incomplete). Skip a repo only if all applicable files are present; a non-empty-but-incomplete folder (e.g. an interrupted copy that only got partway through step 2/3) is **not** done — re-run the Doc Copy steps for that repo, which safely re-copies/overwrites any files already there.
 
 ---
 
@@ -123,6 +123,8 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
      - `local path` — relative path where the user will clone/create this repo (e.g., `./api-service`)
 
    > **Java REST service ⇒ API spec companion repo (fixed devkit convention, not optional).** For every repo whose tech stack is a Java REST service, add a second repo entry `<repo-name>-api-spec` (purpose: "OpenAPI/Swagger contract for `<repo-name>`", tech stack: "Java, OpenAPI Generator", local path a sibling of the service's own path) **immediately before** that service's row in the table — Stage 4 scaffolds repos in table order, and the service's skeleton depends on the api-spec repo already existing. This applies even when the overall `Decision` is `monolith`: a Java REST service and its contract are always two repos, regardless of how the rest of the system is structured. See `.claude/agents/working/skeletons/java/Java_Skeleton_Conventions.md` for why.
+
+   > **UI-bearing repo ⇒ UI/UX prototype companion repo (fixed devkit convention, not optional).** For every repo whose tech stack includes a web/mobile/desktop UI layer (a frontend web app, mobile app, or desktop GUI), add a companion repo entry `<repo-name>-ui-prototype` (purpose: "Runnable UI/UX prototype for `<repo-name>`", tech stack: the same framework family as the paired repo plus a local mock-backend tool, local path a sibling of the paired repo's own path) **immediately before** that repo's row in the table. Unlike the api-spec convention, this is **positional/adjacency only — it introduces no Stage 4 wave dependency**: nothing at scaffold time consumes the prototype repo the way a REST service consumes its api-spec contract, so the prototype repo scaffolds in the same Wave 1 as its paired repo (see Stage 4 Path B's wave-order rule). This applies even when the overall `Decision` is `monolith`, same reasoning as the Java convention. **Composes with the Java convention:** if a single repo is both a Java REST service *and* UI-bearing (e.g. a server-rendered UI), apply the UI-prototype insertion first, then the api-spec insertion — final order is `<repo>-ui-prototype`, `<repo>-api-spec`, `<repo>`.
 
 3. Write `/result/build/repo_structure.md` using the format below:
 
@@ -250,8 +252,11 @@ After both agents complete, the orchestrator copies the following files from `/r
 | `/result/analyst/summary.md` | `/result/build/<repo-name>/summary.md` |
 | `/result/analyst/testing_plan.md` | `/result/build/<repo-name>/testing_plan.md` |
 | `/result/analyst/business_requirements.md` | `/result/build/<repo-name>/business_requirements.md` |
+| `/result/analyst/ui_design.md` (if it exists) | `/result/build/<repo-name>/ui_design.md` |
 | `/result/analyst/diagrams/` (entire folder) | `/result/build/<repo-name>/diagrams/` |
 
+> `ui_design.md` only exists when the Analyst pipeline detected a UI layer (see `Analyst_Workflow.md` Stage 2a). When present, copy it to **every** repo, not just the UI-bearing one and its prototype companion — Developer in the real repo needs it as the implementation reference (per `UI_Prototype_Rules.md`'s "implement from the design" rule), and it costs nothing to have available elsewhere. Skip this row entirely if the file doesn't exist.
+>
 > Both a full copy and a filtered version of `architecture.md` exist per repo. The full copy (`/result/build/<repo-name>/architecture.md`) is placed here for completeness and is the authoritative reference. The filtered version (`/result/build/<repo-name>/architecture_<repo-name>.md`), produced by Agent B, is an additional quick-reference artifact scoped to that repo's components — it does not replace the full copy.
 >
 > The entire `diagrams/` folder is copied whole to every repo — never filtered — so every diagram link kept by Agent A/B (or found in the full-copy docs) always resolves.
@@ -274,6 +279,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    - summary.md
    - testing_plan.md
    - business_requirements.md
+   - ui_design.md (only if a UI layer was detected)
 
    Proceeding to Stage 4 (Repo Scaffolding)...
    ```
@@ -290,7 +296,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 1. Verify the state file shows `Confirmed: stage2`. If not, stop and report an unexpected state to the user.
 2. Read `/result/build/repo_structure.md` to determine repo names and local paths.
-3. **Route by actual row count in the Repos table, not by the `Decision` label** — use Path A only if the table has exactly one row. A `Decision: monolith` architecture that includes a Java REST service has **two** rows (the service + its `-api-spec` companion, per Stage 2's fixed convention) and must use Path B even though `Decision` still reads `monolith`; the `Decision` field describes the overall system's coupling, not literally "one repo".
+3. **Route by actual row count in the Repos table, not by the `Decision` label** — use Path A only if the table has exactly one row. A `Decision: monolith` architecture that includes a Java REST service has **two** rows (the service + its `-api-spec` companion, per Stage 2's fixed convention) and must use Path B even though `Decision` still reads `monolith`; the `Decision` field describes the overall system's coupling, not literally "one repo". The same applies to a UI-bearing repo: its `-ui-prototype` companion (Stage 2's UI convention) also adds a second row, so a `Decision: monolith` architecture with a UI-bearing repo also always routes through Path B.
 4. **Java Repo Consultation (batch, up front — before any repo folder or agent work begins).** Identify every repo row in `repo_structure.md` whose tech stack names Java/Spring Boot/a JVM framework (this includes every `-api-spec` companion repo). If `Java Skeleton References`, `Java GroupId`, and `Java Build Tool` in the state file are already populated, skip this step (resume). If there are no Java repos at all, record nothing and skip this step. Otherwise, ask the user once, listing every Java repo together (label each with a best-guess shape from its purpose text — `-api-spec` suffix ⇒ API spec, "service"/"API"/"backend" ⇒ REST service, "library"/"SDK"/"client" ⇒ library; this label is for the prompt only, the real shape decision still happens inside Java Skeleton Generation):
 
    ```
@@ -324,7 +330,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 5. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**. This runs **before** Java skeleton generation (step 6) so that a Java repo already has `.gitignore`, `VERSION`, and `CHANGELOG.md` in place for that step to build on rather than create itself:
    - Stage 1: scan the repo folder (it is brand-new, so use the product name and description derived from the user's idea and `/result/analyst/summary.md`)
-   - **Mechanical tier (orchestrator-direct, one Bash call):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes the 8 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, and the `settings.json` hook. See `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section for exactly what this covers.
+   - **Mechanical tier (orchestrator-direct, one Bash call):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes the 9 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, and the `settings.json` hook. See `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section for exactly what this covers.
    - **Adaptive tier (agent, smaller scope now):** spawn a general-purpose agent for only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 9 adaptive rules files, and 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 9 rules files these are (it's not just Developer/QA/TL). Point this agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md` from `/result/build/<repo-name>/`) — only have it read the full `architecture.md` for cross-cutting sections (security model, error handling) the filtered excerpt visibly omits, not as a blanket second read of the same content.
    - Stage 3: skip the user-confirmation sub-step — you already have user consent from the overall Stage 4 flow
 
@@ -356,10 +362,11 @@ After both agents complete, the orchestrator copies the following files from `/r
 1. **Local paths:** Read each repo's `local path` from `/result/build/repo_structure.md`. For any repo whose `local path` is missing or set to a placeholder, ask the user: **"Provide an absolute local path for repo `<repo-name>`."** Collect all missing paths before continuing.
 
 2. **Determine wave order — dependency-aware, not a blanket sequential list.** The only ordering constraint this workflow ever produces is a Java REST service depending on its own `-api-spec` companion (Stage 2 always places the pair adjacent in `repo_structure.md`, api-spec first). Skip any repo already listed in the state file's `Scaffolded Repos` (resume).
-   - **Wave 1:** every repo with no unresolved dependency — every `-api-spec` repo, plus any repo that isn't part of a Java-service/api-spec pair at all (e.g. `web-service`, `android-app` have no dependency on each other or on the Java repos).
+   - **Wave 1:** every repo with no unresolved dependency — every `-api-spec` repo, every `-ui-prototype` repo, plus any repo that isn't part of a Java-service/api-spec pair at all (e.g. `web-service`, `android-app` have no dependency on each other or on the Java repos).
    - **Wave 2:** every REST service repo whose `-api-spec` companion is in Wave 1 (there are no waves beyond 2 under the current devkit convention — only one dependency edge type exists).
+   - **`-ui-prototype` repos are Wave 1 by adjacency, not by a dependency edge.** Unlike the api-spec convention, nothing at scaffold time reads from or depends on the `-ui-prototype` repo — its paired UI-bearing repo does **not** wait for it. `repo_structure.md`'s "insert immediately before" instruction is purely positional (keeps the pair visually adjacent in the table); it does not create a Wave 2 relationship the way the Java api-spec pairing does. Both the `-ui-prototype` repo and its paired repo scaffold in the same wave.
 
-   Run each wave to completion before starting the next. Within a wave, steps a–c and e below (folder creation, `git init`, `gh repo create`, Java skeleton) run per-repo in the orchestrator — cheap, no agent needed — but **step d's adaptive-tier agent is what actually benefits from parallelism: spawn one agent per repo in the wave, all in a single orchestrator message** (same pattern as Stage 3's Agent A/B parallel spawn). Wait for every agent in the wave to report before moving to the next wave.
+   Run each wave to completion before starting the next. Within a wave, steps a–c, e, and f below (folder creation, `git init`, `gh repo create`, Java skeleton, UI prototype scaffold) run per-repo in the orchestrator — cheap, no agent needed — but **step d's adaptive-tier agent is what actually benefits from parallelism: spawn one agent per repo in the wave, all in a single orchestrator message** (same pattern as Stage 3's Agent A/B parallel spawn). Wait for every agent in the wave to report before moving to the next wave.
 
    For **each sub-repo** in the current wave:
 
@@ -371,13 +378,16 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    d. Scaffold this repo per `Init_Project_Workflow.md`'s Stage 1/2 (github mode), split into two tiers — **do not route the mechanical tier through an agent**. This runs **before** Java skeleton generation (step e) so that a Java repo already has `.gitignore`, `VERSION`, and `CHANGELOG.md` in place for that step to build on rather than create itself:
       - Stage 1: scan the repo folder using the repo's `purpose` and `tech stack` from `repo_structure.md`
-      - **Mechanical tier (orchestrator-direct, one Bash call, before the parallel agent spawn below):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes `.gitignore`, `VERSION`, `CHANGELOG.md` among its universal outputs (see `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section).
-      - **Adaptive tier (agent — this is the one spawned in parallel across the wave):** only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 9 adaptive rules files, 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 9 rules files. Point the agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md`) — only have it read the full `architecture.md` for cross-cutting sections the filtered excerpt visibly omits.
+      - **Mechanical tier (orchestrator-direct, one Bash call, before the parallel agent spawn below):** `bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <repo-path> github <owner>/<repo-name>` — writes `.gitignore`, `VERSION`, `CHANGELOG.md` among its universal outputs (see `Init_Project_Workflow.md`'s Stage 2 "Mechanical tier" section). **Runs unmodified even for a `-ui-prototype` repo** — it still writes blank memory/working-record files for all 6 roles. These are harmless orphan files for the 3 roles the lean roster (below) excludes; the CLAUDE.md roster and the adaptive-tier scope are the source of truth for which roles are actually active in this repo, not the presence of a memory/working-record file.
+      - **Adaptive tier (agent — this is the one spawned in parallel across the wave):** for a normal repo, only `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 9 adaptive rules files, 4 wiki docs — see `Init_Project_Workflow.md`'s "Adaptive tier" list for exactly which 9 rules files. Point the agent at the **filtered** per-repo docs first (`architecture_<repo-name>.md`, `implementation_roadmap_<repo-name>.md`) — only have it read the full `architecture.md` for cross-cutting sections the filtered excerpt visibly omits.
+        - **Lean roster exception — `-ui-prototype` repos only.** Per AC6, a prototype companion repo gets only the 3 roles actually involved in prototype work, never the full 6: **UI/UX Designer** (builds it), **Technical Lead** (only role that can approve a PR), **Product Owner** (only role that owns stories/ticks AC). Scope the adaptive-tier agent accordingly: CLAUDE.md's agent roster lists only these 3 roles; write only `ui_ux_designer_instructions.md`, `technical_lead_instructions.md`, `product_owner_instructions.md` (skip `business_analyst`/`developer`/`qa` instructions); write only the rules files relevant to these 3 roles — `UI_UX_Designer_Rules.md`, `Technical_Lead_Rules.md`, `Product_Owner_Rules.md`, `Story_Standard.md` (base), `Story_Standard_PO.md` (skip `Story_Standard_Dev.md`/`Story_Standard_QA.md`; `Story_Standard_TL.md` and `UI_Prototype_Rules.md` are already written verbatim by the mechanical tier). Dev/QA/BA are excluded — Dev never touches the prototype directly (see `UI_Prototype_Rules.md`'s reference-only rule), QA validates the real UI rather than the prototype, and BA's requirements work is already done upstream in the Analyst pipeline.
       - Stage 3: skip the user-confirmation sub-step
 
    e. **Java skeleton generation (conditional — see "Java Skeleton Generation" below for full rules):** if this sub-repo's tech stack (from `repo_structure.md` / `architecture_<repo-name>.md`) is Java-based **and** the folder has no `pom.xml`/`build.gradle`/`build.gradle.kts` and no `src/` directory, spawn a general-purpose agent to generate a real, buildable skeleton, passing this repo's answer from `Java Skeleton References` (Entry step 4) into the agent prompt as its reference project. Runs after step d, so `.gitignore`/`VERSION`/`CHANGELOG.md` already exist — the agent appends to/reads them rather than creating them. Skip entirely for non-Java repos or repos that already have code.
 
-   f. Write `.claude/agents/docs/build_state.md` inside the sub-repo:
+   f. **UI prototype scaffold generation (conditional — see "UI Prototype Scaffold Generation" below for full rules):** if this sub-repo's name ends `-ui-prototype` and the folder has no application code yet, spawn a general-purpose agent to generate the runnable prototype app. Runs after step d, same ordering rationale as Java skeleton generation. Skip entirely for repos that aren't a `-ui-prototype` companion repo, or that already have code.
+
+   g. Write `.claude/agents/docs/build_state.md` inside the sub-repo:
 
       ```markdown
       # Build State
@@ -388,7 +398,7 @@ After both agents complete, the orchestrator copies the following files from `/r
       **Analysis Docs:** .claude/agents/docs/analysis/
       ```
 
-   g. Update state file: append `<repo-name>` to `Scaffolded Repos`, `Updated: <now>` (repo count is already set from Stage 2). Do this as soon as this repo's own steps a–f finish — do not wait for the rest of the wave — so a crash mid-wave still leaves an accurate resume point.
+   h. Update state file: append `<repo-name>` to `Scaffolded Repos`, `Updated: <now>` (repo count is already set from Stage 2). Do this as soon as this repo's own steps a–g finish — do not wait for the rest of the wave — so a crash mid-wave still leaves an accurate resume point.
 
 3. **Project orchestrator folder** — **skip this step entirely if the only reason there's more than one repo is the Java REST service + API spec companion pattern under an otherwise-`monolith` decision** (i.e. exactly a service + its own `-api-spec` repo, nothing else). In that case there is no real multi-repo product to orchestrate — treat the REST service repo as the product's primary repo (it already gets the full devkit scaffold in step 2d) and proceed directly to step 4 below. For genuine multi-repo systems (independently deployable components beyond just a service+contract pair), create the orchestrator folder:
 
@@ -408,7 +418,7 @@ After both agents complete, the orchestrator copies the following files from `/r
    ```
    Repeat for each repo. (**Not** `gh project item-add` — that subcommand only accepts Issue/PR URLs and returns "resource not found" for a bare repo URL; `gh project link` is the correct command for attaching a repository to a Project.)
 
-6. Go back and fill in `GitHub Project URL` in every sub-repo's `.claude/agents/docs/build_state.md` that was written with an empty placeholder in step 2f.
+6. Go back and fill in `GitHub Project URL` in every sub-repo's `.claude/agents/docs/build_state.md` that was written with an empty placeholder in step 2g.
 
 **Steps 7–11 apply only if a project orchestrator folder was created in step 3** (skip all five for the service+api-spec-only case):
 
@@ -542,6 +552,47 @@ If either condition fails, **skip entirely** — do not touch the repo's code. T
 
 ---
 
+### UI Prototype Scaffold Generation
+
+**Purpose:** For a brand-new (empty) `-ui-prototype` companion repo, generate a real, runnable prototype app — real routes/components for every screen in `ui_design.md`, wired to a local mock backend — instead of leaving the repo with only the devkit's `.claude/agents/` scaffold and no actual prototype. Referenced from Path B step f above (Path A never applies here — a UI-bearing repo always creates ≥2 rows per Stage 2's convention, so it always routes through Path B; see Stage 4 Entry step 3).
+
+**Applies only when both are true** (check before spawning anything):
+1. **Repo is a `-ui-prototype` companion repo** — its name (from `repo_structure.md`) ends `-ui-prototype`.
+2. **Repo is code-empty** — the local path has no application code yet. Incidental files the earlier Stage 4 steps may already have created (`.git/`, `.claude/`, `CLAUDE.md`, `.gitignore`, `README.md`) do **not** count as "existing project" and do not block generation.
+
+If either condition fails, **skip entirely** — do not touch the repo's code.
+
+**Execution (when both conditions hold):**
+
+1. Spawn **one general-purpose agent** (**model: sonnet**, not the devkit's own UI/UX Designer agent — same rationale as Java Skeleton Generation staying general-purpose: the devkit's own role agents assume sprint story context) with a fully self-contained inline prompt (the agent has no memory of this conversation):
+
+   ```
+   Generate a real, runnable UI/UX prototype at <repo-path>, paired with the real repo <paired-repo-name> at <paired-repo-path>.
+
+   Step 1 — read your inputs:
+   1. /result/build/<repo-name>/ui_design.md (copied from /result/analyst/ui_design.md by Stage 3/5's full-copy step) — this is the screen/component inventory, layout, and interaction notes you are building from. If it does not exist at that path, check /result/analyst/ui_design.md directly.
+   2. The paired repo's tech stack from /result/build/repo_structure.md and (if already scaffolded) its architecture_<paired-repo-name>.md — use this to decide the prototype's framework: build in the same framework family as the paired repo (e.g. paired repo is React → prototype is React; paired repo is Flutter → prototype is Flutter), so layout/interaction patterns transfer visually without transferring code.
+   3. .claude/agents/templates/instructions/ui_ux_designer_instructions_template.md — the Definition of Done for a prototype (real routes/components, a local mock backend, at least one real wired interaction per primary flow, single documented start command).
+   4. .claude/agents/templates/rules/UI_UX_Designer_Rules_template.md §4 (Prototype Standard) — the same runnable-prototype bar a real UI/UX Designer story would be held to.
+
+   Step 2 — generate:
+   - Real routes/components for every screen `ui_design.md` names — reachable by navigating the running app.
+   - A local mock backend (in-memory server, fixture-driven stub, or equivalent lightweight tool appropriate to the framework) serving realistic response shapes for the flows `ui_design.md` describes.
+   - At least one real interaction per primary flow wired end-to-end to the mock backend — not a purely idle/static render.
+   - A single documented start command.
+   - Clearly-labeled mock cases only (a visible "mock" indicator, an obviously fake account) — never anything that could be mistaken for real backend behavior.
+
+   Do not touch anything under <repo-path>/.claude/ or any devkit scaffold files — those are written by a separate step (including the lean-roster adaptive tier, which already ran before this step). Do not write README.md yourself — leave its content for the adaptive-tier agent, which reads what you wrote here (start command, mock backend details) to fill in accurate Getting Started instructions.
+
+   Report back: which framework you chose and why, the screens/flows built, the mock backend approach, the start command, and the full file list (max 5 bullets + observations).
+   ```
+
+2. Agent reports back to the orchestrator (max 5 bullets + observations, per the standard Agent Completion Reports rule).
+3. Orchestrator relays a one-line status to the user (e.g. "UI/UX prototype generated for `<repo-name>` — N screens, <framework>, mock backend via <tool>.") and continues to the devkit scaffold step.
+4. **Stop on blocker** — if `ui_design.md` cannot be found anywhere (neither the per-repo copy nor `/result/analyst/ui_design.md`), that is a blocking condition — stop and report to the user rather than inventing screens from scratch.
+
+---
+
 ## Stage 5 — Doc Copy + Handoff
 
 **Purpose:** Distribute analysis documents into each repo and print the handoff message to the user.
@@ -564,7 +615,10 @@ For each repo in the list:
    | `/result/analyst/architecture.md` | `<repo-path>/.claude/agents/docs/analysis/architecture.md` |
    | `/result/analyst/testing_plan.md` | `<repo-path>/.claude/agents/docs/analysis/testing_plan.md` |
    | `/result/analyst/business_requirements.md` | `<repo-path>/.claude/agents/docs/analysis/business_requirements.md` |
+   | `/result/analyst/ui_design.md` (if it exists) | `<repo-path>/.claude/agents/docs/analysis/ui_design.md` |
    | `/result/analyst/diagrams/` (entire folder) | `<repo-path>/.claude/agents/docs/analysis/diagrams/` |
+
+   > `ui_design.md` only exists when the Analyst pipeline detected a UI layer. Copy it to every repo when present, same reasoning as Stage 3's full-copy step — Skip this row entirely if the file doesn't exist.
 
 3. Copy the **per-repo split files** from `/result/build/<repo-name>/` into `.claude/agents/docs/analysis/` inside the repo:
 
@@ -623,15 +677,16 @@ Next step:
 - **Orchestrator-direct for Stage 2** — no agent spawn; orchestrator writes `repo_structure.md` inline
 - **Parallel Stage 3 spawns** — Agent A and Agent B are spawned in a single orchestrator message; never sequentially
 - **Stage 4 parallelizes within dependency waves, not blanket-sequential** — the only real ordering constraint is a Java REST service depending on its `-api-spec` companion. Repos with no dependency on each other (e.g. `web-service` and `android-app`) scaffold in the same wave, with their adaptive-tier agents spawned in one parallel orchestrator message (same pattern as Stage 3's Agent A/B). Only serialize across an actual dependency edge.
-- **Mechanical tier never goes through an agent** — `scaffold_mechanical.sh` (Bash, orchestrator-direct) handles the 8 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook, for every repo in both Path A and Path B. Only the adaptive-tier files (CLAUDE.md, README.md, Project_Priming.md, Document_Index.md, 6 instructions, 9 adaptive rules files, 4 wiki docs) go through an agent. See `Init_Project_Workflow.md`'s Stage 2 for the full mechanical/adaptive split and why it's not just a `{placeholder}` token scan.
+- **Mechanical tier never goes through an agent** — `scaffold_mechanical.sh` (Bash, orchestrator-direct) handles the 9 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook, for every repo in both Path A and Path B. Only the adaptive-tier files (CLAUDE.md, README.md, Project_Priming.md, Document_Index.md, 6 instructions, 9 adaptive rules files, 4 wiki docs) go through an agent. See `Init_Project_Workflow.md`'s Stage 2 for the full mechanical/adaptive split and why it's not just a `{placeholder}` token scan.
 - **Prefer filtered per-repo docs over full analyst docs in agent prompts** — `architecture_<repo-name>.md` / `implementation_roadmap_<repo-name>.md` exist specifically so Stage 4 agents don't have to read the full unfiltered `architecture.md`/`implementation_roadmap.md`. Only fall back to the full doc for sections the filtered excerpt visibly omits.
 - **`Scaffolded Repos` in the state file is the resume source of truth for Stage 4** — append to it the moment each repo's `build_state.md` is written, before moving to the next repo. Resume reads this list first; filesystem probing is only a fallback for state predating this field.
 - **Java skeleton generation is guarded and additive** — only for Java repos with no existing `pom.xml`/`build.gradle`/`build.gradle.kts`/`src/`; never overwrites or runs alongside an existing project; supports both Maven and Gradle (chosen from `architecture.md`, default Maven) but never mixes the two in one repo; generated skeletons use only public Maven Central dependencies, never invented proprietary artifacts
 - **Reference Project Consultation happens once, up front, per Java repo** (Stage 4 Entry step 4) — the orchestrator asks directly (not a spawned TL/PO agent, consistent with Build Software's existing binding decision to keep Stage 2/4 orchestrator-direct) whether the user has an existing local project to use as a structural reference for each Java repo's skeleton, before any repo folder or agent work begins. Answers go in the state file's `Java Skeleton References` field and are passed into that repo's Java Skeleton Generation agent prompt. A reference project only ever informs structural/style choices `.claude/agents/working/skeletons/java/` leaves open — it never overrides a fixed rule (Lombok, entity/DTO conventions, layering, healthcheck, security baseline, VERSION/CHANGELOG).
 - **Every Java REST service gets a companion API spec repo** — Stage 2 adds it automatically, ordered before the service in `repo_structure.md`; the service's skeleton depends on the contract repo already existing and stops as a blocker (not a silent workaround) if it's missing; a monolith-with-a-Java-REST-service is routed through Path B for this pair even though `Decision` still reads `monolith`
+- **Every UI-bearing repo gets a companion UI/UX prototype repo, positionally, not as a wave dependency** — Stage 2 adds `<repo-name>-ui-prototype` automatically, ordered before the paired repo in `repo_structure.md`; unlike the api-spec convention, nothing consumes the prototype repo at scaffold time, so it scaffolds in the same Wave 1 as its paired repo, never a later wave; the prototype repo's own scaffold uses a **lean 3-role roster** (UI/UX Designer, Technical Lead, Product Owner), never the full 6; a monolith-with-a-UI-bearing-repo is routed through Path B for this pair even though `Decision` still reads `monolith`; composes with the Java convention when a single repo is both (final order: `-ui-prototype`, `-api-spec`, repo)
 - **Use `gh project link`, never `gh project item-add`, to attach a repo to a Project** — `item-add` only accepts Issue/PR URLs and fails with "resource not found" on a bare repo URL; `gh project link <number> --owner <owner> --repo <owner>/<repo>` is the correct command (Path A step 8, Path B step 5)
 - **Every repo gets committed and pushed exactly once, at the end of Stage 5** — Stage 4 only creates the remote (`gh repo create`) and writes files locally; it never commits. The Stage 5 doc-copy loop's commit+push step is what actually populates the GitHub repo, after scaffold + Java skeleton + analysis docs are all in place. The project-orchestrator folder is the one exception — it isn't part of the Stage 5 repo list, so it commits+pushes at the end of Stage 4 Path B instead (step 11). **Resume note:** if a repo shows a complete scaffold on disk but its Stage 4/5 resume check still finds it "incomplete" or its GitHub remote returns an empty tree, check whether it was simply never committed before assuming the scaffold itself needs redoing.
-- **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, and `business_requirements.md` go to all repos verbatim
+- **Full-copy docs are never filtered** — `architecture.md`, `summary.md`, `testing_plan.md`, `business_requirements.md`, and (when it exists) `ui_design.md` go to all repos verbatim
 - **Whole-project docker-compose aggregates, never invents** — Path B step 14 only copies service definitions that already exist in a sub-repo's own `docker/sandbox/docker-compose.yml` (written by Java Skeleton Generation); it never fabricates a service for a repo that doesn't have one yet, and is skipped entirely when `Docker Preference` isn't `docker` or no sub-repo has Docker artifacts
 - **Project-orchestrator analysis docs go in `docs/`, never under `.claude/agents/`** — Path B step 12 copies the full analyst docs (summary, architecture, testing plan, business requirements, unfiltered implementation roadmap, repo_structure.md, diagrams/) flat into `<orchestrator-folder-path>/docs/`, since these are project-level documents, not agent working files. This is the orchestrator folder's only source of analysis docs — Stage 5's doc-copy loop explicitly excludes it.
 - **VERSION/CHANGELOG.md are universal, not Java-only** — every scaffolded repo (any language, via `scaffold_mechanical.sh`) and the project-orchestrator root (Path B step 13) get a `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` at scaffold time; see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`. Java skeleton generation no longer creates these itself — it runs after the mechanical scaffold step and only reads/appends.
