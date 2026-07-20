@@ -65,6 +65,9 @@ Review checklist differs from code review — focus on:
 - **File deletions / renames:** If the story deletes or renames files, confirm the original is absent from the branch tree — do not rely on the diff alone; verify via the GitHub API or `git ls-tree` on the PR branch.
 - **Path-reference stories:** If the story updates file path references inside a document, grep that file for the old path string before approving: `grep -n "old_path" <file>`. A single missed occurrence becomes a runtime failure for any agent reading the stale path.
 
+**UI Prototype PRs (UI-bearing repos only):**
+If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.claude/agents/rules/UI_Prototype_Rules.md` before approving any PR for a screen with a prototype counterpart.
+
 **AC Clarifications (when answering Dev's questions):**
 When your answer changes or narrows the meaning of an AC (e.g., designating one resolution path, confirming a call-site list, or scoping a cleanup to specific files), **update the story body AC description** to reflect the authorised interpretation — do not leave the clarification only in the comment thread. Dev and QA use the story body as their single source of truth.
 
@@ -244,6 +247,6 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 2.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
-**Previous:** 2.0 — Fixed PR-approval contradiction (§2/§5 now use `gh pr comment`, never `gh pr review --approve`); added Memory to §1 pre-start read sequence; renumbered sections sequentially (8–12, was 10/11/13/12/14)  
+**Version:** 2.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
+**Previous:** 2.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
 **Created:** 2026-05-01

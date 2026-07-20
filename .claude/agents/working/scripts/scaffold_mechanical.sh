@@ -50,6 +50,7 @@ fi
 VERBATIM_RULES=(
   Agent_Common Blocked_Request CICD_Validation_Guide Clean_Code_Rules
   Product_Owner_Rules Retro_Rules Story_Standard_TL Strict_Mode_Story_Guide
+  UI_Prototype_Rules
 )
 GH_ORG="${GH_SLUG%%/*}"
 GH_REPO="${GH_SLUG##*/}"
