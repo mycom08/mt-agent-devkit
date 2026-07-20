@@ -39,6 +39,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - tl_session: <agentId or empty>
 - po_session: <agentId or empty>
 - ba_session: <agentId or empty>
+- qa_session: <agentId or empty>
 **Updated:** YYYY-MM-DDTHH:MM
 ```
 
@@ -79,7 +80,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 
    > Do not modify or shorten the Analyst_Workflow pipeline. All documents (`summary.md`, `architecture.md`, `implementation_roadmap.md`, `business_requirements.md`, `testing_plan.md`, `spec.md`, `elicitation_notes.md`, `diagrams/`) must be produced.
 
-4. After the Analyst pipeline (including Stage 2d) completes, update state file: `Stage: 1`, `Updated: <now>`, and copy `tl_session` / `po_session` / `ba_session` from `analyst_workflow_state.md` (or from the orchestrator's own record of which agents it spawned/resumed during the delegated run, if that file is already gone) into **this** state file's `Sessions` block. This is what keeps those sessions resumable for any later feedback round — `analyst_workflow_state.md` itself is deleted once Stage 2d closes, per the Analyst workflow's own rules.
+4. After the Analyst pipeline (including Stage 2d) completes, update state file: `Stage: 1`, `Updated: <now>`, and copy `tl_session` / `po_session` / `ba_session` / `qa_session` from `analyst_workflow_state.md` (or from the orchestrator's own record of which agents it spawned/resumed during the delegated run, if that file is already gone) into **this** state file's `Sessions` block. This is what keeps those sessions resumable for any later feedback round — `analyst_workflow_state.md` itself is deleted once Stage 2d closes, per the Analyst workflow's own rules.
 
 ### Confirmation Gate
 
@@ -94,7 +95,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
    If you have any further feedback, share it now — otherwise just say so and I'll continue to Stage 2 (Repo Structure Planning).
    ```
 
-6. **If the user gives feedback** → route it to the relevant agent (TL for `architecture.md`/`testing_plan.md`, PO for `implementation_roadmap.md`, BA for `business_requirements.md`/`spec.md`) via the sessions saved in this state file (resume; spawn fresh only if expired), apply the change, re-present, and ask again. No loop limit — same pattern as `Analyst_Workflow.md` Stage 2d.
+6. **If the user gives feedback** → route it to the relevant agent (TL for `architecture.md`, QA for `testing_plan.md`, PO for `implementation_roadmap.md`, BA for `business_requirements.md`/`spec.md`) via the sessions saved in this state file (resume; spawn fresh only if expired), apply the change, re-present, and ask again. No loop limit — same pattern as `Analyst_Workflow.md` Stage 2d.
 
 7. If user says to **stop** without giving feedback → stop and inform the user they can resume by running `build software` again (the state file will resume at this same gate on next run).
 
