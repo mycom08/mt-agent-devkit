@@ -127,6 +127,9 @@ A test that exists but is expected to fail is a failing test.
 **UI Prototype validation (UI-bearing repos only):**
 If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.claude/agents/rules/UI_Prototype_Rules.md` before signing off any AC for a screen with a prototype counterpart.
 
+**Logging review (source code stories only):**
+When reviewing a story that added or changed log statements, verify compliance with `.claude/agents/rules/Logging_Standard.md` (correct level, single-log rule, full stack trace only at ERROR, no sensitive data) before signing off AC.
+
 **Field-removal stories (immutability enforcement):**
 When a story removes or marks fields as immutable on an endpoint request body (structural rejection, validation constraints, etc.), QA must verify BOTH branches explicitly:
 - (a) **Omit the removed field** → request succeeds (200 or spec-defined success status)
@@ -240,6 +243,6 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 3.5 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
-**Previous:** 3.4 — §4: real-fixture test requirement for external-integration AC, mock/structural-pass-≠-complete rule, run-twice isolation technique, CI/workflow-only and verification-only test-scenario-doc exceptions, missing-credential example added; §8: CI-equivalent exception for CI/workflow-only stories  
+**Version:** 3.6 — §4: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
+**Previous:** 3.5 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
 **Created:** 2026-05-01

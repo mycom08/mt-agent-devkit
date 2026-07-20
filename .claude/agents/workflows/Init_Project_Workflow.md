@@ -82,8 +82,8 @@ Summarize findings to the user in 5 bullets max before proceeding to Stage 2.
 ## Stage 2 — Content Generation
 
 Scaffold files split into two tiers (see full detail below):
-- **Mechanical tier** — 9/18 rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`.
-- **Adaptive tier** — `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, 9/18 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.claude/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
+- **Mechanical tier** — 9/19 rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`.
+- **Adaptive tier** — `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, 10/19 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.claude/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
 
 ### Source template paths (in this devkit)
 
@@ -94,7 +94,7 @@ Scaffold files split into two tiers (see full detail below):
 | `templates/context/Project_Priming_template.md` | `.claude/agents/context/Project_Priming.md` | Adaptive |
 | `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` | Adaptive |
 | `templates/instructions/*_instructions_template.md` (×6) | `.claude/agents/[role]_instructions.md` | Adaptive |
-| `templates/rules/*_template.md` (×18) | `.claude/agents/rules/[name].md` | 9 Mechanical, 9 Adaptive — see the Rules files section below for exactly which |
+| `templates/rules/*_template.md` (×19) | `.claude/agents/rules/[name].md` | 9 Mechanical, 10 Adaptive — see the Rules files section below for exactly which |
 | `templates/{mode}/workflows/*_template.md` (×7 split) + `templates/workflows/*_Workflow_template.md` (×2 non-split) | `.claude/agents/workflows/[name].md` | Mechanical (all 9) |
 
 Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
@@ -204,7 +204,7 @@ For each agent (`business_analyst`, `developer`, `product_owner`, `qa`, `technic
 This one script call writes every file (or file family) that needs **zero project-specific judgment** — it was built and content-diffed against real, previously agent-generated scaffolds until every file matched byte-for-byte (the few residual diffs found were agent *drift bugs* — literal template dates silently rewritten to "today," a stray backtick moved — not legitimate adaptations; the script is the more faithful copy). Do not re-derive this list by re-reading the templates and eyeballing them for `{placeholder}` tokens — some files need real adaptation via plain prose with no bracketed token at all (see the Adaptive tier note below), which a token scan alone will miss. If you're ever unsure whether a "verbatim" file actually needs a specific line's content adapted, diff the script's output against a known-good previously-generated repo for that same file, not just against the template.
 
 It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` (no `.gitkeep` — gitignored, see below), `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
-- **9 of 18 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`, `UI_Prototype_Rules`
+- **9 of 19 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`, `UI_Prototype_Rules`
 - **All 9 workflow files** — the 7 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
 - Both version-check scripts, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.claude/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
 - `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` (single-next-version-heading format) at the target project root — a universal devkit convention, any language, written only if not already present (idempotent — a Java skeleton generation pass that ran earlier in `Build_Software_Workflow.md` never creates these itself anymore, so this is always the actual creator). See `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md` for the format.
@@ -219,12 +219,13 @@ Everything below needs real judgment and should go through an agent (a much smal
 
 - `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`
 - 6 agent instruction files — adapt pre-PR gates to detected tooling (e.g., `npm test`, `pytest`, `cargo test`, `./mvnw test`)
-- **9 of 18 rules files need real adaptation**, not just token substitution — confirmed by diffing real generated repos, not by scanning for `{}` tokens (several of these have zero bracketed placeholders and still needed rewriting):
+- **10 of 19 rules files need real adaptation**, not just token substitution — confirmed by diffing real generated repos, not by scanning for `{}` tokens (several of these have zero bracketed placeholders and still needed rewriting):
   - `Developer_Rules.md` — adapt §2 (pre-PR gate commands) to detected tooling
   - `QA_Rules.md` — adapt §4 (testing rules) to detected test framework
   - `Technical_Lead_Rules.md` — adapt §4 (design standards) to detected tech stack
   - `UI_UX_Designer_Rules.md` — adapt §5 (pre-PR gate) `{prototype-start-command}` / `{mock-backend-start-command}` to the detected or decided frontend stack and mock-backend tooling
   - `Business_Analyst_Rules.md` — despite reading as tool-agnostic, references a `{feature-label}`/test-command convention that needs a real decision (e.g., "this repo uses sprint labels, not per-feature labels")
+  - `Logging_Standard.md` — the four-level semantics, single-log rule, and sensitive-data prohibition are copied verbatim; only §4 (Log Format) needs real adaptation — replace or supplement the default Java pattern-layout example with the target project's actual tech-stack logging convention (e.g., structured JSON, Python `logging`, Go `zap`/`zerolog`)
   - `Story_Standard.md` (base) — references `{start-server-command}` and other tooling-specific AC/DoD language
   - `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md` — all three reference a hardcoded generic API-spec location (`docs/api/`) in plain prose with no `{}` marker; real scaffolds need this rewritten to the project's actual contract location (e.g., a sibling `-api-spec` repo, or wherever the spec actually lives) and to the actual migration/build tooling in use
 - 4 wiki docs (`Testing_Guidelines.md`, `Development_Standards.md`, `Code_Review_Checklist.md`, `{Language}_Style_Guide.md`) — fill every `{{PLACEHOLDER}}` from reference material (if provided) and the Stage 1 scan / architecture docs
@@ -366,7 +367,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```
    This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 9 verbatim rules files, all 9 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 
-2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 9 adaptive rules files, 4 wiki docs.
+2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 10 adaptive rules files, 4 wiki docs.
    - For `CLAUDE.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.
 
 3. **Only if the mechanical script reported `settings.json` already existed:** read the existing `.claude/settings.json` and merge the `SessionStart` hook under `hooks` (do not remove existing hooks or keys) — use the same Windows/Mac-Linux hook JSON the script would have written (see the script source for both forms).

@@ -57,6 +57,13 @@ If the story involves writing or modifying source code files, read before writin
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
+**Logging Standard (source code stories only):**
+
+If the story involves writing or modifying log statements, read before writing any code:
+- `.claude/agents/rules/Logging_Standard.md`
+
+Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
+
 **UI Prototype reference (UI-bearing repos only):**
 
 If this repo has (or is paired with) a `-ui-prototype` companion repo, read `.claude/agents/rules/UI_Prototype_Rules.md` before implementing any screen with a prototype counterpart — it governs what may (and must not) be reused from the prototype.
@@ -257,6 +264,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 
 ## Version
 
-**Version:** 2.10 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
-**Previous:** 2.9 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
+**Version:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
+**Previous:** 2.10 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
 **Created:** 2026-04-24

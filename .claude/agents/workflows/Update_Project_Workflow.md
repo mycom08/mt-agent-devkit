@@ -203,7 +203,7 @@ Wiki files are project-owned — never overwrite existing content.
 After all updates are applied, scan each managed directory in `TARGET_PROJECT` and flag any file not in the known expected set.
 
 **Expected files — `rules/`:**
-`Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `UI_UX_Designer_Rules.md`, `UI_Prototype_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
+`Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Logging_Standard.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `UI_UX_Designer_Rules.md`, `UI_Prototype_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
 
 **Expected files — `workflows/`:**
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
