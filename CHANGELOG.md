@@ -6,6 +6,9 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Fixed (v0.1.32 — Stage 0 routing table missing UI/UX Designer row)
+- [#75] `Shared_Pipeline_Stages_template.md` (+ working mirror `Shared_Pipeline_Stages.md`) — Stage 0 Implementer Routing table gains a `UI/UX Designer` row (routes to Technical Lead review, QA validation, matching the `Business Analyst` row's chain). A UI/UX-assigned story previously planned and refined without issue but halted at Stage 0 of sprint execution on the "unrecognised `**Assigned:**` value" stop.
+
 ### Added (internal, no changes.json entry — CI Bootstrap + per-repo CI classification)
 - [ST-000025] `Build_Software_Workflow.md` Stage 2 — `repo_structure.md`'s Repos table gains a `CI` column classified `full`/`contract`/`none` (+ one-word reason) from each row's own Tech Stack column (fallback to full `architecture.md` only when ambiguous); `-ui-prototype` companion rows classify `full`, `-api-spec` rows classify `contract` by construction.
 - [ST-000025] New `.claude/agents/working/skeletons/shared/CI_Bootstrap_Conventions.md` — stack-generic baseline `ci.yml` guidance (universal `paths-ignore` trigger block + required-checks caveat reused verbatim from the Java skeleton shapes, 3-job graph `build-and-test`/`lint`/`automation-test` stub, Node/Python/Go/Gradle-Maven-fallback per-stack tool mappings).

@@ -20,6 +20,7 @@ Store `Implementer` in the pipeline state file. This determines which agent runs
 | `Technical Lead` | Technical Lead | Developer (peer review) | QA |
 | `QA` | QA | Technical Lead | Skipped — PO validates AC directly |
 | `Business Analyst` | Business Analyst | Technical Lead | QA |
+| `UI/UX Designer` | UI/UX Designer | Technical Lead | QA |
 
 > If the `**Assigned:**` field is missing or contains an unrecognised value, stop and notify the user before proceeding.
 
