@@ -38,13 +38,17 @@
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+- None blocking. This is a `Type: behavioral` story (diff touches `scaffold_mechanical.sh`), so full validation was required rather than fast-path sign-off — that classification was correct: the shell-script change (a hardcoded-count array edit) needed its own regression check independent of the template-content AC checks.
+- Confirmed TL's CR-1/CR-2 non-blocking observation myself rather than accepting it: `grep -n "agents/working\|Build_Software_Workflow\|scaffold_mechanical"` across all 3 new template files returns exactly one hit, and it reads as a negative statement ("has no ... and no ...") confirming absence, not a live executable reference. Cheap, mechanical, and closes the loop on the exact defect class TL's own memory flagged the corpus-wide validator as blind to.
+- Re-hit the same CRLF-vs-LF `git worktree` artifact TL's memory already documented for this story (comparing a PR-branch scaffold against an `origin/main` scaffold via `git worktree add`): 3 files showed as whole-file diffs that were byte-identical after `tr -d '\r'` normalization. Having the artifact pre-documented in TL's memory before I hit it saved a chase — worth keeping that fact visible for future scaffold-regression checks (QA_Memory already has the git-worktree technique; the CRLF caveat lived only in TL_Memory, so I'm adding it there too since it's a technique-level gotcha, not role-specific).
 
 ### Process Suggestions
-*(pending)*
+- The TL-flagged non-blocking `Step 3g` stale cross-reference is real (verified: Step 3's sub-steps are plain-numbered 1–6, no lettered sub-steps exist anywhere in this file) and harmless in context. Suggest PO batch it with the other two TL round-2 non-blocking items (the `Sync_Devkit_Workflow_template.md` pre-existing `init project`-pointer divergence, and the missing `Workflow_Guide_template.md` trigger-table row) into a single small follow-up story rather than three separate ones — same file family, same "devkit-only reference / stale pointer" theme.
+- Worth generalizing in `QA_Rules.md §8` or `Template_Test_Strategy.md`: for any `Type: behavioral` template/workflow story that also touches `scaffold_mechanical.sh`, the regression check should always include a two-mode scratch scaffold dry-run diffed against `origin/main`, not just the Layer-1 script pair — this is the check that actually caught (and, via CRLF-normalization, ruled out) file-count and deployed-content regressions that `validate_templates.py` cannot see (it validates the devkit repo's own template tree, not scaffolded output).
 
 ### What Worked Well
-*(pending)*
+- Independently re-deriving CR-1/CR-2/CR-3 from live file content (grep + read, not trusting TL's round-2 prose) found no daylight between the review claim and the actual file state — a clean confirmation rather than a new finding, which is itself useful signal that this round-2 review was accurate.
+- The scaffold dry-run (both modes, PR branch vs. `origin/main`, via `git worktree`) converted several separate claims into one piece of evidence: correct 10-file count in both modes, byte-identical github/strict deployed output for the new workflow (independently confirming TL's thin-variant-stripping finding), and zero unintended regression elsewhere in the deployed tree. Same technique TL used in their own round-2 review — reusing it directly rather than re-deriving a different verification approach saved effort without weakening the check.
 
 ## Product Owner
 ### Impediments & Unclear Points
