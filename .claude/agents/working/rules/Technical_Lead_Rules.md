@@ -29,6 +29,8 @@ Do these **in order** before any design or review work:
 - **Confirm the head SHA:** the cited run's commit SHA must match the PR's current head SHA. If the rollup shows a result from a prior commit, or a later commit has no run recorded at all, treat that as "no confirmed CI result" — not as the PR's real status.
 - **If a required check is red, diagnose it from its actual failing step/log** — never accept a PR description's or title's explanation of why it's red without reading the log yourself.
 - **Dependency-pin check:** if the story changes or introduces a version pin, confirm the pinned version is actually resolvable, not just present in a local cache.
+- **Resume-rule branch completeness (state-file / pipeline stories):** if the story adds a new pipeline-state field, status value, or step to a resumable workflow, verify the resume/routing logic has an explicit branch for every value its own write rules can produce — not just the pre-existing ones. A new terminal or interrupted-window state with no matching resume branch silently falls into the nearest existing branch instead of doing the right thing.
+- **Citation accuracy:** before citing a rule as `<file> §N`, open the file and confirm N is the section's actual heading number — a `grep -n` result is a *line* number, not a section number, and a wrong-but-existing section number ships silently past casual review.
 - Verify compliance with the approved implementation design
 - Check: naming conventions, cross-reference correctness, template structure completeness
 - **Source code / script changes only** — verify compliance with `.claude/agents/working/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling) for `.sh` and `.ps1` scripts
@@ -64,6 +66,7 @@ When your answer changes or narrows the meaning of an AC, **update the story bod
 **Change Requests:**
 - Post each required change as an **inline comment on the PR** with enough detail for Dev to action it
 - After posting all PR inline comments, post a **brief notify comment on the GitHub Issue**
+- **Fix/call-site menus are not exhaustive by default:** when a change request names specific files, call sites, or fix options, phrase it as "at minimum these, plus any site/mechanism sharing the same pattern" rather than a bare list — a bare list invites treating it as complete, and the implementer is often closer to the full mechanism inventory than the reviewer.
 
 **PR Approval:**
 - When approving, post a **brief comment on the GitHub Issue** to notify the team

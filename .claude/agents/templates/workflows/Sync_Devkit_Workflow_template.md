@@ -172,7 +172,15 @@ Fetch and write verbatim. Create `.claude/agents/scripts/` if it does not exist.
 
 Check `.claude/settings.json` for the devkit update-check hook:
 - If a `SessionStart` entry whose command references `check_devkit_version` already exists → skip
-- If missing → inject it using the same OS-detection logic as `init project` Stage 4 step 6 (merge into existing `settings.json`, or create it if absent)
+- If missing → detect OS from the environment `sync devkit` is running in, then inject the matching hook JSON. If `.claude/settings.json` already exists, merge this under its existing `hooks` key — do not remove existing hooks or keys. If it does not exist, create it with this content:
+  - **Windows:**
+    ```json
+    { "hooks": { "SessionStart": [{ "matcher": "startup", "hooks": [{ "type": "command", "command": "powershell -File .claude/agents/scripts/check_devkit_version.ps1", "timeout": 10 }] }] } }
+    ```
+  - **Mac/Linux:**
+    ```json
+    { "hooks": { "SessionStart": [{ "matcher": "startup", "hooks": [{ "type": "command", "command": "bash .claude/agents/scripts/check_devkit_version.sh", "timeout": 10 }] }] } }
+    ```
 
 #### Instruction files — Merge
 

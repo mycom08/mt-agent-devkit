@@ -342,6 +342,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ## Stage 4 — PO Story Closure
 
+> **GitHub mode closure-comment ordering:** if the merged PR's body contained a `Closes #N`-style keyword, GitHub already auto-closed the issue on merge — before Stage 4 runs. Post any closure comment via a **separate** `gh issue comment` call; never combine it with `gh issue close --comment`, since `gh issue close` on an already-closed issue errors out and silently drops the comment along with it. A subsequent `gh issue close` call erroring "already closed" is expected and harmless — treat it as confirmation, not a failure.
+
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
 1. Orchestrator executes closure directly — no PO agent spawn:

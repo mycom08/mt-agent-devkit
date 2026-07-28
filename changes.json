@@ -1,4 +1,17 @@
 {
+  "0.1.38": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Sprint-5 retro batch: §2 Review checklist gains resume-rule branch-completeness and §N-citation-accuracy checks (recurring findings across ST-000025/026/028); Change Requests section gains a fix/call-site-menu-is-not-exhaustive phrasing convention (recurred ST-000026/028).",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Sprint-5 retro batch: Stage 4 gains a GitHub-mode closure-comment-ordering note — post closure comments via a separate `gh issue comment` call, never combined with `gh issue close --comment`, since a PR's `Closes #N` auto-close makes the combined call error and silently drop the comment (recurring friction, first reported in community retro issue #76).",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Sprint-5 retro batch: fixed a confirmed corpus bug — the Settings-hook injection step pointed at `init project` Stage 4 step 6, a devkit-internal file/step target projects never receive (and the step number was already stale). Restated the OS-detection + hook JSON inline instead of pointing at a devkit-only file, per the ST-000028 CR-1/CR-2 fix pattern."
+    }
+  },
   "0.1.37": {
     "new": [
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md",
