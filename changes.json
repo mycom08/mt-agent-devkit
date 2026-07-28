@@ -1,4 +1,15 @@
 {
+  "0.1.35": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[ST-000026] New §11a Roadmap Story Drain: authoring or updating a roadmap/planning doc (Implementation Roadmap, or any `*Roadmap*.md` under `docs/feature/<feature_name>/plan/`) now mandatorily drains every story it defines into a tracked `status:backlog` issue/story at that same moment, instead of deferring to sprint planning. Idempotent via a `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>` marker line, matched as an exact full body line against candidates (github: `gh issue list --search \"... in:body\" --state all --json number,body`, treated as a candidate set not a verdict — a bare phrase/search hit can false-positive on a prefix-titled story; strict: grep the stories folder with a whole-line match) before every create — re-authoring the same roadmap returns an existing exact-line match for every story and creates zero duplicates. Cross-references the new `Plan_Sprint_Workflow.md` Stage 1 reconciliation backstop.",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000026] Stage 1 gains a new step 7, 'Roadmap reconciliation backstop' (feature sprints only): before Stage 2 selects candidate stories, checks every roadmap-defined story against tracked issues/stories **in any status** (`--state all`, no `status:backlog` filter — a drained-then-progressed story must not read as drift) via an exact-line `**Roadmap Source:**` marker match, and surfaces any genuinely untracked story as drift. This is the sprint-planning safety net for AC4 — the primary drain now happens at roadmap authoring time (`Product_Owner_Rules_template.md §11a`), not here."
+    }
+  },
   "0.1.34": {
     "new": [],
     "modified": [
