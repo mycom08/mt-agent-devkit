@@ -17,13 +17,19 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[failure]` A workflow file that is *injected into another project* was written with executable references to files that exist only in the originating toolkit — a script path under a maintainer-only directory, plus "follow file X exactly" pointing at a file the receiving project never gets. Both read as correct while editing, because the author's own working tree contains them. This is a distinct failure mode from a stale reference: the target exists, just not where the file will run. Evidence: PR review comment CR-1/CR-2.
+- `[failure]` Automated corpus validation gave false assurance here. The reference-integrity check resolves candidate paths against the **toolkit repo root**, so a toolkit-only path inside an injected template resolves clean, and its regex covers `.md` only, so script paths are never examined at all. A green validator run says nothing about whether an injected template's references resolve in a receiving project. Reinforces the same-shaped lesson recorded for path-move stories (TL memory, ST-000015).
+- `[workflow]` A new pipeline-state file specified a terminal status value and a "delete only after the final step" write rule, but the resume rule enumerated branches for only the non-terminal values. The interrupted-window the write rule explicitly anticipates had no routing. Third story running where a resume rule's branch set lagged the states its own write rules create.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` Add a review-checklist line for template/workflow stories: for any file that is deployed into another project, verify every executable path and "read file X" pointer against the *deployed* file inventory, not the authoring repo's tree. The deployed inventory is already enumerated in the sync/update workflows' "Expected files" lists — that list is the authority, and checking against it is a two-minute grep.
+- `[workflow]` Extend the corpus validator with an invariant scoped to injected templates only: no reference to a path outside the deployed inventory, and widen the reference regex beyond `.md` to cover script extensions. Both blocking findings this round would have been caught mechanically.
+- `[workflow]` When a story's technical scope says design-first, a pre-flight Q&A that resolved the *architectural* questions is not a substitute for the design draft. The questions answered up front were about placement and ownership; the defects landed in mechanics — "in the receiving project, what actually executes this step?" — which is exactly what a draft surfaces before a file is written.
 
 ### What Worked Well
-*(pending)*
+- Reproducing the scaffold from both the PR branch and the base branch into scratch targets, then diffing the outputs, converted three separate claims into evidence in one step: no regression to the existing workflows, correct file count in both modes, and — unexpectedly — proof that mode-specific thin-variant comments are stripped before deployment, which is precisely why the mode branching had to live in the shared file for the mode-dependent AC to hold at all.
+- Re-deriving the count ripple independently (grepping for the *stale* phrasings rather than confirming the listed locations) turned "did they get all 6?" into a zero-hit result that needs no trust in the enumeration. Reinforces: TL memory, ST-000026 — an enumerated list in a change request invites being treated as exhaustive; the same applies to an enumerated list in a completion claim.
+- Checking cross-referenced section numbers by resolving each one to its actual heading, not by pattern-matching the citation, held up: all five resolved. Direct application of the §-citation lesson from the previous story.
 
 ## QA
 ### Impediments & Unclear Points
