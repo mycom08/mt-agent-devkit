@@ -38,13 +38,15 @@
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+- None. All AC and the TL-fixed mechanics (CR-1..CR-4) were verifiable directly from the live file content on the PR branch — no ambiguity requiring a blocker comment.
 
 ### Process Suggestions
-*(pending)*
+- The orchestrator's instruction to "not just trust TL's review summary, re-derive your own conclusion" paid off concretely once: independently `git diff`-ing the Stage 4 `Scaffolded Repos` resume bullet between `main` and the PR branch (rather than trusting the byte-identical claim in TL's memory) is a five-second check that turns a trusted assertion into an independently-verified fact — worth keeping as a standing QA habit whenever a PR claims "X invariant untouched," not just for this story.
+- Constructing an actual adversarial idempotency scenario (prefix-title case, checked in both directions) rather than re-reading the fix's prose was the only way to genuinely test AC3 — a docs-only story with no runtime still benefits from a "try to break it" pass, not just a "does the text say the right thing" pass. Worth keeping as a standard QA step whenever an AC's mechanism is a `gh`/CLI query, mirroring the review-side lesson TL already recorded.
 
 ### What Worked Well
-*(pending)*
+- Because TL's round-2 review had already fixed all 4 CRs as genuine instruction changes (not warnings-next-to-rules), independent re-derivation converged on the same pass verdict without finding new blocking issues — a case where thorough upstream review made the QA gate confirmatory rather than discovery-heavy, without QA skipping the independent-verification step to get there.
+- The devkit's own git worktree pattern (checking out the PR branch into a scratch worktree to run `validate_templates.py`/`run.sh` without disturbing the main working tree, which was itself already sitting on the dev branch) worked cleanly for a docs-only story with no runtime — confirms the Layer-1 gate is exercisable purely from file content, no build step needed.
 
 ## Product Owner
 ### Impediments & Unclear Points
