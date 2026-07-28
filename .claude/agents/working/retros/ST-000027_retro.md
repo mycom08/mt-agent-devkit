@@ -16,34 +16,34 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+*(not submitted)*
 
 ### Process Suggestions
-*(pending)*
+*(not submitted)*
 
 ### What Worked Well
-*(pending)*
+*(not submitted)*
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+*(not submitted)*
 
 ### Process Suggestions
-*(pending)*
+*(not submitted)*
 
 ### What Worked Well
-*(pending)*
+*(not submitted)*
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+*(not submitted)*
 
 ### Process Suggestions
-*(pending)*
+*(not submitted)*
 
 ### What Worked Well
-*(pending)*
+*(not submitted)*
 
 ## Orchestrator
 ### Observations
-*(pending)*
+- [skipped-step] Orchestrator jumped Stage 1→3 in one edit during the non-behavioral fast path (Stage 2 approval + Stage 3 QA sign-off both executed directly, no agent spawn) without an intermediate Stage/Updated write at the Stage 2 boundary.
