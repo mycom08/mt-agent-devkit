@@ -59,6 +59,8 @@ Review checklist differs — focus on:
 **AC Clarifications:**
 When your answer changes or narrows the meaning of an AC, **update the story body AC description** to reflect the authorised interpretation.
 
+**Distinguishing this from "TL commenting on scope" (`Story_Standard_TL.md` §7 red flag):** narrowing an AC's *technical* interpretation is your job, per above. If your answer would instead create a **new** deliverable the existing AC doesn't already imply, document the technical detail in AC/Technical Scope as usual, but flag PO in the same comment to confirm the scope addition — don't expand scope on your own authority.
+
 **Change Requests:**
 - Post each required change as an **inline comment on the PR** with enough detail for Dev to action it
 - After posting all PR inline comments, post a **brief notify comment on the GitHub Issue**

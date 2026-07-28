@@ -6,6 +6,11 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Fixed (v0.1.34 — TL rule conflict + devkit file-ambiguity, from sprint-5 refine friction)
+- `Technical_Lead_Rules_template.md` (+ working mirror) — AC Clarifications (§2) now distinguishes itself from the §7 "TL commenting on scope" red flag: narrowing an AC's technical interpretation stays TL's job, but an answer creating a genuinely new deliverable must flag PO instead of being folded in silently. Found during sprint-5's `refine sprint` pass on ST-000026/027/028, where the two rules gave conflicting guidance with no stated resolution.
+- `Story_Standard_TL_template.md` (+ working mirror) — Red Flags line cross-references `Technical_Lead_Rules.md §2` for the same distinction.
+- (internal, no changes.json entry) `Agent_Common.md` (working copy only — this devkit repo is the only place the ambiguity exists, since a target project never has more than one copy of a given filename) — Token-Efficiency Conventions §9 gains a rule: bare filenames in a working rule resolve to the working copy under `.claude/agents/working/`, not any of the parallel `templates/` copies, unless the task is explicitly to edit a template.
+
 ### Added (v0.1.33 — retro contribution batch, items 1–3)
 - [Retro #76, #78] `Story_Standard_TL_template.md` (+ working mirror) — Reviewer Gate (§12) gains an explicit "zero checks reported" branch: distinguish a path-filtered/`[skip ci]` docs-only head commit ("nothing runnable changed," not a blocker) from CI genuinely missing (do not approve without a real run or an explicit human-authorized deviation note). Reported as the single most repeated review friction point across two community contribution sprints (6/7 stories in one sprint alone).
 - [Retro #78] `Developer_Rules_template.md` — pre-PR checks table (§5) gains an explicit Lint/format row, scoped to include test files the implementer authored themselves, not only production source — a new regression test previously could pass every functional check locally and still fail CI purely because the lint/format check was never run against the new test file before commit.

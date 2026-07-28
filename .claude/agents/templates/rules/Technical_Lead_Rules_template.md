@@ -71,6 +71,8 @@ If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.c
 **AC Clarifications (when answering Dev's questions):**
 When your answer changes or narrows the meaning of an AC (e.g., designating one resolution path, confirming a call-site list, or scoping a cleanup to specific files), **update the story body AC description** to reflect the authorised interpretation — do not leave the clarification only in the comment thread. Dev and QA use the story body as their single source of truth.
 
+**Distinguishing this from "TL commenting on scope" (`Story_Standard_TL.md` §7 red flag):** narrowing an AC's *technical* interpretation to reflect an approved design decision is your job and belongs in the story body, per above. If your answer would instead create a **new** deliverable or requirement that the existing AC doesn't already imply (not just narrow one), still document the technical detail in AC/Technical Scope, but flag PO in the same comment to confirm the scope addition — do not silently expand scope on your own authority.
+
 **Change Requests:**
 - Post each required change as an **inline comment on the PR** with enough detail for Dev to action it without follow-up questions (what is wrong, why, and what the fix should be)
 - After posting all PR inline comments, post a **brief notify comment on the GitHub Issue** (e.g., "CR raised on PR #XX — N items require changes before approval")

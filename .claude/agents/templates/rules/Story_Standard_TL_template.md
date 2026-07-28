@@ -57,7 +57,7 @@ When `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation):
 |------|--------|-----------|
 | **TL** | Review code, approve PR, discuss technical design, implement when assigned | Tick AC, test, clarify scope |
 
-**Red Flags:** TL ticking AC checkboxes; TL commenting on scope (PO only); TL self-approving PR (GitHub blocks it — use `gh pr comment` instead).
+**Red Flags:** TL ticking AC checkboxes; TL commenting on scope (PO only) — see `Technical_Lead_Rules.md` §2 for how this differs from a routine AC-clarification edit; TL self-approving PR (GitHub blocks it — use `gh pr comment` instead).
 
 ---
 

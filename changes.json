@@ -1,4 +1,15 @@
 {
+  "0.1.34": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix (sprint-5 refine, ST-000026/027/028 design review): AC Clarifications (§2) gains a rule distinguishing it from the §7 'TL commenting on scope' red flag — narrowing an AC's technical interpretation stays TL's job, but a design answer that creates a genuinely new deliverable must flag PO rather than being folded in silently. The two rules previously gave conflicting guidance with no stated resolution.",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix (sprint-5 refine): Role Boundaries §7 Red Flags line now points to `Technical_Lead_Rules.md §2` for how a routine AC-clarification edit differs from the 'TL commenting on scope' red flag, matching the companion fix in Technical_Lead_Rules_template.md."
+    }
+  },
   "0.1.33": {
     "new": [],
     "modified": [
