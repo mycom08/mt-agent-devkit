@@ -74,8 +74,9 @@ for f in "${NONSPLIT_WORKFLOWS[@]}"; do
 done
 
 SPLIT_WORKFLOWS=(
-  Create_Stories_Workflow Plan_Sprint_Workflow Refine_Sprint_Workflow
-  Resume_Story_Workflow Shared_Pipeline_Stages Sprint_Workflow Start_Story_Workflow
+  Create_Stories_Workflow Plan_Sprint_Workflow Refine_Prototype_Workflow
+  Refine_Sprint_Workflow Resume_Story_Workflow Shared_Pipeline_Stages
+  Sprint_Workflow Start_Story_Workflow
 )
 for f in "${SPLIT_WORKFLOWS[@]}"; do
   shared="$TPL/shared/workflows/${f}_Shared_template.md"

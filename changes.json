@@ -1,4 +1,22 @@
 {
+  "0.1.37": {
+    "new": [
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md",
+      ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000028] New `refine prototype` workflow: orchestrator acts as UI/UX Designer directly (no agent spawn) for a lightweight, no-story iteration loop against a `-ui-prototype` companion repo — reuses/creates the repo via Build Software's Path B repo conventions (never its scaffold-generation agent), tracks progress in the target project's `.claude/agents/tmp/refine_prototype_state.md` (not the prototype repo), commits each iteration directly with a `prototype adaptation:` prefix (github mode pushes live, strict mode stays local), and at loop end reuses `Create_Stories_Workflow.md`'s draft-and-confirm step to create stories in the paired production repo's tracker.",
+      ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: github-mode thin variant pointing at the shared workflow — repo creation uses `gh repo create`, each iteration pushes live.",
+      ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: strict-mode thin variant pointing at the shared workflow — local `git init` only, no push after any iteration.",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000028] Added `refine prototype` row to the Workflows trigger table.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000028] Added `Refine_Prototype_Workflow.md` to the split-candidates fetch list, the applies-to-N-files count, and the workflows/ expected-files cleanup list."
+    }
+  },
   "0.1.36": {
     "new": [],
     "modified": [

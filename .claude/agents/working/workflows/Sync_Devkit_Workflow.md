@@ -150,7 +150,9 @@ Applies to: `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`
 
 Fetch and write verbatim. No project-specific content lives here.
 
-Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md` (this file), `Workflow_Guide.md`.
+Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md` (this file), `Workflow_Guide.md`.
+
+> **Pre-existing divergence note (found during ST-000028):** unlike the current `templates/workflows/Sync_Devkit_Workflow_template.md`, this reference mirror's "Workflow files — Overwrite" section above still describes a single verbatim-fetch path with no split/non-split distinction — it predates the shared/`{mode}`-split workflow convention. Left as-is here (out of scope for ST-000028); worth a follow-up story to reconcile this reference-only mirror with the template's current split logic.
 
 #### Script files — Overwrite
 
@@ -256,7 +258,7 @@ After all updates are applied, scan each managed directory and flag any file not
 `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Logging_Standard.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `UI_UX_Designer_Rules.md`, `UI_Prototype_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
 
 **Expected files — `workflows/`:**
-`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 **Expected files — `scripts/`:**
 `check_devkit_version.ps1`, `check_devkit_version.sh`
