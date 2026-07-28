@@ -87,6 +87,7 @@ Technical decision or review feedback.
 
 - [ ] All CI checks on the PR have **finished**
 - [ ] No CI check is in a **failed** state
+- [ ] **Zero checks reported ≠ CI failing.** Check whether the head commit is path-filtered/`[skip ci]` (docs-only) — if so, that's "nothing runnable changed," proceed. If the commit touched CI-relevant paths and still shows zero checks, CI is genuinely missing — do not approve without a real run or an explicit deviation note
 - [ ] Code review criteria pass (per `Technical_Lead_Rules.md §2`)
 
 ---

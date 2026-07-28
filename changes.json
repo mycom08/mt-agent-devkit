@@ -1,4 +1,15 @@
 {
+  "0.1.33": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Retro (#76, #78): Reviewer Gate (§12) gains an explicit branch for zero-checks-reported PRs — distinguishes 'nothing runnable changed' (path-filtered/`[skip ci]` docs-only commit, not a blocker) from 'CI genuinely missing' (do not approve without a real run or an explicit deviation note). Was the single most repeated review friction point reported across two contribution sprints.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Retro (#76, #78): pre-PR checks table (§5) gains an explicit Lint/format row covering test files the implementer authored themselves, not only production source (#78 — a new regression test passed functionally but failed CI purely on an un-run lint check); Step 3 (§2) gains a mechanical `git branch --show-current` verification before the first commit, so implementation can no longer start directly on main/master/trunk undetected (#76)."
+    }
+  },
   "0.1.32": {
     "new": [],
     "modified": [

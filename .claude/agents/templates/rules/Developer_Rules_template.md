@@ -48,7 +48,8 @@ Once all blocking questions are resolved:
 
 1. **Update story status** — Remove label `status:ready` (or `status:backlog`), add label `status:in-progress`
 2. Create your dev branch: `ST-XXXXXX/short-description` (branch off feature branch)
-3. Begin implementation
+3. **Verify the branch switch before committing anything** — run `git branch --show-current` and confirm it prints the dev branch name, not `main`/`master`/the feature branch. Do not make the first commit until this check passes.
+4. Begin implementation
 
 **Clean Code (source code stories only):**
 
@@ -165,6 +166,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 |---|---|---|---|
 | Build | Always | `{build-command}` | Zero errors |
 | Unit tests | Always | `{test-command}` | All tests pass |
+| Lint / format | Any source or test file changed — **including test files you just authored yourself**, not only production source | `{lint-command}` | Zero errors |
 | API spec lint | Spec changed (`docs/api/{api-spec-file}` or lint config) | `{api-lint-command}` | Zero errors |
 | API spec drift check | Spec changed and code generation is used | `{code-gen-command}` then `git diff --exit-code {generated-file-path}` | No diff — generated file matches spec |
 | Integration test run | Source code changed | `{integration-test-command}` (start sandbox first) | All assertions pass |

@@ -6,6 +6,11 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## [Unreleased]
 
+### Added (v0.1.33 — retro contribution batch, items 1–3)
+- [Retro #76, #78] `Story_Standard_TL_template.md` (+ working mirror) — Reviewer Gate (§12) gains an explicit "zero checks reported" branch: distinguish a path-filtered/`[skip ci]` docs-only head commit ("nothing runnable changed," not a blocker) from CI genuinely missing (do not approve without a real run or an explicit human-authorized deviation note). Reported as the single most repeated review friction point across two community contribution sprints (6/7 stories in one sprint alone).
+- [Retro #78] `Developer_Rules_template.md` — pre-PR checks table (§5) gains an explicit Lint/format row, scoped to include test files the implementer authored themselves, not only production source — a new regression test previously could pass every functional check locally and still fail CI purely because the lint/format check was never run against the new test file before commit.
+- [Retro #76] `Developer_Rules_template.md` (+ working mirror) — Step 3 (§2) gains a mechanical `git branch --show-current` verification before the first commit of a story, so implementation can no longer silently start directly on main/master/trunk instead of the dev branch.
+
 ### Fixed (v0.1.32 — Stage 0 routing table missing UI/UX Designer row)
 - [#75] `Shared_Pipeline_Stages_template.md` (+ working mirror `Shared_Pipeline_Stages.md`) — Stage 0 Implementer Routing table gains a `UI/UX Designer` row (routes to Technical Lead review, QA validation, matching the `Business Analyst` row's chain). A UI/UX-assigned story previously planned and refined without issue but halted at Stage 0 of sprint execution on the "unrecognised `**Assigned:**` value" stop.
 
