@@ -115,6 +115,16 @@ Scope decision or AC clarification.
 [Filled in after work complete: PR links, commits, artifacts]
 ```
 
+> **Bug/defect stories** (carry the `bug` label): insert a `## Reproduction` section immediately after `## Acceptance Criteria` (before `## Technical Scope`):
+> ```markdown
+> ## Reproduction
+>
+> **Repro Command:** [exact command/test to run verbatim, or `unknown`]
+> **Expected:** [what should happen]
+> **Actual:** [what actually happens — the observed defect]
+> ```
+> The Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`, runs ahead of Stage 0) executes `Repro Command` verbatim before any implementer is spawned — it never parses AC prose to derive a command. If `Repro Command` is absent or `unknown`, pre-flight is skipped and Stage 1 proceeds normally (the implementer reproduces as part of its own work, same as before this convention existed).
+
 **Writing AC for a devkit workflow stage (devkit-internal, no target-project equivalent):**
 - **State detection in terms of what's actually on disk at that stage, not a downstream concept.** A stage that runs before a later pipeline boundary exists (e.g. Analyst Stage 2a runs before Build Software's repo-splitting) cannot gate on that downstream concept ("any repo's tech stack") — phrase the AC against the artifacts genuinely available at that point (e.g. "the spec names a UI-bearing surface"), or the Developer has to reword it mid-design.
 - **When two same-sprint stories restructure the same workflow section, name the land order in Technical Scope.** Don't rely on a Developer-initiated cross-reference comment to surface the sequencing question — state which story lands first and how the sections compose once both are merged.

@@ -1,4 +1,19 @@
 {
+  "0.1.36": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000027] §13 Story Creation Template — bug/defect stories (`bug` label) now add a `## Reproduction` section (`**Repro Command:**`/`**Expected:**`/`**Actual:**`) right after Acceptance Criteria. The new Bug Reproduction Pre-Flight step runs `Repro Command` verbatim before any implementer spawns — never a command parsed from AC prose; absent/`unknown` falls back to the pre-existing behavior (Stage 1 implementer reproduces as part of its own work). Strict mode has no label mechanism, so the section's presence in the story MD is itself the bug-story marker.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000027] New 'Bug Reproduction Pre-Flight' section runs immediately ahead of Stage 0, for bug-labeled (GitHub) / `## Reproduction`-bearing (strict) stories only. Reproduced → proceeds to Stage 1 with the confirmed repro artifact handed to the implementer. Not reproduced → no agent spawned, repro steps + result reported on the story, status label left unchanged. Two independent skip paths (no usable `Repro Command`, tooling/command unavailable) both fall back to pre-existing behavior unchanged.",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000027] Pipeline state file gains a `Repro Skipped:` field (comma-separated story IDs not reproduced this run) carried forward across per-story state overwrites within a run, cleared on a fresh run; new Pipeline Rule skips re-selecting stories already recorded there — this is how Sprint Workflow implements 'skip and continue' for the not-reproduced outcome from Bug Reproduction Pre-Flight.",
+      ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md": "[ST-000027] Stage Entry Check's `status:ready`/`status:in-progress` row now runs Bug Reproduction Pre-Flight ahead of Stage 0; a not-reproduced outcome reports to the user and stops the pipeline for the targeted story instead of skip-and-continue (no 'next story' concept in Start Story Workflow)."
+    }
+  },
   "0.1.35": {
     "new": [],
     "modified": [

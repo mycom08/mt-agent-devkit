@@ -6,6 +6,34 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Bug Reproduction Pre-Flight (runs immediately ahead of Stage 0 — bug stories only)
+
+Runs once per story, every time this story would enter Stage 0 — Sprint Workflow's per-story loop, and Start Story Workflow's Stage Entry Check routing `status:ready`/`status:in-progress` to Stage 0. Does **not** run when a story enters directly at Stage 2 or Stage 3 (already past implementation).
+
+**1. Is this story subject to pre-flight?** Read the issue's labels (`gh issue view <number> --json labels`) — subject to pre-flight only if the `bug` label is present.
+- **Not a bug story** → skip this entire section; proceed directly to Stage 0.
+
+**2. Read the Repro Command.** Parse `**Repro Command:**` from the issue body's `## Reproduction` section.
+- **Field absent, empty, or literally `unknown`** → **skip path**: proceed directly to Stage 0 — today's behavior (Stage 1 implementer reproduces as part of its own work) is preserved unchanged. Do not attempt execution.
+- **Field present with a real command** → continue to step 3.
+
+**3. Attempt reproduction.** Run the `Repro Command` value **verbatim** — never a command synthesised from AC prose or any other field — in the repo root, using whichever shell tool the command's syntax implies.
+- **The tool itself cannot be invoked** (the shell reports the command/binary is missing — e.g. `command not found`, `'X' is not recognized`, `ENOENT` — a tooling-availability error, not a test result) → **skip path**: proceed directly to Stage 0, same as step 2's skip. Record nothing further.
+- **The command executes to completion** (regardless of exit code) → continue to step 4.
+
+**4. Evaluate the result** against the story's `**Expected:**` / `**Actual:**` fields:
+- **Observed output matches `**Actual:**`** → **Reproduced.**
+  - Record a short repro artifact (command run, tool used, observed failure) and pass it directly in the Stage 1 spawn prompt, in addition to the story body, as the implementer's confirmed starting evidence.
+  - Proceed to Stage 0 → Stage 1 as normal.
+- **Observed output does not match `**Actual:**`** (command passes cleanly, or fails in a way inconsistent with the reported defect) → **Not reproduced.**
+  - Do **not** spawn any Stage 1 agent for this story.
+  - Report the repro steps and result: post a comment on the issue with the command run, the story's `**Expected:**`/`**Actual:**`, and what was actually observed.
+  - Leave the story's status label **unchanged**.
+  - **Sprint Workflow:** append the story ID to the `Repro Skipped:` field in the pipeline state file; skip this story and continue to the next `status:ready` story not already recorded in `Repro Skipped:` for this run.
+  - **Start Story Workflow:** report the result to the user and **stop** — do not proceed to Stage 0 for this story.
+
+---
+
 ## Stage 0 — Implementer Routing
 
 **Read the story body** to get `**Assigned:**` and classify the story:
