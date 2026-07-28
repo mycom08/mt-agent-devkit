@@ -1,4 +1,15 @@
 {
+  "0.1.35": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[ST-000026] New §11a Roadmap Story Drain: authoring or updating a roadmap/planning doc (Implementation Roadmap, or any `*Roadmap*.md` under `docs/feature/<feature_name>/plan/`) now mandatorily drains every story it defines into a tracked `status:backlog` issue/story at that same moment, instead of deferring to sprint planning. Idempotent via a `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>` marker line queried before every create (github: `gh issue list --search \"... in:body\"`; strict: grep the stories folder) — re-authoring the same roadmap returns an existing match for every story and creates zero duplicates. Cross-references the new `Plan_Sprint_Workflow.md` Stage 1 reconciliation backstop.",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000026] Stage 1 gains a new step 7, 'Roadmap reconciliation backstop' (feature sprints only): before Stage 2 selects candidate stories, checks every roadmap-defined story against tracked issues/stories via the `**Roadmap Source:**` marker and surfaces any untracked story as drift. This is the sprint-planning safety net for AC4 — the primary drain now happens at roadmap authoring time (`Product_Owner_Rules_template.md §11a`), not here."
+    }
+  },
   "0.1.34": {
     "new": [],
     "modified": [

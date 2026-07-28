@@ -139,6 +139,21 @@ After creating or updating any project plan file (Sprint Overviews, Product Back
 
 ---
 
+## 11a. Roadmap Story Drain (mandatory whenever a roadmap doc is authored or updated)
+
+**Applies whenever you author or update a roadmap/planning doc that defines stories ahead of pickup — the Implementation Roadmap or any `*Roadmap*.md` under `docs/feature/<feature_name>/plan/` — in a context where a story tracker already exists** (this devkit repo's own tracker, GitHub Issues in `mycom08/mt-agent-devkit`, always exists; this rule doesn't apply to the Analyst workflow's pre-repo `implementation_roadmap.md`, which has no tracker and no real story IDs yet).
+
+Every story the roadmap defines must become a tracked `status:backlog` issue **at this same moment** — do not defer this to sprint planning, and do not wait for `plan next sprint`/`create stories` to notice it.
+
+1. For each story the roadmap defines (each Phase/theme entry), build the idempotency marker: `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>`.
+2. Check whether a tracked issue already carries this exact marker **before creating anything** — this is what makes re-authoring or updating the same roadmap safe against duplicates; run it for every story on every write, not just the ones you think are new: `gh issue list --repo mycom08/mt-agent-devkit --search "\"<marker from step 1>\" in:body" --state all --json number`. A returned match means this story is already drained — skip it.
+3. If no match, create the tracked issue following `Story_Standard_PO.md` §13's title/label/`--body-file` conventions, with the usual `**Roadmap Phase:** Phase N — <theme>` body line and `phase-N` label already used for roadmap-sourced stories (see `Plan_Sprint_Workflow.md` Stage 4) — those are your phase-reference tag (AC2). Add the new marker line from step 1 verbatim in the body too (alongside `**Phase:**`/`**Story Points:**`/`**Priority:**`/`**Assigned:**`) — that one exists purely for the idempotency check in step 2, not as a human-facing phase tag.
+4. **Verification (idempotent re-run):** re-running steps 1–3 against an unchanged roadmap must return an existing match at step 2 for every story and create zero new issues — this is the mechanism that satisfies "re-authoring the same roadmap does not create duplicates."
+
+> This is separate from, and happens earlier than, `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop. That backstop exists only to catch drift if a roadmap somehow got out of sync with tracked issues despite this rule (e.g. a manual edit made outside your own workflow) — it is not a substitute for draining at authoring time.
+
+---
+
 ## 11b. Working Record Retention
 
 Delete entries older than 3 days before writing today's entry — the record must never exceed 3 days of history.
@@ -153,5 +168,6 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 
 ## Version
 
-**Version:** 1.0 — Initial devkit-specific version  
+**Version:** 1.1 — New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop  
+**Previous:** 1.0 — Initial devkit-specific version  
 **Created:** 2026-06-16

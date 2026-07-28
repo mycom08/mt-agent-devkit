@@ -39,7 +39,12 @@ Before spawning any agent, the orchestrator resolves the sprint context.
    - **Strict mode:** read all story MD files for the identified sprint and confirm all have `**Status:** done`
 5. **If NOT done** → PO reports which stories are still open; orchestrator notifies user and **stops**
 6. **One-Sprint-at-a-Time Guard** (feature sprint only): check whether `Sprint_{N+1}_Overview.md` already exists in `docs/feature/<feature_name>/plan/`. If it does → orchestrator notifies user and **stops**
-7. **If done** → proceed to Stage 2
+7. **Roadmap reconciliation backstop** (feature sprint only; lightweight — this is the sprint-planning safety net for AC4, not the primary drain mechanism). If `feature_name` is set, glob `docs/feature/<feature_name>/plan/*Roadmap*.md`. If a roadmap file exists, for every story it defines, check whether a tracked issue/story already carries that story's `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>` marker (see `Product_Owner_Rules.md §11a`):
+   - **GitHub mode:** `gh issue list --label "status:backlog" --state open --search "\"<marker>\" in:body"` per story (or a single combined query, orchestrator's choice) — an empty result for a given story means it's untracked.
+   - **Strict mode:** grep `.claude/agents/docs/stories/*.md` for each story's marker line — no match means it's untracked.
+   
+   If any roadmap-defined story has no matching tracked issue/story, report it to the user as drift **before** proceeding to Stage 2 — this should be rare (§11a's authoring-time drain is the primary mechanism; this step only catches a roadmap that got out of sync some other way, e.g. a manual edit). Do not block Stage 2 on this — surface the gap, and if the user confirms, PO drains the missing stories on the spot using the same steps as `Product_Owner_Rules.md §11a` before continuing.
+8. **If done** → proceed to Stage 2
 
 **Completion report:** PO returns max 5 bullets — current sprint status, any open stories, guard check result.
 
@@ -127,5 +132,6 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 - **Loop limit** — max 3 question-answer cycles before escalating to user
 - **Completion reports** — each agent returns max 5 bullets; details go in Working Records. Agents may append an optional `**Observations:**` section for workflow friction (unclear instructions, rule gaps, uncovered edge cases); orchestrator appends each item to `plan_observations.md`, prefixed with the agent role
 - **Stop conditions** — current sprint not done; next-sprint draft already exists; questions unresolved after 3 cycles; scope decision requires user judgment
+- **Roadmap reconciliation backstop** — Stage 1 step 7 (feature sprints only) checks every story the roadmap defines against tracked issues/stories via the `**Roadmap Source:**` marker, before Stage 2 selects candidates. This is a lightweight drift-catcher, not the primary drain mechanism — that happens at roadmap authoring time, see `Product_Owner_Rules.md §11a`. On drift, PO drains the missing stories on the spot rather than blocking the plan.
 - **Observations** — whenever the orchestrator makes a judgment call not covered by this workflow, append a one-line bullet to `.claude/agents/tmp/plan_observations.md` (create the file if it does not exist). These are reviewed at the end of Stage 4.
 <!-- SHARED-END -->
