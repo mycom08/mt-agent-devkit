@@ -1,4 +1,13 @@
 {
+  "0.1.39": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/QA_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fixes #77: §3 contradicted Shared_Pipeline_Stages.md Stage 4 (PO ticks AC at closure, not QA) and Story_Standard_QA.md (already correct). §3 rewritten so QA validates AC and records sign-off via comment; PO ticks checkboxes and sets status:done at Stage 4. Also fixed 'tick any AC' → 'sign off' wording in the QA-fails-a-check rule, and 'ticked' → 'validated' in the Post-Pass Commit gate."
+    }
+  },
   "0.1.38": {
     "new": [],
     "modified": [

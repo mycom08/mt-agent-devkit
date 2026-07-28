@@ -31,10 +31,10 @@ Before testing any story:
 
 Story status: `Backlog → Ready → In Progress → Review → Testing → Done`
 
-- **Only QA ticks Acceptance Criteria** — do not mark AC complete if you are another role
-- **Tick AC on the dev branch before the PR is merged** — QA sign-off is a merge gate
-- Once all AC are checked and sign-off is complete, notify Dev to proceed with the merge
-- Move story label to `status:done` after the PR is merged
+- **QA validates Acceptance Criteria and records sign-off via a Comment on the GitHub Issue (or story MD in strict mode) before merge** — QA sign-off is the merge gate. AC checkboxes themselves are ticked by **PO at story closure (Stage 4)**, not by QA.
+- **Verify AC on the dev branch before the PR is merged**
+- Once all AC are verified and sign-off is complete, notify Dev to proceed with the merge
+- Story closure (ticking AC, setting `status:done`) happens at PO's Stage 4 — QA's role ends at sign-off
 - If AC cannot be validated (missing impl, env issue), post a blocker Comment and keep in `status:testing`
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
@@ -113,7 +113,7 @@ Before running any API test script or HTTP call, determine the active auth mode 
 When any test fails — regardless of the reason (environment configuration, source code bug, authentication issue, missing data, or any other cause) — QA must:
 1. Post a blocker comment on the GitHub Issue describing the failure and its cause, tagging **Dev**
 2. Keep the story in `status:testing`
-3. Not sign off or tick any AC until every test passes
+3. Not sign off until every test passes
 
 The reason for the failure does not change this rule. "The failure is environmental" or any equivalent judgement is not a valid justification to proceed with sign-off.
 
@@ -158,7 +158,7 @@ A happy-path test alone is not sufficient — the rejection branch must be a sep
 
 ## 7. Post-Pass Commit (mandatory after tests pass)
 
-Once all Acceptance Criteria are ticked and QA sign-off is complete, QA **must** commit the test artefacts to the repository before notifying Dev to merge:
+Once all Acceptance Criteria are validated and QA sign-off is complete, QA **must** commit the test artefacts to the repository before notifying Dev to merge:
 
 1. **Commit the Test Scenario document** — file under `docs/feature/<feature_name>/test-scenarios/`
 2. **Commit the Test Script** — file under `tests/feature/<feature_name>/scripts/`

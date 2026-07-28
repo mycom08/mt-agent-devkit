@@ -31,13 +31,13 @@ Before testing any story:
 
 Story status: `Backlog → Ready → In Progress → Review → Testing → Done`
 
-- **Only QA ticks Acceptance Criteria** — do not mark AC complete if you are another role
-- **Verify AC on the dev branch before the PR is merged** — QA sign-off is a merge gate
-- Once all AC are checked and sign-off is complete, notify Dev to proceed with the merge
-- Move story label to `status:done` after the PR is merged
+- **QA validates Acceptance Criteria and records sign-off via a Comment on the GitHub Issue (or story MD in strict mode) before merge** — QA sign-off is the merge gate. AC checkboxes themselves are ticked by **PO at story closure (Stage 4)**, not by QA.
+- **Verify AC on the dev branch before the PR is merged**
+- Once all AC are verified and sign-off is complete, notify Dev to proceed with the merge
+- Story closure (ticking AC, setting `status:done`) happens at PO's Stage 4 — QA's role ends at sign-off
 - If AC cannot be validated (missing impl, unclear behavior), post a blocker Comment and keep in `status:testing`
 
-See `Story_Standard.md` §4 for the full workflow and gate conditions.
+See `Story_Standard.md` §4 and `Shared_Pipeline_Stages.md` Stage 3/4 for the full workflow and gate conditions.
 
 ---
 
@@ -76,7 +76,7 @@ Apply `.claude/agents/working/rules/UI_Prototype_Rules.md` before signing off. N
 When any validation fails, QA must:
 1. Post a blocker comment on the GitHub Issue describing the failure, tagging **Dev**
 2. Keep the story in `status:testing`
-3. Not sign off or tick any AC until every validation passes
+3. Not sign off until every validation passes
 
 ---
 
