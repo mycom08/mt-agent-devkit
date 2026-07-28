@@ -52,14 +52,23 @@
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+- None blocking. The pre-flight refinement (issue #84 comments `5099680121` and follow-up) surfaced exactly one PO-scoped question (Q3: which repo tracker receives drafted stories) and one verification AC that was missing. Both were addressed decisively before design started.
+- The Q3 decision required understanding the relationship between the prototype repo (disposable) and the production repo (the tracked source of truth), which is a PO concern around scope tracking. The decision itself was straightforward once framed: stories land in production's tracker because a story tracked only in the prototype repo replicates ST-000026's "silently untracked scope" gap that this devkit was built to close.
 
 ### Process Suggestions
-*(pending)*
+- The structure of the refinement worked well: Developer asked four targeted questions, TL answered two architectural ones, PO answered one scoping one, Developer confirmed all 4 resolved together. Frame follow-up refinements the same way — tagged questions to specific roles, with resolution signals confirming all are addressed before design.
+- Prompt every story that reuses an existing workflow to add a verification AC if none is present (here: `validate_templates.py` pass). It's a one-line addition to the AC list and catches process-compliance issues automatically; the cost is near-zero and the coverage gain is high.
 
 ### What Worked Well
-*(pending)*
+- The PO decisions (Q3 destination + added AC9) were narrow and specific enough that no clarification loop was needed mid-implementation. Q3's answer cited ST-000026 explicitly, which gave the implementer and reviewers a grounded reference point rather than just a preference.
+- All AC checkboxes were successfully verified by QA (all 9 pass), and QA's sign-off was detailed enough to confirm each one independently rather than trusting a roll-up claim. Clean handoff to acceptance.
+- The story's scope was held firmly: the eight-AC baseline plus one missing verification AC, no scope creep during review, and when TL's round-1 CR items required implementer work, the implementer fixed them without ballooning the story into adjacent concerns (e.g., fixing the pre-existing sync-template divergence TL flagged as out-of-scope, even though it's the same defect class).
 
 ## Orchestrator
 ### Observations
-*(pending)*
+- [context] PR #87 diff touches `.claude/agents/working/scripts/scaffold_mechanical.sh` (a shell script) alongside the docs/template files named in Technical Scope — reclassified `Type` from `non-behavioral` (Stage 0 guess based on Technical Scope prose) to `behavioral` per the diff-based rule; routed to full TL review instead of the fast path.
+- [workflow][TL] Design-first Q&A resolved placement/ownership questions but not target-project executability mechanics (CR-1/CR-2) — a design-first flag isn't discharged by a refinement Q&A alone; a short design draft may be needed before implementation for this class of story.
+- [instruction][TL] Orchestrator's Stage 1 spawn-prompt wording ("write retro if approved") conflicts with `Retro_Rules.md`'s unconditional "When to Write" — align spawn-prompt wording with the rules file.
+- [workflow][TL] Round-1 change-request fix menus that enumerate specific options are narrower than what the implementer can find — phrase fix menus as "these, or any mechanism already available in the deployment context" (mirrors the ST-000026 call-site-enumeration lesson).
+- [failure][TL] A stale intra-file cross-reference (`Step 3g` vs. actual 1–6 numbering) survived both TL review rounds despite being the exact defect class the review checklist claims to catch — argues for a mechanical validator check over a manual checklist line for numbering/cross-reference consistency. Non-blocking on this story.
+- [context][TL] `Sync_Devkit_Workflow_template.md`'s "Settings hook" section defers to `init project` Stage 4 step 6, a devkit-internal workflow target projects never receive — same defect class as this story's CR-1/CR-2, found in existing corpus, out of scope for ST-000028. Candidate follow-up backlog story for PO.
