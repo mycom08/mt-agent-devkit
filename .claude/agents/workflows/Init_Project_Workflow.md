@@ -82,7 +82,7 @@ Summarize findings to the user in 5 bullets max before proceeding to Stage 2.
 ## Stage 2 — Content Generation
 
 Scaffold files split into two tiers (see full detail below):
-- **Mechanical tier** — 9/19 rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`.
+- **Mechanical tier** — 9/19 rules files, all 10 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md`.
 - **Adaptive tier** — `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, 10/19 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.claude/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
 
 ### Source template paths (in this devkit)
@@ -95,7 +95,7 @@ Scaffold files split into two tiers (see full detail below):
 | `templates/context/Document_Index_template.md` | `.claude/agents/context/Document_Index.md` | Adaptive |
 | `templates/instructions/*_instructions_template.md` (×6) | `.claude/agents/[role]_instructions.md` | Adaptive |
 | `templates/rules/*_template.md` (×19) | `.claude/agents/rules/[name].md` | 9 Mechanical, 10 Adaptive — see the Rules files section below for exactly which |
-| `templates/{mode}/workflows/*_template.md` (×7 split) + `templates/workflows/*_Workflow_template.md` (×2 non-split) | `.claude/agents/workflows/[name].md` | Mechanical (all 9) |
+| `templates/{mode}/workflows/*_template.md` (×8 split) + `templates/workflows/*_Workflow_template.md` (×2 non-split) | `.claude/agents/workflows/[name].md` | Mechanical (all 10) |
 
 Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 
@@ -106,6 +106,7 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 - `Resume_Story_Workflow_template.md`
 - `Create_Stories_Workflow_template.md`
 - `Plan_Sprint_Workflow_template.md`
+- `Refine_Prototype_Workflow_template.md`
 - `Refine_Sprint_Workflow_template.md`
 
 **Non-split (read from `templates/workflows/`):**
@@ -205,7 +206,7 @@ This one script call writes every file (or file family) that needs **zero projec
 
 It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` (no `.gitkeep` — gitignored, see below), `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
 - **9 of 19 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`, `UI_Prototype_Rules`
-- **All 9 workflow files** — the 7 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
+- **All 10 workflow files** — the 8 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
 - Both version-check scripts, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.claude/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
 - `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` (single-next-version-heading format) at the target project root — a universal devkit convention, any language, written only if not already present (idempotent — a Java skeleton generation pass that ran earlier in `Build_Software_Workflow.md` never creates these itself anymore, so this is always the actual creator). See `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md` for the format.
 
@@ -365,7 +366,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```
    bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
-   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 9 verbatim rules files, all 9 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
+   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 9 verbatim rules files, all 10 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 
 2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 10 adaptive rules files, 4 wiki docs.
    - For `CLAUDE.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.
@@ -449,5 +450,5 @@ Next steps:
 - **Strip `_template` suffix** — all files written to the target project use clean names without the suffix
 - **Never copy devkit-internal files** — `Analyst_Workflow.md` and `Init_Project_Workflow.md` are devkit-only; never write them to the target project
 - **State file cleanup** — always delete the state file after successful Stage 4 completion or user cancellation
-- **Mechanical tier never goes through an agent** — run `scaffold_mechanical.sh` for the 9 verbatim rules files, all 9 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook. Routing these through an LLM agent only adds cost and risks silent drift (confirmed in practice: agents rewrote literal template dates to "today's date" and reworded prose that should have been byte-identical) with zero benefit — the content is fixed and known before Stage 4 starts.
+- **Mechanical tier never goes through an agent** — run `scaffold_mechanical.sh` for the 9 verbatim rules files, all 10 workflow files, scripts, blank memory/working-record files, `.gitignore`, `devkit_version.txt`, and the `settings.json` hook. Routing these through an LLM agent only adds cost and risks silent drift (confirmed in practice: agents rewrote literal template dates to "today's date" and reworded prose that should have been byte-identical) with zero benefit — the content is fixed and known before Stage 4 starts.
 - **The rules-file mechanical/adaptive boundary is not just a `{placeholder}` token scan** — several adaptive-tier rules files (`Business_Analyst_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev/PO/QA.md`) need real content changes expressed as plain prose with no bracketed token at all (e.g. a hardcoded `docs/api/` spec path that needs correcting per-project). Don't move a file into the mechanical tier without diffing its scripted output against a known-good previously-generated repo, not just grepping the template for `{}`.

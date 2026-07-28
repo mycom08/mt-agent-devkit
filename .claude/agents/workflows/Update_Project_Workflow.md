@@ -97,7 +97,7 @@ Read `**Mode:**` from `{TARGET_PROJECT}/CLAUDE.md` to resolve `{mode}` (`github`
 For split candidates, read from `templates/{mode}/workflows/`. For the full deployed content, read both the mode-specific variant and its referenced `templates/shared/workflows/*_Shared_template.md`. Combine: shared `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block first, then any mode-specific content from the variant (non-comment lines). Write the combined result verbatim to the target.
 
 **Split candidates (source from `templates/{mode}/workflows/`):**
-`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`
 
 **Non-split (source from `templates/workflows/`):**
 `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
@@ -206,7 +206,7 @@ After all updates are applied, scan each managed directory in `TARGET_PROJECT` a
 `Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Logging_Standard.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `UI_UX_Designer_Rules.md`, `UI_Prototype_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
 
 **Expected files — `workflows/`:**
-`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
+`Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
 
