@@ -123,6 +123,16 @@ Scope decision or AC clarification.
 [Filled in after work complete: PR links, commits, artifacts]
 ```
 
+> **Bug/defect stories** (carry the `bug` label): insert a `## Reproduction` section immediately after `## Acceptance Criteria` (before `## API Spec Reference`):
+> ```markdown
+> ## Reproduction
+>
+> **Repro Command:** [exact command/test to run verbatim, or `unknown`]
+> **Expected:** [what should happen]
+> **Actual:** [what actually happens — the observed defect]
+> ```
+> The Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`, runs ahead of Stage 0) executes `Repro Command` verbatim before any implementer is spawned — it never parses AC prose to derive a command. If `Repro Command` is absent or `unknown`, pre-flight is skipped and Stage 1 proceeds normally (the implementer reproduces as part of its own work, same as before this convention existed). **Strict mode** has no label mechanism — the presence of a populated `## Reproduction` section in the story MD is itself the bug-story marker pre-flight checks for.
+
 ---
 
 ## 13a. AC Authoring Rules (apply when drafting or refining ACs)

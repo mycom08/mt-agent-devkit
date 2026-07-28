@@ -29,6 +29,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 **Docs SHA:** <git short SHA captured at Stage 0>
 **Loop Impl→Reviewer:** <count>
 **Loop Impl→QA:** <count>
+**Repro Skipped:** <comma-separated story IDs not reproduced this run, or empty>
 **Sessions:**
 - impl_session: <agentId or empty>
 - reviewer_session: <agentId or empty>
@@ -40,7 +41,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 
 > `Sprint Branch` and `Story Branch` are strict-mode only fields. In GitHub mode write `Sprint Branch: n/a` and `Story Branch: n/a`.
 
-**Write rules:** Create/overwrite at Stage 0 entry of each new story — carry forward any existing `Observations:` entries when overwriting. **After every stage transition, update both `Stage` and `Updated` — these are mandatory, not optional.** Update `Sessions` on every agent spawn — **write `impl_session: PENDING` (or the relevant session field) to the state file immediately before making the spawn call**; overwrite with the real agentId as soon as the spawn returns. Never leave a session ID empty after spawning. Update loop counts at each retry cycle start. Set `Type` at Stage 0 based on story classification (see Shared Pipeline Stages §Stage 0). Set `Sprint` at Stage 0 by reading the sprint value from the story (`sprint-N` label in GitHub mode; `**Sprint:**` field in strict mode). Set `Sprint Branch` and `Story Branch` at Stage 0 in strict mode (derived per `Strict_Mode_Story_Guide.md` §Branch Naming); write `n/a` in GitHub mode. Set `Docs SHA` at Stage 0 via `git rev-parse --short HEAD`. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow or an agent reports friction. Delete after workflow review is complete.
+**Write rules:** Create/overwrite at Stage 0 entry of each new story — carry forward any existing `Observations:` **and `Repro Skipped:`** entries when overwriting. **After every stage transition, update both `Stage` and `Updated` — these are mandatory, not optional.** Update `Sessions` on every agent spawn — **write `impl_session: PENDING` (or the relevant session field) to the state file immediately before making the spawn call**; overwrite with the real agentId as soon as the spawn returns. Never leave a session ID empty after spawning. Update loop counts at each retry cycle start. Set `Type` at Stage 0 based on story classification (see Shared Pipeline Stages §Stage 0). Set `Sprint` at Stage 0 by reading the sprint value from the story (`sprint-N` label in GitHub mode; `**Sprint:**` field in strict mode). Set `Sprint Branch` and `Story Branch` at Stage 0 in strict mode (derived per `Strict_Mode_Story_Guide.md` §Branch Naming); write `n/a` in GitHub mode. Set `Docs SHA` at Stage 0 via `git rev-parse --short HEAD`. Append the story ID to `Repro Skipped:` whenever the Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`) determines a story was not reproduced — this field persists across story transitions within the current run only; it is never carried into a fresh run (a new `continue sprint` after the state file is deleted starts with `Repro Skipped:` empty, so a story a human has since added repro steps to is re-attempted). Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow or an agent reports friction. Delete after workflow review is complete.
 
 ---
 
@@ -48,6 +49,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 
 - **ST-XXXXXX stories only** — skip any story whose ID does not match the `ST-XXXXXX` format
 - **Skip `status:blocked` stories** — notify the user; do not run the pipeline for it
+- **Skip stories already recorded in `Repro Skipped:`** for the current run — do not re-select them; see Bug Reproduction Pre-Flight in `Shared_Pipeline_Stages.md`
 - Each stage must complete before the next starts
 - Loop limit: max 3 Impl→Reviewer or Impl→QA cycles per story before escalating to the user
 - **Session reuse** — always resume an existing session before spawning

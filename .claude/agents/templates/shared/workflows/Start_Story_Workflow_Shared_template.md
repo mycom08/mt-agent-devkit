@@ -15,7 +15,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 | Story label | Entry point |
 |---|---|
-| `status:ready` or `status:in-progress` | Stage 0 — Implementer Routing |
+| `status:ready` or `status:in-progress` | Bug Reproduction Pre-Flight, then Stage 0 — Implementer Routing |
 | `status:review` | Stage 2 — Review |
 | `status:testing` | Stage 3 — QA Validation |
 | `status:blocked` | Stop — story is blocked on external input; notify user to run `resume story ST-XXXXXX` once the required information has been provided |
@@ -24,6 +24,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 **If `Mode: strict`** — read `**Status:**` field from `.claude/agents/docs/stories/ST-XXXXXX.md` and route using the same table above (status values are identical — see `Strict_Mode_Story_Guide.md` §Status Values).
 
 > If the status is missing or unrecognised, stop and notify the user before proceeding.
+> Bug Reproduction Pre-Flight only runs for the `status:ready`/`status:in-progress` entry point (see `Shared_Pipeline_Stages.md`); a story entering directly at Stage 2 or 3 is already past implementation and skips it. If pre-flight determines **not reproduced**, report the result to the user and stop — do not proceed to Stage 0.
 
 ---
 
@@ -32,6 +33,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 - Targets only the story specified in the trigger command
 - Loop limit: max 3 Impl→Reviewer or Impl→QA cycles before escalating to the user
 - **Session reuse** — always resume an existing session before spawning
+- **Bug Reproduction Pre-Flight not-reproduced outcome** — report to the user and stop; do not proceed to Stage 0 (see `Shared_Pipeline_Stages.md`)
 - **Pipeline stops after Stage 4 completes for the targeted story**
 - **Stage 5 (Retrospective)** — after Stage 4's observation check completes, check the Stage 5 heading in `Shared_Pipeline_Stages.md`: if `[BETA: enabled]`, run Stage 5; if `[BETA: disabled]`, skip and go directly to Retro Review.
 - **Retro Review** — after Stage 5 (or immediately after Stage 4 if Stage 5 is disabled):
