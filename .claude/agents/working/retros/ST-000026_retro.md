@@ -50,14 +50,22 @@
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+*(stage skipped — Type: non-behavioral, orchestrator closed the story directly at Stage 4 per the fast path, no PO agent spawned)*
 
 ### Process Suggestions
-*(pending)*
+*(stage skipped)*
 
 ### What Worked Well
-*(pending)*
+*(stage skipped)*
 
 ## Orchestrator
 ### Observations
-*(pending)*
+- [Technical Lead] My own refine-sprint answer asserted Stage 5's resume rule "re-runs safely" and cited `Product_Owner_Rules.md §11` for roadmap authorship — both paraphrased from memory rather than checked against the live file, and both were wrong. Design answers leaning on an existing resume/ordering rule should quote the rule's actual skip condition.
+- [Technical Lead] Review checklist has no step for "the documented mechanism is coherent, but does the actual CLI command answer the question the AC asks" — CR-1 and CR-2 both passed every existing check and still shipped wrong behavior. Worth a rule addition for stories where a `gh`/CLI query is the correctness mechanism.
+- [Technical Lead] Mode-parity (comparing strict vs. github branches of the same step) was a cheap bug detector — CR-1 was localized immediately because the two branches answered different questions.
+- [Developer] Both TL's round-1 decision comment ("§11") and my own round-2 fix ("§15") cited a section number without verifying it against the live file — `validate_templates.py`'s reference-integrity check caught the second one, a useful safety net but shouldn't be the first line of defense for citation accuracy.
+- [Technical Lead] The §15 citation was TL's own round-1 error (grep line number mistaken for a section number), not implementation drift — propagated into two files before validate_templates.py caught it. Resolve a line number to its section header before writing it as §N.
+- [Technical Lead] Enumerating specific call sites in a change request invites treating the list as exhaustive (CR-2 named 3, missed a 4th sharing the same mechanism) — phrase CRs as "at minimum these, plus any site sharing this mechanism."
+- [Technical Lead] The round-1/round-2 split validated an "instruction vs. warning" distinction for workflow-doc reviews: does this change what an orchestrator following the numbered steps actually does, not just whether it describes the risk. Candidate for `Technical_Lead_Rules.md §2`'s checklist if it recurs.
+- [QA] Verifying an "invariant untouched" claim by diffing the specific bullet's text (not just scanning the PR diff for absence of a hunk) is a cheap, high-value QA check whenever a PR asserts something was deliberately left alone — worth keeping as a standing habit beyond this story.
+- [Orchestrator] `gh issue close 82 --comment "..."` errored "already closed" (the PR's `Closes #82` had already auto-closed it on merge) and the comment silently did not post — had to post it as a separate follow-up `gh issue comment` call. This is exactly retro item #4/Cluster W (#76) from the earlier retro batch, which was surfaced but left unselected/unapplied — now observed live, not hypothetical.
