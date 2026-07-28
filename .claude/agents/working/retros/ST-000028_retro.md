@@ -31,6 +31,11 @@
 - Re-deriving the count ripple independently (grepping for the *stale* phrasings rather than confirming the listed locations) turned "did they get all 6?" into a zero-hit result that needs no trust in the enumeration. Reinforces: TL memory, ST-000026 — an enumerated list in a change request invites being treated as exhaustive; the same applies to an enumerated list in a completion claim.
 - Checking cross-referenced section numbers by resolving each one to its actual heading, not by pattern-matching the citation, held up: all five resolved. Direct application of the §-citation lesson from the previous story.
 
+**Round-2 addendum (approved).** Delta to the conclusions above:
+- The `[failure]` signal on injected templates referencing originating-toolkit paths is **not** a one-off authoring slip — a pre-existing instance of the identical class was found in the sync workflow template during the re-review, in a file this story did not author. Upgrade the round-1 suggestion from "add a review-checklist line" to "add a mechanical invariant": the class recurs, and both the human and the automated check missed it in the file that introduced it.
+- The fix chosen was better than the options I offered. I proposed resolving the toolkit location at runtime; the implementer instead routed through the fetch mechanism the receiving project is already given, which removes the dependency rather than resolving it. Lesson for my own change requests: when I enumerate fixes, say explicitly that the list is not exhaustive — a reviewer's options are constrained by what they happened to think of, and the implementer is closer to the mechanism inventory.
+- One stale intra-file cross-reference (a lettered sub-step label where the sub-steps are numbered) survived both my round-1 pass and the fix round. Unambiguous in context, so correctly non-blocking — but it is the specific defect type my own round-1 review claimed to have checked, which is worth recording honestly rather than quietly.
+
 ## QA
 ### Impediments & Unclear Points
 *(pending)*
