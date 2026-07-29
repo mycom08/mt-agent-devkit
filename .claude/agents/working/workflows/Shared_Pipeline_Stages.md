@@ -341,6 +341,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 - `[skipped-step]` Retro file skeleton created at Stage 1 before spawning implementer?
 - `[skipped-step]` Orchestrator observations written to `## Orchestrator` section?
 - `[skipped-step]` Retro file verified — no remaining `*(pending)*` placeholders?
+- `[skipped-step]` Ran `wc -c .claude/agents/working/working-record/*_Working_Record.md`; append one bullet per file over 4,000 chars, naming the file and its size.
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 After completing Stage 5 → **for `continue sprint`: proceed to next story (Stage 0). For `start story`: proceed to Retro Review.**

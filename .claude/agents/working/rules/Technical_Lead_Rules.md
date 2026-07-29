@@ -157,7 +157,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 - Keep working record updates short and fact-based (design decisions, PR links, story IDs)
 - Post blockers immediately as a Comment on the GitHub Issue; tag BA or PO as appropriate
-- **Working record retention:** Delete entries older than 3 days before writing today's entry
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
 
 ---
 
