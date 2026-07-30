@@ -184,7 +184,7 @@ When a rule, workflow, or instruction file needs to change, update the source te
 
 1. **Edit the template file** under `.claude/agents/templates/` (e.g., `.claude/agents/templates/rules/QA_Rules_template.md`)
 2. **Bump the patch version** in `version.txt` (e.g., `0.1.5` → `0.1.6`)
-3. **Append a new entry** to `changes.json` — place it **after** the previous version entry (at the end of the object, before the closing `}`):
+3. **Add a new entry** to `changes.json` — place it **first**, at the **top** of the object, immediately after the opening `{`. This file is ordered **newest-first (descending)**: the current first key is the latest version and the last key is `0.0.1`:
 
 ```json
 "0.1.6": {
@@ -200,7 +200,7 @@ When a rule, workflow, or instruction file needs to change, update the source te
 
 Use `"new"` for files added for the first time; `"modified"` for files that already existed. Both can be non-empty in the same entry.
 
-> Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Entries must be appended in ascending version order — inserting out of order will cause `sync devkit` to skip or double-apply changes.
+> Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Keep the file's **newest-first (descending)** order — inserting out of order will cause `sync devkit` to skip or double-apply changes. `validate_templates.py` checks semver parseability only, never ordering direction, so a misplaced entry will not be caught by CI.
 
 ### 15a. Adding a New Agent Role (Nth Role)
 
