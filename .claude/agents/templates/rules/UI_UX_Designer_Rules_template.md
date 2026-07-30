@@ -166,7 +166,7 @@ Place the prototype source under the project's standard feature-doc/source struc
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than 3 days before writing today's entry
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
 
 ---
 

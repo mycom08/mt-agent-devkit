@@ -17,7 +17,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 
 **Resumed session (continuing via `SendMessage`):**
 1. Skip Project Priming — already in context
-2. Re-read your Working Record to catch updates since the last turn
+2. Skip your Working Record too — no other agent can write it, so a resumed agent is only re-reading its own words from earlier in the same session; nothing has changed since the last turn
 
 > Lightweight tasks (e.g., PO story closure) override this sequence — see your role instructions for the reduced read set.
 
@@ -89,25 +89,29 @@ Before reporting back to the orchestrator, write your retrospective section to t
 
 ## 5. Working Record
 
-Update your Working Record at the start and end of each session.
+Update your Working Record at the start and end of each session, using **rewrite-in-place snapshot semantics** — the record holds only the current-state snapshot, not an append-only log. Nothing outside the owning agent ever reads it (see §1), so nothing is lost by replacing rather than appending.
 
-**When starting:** Read your record to understand last session's progress and impediments. Roles that own GitHub story status (Developer, TL, QA) also **sync story statuses with GitHub** — check the current label on each in-progress or recently completed story and correct the record before reporting status.
+**When starting:** Read your record to understand last session's progress and impediments. Roles that own GitHub story status (Developer, TL, QA) also **sync story statuses with GitHub** — check the current label on each in-progress story and correct the record before reporting status.
 
-**When ending:** Log Completed (with file paths, PR numbers, story IDs), In Progress, and Impediments.
+**When ending:** Rewrite the snapshot in place: overwrite Completed / In Progress / Impediments with this session's current state (not appended alongside the prior session's). Carry `Blockers & Watch-outs` forward unchanged unless it needs updating — see below.
 
 **Access control:** Read and update only your own record. Never read or modify another agent's record.
 
-**Retention:** Keep only the 3 most recent days (QA: 3 most recent story entries). Delete older entries before writing the new one. Working Records are gitignored — never commit them.
+**Retention:** Keep only the **3 most recent story entries** — the retention unit is story entries, not calendar days (all roles; this generalizes the unit QA already used). Delete older entries before writing the new one. The enforced cap is **≤ 4,000 characters**, measured with `wc -c` — not a line count. `≤ 60 lines` is retained only as non-enforced structural guidance for a soft-wrapped, one-bullet-per-entry format; it is not itself checked. Working Records are gitignored — never commit them.
 
-**Standup entry format** — one entry per day:
-- **Date:** YYYY-MM-DD
-- **Completed:** What was done (tasks, features, bug fixes — with file paths, PR numbers, story IDs)
+**Snapshot entry format** — one entry per story:
+- **Story:** ST-XXXXXX
+- **Completed:** What was done (tasks, features, bug fixes — with file paths, PR numbers)
 - **In Progress:** Current work and next priorities
 - **Impediments:** Any blockers, questions, or dependencies (none if clear)
 
+**Blockers & Watch-outs** (own section, capped at **≤ 5 lines**): sprint-scoped conditions that are too transient for a memory file and too cross-story for a per-story retro (e.g. "a shared fixture is flaky — expect a retry" for the rest of the sprint). Unlike the per-story snapshot above, this section **carries forward across rewrites** — it is not replaced when you overwrite Completed/In Progress/Impediments — until the condition is resolved or the sprint ends, whichever comes first.
+
+**Inclusion test (apply before adding any line to any section):** *would the next agent take a different action if this line were missing?* If no, cut it.
+
 **Entry-writing rules:**
 
-- **Bullets, not paragraphs.** 3–6 bullets under Completed, one line each (story ID + outcome + PR/commit ref); one bullet per open hand-off under In Progress. Hard cap **~100–150 words per day**.
+- **Bullets, not paragraphs.** 3–6 bullets under Completed, one line each (story ID + outcome + PR/commit ref); one bullet per open hand-off under In Progress.
 - **Evidence by pointer.** Detail lives in the retro, PR, issue comment, or memory fact — the record links to them, never re-narrates the session.
 - Key decisions only — session trivia (starting tools, deleting throwaway files) doesn't belong in the record.
 

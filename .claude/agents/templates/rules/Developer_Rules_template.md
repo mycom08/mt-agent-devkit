@@ -229,7 +229,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
 - **When starting a session:** Read your working record, then **sync story statuses with GitHub** — check the current label on each in-progress or recently completed story and correct the record before reporting status
-- **Working record retention:** Delete entries older than 3 days before writing today's entry — the record must never exceed 3 days of history
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
 
 ---
 

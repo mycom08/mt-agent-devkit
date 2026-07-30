@@ -147,7 +147,7 @@ If a live instruction from the user during implementation contradicts a prior de
 
 - Keep working record updates short and fact-based (story IDs, validation results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than 3 most-recent stories before writing a new one
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
 
 ---
 

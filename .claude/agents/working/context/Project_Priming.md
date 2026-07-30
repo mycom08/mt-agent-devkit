@@ -77,7 +77,7 @@ For complex changes (new workflow stage, major template restructure, new devkit 
 
 **Access control:** Read and update only your own record. Never read or modify another agent's record.
 
-Update at **start of session** and **end of session**. Keep 3 most recent days.
+Update at **start of session** and **end of session**, using rewrite-in-place snapshot semantics (see `Agent_Common.md §5`). Keep the **3 most recent story entries** — the retention unit is story entries, not calendar days — capped at ≤ 4,000 characters (`wc -c`), not a line count.
 
 ---
 

@@ -225,7 +225,7 @@ Do not silently follow the old decision, and do not block awaiting re-confirmati
 
 - Keep working record updates short and fact-based (story IDs, test results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than 3 most-recent stories before writing a new one — the record must never exceed 3 story entries
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
 
 ---
 

@@ -85,15 +85,17 @@ For complex features, the team follows a design-first process before any code is
 
 **Access control:** Read and update only your own record. Never read or modify another agent's record.
 
-Update at **start of session** (read yesterday's context, sync story statuses from GitHub) and at **end of session** (log completed work, in-progress items, impediments). Keep 3 most recent days.
+Update at **start of session** (read last story's context, sync story statuses from GitHub) and at **end of session** (rewrite completed work, in-progress items, impediments in place). Keep the 3 most recent story entries — the retention unit is story entries, not calendar days — capped at ≤ 4,000 characters (`wc -c`), not a line count.
 
-**Format:** Each day is recorded as a standup entry with:
-- **Date:** YYYY-MM-DD
+**Format:** Rewrite-in-place snapshot semantics — each story is recorded as a snapshot entry (replacing the prior session's, not appended alongside it) with:
+- **Story:** ST-XXXXXX
 - **Completed:** What was done (list of tasks, features, bug fixes)
 - **In Progress:** Current work and next priorities
 - **Impediments:** Any blockers, questions, or dependencies (none if clear)
 
-Entries are **bullets, not paragraphs** — one line per item with story ID + outcome + PR/commit ref, hard cap ~100–150 words per day; detail lives in the retro/PR/memory fact by pointer (see `Agent_Common.md §5`).
+A separate `Blockers & Watch-outs` section (≤ 5 lines) carries sprint-scoped conditions forward across rewrites until resolved or sprint end.
+
+Entries are **bullets, not paragraphs** — one line per item with story ID + outcome + PR/commit ref; detail lives in the retro/PR/memory fact by pointer (see `Agent_Common.md §5`).
 
 ---
 
