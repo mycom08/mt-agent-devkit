@@ -102,6 +102,7 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 | `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project (same logic as `sync devkit` but uses local files) |
 | `build software <idea>` | — | End-to-end workflow: analyze idea, plan repo structure, split docs per repo, initialise repos, and wire the AI Scrum team (Stages 1–3 available; Stages 4–5 in a future release) |
 | `apply retros [label]` | `process retros` | Scan community retro contribution Issues (label `retro:contribution`), prioritise the signals, let you pick which to apply, edit the templates, and bump the version once |
+| `audit agent files` | — | Scan the devkit's own agent instruction/rules/workflow corpus for cross-file duplication, contradictions, and dead references (Tier A detection only); write a timestamped report and apply only user-approved findings on a dedicated branch |
 
 ---
 
@@ -290,6 +291,18 @@ Maintainer workflow that scans community retro contribution Issues on `mycom08/m
 - Only template files under `.claude/agents/templates/` count toward `changes.json`; devkit-internal workflow edits do not.
 
 Read `.claude/agents/workflows/Apply_Retros_Workflow.md` for the complete pipeline before executing.
+
+---
+
+## Audit Agent Files Workflow
+
+Trigger: user says **"audit agent files"**
+
+Devkit-internal maintainer workflow that scans the devkit's own agent instruction/rules/workflow corpus (`.claude/agents/templates/`, `.claude/agents/workflows/`, `.claude/agents/working/`) for Tier A findings only: cross-file duplication (byte-identical and role-parallel), contradictions, and dead or orphaned references. Spawns a general-purpose subagent to perform the scan so the corpus text never enters the orchestrator's own context. Writes a single timestamped report and applies **only** user-approved findings — per-finding approval, never a whole-report accept — on a dedicated branch with a git-diff-scoped revert path.
+
+**Not an agent role.** There is no `auditor_instructions.md` and no roster entry — this workflow is reached purely through this trigger row, the same pattern `analyze` already uses.
+
+Read `.claude/agents/workflows/Audit_Agent_Files_Workflow.md` for the complete pipeline before executing.
 
 ---
 
