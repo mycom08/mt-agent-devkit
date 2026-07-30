@@ -281,7 +281,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ## Stage 4 — PO Story Closure
 
-> **GitHub mode closure-comment ordering:** if the merged PR's body contained a `Closes #N`-style keyword, GitHub already auto-closed the issue on merge — before Stage 4 runs. Post any closure comment via a **separate** `gh issue comment` call; never combine it with `gh issue close --comment`, since `gh issue close` on an already-closed issue errors out and silently drops the comment along with it. A subsequent `gh issue close` call erroring "already closed" is expected and harmless — treat it as confirmation, not a failure.
+> **GitHub mode closure-comment ordering (mandatory pre-check, not a memory item):** before posting any closure comment, run `gh issue view <number> --json state --jq '.state'`. **`CLOSED`** → the merged PR's `Closes #N`-style keyword already auto-closed the issue before Stage 4 ran; post the closure comment via a **separate** `gh issue comment` call — never combine it with `gh issue close --comment`, since `gh issue close` on an already-closed issue errors out and silently drops the comment along with it. **`OPEN`** → the combined `gh issue close --comment` call is safe to use as-is. Checking state first turns this from a rule to remember into a branch to execute — the prose warning alone was insufficient in practice (recurred in ST-000032 after already being documented from ST-000026).
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
