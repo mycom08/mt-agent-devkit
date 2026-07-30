@@ -28,6 +28,15 @@
 - Re-deriving each AC from the final file on the branch rather than from diff hunks confirmed two absence-type criteria (no roster entry, no new role file) that a hunk-only read cannot establish. Reinforces: Technical_Lead_Memory Fact 12.
 - Phrasing the non-blocking nits as "at minimum these, plus any site sharing the same pattern" kept the follow-up list open rather than presenting three items as the complete inventory. Reinforces: Technical_Lead_Memory Fact 5.
 
+#### Addendum — second review pass (independent re-run, not the canonical pass)
+A fresh reviewer session re-derived all 18 AC, the stub scan, and the differential validator run from scratch. **Verdict unchanged: approve.** Deltas only:
+
+- **Correction:** the zero-checks state on the PR head is **path-filtered**, not `[skip ci]`-suppressed. The head commit touches only `working/memory/` and `working/retros/`, and the CI workflow's `pull_request.paths` filter is `templates/**` + `workflows/**` — the run would not have been created even without the tag. Structural reason, stronger than the tag; both land in the same "nothing runnable changed" gate outcome.
+- **Metric correction:** the explicit-path baseline is **67 `[ERROR]` lines** on both base and head (round 1's "70 violations" appears to have counted `[KNOWN_ISSUE]` lines too). The load-bearing result is identical — **zero new**, neither new file named in any violation. Lesson: state the counted token, not just the number, when a differential gate's evidence is a count.
+- **Classification added to the quoted-heading finding above:** the under-covered heading appears in the *second* clause of a two-clause gate whose first clause is universal, so partial coverage only **narrows** detection (fewer findings) — it cannot generate false positives. That distinction is what makes it non-blocking rather than a correctness defect, and round 1 flagged it without stating it.
+- **New non-blocking nit (fourth):** on the revert path the apply stage leaves the user checked out on the freshly created apply branch with no commits — the completion stage's "tell the user the branch is ready" line is conditional on the batch being *kept*, so the reverted case gets no checkout-back or branch-cleanup instruction. Same follow-up bucket as the other three.
+- `[workflow]` Cost datapoint for the digest-gate question in Process Suggestions above: reading this issue's full comment thread raw cost roughly 12k characters of context that was then resent on every subsequent turn of the review. The verification value of the thread was near zero — every decision in it had already been folded into the issue body by design, which is the body's stated purpose. This supports digesting the *discussion* while reading the AC contract verbatim, rather than skipping the gate entirely.
+
 ## QA
 ### Impediments & Unclear Points
 *(pending)*
