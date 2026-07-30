@@ -2,18 +2,59 @@
 
 ## Stored Facts
 
-- ST-000016 (PR #34): The Layer-1 validator produces `[KNOWN_ISSUE]` output (not `[ERROR]`) for the known Blocked_Request_Template.md capital-T typo in two shared workflow files — this is expected and does not block CI or QA sign-off.
-- `docs/Template_Test_Strategy.md` is the canonical test-approach reference for template/workflow changes (3-layer model: Layer-1 static / Layer-2 deployment / Layer-3 behavioral; the 6 invariant specs; risk tiers A/B/C; coverage model; AC-as-oracle pattern; deferred Layer-2/3 roadmap). Read it for the *why/how*; the scripts below are the Layer-1 *mechanics*. Wired into QA_Rules §8/§9 and Project_Priming §8.
-- The full automation suite for this devkit (no runtime, no API) is: `python scripts/validate_templates.py` (corpus invariant check) + `bash scripts/test/run.sh` (fixture self-test). Both must exit 0.
-- For additive-only PRs (scripts/docs/CI only, no templates or workflows changed), regression check is: confirm `git diff main..HEAD --name-only` contains no files under `.claude/agents/templates/` or `.claude/agents/workflows/`.
-- Fixture for invariant #4 (retired-trigger) requires `--test-retired-trigger TEST_RETIRED_TRIGGER_DO_NOT_USE` flag because `RETIRED_TRIGGERS` is empty in production. This is by design.
-- Invariant #5 (manifest integrity) has no standalone bad fixture — it is validated by running `python scripts/validate_templates.py` against the full corpus.
-- To run the Layer-1 gate against a PR branch without disturbing the current working tree, use `git worktree add <scratch-path> origin/<branch>` then run both scripts against `<scratch-path>`; `git worktree remove <scratch-path> --force` to clean up. If the working tree happens to already be on the dev branch (common — implementers/reviewers often leave it checked out there), running directly is fine too; check `git branch --show-current` first.
-- When a PR claims an invariant/resume-rule bullet is "untouched" by a change, verify with `git diff main origin/<branch> -- <file>` scoped to that bullet's text and confirm it shows zero `+`/`-` lines (appears only as context) — do not infer "untouched" from the absence of a hunk elsewhere in the diff or from trusting the reviewer's summary (ST-000026, ST-000025 precedent).
-- For any AC whose correctness mechanism is a `gh`/CLI query (idempotency checks, dedup keys, filters), construct at least one adversarial input by hand (e.g. a prefix-title case for exact-line-match idempotency) rather than only re-reading the fix's prose — mirrors the TL-side review lesson recorded in Technical_Lead_Memory for ST-000026.
-- **For a `Type: behavioral` template/workflow story that also touches `scaffold_mechanical.sh`, the regression check should include a two-mode scratch scaffold dry-run diffed against `origin/main`** (ST-000028), not just the Layer-1 script pair — `validate_templates.py` only validates the devkit's own template tree, never scaffolded/deployed output, so it cannot catch a file-count or deployed-content regression from a hardcoded-array edit. Technique: `bash scaffold_mechanical.sh <devkit_root> <scratch> github|strict [org/repo]` from the PR branch into two scratch dirs (github + strict), then the same from an `origin/main` worktree, then `diff -rq` the two `.claude/agents` trees.
-- **A `git worktree` checkout of a branch may materialize CRLF while the primary working tree is LF, producing spurious whole-file diffs during a scaffold-regression `diff -rq`** (ST-000028, same caveat independently confirmed after being pre-documented in Technical_Lead_Memory) — before treating any such diff as a real regression, normalize with `diff <(tr -d '\r' < fileA) <(tr -d '\r' < fileB)` and confirm the delta collapses to nothing (or to only the genuinely expected lines).
-- **For a devkit-only-path defect class (an injected `templates/**` file referencing a path that only exists in the devkit's own repo, e.g. `.claude/agents/working/scripts/scaffold_mechanical.sh` or `Build_Software_Workflow.md` by path), verify the fix with a single grep rather than re-reading prose**: `grep -n "agents/working/\|Build_Software_Workflow\|<script-name>"` across the changed injected template file(s) — a clean fix leaves at most a negative/explanatory sentence confirming the path's absence, never a literal invocation or "follow file X" pointer. `validate_templates.py` cannot catch this class (its reference regex is `.md`-only and resolves against the devkit repo root, where devkit-only paths resolve clean) — this is a QA-side grep, not something the automated gate covers.
+### Fact 1
+- **Rule:** The full automation suite for this devkit (no runtime, no API) is `python scripts/validate_templates.py` (corpus invariant check) + `bash scripts/test/run.sh` (fixture self-test). Both must exit 0. `docs/Template_Test_Strategy.md` is the canonical *why/how* — 3-layer model, 6 invariant specs, risk tiers A/B/C, AC-as-oracle pattern.
+- **Applies when:** validating any template or workflow change.
+- **Evidence:** wired into `QA_Rules §8/§9` and `Project_Priming §8`.
+- **Expires when:** a Layer-2/3 gate lands and changes the required command set.
+
+### Fact 2
+- **Rule:** Run the Layer-1 gate against a PR branch without disturbing the working tree via `git worktree add <scratch> origin/<branch>`, then `git worktree remove <scratch> --force`. Check `git branch --show-current` first — if the tree is already on the dev branch, run directly.
+- **Applies when:** testing a PR branch.
+- **Evidence:** standing technique.
+- **Expires when:** never.
+
+### Fact 3
+- **Rule:** A `git worktree` checkout may materialize CRLF while the primary tree is LF, producing spurious whole-file diffs. Before treating any such diff as a regression, normalize with `diff <(tr -d '\r' < A) <(tr -d '\r' < B)` and confirm the delta collapses.
+- **Applies when:** any `diff -rq` across a worktree boundary.
+- **Evidence:** ST-000028.
+- **Expires when:** repo-wide `.gitattributes` normalization lands.
+
+### Fact 4
+- **Rule:** For a `Type: behavioral` story that touches `scaffold_mechanical.sh`, the regression check must include a two-mode scratch scaffold diffed against `origin/main` — not just the Layer-1 script pair. `validate_templates.py` only validates the devkit's own template tree, never scaffolded output, so it cannot catch a file-count or deployed-content regression from a hardcoded-array edit. Technique: run `scaffold_mechanical.sh <devkit_root> <scratch> github|strict` from the PR branch into two scratch dirs, repeat from an `origin/main` worktree, then `diff -rq`.
+- **Applies when:** any change to `scaffold_mechanical.sh` or the workflow/rules template set.
+- **Evidence:** ST-000028.
+- **Expires when:** a Layer-2 deployment gate automates this.
+
+### Fact 5
+- **Rule:** For an injected `templates/**` file referencing a devkit-only path, verify the fix with one grep — `grep -n "agents/working/\|Build_Software_Workflow\|<script-name>"` across the changed file. A clean fix leaves at most an explanatory sentence, never a literal invocation or "follow file X" pointer. This is a QA-side grep; the automated gate cannot cover it (the validator's reference regex is `.md`-only and resolves against the devkit root, where devkit-only paths resolve clean).
+- **Applies when:** verifying a fix to the devkit-only-path defect class.
+- **Evidence:** ST-000028.
+- **Expires when:** the validator gains deployment-scoped resolution.
+
+### Fact 6
+- **Rule:** When a PR claims a bullet or rule is "untouched", verify with `git diff main origin/<branch> -- <file>` scoped to that bullet's text and confirm it appears only as context with zero `+`/`-` lines. Never infer "untouched" from the absence of a hunk elsewhere, or from the reviewer's summary.
+- **Applies when:** a review verdict rests on something not having changed.
+- **Evidence:** ST-000025, ST-000026 precedent.
+- **Expires when:** never.
+
+### Fact 7
+- **Rule:** For any AC whose correctness mechanism is a `gh`/CLI query (idempotency, dedup, filters), hand-construct at least one adversarial input — e.g. a prefix-title case against an exact-line-match idempotency key — rather than only re-reading the fix's prose.
+- **Applies when:** validating a CLI-as-correctness-mechanism story.
+- **Evidence:** ST-000026.
+- **Expires when:** never.
+
+### Fact 8
+- **Rule:** For additive-only PRs (scripts/docs/CI only), the regression check is confirming `git diff main..HEAD --name-only` contains nothing under `.claude/agents/templates/` or `.claude/agents/workflows/`.
+- **Applies when:** scoping regression effort on a non-template PR.
+- **Evidence:** standing convention.
+- **Expires when:** never.
+
+### Fact 9
+- **Rule:** `validate_templates.py` emits `[KNOWN_ISSUE]` (not `[ERROR]`) for the `Blocked_Request_Template.md` capital-T typo in two shared workflow files. Expected — does not block CI or QA sign-off. Invariant #4's fixture needs `--test-retired-trigger TEST_RETIRED_TRIGGER_DO_NOT_USE` because `RETIRED_TRIGGERS` is empty in production; invariant #5 has no standalone bad fixture and is validated against the full corpus.
+- **Applies when:** interpreting validator output or its fixture suite.
+- **Evidence:** ST-000016 / PR #34.
+- **Expires when:** the typo is fixed or the fixture design changes.
 
 ## Troubleshooting Facts
 
