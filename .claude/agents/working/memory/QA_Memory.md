@@ -9,9 +9,9 @@
 - **Expires when:** a Layer-2/3 gate lands and changes the required command set.
 
 ### Fact 2
-- **Rule:** Run the Layer-1 gate against a PR branch without disturbing the working tree via `git worktree add <scratch> origin/<branch>`, then `git worktree remove <scratch> --force`. Check `git branch --show-current` first — if the tree is already on the dev branch, run directly.
-- **Applies when:** testing a PR branch.
-- **Evidence:** standing technique.
+- **Rule:** Run the Layer-1 gate against a PR branch via `git worktree add <scratch> origin/<branch>`, then `git worktree remove <scratch> --force` — **always**, even when the primary tree is already checked out to the dev branch. Never run directly against the primary working tree: gitignored runtime files left on disk from prior sessions (e.g. `working-record/*.md`) are read by `_resolve_file_ref`'s repo-verbatim root and can silently shift the `[ERROR]` count depending on which directory the command runs from — independent of any PR change. For a differential base-vs-head comparison, run **both** sides from matched worktrees so neither side is polluted. Corrected: 2026-07-30 (ST-000035) — removed the "if already on dev branch, run directly" carve-out; that shortcut produced a wrong baseline (53 vs. the true 67 `[ERROR]` lines) in this story.
+- **Applies when:** testing a PR branch, especially any differential (base-vs-head) validator comparison.
+- **Evidence:** standing technique; ST-000035 PR #103 (methodology correction).
 - **Expires when:** never.
 
 ### Fact 3

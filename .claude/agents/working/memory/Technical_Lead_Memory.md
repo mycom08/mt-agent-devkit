@@ -9,9 +9,9 @@
 - **Expires when:** a validator invariant scopes injected templates to the deployed "Expected files" inventory.
 
 ### Fact 2
-- **Rule:** `validate_templates.py` cannot catch the Fact 1 class. Its `_FILEREF_RE` matches `.md` only (scripts never checked) and `_resolve_file_ref` tries **three** roots — repo-verbatim, the `working/` mirror, and a `<stem>_template.md` fallback — so a devkit-only or since-deleted path still resolves via a sibling root. `SCAN_DIRS` is `templates/` + `workflows/` only: nothing under `working/` is scanned at all (pass dirs explicitly — `main()` takes `<dir>...`). It also does not check roster ↔ write-location consistency. A green run is not evidence. For any batch-edit workflow, the real revert net is a dedicated branch + `git diff --stat`, not a validator verdict.
-- **Applies when:** tempted to treat a passing validator run as review coverage.
-- **Evidence:** ST-000028; same class as the ST-000015 path-move finding.
+- **Rule:** `validate_templates.py` cannot catch the Fact 1 class: `_FILEREF_RE` matches `.md` only (scripts never checked); `_resolve_file_ref` tries **three** roots (repo-verbatim, `working/` mirror, `<stem>_template.md`), so a devkit-only or deleted path still resolves via a sibling. `SCAN_DIRS` is `templates/`+`workflows/` only — nothing under `working/` is scanned, so CI green is **no evidence for a `working/` file** (pass dirs explicitly; `main()` takes `<dir>...`). Roster ↔ write-location consistency unchecked. Under explicit paths the corpus baseline is **~70 violations and exit 1 on `main` too**, so any validator verdict must be *differential*: same command on base and head in parallel `git worktree`s, diff sorted output. Real revert net for batch edits: dedicated branch + `git diff --stat`.
+- **Applies when:** tempted to treat a passing validator run as review coverage, or asked to verify a story whose own gate is a before/after tool run.
+- **Evidence:** ST-000028; ST-000035 PR #103 (explicit-path diff, both new files clean); same class as the ST-000015 path-move finding.
 - **Expires when:** `_FILEREF_RE` widens past `.md` and deployment-scoped resolution lands.
 
 ### Fact 3
@@ -81,11 +81,7 @@
 - **Evidence:** ST-000028; `build_software_state.md` is the pattern.
 - **Expires when:** never.
 
-### Fact 14
-- **Rule:** Size caps on memory files and Working Records must be stated in **characters** (`wc -c`), never lines — entries are one soft-wrapped bullet each, so `wc -l` is uncorrelated with token cost. Agreed caps: Working Record ≤ 4,000, memory ≤ 10,000.
-- **Applies when:** reviewing or proposing any cap on these artifacts.
-- **Evidence:** ST-000032/033; a 60-line memory file measured 29,016 chars.
-- **Expires when:** the caps in `Agent_Common.md §2` change.
+> Fact 14 removed 2026-07-30 (ST-000035): superseded by `Agent_Common.md §2`/`§5`, which now state both caps and the chars-not-lines rationale directly. Numbering left with a gap on purpose — renumbering would silently stale external "Fact 15/16" citations.
 
 ### Fact 15
 - **Rule:** A **pre-spawn** eligibility filter (nothing spawned, no state) is a skip-and-continue, structurally the same as `Sprint_Workflow`'s `status:blocked` rule — not the Blocked Story Procedure, which halts the pipeline because an agent is mid-story with a live branch. If the status label must stay unchanged, skip-and-continue needs an in-run skip list in the state file or the selection loop re-selects forever.
