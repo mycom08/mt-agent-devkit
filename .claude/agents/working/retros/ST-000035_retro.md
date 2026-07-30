@@ -16,13 +16,17 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[failure]` The CI job's default scan directory list does not include the working-rules tree, so the larger of the two new files was never validated by the green check — a reviewer accepting the CI verdict would have had zero evidence for it. Reinforces: Technical_Lead_Memory Fact 2 ("a green run is not evidence"); this story is the first time the uncovered path held a **new** file rather than an edited one.
+- `[workflow]` A detection spec that quotes another file's section *heading text* as a matching key is a reference class no validator checks — it resolves as prose. The quoted heading here exists in only 2 of 6 sibling rules files. Section-number and file-path citations are checked; quoted heading names are not.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` When a story's own acceptance gate is a differential tool run ("any **new** finding reverts"), the reviewer should execute that exact command against both the base and the head revision and diff the sorted output — not run it once and read the exit code. Here the shared baseline was ~70 pre-existing violations and the exit code is non-zero on both sides, so a single run proves nothing in either direction. Parallel worktrees make this a two-command check with no working-tree disruption.
+- `[instruction]` A size-gate that routes a long issue thread to a digest subagent needs an explicit carve-out for the acceptance-criteria list itself: AC text is the review contract and is verified clause-by-clause, so summarising it silently thins verification. Digest the discussion; read the contract verbatim.
 
 ### What Worked Well
-*(pending)*
+- The resume-branch-completeness rule caught nothing here because the implementation already satisfied it — every value the state field can produce has an explicit branch, including the unobservable terminal state left by a crash between "mark complete" and "delete". Reinforces: Technical_Lead_Memory Fact 4, first story in that series to pass clean.
+- Re-deriving each AC from the final file on the branch rather than from diff hunks confirmed two absence-type criteria (no roster entry, no new role file) that a hunk-only read cannot establish. Reinforces: Technical_Lead_Memory Fact 12.
+- Phrasing the non-blocking nits as "at minimum these, plus any site sharing the same pattern" kept the follow-up list open rather than presenting three items as the complete inventory. Reinforces: Technical_Lead_Memory Fact 5.
 
 ## QA
 ### Impediments & Unclear Points
