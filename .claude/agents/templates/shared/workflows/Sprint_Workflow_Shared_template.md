@@ -153,7 +153,9 @@ The orchestrator maintains `.claude/agents/tmp/sprint_pipeline_state.md` to supp
                Report the Issue URL to the user. Delete the local export file.
              - **Not authenticated or `gh` unavailable:** inform the user that the export file has been written to `.claude/agents/retros/devkit_contribution_sprint_N.md`. Instruct them to open an Issue labeled `retro:contribution` on `mycom08/mt-agent-devkit` with the export file contents, so the `apply retros` workflow can find it.
 
-     d. **If no:** skip to step 5 (Cleanup).
+     d. **If no:** skip to step 5 (Memory Pruning).
 
-  5. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
+  5. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `.claude/agents/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common.md §2` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
+
+  6. **Cleanup** — delete the state file, then delete any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
 <!-- SHARED-END -->
