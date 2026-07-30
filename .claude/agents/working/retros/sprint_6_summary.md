@@ -27,3 +27,24 @@
 - Developer branch-before-first-file sequencing — not applied; treated as a one-off execution slip, not a missing rule.
 - 3 carried-over workflow items (AC boilerplate impossibility, structurally divergent §1 sections) — not applied; deferred again.
 - Stale pipeline-state-file pattern — not applied; no rule change proposed, noted as a recurring risk.
+
+---
+
+## ST-000033 — Agent memory: purpose test, file cap, scheduled prune, detection
+**Date:** 2026-07-30
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[context]` The pruning-schedule AC referenced "existing sprint-end cleanup" without naming a file — Developer had to grep for `Sprint_Workflow.md`'s "Sprint end" sequence rather than follow a pointer. *(Developer)*
+- `[context]` No refinement-thread decision existed for exactly where the once-per-sprint pruning step should live (unlike the other 5 AC points, all resolved with worked examples) — Developer made a judgment call: new "Sprint-End Memory Pruning" section in `Retro_Rules.md` + a new step in `Sprint_Workflow.md`'s Sprint-end sequence. *(Developer)*
+- `[workflow]` When a design-first refinement thread resolves most but not all AC points explicitly, flag the remaining point(s) so the implementer knows a judgment call is expected there rather than assuming full thread coverage. *(Developer)*
+- `[failure]` Both original PR commits carried `[skip ci]`, including the feat commit touching `.claude/agents/templates/**` — the exact path this repo's CI validates. `Developer_Rules.md §6`'s docs-only-push rule (`.claude/agents/**` = non-code) is correct for target projects but mis-scoped when mirrored verbatim into the devkit's own working copy. CI never ran until the orchestrator's unrelated changes.json-merge commit (no tag) triggered it for real — recovered, but only incidentally. *(Orchestrator)*
+- `[context]` No version bump this run, per explicit user instruction — files merged into the existing `"0.1.40"` `changes.json` entry instead of a new version key. *(Orchestrator)*
+
+### What Worked Well
+- Land-order coordination worked exactly as designed — the ST-000032 Stage 5 block was a clean append, no rebase conflict, same bullet-and-glob pattern reused verbatim (`s/working-record/memory/`, `s/4,000/10,000/`). *(Developer)*
+- `validate_templates.py` ran clean on the first pass (3 pre-existing known issues, none touching the diff). *(Developer)*
+- Non-behavioral fast path (Stage 2/3/4, no agent spawn) verified all 10 AC directly against the diff with no domain-knowledge gaps. *(Orchestrator)*
+
+### Actions Applied
+- None — user reviewed all 5 findings and judged none critical enough to act on now (the CI skip-ci item is the closest, but it's a repeat-risk for next time, not something broken this run). All left as observations only.
