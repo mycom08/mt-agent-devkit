@@ -48,3 +48,49 @@
 
 ### Actions Applied
 - None — user reviewed all 5 findings and judged none critical enough to act on now (the CI skip-ci item is the closest, but it's a repeat-risk for next time, not something broken this run). All left as observations only.
+
+---
+
+## refine sprint — ST-000035 (#100) / ST-000036 (#101)
+**Date:** 2026-07-30
+**Loop counts:** #100: 1 | #101: 0 (clear at Stage 1, no loop)
+
+### Findings
+- `[failure]` Stage 4's promotion rule had no branch for a story clear at Stage 1. Stage 1 step 7 said a story with no open points gets NO comment, so it matched Stage 4's "no final comment -> leave as status:backlog" branch and could never be promoted. Only the All-Clear Shortcut (every story clear) covered it; a mixed run like this one -- #100 with questions, #101 clear -- fell through. #101 reached `status:ready` anyway, but not by rule. *(Orchestrator)*
+- `[workflow]` `Technical_Lead_Rules.md §2` says to update the story body AC when an answer narrows its meaning, but the Stage 2 spawn prompt forbids editing the issue body. The two conflict; §2 should state the refinement-stage exception (PO owns body edits at Stage 2 step 5). *(Technical Lead)*
+- `[workflow]` TL branched off `main` and committed to satisfy the no-work-on-main rule, orphaning a commit unrelated to any story implementation. Refine Stage 2 produces comments only -- the workflow should say no branch or commit is expected at this stage. *(Technical Lead)*
+- `[workflow]` Agents committing files they own mid-refinement splits unrelated in-flight work across branches. Resolved by fast-forwarding `main`. Worth a Pipeline Rule that Stage 2 agents do not commit. *(Orchestrator)*
+- `[context]` User scoped this run to #100/#101 only, not the full sprint-6 backlog (#93/#94/#98/#102 excluded) -- same narrowing precedent as the #95/#96 run. *(Orchestrator)*
+
+### What Worked Well
+- Per-story independence held: #101 was clear at Stage 1 and did not wait on #100's question loop.
+- One Impl->TL/PO cycle on #100 was enough; no escalation to the 3-loop limit.
+
+### Actions Applied
+- Stage 4 promotion gap -- **applied** (commit `67d3204`, before this retro was written). Stage 1 step 7 now requires an explicit cleared note through the same channel as step 6; the All-Clear Shortcut is retested on question-presence rather than comment-presence; Stage 4 names both promote paths. Shared template + devkit working copy, folded into the existing `0.1.40` changes.json entry, no version bump.
+- Remaining 4 findings -- **not applied**; user reviewed and judged none critical. The TL-rule contradiction resolves safely in practice (spawn prompt is the narrower instruction, worst case is a TL that pauses to ask); the branch/commit pair cost real cleanup but was fully recoverable via fast-forward; the scoping item is an observation with no rule change proposed. Left as observations only.
+
+---
+
+## ST-000035 — Audit agent files workflow (devkit-only, Tier A detection)
+**Date:** 2026-07-30
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[failure]` CI's green badge covered `Layer-1 invariant check` but its default `SCAN_DIRS` never reaches `working/`, giving zero evidence for the story's largest new file (`Audit_Rules.md`) — TL had to run the AC-mandated explicit-path validator manually to get real coverage. *(Technical Lead)*
+- `[failure]` A non-worktree differential validator run undercounted violations by 14 (53 vs. the true 67) because gitignored `working-record/*.md` files on disk skew the count versus a clean worktree. *(QA)*
+- `[workflow]` The differential-gate-needs-both-sides-diffed lesson was independently rediscovered by both TL (corrected round 1's "~70" to 67) and QA (found the actual undercount bug behind it) — a structural gap in method, hit twice in one story, not a fluke. *(Technical Lead, QA)*
+- `[instruction]` AC phrase "added to the trigger table" was ambiguous about which of `CLAUDE.md`'s three candidate tables — resolved by precedent-matching sibling commands, no story-blocking question needed. *(Developer)*
+- `[workflow]` A story introducing a new gitignored runtime-output directory should prompt the implementer to check `validate_templates.py`'s `RUNTIME_PATH_PREFIXES` — caught this run only because Developer Memory Fix 1 already documented the pattern. *(Developer)*
+- `[workflow]` A size-gated digest-subagent rule (`Agent_Common.md §9.6`) added mid-sprint needed a carve-out (never digest the AC/body contract, only discussion) before a live A/B test (two independent TL review passes of the same PR, gate on vs. off) proved the whole mechanism a net token cost, not a savings — prompt caching makes same-session raw reads cheaper than subagent isolation. Rule removed outright rather than kept disabled. *(Orchestrator, Technical Lead)*
+
+### What Worked Well
+- Design-first was fully satisfied by the issue thread itself before Dev ever spawned — zero mid-implementation consultations across Developer, both TL rounds, and QA. *(Developer, Technical Lead, QA)*
+- Re-deriving AC from live branch/file content rather than diff hunks or a prior role's verdict caught absence-type criteria a hunk-only read can't establish, independently at every stage. *(Technical Lead, QA)*
+- Non-blocking nits were phrased as an open "at minimum these" list rather than a closed inventory, keeping the follow-up bucket honest for ST-000036. *(Technical Lead)*
+
+### Actions Applied
+- `.claude/agents/working/workflows/Shared_Pipeline_Stages.md` — Stage 1 spawn-prompt reminder: name only the role-scoped Story Standard variant, never offer the full cross-role file as an alternative. Committed `37e6241`.
+- `.claude/agents/working/rules/Agent_Common.md` §9 — corrected preamble (prompt caching makes same-session repeats cheap; session fragmentation, not read size, is the real cost driver); the `§9.6` digest-gate rule this same session had added was removed outright after the live A/B test showed it cost more, not less. Committed `37e6241`.
+- `.claude/agents/working/memory/QA_Memory.md` Fact 2 — corrected to require worktree-vs-worktree checkouts for every differential validator run. Applied by QA directly, pushed as part of PR #103.
+- Remaining findings (CI scan-gap as a standing rule, worktree-required as a *shared* rule beyond QA's own memory, story-authoring table-heading clarity, runtime-dir PO-side checklist reminder) — **not applied**; user reviewed all four and judged none critical enough to act on now, including the two flagged as closest to critical (CI scan-gap, worktree-required gate). Left as observations only.
