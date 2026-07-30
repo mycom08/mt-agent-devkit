@@ -206,7 +206,7 @@ When the implementer returns with a mid-implementation consultation report inste
 
 ### Blocked Story Procedure (agent executes when external input is required)
 
-1. Resolve **who to tag** following the lookup order in `.claude/agents/rules/Blocked_Request_Template.md` § Step 1 — if no match is found, report back to the orchestrator to ask the user before proceeding
+1. Resolve **who to tag** following the lookup order in `.claude/agents/rules/Blocked_Request.md` § Step 1 — if no match is found, report back to the orchestrator to ask the user before proceeding
 2. Fill in the template with the resolved name, confirmed items, missing items, and helpful commands
 3. Write the filled-in content to `.claude/agents/tmp/blocked_<story-id>.md`
 4. Record the block:
