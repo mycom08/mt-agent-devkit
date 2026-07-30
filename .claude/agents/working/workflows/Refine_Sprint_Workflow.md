@@ -49,7 +49,7 @@ The orchestrator maintains `.claude/agents/working/tmp/refine_pipeline_state.md`
    - **Unit-test AC check:** If the story introduces new service-layer methods or functions, confirm an explicit unit-test AC is present (e.g., "Unit tests added for all new service methods"). If missing, flag as an open question to PO.
    - **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
 6. For each story with open points, the agent records questions: post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format; technical/design questions → tag **TL**; scope/AC questions → tag **PO**; a single comment per story may contain questions for both agents
-7. Stories with no open points require no comment — agent marks them as clear internally
+7. For each story with **no** open points, the agent still posts an explicit **cleared note** — one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent: Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
 8. Each agent reports to orchestrator: which stories have comments filed (agents tagged), which stories are already clear
 9. Orchestrator collects all agent reports → updates state file (`Stage: 2`) → proceeds to Stage 2
 
@@ -59,7 +59,7 @@ The orchestrator maintains `.claude/agents/working/tmp/refine_pipeline_state.md`
 
 ## All-Clear Shortcut (check after Stage 1 completes)
 
-After all implementer agents report back, check: **did every agent report all their stories clear — i.e., no GitHub comment was filed on any story?**
+After all implementer agents report back, check: **did every agent report all their stories clear — i.e., every story carries only a step 7 cleared note, and no story has questions tagged to TL or PO?** Presence of a comment is not the test — every story now carries one; the test is whether any comment contains open questions.
 
 - **Yes — all clear:** Skip Stages 2 and 3 entirely. Go directly to Stage 4 (PO promotes stories to `status:ready`). Update state file: `Stage: 4`.
 - **No — at least one story has comments:** Proceed to Stage 2 as normal.
@@ -98,8 +98,8 @@ After all implementer agents report back, check: **did every agent report all th
 
 1. **Resume** PO agent via `po_session` from state file (spawn new if expired)
 2. PO checks each story in the target sprint independently:
-   - Implementer posted final "all clear" comment → update story status to `ready`: remove `status:backlog`, add `status:ready`
-   - No final comment or questions still open → leave as `status:backlog` (no change)
+   - Implementer posted a final "all clear" comment → update story status to `ready`: remove `status:backlog`, add `status:ready`. This covers **both** paths: the Stage 3 resolution comment on a story that had questions, and the Stage 1 step 7 cleared note on a story that never had any.
+   - No comment at all, or questions still open → leave as `status:backlog` (no change)
 3. PO reports summary (max 5-bullet):
    - Stories moved to `status:ready` (IDs + titles)
    - Stories still `status:backlog` (IDs + reason)
