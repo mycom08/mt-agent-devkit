@@ -17,7 +17,7 @@ Use this when a story has `status:blocked` and the required external information
    - Change label from `status:blocked` to `status:ready`
    - Proceed with [Shared Pipeline Stages](Shared_Pipeline_Stages.md) from Stage 0
 4. **If info is still incomplete:**
-   - Post an updated comment listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request_Template.md`)
+   - Post an updated comment listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request.md`)
    - Notify the user what is still needed before the story can proceed
 
 **If `Mode: strict`:**
@@ -29,6 +29,6 @@ Use this when a story has `status:blocked` and the required external information
    - Also check `.claude/agents/tmp/blocked_ST-XXXXXX.md` — if it exists, delete it
    - Proceed with [Shared Pipeline Stages](Shared_Pipeline_Stages.md) from Stage 0
 4. **If info is still incomplete:**
-   - Append an updated comment entry to the story MD `## Comments` section listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request_Template.md` as the template)
+   - Append an updated comment entry to the story MD `## Comments` section listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request.md` as the template)
    - Notify the user what is still needed before the story can proceed
 <!-- SHARED-END -->
