@@ -191,6 +191,11 @@ RUNTIME_PATH_PREFIXES = (
     # Templates reference the deployed path (.claude/agents/working-record/) but
     # the files cannot be verified in CI since they are gitignored.
     ".claude/agents/working-record/",
+    # Audit workflow reports: gitignored (.claude/agents/internal/), written and
+    # deleted at runtime by the `audit agent files` workflow (ST-000035). The
+    # filename itself is a timestamp placeholder (audit_report_YYYYMMDD_HHMMSS.md)
+    # in the workflow file's own prose, never a real file on disk in the repo.
+    ".claude/agents/internal/",
 )
 
 # Known-wrong references in the current corpus, tracked for fix in the
