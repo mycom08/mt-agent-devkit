@@ -127,6 +127,7 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
 1. **Spawn** the agent matching the `Implementer` role (**model: sonnet**)
+   > **Spawn-prompt reminder (mandatory-reading references):** when the spawn prompt points the agent at a Story Standard file, name only the role-scoped variant already gated by that role's own Rules file (e.g. `Story_Standard_Dev.md` for Developer, `Story_Standard_TL.md` for Technical Lead) — never phrase it as "`Story_Standard.md` (or the role-scoped variant if one exists)". Offering both as options causes the agent to read the full cross-role file needlessly; the role's own Rules file gate already resolves which one to read.
 2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
 4. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)

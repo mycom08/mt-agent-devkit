@@ -168,7 +168,7 @@ Applies whenever a story's verification requires a runtime secret (API token, PA
 
 ## 9. Token-Efficiency Conventions
 
-Every tool call resends the whole transcript, so call **count** drives cost as much as any single call's size. Defaults for all agents:
+Every tool call resends the whole transcript, but prompt caching makes repeats within one session cheap — so **call count** and **needless session fragmentation** (a new agent has no cache to inherit) drive cost, not a large read's size. Defaults for all agents:
 
 1. **Mechanical edits via shell, not Read+Edit.** AC-checkbox ticks in an issue body or placeholder replacement in a file use a `sed`-style in-place substitution — don't read the whole file into context and regenerate it.
 2. **Narrow `gh` queries with `-q`/`--jq`.** Fetch only the fields you need (e.g. just comment bodies, not author/timestamp/edit-history metadata); cap to the last N comments when full history isn't required.
