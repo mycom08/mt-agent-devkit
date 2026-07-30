@@ -12,7 +12,8 @@ Do these **in order** before any testing or validation work:
 1. **Read Project Priming** — `.claude/agents/working/context/Project_Priming.md`
 2. **Read Story Standard (QA)** — `.claude/agents/working/rules/Story_Standard_QA.md`
 3. **Read your Working Record** — `.claude/agents/working/working-record/QA_Working_Record.md`
-4. **Read the relevant GitHub Issues** — filter by `status:testing` label for the current task
+4. **Read your Memory** — `.claude/agents/working/memory/QA_Memory.md`
+5. **Read the relevant GitHub Issues** — filter by `status:testing` label for the current task
 
 ---
 
@@ -165,6 +166,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.2 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
-**Previous:** 1.1 — §4: CI/workflow-only and verification-only test-scenario-doc exceptions; §8: CI-equivalent exception for CI/workflow-only stories  
+**Version:** 1.3 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
+**Previous:** 1.2 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
 **Created:** 2026-06-16

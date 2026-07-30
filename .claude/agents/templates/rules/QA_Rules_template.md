@@ -12,7 +12,8 @@ Do these **in order** before any testing or validation work:
 1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
 2. **Read Story Standard (QA)** — `.claude/agents/rules/Story_Standard_QA.md`
 3. **Read your Working Record** — `.claude/agents/working-record/QA_Working_Record.md`
-4. **Read the relevant GitHub Issues** — filter by `status:testing` label for the current task
+4. **Read your Memory** — `.claude/agents/memory/QA_Memory.md`
+5. **Read the relevant GitHub Issues** — filter by `status:testing` label for the current task
 
 ---
 
@@ -243,6 +244,6 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 3.6 — §4: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
-**Previous:** 3.5 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
+**Version:** 3.7 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
+**Previous:** 3.6 — §4: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
 **Created:** 2026-05-01
