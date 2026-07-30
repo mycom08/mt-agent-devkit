@@ -68,13 +68,17 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ## Orchestrator Working Record
 
-**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and format as agent working records (dated entries: **Completed / In Progress / Impediments**; keep the 3 most recent days, delete older entries before writing a new one).
+**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common.md §5` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
 
-**When to update (append/amend today's entry):**
+**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 4,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common.md §5`: *would the next session take a different action if this line were missing?*
+
+**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common.md §5`.
+
+**When to update (rewrite the current entry in place, or start a new one for a new piece of work):**
 - **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, versions bumped, PR/story refs).
-- **On explicit close** — if the user says "end session" or "wrap up", finalize today's entry before ending, even if no stage completed since the last write.
+- **On explicit close** — if the user says "end session" or "wrap up", finalize the current entry before ending, even if no stage completed since the last write.
 
-**Trigger:** user says **"report working status"** (aliases: "status report", "daily status"). No agents are spawned — read the record directly and summarize the most recent entry to the user (include earlier retained days only if asked for more history).
+**Trigger:** user says **"report working status"** (aliases: "status report", "daily status"). No agents are spawned — read the record directly and summarize the most recent entry to the user (include earlier retained entries only if asked for more history).
 
 ---
 

@@ -119,16 +119,15 @@ for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Des
   printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
 done
 
-# 7. Blank working-record files
-TODAY="$(date +%Y-%m-%d)"
+# 7. Blank working-record files (rewrite-in-place snapshot format — see Agent_Common.md §5)
 for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
   if [[ "$role" == "UI_UX_Designer" ]]; then
     role_label="UI/UX Designer"
   else
     role_label="${role//_/ }"
   fi
-  printf '# %s Working Record\n\n## %s\n**Completed:** —\n**In Progress:** —\n**Impediments:** —\n' \
-    "$role_label" "$TODAY" > "$AGENTS/working-record/${role}_Working_Record.md"
+  printf '# %s Working Record\n\n**Story:** none yet\n**Completed:** —\n**In Progress:** —\n**Impediments:** —\n\n**Blockers & Watch-outs:**\n- (none)\n' \
+    "$role_label" > "$AGENTS/working-record/${role}_Working_Record.md"
 done
 
 # 8. .gitignore additions
