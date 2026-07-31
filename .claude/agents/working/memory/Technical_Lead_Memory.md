@@ -3,9 +3,9 @@
 ## Stored Facts
 
 ### Fact 1
-- **Rule:** Any file under `.claude/agents/templates/` must have every executable path and "read file X" pointer resolve against the **deployed** target-project inventory, never the devkit tree. Target projects have no `working/`, no `templates/`, and never receive devkit-internal workflows. When an injected template needs devkit-only automation, use `Sync_Devkit_Workflow_template.md`'s fetch path (`{DEVKIT_SOURCE_URL}` from the target's own `CLAUDE.md`, WebFetch + curl fallback) — that removes the dependency instead of resolving it at runtime. The two trees can never share a source file: **restate the convention + pointer**, never extract into a shared one.
-- **Applies when:** reviewing or writing any `templates/**` file that names a path, script, or another workflow file.
-- **Evidence:** ST-000028 PR #87 CR-1/CR-2; unfixed instance in `Sync_Devkit_Workflow_template.md`'s "Settings hook".
+- **Rule:** Any file under `.claude/agents/templates/` must have every executable path and "read file X" pointer resolve against the **deployed** target-project inventory, never the devkit tree. Target projects have no `working/`, no `templates/`, and never receive devkit-internal workflows. When an injected template needs devkit-only automation, use `Sync_Devkit_Workflow_template.md`'s fetch path (`{DEVKIT_SOURCE_URL}` from the target's own `CLAUDE.md`, WebFetch + curl fallback) — that removes the dependency instead of resolving it at runtime. The two trees can never share a source file: **restate the convention + pointer**, never extract into a shared one. **Corollary:** a target-side detect pass has no template to diff against, so it finds only defects self-evident inside one file — never divergence-from-source. Scope it to model-generated writes (adapt-to-mode, merge); verbatim-overwrite files yield nothing and self-heal via the next sync's checksum pre-filter.
+- **Applies when:** reviewing or writing any `templates/**` file that names a path, script, or another workflow file; scoping any target-side audit/validate stage.
+- **Evidence:** ST-000028 PR #87 CR-1/CR-2; ST-000037 refinement.
 - **Expires when:** a validator invariant scopes injected templates to the deployed "Expected files" inventory.
 
 ### Fact 2
@@ -32,11 +32,7 @@
 - **Evidence:** ST-000026 — listed 3 call sites, missed the strict-mode 4th; ST-000028 r2 — offered 3 fixes, implementer found a better 4th.
 - **Expires when:** never — this is a phrasing discipline.
 
-### Fact 6
-- **Rule:** Cite `§N` section numbers, never line numbers. Resolve a `grep -n` hit to its `## N.` header before writing `§N` — a wrong-but-existing section number ships silently.
-- **Applies when:** citing a rules file in a review comment or design answer.
-- **Evidence:** ST-000026 — wrote "§15" meaning line 15, which sits in §1; propagated into 2 files.
-- **Expires when:** never.
+> Fact 6 removed (ST-000037): §N-not-line-number citation is now a `Technical_Lead_Rules.md §2` bullet I read every session. Gap kept on purpose.
 
 ### Fact 7
 - **Rule:** `gh issue list --json` reads the immediately-consistent issues API; `--search` hits the eventually-consistent search index **and** does contiguous-token phrase matching (GitHub strips `**`/`::` at index time), so a prefix-title story silently matches another. For small result sets prefer plain list + local exact-line match. In strict mode the equivalent is `grep -Fxq`.
@@ -58,7 +54,7 @@
 - **Expires when:** never.
 
 ### Fact 10
-- **Rule:** Write the retro section at the end of stage work regardless of verdict — `Retro_Rules.md` "When to Write" is unconditional. A spawn prompt saying "if approved: … write your retro" is the happy path, not a narrowing of the rule. Add addenda per round.
+- **Rule:** Write the retro section at the end of stage work regardless of verdict — `Retro_Rules.md` "When to Write" is unconditional; a spawn prompt's "if approved: … write your retro" is the happy path, not a narrowing. Add addenda per round.
 - **Applies when:** a review round ends in CHANGES REQUESTED.
 - **Evidence:** ST-000015/25/26/28 precedent.
 - **Expires when:** `Retro_Rules.md` adds a verdict condition.
@@ -81,7 +77,7 @@
 - **Evidence:** ST-000028; `build_software_state.md` is the pattern.
 - **Expires when:** never.
 
-> Fact 14 removed 2026-07-30 (ST-000035): superseded by `Agent_Common.md §2`/`§5`, which now state both caps and the chars-not-lines rationale directly. Numbering left with a gap on purpose — renumbering would silently stale external "Fact 15/16" citations.
+> Fact 14 removed (ST-000035): superseded by `Agent_Common.md §2`/`§5`. Gap kept on purpose — renumbering stales external citations.
 
 ### Fact 15
 - **Rule:** A **pre-spawn** eligibility filter (nothing spawned, no state) is a skip-and-continue, structurally the same as `Sprint_Workflow`'s `status:blocked` rule — not the Blocked Story Procedure, which halts the pipeline because an agent is mid-story with a live branch. If the status label must stay unchanged, skip-and-continue needs an in-run skip list in the state file or the selection loop re-selects forever.
