@@ -1,6 +1,6 @@
 # Sprint 6 — Retro Summary
 **Sprint:** sprint-6
-**Last Updated:** 2026-07-30
+**Last Updated:** 2026-07-31
 
 ---
 
@@ -94,3 +94,26 @@
 - `.claude/agents/working/rules/Agent_Common.md` §9 — corrected preamble (prompt caching makes same-session repeats cheap; session fragmentation, not read size, is the real cost driver); the `§9.6` digest-gate rule this same session had added was removed outright after the live A/B test showed it cost more, not less. Committed `37e6241`.
 - `.claude/agents/working/memory/QA_Memory.md` Fact 2 — corrected to require worktree-vs-worktree checkouts for every differential validator run. Applied by QA directly, pushed as part of PR #103.
 - Remaining findings (CI scan-gap as a standing rule, worktree-required as a *shared* rule beyond QA's own memory, story-authoring table-heading clarity, runtime-dir PO-side checklist reminder) — **not applied**; user reviewed all four and judged none critical enough to act on now, including the two flagged as closest to critical (CI scan-gap, worktree-required gate). Left as observations only.
+
+---
+
+## ST-000037 — Inject Auditor into target projects + wire sync devkit / update project audit stage
+**Date:** 2026-07-31
+**Loop counts:** Impl→Reviewer: 1 | Impl→QA: 0
+
+### Findings
+- `[failure]` Round 1 review CHANGES REQUESTED on one finding: adding a 20th rules file rippled into a deployed-template scaffold enumeration (`Refine_Prototype_Workflow_Shared_template.md`) that neither the AC, the implementer's own ripple memory, nor the reviewer's own refinement-thread scope answer had named — same defect class as ST-000022/ST-000023, now a 3rd occurrence. *(Technical Lead)*
+- `[workflow]` Three roles (Developer, Technical Lead, Product Owner) independently flagged the same gap: `Project_Priming.md §15a` has a ripple checklist for "Nth agent role" but nothing for "Nth enumerated set" (rules files, workflow files) — both implementer and reviewer currently reconstruct that inventory from personal memory files, which is why the same 1-2 sites get missed each time. *(Developer, Technical Lead, Product Owner)*
+- `[workflow]` Reviewer suggestion: for enumeration-ripple stories, grep the corpus for the old count/signature terms first, before verifying the story's actual design content — inverts the default review order for this story class. *(Technical Lead)*
+- `[workflow]` The standard round-2 scoping recipe (`git diff <round1-head> <round2-head> --stat`) overstates the implementer's work when the reviewer's own stage-transition commit lands between rounds — should diff from the reviewer's own last commit instead. *(Technical Lead)*
+- `[workflow]` AC4/AC5's scoped-file-list description read like unbacked prose until traced to three pre-existing mechanisms already in the target file — a general habit worth applying to any AC whose correctness rests on a described-but-not-visibly-implemented runtime log. *(QA)*
+- `[skipped-step]` Orchestrator did not refresh the pipeline state file's `Updated` timestamp at every stage transition (only `Stage` was kept current) — harmless here, real process gap. *(Orchestrator)*
+
+### What Worked Well
+- Refinement (Dev/TL/PO thread on #102) was thorough enough that zero new mid-implementation or QA-time AC questions arose across the whole pipeline. *(Developer, Product Owner)*
+- "Is this scope an actual mechanism or just prose?" as the primary review question paid off — the new audit stage's scoped-file-list, which looked like the likeliest spot for unbacked hand-waving, held up because it rested on three pre-existing mechanisms in the file. *(Technical Lead, QA)*
+- Verifying a cited precedent (ST-000022/ST-000023) against the actual CHANGELOG entries, not the citation, is what exposed that the precedent covered only devkit-internal ripple sites — the same operation that found the gap also confirmed what it didn't cover. *(Technical Lead)*
+- QA's independent re-derivation of all 14 AC plus a two-mode scaffold-output regression diff gave high closing confidence with zero regressions. *(QA, Product Owner)*
+
+### Actions Applied
+*(none — user reviewed all 3 proposed items (§15a enumeration-ripple checklist, reviewer grep-first checklist, TL Memory Fact 9 round-2 diff-recipe fix) and deferred applying any of them this round; left as recorded observations for a future pass.)*
