@@ -5,12 +5,14 @@
     ],
     "modified": [
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md"
     ],
     "descriptions": {
       ".claude/agents/templates/rules/Audit_Rules_template.md": "New (ST-000037): injectable, detect-only counterpart of the devkit-internal Audit_Rules.md, scoped to a single MA-n (mode-adaptation artifact) finding class a template-blind target-side scan can actually support — orphan headings, dangling GitHub references in strict-mode files, internal contradictions from a partial mode strip, and broken internal cross-references. Report-only, always; never proposes an edit.",
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "Fixes (ST-000037): `## Agent File Integrity` gains an audit carve-out naming `sync devkit`/`update project`'s new detect-only audit pass as a workflow step (not an agent role, not a third writer of protected paths) — it only reads files just written this run and files findings upstream as a devkit-repo Issue.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "New (ST-000037): final 'Stage 4 — Audit Pass (detect-only)' — scoped to files this run wrote via rules/instructions/CLAUDE.md merge strategies only, silent when clean, spawns a fresh general-purpose subagent naming the deployed `Audit_Rules.md` copy as its behavior spec, files findings as a `mycom08/mt-agent-devkit` Issue labelled `audit:contribution` (or instructs the user to file one manually if `gh` is unavailable/unauthenticated), then deletes the local report. Rules-file enumerations ('Applies to', 'Expected files — rules/') gain `Audit_Rules.md` as the 20th rules file."
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "New (ST-000037): final 'Stage 4 — Audit Pass (detect-only)' — scoped to files this run wrote via rules/instructions/CLAUDE.md merge strategies only, silent when clean, spawns a fresh general-purpose subagent naming the deployed `Audit_Rules.md` copy as its behavior spec, files findings as a `mycom08/mt-agent-devkit` Issue labelled `audit:contribution` (or instructs the user to file one manually if `gh` is unavailable/unauthenticated), then deletes the local report. Rules-file enumerations ('Applies to', 'Expected files — rules/') gain `Audit_Rules.md` as the 20th rules file.",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "Fixes (ST-000037, CR-1 round-2): Step 1.4's 'Universal set' scaffold instruction for `-ui-prototype` companion repos still said 9 verbatim-tier rules files — bumped to 10 and `Audit_Rules` inserted into the enumeration, so a repo scaffolded by `refine prototype` at v0.1.41+ gets the file instead of shipping a dead reference against `Sync_Devkit_Workflow.md`'s now-updated 'Expected files' list."
     }
   },
   "0.1.40": {
