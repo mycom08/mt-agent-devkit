@@ -35,13 +35,14 @@
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+- `[context]` None specific to this story — AC13's under-enumeration (4 named sites vs. the real ripple set) was already caught and fixed at review time (CR-1), so QA re-verification of the closed ripple was a confirmation pass, not a discovery pass. Reinforces: `Developer_Memory.md` Fact 1 / `Technical_Lead_Memory.md` Fact 12.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` The AC4/AC5 scope description ("files Stage 2's written-files log actually wrote") reads like unbacked prose until traced to the three separate pre-existing mechanisms it depends on (per-write log instruction, "Log every file written" rule, "Checksum skip is silent" rule). Worth a standing QA habit for any AC whose correctness rests on a described-but-not-visibly-implemented runtime log: locate the mechanism by name before accepting the scope claim, same discipline as the CLI-adversarial-input rule in `QA_Memory.md` Fact 7.
 
 ### What Worked Well
-*(pending)*
+- The `QA_Memory.md` Fact 4 scaffold-output regression diff (two-mode, worktree-vs-worktree) caught nothing wrong here, but ran clean and cheap — confirming a `Type: behavioral` story touching `scaffold_mechanical.sh` produced exactly the intended deltas (new `Audit_Rules.md`, updated Sync/Refine-Prototype workflow files, bumped version stamp, github-only `.gitignore` line) with zero unexpected files in either mode.
+- Confirming AC13's ripple closure with one corpus-wide grep for the old count/signature terms, scoped to exclude historical record (CHANGELOG/memory/retros), was faster and more conclusive than re-reading each of the 4+1 named files individually for the new count.
 
 ## Product Owner
 ### Impediments & Unclear Points
