@@ -203,12 +203,12 @@ Wiki files are project-owned — never overwrite existing content.
 After all updates are applied, scan each managed directory in `TARGET_PROJECT` and flag any file not in the known expected set.
 
 **Expected files — `rules/`:**
-`Agent_Common.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Logging_Standard.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `UI_UX_Designer_Rules.md`, `UI_Prototype_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
+`Agent_Common.md`, `Audit_Rules.md`, `Blocked_Request.md`, `Business_Analyst_Rules.md`, `CICD_Validation_Guide.md`, `Clean_Code_Rules.md`, `Developer_Rules.md`, `Logging_Standard.md`, `Product_Owner_Rules.md`, `QA_Rules.md`, `Retro_Rules.md`, `Story_Standard.md`, `Story_Standard_Dev.md`, `Story_Standard_PO.md`, `Story_Standard_QA.md`, `Story_Standard_TL.md`, `Technical_Lead_Rules.md`, `UI_UX_Designer_Rules.md`, `UI_Prototype_Rules.md`, `Strict_Mode_Story_Guide.md` (strict mode only)
 
 **Expected files — `workflows/`:**
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
-Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
+Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/`, `internal/` — these are project-owned, runtime-output, or agent-managed and may contain custom or transient files. `internal/` specifically holds only this workflow's own audit report while a Stage 4 run is in flight (see Stage 4) and is always empty between runs.
 
 If any unexpected files are found, report them to the user:
 
@@ -252,6 +252,61 @@ Skipped (project-owned):
 
 ---
 
+## Stage 4 — Audit Pass (detect-only)
+
+**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files and script files (verbatim overwrite), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote. This workflow has no checksum pre-filter (unlike `sync devkit`), so only the **failed-write** exclusion applies here — a file Stage 2 logged an error for and skipped is not in scope.
+
+If the scope list is empty → **skip this stage silently.** Print nothing, spawn nothing.
+
+**1. Spawn one general-purpose subagent** (never a persistent role or session — fresh every run) with a fully self-contained prompt naming `{TARGET_PROJECT}/.claude/agents/rules/Audit_Rules.md` as the complete behavior spec:
+
+```
+Scan the following files, just written into {TARGET_PROJECT} by this update project run, for mode-adaptation drift and return a compact finding list only — never the raw file contents you read.
+
+Step 1 — read the detection spec in full before scanning anything:
+{TARGET_PROJECT}/.claude/agents/rules/Audit_Rules.md
+
+This file is the complete and only behavior spec for this scan: the single MA-n finding class, its four recognizable shapes, the <!-- audit:keep --> absolute exclusion, and what's explicitly out of scope. Do not invent detection criteria beyond what that file states — if something is ambiguous under the spec, do not report it as a finding.
+
+Step 2 — scan only these files (do not read anything else in the project):
+<scope list — the files this run actually wrote via rules/instructions/CLAUDE.md merge, from Stage 2's written-files log>
+
+Step 3 — apply Audit_Rules.md's MA-n rules exactly, one finding class, report-only — you are not proposing an edit, only describing what you found and where.
+
+Step 4 — return your findings as a single compact Markdown block:
+
+<file>:<line-or-line-range> — <one-clause description of the drift and which shape it matches>
+(or "_None found._" if empty)
+
+Do not edit any file. Return the finding list as your final response; the orchestrator persists it if non-empty.
+```
+
+**2. If the subagent's return is `_None found._`** → this stage's work is done. Report nothing beyond the normal Stage 3 completion report.
+
+**3. If the subagent returned one or more findings:**
+
+a. Write them to `{TARGET_PROJECT}/.claude/agents/internal/audit_report_YYYYMMDD_HHMMSS.md` (create `.claude/agents/internal/` if it does not exist):
+   ```markdown
+   # Update Audit Report — YYYYMMDD_HHMMSS
+   **Devkit Version:** {DEVKIT_VERSION}
+   **Target:** {TARGET_PROJECT}
+   **Scanned:** <count> file(s) written this run
+
+   <findings block, verbatim from the subagent>
+   ```
+b. Run `gh auth status` to check authentication (this runs from the devkit's own environment, since `update project` is a devkit-side command):
+   - **Authenticated:** file an Issue on the devkit repository:
+     ```bash
+     gh issue create --repo mycom08/mt-agent-devkit \
+       --title "Update Audit Finding — <target project name> (YYYY-MM-DD)" \
+       --label "audit:contribution" \
+       --body-file {TARGET_PROJECT}/.claude/agents/internal/audit_report_YYYYMMDD_HHMMSS.md
+     ```
+     Report the Issue URL to the user, then **delete the report file** — the Issue is now the record.
+   - **Not authenticated or `gh` unavailable:** tell the user the report has been written to `{TARGET_PROJECT}/.claude/agents/internal/audit_report_YYYYMMDD_HHMMSS.md` and instruct them to open an Issue labeled `audit:contribution` on `mycom08/mt-agent-devkit` with the report's contents. Leave the report file in place in this case.
+
+---
+
 ## Pipeline Rules
 
 - **Never write before user confirms** in Stage 1
@@ -261,3 +316,5 @@ Skipped (project-owned):
 - **Merge preserves project content** — when in doubt about whether a section is project-specific, keep the existing file and notify the user
 - **Source is always local** — this workflow reads from the devkit's own template files, never from GitHub
 - **State file cleanup** — no persistent state file needed; the workflow is short enough to restart cleanly if interrupted
+- **Stage 4 is detect-only and silent when clean** — it never writes to the target project's `rules/`, `instructions/`, or `CLAUDE.md`; a scoped run that finds nothing produces no output at all, only a filed Issue (or an instruction to file one manually) when it finds something
+- **Stage 4's scan subagent is spawned fresh every run** — never a persistent role or session, and it reads only the files this run actually wrote via a model-generated merge strategy, never the full target project's `.claude/agents/` tree

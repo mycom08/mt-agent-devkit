@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Writes every scaffold file that needs zero project-specific judgment — pure copy or
 # fixed-token substitution. Run this BEFORE generating the adaptive-tier files (CLAUDE.md,
-# README.md, Project_Priming.md, Document_Index.md, 6 instruction files, 9 rules files that
+# README.md, Project_Priming.md, Document_Index.md, 6 instruction files, 10 rules files that
 # need real adaptation, 4 wiki docs) so an LLM agent never has to touch content it would
 # only reproduce byte-for-byte.
 #
@@ -48,7 +48,7 @@ fi
 #    real scaffold output for that file (byte tokens alone are not sufficient — some
 #    per-project rewrites use plain prose with no {} marker at all).
 VERBATIM_RULES=(
-  Agent_Common Blocked_Request CICD_Validation_Guide Clean_Code_Rules
+  Agent_Common Audit_Rules Blocked_Request CICD_Validation_Guide Clean_Code_Rules
   Product_Owner_Rules Retro_Rules Story_Standard_TL Strict_Mode_Story_Guide
   UI_Prototype_Rules
 )
@@ -145,6 +145,9 @@ if [[ "$MODE" == "github" ]]; then
 
 # Agent retrospective files — for human review only, not part of the committed codebase
 .claude/agents/retros/
+
+# Audit workflow reports — runtime output, never committed
+.claude/agents/internal/
 EOF
 else
   cat >> "$TARGET/.gitignore" <<'EOF'

@@ -56,6 +56,12 @@
 - **Evidence:** ST-000016 / PR #34.
 - **Expires when:** the typo is fixed or the fixture design changes.
 
+### Fact 10
+- **Rule:** For any AC whose correctness claim rests on a described-but-not-visibly-implemented runtime mechanism (e.g. "files logged by an earlier stage," "the scope computed at runtime"), locate the actual pre-existing rule/instruction text the claim depends on before accepting the scope as real — do not accept the prose describing the mechanism as sufficient evidence the mechanism exists.
+- **Applies when:** an AC's scope or exclusion list is defined in terms of a log, state, or computed set rather than a static file list.
+- **Evidence:** ST-000037 (Stage 4 audit-pass scope traced to Stage 2's written-files log + "Log every file written" + "Checksum skip is silent" rules, all pre-existing).
+- **Expires when:** never.
+
 ## Troubleshooting Facts
 
 No troubleshooting facts recorded yet.
