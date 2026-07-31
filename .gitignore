@@ -43,6 +43,9 @@ docker/sandbox/.env
 # Audit workflow reports — runtime output, never committed
 .claude/agents/internal/
 
+# Token-trace step logs — runtime observability output, never committed
+.claude/agents/working/token-trace/
+
 # Python
 __pycache__/
 *.pyc
