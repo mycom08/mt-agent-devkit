@@ -9,7 +9,7 @@
 - **Expires when:** a validator invariant scopes injected templates to the deployed "Expected files" inventory.
 
 ### Fact 2
-- **Rule:** `validate_templates.py` cannot catch the Fact 1 class: `_FILEREF_RE` matches `.md` only (scripts never checked); `_resolve_file_ref` tries **three** roots (repo-verbatim, `working/` mirror, `<stem>_template.md`), so a devkit-only or deleted path still resolves via a sibling. `SCAN_DIRS` is `templates/`+`workflows/` only — nothing under `working/` is scanned, so CI green is **no evidence for a `working/` file** (pass dirs explicitly; `main()` takes `<dir>...`). Roster ↔ write-location consistency unchecked. Under explicit paths the corpus baseline is **~70 violations and exit 1 on `main` too**, so any validator verdict must be *differential*: same command on base and head in parallel `git worktree`s, diff sorted output. Real revert net for batch edits: dedicated branch + `git diff --stat`.
+- **Rule:** `validate_templates.py` cannot catch the Fact 1 class: `_FILEREF_RE` matches `.md` only (scripts never checked); `_resolve_file_ref` tries **three** roots (repo-verbatim, `working/` mirror, `<stem>_template.md`), so a devkit-only or deleted path still resolves via a sibling. `SCAN_DIRS` is `templates/`+`workflows/` only — nothing under `working/` is scanned, so CI green is **no evidence for a `working/` file** (pass dirs explicitly; `main()` takes `<dir>...`). Roster ↔ write-location consistency unchecked. Under explicit paths the corpus baseline is **~70 violations and exit 1 on `main` too**, so any validator verdict must be *differential*: same command on base and head in parallel `git worktree`s, diff sorted output.
 - **Applies when:** tempted to treat a passing validator run as review coverage, or asked to verify a story whose own gate is a before/after tool run.
 - **Evidence:** ST-000028; ST-000035 PR #103 (explicit-path diff, both new files clean); same class as the ST-000015 path-move finding.
 - **Expires when:** `_FILEREF_RE` widens past `.md` and deployment-scoped resolution lands.
@@ -32,7 +32,7 @@
 - **Evidence:** ST-000026 — listed 3 call sites, missed the strict-mode 4th; ST-000028 r2 — offered 3 fixes, implementer found a better 4th.
 - **Expires when:** never — this is a phrasing discipline.
 
-> Fact 6 removed (ST-000037): §N-not-line-number citation is now a `Technical_Lead_Rules.md §2` bullet I read every session. Gap kept on purpose.
+> Fact 6 removed (ST-000037): now a `Technical_Lead_Rules.md §2` bullet. Gap kept on purpose.
 
 ### Fact 7
 - **Rule:** `gh issue list --json` reads the immediately-consistent issues API; `--search` hits the eventually-consistent search index **and** does contiguous-token phrase matching (GitHub strips `**`/`::` at index time), so a prefix-title story silently matches another. For small result sets prefer plain list + local exact-line match. In strict mode the equivalent is `grep -Fxq`.
@@ -66,9 +66,9 @@
 - **Expires when:** mirrors are generated rather than hand-maintained.
 
 ### Fact 12
-- **Rule:** A change to where a file is *written*, or any step renumbering, must update every referrer — grep the whole template+workflow corpus for the old path/pattern before approving, against the **final** file on the PR branch (`git show <branch>:<file> | grep`), not the diff hunks. A hunk-only check cannot distinguish a reference correctly left alone from one that should have changed. If an Update-side migration self-heals via a directory-existence check, moving Init to pre-create that dir silently disables the self-heal.
-- **Applies when:** reviewing a path-move, scaffold-location, or step-renumbering change.
-- **Evidence:** ST-000015 / PR #41; ST-000025 PR #71 (8 `Path A/B step` hits verified individually).
+- **Rule:** A change to where a file is *written*, or any step renumbering, must update every referrer — grep the whole template+workflow corpus for the old path/pattern before approving, against the **final** file on the PR branch (`git show <branch>:<file> | grep`), not the diff hunks. A hunk-only check cannot distinguish a reference correctly left alone from one that should have changed. If an Update-side migration self-heals via a directory-existence check, moving Init to pre-create that dir silently disables the self-heal. Same for an Nth-enumerated-set item: grep the **old count** + a signature member corpus-wide; the AC never names every site, and deployed `templates/` sites also need a `changes.json` entry.
+- **Applies when:** reviewing a path-move, scaffold-location, step-renumbering, or Nth-enumerated-item change.
+- **Evidence:** ST-000015 / PR #41; ST-000025 PR #71 (8 `Path A/B step` hits verified individually); ST-000037 (20th rules file, 4th consecutive ripple miss).
 - **Expires when:** never.
 
 ### Fact 13
@@ -77,7 +77,7 @@
 - **Evidence:** ST-000028; `build_software_state.md` is the pattern.
 - **Expires when:** never.
 
-> Fact 14 removed (ST-000035): superseded by `Agent_Common.md §2`/`§5`. Gap kept on purpose — renumbering stales external citations.
+> Fact 14 removed (ST-000035): superseded by `Agent_Common.md §2`/`§5`. Gap kept on purpose.
 
 ### Fact 15
 - **Rule:** A **pre-spawn** eligibility filter (nothing spawned, no state) is a skip-and-continue, structurally the same as `Sprint_Workflow`'s `status:blocked` rule — not the Blocked Story Procedure, which halts the pipeline because an agent is mid-story with a live branch. If the status label must stay unchanged, skip-and-continue needs an in-run skip list in the state file or the selection loop re-selects forever.

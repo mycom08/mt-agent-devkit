@@ -16,13 +16,17 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[failure]` Round 1 CHANGES REQUESTED on a single finding: adding the Nth item to an enumerated corpus set rippled into one site the AC did not name and the implementer's own ripple-site list did not cover — a **deployed template** carrying a scaffold instruction that enumerates the set by name and by count. The implementer caught the two devkit-internal ripple sites from memory but stopped at the boundary of the list their memory fact records; the missed site was of a different kind (template, not devkit-internal), so it also needed a manifest entry, not just a count edit. Same defect class as three prior stories, now recurring across a fourth.
+- `[context]` The refinement I authored on this story named ripple sites and did not include the missed one either — so the AC under-specification and the review-side catch both trace to the same absent inventory. A reviewer re-deriving the ripple set independently of the implementer's list is what closed it; had I only checked the sites the AC named, this would have shipped.
 
 ### Process Suggestions
-*(pending)*
+- `[context]` Priming docs carry an "Nth agent role" ripple-site checklist but no equivalent for the more frequent case — adding an Nth item to any other enumerated set (rules file, workflow file). Both implementer and reviewer are currently reconstructing that inventory from a personal memory file, which is why the same 1–2 sites get missed each time. Promote it to the shared priming doc as a set-agnostic checklist, and include the **deployed-template** sites alongside the internal ones, since only the former also require a change-manifest entry.
+- `[workflow]` When a story adds an item to an enumerated set, the reviewer's cheapest complete check is a corpus-wide grep for the *old count and the set's signature members* rather than a re-read of the AC-named files. That inverts the default review order — verify the enumeration inventory first, since it is the failure mode with precedent, then the story's actual design content. Worth stating explicitly in the reviewer checklist for enumeration-ripple stories.
 
 ### What Worked Well
-*(pending)*
+- Treating "is this scope an actual mechanism or just prose?" as the primary review question paid off in the opposite direction from expected: the new stage's scoped-file-list, which looked like the most likely place for unbacked hand-waving, turned out to rest on three pre-existing mechanisms already in the file (a per-write log instruction, a "log every file written" rule, and a "skipped files never appear in the written-files report" rule). Confirming a claim by locating the mechanism it names is faster than arguing about the prose around it.
+- Verifying a cited precedent against the actual changelog entries rather than the citation. The implementer's precedent claim was accurate, and checking it took one grep — but the same check is what exposed that the precedent covered only the internal ripple sites, which is precisely the gap the missed file fell through. Verifying a citation and reading what it *doesn't* cover are the same operation.
+- The differential validator run stayed decisive despite a corpus that fails on the base branch too: parallel clean worktrees, sorted output, diffed. The entire delta was one line-number shift of a pre-existing violation, which took a non-zero, exit-1 tool and turned it into a usable signal.
 
 ## QA
 ### Impediments & Unclear Points
