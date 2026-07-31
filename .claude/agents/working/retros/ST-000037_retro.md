@@ -28,6 +28,11 @@
 - Verifying a cited precedent against the actual changelog entries rather than the citation. The implementer's precedent claim was accurate, and checking it took one grep — but the same check is what exposed that the precedent covered only the internal ripple sites, which is precisely the gap the missed file fell through. Verifying a citation and reading what it *doesn't* cover are the same operation.
 - The differential validator run stayed decisive despite a corpus that fails on the base branch too: parallel clean worktrees, sorted output, diffed. The entire delta was one line-number shift of a pre-existing violation, which took a non-zero, exit-1 tool and turned it into a usable signal.
 
+**Round-2 addendum (APPROVED).** Round-1 content above is unchanged; nothing in it was revised by the second pass.
+- `[workflow]` Round-2 scoping needed one adjustment the standard `git diff <round1-head> <round2-head> --stat` recipe does not anticipate: the reviewer's own memory/retro commit had landed between the two refs, so that range overstated the implementer's work by two files. Diffing from *the reviewer's own commit* to the new head isolated the actual round-2 change (3 files, 6 insertions). Worth folding into the recipe — after a stage-transition commit, the round-1 head is no longer the right base.
+- `[context]` Confirmed the round-1 finding was the whole of it: re-running the residual-stale-site grep on the fixed tree returned only the corrected line, so the enumeration ripple closed completely rather than revealing further sites. This is the payoff for having run the exhaustive grep at round 1 instead of reporting the first hit and stopping — the change request could be stated as a complete fix, and round 2 was a confirmation pass rather than another discovery pass.
+- The manifest check that mattered was structural, not visual: parsing `changes.json` to assert version keys still strictly descending, `descriptions` keys exactly equal to `new` + `modified`, and every referenced path present on disk. Version-key ordering in particular is explicitly outside what the validator checks, so it is only ever caught by hand — cheap to assert programmatically, invisible to eyeballing a diff hunk.
+
 ## QA
 ### Impediments & Unclear Points
 *(pending)*
