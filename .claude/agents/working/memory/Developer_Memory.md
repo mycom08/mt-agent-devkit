@@ -5,7 +5,7 @@
 ### Fact 1
 - **Rule:** Adding an Nth item to any enumerated corpus set (role, rules file, split workflow) ripples into hardcoded counts and lists that a story's AC never names. Grep an existing member of the set across `.claude/agents/` *before* starting — a `{placeholder}` scan will not catch count prose. Known ripple sites: `scaffold_mechanical.sh` (role loops, `SPLIT_WORKFLOWS` array), `Init_Project_Workflow.md`, `Update_Project_Workflow.md`, `Build_Software_Workflow.md`, and `Sync_Devkit_Workflow_template.md` **plus its working mirror** — the last three each carry *two* distinct lists ("Applies to" and "Expected files — …"), and updating only one is the standard miss.
 - **Applies when:** any story that adds a role, a rules template, or a split workflow file.
-- **Evidence:** ST-000021 (6th role, missed 2 sites), ST-000023 (19th rules file), ST-000028 (Nth split workflow). Role case now also documented in `Project_Priming.md §15a`.
+- **Evidence:** ST-000021 (6th role, missed 2 sites), ST-000023 (19th rules file), ST-000028 (Nth split workflow), ST-000037 (20th rules file — AC named only 4 of the 6 real ripple sites; `scaffold_mechanical.sh`'s `VERBATIM_RULES` and `Build_Software_Workflow.md`'s 2 count mentions caught from this fact alone). Role case now also documented in `Project_Priming.md §15a`.
 - **Expires when:** the counts become generated rather than hardcoded.
 
 ### Fact 2
