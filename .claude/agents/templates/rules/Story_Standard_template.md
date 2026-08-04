@@ -301,16 +301,18 @@ Use comments for:
 **Comment-writing standard (all roles):**
 
 1. **Decision-first.** The first line states the decision/outcome. Rationale follows, capped at ~2–3 sentences per point.
-2. **Soft length cap: ~150–200 words per comment.** Exemption: QA validation reports (per-AC evidence) may be longer — thoroughness there is high-signal. The cap targets re-argued reasoning, not evidence.
-3. **Evidence by pointer, not transcript.** Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread.
-4. **Corrections state the delta only.** What changed, what didn't, one-line why. Never re-derive conclusions that didn't change.
-5. **No comments about comments.** If a prior comment lacked substance, put the substance in your working record and post one pointer line — never a follow-up itemizing verification transcripts.
-6. **One close-out per thread.** Post the "resolved / ready" hand-off line once; never restate it in later comments.
-7. **Recommended default format** — compact bullets: claim → source checked → verdict. Same verification substance, cheaper for every downstream role that re-reads the thread. This is a recommended format, not a license for thinner review.
+2. **One topic per comment.** A comment answers the questions asked and nothing else. A finding that surfaces while answering — however relevant — posts as its own comment with its own thread status. Bundling makes a thread unresolvable: it cannot be closed while any of its topics stays open, so a multi-topic comment leaves `Thread Status` with no coherent value.
+   > Replying to several questions **that were genuinely asked together** in one comment is fine and expected — this is not a one-reply-per-question rule. What it prohibits is an *unasked* finding smuggled into an answer.
+3. **Length cap: ~150–200 words per comment**, checked with `wc -w` at the Commenter gate (§12). Exemption: QA validation reports (per-AC evidence) may be longer — thoroughness there is high-signal. The cap targets re-argued reasoning, not evidence.
+4. **Evidence by pointer, not transcript.** Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread. **Never paste command output, check transcripts, or verification logs into a comment** — state the verdict in one line and cite the working record. A reader who needs the transcript can open it; a reader who does not pays for it on every read of the thread.
+5. **Body edits are announced, not reproduced.** When a comment's decision is written into the story body in the same pass (§3), the comment states which section changed, what kind of change, and why — never the resulting body text. The body is current truth; the comment is the reason it changed. Reproducing the new wording creates a second copy that goes stale on the next edit and then contradicts the body.
+6. **Corrections state the delta only.** What changed, what didn't, one-line why. Never re-derive conclusions that didn't change.
+7. **No comments about comments.** If a prior comment lacked substance, put the substance in your working record and post one pointer line — never a follow-up itemizing verification transcripts.
+8. **One close-out per thread.** Post the "resolved / ready" hand-off line once; never restate it in later comments.
+9. **Recommended default format** — compact bullets: claim → source checked → verdict. Same verification substance, cheaper for every downstream role that re-reads the thread. This is a recommended format, not a license for thinner review.
 
 **Rule for comment**:
-- Open a new issue comment only for a new topic.
-- Reply in the same comment when continuing the same issue.
+- Reply in the same comment when continuing the same issue; a new topic gets its own comment (rule 2).
 - When a comment changes scope, acceptance criteria, status, or delivery expectations, update the issue body (AC, Deliverables) to match the resolved decision. This includes a **design-first approval comment that narrows or supersedes an AC** — reconcile the body AC text in the **same pass**, so later-stage reviewers never have to cross-read the body against a separate design thread.
 - Never put discussions inside the issue body. The body is for User Story, AC, and Deliverables only.
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`, `**Dev**`). An `@` prefix triggers a GitHub mention notification to a real user account.
@@ -410,6 +412,20 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 > **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
 
 **Only then:** Approve the PR
+
+### Commenter — Before Posting an Issue Comment
+
+Applies to every role, on every issue comment:
+
+- [ ] Answers only the questions asked — a new finding gets its own comment (§9 rule 2)
+- [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4)
+- [ ] A decision written into the story body in this same pass is announced, not reproduced (§9 rule 5)
+- [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common.md §2` rule 4)
+- [ ] Word count checked — `wc -w` ≤ 200, or a stated exception
+
+> **Stated exception:** QA per-AC validation evidence (§9 rule 3) may exceed the cap. Note the exception in the comment; do not silently skip the check.
+
+**Only then:** Post the comment
 
 ### Merge Gate
 
@@ -542,7 +558,8 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.8 — §2, §7, §11, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row  
+**Version:** 2.9 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check (ST-000038)  
+**Previous:** 2.8 — §2, §7, §11, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row  
 **Previous:** 2.7 — §2: optional sections legitimized (Technical Scope / API Spec Reference / Design Source) + one-list-per-concern; §3: AC hygiene + Body Amendments edit-time rules; §9: comment-writing standard (decision-first, capped, evidence by pointer)
 
 This is the single source of truth for story workflow across all agents.

@@ -104,12 +104,12 @@ Response and decision.
 **Next:** [Owner or "None"]
 ```
 
-- Open a new comment only for a new topic
+- **One topic per comment** — answer the questions asked and nothing else; a finding that surfaces while answering posts as its own comment with its own thread status. Batching replies to questions asked together is fine; smuggling an unasked finding into an answer is not.
 - Reply in the same thread for the same topic
 - When a comment resolves a scope/AC question, update the issue body to match
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, soft cap ~150–200 words; evidence by pointer — full check logs go in your working record, not the thread; corrections state the delta only; no comments about comments; one close-out line per thread. Full rule: `Story_Standard.md §9`.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words checked with `wc -w`; **never paste command output or check transcripts** — verdict in one line, logs go in your working record; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
 
 ---
 
