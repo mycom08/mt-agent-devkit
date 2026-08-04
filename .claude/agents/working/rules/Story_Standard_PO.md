@@ -77,7 +77,9 @@ Scope decision or AC clarification.
 - When a comment changes AC or delivery expectations, update the issue body to match
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, soft cap ~150–200 words; corrections state the delta only; one close-out line per thread. When writing a decision into the story body: the decision itself, ≤ 5 lines, pointer to the resolving comment — the body stays current truth with no supersession notes. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
+- **One topic per comment** — answer what was asked and nothing else; a new finding gets its own comment. Batching replies to questions asked together is fine; an unasked finding smuggled into an answer is not.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words — draft to shape (one short paragraph per topic: decision, one-line why, pointer) so the `wc -w` check is a backstop, not a trim-and-recount loop; corrections state the delta only; one close-out line per thread. When writing a decision into the story body: the decision itself, ≤ 5 lines, pointer to the resolving comment — the body stays current truth with no supersession notes. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
+- **Announce body edits, never reproduce them.** As the only role that edits the story body, you are the one at risk here: after amending an AC, the comment states *which* section changed, *what kind* of change, and *why* — never the resulting AC text. A wording copied into a comment goes stale the next time that AC is reworded, and the thread then contradicts the body. Example: "AC6 reworded — added an X carve-out, per the reviewer's point that <reason>. Body updated." (`Story_Standard.md §9` rule 5)
 
 ---
 

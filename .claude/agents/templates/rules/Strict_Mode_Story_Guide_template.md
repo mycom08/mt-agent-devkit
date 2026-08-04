@@ -107,7 +107,8 @@ Rules:
 - Always append — never delete or overwrite existing comment entries
 - Include role name and ISO timestamp on the header line
 - Keep entries concise — details go in the agent's Working Record
-- **Writing standard (same as GitHub-mode `Story_Standard.md §9`):** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, soft cap ~150–200 words per entry (QA per-AC validation reports exempt); evidence by pointer, full check logs in your Working Record; corrections state the delta only; no entries about prior entries; one close-out line per story hand-off
+- **Writing standard (same as GitHub-mode `Story_Standard.md §9`):** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words per entry — draft to shape (one short paragraph per topic: decision, one-line why, pointer) so the `wc -w` check is a backstop, not a trim-and-recount loop (QA per-AC validation reports exempt); one topic per entry — a finding that surfaces while answering gets its own entry; **never paste command output, check transcripts, or verification logs** — verdict in one line, full logs in your Working Record (§9 rule 4's single carve-out, gate-mandated CI evidence, covers PR approval comments only — strict mode has no PRs, so nothing is exempt here); a story-body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no entries about prior entries; one close-out line per story hand-off
+- **Commenter gate:** run the checklist in `Story_Standard.md §12` before appending an entry — it applies unchanged in strict mode, with "issue comment" read as "comment entry"
 
 ---
 

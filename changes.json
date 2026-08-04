@@ -1,4 +1,25 @@
 {
+  "0.1.42": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/Agent_Common_template.md",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Fix (ST-000038): issue comments were the only capped artifact with no enforcement. §12 gains a third gate, **Commenter — Before Posting an Issue Comment**, turning the ~150–200 word cap into a `wc -w` self-check (the same move `wc -c` made for memory files). §9 writing rules: one-topic-per-comment promoted out of the threading block into numbered rule 2 as a constraint on composition (with an explicit carve-out that batching replies to questions asked together is permitted); rule 4 now prohibits pasting command output, check transcripts, or verification logs, scoped to issue and PR comments alike, with a single named carve-out — gate-mandated CI evidence, i.e. the literal `gh pr checks` output the §12 Reviewer gate requires in a PR approval comment — so the two rules can both be obeyed; the §12 Reviewer and Commenter gates cross-reference the carve-out from both sides; new rule 5 'body edits are announced, not reproduced' — a comment states which section changed and why, never the resulting body text, because a duplicated wording goes stale on the next edit and then contradicts the body. Round 3 adds the drafting target the gate was missing: §9 rule 3 now says draft to the shape (one short paragraph per topic — decision, one-line why, pointer) so the `wc -w` check is a backstop that should almost never fire, and the §12 Commenter gate splits into a before-you-draft item and before-you-post items, with an explicit instruction not to trim-and-recount when the count fails (an over-length draft is usually a bundled topic or a pasted transcript — remove something whole instead). Measured cause: a single 200-word comment cost 22% of one agent run because the post-hoc check induced a draft-then-truncate loop, each pass re-reading full context.",
+      ".claude/agents/templates/rules/Agent_Common_template.md": "Fix (ST-000038): §2 rule 4 'Point, don't mirror' scoped to issue comments as well as memory writes — re-deriving a recorded fact is more expensive in a comment, which every downstream role re-reads. Enforced via the new Commenter gate.",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "Fix (ST-000038): §9 view carries the same delta as the cross-role source — one-topic-per-comment as a composition rule, `wc -w` cap, transcript prohibition with the gate-mandated-CI-evidence carve-out named for Dev's peer-reviewer role, announce-don't-reproduce, cite-don't-re-explain, plus a pointer to the §12 Commenter gate. Round 3: carries the draft-to-shape target.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "Fix (ST-000038): §9 view carries the same delta, with the closer-role failure mode called out explicitly — PO is the only role that edits the story body, so 'announce the edit, never reproduce the new AC text' is stated as its own rule with a worked example. Round 3: carries the draft-to-shape target.",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "Fix (ST-000038): §9 view carries the same delta. QA's per-AC evidence exemption is preserved and clarified — it exempts the word cap only, not the one-topic or transcript rules, and the gate's `wc -w` item is satisfied by stating the exemption rather than skipping the check. Round 3: carries a role-specific draft-to-shape target — one line per AC (criterion, verdict, pointer), so length follows AC count and never needs trimming.",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix (ST-000038): §9 view carries the same delta, phrased for the reviewer role that produced the observed 4x-over comment — a finding surfacing mid-review posts as its own comment, and no verification transcript goes inline except the gate-mandated `gh pr checks` output the Reviewer gate requires in a PR approval comment. Round 3: carries the draft-to-shape target.",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "Fix (ST-000038): strict mode's local comment-entry writing standard restates §9 verbatim and would otherwise have drifted — same delta applied, with the Commenter gate declared applicable ('issue comment' read as 'comment entry') and the transcript carve-out noted as inapplicable, since strict mode has no PRs. Round 3: carries the draft-to-shape target."
+    }
+  },
   "0.1.41": {
     "new": [
       ".claude/agents/templates/rules/Audit_Rules_template.md"
