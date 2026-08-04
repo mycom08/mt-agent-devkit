@@ -50,6 +50,12 @@
 - **Evidence:** ST-000033 — added "Memory Pruning" there, referenced from `Retro_Rules.md`.
 - **Expires when:** the "Sprint end" sequence is restructured or renamed.
 
+### Fact 9
+- **Rule:** A rule that lives in `Story_Standard_template.md` is restated in **six** places, not five: the four per-role views (`Story_Standard_Dev/PO/QA/TL_template.md`) *and* `Strict_Mode_Story_Guide_template.md`, which restates the same standard for strict mode's local comment entries. The strict-mode guide is the one an AC's file list reliably omits, and it has no working mirror (`Project_Priming.md §15` carve-out names it). Before editing any `Story_Standard` rule, grep a distinctive phrase from it (e.g. `150–200`) across `.claude/agents/` rather than trusting the AC — this is restatement drift, a different mechanism from Fact 1's count drift.
+- **Applies when:** editing any rule in `Story_Standard_template.md` that the role views or strict-mode guide summarise.
+- **Evidence:** ST-000038 — AC6 named 4 views; grep found the 5th restatement site.
+- **Expires when:** the views stop restating and become pure pointers.
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity
