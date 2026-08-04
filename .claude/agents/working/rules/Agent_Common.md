@@ -195,7 +195,9 @@ Applies whenever you read a GitHub Issue/PR body or comment (`gh issue view`, `g
 
 **Why devkit-only.** This is an observability convention for our own team's spawn cost, not a designed target-project feature — `Agent_Common_template.md` does not carry this section. Recorded here as an intentional `Project_Priming.md §15`-style divergence.
 
-**File:** one per agent per story, `.claude/agents/working/token-trace/<StoryID>_<RoleTag>_steps_done.md` — `RoleTag` is `dev`, `TL`, `qa`, `po`, `ba`, or `uiux`. Never share a file across roles or stories. Gitignored — never commit.
+**File:** one per agent per story, `.claude/agents/working/token-trace_sprint/<StoryID>_<RoleTag>_steps_done.md` — `RoleTag` is `dev`, `TL`, `qa`, `po`, `ba`, or `uiux`. Never share a file across roles or stories. Gitignored — never commit.
+
+> **Two similarly-named directories — do not confuse them.** `token-trace_sprint/` holds the per-story trace **output** written by agents and is gitignored; it accumulates over a sprint and is cleared at sprint end. `tokentrace/` (no hyphen) holds the **tooling** — `token_cost.sh` and its README — and is committed. The `_sprint` suffix exists to keep the two apart at a glance.
 
 **What you write, before reporting back to the orchestrator:** the header block below, then one line per step you took, in the order you took it, each with a **labeled approximation** of its cost — you have no introspective access to your own real per-step token usage, so never present a step estimate as exact. Base the estimate on a visible proxy (files read, tool calls made, comment length written), not a guess pulled from nowhere.
 
