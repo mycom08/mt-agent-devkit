@@ -304,7 +304,8 @@ Use comments for:
 2. **One topic per comment.** A comment answers the questions asked and nothing else. A finding that surfaces while answering — however relevant — posts as its own comment with its own thread status. Bundling makes a thread unresolvable: it cannot be closed while any of its topics stays open, so a multi-topic comment leaves `Thread Status` with no coherent value.
    > Replying to several questions **that were genuinely asked together** in one comment is fine and expected — this is not a one-reply-per-question rule. What it prohibits is an *unasked* finding smuggled into an answer.
 3. **Length cap: ~150–200 words per comment**, checked with `wc -w` at the Commenter gate (§12). Exemption: QA validation reports (per-AC evidence) may be longer — thoroughness there is high-signal. The cap targets re-argued reasoning, not evidence.
-4. **Evidence by pointer, not transcript.** Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread. **Never paste command output, check transcripts, or verification logs into a comment** — state the verdict in one line and cite the working record. A reader who needs the transcript can open it; a reader who does not pays for it on every read of the thread.
+4. **Evidence by pointer, not transcript.** Applies to issue comments and PR comments alike. Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread. **Never paste command output, check transcripts, or verification logs into a comment** — state the verdict in one line and cite the working record. A reader who needs the transcript can open it; a reader who does not pays for it on every read of the thread.
+   > **Single carve-out — gate-mandated CI evidence.** The literal `gh pr checks <PR-number>` output that the §12 Reviewer gate requires in a **PR approval comment** is a mandated audit artifact and is exempt from this rule. It is the *only* exemption: no other output, transcript, or log may be pasted, in any comment, by any role.
 5. **Body edits are announced, not reproduced.** When a comment's decision is written into the story body in the same pass (§3), the comment states which section changed, what kind of change, and why — never the resulting body text. The body is current truth; the comment is the reason it changed. Reproducing the new wording creates a second copy that goes stale on the next edit and then contradicts the body.
 6. **Corrections state the delta only.** What changed, what didn't, one-line why. Never re-derive conclusions that didn't change.
 7. **No comments about comments.** If a prior comment lacked substance, put the substance in your working record and post one pointer line — never a follow-up itemizing verification transcripts.
@@ -407,7 +408,7 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 - [ ] All CI checks on the PR have **finished** — do not review while CI is still running
 - [ ] No CI check is in a **failed** state — if any check failed, post a comment on the PR noting the failing check and ask the implementer to fix it; do not approve until CI is green
 - [ ] Code review criteria pass (per agent-specific rules)
-- [ ] **Paste the literal `gh pr checks <PR-number>` output into the approval comment** — this turns "I confirmed CI was green" into an auditable artifact instead of a self-report with nothing to check it against later. Approval comments without this evidence are incomplete.
+- [ ] **Paste the literal `gh pr checks <PR-number>` output into the approval comment** — this turns "I confirmed CI was green" into an auditable artifact instead of a self-report with nothing to check it against later. Approval comments without this evidence are incomplete. This paste is the single carve-out to §9 rule 4 (gate-mandated CI evidence); nothing else in the approval comment may be a transcript.
 
 > **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
 
@@ -418,7 +419,7 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 Applies to every role, on every issue comment:
 
 - [ ] Answers only the questions asked — a new finding gets its own comment (§9 rule 2)
-- [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4)
+- [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4). The `gh pr checks` carve-out belongs to PR approval comments only; it never applies here
 - [ ] A decision written into the story body in this same pass is announced, not reproduced (§9 rule 5)
 - [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common.md §2` rule 4)
 - [ ] Word count checked — `wc -w` ≤ 200, or a stated exception
@@ -558,7 +559,7 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.9 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check (ST-000038)  
+**Version:** 2.9 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check (ST-000038)  
 **Previous:** 2.8 — §2, §7, §11, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row  
 **Previous:** 2.7 — §2: optional sections legitimized (Technical Scope / API Spec Reference / Design Source) + one-list-per-concern; §3: AC hygiene + Body Amendments edit-time rules; §9: comment-writing standard (decision-first, capped, evidence by pointer)
 

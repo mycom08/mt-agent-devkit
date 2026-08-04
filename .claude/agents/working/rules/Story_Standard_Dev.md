@@ -109,7 +109,7 @@ Response and decision.
 - When a comment resolves a scope/AC question, update the issue body to match
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words checked with `wc -w`; **never paste command output or check transcripts** — verdict in one line, logs go in your working record; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words checked with `wc -w`; **never paste command output or check transcripts** — verdict in one line, logs go in your working record; the single carve-out is **gate-mandated CI evidence** — when you peer-review, the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires in a PR approval comment, which you must paste and nothing else; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
 
 ---
 

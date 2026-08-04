@@ -56,6 +56,12 @@
 - **Evidence:** ST-000038 — AC6 named 4 views; grep found the 5th restatement site.
 - **Expires when:** the views stop restating and become pure pointers.
 
+### Fact 10
+- **Rule:** Before strengthening a principle into an absolute ("never", "always", "must not") in a shared standard, grep the **same file's gate checklists** for a rule that *mandates* the thing you are about to forbid. A principle tolerates a specific override; an absolute does not. When the two collide, fix it with a **named** carve-out ("gate-mandated CI evidence") rather than a bare scope qualifier — the name is what the per-role views can restate without re-deriving the reasoning, and it survives the next edit to either side.
+- **Applies when:** promoting any soft guidance to a hard prohibition, especially in `Story_Standard_template.md` where §9 (writing rules) and §12 (gate checklists) can each mandate opposite things.
+- **Evidence:** ST-000038 PR #108 CR-1 — §9 rule 4 "never paste command output" vs §12 Reviewer gate "paste the literal `gh pr checks` output … approval comments without this evidence are incomplete".
+- **Expires when:** §9 and §12 stop being separately authored.
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity
