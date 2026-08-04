@@ -304,6 +304,7 @@ Use comments for:
 2. **One topic per comment.** A comment answers the questions asked and nothing else. A finding that surfaces while answering — however relevant — posts as its own comment with its own thread status. Bundling makes a thread unresolvable: it cannot be closed while any of its topics stays open, so a multi-topic comment leaves `Thread Status` with no coherent value.
    > Replying to several questions **that were genuinely asked together** in one comment is fine and expected — this is not a one-reply-per-question rule. What it prohibits is an *unasked* finding smuggled into an answer.
 3. **Length cap: ~150–200 words per comment**, checked with `wc -w` at the Commenter gate (§12). Exemption: QA validation reports (per-AC evidence) may be longer — thoroughness there is high-signal. The cap targets re-argued reasoning, not evidence.
+   > **Draft to the shape, not to the counter.** Before writing, decide the shape: **one short paragraph per topic** — decision first, one-line why, pointer to the evidence. A comment drafted that way lands near the cap without anyone counting. The `wc -w` check is a **backstop that should almost never fire**, not the drafting method: a long draft cut down to 200 words costs several full re-reads of your context and produces worse prose than 200 words written deliberately. If the check fails by more than a little, the fix is usually that you bundled a second topic (rule 2) — split it, don't compress it.
 4. **Evidence by pointer, not transcript.** Applies to issue comments and PR comments alike. Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread. **Never paste command output, check transcripts, or verification logs into a comment** — state the verdict in one line and cite the working record. A reader who needs the transcript can open it; a reader who does not pays for it on every read of the thread.
    > **Single carve-out — gate-mandated CI evidence.** The literal `gh pr checks <PR-number>` output that the §12 Reviewer gate requires in a **PR approval comment** is a mandated audit artifact and is exempt from this rule. It is the *only* exemption: no other output, transcript, or log may be pasted, in any comment, by any role.
 5. **Body edits are announced, not reproduced.** When a comment's decision is written into the story body in the same pass (§3), the comment states which section changed, what kind of change, and why — never the resulting body text. The body is current truth; the comment is the reason it changed. Reproducing the new wording creates a second copy that goes stale on the next edit and then contradicts the body.
@@ -416,7 +417,13 @@ Applies to all reviewer roles (Technical Lead, Developer peer review):
 
 ### Commenter — Before Posting an Issue Comment
 
-Applies to every role, on every issue comment:
+Applies to every role, on every issue comment.
+
+**Before you draft** — one line, and it is what makes the rest of this gate cheap:
+
+- [ ] Shape chosen: one short paragraph per topic — decision, one-line why, pointer (§9 rule 3)
+
+**Before you post:**
 
 - [ ] Answers only the questions asked — a new finding gets its own comment (§9 rule 2)
 - [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4). The `gh pr checks` carve-out belongs to PR approval comments only; it never applies here
@@ -425,6 +432,8 @@ Applies to every role, on every issue comment:
 - [ ] Word count checked — `wc -w` ≤ 200, or a stated exception
 
 > **Stated exception:** QA per-AC validation evidence (§9 rule 3) may exceed the cap. Note the exception in the comment; do not silently skip the check.
+>
+> **If the count fails, don't start truncating.** Re-check the first item instead: an over-length draft is usually a bundled second topic (rule 2) or a pasted transcript (rule 4), and both are fixed by removing something whole rather than by compressing everything. Iterative trim-and-recount is the most expensive way to reach 200 words — each pass re-reads your entire context.
 
 **Only then:** Post the comment
 
@@ -559,7 +568,7 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17  
-**Version:** 2.9 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check (ST-000038)  
+**Version:** 2.9 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)  
 **Previous:** 2.8 — §2, §7, §11, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row  
 **Previous:** 2.7 — §2: optional sections legitimized (Technical Scope / API Spec Reference / Design Source) + one-list-per-concern; §3: AC hygiene + Body Amendments edit-time rules; §9: comment-writing standard (decision-first, capped, evidence by pointer)
 

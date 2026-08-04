@@ -70,7 +70,7 @@ Validation results and findings per AC.
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
 - **One topic per comment** — a finding outside the AC you were asked to validate gets its own comment, not a paragraph inside the validation report.
-- **Writing standard:** decision-first (first line = the verdict), evidence by pointer, corrections state the delta only, no comments about comments, one close-out line per thread. **Never paste raw command output or test transcripts** — one-line verdict per AC, full logs in your working record. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Writing standard:** decision-first (first line = the verdict), evidence by pointer, corrections state the delta only, no comments about comments, one close-out line per thread. **Never paste raw command output or test transcripts** — one-line verdict per AC, full logs in your working record. **Draft to shape:** your shape is one line per AC — criterion, verdict, pointer — so length follows the AC count and never needs trimming down. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
 - **Exemption — yours alone:** per-AC validation reports may exceed the general ~150–200 word cap; thorough per-AC evidence is high-signal and expected. The gate's `wc -w` item is satisfied by stating the exemption in the comment — it is an exemption from the *cap*, not from the transcript and one-topic rules, which still apply.
 
 ---
