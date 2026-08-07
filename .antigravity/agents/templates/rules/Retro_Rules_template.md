@@ -1,0 +1,120 @@
+# Retro Rules
+
+**Applies to:** All pipeline agents (Developer, Technical Lead, QA, Product Owner, Business Analyst)
+
+---
+
+## When to Write
+
+At the end of your stage work, **before reporting back to the orchestrator**, write your retrospective section to the story retro file. The orchestrator creates this file at Stage 1 with `*(pending)*` placeholders — overwrite only your own section.
+
+**File path:** `.antigravity/agents/retros/ST-XXXXXX_retro.md` (the story ID is passed in your spawn prompt)
+
+**Your section heading** matches your role:
+- Implementer → `## Implementer — <your role>`
+- Reviewer → `## Reviewer — <your role>`
+- QA validator → `## QA`
+- Story closer → `## Product Owner`
+
+---
+
+## Three Fixed Questions
+
+Answer these three questions in your section. Bullet points only. Be specific to this story.
+
+### 1. Impediments & Unclear Points
+
+Things that slowed you down or required an unguided judgement call: missing permissions, incorrect technical design, ambiguous AC, unclear workflow steps.
+
+Prefix each bullet with its signal type:
+- `[context]` — gap in priming docs, memory files, or project context
+- `[instruction]` — gap or improvement needed in an agent instruction file
+- `[workflow]` — gap or improvement needed in a workflow file
+- `[failure]` — recurring failure pattern that needs a guardrail or rule
+
+If nothing: write `- None.`
+
+### 2. Process Suggestions
+
+Concrete suggestions to improve the process, workflow files, or instruction files — based only on what you directly encountered this story. Use the same signal-type prefixes.
+
+If nothing: write `- None.`
+
+### 3. What Worked Well
+
+Things that should be explicitly preserved: a rule that caught a real problem, a workflow step that ran smoothly, a pattern that produced good output.
+
+No signal-type prefix needed.
+
+If nothing: write `- None.`
+
+---
+
+## Writing Rules
+
+1. **Lesson-first bullets.** Each bullet leads with the lesson/finding; evidence is a one-line pointer (PR/commit/comment reference), never an embedded verification narrative. Soft cap ~3 sentences per bullet. The verification sequence itself is already recorded in the PR, issue comments, and your working record — the retro must not become another copy of the session.
+2. **Shared story-level lessons.** A lesson that applies across roles goes **once** in a `## Story-Level Lessons` section at the top of the retro file (written by whichever role records it first; later roles may refine it in place). Your own section then holds only role-specific friction and references the shared lesson — never restates it in full.
+3. **Reinforced lessons are pointers.** If a lesson already exists in this retro, a prior retro, or a memory fact, record it as a one-line `Reinforces: <pointer>` entry — never a fresh derivation.
+4. **Addenda state the delta.** A fix-loop addendum records what the loop **changed** about the retro's conclusions (new lesson, revised finding) — not a replay of the verification performed, which belongs in the PR/issue record.
+
+---
+
+## Scope Rule
+
+Only report observations that arose **directly from your work on this story**. Do not carry over observations from other stories worked in the same session.
+
+---
+
+## Privacy Rule
+
+Signal items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) must be written in **generic, project-neutral language**. Do not reference:
+
+- Project names or repo names
+- Domain-specific file paths (e.g., `src/billing/invoices/`, `apps/core/models/user.py`)
+- Business logic terms specific to the current project (e.g., "invoice approval flow", "ABAC policy editor")
+- Client names, user identifiers, or environment-specific identifiers
+
+**Why:** Retrospective signals feed the devkit improvement process. Domain-specific references make signals non-transferable and may expose client or project details.
+
+**Self-check — before writing a signal item, ask:** "Could this bullet appear unchanged in a retro for a completely different project?"
+
+**Bad (project-specific):**
+> `[workflow]` The `src/billing/invoices/` path was missing from the sprint summary — the privacy scan step skipped it
+
+**Good (generic):**
+> `[workflow]` A domain-specific subdirectory was absent from the sprint summary — the privacy scan step did not detect it; add an explicit path-enumeration step
+
+---
+
+## Sprint-End Memory Pruning
+
+Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common.md §2` rule 3).
+
+For each `.antigravity/agents/memory/*_Memory.md` file (glob, all roles):
+1. Apply the inclusion test and "Never record" list from `Agent_Common.md §2` to every `## Stored Facts` entry.
+2. Delete or merge: facts whose `Expires when` premise has been met, duplicate/superseded facts, and history-only entries with no future action.
+3. Leave `## Troubleshooting Facts` entries as-is unless the same test clearly applies — they are already tied to a specific fix and less prone to the drift this step targets.
+4. Report a one-line summary per file to the user (kept / pruned counts). No edit needed if nothing qualifies for removal.
+
+This step does not enforce the ≤ 10,000-character cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
+
+---
+
+## Format
+
+Overwrite the `*(pending)*` placeholders in your section only. Do not touch other agents' sections.
+
+Example of a completed section:
+
+    ## Implementer — Developer
+    ### Impediments & Unclear Points
+    - `[context]` AC listed two alternate resolution paths — required a blocking TL question before starting
+    - `[workflow]` Design-first gate too coarse for pure interface extractions
+
+    ### Process Suggestions
+    - `[context]` Story author should commit to a single authorised path at creation time
+    - `[workflow]` Clarify that pure concrete-to-interface extraction does not require a design comment
+
+    ### What Worked Well
+    - Caller-trace rule worked as intended — all call sites traced before touching any file
+    - Integration-test skip rule applied without ambiguity

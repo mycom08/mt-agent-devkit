@@ -1,0 +1,19 @@
+# QA Working Record
+
+**Story:** ST-000037
+**Completed:** QA validation of PR #104 (`sync devkit`/`update project` audit-injection stage, `Type: behavioral`, full path). All 14 AC independently re-derived from live branch content at `88bd8dc` (CI-verified head). Traced AC4/AC5's "Stage 2 written-files log" scope claim to real pre-existing mechanisms (per-write log instruction, "Log every file written", "Checksum skip is silent") rather than accepting the prose. Independently re-confirmed round-1 CR-1's ripple closure via corpus-wide grep (zero remaining `9 verbatim`/`19 rules` sites outside historical record). Layer-1 gate differential (matched worktrees): 67 `[ERROR]`/0 `[KNOWN_ISSUE]` both sides, single pre-existing line-shift, zero new. Fixture suite 5/5 PASS; `bash -n` clean. Two-mode scaffold-output regression diff (`QA_Memory.md` Fact 4, since story touches `scaffold_mechanical.sh`) — only intended deltas, no unexpected files. CI green, head_sha matches exactly. Test scenario committed (`docs/feature/ST-000037/test-scenarios/ST-000037_Test_Scenarios.md`, commit `4ad8b25`, pushed). QA sign-off posted on issue #102. New QA_Memory Fact 10 (trace runtime-mechanism claims before accepting AC scope). Merge gate handed to orchestrator (not executed by QA per this run's instructions).
+**In Progress:** — (closed, awaiting orchestrator-run merge)
+**Impediments:** None — primary working tree had pre-existing uncommitted local edits to `Agent_Common.md`/`.gitignore` from an earlier session (not mine, unrelated to this story); left untouched, committed only the test scenario file by explicit path.
+
+**Story:** ST-000035
+**Completed:** QA validation of PR #103 (`audit agent files` workflow, `Type: non-behavioral`, full path per detection-mechanics complexity). All 18 AC independently re-derived from live branch file content, not either TL review round's summary. Traced all 4 finding classes (`D-n`/`RP-n`/`C-n`/`X-n`) and all 3 crash-recovery states (`pending-approval`/`applying`/`complete`) by hand for internal consistency. Independently confirmed 2 of TL's non-blocking nits (Mandatory Reading heading coverage; reverted-batch leftover branch) are real but non-blocking. Corrected regression-check methodology: a direct (non-worktree) validator run undercounted by 14 lines (53 vs true 67 `[ERROR]`) due to gitignored `working-record/*.md` files present on disk; re-ran from matched `git worktree` checkouts of `main` and PR head — 70 total findings both sides, byte-identical sorted diff, zero new. QA_Memory Fact 2 corrected (worktree comparison is now mandatory, not just working-tree-disturbance avoidance). Test scenario committed (`docs/feature/ST-000035/test-scenarios/ST-000035_Test_Scenarios.md`, commit `d1b7371`). QA sign-off posted on issue #100. Merge gate handed to orchestrator (not executed by QA per this run's instructions).
+**In Progress:** — (closed, awaiting orchestrator-run merge)
+**Impediments:** None — local checkout was 3 commits behind remote (TL retro/memory-only commits); reconciled via merge (commit `c954406`) rather than disturbing intentionally-uncommitted local retro content, preserving TL's more precise corrected figures.
+
+**Story:** ST-000028
+**Completed:** QA validation of PR #87 (`refine prototype` workflow, `Type: behavioral`, full path). All 9 AC independently re-derived from live file content, not TL's review summary. Independently re-verified TL's round-2 CR-1/CR-2/CR-3 fixes by grep (zero remaining devkit-only path references) and by reading the resume-branch logic directly. Layer-1 gate + `scripts/test/run.sh` (5/5 PASS) both green; CI green. Test scenario committed. QA sign-off posted on #84. Merged, closed `status:done`.
+**In Progress:** — (closed)
+**Impediments:** None.
+
+**Blockers & Watch-outs:**
+- (none currently active)
