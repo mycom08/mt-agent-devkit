@@ -51,7 +51,7 @@ The orchestrator conducts the entire Q&A loop directly using the natural convers
 5. Orchestrator asks the next question, explicitly building on all prior answers
 6. Repeat steps 4–5 until the orchestrator judges it has sufficient information for a complete spec (all features, constraints, open decisions, and non-functional requirements covered)
 7. Orchestrator writes the full Q&A log to `/result/analyst/elicitation_notes.md`
-8. **Spawn** BA agent (**model: sonnet**); save its `conversationId` as `ba_session`
+8. **Spawn** BA agent (**model: Gemini Pro**); save its `conversationId` as `ba_session`
 9. BA reads `business_analyst_instructions.md` + its memory files + `elicitation_notes.md`
 10. BA writes:
     - `spec.md` — the full elicited specification
@@ -160,7 +160,7 @@ Agents omit a section entirely if they have nothing to add to it. The `UI/UX Des
 1. **UI layer detection (orchestrator-direct, before any spawn).** `architecture.md` doesn't exist yet at this point — TL writes it *during* this stage — so detection cannot read "repo tech stack." Instead, the orchestrator reads `spec.md` + `business_requirements.md` (already on disk from Stage 1) and decides: does the product name a web/mobile/desktop UI surface (a screen, dashboard, app, GUI, frontend)? This is a judgment call, same class as the mandatory CI/CD question elsewhere in this stage — not a literal keyword match.
    - **If yes** → UI/UX Designer joins the parallel wave (step 2).
    - **If no** → proceed with just TL + PO; skip every UI/UX-Designer-conditional step below for the rest of Stage 2.
-2. **Spawn** TL agent (**model: opus**), PO agent (**model: sonnet**), and — only if step 1 detected a UI layer — UI/UX Designer agent (**model: sonnet**) in the **same orchestrator message** — they run in parallel
+2. **Spawn** TL agent (**model: Gemini Pro, effort: high**), PO agent (**model: Gemini Pro**), and — only if step 1 detected a UI layer — UI/UX Designer agent (**model: Gemini Pro**) in the **same orchestrator message** — they run in parallel
    - Save TL `conversationId` as `tl_session`; save PO `conversationId` as `po_session`; if spawned, save UI/UX Designer `conversationId` as `uiux_session`
 3. TL reads `spec.md` + `business_requirements.md`:
    - Writes `architecture.md` covering: architecture choices, component design, data handling details, error handling strategies, CI/CD & deployment strategy, API-contract strategy, and any alternatives considered. Every diagram (Mermaid `.mmd` or PlantUML `.puml`) is written as a separate file under `diagrams/` and linked from `architecture.md` — never embedded inline.
@@ -183,7 +183,7 @@ Agents omit a section entirely if they have nothing to add to it. The `UI/UX Des
    - **Proactively suggests** screen or flow simplifications — writes these to `discussion.md` under `## UI/UX Designer Suggestions`
    - Writes unresolvable questions to `discussion.md` under `## UI/UX Designer Questions`
 6. TL, PO, and (if spawned) UI/UX Designer each report completion to the orchestrator when done (max 5 bullets each) — these are independent background completions, not a joint synchronization point
-7. **As soon as TL reports completion** — independent of PO's and UI/UX Designer's progress, since `testing_plan.md` is derived from `architecture.md` and has no data dependency on `implementation_roadmap.md` or `ui_design.md` — **spawn or resume** QA agent (**model: sonnet**) via `qa_session` (spawn new if no session exists)
+7. **As soon as TL reports completion** — independent of PO's and UI/UX Designer's progress, since `testing_plan.md` is derived from `architecture.md` and has no data dependency on `implementation_roadmap.md` or `ui_design.md` — **spawn or resume** QA agent (**model: Gemini Pro**) via `qa_session` (spawn new if no session exists)
    - QA reads `spec.md` + `business_requirements.md` + `architecture.md` (including the Testability Notes section)
    - Writes `testing_plan.md` covering: unit, integration, E2E strategy, risk-based prioritisation, environments, entry/exit criteria, acceptance-criteria hints
    - **Proactively suggests** test-strategy improvements or flags architecture testability gaps — writes these to `discussion.md` under `## QA Suggestions`
@@ -307,13 +307,13 @@ The PO writes this document in the same style as a Scrum implementation roadmap.
 ### Stage 2b — User Discussion (questions and suggestions)
 
 1. Orchestrator reads `discussion.md`; if the file does not exist or is empty → skip to Stage 2c
-2. **Spawn or resume** BA (**model: sonnet**) via `ba_session`; BA reads `discussion.md` and answers only the questions it can definitively resolve from `spec.md` and `business_requirements.md` — writes answers inline beneath each question; marks unanswerable questions `NEEDS_USER`; does not touch the `Suggestions` sections
+2. **Spawn or resume** BA (**model: Gemini Pro**) via `ba_session`; BA reads `discussion.md` and answers only the questions it can definitively resolve from `spec.md` and `business_requirements.md` — writes answers inline beneath each question; marks unanswerable questions `NEEDS_USER`; does not touch the `Suggestions` sections
 3. Orchestrator collects all remaining `NEEDS_USER` questions and all `SUGGEST` items from `discussion.md`
 4. Orchestrator presents each item to the user **one at a time** in this order: questions first, then suggestions
    - For questions: ask the user directly and record the answer
    - For suggestions: present the suggestion with its rationale and ask the user to accept, reject, or modify
-5. After all items are addressed, orchestrator **resumes TL and PO in parallel** (via saved sessions; if session expired spawn new: TL **model: opus**, PO **model: sonnet**) with a summary of all user answers and decisions; TL and PO update their documents accordingly. **If `uiux_session` is populated** (a UI/UX Designer was spawned this Stage 2a), resume it in the **same parallel message** (spawn new if expired: **model: sonnet**) with the same summary; UI/UX Designer updates `ui_design.md` accordingly if any answer or suggestion changed the screen/component inventory, layout, or interaction notes.
-6. **After TL's resume in step 5 completes** (sequenced, not parallel with step 5 — QA derives `testing_plan.md` from `architecture.md`, so it must see TL's updated output, not stale content): if TL's update this cycle **changed `architecture.md`** (including its Testability Notes section), **resume** QA (via `qa_session`; spawn new if expired: **model: sonnet**) with TL's updated `architecture.md` and a summary of user answers/decisions; QA updates `testing_plan.md` accordingly. Skip this sub-step if `architecture.md` was not changed this cycle — QA's own `## QA Questions`/`## QA Suggestions` items being answered does not by itself require a resume unless the answer also changed `architecture.md`; the answers already live in `discussion.md` for QA to pick up on its next natural spawn.
+5. After all items are addressed, orchestrator **resumes TL and PO in parallel** (via saved sessions; if session expired spawn new: TL **model: Gemini Pro, effort: high**, PO **model: Gemini Pro**) with a summary of all user answers and decisions; TL and PO update their documents accordingly. **If `uiux_session` is populated** (a UI/UX Designer was spawned this Stage 2a), resume it in the **same parallel message** (spawn new if expired: **model: Gemini Pro**) with the same summary; UI/UX Designer updates `ui_design.md` accordingly if any answer or suggestion changed the screen/component inventory, layout, or interaction notes.
+6. **After TL's resume in step 5 completes** (sequenced, not parallel with step 5 — QA derives `testing_plan.md` from `architecture.md`, so it must see TL's updated output, not stale content): if TL's update this cycle **changed `architecture.md`** (including its Testability Notes section), **resume** QA (via `qa_session`; spawn new if expired: **model: Gemini Pro**) with TL's updated `architecture.md` and a summary of user answers/decisions; QA updates `testing_plan.md` accordingly. Skip this sub-step if `architecture.md` was not changed this cycle — QA's own `## QA Questions`/`## QA Suggestions` items being answered does not by itself require a resume unless the answer also changed `architecture.md`; the answers already live in `discussion.md` for QA to pick up on its next natural spawn.
 7. Orchestrator increments `Discussion Cycle` in the state file
 8. **Loop limit:** Max 2 discussion cycles. After cycle 2 → orchestrator records any remaining unresolved items as open decisions and continues to Stage 2c
 
@@ -323,14 +323,14 @@ The PO writes this document in the same style as a Scrum implementation roadmap.
 
 **BA finalises requirements:**
 
-1. **Spawn or resume** BA (**model: sonnet**) via `ba_session`
+1. **Spawn or resume** BA (**model: Gemini Pro**) via `ba_session`
 2. BA reads all output documents (`business_requirements.md`, `architecture.md`, `testing_plan.md`, `implementation_roadmap.md`, and `ui_design.md` if it exists) and the resolved `discussion.md`
 3. BA updates `business_requirements.md` to reflect any decisions made during Stage 2b
 4. BA reports completion to the orchestrator (max 5 bullets)
 
 **TL writes human-readable summary:**
 
-5. **Resume** TL via `tl_session` (spawn new if expired: **model: opus**); TL reads all finalised output documents and writes `/result/analyst/summary.md`.
+5. **Resume** TL via `tl_session` (spawn new if expired: **model: Gemini Pro, effort: high**); TL reads all finalised output documents and writes `/result/analyst/summary.md`.
 
    **Writing goal:** Anyone — developer, product manager, or stakeholder — who has never seen this feature should be able to read `summary.md` alone and understand what is being built, why the architecture is shaped the way it is, and what the delivery plan looks like. Write in plain language — no agent-speak, no placeholder prose. Every section must contain real content.
 

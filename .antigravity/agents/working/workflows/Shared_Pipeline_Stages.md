@@ -126,7 +126,7 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
-1. **Spawn** the agent matching the `Implementer` role (**model: sonnet**)
+1. **Spawn** the agent matching the `Implementer` role (**model: Gemini Pro**)
    > **Spawn-prompt reminder (mandatory-reading references):** when the spawn prompt points the agent at a Story Standard file, name only the role-scoped variant already gated by that role's own Rules file (e.g. `Story_Standard_Dev.md` for Developer, `Story_Standard_TL.md` for Technical Lead) — never phrase it as "`Story_Standard.md` (or the role-scoped variant if one exists)". Offering both as options causes the agent to read the full cross-role file needlessly; the role's own Rules file gate already resolves which one to read.
 2. **Immediately write `impl_session: <conversationId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
@@ -153,9 +153,9 @@ When the implementer returns with a mid-implementation consultation report inste
 1. **Read the report** — identify `Owner` (TL / PO / both) and the specific `Question`.
 
 2. **Spawn or resume the answering agent(s):**
-   - If `Owner` is TL → spawn/resume Technical Lead (**model: sonnet**) with the question and story context
-   - If `Owner` is PO → spawn/resume Product Owner (**model: sonnet**) with the question and story context
-   - If `Owner` is both → spawn both in parallel (**model: sonnet** for each) (single orchestrator message)
+   - If `Owner` is TL → spawn/resume Technical Lead (**model: Gemini Pro, effort: high**) with the question and story context
+   - If `Owner` is PO → spawn/resume Product Owner (**model: Gemini Pro**) with the question and story context
+   - If `Owner` is both → spawn both in parallel (**model: Gemini Pro** for each) (single orchestrator message)
 
    Spawn prompt must include:
    - Story ID and GitHub Issue number
@@ -213,9 +213,9 @@ After the implementer reports completion, append a bullet to `Observations:` for
 ### Behavioral path (`Type: behavioral`)
 
 1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `conversationId` as `reviewer_session`
-   - Default: **Technical Lead** reviews (**model: opus**)
-   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: sonnet**)
-   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus.
+   - Default: **Technical Lead** reviews (**model: Gemini Pro, effort: high**)
+   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: Gemini Pro**)
+   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: Gemini Pro** instead of Gemini Pro, effort: high.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules.md §2` for the full checklist).
@@ -250,7 +250,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-5. **Spawn** QA agent (**model: sonnet**); save its `conversationId` as `qa_session`
+5. **Spawn** QA agent (**model: Gemini Pro**); save its `conversationId` as `qa_session`
 6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules.md`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
    - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust it. Skip the test-scenario document per `QA_Rules.md §4`'s verification-only exception.
@@ -292,7 +292,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-1. **Spawn** Product Owner agent (**model: haiku**); save its `conversationId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
+1. **Spawn** Product Owner agent (**model: Gemini Flash Lite**); save its `conversationId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
    - `.antigravity/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
    - `.antigravity/agents/working/rules/Product_Owner_Rules.md`

@@ -59,7 +59,7 @@ Before doing anything else, glob `.antigravity/agents/internal/audit_report_*.md
 
 ## Stage 1 — Spawn Scan Subagent
 
-Spawn **one general-purpose agent** (**model: sonnet**) with a fully self-contained inline prompt (the agent has no memory of this conversation):
+Spawn **one general-purpose agent** (**model: Gemini Pro**) with a fully self-contained inline prompt (the agent has no memory of this conversation):
 
 ```
 Scan the mt-agent-devkit corpus for Tier A audit findings and return a compact finding list — never the raw file contents you read.
