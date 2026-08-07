@@ -20,12 +20,14 @@ You can run the following workflows when the user triggers them:
 
 ## Subagent Primitive Mapping
 
-When orchestrating workflows in Antigravity, use the `invoke_subagent` tool instead of Claude's `<Agent>` tags.
+When orchestrating workflows in Antigravity, use the `define_subagent`, `invoke_subagent` and `send_message` tools.
 
 Example mapping:
 1. Orchestrator reads target agent's instructions (e.g. `Developer_Instructions.md`)
-2. Orchestrator calls `invoke_subagent` with the instruction file content passed into the subagent's prompt, along with the specific task.
-3. Set `Workspace: "share"` so all subagents can view and modify the exact same repository files.
-4. When you need to resume an agent with feedback, use the `send_message` tool passing the agent's `ConversationId`. Wait for the agent to reply asynchronously via the inbox.
+2. Orchestrator uses `define_subagent` to register the agent (e.g. `TypeName: "Developer"`), passing the instruction file content into `system_prompt`.
+3. Orchestrator calls `invoke_subagent` to spawn the agent for the specific task.
+4. **Workspace:** Set `Workspace: "share"` in the `invoke_subagent` call so all subagents can view and modify the exact same repository files.
+5. **Asynchronous Execution:** After calling `invoke_subagent` or `send_message`, you MUST stop executing tools and wait for a reply message in your inbox. Do not proceed to the next stage until the subagent explicitly messages you.
+6. When you need to resume an agent with feedback, use the `send_message` tool passing the agent's `ConversationId`. Wait for the agent to reply asynchronously via the inbox.
 
-**Important:** Do NOT spawn an agent using Claude XML tags. Always use `invoke_subagent` and `send_message`.
+**Important:** Do NOT spawn an agent using Claude XML tags. Always use `define_subagent` followed by `invoke_subagent` and wait for a reply.

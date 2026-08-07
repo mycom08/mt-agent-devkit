@@ -377,7 +377,12 @@ Do not proceed to Stage 4 until the user explicitly confirms.
 ## Stage 4 — Write Files
 
 1. **Run the mechanical tier first, in one call:**
+   If on Windows (pwsh), run:
+   ```powershell
+   powershell -File .antigravity/agents/working/scripts/scaffold_mechanical.ps1 -DevkitRoot <devkit_root> -TargetProject <TARGET_PROJECT> -Mode <mode> -GhSlug [github-org/repo-name]
    ```
+   If on Mac/Linux, run:
+   ```bash
    bash .antigravity/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
    This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 10 verbatim rules files, all 10 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.

@@ -86,7 +86,7 @@ Validation results and findings per AC.
 
 ## 15. Shell Command Rules — Permissions and Tool Choice
 
-**Always use Bash (not PowerShell) for all `gh` CLI calls.** Never prepend `cd /path` to a command; the working directory is already set.
+**Use either PowerShell or Bash for `gh` CLI calls (PowerShell is preferred on Windows).** Never prepend `cd /path` to a command; the working directory is already set.
 
 For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
 
