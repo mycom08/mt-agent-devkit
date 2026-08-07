@@ -66,17 +66,17 @@ If an agent identifies an error or improvement needed in a rules or workflow fil
 
 ## Agent Session Management
 
-The orchestrator tracks the `agentId` returned by every spawned agent. On loop-back, always prefer resuming over spawning:
+The orchestrator tracks the `conversationId` returned by every spawned agent. On loop-back, always prefer resuming over spawning:
 
 | Situation | Action |
 |---|---|
-| Loop-back to a stage whose agent is still active | **Resume** — `SendMessage` to the saved `agentId` with the new feedback |
+| Loop-back to a stage whose agent is still active | **Resume** — `send_message` to the saved `conversationId` with the new feedback |
 | Loop-back but session has expired or ID is unavailable | **Spawn** — new `Agent` call with a fully self-contained prompt |
 | First entry to any stage | **Spawn** — new `Agent` call |
 
 Resuming keeps the agent's full prior context so it can act on feedback immediately without re-reading everything from scratch.
 
-**Session ID update rule:** Only overwrite a saved session ID when a **new agent is spawned**. When resuming via `SendMessage`, do not change the stored ID — the interaction does not produce a new session.
+**Session ID update rule:** Only overwrite a saved session ID when a **new agent is spawned**. When resuming via `send_message`, do not change the stored ID — the interaction does not produce a new session.
 
 ---
 

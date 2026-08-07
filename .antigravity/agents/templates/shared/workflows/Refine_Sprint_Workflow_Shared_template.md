@@ -32,16 +32,16 @@ The orchestrator maintains `.antigravity/agents/tmp/refine_pipeline_state.md` to
 **Stage:** <1 | 2 | 3 | 4>
 **Loop Count:** <per-story loop counts, e.g. "#125: 1, #126: 1">
 **Sessions:**
-- dev_session: <agentId or empty>
-- tl_session: <agentId or empty>
-- qa_session: <agentId or empty>
-- ba_session: <agentId or empty>
-- po_session: <agentId or empty>
+- dev_session: <conversationId or empty>
+- tl_session: <conversationId or empty>
+- qa_session: <conversationId or empty>
+- ba_session: <conversationId or empty>
+- po_session: <conversationId or empty>
 **Updated:** YYYY-MM-DDTHH:MM
 **Observations:**
 ```
 
-**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each stage transition. Update `Sessions` on spawn only — never overwrite a session ID when resuming via SendMessage. Increment per-story loop count at the start of Stage 3. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow. Delete after workflow review is complete (see Stage 4).
+**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each stage transition. Update `Sessions` on spawn only — never overwrite a session ID when resuming via send_message. Increment per-story loop count at the start of Stage 3. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow. Delete after workflow review is complete (see Stage 4).
 
 ---
 

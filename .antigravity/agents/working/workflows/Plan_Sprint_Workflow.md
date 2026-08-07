@@ -19,7 +19,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 ## Stage 1 — Current Sprint Verification (PO)
 
-1. **Spawn** Product Owner agent (**model: sonnet**); save its `agentId` as `po_session`; pass `feature_name`
+1. **Spawn** Product Owner agent (**model: sonnet**); save its `conversationId` as `po_session`; pass `feature_name`
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory + rules)
 3. PO checks the active sprint:
    - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; read its `Sprint_N_Overview.md`

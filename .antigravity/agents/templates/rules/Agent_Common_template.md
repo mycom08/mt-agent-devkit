@@ -15,7 +15,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 3. Your Rules — mandatory role rules
 4. Your Memory — durable conventions and decisions
 
-**Resumed session (continuing via `SendMessage`):**
+**Resumed session (continuing via `send_message`):**
 1. Skip Project Priming — already in context
 2. Skip your Working Record too — no other agent can write it, so a resumed agent is only re-reading its own words from earlier in the same session; nothing has changed since the last turn
 

@@ -15,7 +15,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 3. Your Rules — mandatory role rules
 4. Your Memory — durable conventions and decisions
 
-**Resumed session (continuing via `SendMessage`):**
+**Resumed session (continuing via `send_message`):**
 1. Skip Project Priming — already in context
 2. Skip your Working Record too — no other agent can write it, so a resumed agent is only re-reading its own words from earlier in the same session; nothing has changed since the last turn
 
@@ -207,7 +207,7 @@ Applies whenever you read a GitHub Issue/PR body or comment (`gh issue view`, `g
 ```md
 # <StoryID> — <Role> Step Trace
 
-**Session:** spawn | resume        <!-- resume = orchestrator sent to an existing agentId -->
+**Session:** spawn | resume        <!-- resume = orchestrator sent to an existing conversationId -->
 **Round:** <1 for first entry; increment for each loop-back>
 **Steps:** <count of the step lines below>
 

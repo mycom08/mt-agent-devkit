@@ -36,10 +36,10 @@ The orchestrator maintains `.antigravity/agents/tmp/build_software_state.md` to 
 **Java Build Tool:** <maven | gradle, shared by every Java repo in this build, or empty if not yet asked>
 **Docker Preference:** <docker | own-setup | none, shared by every repo in this build, or empty if not yet asked>
 **Sessions:**
-- tl_session: <agentId or empty>
-- po_session: <agentId or empty>
-- ba_session: <agentId or empty>
-- qa_session: <agentId or empty>
+- tl_session: <conversationId or empty>
+- po_session: <conversationId or empty>
+- ba_session: <conversationId or empty>
+- qa_session: <conversationId or empty>
 **Updated:** YYYY-MM-DDTHH:MM
 ```
 

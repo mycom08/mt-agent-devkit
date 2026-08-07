@@ -26,11 +26,11 @@ The orchestrator maintains `.antigravity/agents/tmp/analyst_workflow_state.md` t
 **Question Count:** <N>
 **Discussion Cycle:** <0 | 1 | 2>
 **Sessions:**
-- ba_session: <agentId or empty>
-- tl_session: <agentId or empty>
-- po_session: <agentId or empty>
-- qa_session: <agentId or empty>
-- uiux_session: <agentId or empty — only populated when a UI/UX Designer was spawned>
+- ba_session: <conversationId or empty>
+- tl_session: <conversationId or empty>
+- po_session: <conversationId or empty>
+- qa_session: <conversationId or empty>
+- uiux_session: <conversationId or empty — only populated when a UI/UX Designer was spawned>
 **Updated:** YYYY-MM-DDTHH:MM
 ```
 
@@ -51,7 +51,7 @@ The orchestrator conducts the entire Q&A loop directly using the natural convers
 5. Orchestrator asks the next question, explicitly building on all prior answers
 6. Repeat steps 4–5 until the orchestrator judges it has sufficient information for a complete spec (all features, constraints, open decisions, and non-functional requirements covered)
 7. Orchestrator writes the full Q&A log to `/result/analyst/elicitation_notes.md`
-8. **Spawn** BA agent (**model: sonnet**); save its `agentId` as `ba_session`
+8. **Spawn** BA agent (**model: sonnet**); save its `conversationId` as `ba_session`
 9. BA reads `business_analyst_instructions.md` + its memory files + `elicitation_notes.md`
 10. BA writes:
     - `spec.md` — the full elicited specification
@@ -161,7 +161,7 @@ Agents omit a section entirely if they have nothing to add to it. The `UI/UX Des
    - **If yes** → UI/UX Designer joins the parallel wave (step 2).
    - **If no** → proceed with just TL + PO; skip every UI/UX-Designer-conditional step below for the rest of Stage 2.
 2. **Spawn** TL agent (**model: opus**), PO agent (**model: sonnet**), and — only if step 1 detected a UI layer — UI/UX Designer agent (**model: sonnet**) in the **same orchestrator message** — they run in parallel
-   - Save TL `agentId` as `tl_session`; save PO `agentId` as `po_session`; if spawned, save UI/UX Designer `agentId` as `uiux_session`
+   - Save TL `conversationId` as `tl_session`; save PO `conversationId` as `po_session`; if spawned, save UI/UX Designer `conversationId` as `uiux_session`
 3. TL reads `spec.md` + `business_requirements.md`:
    - Writes `architecture.md` covering: architecture choices, component design, data handling details, error handling strategies, CI/CD & deployment strategy, API-contract strategy, and any alternatives considered. Every diagram (Mermaid `.mmd` or PlantUML `.puml`) is written as a separate file under `diagrams/` and linked from `architecture.md` — never embedded inline.
      - **CI/CD & deployment strategy** covers: CI tooling and per-service CI needs, target environment(s) for CD (e.g. AWS/GCP/self-hosted/undecided), how a merged PR gets from code to a running instance (deploy pipeline shape, not full IaC detail), and what "automation test" means for this project beyond unit tests (real integration/API test scope, not just "we'll add tests later"). This is a **decision to make explicit and hand to PO for roadmap stories**, not something the devkit scaffold already solves — Build Software's generated Dockerfile/docker-compose/CI only bootstrap a local-dev baseline (build, unit test, lint, a stub automation-test job) and never invent a real deploy target on their own.

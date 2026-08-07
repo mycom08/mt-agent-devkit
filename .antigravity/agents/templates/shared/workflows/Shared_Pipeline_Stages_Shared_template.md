@@ -138,7 +138,7 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
 1. **Spawn** the agent matching the `Implementer` role (**model: sonnet**)
-2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
+2. **Immediately write `impl_session: <conversationId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
 4. **Read the story:**
    - **GitHub mode:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
@@ -193,7 +193,7 @@ When the implementer returns with a mid-implementation consultation report inste
 
 3. **Collect the answer(s).** If both TL and PO are consulted, wait for both before resuming the Developer.
 
-4. **Resume the implementer** via `SendMessage` to `impl_session` (spawn new if expired). Pass:
+4. **Resume the implementer** via `send_message` to `impl_session` (spawn new if expired). Pass:
    - The answer(s) from TL and/or PO
    - A reminder of where they paused
    - Instruction to continue implementation
@@ -249,7 +249,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
 
 ### Behavioral path (`Type: behavioral`)
 
-1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `agentId` as `reviewer_session`
+1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `conversationId` as `reviewer_session`
    - Default: **Technical Lead** reviews (**model: opus**)
    - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: sonnet**)
    - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of a full environment re-verification; escalate to full re-verification only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus for verification-only reviews.
@@ -258,7 +258,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - **GitHub mode:** reviewer reviews PR (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
    - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD; appends summary comment entry to story MD `## Comments`
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers/trivial-return patterns in AC-functional methods. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules.md §2` for the full review checklist, including the CI-execution/SHA/red-diagnosis and dependency-pin checks).
-4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
+4. **If changes requested** → resume Implementer via `send_message` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `.antigravity/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 6. **If approved:**
    - **GitHub mode:** update the story label to `status:testing` — do this immediately, before proceeding to Stage 3. QA tests on the dev branch before merge; the label signals QA to begin
@@ -296,11 +296,11 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-5. **Spawn** QA agent (**model: sonnet**); save its `agentId` as `qa_session`
+5. **Spawn** QA agent (**model: sonnet**); save its `conversationId` as `qa_session`
 6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules.md`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
    - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of a full environment re-verification; escalate to full re-verification only if there's a specific reason to distrust the evidence. Skip the test-scenario document per `QA_Rules.md §4`'s verification-only exception.
-8. **If story AC issues found** → resume Implementer via `SendMessage` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `SendMessage` to `qa_session`** to revalidate (spawn new if expired)
+8. **If story AC issues found** → resume Implementer via `send_message` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `send_message` to `qa_session`** to revalidate (spawn new if expired)
 9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (see QA Rules §8–§9)
    - **If automation fails** → QA reports regression failures:
      - **GitHub mode:** as a story comment
@@ -353,7 +353,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
+1. **Spawn** Product Owner agent (**model: haiku**); save its `conversationId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
    - `.antigravity/agents/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
    - `.antigravity/agents/rules/Product_Owner_Rules.md`
