@@ -12,7 +12,7 @@ This is the **project orchestrator folder** for a multi-repo build managed by mt
 **Devkit source:** {{DEVKIT_SOURCE_URL}}
 **Devkit version:** {{DEVKIT_VERSION}}
 
-> This folder is **not** a scrum team. It does not have `continue sprint`, `plan next sprint`, `refine sprint`, or `start story` triggers. Those live in each individual repo's `CLAUDE.md`. Run sprint workflows from inside the relevant repo folder.
+> This folder is **not** a scrum team. It does not have `continue sprint`, `plan next sprint`, `refine sprint`, or `start story` triggers. Those live in each individual repo's `ANTIGRAVITY.md`. Run sprint workflows from inside the relevant repo folder.
 
 ---
 
@@ -31,7 +31,7 @@ The following repos belong to this project. All paths are absolute.
 | Trigger | What it does |
 |---|---|
 | `build software` | Phase 2 — coordinate story creation and sprint planning across all repos |
-| `sync devkit` | Pull the latest version of this folder's 3 devkit-owned files (`CLAUDE.md`, `Build_Software_Project_Workflow.md`; `Project_Priming.md` is skipped, project-owned) |
+| `sync devkit` | Pull the latest version of this folder's 3 devkit-owned files (`ANTIGRAVITY.md`, `Build_Software_Project_Workflow.md`; `Project_Priming.md` is skipped, project-owned) |
 | `workflow help` | Show this project orchestrator command reference |
 
 ---
@@ -50,7 +50,7 @@ Read `.antigravity/agents/workflows/Build_Software_Project_Workflow.md` for the 
 
 Trigger: user says **"sync devkit"** or **"sync devkit --auto"**
 
-Fetches the latest version of this folder's own devkit-templated files (`CLAUDE.md`, `.antigravity/agents/workflows/Build_Software_Project_Workflow.md`) from the devkit source and applies them, preserving `Project_Priming.md` and this folder's own `Repo Roster`/`Mode`/`Devkit source`/`Devkit version` fields untouched.
+Fetches the latest version of this folder's own devkit-templated files (`ANTIGRAVITY.md`, `.antigravity/agents/workflows/Build_Software_Project_Workflow.md`) from the devkit source and applies them, preserving `Project_Priming.md` and this folder's own `Repo Roster`/`Mode`/`Devkit source`/`Devkit version` fields untouched.
 
 Read `.antigravity/agents/workflows/Sync_Devkit_Project_Workflow.md` for the complete pipeline before executing.
 
@@ -74,11 +74,11 @@ This is the project orchestrator for a multi-repo build. Sprint execution comman
 | `sync devkit` | Pull the latest version of this folder's devkit-owned files |
 | `workflow help` | Show this reference |
 
-**To run sprint workflows, open a Claude Code session inside the target repo:**
+**To run sprint workflows, open a Antigravity session inside the target repo:**
 
 {{REPOS}}
 
-> Each repo has its own `CLAUDE.md` with `continue sprint`, `start story`, `plan next sprint`, and all other scrum team commands.
+> Each repo has its own `ANTIGRAVITY.md` with `continue sprint`, `start story`, `plan next sprint`, and all other scrum team commands.
 
 ---
 
