@@ -1,6 +1,6 @@
 # mt-agent-devkit
 
-> **AI provider support:** This devkit currently requires [Claude Code](https://claude.ai/code). It relies on Claude Code's native multi-agent primitives (`Agent`, `SendMessage`, session management, and the hook system) which are not available in other AI coding assistants. Support for additional providers (OpenAI Codex, GitHub Copilot, Gemini, etc.) is not planned at this time.
+> **AI provider support:** This devkit supports both [Claude Code](https://claude.ai/code) and **Antigravity**. It natively implements isolated, side-by-side agent infrastructure for both AI providers (`.claude/` for Claude Code and `.antigravity/` for Antigravity), allowing you to seamlessly run multi-agent agile workflows using either CLI.
 
 A Claude Code agent devkit that installs multi-agent sprint workflows into any software project. It provides a team of five specialized AI agents — Technical Lead, Developer, QA, Product Owner, and Business Analyst — that collaborate to plan, implement, review, test, and close stories end-to-end.
 
