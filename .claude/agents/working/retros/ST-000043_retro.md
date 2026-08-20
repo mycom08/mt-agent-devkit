@@ -49,13 +49,15 @@
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+- `[workflow]` The story closure task's "close the issue" step assumes the issue is still open. With a squash-merged PR carrying a closing keyword, the issue auto-closes at merge time — before PO closure ever runs — so `gh issue close --comment` errors out on the already-closed state and silently drops the intended comment.
+- `[workflow]` This story's QA stage was explicitly skipped by user instruction, so there was no QA testing-pass comment to serve as the closing signal AC rules normally require. Closure instead relied on the reviewer's CHANGES-REQUESTED → fix → re-review-request comment sequence plus the merge event itself — a reasonable substitute, but the rule set has no explicit fallback naming what the authoritative signal is when the QA stage is the one being skipped.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` Story closure should check issue state before calling `gh issue close`, and always post the summary comment via a plain comment call regardless of whether the close call itself succeeds — otherwise the closure rationale never lands on an issue that closed automatically at merge.
+- `[workflow]` Name the alternate authoritative closing signal (reviewer approval sequence + merge) for the documented skip-QA case, so PO closure doesn't have to improvise it story by story.
 
 ### What Worked Well
-*(pending)*
+- The reviewer's PR-review comment did genuine independent re-verification per AC (byte-level section diff, dry-run script execution, manifest cross-check) rather than trusting the PR description — that made the closure spot-check fast: re-running a handful of targeted checks (validator, changes.json entry, protected-paths row, template files present) against `main` reproduced the same conclusions in minutes instead of a full re-audit.
 
 ## Orchestrator
 ### Observations
