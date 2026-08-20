@@ -44,6 +44,9 @@ Keywords: sync/update workflow expected-files list, merge-tier check, project-mu
 ### Fact 12 — Inline ALL-CAPS shell variable in prose trips the validator's placeholder check
 Keywords: `validate_templates.py` Invariant #2, single-backtick code span, `${START}`, placeholder false positive, lowercase shell variable
 
+### Fact 13 — Restatement-pretending-to-be-a-pointer; `Agent_Common.md` §1 (mirror) vs §5 (template) numbering split
+Keywords: bare pointer, restated rule, `Agent_Common.md`, `Agent_Common_template.md`, section number divergence, working record retention, paying twice, Troubleshooting Protocol precedent, Stage-Transition Commit precedent
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity
