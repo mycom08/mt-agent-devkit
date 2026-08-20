@@ -13,7 +13,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 1. Project Priming — canonical project overview, architecture, document locations
 2. Your Working Record — last session's progress and impediments
 3. Your Rules — mandatory role rules
-4. Your Memory — durable conventions and decisions. Developer/QA/Technical Lead: this means the live index file only — see §12 for the two-tier split and when to also open the archive.
+4. Your Memory — durable conventions and decisions. Developer/QA/Technical Lead: see §12.
 
 **Resumed session (continuing via `SendMessage`):**
 1. Skip Project Priming — already in context
@@ -76,7 +76,7 @@ Update your memory file when you encounter a fact worth remembering for future s
 
 > PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The four-field Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts is unchanged and stays scoped to Dev/TL/QA.
 
-> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above.** See §12 — their `## Stored Facts` four-field bodies live in a separate archive file, and the always-read memory file holds only a lean index. PO, BA, and UI/UX Designer are unaffected — their memory files stay small enough that a single file is still the right shape.
+> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above** — see §12. PO, BA, and UI/UX Designer are unaffected.
 
 ---
 
@@ -237,20 +237,13 @@ If the completion report does not make clear which of the two it is, write `(unl
 
 ## 12. Two-Tier Memory (devkit-internal pilot — Developer, QA, Technical Lead only)
 
-**Why devkit-only, and why only three roles.** Follow-up to issue #118 (itself a follow-up to #92/ST-000033, which shipped the single-file cap). A memory file is read in full at **every** spawn regardless of whether the current task touches any of it (§1 step 4) — a cap alone doesn't fix that cost, it only delays the same ceiling. Validated once end-to-end on a real subagent spawn against a lean-vs-full split (see issue #118 for the measured 76–83% per-spawn read reduction). Not yet proven at scale — reliability of keyword-tag recall for a low-salience fact, and of the bounded-read behavior below without an explicit instruction, is still open. Piloted on this devkit's own team first, deliberately not mirrored to `templates/` — `Agent_Common_template.md` keeps the single-file §2 format target projects use. PO, BA, and UI/UX Designer memory files stay single-file (§2) — their content is small enough that a split has no payoff yet.
+Issue #118 follow-up, not mirrored to `templates/`. Each role's `## Stored Facts` splits across two files:
 
-**The split.** Each of the three roles' `## Stored Facts` section is split across two files:
+- **`<Role>_Memory.md`** (live, read every spawn): **Standing Checks** — unconditional always-do actions, no recall needed (leave `*(none yet)*` if none qualify) — plus a **Keyword Index**: one line per fact, `### Fact N — <short title>` + a `Keywords:` line, no fact body. `## Troubleshooting Facts` stays here too, unchanged §2 shape.
+- **`<Role>_Memory_Archive.md`** (conditional — open only on a keyword match): full four-field bodies, unchanged §2 shape.
 
-- **`<Role>_Memory.md`** (live — read every spawn, per §1 step 4): a lean index only, no fact bodies.
-  - **Standing Checks** — a fact that reduces to an unconditional always-do action regardless of task (e.g. "before every commit in a shared dir, re-run `git branch --show-current`"). No recall needed; the condition is structural, not something that has to match the current task. Most facts do not qualify — leave this section empty (`*(none yet)*`) rather than force a fit.
-  - **Keyword Index** — everything else: one line per fact, `### Fact N — <short title>` plus a `Keywords:` line of literal grep-able terms (error strings, function/file names, story IDs) — no `Rule`/`Applies when`/`Evidence`/`Expires when` body. Before starting a task, scan the titles and keywords for a match against what you're about to touch.
-  - `## Troubleshooting Facts` is **not** split — it stays in the live file, in its existing §2 shape, unchanged. It is typically small and §3's Step 1 already requires scanning it directly.
-- **`<Role>_Memory_Archive.md`** (conditional — opened only when an index line matches): every fact's full four-field body, unchanged from the single-file §2 shape, under its own `## Stored Facts` heading.
+**Retrieval:** bounded read only, never a full-file read of the archive — use the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `).
 
-**Retrieval — bounded read, never a full-file read of the archive.** When an index line matches your task, use the `read-section` skill (`.claude/skills/read-section/`, same tool §9 rule 4 uses for numbered rule sections) with heading marker `^### Fact ` — it covers this exact case under "Example — non-numbered heading prefix". Do not hand-roll the grep/sed pair inline; the skill is the single canonical recipe for both citation forms.
+**Writing a fact:** append the body to the archive under the next number, then the matching index line — both files change together; an entry in one without the other is a defect. Numbers are never reused — retire gaps rather than renumbering (see `Technical_Lead_Memory.md`'s "Numbering gaps ... do not renumber").
 
-**Numbering.** Fact numbers in the index and the archive must match exactly and never be reused — when a fact is pruned, leave the number retired (see the `Technical_Lead_Memory.md` precedent: "Numbering gaps ... are pruned facts — do not renumber") rather than shifting later facts down.
-
-**Writing a new fact:** append the full four-field body to the archive under the next fact number, then append the matching one-line title + keywords entry to the live index. Both files change together — an index line with no archive entry, or an archive entry with no index line, is a defect.
-
-**Enforced caps still apply, split across the two files.** The live file (Standing Checks + Keyword Index + unchanged Troubleshooting Facts) is what §2's ≤ 40,000-character cap governs day to day — it should stay far under that ceiling by construction, since it holds no fact bodies. The archive has no separate enforced cap yet; treat §2's cap as the working ceiling for it too until this pilot's retention policy is settled.
+**Caps:** the live file falls under §2's ≤ 40,000-char cap and should stay far under it by construction (no fact bodies). The archive has no separate cap yet — treat §2's cap as its working ceiling until this pilot's retention policy is settled.
