@@ -94,7 +94,7 @@ Files to update (targeted):
   — or —
 
 Full scan triggered (N files)
-  Files to overwrite:  rules/ (N), workflows/ (N)
+  Files to overwrite:  rules/ (N), workflows/ (N), Orchestrator_Guide.md
   Files to merge:      instructions/ (6), CLAUDE.md
   Files to skip:       Project_Priming.md, memory/ (6), working-record/ (6)
 ```
@@ -194,6 +194,17 @@ Check `.claude/settings.json` for the devkit update-check hook:
 5. Apply updated role-logic sections verbatim; preserve project-specific sections unchanged
 6. New sections added by the template → append verbatim if role-logic; append with `[UPDATE REQUIRED]` placeholder if project-specific, and notify the user
 
+#### Orchestrator_Guide.md — Overwrite
+
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md` (use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `{DEVKIT_SOURCE_URL}/.claude/agents/templates/{mode}/Orchestrator_Guide_template.md` — same combine rule as split workflow files above.
+**Target:** `.claude/agents/Orchestrator_Guide.md`
+
+Devkit-authored, devkit-merged (protected, same as `rules/` and `workflows/`) — carries no project-specific content, so always overwrite in full. Create the file if it does not exist locally yet (the common case on the first sync after ST-000043).
+
+Applies to: `Orchestrator_Guide.md` (1 file).
+
+**Process this file before the CLAUDE.md — Merge step below whenever both are in this run's update set.** The CLAUDE.md migration step (step 5 below) deletes local sections whose only surviving copy is this file — if the fetch/write here fails, skip the migration step entirely this run (leave the old sections in place) so a failed write never leaves the project with neither copy. Log the skip and retry both on the next sync.
+
 #### CLAUDE.md — Merge
 
 **Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/CLAUDE_Shared_template.md` (use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content)
@@ -205,21 +216,13 @@ Check `.claude/settings.json` for the devkit update-check hook:
    - `**Devkit source:**`
    - `**Devkit version:**` (updated in Stage 3)
    - `## Project Overview` content
+   - `## Agent Roster` — project-mutable (per-project instruction-file paths, lean prototype rosters); if the template adds a new role row not already present locally, append that row only — never touch existing rows or replace the section wholesale
 4. **Replace verbatim** from the updated template:
    - `## Orchestrator Reference`
    - `## Agent File Integrity`
    - `## PR Approval Rule`
-5. **Migrate a pre-split install (one-time, auto-split):** if the local `CLAUDE.md` still contains any of `## Agent Roster`, `## Agent Session Management`, `## Agent Completion Reports`, or `## Workflows` — this is an install from before ST-000043 — remove those sections from `CLAUDE.md` entirely (their content now lives in `.claude/agents/Orchestrator_Guide.md`, written by the "Orchestrator_Guide.md — Overwrite" step below in this same run) and notify the user: _"Split the orchestrator-only sections out of CLAUDE.md into .claude/agents/Orchestrator_Guide.md (new file) — this reduces the fixed context cost every spawned subagent pays."_
+5. **Migrate a pre-split install (one-time, auto-split — only if the `Orchestrator_Guide.md — Overwrite` step above wrote successfully this run):** if the local `CLAUDE.md` still contains any of `## Agent Session Management`, `## Agent Completion Reports`, or `## Workflows` — this is an install from before ST-000043 — remove those sections (and only those three; `## Agent Roster` is never stripped, per step 3 above) from `CLAUDE.md` entirely and notify the user: _"Split the orchestrator-only sections out of CLAUDE.md into .claude/agents/Orchestrator_Guide.md (new file) — this reduces the fixed context cost every spawned subagent pays."_
 6. New top-level sections in the template not present locally → append after the last existing section
-
-#### Orchestrator_Guide.md — Overwrite
-
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md` (use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `{DEVKIT_SOURCE_URL}/.claude/agents/templates/{mode}/Orchestrator_Guide_template.md` — same combine rule as split workflow files above.
-**Target:** `.claude/agents/Orchestrator_Guide.md`
-
-Devkit-authored, devkit-merged (protected, same as `rules/` and `workflows/`) — carries no project-specific content, so always overwrite in full. Create the file if it does not exist locally yet (the common case on the first sync after ST-000043 — see the CLAUDE.md migration step above, which runs in the same pass).
-
-Applies to: `Orchestrator_Guide.md` (1 file).
 
 #### Project_Priming.md — Skip
 

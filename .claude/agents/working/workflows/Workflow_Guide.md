@@ -98,6 +98,8 @@ backlog → ready → in-progress → review → testing → done
 | What | Where |
 |---|---|
 | Project overview and architecture | `.claude/agents/working/context/Project_Priming.md` |
-| All workflow trigger mappings | `CLAUDE.md` §Workflows |
+| All workflow trigger mappings | `CLAUDE.md` §Sprint Workflows (Devkit) |
 | Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
 | CI/CD story validation | `.claude/agents/working/rules/CICD_Validation_Guide.md` |
+
+> **ST-000043 note (intentional divergence):** the deployed template now points these two at `.claude/agents/Orchestrator_Guide.md` (Workflows) and keeps `CLAUDE.md` (Agent Roster). The devkit's own root `CLAUDE.md` was never split by that story — it has no `## Workflows` heading (routing lives under `## Sprint Workflows (Devkit)` instead) but does have its own `## Agent Roster`, so the Roster pointer above already resolved and needed no change; the Workflows pointer is corrected to the heading that actually exists here.

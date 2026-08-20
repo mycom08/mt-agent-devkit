@@ -3,24 +3,7 @@
 <!-- SHARED-START -->
 # Orchestrator Guide
 
-> Read by the orchestrator only — workflow routing, agent roster, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `CLAUDE.md`.
-
----
-
-## Agent Roster
-
-Each specialized agent must read its instruction file before starting any work.
-
-| Agent | Instruction File |
-|---|---|
-| Technical Lead | `.claude/agents/technical_lead_instructions.md` |
-| Developer | `.claude/agents/developer_instructions.md` |
-| QA | `.claude/agents/qa_instructions.md` |
-| Product Owner | `.claude/agents/product_owner_instructions.md` |
-| Business Analyst | `.claude/agents/business_analyst_instructions.md` |
-| UI/UX Designer | `.claude/agents/ui_ux_designer_instructions.md` |
-
-Agent memory, rules, working records, and context live under `.claude/agents/`.
+> Read by the orchestrator only — workflow routing, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `CLAUDE.md`. **Agent Roster also stays in `CLAUDE.md`, not here** — it is project-mutable (per-project instruction paths, lean prototype rosters) and must survive `sync devkit`/`update project`, unlike everything in this file, which is always devkit-verbatim.
 
 ---
 

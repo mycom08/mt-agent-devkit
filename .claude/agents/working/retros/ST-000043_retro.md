@@ -16,6 +16,11 @@
 - Dry-running the mechanical scaffold script locally (github and strict) before opening the PR confirmed byte-identical output across modes and caught the combine logic worked correctly on the first try — cheap, high-confidence verification for a devkit-authored file with no project-specific placeholders.
 - Diffing each relocated section verbatim against its pre-split source (via `git show HEAD:<file>` + `awk` section extraction) gave a concrete, checkable answer to the "nothing silently dropped" AC rather than a visual scan.
 
+### Round 2 addendum (TL CHANGES REQUESTED — CR-1, CR-2)
+- `[failure]` "Verify no subagent needs this content" (this story's own AC1 check) is necessary but not sufficient for deciding a section can move into an always-overwritten file — it misses that the section might be **project-mutable** (edited/preserved locally by another workflow, e.g. a path repair or a lean-role override), which is a different ownership question entirely. Both checks are needed before reclassifying a section's merge tier, not just the read-need one.
+- `[workflow]` A workflow that scaffolds a new repo via **remote fetch** (`{DEVKIT_SOURCE_URL}`) has its own separate enumeration of "every devkit-scaffolded repo gets these" and cannot benefit from a local mechanical-script update — this is the same ripple-miss shape Memory Fact 1 already tracks for role/rules/workflow additions, now confirmed to extend to any new mechanical-tier file, not just those three categories.
+- Reinforces: Memory Fact 11 (extended in place with both round-2 lessons rather than duplicated as new facts).
+
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
 - `[failure]` Relocating a section between files silently changes its **merge contract**, and no AC or checklist asks about that. One relocated section had deliberately been excluded from the merge workflow's "replace verbatim" list — i.e. it was project-preserved — and landed in a file documented as "always overwrite in full". Two downstream mechanisms depended on the old contract and broke without any diff hunk touching them. Evidence: PR CR-2.

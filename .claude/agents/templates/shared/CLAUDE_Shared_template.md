@@ -16,9 +16,28 @@ Canonical project context: `.claude/agents/context/Project_Priming.md`
 
 ---
 
+## Agent Roster
+
+Each specialized agent must read its instruction file before starting any work.
+
+| Agent | Instruction File |
+|---|---|
+| Technical Lead | `.claude/agents/technical_lead_instructions.md` |
+| Developer | `.claude/agents/developer_instructions.md` |
+| QA | `.claude/agents/qa_instructions.md` |
+| Product Owner | `.claude/agents/product_owner_instructions.md` |
+| Business Analyst | `.claude/agents/business_analyst_instructions.md` |
+| UI/UX Designer | `.claude/agents/ui_ux_designer_instructions.md` |
+
+Agent memory, rules, working records, and context live under `.claude/agents/`.
+
+> **Project-mutable — never blindly overwritten on sync/update.** This table's paths and role set are edited locally per project: a `-ui-prototype` companion repo trims it to 3 roles, and a project migrated from the old flat instruction-file layout has its paths rewritten in place (`Update_Project_Workflow.md`'s "Path structure detection" step). It stays in `CLAUDE.md` rather than `Orchestrator_Guide.md` for exactly that reason — `Orchestrator_Guide.md` is devkit-verbatim, always overwritten in full, with no per-project preservation.
+
+---
+
 ## Orchestrator Reference
 
-The orchestrator (this top-level session) must read `.claude/agents/Orchestrator_Guide.md` before executing any workflow — it carries the workflow trigger table, agent roster, session management, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
+The orchestrator (this top-level session) must read `.claude/agents/Orchestrator_Guide.md` before executing any workflow — it carries the workflow trigger table, session management, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
 
 ---
 
@@ -35,7 +54,7 @@ Protected paths — read-only for all agents and the orchestrator at all times:
 | `.claude/agents/workflows/` | All workflow files |
 | `.claude/agents/context/` | Project priming and document index |
 | `.claude/agents/devkit_version.txt` | Installed devkit version stamp |
-| `.claude/agents/Orchestrator_Guide.md` | Orchestrator-only routing, roster, and session-management reference |
+| `.claude/agents/Orchestrator_Guide.md` | Orchestrator-only routing, session-management, and completion-report reference |
 
 Writable paths during normal work:
 

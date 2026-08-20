@@ -208,7 +208,7 @@ Check `.claude/settings.json` for the devkit update-check hook:
    - `## PR Approval Rule`
 5. New top-level sections in the template not present locally → append after the last existing section
 
-> **ST-000043 note:** the source template's orchestrator-only content (`## Agent Roster`, `## Agent Session Management`, `## Agent Completion Reports`, `## Workflows`) moved out of `CLAUDE.md` into a new devkit-merged `Orchestrator_Guide.md`, following the same "Workflow files — Overwrite" strategy documented above. This reference-only mirror does not reproduce that new file's fetch/merge section (same rationale as the pre-existing divergences noted below — `sync devkit` never actually runs inside the devkit repo).
+> **ST-000043 note:** the source template's `## Agent Session Management`, `## Agent Completion Reports`, and `## Workflows` moved out of `CLAUDE.md` into a new devkit-merged `Orchestrator_Guide.md`, following the same "Workflow files — Overwrite" strategy documented above. `## Agent Roster` stays in `CLAUDE.md` — it is project-mutable (per-project instruction paths, lean prototype rosters) and would lose that status if it moved into an always-overwritten file, so it is never in either template's "replace verbatim" list. This reference-only mirror does not reproduce the new file's fetch/merge section (same rationale as the pre-existing divergences noted below — `sync devkit` never actually runs inside the devkit repo).
 
 #### Project_Priming.md — Skip
 
