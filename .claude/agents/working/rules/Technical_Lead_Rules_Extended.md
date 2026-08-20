@@ -1,6 +1,6 @@
 # Technical Lead Rules — Extended (Scenario-Conditional)
 
-**Applies to:** Technical Lead agent — devkit's own team only (`.claude/agents/working/`). Relocated out of `Technical_Lead_Rules.md` 2026-08-20, applying the pattern from issue #123 to the devkit's own agent team first (the distributable `.claude/agents/templates/` role rules are unchanged — a separate story). `Technical_Lead_Rules.md` is read in full on every TL spawn regardless of task; the three sections below apply only in scenarios that don't arise on most spawns (TL acting as story implementer instead of reviewer, and the resulting implementer-only pre-PR gate; the post-session context-anchoring note). §2 Code Review & PR Approval — the reason TL exists on most spawns — was deliberately **not** moved; that stays in `Technical_Lead_Rules.md`. Read this file **only when the matching scenario actually occurs**. `Technical_Lead_Rules.md` §5/§11/§13 each still carry a one-line pointer to their relocated section here.
+**Applies to:** Technical Lead agent — devkit's own team only (`.claude/agents/working/`). Relocated out of `Technical_Lead_Rules.md` and `Story_Standard_TL.md` 2026-08-20, applying the pattern from issue #123 (and its extension to the Story_Standard views, issue #133) to the devkit's own agent team first (the distributable `.claude/agents/templates/` role rules are unchanged — a separate story). `Technical_Lead_Rules.md` and `Story_Standard_TL.md` are each read in full on every TL spawn regardless of task; the four sections below apply only in scenarios that don't arise on most spawns (TL acting as story implementer instead of reviewer, the resulting implementer-only pre-PR gate and status-transition steps, and the post-session context-anchoring note). §2 Code Review & PR Approval and §12 Reviewer Gate — the reason TL exists on most spawns — were deliberately **not** moved; those stay in `Technical_Lead_Rules.md`/`Story_Standard_TL.md`. Read this file **only when the matching scenario actually occurs**. `Technical_Lead_Rules.md` §5/§11/§13 and `Story_Standard_TL.md` §4 each still carry a one-line pointer to their relocated section here.
 
 ---
 
@@ -57,6 +57,35 @@ Include a one-line check result note in the PR description.
 
 ---
 
+## 4. TL as Implementer — Status Transitions
+
+Triggered from `Story_Standard_TL.md §4`. When `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation):
+
+### Status: In Progress → Review
+1. Remove `status:in-progress`, add `status:review`
+2. Create PR with title: `[ST-XXXXXX][DEVKIT] Story title`
+3. **Add PR link to issue Deliverables section** — edit the issue body to include the PR URL under `## Deliverables` (use `gh issue edit --body-file`)
+4. Post a brief comment on the story notifying the Developer reviewer:
+
+   ```
+   ## PR ready for peer review
+   **Thread Status:** Open
+   **Area:** Implementation
+
+   **TL - YYYY-MM-DD**
+   PR #NNN opened for peer review. <one-line summary of changes>
+
+   **Next:** Developer
+   ```
+
+### Status: Review → In Progress (Developer feedback)
+1. Address all CR items in the branch
+2. Push new commits
+3. Re-request review via issue comment
+
+---
+
 ## Version
 
-**Version:** 1.0 (created 2026-08-20, split out of `Technical_Lead_Rules.md` v1.3 per devkit issue #123).
+**Version:** 1.1 — Added §4 (TL as Implementer — Status Transitions), relocated from `Story_Standard_TL.md` §4 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
+**Previous:** 1.0 (created 2026-08-20, split out of `Technical_Lead_Rules.md` v1.3 per devkit issue #123).

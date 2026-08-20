@@ -68,7 +68,7 @@ After the orchestrator confirms all answers are filled in, verify every `A:` fie
 ### Step 5 — Write Sprint Artifacts
 1. Create `docs/sprints/Sprint_{N+1}_Overview.md`
 2. Update `docs/plan/Product_Backlog.md`
-3. For stories without GitHub Issues: create issues following `Story_Standard_PO.md` §13 — use `--body-file`
+3. For stories without GitHub Issues: create issues following §5 above — use `--body-file`
    - Labels: `status:backlog` + `sprint-N`
 4. For stories that already have GitHub Issues: add `sprint-N` label if missing — **do not change `status:backlog` to `status:ready`**
 5. Delete `.claude/agents/working/tmp/PO_questions.md` if it exists
@@ -86,13 +86,66 @@ Every story the roadmap defines must become a tracked `status:backlog` issue **a
 
 1. For each story the roadmap defines (each Phase/theme entry), build the idempotency marker: `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>`.
 2. Check whether a tracked issue already carries this exact marker **before creating anything** — this is what makes re-authoring or updating the same roadmap safe against duplicates; run it for every story on every write, not just the ones you think are new: `gh issue list --repo mycom08/mt-agent-devkit --search "\"<marker from step 1>\" in:body" --state all --json number,body`. Treat the result as a **candidate set, not a verdict**: GitHub's phrase search matches a contiguous token subsequence of the body, not an exact line, so a story whose title is a prefix of another already-drained story's title can return a false match. For each candidate, confirm the marker appears as an **exact, full line** in that issue's body before treating this story as already drained — skip creating it only then. Note: GitHub's search index is eventually consistent, so an issue you created moments earlier in this same pass may not be returned yet — track what you just created directly rather than relying on search to re-find it.
-3. If no match, create the tracked issue following `Story_Standard_PO.md` §13's title/label/`--body-file` conventions, with the usual `**Roadmap Phase:** Phase N — <theme>` body line and `phase-N` label already used for roadmap-sourced stories (see `Plan_Sprint_Workflow.md` Stage 4) — those are your phase-reference tag (AC2). Add the new marker line from step 1 verbatim in the body too (alongside `**Phase:**`/`**Story Points:**`/`**Priority:**`/`**Assigned:**`) — that one exists purely for the idempotency check in step 2, not as a human-facing phase tag.
+3. If no match, create the tracked issue following §5 above's title/label/`--body-file` conventions, with the usual `**Roadmap Phase:** Phase N — <theme>` body line and `phase-N` label already used for roadmap-sourced stories (see `Plan_Sprint_Workflow.md` Stage 4) — those are your phase-reference tag (AC2). Add the new marker line from step 1 verbatim in the body too (alongside `**Phase:**`/`**Story Points:**`/`**Priority:**`/`**Assigned:**`) — that one exists purely for the idempotency check in step 2, not as a human-facing phase tag.
 4. **Verification (idempotent re-run):** re-running steps 1–3 against an unchanged roadmap must return an existing match at step 2 for every story and create zero new issues — this is the mechanism that satisfies "re-authoring the same roadmap does not create duplicates."
 
 > This is separate from, and happens earlier than, `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop. That backstop exists only to catch drift if a roadmap somehow got out of sync with tracked issues despite this rule (e.g. a manual edit made outside your own workflow) — it is not a substitute for draining at authoring time.
 
 ---
 
+## 5. Story Creation Template
+
+Triggered from `Story_Standard_PO.md §13`. Read before your first `gh issue create`/`gh issue edit --body-file` of the session.
+
+**Issue title:** `[ST-XXXXXX][DEVKIT] Clear Title`
+**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
+
+**Labels:** `status:backlog`, `sprint-N`
+**Labels — bug/defect story:** `status:backlog`, `bug`, `sprint-N`
+
+```markdown
+**Phase:** [Phase/Sprint]  
+**Story Points:** [1-13]  
+**Priority:** Must-Have | Should-Have | Nice-to-Have  
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
+
+## User Story
+
+> As a **[persona]**,  
+> I want **[feature]**,  
+> So that **[benefit]**.
+
+## Acceptance Criteria
+
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+## Technical Scope
+
+[Optional: design notes, template changes, workflow changes]
+
+## Deliverables
+
+[Filled in after work complete: PR links, commits, artifacts]
+```
+
+> **Bug/defect stories** (carry the `bug` label): insert a `## Reproduction` section immediately after `## Acceptance Criteria` (before `## Technical Scope`):
+> ```markdown
+> ## Reproduction
+>
+> **Repro Command:** [exact command/test to run verbatim, or `unknown`]
+> **Expected:** [what should happen]
+> **Actual:** [what actually happens — the observed defect]
+> ```
+> The Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`, runs ahead of Stage 0) executes `Repro Command` verbatim before any implementer is spawned — it never parses AC prose to derive a command. If `Repro Command` is absent or `unknown`, pre-flight is skipped and Stage 1 proceeds normally (the implementer reproduces as part of its own work, same as before this convention existed).
+
+**Writing AC for a devkit workflow stage (devkit-internal, no target-project equivalent):**
+- **State detection in terms of what's actually on disk at that stage, not a downstream concept.** A stage that runs before a later pipeline boundary exists (e.g. Analyst Stage 2a runs before Build Software's repo-splitting) cannot gate on that downstream concept ("any repo's tech stack") — phrase the AC against the artifacts genuinely available at that point (e.g. "the spec names a UI-bearing surface"), or the Developer has to reword it mid-design.
+- **When two same-sprint stories restructure the same workflow section, name the land order in Technical Scope.** Don't rely on a Developer-initiated cross-reference comment to surface the sequencing question — state which story lands first and how the sections compose once both are merged.
+
+---
+
 ## Version
 
-**Version:** 1.0 (created 2026-08-20, split out of `product_owner_instructions.md` and `Product_Owner_Rules.md` v1.2 per devkit issue #123).
+**Version:** 1.1 — Added §5 (Story Creation Template), relocated from `Story_Standard_PO.md` §13 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
+**Previous:** 1.0 (created 2026-08-20, split out of `product_owner_instructions.md` and `Product_Owner_Rules.md` v1.2 per devkit issue #123).

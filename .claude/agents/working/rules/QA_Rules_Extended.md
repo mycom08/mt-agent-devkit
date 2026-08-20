@@ -1,6 +1,6 @@
 # QA Rules — Extended (Scenario-Conditional)
 
-**Applies to:** QA agent — devkit's own team only (`.claude/agents/working/`). Relocated out of `QA_Rules.md` 2026-08-20, applying the pattern from issue #123 to the devkit's own agent team first (the distributable `.claude/agents/templates/` role rules are unchanged — a separate story). `QA_Rules.md` is read in full on every QA spawn regardless of task; the two sections below apply only when QA is acting as the story Implementer, which is rare. Read this file **only when that scenario actually occurs**. `QA_Rules.md` §9/§10 each still carry a one-line pointer to their relocated section here.
+**Applies to:** QA agent — devkit's own team only (`.claude/agents/working/`). Relocated out of `QA_Rules.md` and `Story_Standard_QA.md` 2026-08-20, applying the pattern from issue #123 (and its extension to the Story_Standard views, issue #133) to the devkit's own agent team first (the distributable `.claude/agents/templates/` role rules are unchanged — a separate story). `QA_Rules.md` and `Story_Standard_QA.md` are each read in full on every QA spawn regardless of task; the three sections below apply only when QA is acting as the story Implementer, or a post-Done bug surfaces — both rare. Read this file **only when the matching scenario actually occurs**. `QA_Rules.md` §9/§10 and `Story_Standard_QA.md` §6 each still carry a one-line pointer to their relocated section here.
 
 ---
 
@@ -28,6 +28,17 @@ If a live instruction from the user during implementation contradicts a prior de
 
 ---
 
+## 3. Hotfix (Post-Done Bug) — QA Role
+
+Triggered from `Story_Standard_QA.md §6`. When a bug is found after story is `status:done`:
+
+1. **Report:** Post Comment on original issue describing the bug; tag Dev and TL
+2. After Dev creates a fix branch and fix PR → **re-validate** all affected AC
+3. Report re-test results in Comment; notify PO
+
+---
+
 ## Version
 
-**Version:** 1.0 (created 2026-08-20, split out of `QA_Rules.md` v1.4 per devkit issue #123).
+**Version:** 1.1 — Added §3 (Hotfix — QA Role), relocated from `Story_Standard_QA.md` §6 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
+**Previous:** 1.0 (created 2026-08-20, split out of `QA_Rules.md` v1.4 per devkit issue #123).

@@ -54,7 +54,7 @@ Keep stories concise (2-3 pages). Reference technical docs (`docs/technical/`) r
 |------|--------|-----------|
 | **PO** | Create stories, define AC, clarify scope in Comment, tick AC checkboxes after QA confirms | Approve code, comment on implementation |
 
-**Red Flags:** PO ticking checkboxes before QA confirms; PO commenting on technical decisions.
+**Red Flags:** ticking checkboxes before QA confirms; commenting on technical decisions.
 
 ---
 
@@ -78,58 +78,14 @@ Scope decision or AC clarification.
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
 - **One topic per comment** — answer what was asked and nothing else; a new finding gets its own comment. Batching replies to questions asked together is fine; an unasked finding smuggled into an answer is not.
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words — draft to shape (one short paragraph per topic: decision, one-line why, pointer) so the `wc -w` check is a backstop, not a trim-and-recount loop; corrections state the delta only; one close-out line per thread. When writing a decision into the story body: the decision itself, ≤ 5 lines, pointer to the resolving comment — the body stays current truth with no supersession notes. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; corrections state the delta only; one close-out line per thread. Story-body decisions: the decision itself, ≤ 5 lines, pointer to the resolving comment — current truth, no supersession notes. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
 - **Announce body edits, never reproduce them.** As the only role that edits the story body, you are the one at risk here: after amending an AC, the comment states *which* section changed, *what kind* of change, and *why* — never the resulting AC text. A wording copied into a comment goes stale the next time that AC is reworded, and the thread then contradicts the body. Example: "AC6 reworded — added an X carve-out, per the reviewer's point that <reason>. Body updated." (`Story_Standard.md §9` rule 5)
 
 ---
 
 ## 13. Story Creation Template
 
-**Issue title:** `[ST-XXXXXX][DEVKIT] Clear Title`  
-**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
-
-**Labels:** `status:backlog`, `sprint-N`  
-**Labels — bug/defect story:** `status:backlog`, `bug`, `sprint-N`
-
-```markdown
-**Phase:** [Phase/Sprint]  
-**Story Points:** [1-13]  
-**Priority:** Must-Have | Should-Have | Nice-to-Have  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
-
-## User Story
-
-> As a **[persona]**,  
-> I want **[feature]**,  
-> So that **[benefit]**.
-
-## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Technical Scope
-
-[Optional: design notes, template changes, workflow changes]
-
-## Deliverables
-
-[Filled in after work complete: PR links, commits, artifacts]
-```
-
-> **Bug/defect stories** (carry the `bug` label): insert a `## Reproduction` section immediately after `## Acceptance Criteria` (before `## Technical Scope`):
-> ```markdown
-> ## Reproduction
->
-> **Repro Command:** [exact command/test to run verbatim, or `unknown`]
-> **Expected:** [what should happen]
-> **Actual:** [what actually happens — the observed defect]
-> ```
-> The Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`, runs ahead of Stage 0) executes `Repro Command` verbatim before any implementer is spawned — it never parses AC prose to derive a command. If `Repro Command` is absent or `unknown`, pre-flight is skipped and Stage 1 proceeds normally (the implementer reproduces as part of its own work, same as before this convention existed).
-
-**Writing AC for a devkit workflow stage (devkit-internal, no target-project equivalent):**
-- **State detection in terms of what's actually on disk at that stage, not a downstream concept.** A stage that runs before a later pipeline boundary exists (e.g. Analyst Stage 2a runs before Build Software's repo-splitting) cannot gate on that downstream concept ("any repo's tech stack") — phrase the AC against the artifacts genuinely available at that point (e.g. "the spec names a UI-bearing surface"), or the Developer has to reword it mid-design.
-- **When two same-sprint stories restructure the same workflow section, name the land order in Technical Scope.** Don't rely on a Developer-initiated cross-reference comment to surface the sequencing question — state which story lands first and how the sections compose once both are merged.
+Full template (title/label conventions, body skeleton, bug-repro block, AC-writing guidance) relocated to `Product_Owner_Rules_Extended.md §5` — triggers whenever you create a new story (most PO spawns are status/comment work on existing stories, not this). Read it before your first `gh issue create`/`gh issue edit --body-file` of the session.
 
 ---
 
