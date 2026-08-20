@@ -28,7 +28,7 @@ fi
 # 1. Directories
 mkdir -p "$AGENTS/context" "$AGENTS/memory" "$AGENTS/rules" "$AGENTS/working-record" \
          "$AGENTS/workflows" "$AGENTS/scripts" "$AGENTS/retros" "$AGENTS/tmp" "$AGENTS/docs" \
-         "$TARGET/docs/wiki"
+         "$TARGET/docs/wiki" "$TARGET/.claude/skills/read-section"
 # No .gitkeep for retros/ — it's gitignored below (github mode) or covered by the blanket
 # .claude/agents/ ignore (strict mode), so an empty-dir placeholder would never be committed.
 
@@ -120,6 +120,11 @@ fi
 # 4. Version-check scripts (verbatim)
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
+
+# 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
+#    .claude/skills/, a sibling of .claude/agents/, not under it, since that is
+#    where Claude Code discovers project-level skills.
+cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.claude/skills/read-section/SKILL.md"
 
 # 5. devkit_version.txt
 cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"
