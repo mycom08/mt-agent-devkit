@@ -1,4 +1,26 @@
 {
+  "0.1.43": {
+    "new": [
+      ".claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md",
+      ".claude/agents/templates/github/Orchestrator_Guide_template.md",
+      ".claude/agents/templates/strict/Orchestrator_Guide_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Workflow_Guide_template.md",
+      ".claude/agents/templates/instructions/developer_instructions_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md": "New (ST-000043): orchestrator-only routing/roster/session-management/completion-report content moved out of CLAUDE.md into a new devkit-merged file, following the CLAUDE_Shared_template.md shared+per-mode-wrapper pattern. No subagent needs to read it — every spawn is auto-injected the full CLAUDE.md by the harness, so trimming CLAUDE.md down to what every role needs removes a fixed per-spawn context cost (measured ~20% actual-token reduction on a repeat cold-start Dev implementation, N=1 each side).",
+      ".claude/agents/templates/github/Orchestrator_Guide_template.md": "New (ST-000043): thin per-mode wrapper for Orchestrator_Guide_Shared_template.md — no github-only content at this time.",
+      ".claude/agents/templates/strict/Orchestrator_Guide_template.md": "New (ST-000043): thin per-mode wrapper for Orchestrator_Guide_Shared_template.md — no strict-only content at this time.",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "Fix (ST-000043): trimmed to shared-by-every-role content — `## Agent Roster`, `## Agent Session Management`, `## Agent Completion Reports`, and `## Workflows` moved to the new `Orchestrator_Guide.md`; replaced with a one-line `## Orchestrator Reference` pointer. `## Agent File Integrity`, `## PR Approval Rule`, and the Mode/source/version banner stay (every role needs them) — verified against the actual role instruction/rules files before moving anything, not just the story's own list. Protected-paths table gains an `Orchestrator_Guide.md` row.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Fix (ST-000043): CLAUDE.md merge's 'Replace verbatim' list was already stale (named per-workflow sections — `## Sprint Workflow`, `## Analyst Workflow`, etc. — that don't exist as CLAUDE.md headings; only a `## Workflows` table row references them). Corrected to the real heading set, added a one-time auto-split migration step for pre-ST-000043 installs whose local CLAUDE.md still carries the old orchestrator-only sections, and added a new 'Orchestrator_Guide.md — Overwrite' merge section (devkit-merged, protected, verbatim like workflow files). Stage 4 audit-scope exclusion list now also names Orchestrator_Guide.md.",
+      ".claude/agents/templates/workflows/Workflow_Guide_template.md": "Fix (ST-000043): 'Key Files for New Users' table pointers to `CLAUDE.md §Workflows` / `CLAUDE.md §Agent Roster` updated to `.claude/agents/Orchestrator_Guide.md` — that's where the content now actually lives.",
+      ".claude/agents/templates/instructions/developer_instructions_template.md": "Fix (ST-000043): Refine Sprint Task's 'Read CLAUDE.md §Refine Sprint Workflow' pointer removed — already dangling (no such CLAUDE.md heading ever existed) and, per issue #122 comment, the wrong shape of instruction regardless (a subagent depending on orchestrator-only CLAUDE.md content, contradicting Refine_Sprint_Workflow.md's own Stage 1 read rules)."
+    }
+  },
   "0.1.42": {
     "new": [],
     "modified": [

@@ -145,18 +145,20 @@ Check whether the target project uses the old flat structure or the current subd
    - `**Devkit version:**` (updated in Stage 3)
    - `## Project Overview` content
 4. **Replace verbatim** from the local template:
+   - `## Orchestrator Reference`
    - `## Agent File Integrity`
-   - `## Agent Session Management`
-   - `## Agent Completion Reports`
-   - `## Workflows` routing table (preserve `sync devkit` row)
-   - `## Sprint Workflow`
-   - `## Start Story Workflow`
-   - `## Shared Pipeline Stages`
-   - `## Refine Sprint Workflow`
-   - `## Plan Next Sprint Workflow`
-   - `## Analyst Workflow`
    - `## PR Approval Rule`
-5. New top-level sections in the template not present locally → append after the last existing section
+5. **Migrate a pre-split install (one-time, auto-split):** if the target project's `CLAUDE.md` still contains any of `## Agent Roster`, `## Agent Session Management`, `## Agent Completion Reports`, or `## Workflows` — this is an install from before ST-000043 — remove those sections from `CLAUDE.md` entirely (their content now lives in `{TARGET_PROJECT}/.claude/agents/Orchestrator_Guide.md`, written by the "Orchestrator_Guide.md — Overwrite" step below in this same run) and notify the user: _"Split the orchestrator-only sections out of CLAUDE.md into .claude/agents/Orchestrator_Guide.md (new file) — this reduces the fixed context cost every spawned subagent pays."_
+6. New top-level sections in the template not present locally → append after the last existing section
+
+### Orchestrator_Guide.md — Overwrite
+
+**Source:** `.claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md` (local devkit — use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `.claude/agents/templates/{mode}/Orchestrator_Guide_template.md` — same combine rule as workflow files above.
+**Target:** `{TARGET_PROJECT}/.claude/agents/Orchestrator_Guide.md`
+
+Devkit-authored, devkit-merged (protected, same as `rules/` and `workflows/`) — carries no project-specific content, so always overwrite in full. Create the file if it does not exist locally yet (the common case on the first update after ST-000043 — see the CLAUDE.md migration step above, which runs in the same pass).
+
+Files: `Orchestrator_Guide.md` (1 file).
 
 ### Project_Priming.md — Skip
 
@@ -254,7 +256,7 @@ Skipped (project-owned):
 
 ## Stage 4 — Audit Pass (detect-only)
 
-**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files and script files (verbatim overwrite), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote. This workflow has no checksum pre-filter (unlike `sync devkit`), so only the **failed-write** exclusion applies here — a file Stage 2 logged an error for and skipped is not in scope.
+**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files, script files, and `Orchestrator_Guide.md` (all verbatim overwrite), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote. This workflow has no checksum pre-filter (unlike `sync devkit`), so only the **failed-write** exclusion applies here — a file Stage 2 logged an error for and skipped is not in scope.
 
 If the scope list is empty → **skip this stage silently.** Print nothing, spawn nothing.
 

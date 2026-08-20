@@ -37,7 +37,7 @@ Record durable facts in `.claude/agents/memory/Developer_Memory.md`. Rules and f
 
 ## Refine Sprint Task
 
-When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps. Read `CLAUDE.md` §Refine Sprint Workflow for the full pipeline rules before starting.
+When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps.
 
 ### Step 1 — Fetch Target Stories
 1. Read `docs/feature/{feature-name}/plan/Product_Backlog.md` — find the sprint marked `🔲 Planned` and note its sprint label (e.g., `sprint-5`)

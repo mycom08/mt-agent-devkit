@@ -203,18 +203,12 @@ Check `.claude/settings.json` for the devkit update-check hook:
    - `**Devkit version:**` (updated in Stage 3)
    - `## Project Overview` content
 4. **Replace verbatim** from the updated template:
+   - `## Orchestrator Reference`
    - `## Agent File Integrity`
-   - `## Agent Session Management`
-   - `## Agent Completion Reports`
-   - `## Workflows` routing table (preserve `sync devkit` row)
-   - `## Sprint Workflow`
-   - `## Start Story Workflow`
-   - `## Shared Pipeline Stages`
-   - `## Refine Sprint Workflow`
-   - `## Plan Next Sprint Workflow`
-   - `## Analyst Workflow`
    - `## PR Approval Rule`
 5. New top-level sections in the template not present locally → append after the last existing section
+
+> **ST-000043 note:** the source template's orchestrator-only content (`## Agent Roster`, `## Agent Session Management`, `## Agent Completion Reports`, `## Workflows`) moved out of `CLAUDE.md` into a new devkit-merged `Orchestrator_Guide.md`, following the same "Workflow files — Overwrite" strategy documented above. This reference-only mirror does not reproduce that new file's fetch/merge section (same rationale as the pre-existing divergences noted below — `sync devkit` never actually runs inside the devkit repo).
 
 #### Project_Priming.md — Skip
 

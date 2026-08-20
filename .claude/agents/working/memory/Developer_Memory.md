@@ -62,6 +62,12 @@
 - **Evidence:** ST-000038 PR #108 CR-1 — §9 rule 4 "never paste command output" vs §12 Reviewer gate "paste the literal `gh pr checks` output … approval comments without this evidence are incomplete".
 - **Expires when:** §9 and §12 stop being separately authored.
 
+### Fact 11
+- **Rule:** A merge/sync workflow's per-file-type "replace verbatim" or "expected files" list is a second, independent restatement of a config file's heading/file structure — it can drift from the real structure with zero validator signal, since `validate_templates.py`'s §-ref check only fires on numeric `§N` references, never on bare `## Heading Name` mentions in prose. Before editing a shared config file's structure (splitting, renaming, or removing a section), grep every sync/update workflow file that documents its merge strategy for the old heading list and verify each entry against a real heading in the file — don't assume the documented list was already accurate.
+- **Applies when:** restructuring any file that a sync/update-style workflow merges section-by-section (found via `CLAUDE.md`, generalizes to any similarly-merged shared config).
+- **Evidence:** ST-000043 — `Sync_Devkit_Workflow_template.md`'s CLAUDE.md-merge list named several headings (`## Sprint Workflow`, `## Analyst Workflow`, etc.) that never existed as real sections, only as table rows; found via an external contributor's issue comment, not the validator.
+- **Expires when:** the validator gains prose-heading reference checking.
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity
