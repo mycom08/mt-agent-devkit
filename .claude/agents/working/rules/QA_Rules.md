@@ -138,7 +138,7 @@ Rare — only when QA is the story Implementer. Rule in `QA_Rules_Extended.md §
 
 - Keep working record updates short and fact-based (story IDs, validation results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §1` for the char cap and snapshot format)
+- **Working record retention:** See `Agent_Common.md §1` for the retention rule and char cap.
 
 ---
 

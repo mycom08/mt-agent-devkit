@@ -1,4 +1,21 @@
 {
+  "0.1.45": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix (ST-000131, issue #131): Working Record retention rule was restated in full (the 3-most-recent-story-entries detail plus the char-cap pointer) instead of following the bare-pointer precedent already used by this file's Troubleshooting Protocol and Stage-Transition Commit entries. Reduced to a one-line pointer at `Agent_Common.md §5`, leaving `Agent_Common.md §1` (working mirror) / §5 (template) as the single source. Working mirror (`working/rules/Developer_Rules.md`) carries the identical fix, pointing at its own §1.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix (ST-000131, issue #131): same restated-retention-rule fix as Developer_Rules — reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/QA_Rules.md`) carries the identical fix, pointing at its own §1.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix (ST-000131, issue #131): same restated-retention-rule fix as Developer_Rules — reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/Technical_Lead_Rules.md`) carries the identical fix, pointing at its own §1.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Fix (ST-000131, issue #131): same restated-retention-rule fix, applied to the `## 11b. Working Record Retention` section body rather than a Reporting & Blockers bullet (PO's file structures the rule as its own heading) — reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/Product_Owner_Rules.md`) carries the identical fix, pointing at its own §1.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "Fix (ST-000131, issue #131): same restated-retention-rule fix as Developer_Rules — reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/UI_UX_Designer_Rules.md`) carries the identical fix, pointing at its own §1."
+    }
+  },
   "0.1.44": {
     "new": [
       ".claude/agents/templates/skills/read-section/SKILL_template.md"

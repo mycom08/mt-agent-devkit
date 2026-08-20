@@ -188,7 +188,7 @@ Every story the roadmap defines must become a tracked `status:backlog` issue/sto
 
 ## 11b. Working Record Retention
 
-Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format).
+See `Agent_Common.md §5` for the retention rule and char cap.
 
 ---
 

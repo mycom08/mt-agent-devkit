@@ -147,7 +147,7 @@ Only when you author or update a roadmap/planning doc that defines stories ahead
 
 ## 11b. Working Record Retention
 
-Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §1` for the char cap and snapshot format).
+See `Agent_Common.md §1` for the retention rule and char cap.
 
 ---
 
