@@ -49,7 +49,7 @@ Update your memory file when you encounter a fact worth remembering for future s
 4. **Point, don't mirror.** If the substance lives in a committed project doc or another role's session artifacts, store a one-line pointer plus only your role-specific delta — never a full re-derivation.
    > **Scope: memory writes *and* issue comments.** The same failure is more expensive in a comment, because a comment is re-read by every downstream role on the story. A fact already recorded in your own memory file is cited (`Developer_Memory.md` Fact N), never re-explained in a thread. Enforced by the Commenter gate in `Story_Standard.md §12`.
 
-**Enforced file-level cap:** **≤ 10,000 characters** per memory file, measured with `wc -c` — not a line count. `≤ 200 lines` is retained only as non-enforced structural guidance; it does not track token cost (a fully rule-compliant 60-line file can already run ~7,250 tokens) and is never itself checked.
+**Enforced file-level cap:** **≤ 40,000 characters** per memory file, measured with `wc -c` — not a line count. `≤ 200 lines` is retained only as non-enforced structural guidance; it does not track token cost (a fully rule-compliant 60-line file can already run ~7,250 tokens) and is never itself checked.
 
 **Format:**
 
@@ -113,7 +113,7 @@ Update your Working Record at the start and end of each session, using **rewrite
 
 **Access control:** Read and update only your own record. Never read or modify another agent's record.
 
-**Retention:** Keep only the **3 most recent story entries** — the retention unit is story entries, not calendar days (all roles; this generalizes the unit QA already used). Delete older entries before writing the new one. The enforced cap is **≤ 4,000 characters**, measured with `wc -c` — not a line count. `≤ 60 lines` is retained only as non-enforced structural guidance for a soft-wrapped, one-bullet-per-entry format; it is not itself checked. Working Records are gitignored — never commit them.
+**Retention:** Keep only the **3 most recent story entries** — the retention unit is story entries, not calendar days (all roles; this generalizes the unit QA already used). Delete older entries before writing the new one. The enforced cap is **≤ 10,000 characters**, measured with `wc -c` — not a line count. `≤ 60 lines` is retained only as non-enforced structural guidance for a soft-wrapped, one-bullet-per-entry format; it is not itself checked. Working Records are gitignored — never commit them.
 
 **Snapshot entry format** — one entry per story:
 - **Story:** ST-XXXXXX
