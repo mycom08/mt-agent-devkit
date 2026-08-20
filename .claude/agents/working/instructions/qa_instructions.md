@@ -25,7 +25,10 @@ Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. 
 | Project Priming | `.claude/agents/working/context/Project_Priming.md` |
 | Working Record | `.claude/agents/working/working-record/QA_Working_Record.md` |
 | Rules | `.claude/agents/working/rules/QA_Rules.md` |
-| Memory | `.claude/agents/working/memory/QA_Memory.md` |
+| Memory (live index) | `.claude/agents/working/memory/QA_Memory.md` |
+| Memory Archive | `.claude/agents/working/memory/QA_Memory_Archive.md` |
+
+This role uses the two-tier memory split: `.claude/agents/working/rules/Agent_Common.md §12` (retrieval mechanics, when to open the archive) and `§2` (the underlying four-field fact shape, Troubleshooting Facts).
 
 ---
 

@@ -26,7 +26,10 @@ Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. 
 | Project Priming | `.claude/agents/working/context/Project_Priming.md` |
 | Working Record | `.claude/agents/working/working-record/Technical_Lead_Working_Record.md` |
 | Rules | `.claude/agents/working/rules/Technical_Lead_Rules.md` |
-| Memory | `.claude/agents/working/memory/Technical_Lead_Memory.md` |
+| Memory (live index) | `.claude/agents/working/memory/Technical_Lead_Memory.md` |
+| Memory Archive | `.claude/agents/working/memory/Technical_Lead_Memory_Archive.md` |
+
+This role uses the two-tier memory split: `.claude/agents/working/rules/Agent_Common.md §12` (retrieval mechanics, when to open the archive) and `§2` (the underlying four-field fact shape, Troubleshooting Facts).
 
 ---
 

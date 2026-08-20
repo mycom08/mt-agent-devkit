@@ -13,7 +13,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 1. Project Priming — canonical project overview, architecture, document locations
 2. Your Working Record — last session's progress and impediments
 3. Your Rules — mandatory role rules
-4. Your Memory — durable conventions and decisions
+4. Your Memory — durable conventions and decisions. Developer/QA/Technical Lead: this means the live index file only — see §12 for the two-tier split and when to also open the archive.
 
 **Resumed session (continuing via `SendMessage`):**
 1. Skip Project Priming — already in context
@@ -75,6 +75,8 @@ Update your memory file when you encounter a fact worth remembering for future s
 ```
 
 > PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The four-field Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts is unchanged and stays scoped to Dev/TL/QA.
+
+> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above.** See §12 — their `## Stored Facts` four-field bodies live in a separate archive file, and the always-read memory file holds only a lean index. PO, BA, and UI/UX Designer are unaffected — their memory files stay small enough that a single file is still the right shape.
 
 ---
 
@@ -230,3 +232,25 @@ Applies whenever you read a GitHub Issue/PR body or comment (`gh issue view`, `g
 If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than guessing. A derived number presented as a measurement is worse than an honest gap.
 
 **Why the `Session:` field matters.** Spawn-vs-resume is the largest single cost lever available to the orchestrator — a resumed round skips all pre-work reads and re-establishes no context, and has measured several times cheaper per step than a cold spawn. `CLAUDE.md`'s resume-over-spawn rule depends on it; this field is what makes it verifiable rather than assumed.
+
+---
+
+## 12. Two-Tier Memory (devkit-internal pilot — Developer, QA, Technical Lead only)
+
+**Why devkit-only, and why only three roles.** Follow-up to issue #118 (itself a follow-up to #92/ST-000033, which shipped the single-file cap). A memory file is read in full at **every** spawn regardless of whether the current task touches any of it (§1 step 4) — a cap alone doesn't fix that cost, it only delays the same ceiling. Validated once end-to-end on a real subagent spawn against a lean-vs-full split (see issue #118 for the measured 76–83% per-spawn read reduction). Not yet proven at scale — reliability of keyword-tag recall for a low-salience fact, and of the bounded-read behavior below without an explicit instruction, is still open. Piloted on this devkit's own team first, deliberately not mirrored to `templates/` — `Agent_Common_template.md` keeps the single-file §2 format target projects use. PO, BA, and UI/UX Designer memory files stay single-file (§2) — their content is small enough that a split has no payoff yet.
+
+**The split.** Each of the three roles' `## Stored Facts` section is split across two files:
+
+- **`<Role>_Memory.md`** (live — read every spawn, per §1 step 4): a lean index only, no fact bodies.
+  - **Standing Checks** — a fact that reduces to an unconditional always-do action regardless of task (e.g. "before every commit in a shared dir, re-run `git branch --show-current`"). No recall needed; the condition is structural, not something that has to match the current task. Most facts do not qualify — leave this section empty (`*(none yet)*`) rather than force a fit.
+  - **Keyword Index** — everything else: one line per fact, `### Fact N — <short title>` plus a `Keywords:` line of literal grep-able terms (error strings, function/file names, story IDs) — no `Rule`/`Applies when`/`Evidence`/`Expires when` body. Before starting a task, scan the titles and keywords for a match against what you're about to touch.
+  - `## Troubleshooting Facts` is **not** split — it stays in the live file, in its existing §2 shape, unchanged. It is typically small and §3's Step 1 already requires scanning it directly.
+- **`<Role>_Memory_Archive.md`** (conditional — opened only when an index line matches): every fact's full four-field body, unchanged from the single-file §2 shape, under its own `## Stored Facts` heading.
+
+**Retrieval — bounded read, never a full-file read of the archive.** When an index line matches your task: `grep -n "^### Fact " <Role>_Memory_Archive.md` to list every fact heading with its line number, find the matched fact's line (`start`) and the next fact's line (`end`), then read only `start` to `end - 1` — via `sed -n "${start},$((end-1))p"` or `Read` with `offset=start`, `limit=$((end-start))`. Same mechanism the `read-section` skill uses for numbered rule sections (§9 rule 4); apply it here even though fact headings aren't the skill's literal citation form. If the matched fact is the last one in the file, read to end of file instead (no `end` bound).
+
+**Numbering.** Fact numbers in the index and the archive must match exactly and never be reused — when a fact is pruned, leave the number retired (see the `Technical_Lead_Memory.md` precedent: "Numbering gaps ... are pruned facts — do not renumber") rather than shifting later facts down.
+
+**Writing a new fact:** append the full four-field body to the archive under the next fact number, then append the matching one-line title + keywords entry to the live index. Both files change together — an index line with no archive entry, or an archive entry with no index line, is a defect.
+
+**Enforced caps still apply, split across the two files.** The live file (Standing Checks + Keyword Index + unchanged Troubleshooting Facts) is what §2's ≤ 40,000-character cap governs day to day — it should stay far under that ceiling by construction, since it holds no fact bodies. The archive has no separate enforced cap yet; treat §2's cap as the working ceiling for it too until this pilot's retention policy is settled.

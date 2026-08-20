@@ -25,13 +25,14 @@ Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. 
 | Project Priming | `.claude/agents/working/context/Project_Priming.md` |
 | Working Record | `.claude/agents/working/working-record/Developer_Working_Record.md` |
 | Rules | `.claude/agents/working/rules/Developer_Rules.md` |
-| Memory | `.claude/agents/working/memory/Developer_Memory.md` |
+| Memory (live index) | `.claude/agents/working/memory/Developer_Memory.md` |
+| Memory Archive | `.claude/agents/working/memory/Developer_Memory_Archive.md` |
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/Developer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/working/rules/Agent_Common.md §2`.
+Record durable facts in `.claude/agents/working/memory/Developer_Memory.md` (live index) with full fact bodies in `.claude/agents/working/memory/Developer_Memory_Archive.md`. This role uses the two-tier split — rules and format: `.claude/agents/working/rules/Agent_Common.md §12` (retrieval mechanics, when to open the archive) and `§2` (the underlying four-field fact shape, Troubleshooting Facts).
 
 ---
 
