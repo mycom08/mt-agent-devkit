@@ -1,4 +1,12 @@
 {
+  "0.1.45": {
+    "modified": [
+      ".claude/agents/templates/skills/read-section/SKILL_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/skills/read-section/SKILL_template.md": "Generalized (issue #118 follow-up): the skill's recipe already worked for any consistent heading prefix, not just numbered `§N` rule citations, but its description and examples only documented the numbered case. Broadened the frontmatter description and added a second worked example (`### Fact N` entries in a two-tier memory archive, `.claude/agents/working/memory/*_Memory_Archive.md`) so the devkit's own team can point at this one skill for both retrieval needs instead of `Agent_Common.md §12` re-deriving the same grep+bounded-read mechanism inline. Working mirror (`.claude/skills/read-section/SKILL.md`) carries the identical change."
+    }
+  },
   "0.1.44": {
     "new": [
       ".claude/agents/templates/skills/read-section/SKILL_template.md"
