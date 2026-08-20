@@ -37,7 +37,7 @@ Record durable facts in `.claude/agents/working/memory/Developer_Memory.md`. Rul
 
 ## Refine Sprint Task
 
-When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps. Read `CLAUDE.md` §Refine Sprint Workflow for the full pipeline rules before starting.
+When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps.
 
 ### Step 1 — Fetch Target Stories
 1. Run: `gh issue list --repo mycom08/mt-agent-devkit --label "sprint-N" --label "status:backlog" --state open`

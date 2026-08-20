@@ -99,7 +99,7 @@ backlog → ready → in-progress → review → testing → done
 | What | Where |
 |---|---|
 | Project overview and architecture | `.claude/agents/context/Project_Priming.md` |
-| All workflow trigger mappings | `CLAUDE.md` §Workflows |
+| All workflow trigger mappings | `.claude/agents/Orchestrator_Guide.md` §Workflows |
 | Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
 | Strict-mode story format and operations | `.claude/agents/rules/Strict_Mode_Story_Guide.md` |
 | CI/CD story validation (github mode only) | `.claude/agents/rules/CICD_Validation_Guide.md` |

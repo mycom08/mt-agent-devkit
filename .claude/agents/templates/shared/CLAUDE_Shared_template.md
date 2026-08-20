@@ -31,6 +31,14 @@ Each specialized agent must read its instruction file before starting any work.
 
 Agent memory, rules, working records, and context live under `.claude/agents/`.
 
+> **Project-mutable — never blindly overwritten on sync/update.** This table's paths and role set are edited locally per project: a `-ui-prototype` companion repo trims it to 3 roles, and a project migrated from the old flat instruction-file layout has its paths rewritten in place (`Update_Project_Workflow.md`'s "Path structure detection" step). It stays in `CLAUDE.md` rather than `Orchestrator_Guide.md` for exactly that reason — `Orchestrator_Guide.md` is devkit-verbatim, always overwritten in full, with no per-project preservation.
+
+---
+
+## Orchestrator Reference
+
+The orchestrator (this top-level session) must read `.claude/agents/Orchestrator_Guide.md` before executing any workflow — it carries the workflow trigger table, session management, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
+
 ---
 
 ## Agent File Integrity
@@ -46,6 +54,7 @@ Protected paths — read-only for all agents and the orchestrator at all times:
 | `.claude/agents/workflows/` | All workflow files |
 | `.claude/agents/context/` | Project priming and document index |
 | `.claude/agents/devkit_version.txt` | Installed devkit version stamp |
+| `.claude/agents/Orchestrator_Guide.md` | Orchestrator-only routing, session-management, and completion-report reference |
 
 Writable paths during normal work:
 
@@ -61,56 +70,6 @@ Writable paths during normal work:
 If an agent identifies an error or improvement needed in a rules or workflow file, it must report it to the user as an observation — never self-correct by editing the file.
 
 **Audit carve-out.** `sync devkit` and `update project` (the devkit-side command that applies local templates to this project) may each run a scoped, detect-only audit pass as their own final stage — this is a **workflow step, not an agent role or a third writer of protected paths**. The audit pass never writes to `rules/`, `instructions/`, or `CLAUDE.md` itself; it only reads the files that same run just wrote and, if it finds mode-adaptation drift, files a report Issue on the devkit repository — the fix, if any, lands upstream in `templates/`, never as a local edit here. No other workflow may invoke this audit pass.
-
----
-
-## Agent Session Management
-
-The orchestrator tracks the `agentId` returned by every spawned agent. On loop-back, always prefer resuming over spawning:
-
-| Situation | Action |
-|---|---|
-| Loop-back to a stage whose agent is still active | **Resume** — `SendMessage` to the saved `agentId` with the new feedback |
-| Loop-back but session has expired or ID is unavailable | **Spawn** — new `Agent` call with a fully self-contained prompt |
-| First entry to any stage | **Spawn** — new `Agent` call |
-
-Resuming keeps the agent's full prior context so it can act on feedback immediately without re-reading everything from scratch.
-
-**Session ID update rule:** Only overwrite a saved session ID when a **new agent is spawned**. When resuming via `SendMessage`, do not change the stored ID — the interaction does not produce a new session.
-
----
-
-## Agent Completion Reports
-
-When any spawned agent completes and returns to the orchestrator, it **must** limit its summary to **5 bullets max**:
-
-1. Story ID + what was done (e.g., "ST-000025 — PR #86 opened")
-2. Key outcome (approved / blocked / passed / failed)
-3. PR or commit reference if applicable
-4. Any blockers or open items
-5. Next action required (if any)
-
-Detailed activity logs go in the agent's Working Record — not in the orchestrator message. The orchestrator relays a brief status update to the user after each stage.
-
----
-
-## Workflows
-
-Read the linked file before executing any workflow.
-
-| Trigger | Workflow File |
-|---|---|
-| `workflow help` | `.claude/agents/workflows/Workflow_Guide.md` |
-| `continue sprint` | `.claude/agents/workflows/Sprint_Workflow.md` |
-| `start story ST-XXXXXX` | `.claude/agents/workflows/Start_Story_Workflow.md` |
-| `resume story ST-XXXXXX` | `.claude/agents/workflows/Resume_Story_Workflow.md` |
-| `refine sprint` | `.claude/agents/workflows/Refine_Sprint_Workflow.md` |
-| `plan next sprint` / `plan sprint` | `.claude/agents/workflows/Plan_Sprint_Workflow.md` |
-| `create stories` | `.claude/agents/workflows/Create_Stories_Workflow.md` |
-| `refine prototype` | `.claude/agents/workflows/Refine_Prototype_Workflow.md` |
-| `sync devkit` | `.claude/agents/workflows/Sync_Devkit_Workflow.md` |
-
-Sprint and Start Story workflows share pipeline stages — see `.claude/agents/workflows/Shared_Pipeline_Stages.md`.
 
 ---
 

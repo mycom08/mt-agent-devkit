@@ -62,6 +62,12 @@
 - **Evidence:** ST-000038 PR #108 CR-1 — §9 rule 4 "never paste command output" vs §12 Reviewer gate "paste the literal `gh pr checks` output … approval comments without this evidence are incomplete".
 - **Expires when:** §9 and §12 stop being separately authored.
 
+### Fact 11
+- **Rule:** Splitting a shared devkit config file (e.g. `CLAUDE.md`) ripples three ways beyond the split itself, none caught by the validator: (1) a sync/update workflow's "replace verbatim"/"expected files" list is a second restatement of the file's heading structure that can already be stale — verify each entry against a real heading, don't trust it. (2) **Merge-tier check before moving any section**: if it's project-mutable (edited/preserved locally — role paths, a trimmed roster), moving it into an always-overwritten mechanical file destroys that preservation; grep for workflows editing it in place, not just subagent read-need. (3) A workflow that scaffolds a new repo by **remote fetch** (`{DEVKIT_SOURCE_URL}`, e.g. `Refine_Prototype_Workflow`) cannot use the local `scaffold_mechanical.sh` — a new mechanical-tier file must be added to its own fetch list separately, or the fetched repo silently lacks it.
+- **Applies when:** restructuring any file that a sync/update-style workflow merges section-by-section, or adding a new mechanical-tier file to the devkit's scaffold set.
+- **Evidence:** ST-000043 R1 — stale heading list found via an issue comment. R2 TL review — CR-2: Agent Roster moved into the new mechanical file, breaking the lean-prototype-roster override and flat→subdir path repair (both edit CLAUDE.md's Roster in place); CR-1: `Refine_Prototype_Workflow_Shared_template.md`'s remote-fetch list missed the new file (same class as ST-000037 CR-1, 5th consecutive miss).
+- **Expires when:** the validator gains prose-heading + merge-tier-contract checking, or the scaffold-file lists become generated rather than hand-enumerated.
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity

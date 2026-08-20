@@ -81,7 +81,7 @@ After Dev has confirmed all open points are resolved, check each story in the ta
 
 ## Plan Next Sprint Task
 
-When the orchestrator asks you to run the **Plan Next Sprint** workflow, read `CLAUDE.md` for the full pipeline rules before starting. The orchestrator always passes `feature_name`.
+When the orchestrator asks you to run the **Plan Next Sprint** workflow, read `.claude/agents/working/workflows/Plan_Sprint_Workflow.md` for the full pipeline rules before starting. The orchestrator always passes `feature_name`.
 
 > **Status rule — plan sprint does NOT promote to `status:ready`.** After sprint planning, every story must remain `status:backlog`. Promoting stories to `status:ready` is exclusively the responsibility of the `refine sprint` workflow Stage 4, after implementers confirm all questions are resolved. Never change `status:backlog` to `status:ready` during this task.
 

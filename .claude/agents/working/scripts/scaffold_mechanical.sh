@@ -99,6 +99,24 @@ for f in "${SPLIT_WORKFLOWS[@]}"; do
   fi
 done
 
+# 3b. Orchestrator Guide — shared + mode-specific combine, same mechanism as the split
+#    workflow files above (step 3), but this is a single file living directly under
+#    .claude/agents/, not under workflows/. Devkit-merged/protected (see CLAUDE.md's
+#    Agent File Integrity table) — carries no project-specific placeholders.
+og_shared="$TPL/shared/Orchestrator_Guide_Shared_template.md"
+og_modefile="$TPL/$MODE/Orchestrator_Guide_template.md"
+og_dst="$AGENTS/Orchestrator_Guide.md"
+awk '/<!-- SHARED-START -->/{flag=1;next}/<!-- SHARED-END -->/{flag=0}flag' "$og_shared" > "$og_dst"
+og_mode_body="$(tail -n +2 "$og_modefile" | grep -vE '^<!--.*-->[[:space:]]*$' || true)"
+if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
+  og_trimmed="$(printf '%s\n' "$og_mode_body" | awk '
+    NF{p=1} p{buf[++n]=$0}
+    END{last=1; for(i=n;i>=1;i--){if(buf[i]!~/^[ \t]*$/){last=i;break}}
+        for(i=1;i<=last;i++) print buf[i]}')"
+  printf '\n---\n\n' >> "$og_dst"
+  printf '%s\n' "$og_trimmed" >> "$og_dst"
+fi
+
 # 4. Version-check scripts (verbatim)
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
