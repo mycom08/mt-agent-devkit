@@ -9,7 +9,7 @@
 - **Expires when:** a validator invariant scopes templates to the deployed inventory.
 
 ### Fact 2
-- **Rule:** `validate_templates.py` cannot catch the Fact 1 class: `_FILEREF_RE` matches `.md` only (scripts never checked); `_resolve_file_ref` tries **three** roots (repo-verbatim, `working/` mirror, `<stem>_template.md`), so a devkit-only or deleted path still resolves via a sibling. `SCAN_DIRS` is `templates/`+`workflows/` only — CI green is **no evidence for a `working/` file** (pass dirs explicitly; `main()` takes `<dir>...`). It never checks `changes.json` ordering or roster↔write-location consistency. Under explicit paths the baseline is **~70 violations and exit 1 on `main` too**, so any validator verdict must be *differential*: same command on base and head in parallel `git worktree`s, diff sorted output.
+- **Rule:** `validate_templates.py` cannot catch the Fact 1 class: `_FILEREF_RE` matches `.md` only (scripts never checked); `_resolve_file_ref` tries **three** roots (repo-verbatim, `working/` mirror, `<stem>_template.md`), so a devkit-only or deleted path still resolves via a sibling. `SCAN_DIRS` is `templates/`+`workflows/` only — CI green is **no evidence for a `working/` file** (pass dirs explicitly; `main()` takes `<dir>...`). It never checks `changes.json` ordering or roster↔write-location consistency. Under explicit paths the baseline is **~70 violations and exit 1 on `main` too**, so any validator verdict must be *differential*: same command on base and head in parallel `git worktree`s, diff sorted output (strip line numbers first). ~36 of those are one bogus class — `check_shared_integrity`'s Included-by/Shared-logic substring test compares a backslash path against forward-slash file text, so **on Windows every shared+wrapper pair fails both directions**; adding one new trio adds 4 such findings. Classify by class before calling anything a regression; Linux CI shows none of them.
 - **Applies when:** tempted to treat a passing validator run as review coverage.
 - **Evidence:** ST-000028; ST-000035 PR #103; same class as the ST-000015 path-move finding.
 - **Expires when:** `_FILEREF_RE` widens past `.md` and deployment-scoped resolution lands.
@@ -31,8 +31,6 @@
 - **Applies when:** writing any CR that names call sites, or proposing fix options.
 - **Evidence:** ST-000026 (listed 3 sites, missed a 4th); ST-000028 r2 (offered 3 fixes, Dev found a better 4th).
 - **Expires when:** never — this is a phrasing discipline.
-
-> Fact 6 removed (ST-000037): now a `Technical_Lead_Rules.md §2` bullet. Gap kept on purpose.
 
 ### Fact 7
 - **Rule:** `gh issue list --json` reads the immediately-consistent issues API; `--search` hits the eventually-consistent index **and** does contiguous-token phrase matching (GitHub strips `**`/`::` at index time), so a prefix-title story silently matches another. Prefer plain list + local exact-line match (`grep -Fxq` in strict mode). Always hand-construct one adversarial input against the tool's *documented* semantics — prose can be coherent while the command answers a different question.
@@ -71,27 +69,19 @@
 - **Evidence:** ST-000015/PR #41; ST-000025 PR #71; ST-000037 (4th consecutive ripple miss).
 - **Expires when:** never.
 
-### Fact 13
-- **Rule:** Orchestrator state files live in the orchestrating workspace's `.claude/agents/tmp/`, not the managed repo — gitignored in both modes, has a cleanup lifecycle, and must exist before the managed repo does. Bridge the two working dirs by recording the managed repo's absolute path plus per-step commit SHAs in the state file.
-- **Applies when:** designing any pipeline/loop state file.
-- **Evidence:** ST-000028; `build_software_state.md` is the pattern.
-- **Expires when:** never.
-
-> Fact 14 removed (ST-000035): superseded by `Agent_Common.md §2`/`§5`. Gap kept on purpose.
-
-### Fact 15
-- **Rule:** A **pre-spawn** eligibility filter (nothing spawned, no state) is skip-and-continue, like `Sprint_Workflow`'s `status:blocked` rule — not the Blocked Story Procedure, which halts because an agent is mid-story with a live branch. If the status label stays unchanged, skip-and-continue needs an in-run skip list in the state file or the loop re-selects forever.
-- **Applies when:** designing any story-eligibility gate.
-- **Evidence:** ST-000027.
-- **Expires when:** never.
-
-> Fact 16 removed (ST-000038): merged into Fact 7. Gap kept on purpose.
-
 ### Fact 17
 - **Rule:** When a story hardens a soft principle into an absolute ("evidence by pointer" → "**never** paste command output"), check what elsewhere in the same rules family **mandates** the now-prohibited act. The cross-role source usually survives on a scoping preamble (`Story_Standard.md` §9 = "GitHub Issue comments"), but the per-role views restate the rule **without** that preamble — so the absolute lands unqualified next to bullets that govern PR comments. Grep the new absolute's own verb corpus-wide for a matching imperative before approving.
 - **Applies when:** reviewing any story that converts advisory wording into a prohibition, or adds a gate item.
 - **Evidence:** ST-000038 PR #108 CR-1 — §9 rule 4's "never paste" vs §12 Reviewer gate's mandatory `gh pr checks` paste.
 - **Expires when:** never — restatement strips scope by construction.
+
+### Fact 18
+- **Rule:** Moving content between files changes its **merge/scaffold contract**, which no content-identity diff can detect — verify the *strategy* per moved section, not just the bytes. Read the sync/update "replace verbatim" list as evidence: a section **absent** from it was project-preserved, and relocating it into an "always overwrite in full" file silently clobbers every local correction. Same for tier: Adaptive (agent-written, trimmable per repo) → Mechanical (verbatim) disables any instruction that says "for repo type X this section lists only N entries", and any migration step that repairs the section in its old home now targets nothing.
+- **Applies when:** any story that relocates, splits, or extracts sections between deployed files.
+- **Evidence:** ST-000043 PR #137 CR-2 — Agent Roster was the one moved section never listed as replace-verbatim.
+- **Expires when:** never.
+
+> Numbering gaps (6, 13–16) are pruned facts — do not renumber.
 
 ## Troubleshooting Facts
 

@@ -18,13 +18,19 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[failure]` Relocating a section between files silently changes its **merge contract**, and no AC or checklist asks about that. One relocated section had deliberately been excluded from the merge workflow's "replace verbatim" list — i.e. it was project-preserved — and landed in a file documented as "always overwrite in full". Two downstream mechanisms depended on the old contract and broke without any diff hunk touching them. Evidence: PR CR-2.
+- `[failure]` Adding an Nth item to an enumerated corpus set missed a ripple site for the 5th consecutive story, and for the 2nd time in the *same* file — a deployed workflow template whose scaffold set is written out longhand because it fetches remotely and cannot call the local scaffold script. Evidence: PR CR-1; prior occurrence recorded in the reviewer working record's Blockers & Watch-outs.
+- `[workflow]` The corpus's own validator emits ~36 findings of one class purely as a path-separator artifact on one OS, so a differential run is the only usable signal. This story added 4 more of that same class, which is indistinguishable from 4 real regressions without classifying them by hand.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` Any story that **moves** content between two files should require the implementer to state, per moved section, its before/after write strategy (preserved vs. overwritten, adaptive vs. verbatim) — a content-identity diff proves nothing about this, and a content-identity diff is exactly what the "no content loss" AC asks for.
+- `[workflow]` Extend the enumerated-set ripple check to cover *scaffold sets written longhand for remote-fetch contexts* — these cannot inherit a local scaffold script's changes, so a new deployed file is invisible to them by construction.
+- `[failure]` Where a validator has a known one-OS false-positive class, record the baseline count in the corpus so a reviewer can subtract it instead of re-deriving the classification each story.
 
 ### What Worked Well
-*(pending)*
+- Refusing to accept the implementer's "diffed verbatim, zero content loss" claim and re-extracting all sections from the pre-split file independently: it confirmed the claim exactly as stated, which then made it safe to spend the remaining effort on the contract question the claim could never have covered.
+- Actually executing the scaffold script for both modes rather than reading it — cheap, and it converted an AC from "looks right" to "produced the right bytes".
+- Reading the removed lines of the merge-strategy list as *evidence about the old behavior*, not just as churn. The one section absent from that list was the whole of the second blocking finding.
 
 ## QA
 ### Impediments & Unclear Points
