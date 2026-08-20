@@ -1,6 +1,6 @@
 # QA Memory Archive
 
-> Full-text archive for `QA_Memory.md`'s Keyword Index tier — devkit-internal two-tier memory pilot (`Agent_Common.md §12`, issue #118). Not read every spawn; open only when an index line's keywords match your current task, using the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.
+> Full-text archive for `QA_Memory.md`'s Keyword Index tier — devkit-internal two-tier memory pilot (`Agent_Common_Records.md §8`, issue #118). Not read every spawn; open only when an index line's keywords match your current task, using the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.
 
 ## Stored Facts
 

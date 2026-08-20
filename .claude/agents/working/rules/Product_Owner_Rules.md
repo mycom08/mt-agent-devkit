@@ -147,13 +147,13 @@ Only when you author or update a roadmap/planning doc that defines stories ahead
 
 ## 11b. Working Record Retention
 
-Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format).
+Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §1` for the char cap and snapshot format).
 
 ---
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
 
 ---
 

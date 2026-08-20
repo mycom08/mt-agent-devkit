@@ -94,7 +94,7 @@ Older entries in the file use different formats — ignore them. Always use `new
 
 ## 5. Pre-PR Gate
 
-**Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common.md §7` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
+**Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common_Records.md §6` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
 
 **All applicable checks must pass before opening a PR — no exceptions:**
 
@@ -150,7 +150,7 @@ Tag **TL** in the comment to request review.
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §1` for the char cap and snapshot format)
 
 ---
 
@@ -162,13 +162,13 @@ When you update or create project documents, use the current structure. Refer se
 
 ## 9. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
 
 ---
 
 ## 10. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common.md §3`.
+On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Records.md §2`.
 
 ---
 

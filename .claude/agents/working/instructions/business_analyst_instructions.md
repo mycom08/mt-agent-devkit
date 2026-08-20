@@ -30,19 +30,19 @@ When you update or create project documents, use the current feature-doc structu
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/Business_Analyst_Memory.md`. Rules and format: `.claude/agents/working/rules/Agent_Common.md §2` (BA records `## Stored Facts` only).
+Record durable facts in `.claude/agents/working/memory/Business_Analyst_Memory.md`. Rules and format: `.claude/agents/working/rules/Agent_Common_Records.md §1` (BA records `## Stored Facts` only).
 
 ---
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
+Write your retro per `.claude/agents/working/rules/Agent_Common_Records.md §3`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §5`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
+Update `.claude/agents/working/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §1`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
 
 ---
 

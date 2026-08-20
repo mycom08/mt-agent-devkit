@@ -138,19 +138,19 @@ Rare — only when QA is the story Implementer. Rule in `QA_Rules_Extended.md §
 
 - Keep working record updates short and fact-based (story IDs, validation results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §1` for the char cap and snapshot format)
 
 ---
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
 
 ---
 
 ## 13. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common.md §3`.
+On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Records.md §2`.
 
 ---
 

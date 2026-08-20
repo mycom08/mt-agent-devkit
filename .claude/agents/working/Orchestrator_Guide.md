@@ -47,11 +47,11 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ## Orchestrator Working Record
 
-**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common.md §5` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
+**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common.md §1` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
 
-**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 10,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common.md §5`: *would the next session take a different action if this line were missing?*
+**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 10,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common.md §1`: *would the next session take a different action if this line were missing?*
 
-**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common.md §5`.
+**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common.md §1`.
 
 **When to update (rewrite the current entry in place, or start a new one for a new piece of work):**
 - **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, versions bumped, PR/story refs).

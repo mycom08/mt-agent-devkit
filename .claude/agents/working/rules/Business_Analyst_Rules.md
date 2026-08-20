@@ -43,13 +43,13 @@ When posting comments on GitHub Issues:
 
 ## 4. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
 
 ---
 
 ## 5. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common.md §3`.
+On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Records.md §2`.
 
 ---
 

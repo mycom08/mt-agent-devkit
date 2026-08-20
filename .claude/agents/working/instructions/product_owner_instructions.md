@@ -34,7 +34,7 @@ When writing or managing stories, also read **Story Standard (PO)** — `.claude
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/Product_Owner_Memory.md`. Rules and format: `.claude/agents/working/rules/Agent_Common.md §2` (PO records `## Stored Facts` only).
+Record durable facts in `.claude/agents/working/memory/Product_Owner_Memory.md`. Rules and format: `.claude/agents/working/rules/Agent_Common_Records.md §1` (PO records `## Stored Facts` only).
 
 ---
 
@@ -58,4 +58,4 @@ Only when the orchestrator asks you to run the **Plan Next Sprint** workflow —
 
 ## Working Record
 
-Update `.claude/agents/working/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §5`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.
+Update `.claude/agents/working/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.

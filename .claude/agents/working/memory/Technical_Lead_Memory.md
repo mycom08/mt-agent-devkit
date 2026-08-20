@@ -1,6 +1,6 @@
 # Technical Lead Memory
 
-> Two-tier memory (devkit-internal pilot, `Agent_Common.md §12`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `Technical_Lead_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §12's bounded-read recipe — never read the whole archive. Numbering gaps (6, 13–16) are pruned facts — do not renumber, here or in the archive.
+> Two-tier memory (devkit-internal pilot, `Agent_Common_Records.md §8`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `Technical_Lead_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §8's bounded-read recipe — never read the whole archive. Numbering gaps (6, 13–16) are pruned facts — do not renumber, here or in the archive.
 
 ## Standing Checks
 

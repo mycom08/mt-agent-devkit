@@ -39,7 +39,7 @@ Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. 
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/working/rules/Agent_Common.md §2`.
+Record durable facts in `.claude/agents/working/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/working/rules/Agent_Common_Records.md §1`.
 
 ---
 
@@ -54,10 +54,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
+Write your retro per `.claude/agents/working/rules/Agent_Common_Records.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §5`.
+Update `.claude/agents/working/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §1`.
