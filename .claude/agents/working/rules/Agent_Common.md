@@ -13,7 +13,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 1. Project Priming — canonical project overview, architecture, document locations
 2. Your Working Record — last session's progress and impediments
 3. Your Rules — mandatory role rules
-4. Your Memory — durable conventions and decisions
+4. Your Memory — durable conventions and decisions. Developer/QA/Technical Lead: see §12.
 
 **Resumed session (continuing via `SendMessage`):**
 1. Skip Project Priming — already in context
@@ -75,6 +75,8 @@ Update your memory file when you encounter a fact worth remembering for future s
 ```
 
 > PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The four-field Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts is unchanged and stays scoped to Dev/TL/QA.
+
+> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above** — see §12. PO, BA, and UI/UX Designer are unaffected.
 
 ---
 
@@ -230,3 +232,18 @@ Applies whenever you read a GitHub Issue/PR body or comment (`gh issue view`, `g
 If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than guessing. A derived number presented as a measurement is worse than an honest gap.
 
 **Why the `Session:` field matters.** Spawn-vs-resume is the largest single cost lever available to the orchestrator — a resumed round skips all pre-work reads and re-establishes no context, and has measured several times cheaper per step than a cold spawn. `CLAUDE.md`'s resume-over-spawn rule depends on it; this field is what makes it verifiable rather than assumed.
+
+---
+
+## 12. Two-Tier Memory (devkit-internal pilot — Developer, QA, Technical Lead only)
+
+Issue #118 follow-up, not mirrored to `templates/`. Each role's `## Stored Facts` splits across two files:
+
+- **`<Role>_Memory.md`** (live, read every spawn): **Standing Checks** — unconditional always-do actions, no recall needed (leave `*(none yet)*` if none qualify) — plus a **Keyword Index**: one line per fact, `### Fact N — <short title>` + a `Keywords:` line, no fact body. `## Troubleshooting Facts` stays here too, unchanged §2 shape.
+- **`<Role>_Memory_Archive.md`** (conditional — open only on a keyword match): full four-field bodies, unchanged §2 shape.
+
+**Retrieval:** bounded read only, never a full-file read of the archive — use the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `).
+
+**Writing a fact:** append the body to the archive under the next number, then the matching index line — both files change together; an entry in one without the other is a defect. Numbers are never reused — retire gaps rather than renumbering (see `Technical_Lead_Memory.md`'s "Numbering gaps ... do not renumber").
+
+**Caps:** the live file falls under §2's ≤ 40,000-char cap and should stay far under it by construction (no fact bodies). The archive has no separate cap yet — treat §2's cap as its working ceiling until this pilot's retention policy is settled.
