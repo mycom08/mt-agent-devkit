@@ -53,7 +53,7 @@ Files to update (targeted):        ← if changes.json resolved cleanly
   — or —
 
 Full scan triggered                ← if any version was missing from changes.json
-  Files to overwrite:  rules/ (N), workflows/ (N), Orchestrator_Guide.md
+  Files to overwrite:  rules/ (N), workflows/ (N), Orchestrator_Guide.md, skills/read-section/SKILL.md
   Files to merge:      instructions/ (6), CLAUDE.md
   Files to skip:       Project_Priming.md, memory/ (6), working-record/ (6)
 ```
@@ -103,6 +103,15 @@ For split candidates, read from `templates/{mode}/workflows/`. For the full depl
 `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 Files: all workflow files listed above. Never write `Analyst_Workflow.md` or `Init_Project_Workflow.md` (devkit-internal — never written to target projects).
+
+### Skill files — Overwrite
+
+**Source:** `.claude/agents/templates/skills/read-section/SKILL_template.md` (local devkit)
+**Target:** `{TARGET_PROJECT}/.claude/skills/read-section/SKILL.md`
+
+Read the local template and write verbatim (strip the `_template` suffix). Create `{TARGET_PROJECT}/.claude/skills/read-section/` if it does not exist. Carries no project-specific content.
+
+Files: `SKILL.md` under `skills/read-section/` (1 file).
 
 ### Instruction files — Merge
 
@@ -259,7 +268,7 @@ Skipped (project-owned):
 
 ## Stage 4 — Audit Pass (detect-only)
 
-**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files, script files, and `Orchestrator_Guide.md` (all verbatim overwrite), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote. This workflow has no checksum pre-filter (unlike `sync devkit`), so only the **failed-write** exclusion applies here — a file Stage 2 logged an error for and skipped is not in scope.
+**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files, script files, skill files, and `Orchestrator_Guide.md` (all verbatim overwrite), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote. This workflow has no checksum pre-filter (unlike `sync devkit`), so only the **failed-write** exclusion applies here — a file Stage 2 logged an error for and skipped is not in scope.
 
 If the scope list is empty → **skip this stage silently.** Print nothing, spawn nothing.
 

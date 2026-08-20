@@ -71,7 +71,7 @@ Deduplicate the targeted update set after collecting across all versions.
 
 ### Checksum pre-filter (overwrite-strategy files only)
 
-For each file in the targeted update set that uses the **overwrite** strategy (workflow files, script files), and where `changes.json` provides a checksum for that file:
+For each file in the targeted update set that uses the **overwrite** strategy (workflow files, script files, skill files), and where `changes.json` provides a checksum for that file:
 
 1. Read the local installed file
 2. Compute its SHA-256
@@ -94,7 +94,7 @@ Files to update (targeted):
   — or —
 
 Full scan triggered (N files)
-  Files to overwrite:  rules/ (N), workflows/ (N), Orchestrator_Guide.md
+  Files to overwrite:  rules/ (N), workflows/ (N), Orchestrator_Guide.md, skills/read-section/SKILL.md
   Files to merge:      instructions/ (6), CLAUDE.md
   Files to skip:       Project_Priming.md, memory/ (6), working-record/ (6)
 ```
@@ -167,6 +167,15 @@ Applies to all 10 files listed above.
           `.claude/agents/scripts/check_devkit_version.sh`
 
 Fetch and write verbatim. Create `.claude/agents/scripts/` if it does not exist.
+
+#### Skill files — Overwrite
+
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/skills/read-section/SKILL_template.md`
+**Target:** `.claude/skills/read-section/SKILL.md`
+
+Fetch and write verbatim (strip the `_template` suffix). Create `.claude/skills/read-section/` if it does not exist. Carries no project-specific content, same reasoning as script files above.
+
+Applies to: `SKILL.md` under `skills/read-section/` (1 file).
 
 #### Settings hook — Inject if missing
 
@@ -280,6 +289,9 @@ After all updates are applied, scan each managed directory and flag any file not
 **Expected files — `scripts/`:**
 `check_devkit_version.ps1`, `check_devkit_version.sh`
 
+**Expected files — `.claude/skills/`** (sibling of `.claude/agents/`, not scanned as part of it — check separately):
+`read-section/SKILL.md`
+
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/`, `internal/` — these are project-owned, runtime-output, or agent-managed and may contain custom or transient files. `internal/` specifically holds only this workflow's own audit report while a Stage 4 run is in flight (see Stage 4) and is always empty between runs.
 
 If any unexpected files are found, report them to the user:
@@ -338,7 +350,7 @@ Skipped (project-owned):
 
 ## Stage 4 — Audit Pass (detect-only)
 
-**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files, script files, and `Orchestrator_Guide.md` (all verbatim overwrite — can't carry a mode-adaptation artifact, self-heals via the checksum pre-filter on the next sync), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote (checksum skip, failed fetch/write).
+**Runs only if Stage 2 wrote at least one file in scope.** Scope = the files Stage 2's written-files log actually wrote in this run whose strategy is model-generated: `rules/*.md` (adapt to mode), `instructions/*.md` (merge), and `CLAUDE.md` (merge). Excluded, even if Stage 2 touched them this run: workflow files, script files, skill files, and `Orchestrator_Guide.md` (all verbatim overwrite — can't carry a mode-adaptation artifact, self-heals via the checksum pre-filter on the next sync), wiki files (project-owned, not devkit-authored content), and anything Stage 1 resolved but Stage 2 never actually wrote (checksum skip, failed fetch/write).
 
 If the scope list is empty (nothing in those three categories was written this run — e.g. only workflow files changed, or the whole run was a no-op) → **skip this stage silently.** Print nothing, spawn nothing.
 

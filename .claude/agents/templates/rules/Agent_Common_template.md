@@ -179,7 +179,7 @@ Every tool call resends the whole transcript, so call **count** drives cost as m
 1. **Mechanical edits via shell, not Read+Edit.** AC-checkbox ticks in an issue body or placeholder replacement in a file use a `sed`-style in-place substitution — don't read the whole file into context and regenerate it.
 2. **Narrow `gh` queries with `-q`/`--jq`.** Fetch only the fields you need (e.g. just comment bodies, not author/timestamp/edit-history metadata); cap to the last N comments when full history isn't required.
 3. **Batch related commands.** Chain `gh`/`git` commands in one shell call when there's no dependency on intermediate output.
-4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard_PO.md` §14"), locate that section (grep) instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file.
+4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard_PO.md` §14"), use the `read-section` skill (`.claude/skills/read-section/`) to extract just that section instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file.
 
 > These conventions govern *how* work is done, never *how much* verification is done — do not use them to justify thinner review or skipped checks.
 
