@@ -128,13 +128,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ### When acting as Implementer
 
-1. Create a dev branch from `main` — **never work directly on `main`**:
-   ```
-   git checkout -b ST-XXXXXX/short-description
-   ```
-2. Push all implementation work to that dev branch
-3. Open a PR from the dev branch → `main`
-4. PR title: `[ST-XXXXXX][DEVKIT] Story title`
+Rare — only when the orchestrator assigns TL as story implementer. Procedure in `Technical_Lead_Rules_Extended.md §1`.
 
 ---
 
@@ -163,36 +157,13 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ## 11. Context Anchoring
 
-After each working session on an unfinished story, create or update a context-anchoring note under `docs/technical/` or `docs/feature/<feature_name>/questions/`.
-
-```md
-# Feature: <feature_name>
-
-## Decisions
-| Decision | Reason | Rejected Alternative |
-|----------|--------|----------------------|
-
-## Constraints
-
-## Open Questions
-
-## State
-```
+After each working session on an unfinished story — procedure and note template in `Technical_Lead_Rules_Extended.md §2`.
 
 ---
 
 ## 13. Pre-PR Gate (when acting as Implementer)
 
-| Change type | Required local check |
-|---|---|
-| `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
-| `.ps1` files changed | PowerShell syntax check — zero parse errors |
-| `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| Template / workflow / rules / docs only | Exempt |
-
-Include a one-line check result note in the PR description.
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+Rare — only when acting as Implementer per §5. Checklist in `Technical_Lead_Rules_Extended.md §3`.
 
 ---
 
@@ -210,6 +181,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
-**Previous:** 1.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
+**Version:** 1.3 — Relocated §5's "When acting as Implementer" subsection, §11 Context Anchoring, and §13 Pre-PR Gate (when acting as Implementer) to `Technical_Lead_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first). §2 Code Review & PR Approval deliberately left in place — always relevant to a TL spawn.  
+**Previous:** 1.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
 **Created:** 2026-06-16

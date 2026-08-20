@@ -124,23 +124,13 @@ After all story AC are verified, confirm no regression was introduced:
 
 ## 9. Pre-PR Gate (when acting as Implementer)
 
-When QA is the story Implementer, run the applicable local checks before opening a PR:
-
-| Change type | Required local check |
-|---|---|
-| `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
-| `.ps1` files changed | PowerShell syntax check — zero parse errors |
-| `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| `.claude/agents/templates/**` or `.claude/agents/workflows/**` changed | `python scripts/validate_templates.py` + `bash scripts/test/run.sh` — both exit 0 (see `docs/Template_Test_Strategy.md`) |
-| Docs only (no templates, workflows, or scripts) | Exempt |
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+Rare — only when QA is the story Implementer. Checklist in `QA_Rules_Extended.md §1`.
 
 ---
 
 ## 10. Live User Instruction Conflicts (when acting as Implementer)
 
-If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread, the live instruction takes precedence. Acknowledge the conflict, proceed with the live instruction, and document the override in the PR description.
+Rare — only when QA is the story Implementer. Rule in `QA_Rules_Extended.md §2`.
 
 ---
 
@@ -166,6 +156,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.3 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
-**Previous:** 1.2 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
+**Version:** 1.4 — Relocated §9 Pre-PR Gate and §10 Live User Instruction Conflicts (both "when acting as Implementer") to `QA_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first)  
+**Previous:** 1.3 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
 **Created:** 2026-06-16

@@ -55,37 +55,7 @@ Read `.claude/agents/working/rules/UI_Prototype_Rules.md` before implementing an
 
 If the story is complex (new workflow stage, major template restructure, new devkit command, or breaking change to `init project` behavior), draft a design and post it as a GitHub Issue comment for TL review. Tag **TL** in the comment. TL approval is confirmed when TL replies with **"Design approved"**. Do not proceed until that exact phrase appears.
 
-**Mid-implementation consultation (when a question surfaces during implementation):**
-
-If you encounter an unclear AC, scope ambiguity, or technical decision point while implementing — and making a judgment call is not appropriate — do NOT use the Blocked Story Procedure and do NOT ask the user. Instead:
-
-1. Identify who owns the question:
-   - Scope or AC question → **PO**
-   - Technical or design question → **TL**
-   - Both → **PO + TL**
-2. Post a comment on the GitHub Issue tagging the right role(s). Use the format:
-   ```
-   **Mid-implementation question — [TL / PO / both]**
-   <specific question — one clear sentence>
-   **Decision needed:** <what answer would unblock you>
-   ```
-3. Report back to the orchestrator using this format:
-   ```
-   Mid-implementation consultation needed — ST-XXXXXX
-   Owner: <TL / PO / both>
-   Question: <same question as posted on issue>
-   Decision needed: <same decision needed>
-   Implementation paused at: <brief description of where you stopped>
-   Question recorded on story: posted
-   ```
-4. Do NOT change the story label. The orchestrator will spawn or resume TL and/or PO to answer in the issue thread, then resume you with their response.
-5. When the orchestrator resumes you with the answer: read it, apply it, and continue implementation from where you paused.
-
-> Use this for genuine ambiguities that would otherwise require a judgment call affecting scope or design. Do not use it for implementation details you can reasonably decide yourself.
-
-**Live user instruction conflicts (mandatory rule during implementation):**
-
-If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread, the live instruction takes precedence. Acknowledge the conflict, proceed with the live instruction, and document the override in the PR description.
+Scenario-conditional rules — mid-implementation consultation and live user instruction conflicts — live in `Developer_Rules_Extended.md §1–§2`. Read only if that scenario actually occurs.
 
 ---
 
@@ -204,17 +174,12 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## 11. Peer Review (when Dev acts as reviewer for a TL-implemented story)
 
-When the orchestrator assigns Dev as peer reviewer:
-- Verify the PR follows naming conventions and pre-PR gate checks from §4–§5 — except commit subject-line **length**, which is a non-blocking nit per §6: note it in a comment, never request changes over it alone
-- Check for obvious logic errors or missing content
-- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail (same rules apply to peer review)
-- Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
-- When all criteria pass, post approval as a comment on the PR (GitHub blocks self-approval — use `gh pr comment`)
+Only when the orchestrator assigns Dev as peer reviewer for a TL-implemented story — checklist in `Developer_Rules_Extended.md §3`. Otherwise skip.
 
 ---
 
 ## Version
 
-**Version:** 1.4 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
-**Previous:** 1.3 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
+**Version:** 1.5 — Relocated §2's mid-implementation-consultation/live-instruction-conflict content and §11's peer-review checklist to `Developer_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first — see `Developer_Rules_Extended.md` header)  
+**Previous:** 1.4 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
 **Created:** 2026-06-16

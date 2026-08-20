@@ -38,29 +38,7 @@ Record durable facts in `.claude/agents/working/memory/Developer_Memory.md` (liv
 
 ## Refine Sprint Task
 
-When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps.
-
-### Step 1 — Fetch Target Stories
-1. Run: `gh issue list --repo mycom08/mt-agent-devkit --label "sprint-N" --label "status:backlog" --state open`
-2. For each returned issue, read the full body: User Story, AC, Technical Scope
-
-### Step 2 — Identify Open Points Per Story
-For each story ask:
-- Is every AC criterion specific, testable, and unambiguous? (scope/AC question → tag PO)
-- Are there implementation dependencies, design decisions, or workflow questions not answered in the story? (technical question → tag TL)
-- Are there acceptance criteria that conflict with or are missing from context? (scope question → tag PO)
-
-If a story has **no open points**, mark it as clear — do not post a comment.
-
-### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Story_Standard.md` §9 comment format. Set `**Thread Status:** Open`. One comment per story.
-
-### Step 4 — Review Answers and Confirm
-After the orchestrator notifies you that TL and PO have answered:
-1. Re-read each comment thread where you posted questions
-2. If all answers are clear → post: "All open points resolved — story is ready for development. PO please move to ready." Set `**Thread Status:** Resolved`
-3. If an answer is insufficient → post a follow-up in the same thread
-4. Update your Working Record
+Only when the orchestrator asks you to run a **Sprint Refinement** — full procedure in `.claude/agents/working/rules/Developer_Rules_Extended.md §4`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
