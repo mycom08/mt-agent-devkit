@@ -148,7 +148,7 @@ If a live instruction from the user during implementation contradicts a prior de
 
 - Keep working record updates short and fact-based (story IDs, validation results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/working/rules/Agent_Common.md §5`.
 
 ---
 
@@ -166,6 +166,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.3 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
-**Previous:** 1.2 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
+**Version:** 1.4 — §11: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)  
+**Previous:** 1.3 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
 **Created:** 2026-06-16

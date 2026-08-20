@@ -166,7 +166,7 @@ Place the prototype source under the project's standard feature-doc/source struc
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/rules/Agent_Common.md §5`.
 
 ---
 
@@ -184,6 +184,6 @@ On any tooling/environment blocker (prototype won't start, mock backend won't ru
 
 ## Version
 
-**Version:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022)
-**Previous:** 1.0 — initial version
+**Version:** 1.2 — §8: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)
+**Previous:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022)
 **Created:** 2026-07-20

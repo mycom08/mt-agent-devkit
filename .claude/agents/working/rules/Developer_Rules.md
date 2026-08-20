@@ -180,7 +180,7 @@ Tag **TL** in the comment to request review.
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/working/rules/Agent_Common.md §5`.
 
 ---
 
@@ -215,6 +215,6 @@ When the orchestrator assigns Dev as peer reviewer:
 
 ## Version
 
-**Version:** 1.4 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
-**Previous:** 1.3 — §6: docs-only pushes append `[skip ci]` so non-code changes stop triggering CI  
+**Version:** 1.5 — §7: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)  
+**Previous:** 1.4 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
 **Created:** 2026-06-16

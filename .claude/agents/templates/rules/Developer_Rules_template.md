@@ -229,7 +229,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
 - **When starting a session:** Read your working record, then **sync story statuses with GitHub** — check the current label on each in-progress or recently completed story and correct the record before reporting status
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/rules/Agent_Common.md §5`.
 
 ---
 
@@ -266,6 +266,6 @@ When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.m
 
 ## Version
 
-**Version:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
-**Previous:** 2.10 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
+**Version:** 2.12 — §7: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)  
+**Previous:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
 **Created:** 2026-04-24

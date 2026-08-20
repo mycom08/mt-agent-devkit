@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000131-2] Reduced the Working Record 3-entry retention rule to a bare pointer at `Agent_Common.md §5` in all five role rules files, removing the restated duplicate.
 - [ST-000044] Piloted a two-tier memory (live index + archive) for the devkit's own Developer/QA/Technical Lead roles.
 - [ST-000044] Generalized the `read-section` skill to support non-numbered heading citations.
 - [ST-000043] Split orchestrator-only content out of `CLAUDE.md` into a new `Orchestrator_Guide.md`.

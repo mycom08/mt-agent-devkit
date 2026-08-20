@@ -190,7 +190,7 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 
 - Keep working record updates short and fact-based (design decisions, schema changes, PR links)
 - Post blockers immediately as a Comment on the GitHub Issue; tag BA or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/rules/Agent_Common.md §5`.
 
 ---
 
@@ -252,6 +252,6 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 2.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
-**Previous:** 2.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
+**Version:** 2.3 — §8: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)  
+**Previous:** 2.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
 **Created:** 2026-05-01

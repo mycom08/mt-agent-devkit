@@ -1,4 +1,21 @@
 {
+  "0.1.45": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Developer_Rules_template.md",
+      ".claude/agents/templates/rules/QA_Rules_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "Fix (ST-000131-2): the Working Record 3-entry retention rule, owned by `Agent_Common.md §5`, was restated in full here and then still pointed at `Agent_Common.md` for the char cap — readers paid for the rule twice. Reduced to a bare pointer, matching the existing Troubleshooting Protocol/Stage-Transition Commit precedent in the same file. Working mirror (`working/rules/Developer_Rules.md`) carries the identical fix.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix (ST-000131-2): same restated-retention-rule fix as `Developer_Rules_template.md`, reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/QA_Rules.md`) carries the identical fix.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix (ST-000131-2): same restated-retention-rule fix as `Developer_Rules_template.md`, reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/Technical_Lead_Rules.md`) carries the identical fix.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "Fix (ST-000131-2): same restated-retention-rule fix as `Developer_Rules_template.md` (§11b here), reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/Product_Owner_Rules.md`) carries the identical fix.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "Fix (ST-000131-2): same restated-retention-rule fix as `Developer_Rules_template.md`, reduced to a bare pointer at `Agent_Common.md §5`. Working mirror (`working/rules/UI_UX_Designer_Rules.md`) carries the identical fix."
+    }
+  },
   "0.1.44": {
     "new": [
       ".claude/agents/templates/skills/read-section/SKILL_template.md"

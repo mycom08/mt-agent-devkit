@@ -226,7 +226,7 @@ Do not silently follow the old decision, and do not block awaiting re-confirmati
 
 - Keep working record updates short and fact-based (story IDs, test results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/rules/Agent_Common.md §5`.
 
 ---
 
@@ -244,6 +244,6 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 3.7 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
-**Previous:** 3.6 — §4: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
+**Version:** 3.8 — §11: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)  
+**Previous:** 3.7 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
 **Created:** 2026-05-01

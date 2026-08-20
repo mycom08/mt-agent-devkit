@@ -188,7 +188,7 @@ Every story the roadmap defines must become a tracked `status:backlog` issue/sto
 
 ## 11b. Working Record Retention
 
-Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format).
+See `.claude/agents/rules/Agent_Common.md §5`.
 
 ---
 
@@ -201,5 +201,5 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 ## Version
 
 **Created:** 2026-04-24  
-**Version:** 1.9 — New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue/story at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop  
-**Previous:** 1.8 — §9 Release Gate: VERSION/CHANGELOG.md are now a universal devkit convention (every repo, any language), not just Java-skeleton repos; only the automated `release.yml` cut remains Java-specific
+**Version:** 1.10 — §11b: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)  
+**Previous:** 1.9 — New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue/story at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop

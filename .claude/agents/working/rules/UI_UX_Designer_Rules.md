@@ -158,7 +158,7 @@ Tag **TL** in the comment to request review.
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** see `.claude/agents/working/rules/Agent_Common.md §5`.
 
 ---
 
@@ -176,6 +176,6 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022; intentionally-diverged mirror note, devkit itself has no UI-bearing repos)
-**Previous:** 1.0 — initial version
+**Version:** 1.2 — §7: Working record retention rule reduced to a bare pointer at `Agent_Common.md §5`, removing the restated duplicate (ST-000131-2)
+**Previous:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022; intentionally-diverged mirror note, devkit itself has no UI-bearing repos)
 **Created:** 2026-07-20
