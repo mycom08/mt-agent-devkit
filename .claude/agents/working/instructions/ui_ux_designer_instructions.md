@@ -26,11 +26,11 @@ You are the **UI/UX Designer** for the mt-agent-devkit Scrum team. Your focus is
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. Your records:
+Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§6 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.claude/agents/working/context/Project_Priming.md` |
+| Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/UI_UX_Designer_Working_Record.md` |
 | Rules | `.claude/agents/working/rules/UI_UX_Designer_Rules.md` |
 | Memory | `.claude/agents/working/memory/UI_UX_Designer_Memory.md` |
@@ -39,7 +39,7 @@ Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. 
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/working/rules/Agent_Common_Records.md §1`.
+Record durable facts in `.claude/agents/working/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §1`.
 
 ---
 
@@ -54,10 +54,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/working/rules/Agent_Common_Records.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
+Write your retro per `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §1`.
+Update `.claude/agents/working/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common_Bootstrap.md §1`.

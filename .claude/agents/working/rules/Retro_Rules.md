@@ -88,15 +88,15 @@ Signal items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) must be w
 
 ## Sprint-End Memory Pruning
 
-Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common_Records.md §1` rule 3).
+Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common_Read_On_Demand.md §1` rule 3).
 
 For PO, BA, and UI/UX Designer — single-file memory, `.claude/agents/working/memory/*_Memory.md` (glob, these 3 roles only):
-1. Apply the inclusion test and "Never record" list from `Agent_Common_Records.md §1` to every `## Stored Facts` entry.
+1. Apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to every `## Stored Facts` entry.
 2. Delete or merge: facts whose `Expires when` premise has been met, duplicate/superseded facts, and history-only entries with no future action.
 3. Leave `## Troubleshooting Facts` entries as-is unless the same test clearly applies — they are already tied to a specific fix and less prone to the drift this step targets.
 4. Report a one-line summary per file to the user (kept / pruned counts). No edit needed if nothing qualifies for removal.
 
-For Developer, QA, and Technical Lead — two-tier memory (`Agent_Common_Records.md §8`):
+For Developer, QA, and Technical Lead — two-tier memory (`Agent_Common_Read_On_Demand.md §8`):
 1. Apply the same test to every `## Stored Facts` entry in `.claude/agents/working/memory/<Role>_Memory_Archive.md`, not the live index file (`## Stored Facts` no longer lives there).
 2. Delete or merge in the archive exactly as above. **Then mirror the deletion in the live file's `## Keyword Index`** — remove the matching `### Fact N` index entry so no index line ever points at a fact that no longer exists in the archive. A merge that keeps the archive fact under a different number requires renumbering the index line to match, not leaving a stale pointer.
 3. Leave `## Troubleshooting Facts` as-is (unchanged from the single-file case — it lives in the live file for these roles too, see §8).

@@ -97,7 +97,7 @@ backlog → ready → in-progress → review → testing → done
 
 | What | Where |
 |---|---|
-| Project overview and architecture | `.claude/agents/working/context/Project_Priming.md` |
+| Project overview and architecture | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | All workflow trigger mappings | `.claude/agents/working/Orchestrator_Guide.md` §Sprint Workflows (Devkit) |
 | Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
 | CI/CD story validation | `.claude/agents/working/rules/CICD_Validation_Guide.md` |

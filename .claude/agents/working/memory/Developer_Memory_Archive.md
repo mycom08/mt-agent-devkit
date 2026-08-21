@@ -1,13 +1,13 @@
 # Developer Memory Archive
 
-> Full-text archive for `Developer_Memory.md`'s Keyword Index tier — devkit-internal two-tier memory pilot (`Agent_Common_Records.md §8`, issue #118). Not read every spawn; open only when an index line's keywords match your current task, using the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.
+> Full-text archive for `Developer_Memory.md`'s Keyword Index tier — devkit-internal two-tier memory pilot (`Agent_Common_Read_On_Demand.md §8`, issue #118). Not read every spawn; open only when an index line's keywords match your current task, using the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.
 
 ## Stored Facts
 
 ### Fact 1
 - **Rule:** Adding an Nth item to any enumerated corpus set (role, rules file, split workflow) ripples into hardcoded counts and lists that a story's AC never names. Grep an existing member of the set across `.claude/agents/` *before* starting — a `{placeholder}` scan will not catch count prose. Known ripple sites: `scaffold_mechanical.sh` (role loops, `SPLIT_WORKFLOWS` array), `Init_Project_Workflow.md`, `Update_Project_Workflow.md`, `Build_Software_Workflow.md`, and `Sync_Devkit_Workflow_template.md` **plus its working mirror** — the last three each carry *two* distinct lists ("Applies to" and "Expected files — …"), and updating only one is the standard miss.
 - **Applies when:** any story that adds a role, a rules template, or a split workflow file.
-- **Evidence:** ST-000021 (6th role, missed 2 sites), ST-000023 (19th rules file), ST-000028 (Nth split workflow), ST-000037 (20th rules file — AC named only 4 of the 6 real ripple sites; `scaffold_mechanical.sh`'s `VERBATIM_RULES` and `Build_Software_Workflow.md`'s 2 count mentions caught from this fact alone). Role case now also documented in `Project_Priming.md §15a`.
+- **Evidence:** ST-000021 (6th role, missed 2 sites), ST-000023 (19th rules file), ST-000028 (Nth split workflow), ST-000037 (20th rules file — AC named only 4 of the 6 real ripple sites; `scaffold_mechanical.sh`'s `VERBATIM_RULES` and `Build_Software_Workflow.md`'s 2 count mentions caught from this fact alone). Role case now also documented in `Project_Priming_Read_On_Demand.md §15a`.
 - **Expires when:** the counts become generated rather than hardcoded.
 
 ### Fact 2
@@ -37,7 +37,7 @@
 ### Fact 6
 - **Rule:** `changes.json` uses **newest-first (descending)** key order — add a new entry at the **top**, immediately after the opening `{`. The validator checks semver parseability only, never ordering direction, so a misplaced entry passes CI.
 - **Applies when:** adding a version entry.
-- **Evidence:** verified against `changes.json` — first key `0.1.40`, last `0.0.1`; `Project_Priming.md §15` states the same.
+- **Evidence:** verified against `changes.json` — first key `0.1.40`, last `0.0.1`; `Project_Priming_Read_On_Demand.md §15` states the same.
 - **Expires when:** the convention flips.
 
 ### Fact 7
@@ -53,7 +53,7 @@
 - **Expires when:** the "Sprint end" sequence is restructured or renamed.
 
 ### Fact 9
-- **Rule:** A rule that lives in `Story_Standard_template.md` is restated in **six** places, not five: the four per-role views (`Story_Standard_Dev/PO/QA/TL_template.md`) *and* `Strict_Mode_Story_Guide_template.md`, which restates the same standard for strict mode's local comment entries. The strict-mode guide is the one an AC's file list reliably omits, and it has no working mirror (`Project_Priming.md §15` carve-out names it). Before editing any `Story_Standard` rule, grep a distinctive phrase from it (e.g. `150–200`) across `.claude/agents/` rather than trusting the AC — this is restatement drift, a different mechanism from Fact 1's count drift.
+- **Rule:** A rule that lives in `Story_Standard_template.md` is restated in **six** places, not five: the four per-role views (`Story_Standard_Dev/PO/QA/TL_template.md`) *and* `Strict_Mode_Story_Guide_template.md`, which restates the same standard for strict mode's local comment entries. The strict-mode guide is the one an AC's file list reliably omits, and it has no working mirror (`Project_Priming_Read_On_Demand.md §15` carve-out names it). Before editing any `Story_Standard` rule, grep a distinctive phrase from it (e.g. `150–200`) across `.claude/agents/` rather than trusting the AC — this is restatement drift, a different mechanism from Fact 1's count drift.
 - **Applies when:** editing any rule in `Story_Standard_template.md` that the role views or strict-mode guide summarise.
 - **Evidence:** ST-000038 — AC6 named 4 views; grep found the 5th restatement site.
 - **Expires when:** the views stop restating and become pure pointers.

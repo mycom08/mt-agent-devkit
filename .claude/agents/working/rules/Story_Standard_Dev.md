@@ -29,7 +29,7 @@
 
 ### Status: In Progress → Review
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
-2. Run pre-PR checks from `Developer_Rules.md §5`
+2. Run pre-PR checks from `Developer_Rules_Read_On_Demand.md §5`
 3. Create PR with title: `[ST-XXXXXX][DEVKIT] Story title`
 4. Remove `status:in-progress`, add `status:review`
 5. Request TL review in issue Comment
@@ -46,13 +46,13 @@
 
 ### Developer as Reviewer (when TL is implementer)
 
-Only when the orchestrator assigns Developer the Stage 2 peer review role — steps and notify-comment template in `Developer_Rules_Extended.md §5`. Otherwise skip.
+Only when the orchestrator assigns Developer the Stage 2 peer review role — steps and notify-comment template in `Developer_Rules_Read_On_Demand.md §16`. Otherwise skip.
 
 ---
 
 ## 6. Hotfix (post-Done bug)
 
-Only when a bug is found after a story is `status:done` — steps in `Developer_Rules_Extended.md §6`. Otherwise skip.
+Only when a bug is found after a story is `status:done` — steps in `Developer_Rules_Read_On_Demand.md §17`. Otherwise skip.
 
 ---
 
@@ -96,12 +96,12 @@ Response and decision.
 
 ### Reviewer Gate — before approving a PR (Dev as peer reviewer)
 
-Only when Dev is the peer reviewer — checklist in `Developer_Rules_Extended.md §5`.
+Only when Dev is the peer reviewer — checklist in `Developer_Rules_Read_On_Demand.md §16`.
 
 ### Merge Gate — before merging dev branch to main
 
 - [ ] Self-checked all AC locally (do NOT tick checkboxes)
-- [ ] Pre-PR checks pass (see `Developer_Rules.md §5`)
+- [ ] Pre-PR checks pass (see `Developer_Rules_Read_On_Demand.md §5`)
 - [ ] PR created with story ID in title: `[ST-XXXXXX][DEVKIT] ...`
 - [ ] TL has reviewed and approved PR ✓
 

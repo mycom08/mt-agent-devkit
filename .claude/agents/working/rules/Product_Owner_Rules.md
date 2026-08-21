@@ -121,7 +121,7 @@ You approve the devkit version bump when all Must-Have stories in the sprint are
 ---
 
 ## 10. Document Placement Rules
-- When you update or create project documents, use the current structure. Refer to `Project_Priming.md §6`.
+- When you update or create project documents, use the current structure. Refer to `Project_Priming_Read_On_Demand.md §6`.
 - Use `Title_Case_With_Underscores` format for document names.
 
 ---
@@ -147,13 +147,13 @@ Only when you author or update a roadmap/planning doc that defines stories ahead
 
 ## 11b. Working Record Retention
 
-Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §1` for the char cap and snapshot format).
+Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format).
 
 ---
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

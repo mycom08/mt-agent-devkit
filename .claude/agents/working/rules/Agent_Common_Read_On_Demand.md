@@ -1,7 +1,11 @@
-# Agent Common Records — On-Demand Mechanics
+# Agent Common — Read On Demand
 
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
-**Purpose:** Companion to `Agent_Common.md` (the bootstrap-mandatory sections read at every spawn — including the Working Record's write format, folded into `Agent_Common.md §1` since it fires on every session, not just conditionally). Nothing in this file is read automatically — `Agent_Common.md §5`'s routing table names the one section to fetch when its trigger fires. §7–§8 are devkit-internal only (not mirrored to `templates/`). Where this file and a role-specific rule disagree, the role-specific rule wins.
+**Purpose:** Companion to `Agent_Common_Bootstrap.md` (the bootstrap-mandatory sections read at every spawn — including the Working Record's write format, folded into `Agent_Common_Bootstrap.md §1` since it fires on every session, not just conditionally). Nothing in this file is read automatically — `Agent_Common_Bootstrap.md §5`'s routing table names the one section to fetch when its trigger fires. §8 is devkit-internal only (not mirrored to `templates/`). Where this file and a role-specific rule disagree, the role-specific rule wins.
+
+> **Two things to know before extracting a section from this file.**
+> 1. **There are two intentional gaps.** Numbering runs §1, §2, §3, §5, §6, §8. **§4** is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1`. **§7** is where the *Token-Trace Log* sat before it became bootstrap-tier (`Agent_Common_Bootstrap.md §6`) — routing to it on demand was circular, since the trace must account for the pre-work reads themselves. Numbers are never reused: leave the gap rather than renumbering, so a stale citation resolves to nothing rather than to a different rule (same convention as `Technical_Lead_Memory.md`'s fact numbering).
+> 2. **§1 contains unnumbered sub-headings** (`## Stored Facts`, `## Troubleshooting Facts`). Bound a section extraction on **numbered** headings only (`grep -nE "^## [0-9]+\."`) — a bare `^## ` treats those sub-headings as the end of §1 and silently returns a truncated section, dropping the format block and §1's closing two-tier note.
 
 ---
 
@@ -113,45 +117,9 @@ Applies whenever a story's verification requires a runtime secret (API token, PA
 
 ---
 
-## 7. Token-Trace Log (devkit-internal only — deliberately not mirrored to `templates/`)
+## 7. Token-Trace Log — RETIRED
 
-**Why devkit-only.** This is an observability convention for our own team's spawn cost, not a designed target-project feature — `Agent_Common_template.md` does not carry this section. Recorded here as an intentional `Project_Priming.md §15`-style divergence.
-
-**File:** one per agent per story, `.claude/agents/working/token-trace_sprint/<StoryID>_<RoleTag>_steps_done.md` — `RoleTag` is `dev`, `TL`, `qa`, `po`, `ba`, or `uiux`. Never share a file across roles or stories. Gitignored — never commit.
-
-> **Two similarly-named directories — do not confuse them.** `token-trace_sprint/` holds the per-story trace **output** written by agents and is gitignored; it accumulates over a sprint and is cleared at sprint end. `tokentrace/` (no hyphen) holds the **tooling** — `token_cost.sh` and its README — and is committed. The `_sprint` suffix exists to keep the two apart at a glance.
-
-**What you write, before reporting back to the orchestrator:** the header block below, then one line per step you took, in the order you took it, each with a **labeled approximation** of its cost — you have no introspective access to your own real per-step token usage, so never present a step estimate as exact. Base the estimate on a visible proxy (files read, tool calls made, comment length written), not a guess pulled from nowhere.
-
-**Your step estimates will run well under the orchestrator-reported actual. This is expected — do not treat the gap as an error to correct.** A step estimate measures *new content entering context*. The reported actual additionally includes per-turn fixed overhead (system prompt, tool schemas, injected reminders), your own output and reasoning tokens, and any retried or failed calls — none of which are visible from the proxies above. Spend no tokens re-deriving or apologising for the difference; record the estimate and move on.
-
-**Format:**
-```md
-# <StoryID> — <Role> Step Trace
-
-**Session:** spawn | resume        <!-- resume = orchestrator sent to an existing agentId -->
-**Round:** <1 for first entry; increment for each loop-back>
-**Steps:** <count of the step lines below>
-
-- Step 1: <what you did> — ~<N> tokens approx (<why, e.g. "read Agent_Common.md + own rules + memory">)
-- Step 2: <what you did> — ~<N> tokens approx
-...
-**Estimated total:** ~<sum of the above, approx>
-**Actual total (orchestrator-reported):** <left blank — the orchestrator fills this in>
-```
-
-**What the orchestrator does:** after the agent completes and the `usage` block reports its real `subagent_tokens` figure, append it to the same file as `**Actual total (orchestrator-reported):** N` — the one real number in the file; every line above it is the agent's own approximation.
-
-**Record the reported figure verbatim, and label what it covers.** On a **resumed** session the reported `subagent_tokens` has been observed to be a session-lifetime cumulative, not the cost of that call alone. Never silently write a subtracted figure as if it were reported. Write both, labelled:
-
-```md
-**Actual total (orchestrator-reported):** <figure exactly as reported> (session-cumulative | per-call)
-**This round (derived):** <cumulative minus the prior round's recorded figure — omit on round 1>
-```
-
-If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than guessing. A derived number presented as a measurement is worse than an honest gap.
-
-**Why the `Session:` field matters.** Spawn-vs-resume is the largest single cost lever available to the orchestrator — a resumed round skips all pre-work reads and re-establishes no context, and has measured several times cheaper per step than a cold spawn. `CLAUDE.md`'s resume-over-spawn rule depends on it; this field is what makes it verifiable rather than assumed.
+> Moved to `Agent_Common_Bootstrap.md §6` on 2026-08-21. An agent must know the trace format before pre-work begins, because the trace has to account for the pre-work reads themselves; routing to it on demand is circular. A live Dev spawn burned three tool calls grepping for this section from a routing row it had never loaded. The number is retired, not reused — a stale `§7` citation must resolve to nothing rather than to a different rule.
 
 ---
 

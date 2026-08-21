@@ -106,7 +106,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Handoff note (mandatory in the PR description):** State plainly which parts are mock-only (backend responses, auth, data) so Developer knows exactly what still needs a real implementation.
 
-**Reference-only + mock-case rules:** see `.claude/agents/working/rules/UI_Prototype_Rules.md` for what the paired real repo may (and must not) reuse from this prototype. Not applicable to the devkit's own repo (markdown-only, no UI-bearing companion repos), but this mirror stays in sync with the template per Project_Priming §15.
+**Reference-only + mock-case rules:** see `.claude/agents/working/rules/UI_Prototype_Rules.md` for what the paired real repo may (and must not) reuse from this prototype. Not applicable to the devkit's own repo (markdown-only, no UI-bearing companion repos), but this mirror stays in sync with the template per Project_Priming_Read_On_Demand.md §15.
 
 ---
 
@@ -158,19 +158,19 @@ Tag **TL** in the comment to request review.
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
 - Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common.md §1` for the char cap and snapshot format)
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
 
 ---
 
 ## 8. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 9. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Records.md §2`.
+On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 

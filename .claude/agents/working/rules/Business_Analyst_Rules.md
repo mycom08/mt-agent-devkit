@@ -9,7 +9,7 @@
 
 Do these **in order** before any analysis or documentation work:
 
-1. **Read Project Priming** — `.claude/agents/working/context/Project_Priming.md`
+1. **Read Project Priming** — `.claude/agents/working/context/Project_Priming_Bootstrap.md`
 2. **Read your Working Record** — `.claude/agents/working/working-record/Business_Analyst_Working_Record.md`
 3. **Read the relevant GitHub Issues** — filter by `sprint-N` label for the current task
 
@@ -43,13 +43,13 @@ When posting comments on GitHub Issues:
 
 ## 4. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Records.md §5`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 5. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Records.md §2`.
+On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 

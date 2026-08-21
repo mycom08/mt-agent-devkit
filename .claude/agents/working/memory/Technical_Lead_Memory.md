@@ -1,6 +1,6 @@
 # Technical Lead Memory
 
-> Two-tier memory (devkit-internal pilot, `Agent_Common_Records.md §8`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `Technical_Lead_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §8's bounded-read recipe — never read the whole archive. Numbering gaps (6, 13–16) are pruned facts — do not renumber, here or in the archive.
+> Two-tier memory (devkit-internal pilot, `Agent_Common_Read_On_Demand.md §8`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `Technical_Lead_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §8's bounded-read recipe — never read the whole archive. Numbering gaps (6, 13–16) are pruned facts — do not renumber, here or in the archive.
 
 ## Standing Checks
 
@@ -36,7 +36,7 @@ Keywords: re-review, CHANGES REQUESTED, round-1 clean findings, own memory commi
 Keywords: `Retro_Rules.md`, unconditional, CHANGES REQUESTED, addenda per round
 
 ### Fact 11 — Templates and their `working/` mirrors drift silently — verify both
-Keywords: `git diff --no-index`, template/mirror drift, `Project_Priming.md §15` carve-outs, `Strict_Mode_Story_Guide_template.md` no-mirror
+Keywords: `git diff --no-index`, template/mirror drift, `Project_Priming_Read_On_Demand.md §15` carve-outs, `Strict_Mode_Story_Guide_template.md` no-mirror
 
 ### Fact 12 — A file-location or renumbering change must update every referrer (grep the final branch, not diff hunks)
 Keywords: path-move, scaffold-location, renumbering, Nth-enumerated-item, `git show <branch>:<file>`, self-healing migration, `changes.json` entry

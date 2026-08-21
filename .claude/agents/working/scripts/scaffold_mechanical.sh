@@ -142,7 +142,9 @@ for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Des
   printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
 done
 
-# 7. Blank working-record files (rewrite-in-place snapshot format — see Agent_Common.md §5)
+# 7. Blank working-record files (rewrite-in-place snapshot format — see the
+#    *scaffolded target project's* Agent_Common.md §5, which is the unsplit
+#    template. The devkit's own working copy folded that section into §1.)
 for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
   if [[ "$role" == "UI_UX_Designer" ]]; then
     role_label="UI/UX Designer"

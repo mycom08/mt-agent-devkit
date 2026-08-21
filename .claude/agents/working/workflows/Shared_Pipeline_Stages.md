@@ -343,7 +343,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 - `[skipped-step]` Orchestrator observations written to `## Orchestrator` section?
 - `[skipped-step]` Retro file verified — no remaining `*(pending)*` placeholders?
 - `[skipped-step]` Ran `wc -c .claude/agents/working/working-record/*_Working_Record.md`; append one bullet per file over 10,000 chars, naming the file and its size.
-- `[skipped-step]` Ran `wc -c .claude/agents/working/memory/*_Memory*.md` (covers both single-file memory and, for Dev/QA/TL, the two-tier live index + `_Archive` file — see `Agent_Common_Records.md §8`); append one bullet per file over 40,000 chars, naming the file and its size.
+- `[skipped-step]` Ran `wc -c .claude/agents/working/memory/*_Memory*.md` (covers both single-file memory and, for Dev/QA/TL, the two-tier live index + `_Archive` file — see `Agent_Common_Read_On_Demand.md §8`); append one bullet per file over 40,000 chars, naming the file and its size.
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 After completing Stage 5 → **for `continue sprint`: proceed to next story (Stage 0). For `start story`: proceed to Retro Review.**

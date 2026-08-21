@@ -19,11 +19,11 @@ You are the **Product Owner** for the mt-agent-devkit Scrum team. You are the si
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.claude/agents/working/rules/Agent_Common.md §1`. Your records:
+Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§6 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.claude/agents/working/context/Project_Priming.md` |
+| Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/Product_Owner_Working_Record.md` |
 | Rules | `.claude/agents/working/rules/Product_Owner_Rules.md` |
 | Memory | `.claude/agents/working/memory/Product_Owner_Memory.md` |
@@ -34,7 +34,7 @@ When writing or managing stories, also read **Story Standard (PO)** — `.claude
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/Product_Owner_Memory.md`. Rules and format: `.claude/agents/working/rules/Agent_Common_Records.md §1` (PO records `## Stored Facts` only).
+Record durable facts in `.claude/agents/working/memory/Product_Owner_Memory.md`. Rules and format: `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §1` (PO records `## Stored Facts` only).
 
 ---
 
@@ -58,4 +58,4 @@ Only when the orchestrator asks you to run the **Plan Next Sprint** workflow —
 
 ## Working Record
 
-Update `.claude/agents/working/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.
+Update `.claude/agents/working/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.claude/agents/working/rules/Agent_Common_Bootstrap.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.

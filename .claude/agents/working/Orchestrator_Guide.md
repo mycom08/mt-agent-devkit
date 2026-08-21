@@ -8,7 +8,7 @@
 
 Before doing anything else, read the following files to understand the project context:
 
-1. `.claude/agents/working/context/Project_Priming.md` — project overview, glossary, architecture, and current state
+1. `.claude/agents/working/context/Project_Priming_Bootstrap.md` — project overview, glossary, architecture, and current state
 2. `version.txt` — current devkit version
 
 ---
@@ -45,13 +45,30 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ---
 
+## Token-Trace Log — Orchestrator Half
+
+Applies only when you asked a spawned agent for a step-cost trace. The agent-facing half — file path, format, estimate-labelling — is `rules/Agent_Common_Bootstrap.md §6`; agents carry that at spawn and are not responsible for anything below.
+
+**What the orchestrator does:** after the agent completes and the `usage` block reports its real `subagent_tokens` figure, append it to the same file as `**Actual total (orchestrator-reported):** N` — the one real number in the file; every line above it is the agent's own approximation.
+
+**Record the reported figure verbatim, and label what it covers.** On a **resumed** session the reported `subagent_tokens` has been observed to be a session-lifetime cumulative, not the cost of that call alone. Never silently write a subtracted figure as if it were reported. Write both, labelled:
+
+```md
+**Actual total (orchestrator-reported):** <figure exactly as reported> (session-cumulative | per-call)
+**This round (derived):** <cumulative minus the prior round's recorded figure — omit on round 1>
+```
+
+If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than guessing. A derived number presented as a measurement is worse than an honest gap.
+
+---
+
 ## Orchestrator Working Record
 
-**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common.md §1` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
+**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common_Bootstrap.md` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
 
-**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 10,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common.md §1`: *would the next session take a different action if this line were missing?*
+**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 10,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common_Bootstrap.md`: *would the next session take a different action if this line were missing?*
 
-**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common.md §1`.
+**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common_Bootstrap.md`.
 
 **When to update (rewrite the current entry in place, or start a new one for a new piece of work):**
 - **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, versions bumped, PR/story refs).
@@ -162,7 +179,7 @@ Scaffolds these files into the target project. The exact structure depends on th
 ├── CLAUDE.md                          ← Mode: github + sprint workflow commands
 ├── .gitignore                         ← .claude/agents/tmp/ + /result/ added
 └── .claude/agents/
-    ├── context/Project_Priming.md
+    ├── context/Project_Priming_Bootstrap.md
     ├── instructions/                  ← 5 agent instruction files
     ├── rules/                         ← Story standard + per-role rules
     ├── memory/                        ← Blank agent memory files (5 files)
@@ -176,7 +193,7 @@ Scaffolds these files into the target project. The exact structure depends on th
 ├── CLAUDE.md                          ← Mode: strict + sprint workflow commands
 ├── .gitignore                         ← .claude/agents/ (entire folder) + /result/ added
 └── .claude/agents/                    ← entirely gitignored
-    ├── context/Project_Priming.md
+    ├── context/Project_Priming_Bootstrap.md
     ├── instructions/                  ← 5 agent instruction files
     ├── rules/                         ← Story standard + per-role rules + Strict_Mode_Story_Guide.md
     ├── memory/                        ← Blank agent memory files (5 files)

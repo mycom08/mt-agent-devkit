@@ -108,7 +108,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 **When:** Work complete, ready for review  
 **Action:**
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
-2. Run applicable pre-PR checks (see Developer_Rules.md §5 or role-specific rules)
+2. Run applicable pre-PR checks (see `Developer_Rules_Read_On_Demand.md` §5 or role-specific rules)
 3. Create PR from dev branch → `main`; title: `[ST-XXXXXX][DEVKIT] Story title`
 4. Remove label `status:in-progress`, add label `status:review`
 5. Request reviewer in issue Comment
@@ -278,7 +278,7 @@ Applies to every role, on every issue comment.
 - [ ] Answers only the questions asked — a new finding gets its own comment (§9 rule 2)
 - [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4). The `gh pr checks` carve-out belongs to PR approval comments only; it never applies here
 - [ ] A decision written into the story body in this same pass is announced, not reproduced (§9 rule 5)
-- [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common_Records.md §1` rule 4)
+- [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common_Read_On_Demand.md §1` rule 4)
 - [ ] Word count checked — `wc -w` ≤ 200, or a stated exception
 
 > **Stated exception:** QA per-AC validation evidence (§9 rule 3) may exceed the cap. Note the exception in the comment; do not silently skip the check.
