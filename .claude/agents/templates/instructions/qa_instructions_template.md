@@ -52,3 +52,11 @@ Update `.claude/agents/working-record/QA_Working_Record.md` at start and end of 
 ## Project Memory
 
 Record durable facts in `.claude/agents/memory/QA_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common.md §2`.
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version of the QA instructions template  
+**Previous:** None — no prior recorded revision  
+**Created:** 2026-08-21

@@ -247,3 +247,11 @@ Quick lookup for all GitHub → strict-mode equivalents used in workflows.
 | `Agent: <message>` commit prefix | **Never use** — see `## Commit Message Format` above for the correct format |
 | `git add .claude/agents/...` | **Never do this** — entire `.claude/agents/` is gitignored |
 | Commit memory/working-record/docs | **Never commit agent files** — they are local-only by design |
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version of the Strict Mode story guide  
+**Previous:** None — no prior recorded revision  
+**Created:** 2026-08-21

@@ -54,3 +54,11 @@ Update `.claude/agents/working-record/Technical_Lead_Working_Record.md` at start
 ## Project Memory
 
 Record durable facts in `.claude/agents/memory/Technical_Lead_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common.md §2`.
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version of the Technical Lead instructions template  
+**Previous:** None — no prior recorded revision  
+**Created:** 2026-08-21

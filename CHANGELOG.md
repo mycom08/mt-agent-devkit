@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Enhancement #148] Added `## Version` provenance footers to the 13 distributable rules and instruction templates that had none.
 - [Enhancement #142] Fixed the `read-section` skill's sub-section citation recipe, which could silently over-read to end of file.
 - [ST-000044] Piloted a two-tier memory (live index + archive) for the devkit's own Developer/QA/Technical Lead roles.
 - [ST-000044] Generalized the `read-section` skill to support non-numbered heading citations.
