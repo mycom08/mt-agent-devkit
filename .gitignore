@@ -36,9 +36,13 @@ docker/sandbox/.env
 # Workflow output documents
 /result/
 
-# Agent working files — not tracked (session state, working records)
+# Agent working files — not tracked (session state, working records).
+# Applies identically to both supported agent roots: .claude/ (Claude Code)
+# and .antigravity/ (Antigravity).
 .claude/agents/working/working-record/
 .claude/agents/working/tmp/
+.antigravity/agents/working/working-record/
+.antigravity/agents/working/tmp/
 
 # Audit workflow reports — runtime output, never committed
 .claude/agents/internal/
@@ -47,7 +51,9 @@ docker/sandbox/.env
 # Accumulates over a sprint, cleared at sprint end. NOT the tooling: the
 # `tokentrace/` directory (no hyphen, no suffix) holds token_cost.sh + README
 # and IS committed. The _sprint suffix keeps the two apart.
+# Applies identically to both supported agent roots: .claude/ and .antigravity/.
 .claude/agents/working/token-trace_sprint/
+.antigravity/agents/working/token-trace_sprint/
 
 # Python
 __pycache__/

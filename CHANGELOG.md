@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [#145] Ignored `.antigravity/` runtime files (working records, tmp, token traces) on the same terms as their `.claude/` counterparts, and untracked the 12 files already committed.
 - [ST-000044] Piloted a two-tier memory (live index + archive) for the devkit's own Developer/QA/Technical Lead roles.
 - [ST-000044] Generalized the `read-section` skill to support non-numbered heading citations.
 - [ST-000043] Split orchestrator-only content out of `CLAUDE.md` into a new `Orchestrator_Guide.md`.
