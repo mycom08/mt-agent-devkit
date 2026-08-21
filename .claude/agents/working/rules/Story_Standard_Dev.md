@@ -29,7 +29,7 @@
 
 ### Status: In Progress → Review
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
-2. Run pre-PR checks from `Developer_Rules_Read_On_Demand.md §5`
+2. Run pre-PR checks from `Developer_Rules_Bootstrap.md §5`
 3. Create PR with title: `[ST-XXXXXX][DEVKIT] Story title`
 4. Remove `status:in-progress`, add `status:review`
 5. Request TL review in issue Comment
@@ -101,7 +101,7 @@ Only when Dev is the peer reviewer — checklist in `Developer_Rules_Read_On_Dem
 ### Merge Gate — before merging dev branch to main
 
 - [ ] Self-checked all AC locally (do NOT tick checkboxes)
-- [ ] Pre-PR checks pass (see `Developer_Rules_Read_On_Demand.md §5`)
+- [ ] Pre-PR checks pass (see `Developer_Rules_Bootstrap.md §5`)
 - [ ] PR created with story ID in title: `[ST-XXXXXX][DEVKIT] ...`
 - [ ] TL has reviewed and approved PR ✓
 
