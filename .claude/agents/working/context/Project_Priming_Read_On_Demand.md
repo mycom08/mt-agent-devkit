@@ -1,6 +1,6 @@
 # mt-agent-devkit — Priming Context (Read On Demand)
 
-> Companion to `Project_Priming_Bootstrap.md`. **Never read as part of the Pre-Work Sequence, in whole or in part.** Fetch one section when its trigger fires — the routing table in the bootstrap file names which. Use the `read-section` skill bound on `^## [0-9]+\.`; §15a is a `### ` sub-heading *inside* §15, so a §15 extraction correctly includes it.
+> Companion to `Project_Priming_Bootstrap.md`. **Never read as part of the Pre-Work Sequence, in whole or in part.** Fetch one section when its trigger fires — the routing table in the bootstrap file names which. Use the `read-section` skill bound on `^## ([0-9]+[a-z]?\.|Version)` — one marker that matches every section *and* every sub-section, so any §N or §Na extraction is bounded by the next heading. §15a is a flat `## ` section, not a `### ` sub-heading: a §15 extraction now stops at §15a, so cite §15a explicitly when you need the Nth-role checklist.
 
 > **Numbering is shared with the bootstrap file and never reused.** This file holds §3, §4, §6, §10, §15, §15a, §16; §1, §2, §5, §7, §8, §9, §11–§14 are in `Project_Priming_Bootstrap.md`. Every pre-split `Project_Priming.md §N` citation therefore still resolves — to whichever of the two files holds that number.
 
@@ -102,7 +102,7 @@ Use `"new"` for files added for the first time; `"modified"` for files that alre
 
 > Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Keep the file's **newest-first (descending)** order — inserting out of order will cause `sync devkit` to skip or double-apply changes. `validate_templates.py` checks semver parseability only, never ordering direction, so a misplaced entry will not be caught by CI.
 
-### 15a. Adding a New Agent Role (Nth Role)
+## 15a. Adding a New Agent Role (Nth Role)
 
 Adding a role to the roster is a corpus-wide ripple, not a two-file change. Beyond the role's own instruction/rules template pair, check every existing enumeration of the current role list:
 

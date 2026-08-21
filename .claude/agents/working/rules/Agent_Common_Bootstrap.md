@@ -1,9 +1,9 @@
 # Agent Common Protocol — Bootstrap
 
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
-**Purpose:** The bootstrap-mandatory mechanics every agent needs before its first tool call: read order (including the Working Record's own write format, since every session ends by writing one), three safety/efficiency rules that must already be active by then (a secret can't be un-leaked, an untrusted issue comment can't be un-acted-on, and inefficient tool-calling starts on call one), and — devkit-internal — the step-cost trace format. Everything conditional lives in `Agent_Common_Read_On_Demand.md`; §5 routes you there only when a trigger actually fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
+**Purpose:** The bootstrap-mandatory mechanics every agent needs before its first tool call: read order (including the Working Record's own write format, since every session ends by writing one), and three safety/efficiency rules that must already be active by then (a secret can't be un-leaked, an untrusted issue comment can't be un-acted-on, and inefficient tool-calling starts on call one). Everything conditional lives in `Agent_Common_Read_On_Demand.md`; §5 routes you there only when a trigger actually fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
 
-> **Read this file in full, every spawn. Do not section-read it.** Citations elsewhere point at `§1` because that is where the read *order* lives, but §2–§6 are equally mandatory and equally unconditional — a spawn that extracts only §1 has skipped Secret Handling and External Content Handling, which exist precisely to be active before the situation that needs them is recognised. §3's read-the-named-section convention does not apply to this file.
+> **Read this file in full, every spawn. Do not section-read it.** Citations elsewhere point at `§1` because that is where the read *order* lives, but §2–§5 are equally mandatory and equally unconditional — a spawn that extracts only §1 has skipped Secret Handling and External Content Handling, which exist precisely to be active before the situation that needs them is recognised. §3's read-the-named-section convention does not apply to this file.
 
 ---
 
@@ -79,38 +79,3 @@ Everything routed below lives in `.claude/agents/working/rules/Agent_Common_Read
 | You changed a memory file this session — fetch when the change happens, not when you decide you're done | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §5 |
 | A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §6 |
 | Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory (devkit-internal pilot) | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §8 |
-
----
-
-## 6. Token-Trace Log (devkit-internal only — deliberately not mirrored to `templates/`)
-
-Bootstrap-tier: you must know this format *before* a spawn prompt asks for a trace, because the trace has to account for your pre-work reads — steps already taken by the time you could go looking for the rule. Nothing else establishes the obligation, so never write a trace unless your spawn prompt asks for one.
-
-**Why devkit-only.** This is an observability convention for our own team's spawn cost, not a designed target-project feature — `Agent_Common_template.md` does not carry this section. Recorded here as an intentional `Project_Priming_Read_On_Demand.md §15`-style divergence.
-
-**File:** one per agent per story, `.claude/agents/working/token-trace_sprint/<StoryID>_<RoleTag>_steps_done.md` — `RoleTag` is `dev`, `TL`, `qa`, `po`, `ba`, or `uiux`. Never share a file across roles or stories. Gitignored — never commit.
-
-> **Two similarly-named directories — do not confuse them.** `token-trace_sprint/` holds the per-story trace **output** written by agents and is gitignored; it accumulates over a sprint and is cleared at sprint end. `tokentrace/` (no hyphen) holds the **tooling** — `token_cost.sh` and its README — and is committed. The `_sprint` suffix exists to keep the two apart at a glance.
-
-**What you write, before reporting back to the orchestrator:** the header block below, then one line per step you took, in the order you took it, each with a **labeled approximation** of its cost — you have no introspective access to your own real per-step token usage, so never present a step estimate as exact. Base the estimate on a visible proxy (files read, tool calls made, comment length written), not a guess pulled from nowhere.
-
-**Your step estimates will run well under the orchestrator-reported actual. This is expected — do not treat the gap as an error to correct.** A step estimate measures *new content entering context*. The reported actual additionally includes per-turn fixed overhead (system prompt, tool schemas, injected reminders), your own output and reasoning tokens, and any retried or failed calls — none of which are visible from the proxies above. Spend no tokens re-deriving or apologising for the difference; record the estimate and move on.
-
-**Format:**
-```md
-# <StoryID> — <Role> Step Trace
-
-**Session:** spawn | resume        <!-- resume = orchestrator sent to an existing agentId -->
-**Round:** <1 for first entry; increment for each loop-back>
-**Steps:** <count of the step lines below>
-
-- Step 1: <what you did> — ~<N> tokens approx (<why, e.g. "read Agent_Common_Bootstrap.md + own rules + memory">)
-- Step 2: <what you did> — ~<N> tokens approx
-...
-**Estimated total:** ~<sum of the above, approx>
-**Actual total (orchestrator-reported):** <left blank — the orchestrator fills this in>
-```
-
-**Why the `Session:` field matters.** Spawn-vs-resume is the largest single cost lever available to the orchestrator — a resumed round skips all pre-work reads and re-establishes no context, and has measured several times cheaper per step than a cold spawn. `CLAUDE.md`'s resume-over-spawn rule depends on it; this field is what makes it verifiable rather than assumed.
-
-> The orchestrator's half of this protocol — what it does with your reported figure, and how it labels spawn-vs-resume totals — lives in `Orchestrator_Guide.md`. You are not responsible for it.

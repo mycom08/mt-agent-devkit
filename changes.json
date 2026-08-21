@@ -1,4 +1,13 @@
 {
+  "0.1.45": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/skills/read-section/SKILL_template.md"
+    ],
+    "descriptions": {
+      ".claude/agents/templates/skills/read-section/SKILL_template.md": "Fix (issue #142): the section-extraction recipe mapped a `§Na` citation to a `### Na` heading and told the agent to grep `^### [0-9]+[a-z]\\.` — a marker narrowed to the target's own shape. In a file holding exactly one sub-numbered heading that grep returns a single hit, so step 2 takes its \"last heading\" branch and the extraction runs to end of file, silently swallowing every following section (measured: a 53% over-read, no error). Replaced with one flat marker for the whole family, `^## ([0-9]+[a-z]?\\.|Version)`, matching §N, §Na and the `## Version` footer alike, plus an explicit rule never to narrow the marker to the target's own shape. The worked example was rebuilt: the prior one cited `Agent_Common.md §5`, and the example now demonstrates both failure directions (over-read from a narrowed marker, short read from a bare `^## ` that hits unnumbered sub-headings inside a numbered section). Working mirror (`.claude/skills/read-section/SKILL.md`) carries the identical recipe against devkit-local paths."
+    }
+  },
   "0.1.44": {
     "new": [
       ".claude/agents/templates/skills/read-section/SKILL_template.md"

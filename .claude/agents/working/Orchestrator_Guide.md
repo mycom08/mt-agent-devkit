@@ -45,20 +45,77 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ---
 
-## Token-Trace Log — Orchestrator Half
+## Token-Trace Log (devkit-internal only — deliberately not mirrored to `templates/`)
 
-Applies only when you asked a spawned agent for a step-cost trace. The agent-facing half — file path, format, estimate-labelling — is `rules/Agent_Common_Bootstrap.md §6`; agents carry that at spawn and are not responsible for anything below.
+**This section is the sole home of the trace convention.** No agent rules file carries it: the directive
+travels in the spawn prompt, not via a rule an agent has to fetch. That is deliberate — a trace must
+account for the agent's own pre-work reads, which happen before any rule could be read, so any agent-side
+placement is either circular (on-demand) or charges every spawn for a convention most spawns never use
+(bootstrap; measured, and it did not improve the traces). Never write a spawn prompt that asks for a trace
+without including the block below — an agent that is not given the format will not produce one.
 
-**What the orchestrator does:** after the agent completes and the `usage` block reports its real `subagent_tokens` figure, append it to the same file as `**Actual total (orchestrator-reported):** N` — the one real number in the file; every line above it is the agent's own approximation.
+**Why devkit-only.** Observability for our own team's spawn cost, not a designed target-project feature —
+`Agent_Common_template.md` does not carry it and neither does any template. Intentional
+`Project_Priming_Read_On_Demand.md §15`-style divergence.
 
-**Record the reported figure verbatim, and label what it covers.** On a **resumed** session the reported `subagent_tokens` has been observed to be a session-lifetime cumulative, not the cost of that call alone. Never silently write a subtracted figure as if it were reported. Write both, labelled:
+> **Two similarly-named directories — do not confuse them.** `token-trace_sprint/` holds the per-story
+> trace **output** written by agents and is gitignored; it accumulates over a sprint and is cleared at
+> sprint end. `tokentrace/` (no hyphen) holds the **tooling** — `token_cost.sh` and its README — and is
+> committed. The `_sprint` suffix exists to keep the two apart at a glance.
+
+### What you paste into the spawn/resume prompt
+
+Include this verbatim when you want a trace from a spawned or resumed pipeline agent (Developer,
+Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer):
+
+> Before reporting back, write a step trace to
+> `.claude/agents/working/token-trace_sprint/<StoryID>_<RoleTag>_steps_done.md` (`RoleTag`: `dev`, `TL`,
+> `qa`, `po`, `ba`, `uiux` — never share a file across roles or stories; gitignored, never commit).
+> Format:
+> ```markdown
+> # <StoryID> — <Role> Step Trace
+>
+> **Session:** spawn | resume
+> **Round:** <1 for first entry; increment per loop-back>
+> **Steps:** <count of step lines below>
+>
+> - Step 1: <what you did> — ~<N> tokens approx (<why, e.g. "read Agent_Common_Bootstrap.md + own rules + memory">)
+> - Step 2: <what you did> — ~<N> tokens approx
+> ...
+> **Estimated total:** ~<sum of the step values above — add them up; do not estimate the total separately>
+> **Actual total (orchestrator-reported):** <left blank — the orchestrator fills this in>
+> ```
+> Base each estimate on a visible proxy (files read, tool calls made, comment length written) — never a
+> guess pulled from nowhere, and never present a step estimate as exact; you have no introspective access
+> to your real per-step usage. Your estimates will run well under the orchestrator-reported actual, which
+> also includes per-turn fixed overhead (system prompt, tool schemas, injected reminders), your own output
+> and reasoning tokens, and any retried or failed calls — none of which are visible to you. That gap is
+> expected; don't spend tokens re-deriving or apologising for it.
+
+**Why the `Session:` field matters.** Spawn-vs-resume is the largest single cost lever you have — a resumed
+round skips all pre-work reads and re-establishes no context, and has measured several times cheaper per
+step than a cold spawn. `CLAUDE.md`'s resume-over-spawn rule depends on it; this field is what makes it
+verifiable rather than assumed.
+
+### What you do after the agent completes
+
+Append the real `subagent_tokens` figure to the same file — the one real number in it; every line above is
+the agent's own approximation.
+
+**Record the reported figure verbatim, and label what it covers.** On a **resumed** session the reported
+`subagent_tokens` has been observed to be a session-lifetime cumulative, not the cost of that call alone.
+Never silently write a subtracted figure as if it were reported. Write both, labelled:
 
 ```md
 **Actual total (orchestrator-reported):** <figure exactly as reported> (session-cumulative | per-call)
 **This round (derived):** <cumulative minus the prior round's recorded figure — omit on round 1>
 ```
 
-If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than guessing. A derived number presented as a measurement is worse than an honest gap.
+If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than
+guessing. A derived number presented as a measurement is worse than an honest gap. Treat
+`subagent_tokens` as unresolved in general: rounds have reported 70,652 / 77,975 / 77,274 where round 3
+made zero tool calls and still came in lower than round 2, so it is neither per-call nor strictly
+cumulative. Do not derive from it beyond the labelled subtraction above.
 
 ---
 

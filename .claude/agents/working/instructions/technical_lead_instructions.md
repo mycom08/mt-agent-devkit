@@ -26,8 +26,7 @@ Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it
 | Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/Technical_Lead_Working_Record.md` |
 | Rules | `.claude/agents/working/rules/Technical_Lead_Rules.md` |
-| Memory (live index) | `.claude/agents/working/memory/Technical_Lead_Memory.md` |
-| Memory Archive | `.claude/agents/working/memory/Technical_Lead_Memory_Archive.md` |
+| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.claude/agents/working/memory/Technical_Lead_Memory.md` |
 
 ---
 
@@ -54,4 +53,4 @@ Update `.claude/agents/working/working-record/Technical_Lead_Working_Record.md` 
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/working/memory/Technical_Lead_Memory.md` (live index) with full fact bodies in `.claude/agents/working/memory/Technical_Lead_Memory_Archive.md`. This role uses the two-tier split — rules and format: `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
+Record durable facts in `.claude/agents/working/memory/Technical_Lead_Memory.md` (live index) with full fact bodies in `.claude/agents/working/memory/Technical_Lead_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).

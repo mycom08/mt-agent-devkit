@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Enhancement #142] Fixed the `read-section` skill's sub-section citation recipe, which could silently over-read to end of file.
 - [ST-000044] Piloted a two-tier memory (live index + archive) for the devkit's own Developer/QA/Technical Lead roles.
 - [ST-000044] Generalized the `read-section` skill to support non-numbered heading citations.
 - [ST-000043] Split orchestrator-only content out of `CLAUDE.md` into a new `Orchestrator_Guide.md`.
