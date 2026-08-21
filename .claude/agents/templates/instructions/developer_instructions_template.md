@@ -89,3 +89,11 @@ Write your retro per `.claude/agents/rules/Agent_Common.md §4`. Overwrite the `
 ## Working Record
 
 Update `.claude/agents/working-record/Developer_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common.md §5`.
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version: `## Version` footer added; no content change  
+**Previous:** none — no prior recorded revision  
+**Created:** 2026-08-21

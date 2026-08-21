@@ -117,3 +117,11 @@ gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comme
 ```
 
 Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version: `## Version` footer added; no content change  
+**Previous:** none — no prior recorded revision  
+**Created:** 2026-08-21

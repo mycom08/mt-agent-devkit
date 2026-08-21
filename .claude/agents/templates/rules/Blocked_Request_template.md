@@ -68,3 +68,11 @@ Please fill in the table below and reply to this comment:
 
 Once you reply, notify the team and we will resume implementation.
 ```
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version: `## Version` footer added; no content change  
+**Previous:** none — no prior recorded revision  
+**Created:** 2026-08-21

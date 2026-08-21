@@ -78,3 +78,11 @@ When analyzing or discussing a feature, cover:
 - MVP vs Phase 2+ feature breakdown
 - Clear scope boundaries with explicit out-of-scope items
 - Success metrics for the feature
+
+---
+
+## Version
+
+**Version:** 1.0 — initial recorded version: `## Version` footer added; no content change  
+**Previous:** none — no prior recorded revision  
+**Created:** 2026-08-21
