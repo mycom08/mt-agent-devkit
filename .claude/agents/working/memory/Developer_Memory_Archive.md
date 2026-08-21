@@ -75,3 +75,9 @@
 - **Applies when:** writing a template file's prose that shows shell variable syntax (`${VAR}`, `{VAR}`) outside a fenced block.
 - **Evidence:** ST-000044 — `read-section` skill doc, `{START}`/`{END}` in inline code at 2 lines, caught by CI-equivalent local run before PR.
 - **Expires when:** the check is scoped to fenced blocks only, or gains a backtick-span exclusion.
+
+### Fact 13
+- **Rule:** Line endings under `.claude/agents/templates/` are mixed per file — most are CRLF, a minority (e.g. `qa_instructions_template.md`, `technical_lead_instructions_template.md`, `Blocked_Request_template.md`) are LF. Any bulk edit across templates must detect and preserve each file's existing endings; a Read+Write or Edit round-trip that normalizes them turns an 8-line append into a whole-file rewrite in the diff.
+- **Applies when:** scripting an append/substitution across more than one file under `.claude/agents/templates/`, or using the Edit/Write tools on one.
+- **Evidence:** BENCH2-B — 13-file footer append; 10 CRLF vs 3 LF. Byte-level append per detected EOL kept the diff at exactly +8 lines per file, 0 deletions.
+- **Expires when:** the repo adds a `.gitattributes` `text eol=` rule that normalizes the corpus.

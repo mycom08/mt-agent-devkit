@@ -44,6 +44,9 @@ Keywords: sync/update workflow expected-files list, merge-tier check, project-mu
 ### Fact 12 — Inline ALL-CAPS shell variable in prose trips the validator's placeholder check
 Keywords: `validate_templates.py` Invariant #2, single-backtick code span, `${START}`, placeholder false positive, lowercase shell variable
 
+### Fact 13 — Templates have mixed CRLF/LF line endings; preserve per file
+Keywords: line endings, CRLF, LF, bulk edit, `templates/`, diff noise, whole-file rewrite, byte-level append, `.gitattributes`
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity
