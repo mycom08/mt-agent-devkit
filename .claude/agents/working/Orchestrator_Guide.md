@@ -119,6 +119,16 @@ cumulative. Do not derive from it beyond the labelled subtraction above.
 
 ---
 
+## Harness Benchmark Runs
+
+Trigger: user says **"run harness benchmark"** (aliases: "benchmark the harness", "A/B the harness")
+
+Read `.claude/agents/working/enhancement/Harness_Benchmark_Guide.md` and follow it. It covers baseline choice, story selection, the four kinds of state that survive a branch checkout and contaminate the second arm, the runbook, and the traps in reading the result.
+
+Devkit-internal, like the trace convention above. **Never give this file to a spawned agent** — an agent that knows it is being benchmarked changes what it reads. The agent gets its arm's issue and the trace block, nothing else.
+
+---
+
 ## Orchestrator Working Record
 
 **Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common_Bootstrap.md` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
