@@ -6,7 +6,7 @@ description: Extract one section from a Markdown file located by a heading marke
 # Read Section
 
 Rules/instructions/context files number **every** cited section flat at `##`
-(`## 1. Title`, `## 2. Title`, `## 15a. Title`, ...) and cite them as
+(`## 1. Title`, `## 2. Title`, `## 11a. Title`, ...) and cite them as
 `<File>.md §N` / `§Na`. `###` is reserved for *unnumbered* prose sub-headings,
 which are never citation targets. Other files use a different but equally
 consistent heading prefix instead — e.g. a memory archive's `### Fact N`.
@@ -44,21 +44,20 @@ consistent heading prefix instead — e.g. a memory archive's `### Fact N`.
 
 ## Example
 
-`Project_Priming_Read_On_Demand.md §15a`
-(`.claude/agents/working/context/Project_Priming_Read_On_Demand.md`):
-`grep -nE "^## ([0-9]+[a-z]?\.|Version)" <file>` lists §3 (9), §4 (39), §6 (49),
-§10 (60), §15 (73), **§15a (105)**, §16 (122). Target `start=105`, next heading
-`end=122` → `sed -n '105,121p' <file>`.
+`Product_Owner_Rules.md §11b` (`.claude/agents/working/rules/Product_Owner_Rules.md`):
+`grep -nE "^## ([0-9]+[a-z]?\.|Version)" <file>` lists §1 (8), §2 (33), ... §11 (129),
+§11a (142), **§11b (148)**, §12 (154), `## Version` (160). Target `start=148`, next
+heading `end=154` → `sed -n '148,153p' <file>`.
 
 That file is also the worked case for step 1's warning. Narrowing the marker to
-the target's own shape — `grep -nE "^### [0-9]+[a-z]\."`, the pre-fix recipe —
-returned a **single** hit, so step 2 took the "last heading" branch and produced
-`sed -n '105,$p'`: lines 105–130, swallowing §16 and the file footer. A 53%
-over-read, silent, no error. The same class of failure in the other direction:
-a bare `^## ` on a file whose numbered section contains unnumbered `##`
-sub-headings takes the first sub-heading as the boundary and returns a **short**
-read. Assume nothing from heading level alone — match the numbering pattern, and
-match the whole family.
+the target's own shape — `grep -nE "^## [0-9]+[a-z]\."` — matches only §11a and
+§11b. §11b is the last of those two, so step 2 takes its "last heading" branch
+and produces `sed -n '148,$p'`: lines 148–164, swallowing §12 and the Version
+footer. A silent over-read, no error. The same class of failure in the other
+direction: a bare `^## ` on a file whose numbered section contains unnumbered
+`##` sub-headings takes the first sub-heading as the boundary and returns a
+**short** read. Assume nothing from heading level alone — match the numbering
+pattern, and match the whole family.
 
 > Line numbers above are illustrative and drift as files are edited — always run
 > step 1 yourself rather than reusing them. The *shape* of the output is the point.

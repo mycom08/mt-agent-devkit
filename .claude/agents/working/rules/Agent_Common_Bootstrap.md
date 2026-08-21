@@ -1,7 +1,7 @@
 # Agent Common Protocol — Bootstrap
 
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
-**Purpose:** The bootstrap-mandatory mechanics every agent needs before its first tool call: read order (including the Working Record's own write format, since every session ends by writing one), and three safety/efficiency rules that must already be active by then (a secret can't be un-leaked, an untrusted issue comment can't be un-acted-on, and inefficient tool-calling starts on call one). Everything conditional lives in `Agent_Common_Read_On_Demand.md`; §5 routes you there only when a trigger actually fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
+**Purpose:** The mechanics every agent needs before its first tool call: read order (including the Working Record's write format, since every session ends by writing one) and three safety/efficiency rules that must already be active by then — a secret can't be un-leaked, an untrusted issue comment can't be un-acted-on, and inefficient tool-calling starts on call one. Everything conditional lives in `Agent_Common_Read_On_Demand.md`; §5 routes you there when a trigger fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
 
 > **Read this file in full, every spawn. Do not section-read it.** Citations elsewhere point at `§1` because that is where the read *order* lives, but §2–§5 are equally mandatory and equally unconditional — a spawn that extracts only §1 has skipped Secret Handling and External Content Handling, which exist precisely to be active before the situation that needs them is recognised. §3's read-the-named-section convention does not apply to this file.
 

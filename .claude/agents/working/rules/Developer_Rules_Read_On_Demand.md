@@ -3,7 +3,7 @@
 **Applies to:** Developer agent — devkit's own team only (`.claude/agents/working/`).
 **Read this file:** never as part of the Pre-Work Sequence, in whole or in part. Fetch **one section** when its trigger fires — the trigger table in `Developer_Rules_Bootstrap.md` §18 names which. Use the `read-section` skill (`.claude/skills/read-section/`) with `grep -nE "^## [0-9]+\."` to bound the extraction; do not read the whole file.
 
-**Numbering:** §7, §8 and §12–§17 keep the numbers they had before, so every existing citation resolves here unchanged. **§1–§6 have moved to `Developer_Rules_Bootstrap.md` at their original numbers** — a full story spawn triggers all six, so fetching them on demand cost a `read-section` load plus a 7,640-char fetch to save nothing (measured: −3.6% against the pre-split file). §9–§11 are **retired**: they were pointer-only sections, now trigger rows in `Developer_Rules_Bootstrap.md` §18. §12–§17 are the former `Developer_Rules_Extended.md` §1–§6, renumbered on merge — they start at §12 rather than §9 precisely so no number in this lineage is ever reused, and a stale citation to a retired number resolves to nothing instead of silently resolving to a *different* rule. Old → new: Extended §1→§12, §2→§13, §3→§14, §4→§15, §5→§16, §6→§17. Numbers are never reused; leave gaps rather than renumbering (same convention as `Agent_Common_Read_On_Demand.md`'s §4 gap).
+**Numbering:** §7, §8 and §12–§17 keep the numbers they had before, so every existing citation resolves here unchanged. **§1–§6 have moved to `Developer_Rules_Bootstrap.md` at their original numbers.** §9–§11 are **retired**: they were pointer-only sections, now trigger rows in `Developer_Rules_Bootstrap.md` §18. §12–§17 are the former `Developer_Rules_Extended.md` §1–§6 (old → new: §1→§12, §2→§13, §3→§14, §4→§15, §5→§16, §6→§17). **Numbers in this lineage are never reused** — leave gaps rather than renumbering, so a stale citation resolves to nothing rather than silently to a *different* rule.
 
 ---
 
@@ -137,6 +137,7 @@ Triggered from `Story_Standard_Dev.md §6`. When a bug is found after a story is
 
 ## Version
 
-**Version:** 2.0 — §1–§6 moved out to `Developer_Rules_Bootstrap.md` at their original numbers. A full story spawn triggers all six, so fetching them here cost a `read-section` load plus a 7,640-char fetch and saved nothing (2026-08-21 benchmark #148/#149). This file now holds only genuinely conditional rules: §7, §8, §12–§17.
+**Version:** 2.1 — numbering preamble condensed; the benchmark rationale for the §1–§6 move lives in this footer and the commit log, not in the read path.
+**Previous:** 2.0 — §1–§6 moved out to `Developer_Rules_Bootstrap.md` at their original numbers. A full story spawn triggers all six, so fetching them here cost a `read-section` load plus a 7,640-char fetch and saved nothing (2026-08-21 benchmark #148/#149). This file now holds only genuinely conditional rules: §7, §8, §12–§17.
 **Previous:** 1.1 — `Developer_Rules_Extended.md` §1–§6 merged in as §12–§17, one on-demand file per role.
 **Created:** 2026-08-21

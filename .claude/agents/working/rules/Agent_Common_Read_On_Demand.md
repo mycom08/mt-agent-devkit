@@ -1,7 +1,7 @@
 # Agent Common — Read On Demand
 
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
-**Purpose:** Companion to `Agent_Common_Bootstrap.md` (the bootstrap-mandatory sections read at every spawn — including the Working Record's write format, folded into `Agent_Common_Bootstrap.md §1` since it fires on every session, not just conditionally). Nothing in this file is read automatically — `Agent_Common_Bootstrap.md §5`'s routing table names the one section to fetch when its trigger fires. §8 is devkit-internal only (not mirrored to `templates/`). Where this file and a role-specific rule disagree, the role-specific rule wins.
+**Purpose:** Companion to `Agent_Common_Bootstrap.md`. Nothing here is read automatically — `Agent_Common_Bootstrap.md §5`'s routing table names the one section to fetch when its trigger fires. §8 is devkit-internal only (not mirrored to `templates/`). Where this file and a role-specific rule disagree, the role-specific rule wins.
 
 > **Two things to know before extracting a section from this file.**
 > 1. **There are two intentional gaps.** Numbering runs §1, §2, §3, §5, §6, §8. **§4** is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1`. **§7** is where the *Token-Trace Log* sat before it left the agent rules altogether for `Orchestrator_Guide.md`. Numbers are never reused: leave the gap rather than renumbering, so a stale citation resolves to nothing rather than to a different rule (same convention as `Technical_Lead_Memory.md`'s fact numbering).

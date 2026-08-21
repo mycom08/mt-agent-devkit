@@ -2,18 +2,17 @@
 
 > This is a cheat sheet for AI agents — the minimum context needed to understand *what this project is*, before knowing what task you have been given. Read it in full at step 1 of `Agent_Common_Bootstrap.md §1`. It is not comprehensive documentation.
 
-> **Section numbers are shared with `Project_Priming_Read_On_Demand.md`** and are never reused: this file holds §1, §2, §5, §7, §8, §9, §11, §12, §13, §14; the companion holds §3, §4, §6, §10, §15, §15a, §16. A `Project_Priming §N` citation resolves to whichever file holds that number — the routing table below is the index.
+> **Section numbers are shared with `Project_Priming_Read_On_Demand.md` and are never reused**, so a `Project_Priming §N` citation resolves to whichever of the two files holds that number. The routing table below is the index.
 
 ---
 
 ## On-Demand Sections — Routing Table
 
-Not loaded at spawn. When a trigger fires, fetch **only** that section from `.claude/agents/working/context/Project_Priming_Read_On_Demand.md` with the `read-section` skill (bound on `^## [0-9]+\.`).
+Not loaded at spawn. When a trigger fires, fetch **only** that section from `.claude/agents/working/context/Project_Priming_Read_On_Demand.md` with the `read-section` skill.
 
 | Trigger | Fetch |
 |---|---|
-| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering | `§15` (How to Update a Template) |
-| Adding a new agent role to the roster | `§15a` (Adding a New Agent Role) — corpus-wide ripple checklist |
+| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering. Also covers **adding a new agent role** — the corpus-wide ripple checklist is the `Adding a New Agent Role` sub-section inside §15 | `§15` (How to Update a Template) |
 | You have been assigned a story | `§3` (Story Workflow) |
 | Starting a complex change — new workflow stage, major template restructure, new devkit command | `§4` (Design First Before Implementation) |
 | Creating or updating a project document | `§6` (Internal Project Documents) — the canonical paths |
@@ -124,6 +123,7 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.2 — split into bootstrap + read-on-demand tiers 2026-08-21 (devkit's own team only)
+**Document Version:** 1.3 — preamble trimmed to drop the section inventory the routing table already carries; §15a's routing row folded into §15.
+**Previous:** 1.2 — split into bootstrap + read-on-demand tiers 2026-08-21 (devkit's own team only)
 **Last Updated:** 2026-08-21
 **Audience:** Development team, architects, AI agents
