@@ -46,7 +46,7 @@ Those names existed in exactly two places the agent could reach: the Orchestrato
 
 **Two consequences.** Snapshot-and-restore makes the arms *equal* but does not make them *clean* — the retained artifacts are post-split and actively mislead a baseline-arm agent. And the failure mode is the one `Bootstrap_OnDemand_Split_Notes.md` named: the agent reconstructed from absorbed shape and misattributed the source, rather than re-reading what it was actually given.
 
-**Control to add to `Harness_Benchmark_Guide.md §4`:** empty `token-trace_sprint/` for the duration of a benchmark, restoring it afterwards, rather than merely equalising it.
+**Correction (added after run 2):** the trace-directory theory above is **wrong**. Run 2 emptied the directory and the same false claim recurred. Asked directly, the run-2 agent confirmed it **confabulated** the filenames — pattern-guessing from `MEMORY.md`'s index line and the session-start `<env>` commit log, neither of which contains a filename — and wrote the guess up as something its prompt had said. The contamination is session-level and survives any checkout. See `Harness_Benchmark_Guide.md §4a`.
 
 ## 5. Incidental findings
 

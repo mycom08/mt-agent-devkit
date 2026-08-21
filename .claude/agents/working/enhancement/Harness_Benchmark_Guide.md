@@ -51,11 +51,29 @@ Four kinds of state survive a branch checkout. All four have been observed to le
 | The GitHub issue | No checkout touches it | **One issue per arm.** See below |
 | Memory | Tracked, so it *does* flip | None needed — verify it flipped |
 
-**Empty the trace directory, do not merely equalise it.** Retained traces are artifacts of whichever harness produced them, and agents read them as format examples. On 2026-08-21 arm B reported that its spawn prompt named bootstrap/read-on-demand filenames; **it did not** — those names existed only in a retained trace and the Orchestrator Working Record. The agent absorbed them, misattributed the source, and spent a call resolving a contradiction that was never in its prompt. Snapshot-restore made the arms equal and still corrupted one of them.
+**Empty the trace directory, do not merely equalise it.** Retained traces are artifacts of whichever harness produced them, and agents read them as format examples. This is hygiene, not a fix for the leak below — the leak survived an empty trace directory.
 
 **The issue is the worst of these.** Arm 1 posts comments, sets `status:review`, links a PR. Arm 2 then runs `gh issue view --json body,title,labels,comments` and sees the work already done. This is not hypothetical: on 2026-08-20 arm 1 pulled "issue body + labels" while the second arm pulled "issue body + **2 comments** + labels", and part of that run's cost difference is this and not the harness.
 
 Create two issues with identical bodies, labelled `test:benchmark`, each naming its arm and instructing the agent not to read the other. Run the **baseline arm first** so any residue you failed to control lands on the treatment arm, where it works against the change rather than for it.
+
+## 4a. The baseline arm cannot be made clean inside a treatment session
+
+**This is the method's hard limit. Read it before quoting any baseline figure.**
+
+Every spawned agent receives two startup inputs that a `git checkout` cannot touch:
+
+1. **The `# claudeMd` system-reminder**, carrying the user's project auto-memory. If any memory names the change under test, every agent knows it exists before reading a file.
+2. **The `<env>` git status block** — branch name and recent commit subjects, snapshotted at *session* start, not at spawn. An agent working on a `main`-based branch still sees the treatment branch's commit log.
+
+Measured on 2026-08-21: both baseline-arm agents, in separate runs, reported that their spawn prompt named `*_Bootstrap.md` paths. **Neither prompt did.** Asked directly, the second agent confirmed it invented the filenames by pattern-guessing from `MEMORY.md`'s index line and the commit subjects `Apply bootstrap + read-on-demand split…`, then wrote them up as though the prompt had listed them. It also flagged a second confabulation it had presented as a finding earlier in the same run.
+
+**What this does and does not spoil.** The read set stays valid — an agent that expects a split still reads whatever its harness actually mandates, and the wrong expectation cost only one directory listing (~250 tok). What is spoiled is **anything the agent says about its own inputs**, and any claim that the baseline arm was naive.
+
+**Controls:**
+- Treat every agent Observation about its own prompt or context as unverified. Quote it back and ask for the source before recording it as a finding. Both leaks in this series surfaced only because someone re-read the prompt.
+- For a genuinely naive baseline, run the baseline arm from a **separate session started on the baseline branch**, with project auto-memories that name the change moved aside for the duration.
+- Never report the baseline arm as "unaware of the treatment" without having done the above.
 
 ## 5. Runbook
 
@@ -101,5 +119,5 @@ Write findings to `.claude/agents/working/enhancement/<Topic>_Findings.md` along
 
 ## Version
 
-**Version:** 1.1 — §4 hardened after the first run: the trace directory must be emptied, not equalised. Retained traces leaked post-split filenames into the baseline arm.
-**Previous:** 1.0 — Created 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
+**Version:** 1.2 — Added §4a. The v1.1 attribution was wrong: emptying the trace directory did not stop the leak. The real source is session-level (auto-memory + the session-start `<env>` commit log), and the agent confabulated the filenames on top of it.
+**Previous:** 1.1 — §4 hardened: empty the trace directory rather than equalising it. **Created:** 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
