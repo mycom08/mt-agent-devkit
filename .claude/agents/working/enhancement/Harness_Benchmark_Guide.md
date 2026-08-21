@@ -47,9 +47,11 @@ Four kinds of state survive a branch checkout. All four have been observed to le
 | State | Why it leaks | Control |
 |---|---|---|
 | Working Record | `.gitignore:40` — untracked, survives checkout | Snapshot before arm 1; restore before arm 2 |
-| `token-trace_sprint/` | `.gitignore:50` — untracked, survives checkout | Same. Arm 1 of ST-000131 read a prior trace as a format crib |
+| `token-trace_sprint/` | `.gitignore:50` — untracked, survives checkout | **Empty it for the run**, restore after. Equalising is not enough — see below |
 | The GitHub issue | No checkout touches it | **One issue per arm.** See below |
 | Memory | Tracked, so it *does* flip | None needed — verify it flipped |
+
+**Empty the trace directory, do not merely equalise it.** Retained traces are artifacts of whichever harness produced them, and agents read them as format examples. On 2026-08-21 arm B reported that its spawn prompt named bootstrap/read-on-demand filenames; **it did not** — those names existed only in a retained trace and the Orchestrator Working Record. The agent absorbed them, misattributed the source, and spent a call resolving a contradiction that was never in its prompt. Snapshot-restore made the arms equal and still corrupted one of them.
 
 **The issue is the worst of these.** Arm 1 posts comments, sets `status:review`, links a PR. Arm 2 then runs `gh issue view --json body,title,labels,comments` and sees the work already done. This is not hypothetical: on 2026-08-20 arm 1 pulled "issue body + labels" while the second arm pulled "issue body + **2 comments** + labels", and part of that run's cost difference is this and not the harness.
 
@@ -93,10 +95,11 @@ Write findings to `.claude/agents/working/enhancement/<Topic>_Findings.md` along
 | Date | Story | Arms | Outcome |
 |---|---|---|---|
 | 2026-08-20 | ST-000131 | `c33b96f` (treatment) vs `87d49b9` (baseline) | Confounded — shared issue, arm names inverted. See `Agent_Common_Split_Findings.md` |
-| 2026-08-21 | #144 / #145 | `agent-enhancement` vs `main` | Set up under this guide |
+| 2026-08-21 | #144 / #145 | `agent-enhancement` vs `main` | Read set −43.5%; first actual-vs-actual pair. See `Bench_2026-08-21_Findings.md` |
 
 ---
 
 ## Version
 
-**Version:** 1.0 — Created 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
+**Version:** 1.1 — §4 hardened after the first run: the trace directory must be emptied, not equalised. Retained traces leaked post-split filenames into the baseline arm.
+**Previous:** 1.0 — Created 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
