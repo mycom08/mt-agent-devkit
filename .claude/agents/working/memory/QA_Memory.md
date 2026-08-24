@@ -38,6 +38,9 @@ Keywords: `[KNOWN_ISSUE]`, `Blocked_Request_Template.md`, capital-T typo, `--tes
 ### Fact 10 — Locate the real mechanism behind a "described but not visibly implemented" AC claim
 Keywords: runtime mechanism, files logged by an earlier stage, computed at runtime, pre-existing rule/instruction text, unverified claim
 
+### Fact 11 — Isolate the story's own commit when a PR branch was cut from a divergent base
+Keywords: `gh pr view --json commits`, `git show <commit> --stat`, branch cut from non-target base, `baseRefName`/`headRefName` mismatch, whole-branch diff pollution, benchmark PR
+
 ## Troubleshooting Facts
 
 No troubleshooting facts recorded yet.

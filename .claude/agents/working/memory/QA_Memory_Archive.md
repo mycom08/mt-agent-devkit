@@ -63,3 +63,9 @@
 - **Applies when:** an AC's scope or exclusion list is defined in terms of a log, state, or computed set rather than a static file list.
 - **Evidence:** ST-000037 (Stage 4 audit-pass scope traced to Stage 2's written-files log + "Log every file written" + "Checksum skip is silent" rules, all pre-existing).
 - **Expires when:** never.
+
+### Fact 11
+- **Rule:** When a PR's branch was cut from something other than the target base (e.g. from `agent-enhancement` while targeting `main`), `gh pr diff` and the PR's CI diff both include the whole ancestor delta, not just the story's change. Isolate the actual story commit first — `gh pr view <n> --json commits` to find the commit whose message/footer names the story, then `git show <commit> --stat` / `git show <commit>` for the true, scoped diff — before validating any AC against "the PR's changes."
+- **Applies when:** a PR's `baseRefName`/`headRefName` or its own description flags a divergent-base branch, or `gh pr diff` shows far more files than the story plausibly touches.
+- **Evidence:** issue #159 / PR #161 (branch `bench-a/multi-section-script`, ~50 files in the raw PR diff vs. 2 files in the story's own commit `89eba3e3`).
+- **Expires when:** never.
