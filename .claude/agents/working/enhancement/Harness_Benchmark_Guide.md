@@ -119,9 +119,42 @@ Write findings to `.claude/agents/working/enhancement/<Topic>_Findings.md` along
 | 2026-08-21 | #152 / #153 | (not run) | Paired issues created, never executed — no branches, no PRs, no trace. Closed 2026-08-24 as setup-only debris. |
 | 2026-08-24 | #154 / #155 | `agent-enhancement` (539f3a0) vs `main` (87d49b9) | Read set −25.7% (67,468 → 50,157 bytes) — about half round 1's effect, traced to a specific cause: `be3988b` moved `Developer_Rules` §1-§6 back to bootstrap after round 1, so that file now contributes ~0% of the saving; `Agent_Common`/`Project_Priming` splits still carry it. Both arms ran in this session (§4a control not used, by explicit user choice); the confabulation leak recurred a third time regardless. See `Bench4_2026-08-24_Findings.md`. |
 
+## 9. Cumulative verdict — does the split earn its place?
+
+**Update this section after every round that adds an actual-vs-actual data point (§1's rule).** It answers three questions any stakeholder will ask before trusting §8's table. Superseded by a later round's numbers; keep only the current read.
+
+### 9a. Does it bring value, and how much?
+
+Real, but smaller than the headline number and shrinking, not flat:
+
+| Round | Shape | Read set (byte-measured) | `subagent_tokens` (self-reported, noisy — §6) |
+|---|---|---|---|
+| 2026-08-21 (#144/#145) | Narrow, single Developer spawn | −43.5% (58,019→32,780) | −12.7% |
+| 2026-08-24 (#154/#155) | Narrow, single Developer spawn | −25.7% (67,468→50,157) | −10.2% |
+
+The drop between rounds is attributable, not noise: `be3988b` (post-round-1) moved `Developer_Rules` §1–§6 back into bootstrap to close a compliance gap, so that file now contributes **~0%** of the saving — all of round 4's gain is `Agent_Common` (−49.0%) and `Project_Priming` (−46.8%) alone.
+
+**Both measured rounds are the shape that favours the split.** No full TL→Dev→QA story spawn has been benchmarked. The one indirect signal on that shape (`Bootstrap_OnDemand_Split_Notes.md`, pre-`be3988b`) measured `Developer_Rules` at **+15% on a full spawn** vs **−63% on a narrow task** — the workload this repo actually runs most is the one direction of evidence points against, and it is untested end-to-end since the revert.
+
+### 9b. Do the two arms' *output* differ, and which is better?
+
+**No difference found, on the one round checked by diffing the actual PRs rather than trusting self-reports.** Round 4: `git diff`ing PR #156 (baseline) against PR #157 (treatment) showed the code change to `Story_Standard_Dev_template.md` was **byte-for-byte identical** — same table cell, same step removed, same renumbering — and both passed `validate_templates.py` and every AC. The only difference was a cosmetic CHANGELOG tag (arm A resolved the real `ST-000113` number via an extra `gh issue view`; arm B echoed its benchmark issue's own tag) — an artifact of which issue each arm was given, not a harness effect.
+
+This is n=1 for a literal diff comparison. It is reassuring (cheaper with no observed quality cost) but does not cover a story ambiguous enough that thinner upfront context could plausibly cause a real mistake — none tested so far have been.
+
+### 9c. Is it worth it?
+
+**Qualified yes — worth keeping the branch, not yet worth trusting a specific percentage.**
+
+For it: two independent byte-measured rounds, both positive; zero quality cost found where actually checked; the one correctness risk the split introduced (Developer_Rules reads skipped) was caught and fixed before it shipped.
+
+Against full confidence: the effect is shrinking as more content returns to bootstrap for correctness, not stable; the workload run most often (full multi-role story) is unmeasured post-fix and the only related prior signal is unfavourable; `subagent_tokens` remains unreliable per §6 and should never be the headline figure.
+
+**Next round that would resolve this:** a full TL→Dev→QA story spawn, `agent-enhancement` vs `main`, run from a genuinely separate baseline session (§4a) rather than the same-session shortcut — this is the load-bearing gap, not another narrow-task round.
+
 ---
 
 ## Version
 
-**Version:** 1.4 — Recorded round 4 (2026-08-24, #154/#155) in §8: read set −25.7%, with the shrunken effect traced to a specific post-round-1 commit rather than left as unexplained noise. Third occurrence of the §4a confabulation leak, from a spawn prompt that named zero filenames — strengthens §4a's evidence, no wording change needed.
-**Previous:** 1.3 — §7 hardened: cleanup must happen same-session. Backfilled §8 with the #148/#149 and #152/#153 rounds, both discovered still open on 2026-08-24 during pre-flight for a new round; #148/#149's data was unrecoverable by the time it was found. **Created:** 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
+**Version:** 1.5 — Added §9, a cumulative verdict section (value / arm-quality / worth-it) that updates after each actual-vs-actual round instead of leaving readers to reconstruct the answer from §8's table. First pass covers rounds 1 and 4.
+**Previous:** 1.4 — Recorded round 4 (2026-08-24, #154/#155) in §8: read set −25.7%, with the shrunken effect traced to a specific post-round-1 commit rather than left as unexplained noise. Third occurrence of the §4a confabulation leak, from a spawn prompt that named zero filenames — strengthens §4a's evidence, no wording change needed. **Created:** 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
