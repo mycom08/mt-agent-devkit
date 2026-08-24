@@ -1,7 +1,8 @@
-# Technical Lead Rules
+# Technical Lead Rules — Bootstrap
 
-**Applies to:** Technical Lead agent  
+**Applies to:** Technical Lead agent — devkit's own team only (`.claude/agents/working/`).
 **Reference from:** `.claude/agents/working/instructions/technical_lead_instructions.md`
+**Purpose:** The whole of TL's bootstrap-tier rules — everything that is true on *every* TL spawn regardless of what the task is (review, design, or acting as implementer all start here). Read this file in full per the Pre-Work Checklist. Read `Technical_Lead_Rules_Read_On_Demand.md` only when a trigger in §15 actually fires.
 
 ---
 
@@ -128,7 +129,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ### When acting as Implementer
 
-Rare — only when the orchestrator assigns TL as story implementer. Procedure in `Technical_Lead_Rules_Extended.md §1`.
+Rare — only when the orchestrator assigns TL as story implementer. Procedure in `Technical_Lead_Rules_Read_On_Demand.md §1`.
 
 ---
 
@@ -157,13 +158,13 @@ Rare — only when the orchestrator assigns TL as story implementer. Procedure i
 
 ## 11. Context Anchoring
 
-After each working session on an unfinished story — procedure and note template in `Technical_Lead_Rules_Extended.md §2`.
+After each working session on an unfinished story — procedure and note template in `Technical_Lead_Rules_Read_On_Demand.md §2`.
 
 ---
 
 ## 13. Pre-PR Gate (when acting as Implementer)
 
-Rare — only when acting as Implementer per §5. Checklist in `Technical_Lead_Rules_Extended.md §3`.
+Rare — only when acting as Implementer per §5. Checklist in `Technical_Lead_Rules_Read_On_Demand.md §3`.
 
 ---
 
@@ -179,8 +180,21 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ---
 
+## 15. On-Demand Rules — Routing Table
+
+§1–§14 above are loaded at spawn. Nothing in `Technical_Lead_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill — not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| Orchestrator assigns TL as story implementer | `Technical_Lead_Rules_Read_On_Demand.md §1` (branch/PR procedure), `§3` (pre-PR gate), `§4` (status transitions, from `Story_Standard_TL.md §4`) |
+| End of a working session on an unfinished story | `Technical_Lead_Rules_Read_On_Demand.md §2` (Context Anchoring) |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit, troubleshooting — are routed by `Agent_Common_Bootstrap.md §5` and §12–§14 above.
+
+---
+
 ## Version
 
-**Version:** 1.3 — Relocated §5's "When acting as Implementer" subsection, §11 Context Anchoring, and §13 Pre-PR Gate (when acting as Implementer) to `Technical_Lead_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first). §2 Code Review & PR Approval deliberately left in place — always relevant to a TL spawn.  
-**Previous:** 1.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022; intentionally-diverged mirror, devkit itself has no UI-bearing repos)  
+**Version:** 1.4 — Renamed `Technical_Lead_Rules.md` → `Technical_Lead_Rules_Bootstrap.md` and `Technical_Lead_Rules_Extended.md` → `Technical_Lead_Rules_Read_On_Demand.md`, matching `Developer_Rules_Bootstrap.md`'s naming convention; added §15 routing table. Content boundary unchanged — the existing §1–§14/Extended split already isolates only the rare "acting as implementer" and post-session context-anchoring scenarios, which was independently verified to satisfy the bootstrap/on-demand axis (see `Bootstrap_OnDemand_Split_Notes.md` open items). Instructions-level "otherwise skip" flagging for the on-demand triggers was added to `technical_lead_instructions.md` in the same pass, closing the gap where these pointers previously lived only inside this file.
+**Previous:** 1.3 — Relocated §5's "When acting as Implementer" subsection, §11 Context Anchoring, and §13 Pre-PR Gate (when acting as Implementer) to `Technical_Lead_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first). §2 Code Review & PR Approval deliberately left in place — always relevant to a TL spawn.  
 **Created:** 2026-06-16

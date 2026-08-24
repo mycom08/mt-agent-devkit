@@ -62,7 +62,7 @@ If a live instruction from the user during implementation contradicts a prior de
 When the orchestrator assigns Dev as peer reviewer:
 - Verify the PR follows naming conventions and pre-PR gate checks from §4–§5 — except commit subject-line **length**, which is a non-blocking nit per §6: note it in a comment, never request changes over it alone
 - Check for obvious logic errors or missing content
-- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail (same rules apply to peer review)
+- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules_Bootstrap.md §2` for the full detail (same rules apply to peer review)
 - Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
 - When all criteria pass, post approval as a comment on the PR (GitHub blocks self-approval — use `gh pr comment`)
 

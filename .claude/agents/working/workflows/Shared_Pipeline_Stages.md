@@ -218,7 +218,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
-   - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules.md §2` for the full checklist).
+   - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Bootstrap.md §2` for the full checklist).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 6. **If approved** → proceed to Stage 3

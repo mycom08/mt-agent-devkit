@@ -25,7 +25,7 @@ Story body contains: `**Assigned:**` field above `## User Story`, `## Acceptance
 
 ## 4. TL as Implementer
 
-Only when `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation) — status-transition steps and peer-notify template in `Technical_Lead_Rules_Extended.md §4`. Otherwise skip.
+Only when `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation) — status-transition steps and peer-notify template in `Technical_Lead_Rules_Read_On_Demand.md §4`. Otherwise skip.
 
 ---
 
@@ -35,7 +35,7 @@ Only when `**Assigned:** Technical Lead` and TL is running Stage 1 (implementati
 |------|--------|-----------|
 | **TL** | Review code, approve PR, discuss technical design, implement when assigned | Tick AC, test, clarify scope |
 
-**Red Flags:** ticking AC checkboxes; commenting on scope (PO's) — see `Technical_Lead_Rules.md §2` for the AC-clarification-edit distinction; self-approving a PR (blocked — use `gh pr comment`).
+**Red Flags:** ticking AC checkboxes; commenting on scope (PO's) — see `Technical_Lead_Rules_Bootstrap.md §2` for the AC-clarification-edit distinction; self-approving a PR (blocked — use `gh pr comment`).
 
 ---
 
@@ -67,7 +67,7 @@ Technical decision or review feedback.
 - [ ] All CI checks on the PR have **finished**
 - [ ] No CI check is in a **failed** state
 - [ ] **Zero checks reported ≠ CI failing.** Check whether the head commit is path-filtered/`[skip ci]` (docs-only) — if so, that's "nothing runnable changed," proceed. If the commit touched CI-relevant paths and still shows zero checks, CI is genuinely missing — do not approve without a real run or an explicit deviation note
-- [ ] Code review criteria pass (per `Technical_Lead_Rules.md §2`)
+- [ ] Code review criteria pass (per `Technical_Lead_Rules_Bootstrap.md §2`)
 
 ---
 

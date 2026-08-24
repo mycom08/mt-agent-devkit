@@ -25,8 +25,20 @@ Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it
 |---|---|
 | Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/Technical_Lead_Working_Record.md` |
-| Rules | `.claude/agents/working/rules/Technical_Lead_Rules.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.claude/agents/working/rules/Technical_Lead_Rules_Bootstrap.md` |
 | Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.claude/agents/working/memory/Technical_Lead_Memory.md` |
+
+---
+
+## When Acting as Story Implementer
+
+Rare — only when the orchestrator assigns you as the story implementer instead of reviewer. Full procedure — branch/PR creation, pre-PR gate, status transitions — in `.claude/agents/working/rules/Technical_Lead_Rules_Read_On_Demand.md §1` (branch/PR), `§3` (pre-PR gate), `§4` (status transitions). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+
+---
+
+## Context Anchoring (end of an unfinished-story session)
+
+After each working session on an unfinished story — note template and procedure in `.claude/agents/working/rules/Technical_Lead_Rules_Read_On_Demand.md §2`. Otherwise skip.
 
 ---
 
