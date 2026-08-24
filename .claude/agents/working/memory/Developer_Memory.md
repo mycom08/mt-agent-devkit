@@ -44,6 +44,9 @@ Keywords: sync/update workflow expected-files list, merge-tier check, project-mu
 ### Fact 12 — Inline ALL-CAPS shell variable in prose trips the validator's placeholder check
 Keywords: `validate_templates.py` Invariant #2, single-backtick code span, `${START}`, placeholder false positive, lowercase shell variable
 
+### Fact 13 — Flat `## Na.` is the live convention; SKILL.md's `### Na` example is stale
+Keywords: flat heading convention, `## N.`, `## Na.`, `### Na` stale, `read-section` SKILL.md, over-read, whole numbered family, `Product_Owner_Rules.md`, `Project_Priming.md §15a`, section boundary scan
+
 ## Troubleshooting Facts
 
 ### Fix 1 — Working-record refs fail CI reference-integrity

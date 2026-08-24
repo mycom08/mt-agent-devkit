@@ -75,3 +75,9 @@
 - **Applies when:** writing a template file's prose that shows shell variable syntax (`${VAR}`, `{VAR}`) outside a fenced block.
 - **Evidence:** ST-000044 — `read-section` skill doc, `{START}`/`{END}` in inline code at 2 lines, caught by CI-equivalent local run before PR.
 - **Expires when:** the check is scoped to fenced blocks only, or gains a backtick-span exclusion.
+
+### Fact 13
+- **Rule:** The repo's live, correct citable-section convention is **flat**: every numbered section — bare or lettered — is a `##`-level heading (`## 5.`, `## 11a.`, `## 15b.`); `###` is reserved for unnumbered prose and is never a citation target. `.claude/skills/read-section/SKILL.md`'s own worked example (`§Na` → `### Na`) documents the **old, buggy** shape and is currently stale against this — `Product_Owner_Rules.md` already uses flat `## 11a.`/`## 11b.`, while `Project_Priming.md §15a` still shows the old `### 15a.`. Any script or manual read that finds section boundaries must scan the **whole numbered family** (`^## ([0-9]+[a-z]*\.|Version)`), never narrow the scan to one marker's own shape — narrowing reproduces a measured 53% over-read when a file has exactly one lettered sub-heading (its lone same-level match makes the "last heading" branch fire and read to EOF).
+- **Applies when:** writing or extending any tool/skill that locates a `§N`/`§Na` section by heading, or auditing which convention a given rules/instructions/context file actually uses.
+- **Evidence:** ST-000158 (BENCH5-B) — discovered via `Product_Owner_Rules.md` (`## 11a.`/`## 11b.`) vs `Project_Priming.md` (`### 15a.`) disagreeing; `read_sections.sh` implements the whole-family scan to avoid the bug.
+- **Expires when:** `SKILL.md` and every `### Na`-shaped heading are migrated to flat `##`, and the convention is uniform corpus-wide.
