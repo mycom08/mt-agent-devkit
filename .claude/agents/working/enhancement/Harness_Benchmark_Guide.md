@@ -107,17 +107,21 @@ Write findings to `.claude/agents/working/enhancement/<Topic>_Findings.md` along
 - Close both issues; the `test:benchmark` label keeps them out of backlog counts.
 - Delete both `bench-*` branches.
 - Leave the trace files — they are the record. Note the run in the Orchestrator Working Record.
+- **Do this in the same session that ran the round, before starting anything else.** The #148/#149 round (§8) sat open for 3 days; its untracked trace/working-record artifacts got overwritten before comparison, and the round became unrecoverable data loss rather than a finding. A pending round blocks starting a new one — §4's contamination controls assume a clean slate.
 
 ## 8. Prior runs
 
 | Date | Story | Arms | Outcome |
 |---|---|---|---|
 | 2026-08-20 | ST-000131 | `c33b96f` (treatment) vs `87d49b9` (baseline) | Confounded — shared issue, arm names inverted. See `Agent_Common_Split_Findings.md` |
-| 2026-08-21 | #144 / #145 | `agent-enhancement` vs `main` | Read set −43.5%; first actual-vs-actual pair. See `Bench_2026-08-21_Findings.md` |
+| 2026-08-21 | #144 / #145 | `agent-enhancement` vs `main` | Read set −43.5%; first actual-vs-actual pair. See `Bench_2026-08-21_Findings.md`. Winning arm (A) reopened as real work — PR #147, tracked under #144. |
+| 2026-08-21 | #148 / #149 | `agent-enhancement` vs `main` | **Abandoned before comparison — no findings written.** Both arms completed and opened PRs (#151, #150), but were never compared or closed out; §7 cleanup ran 2026-08-24, ~3 days late. Arm A's trace file (12 steps, ~19.4k tok estimated / 69,915 unlabelled actual) survived as untracked residue and was read as this round's only surviving artifact; arm B's trace was never captured. No usable read-set comparison — treat as lost data, not a null result. |
+| 2026-08-21 | #152 / #153 | (not run) | Paired issues created, never executed — no branches, no PRs, no trace. Closed 2026-08-24 as setup-only debris. |
+| 2026-08-24 | #154 / #155 | `agent-enhancement` (539f3a0) vs `main` (87d49b9) | Read set −25.7% (67,468 → 50,157 bytes) — about half round 1's effect, traced to a specific cause: `be3988b` moved `Developer_Rules` §1-§6 back to bootstrap after round 1, so that file now contributes ~0% of the saving; `Agent_Common`/`Project_Priming` splits still carry it. Both arms ran in this session (§4a control not used, by explicit user choice); the confabulation leak recurred a third time regardless. See `Bench4_2026-08-24_Findings.md`. |
 
 ---
 
 ## Version
 
-**Version:** 1.2 — Added §4a. The v1.1 attribution was wrong: emptying the trace directory did not stop the leak. The real source is session-level (auto-memory + the session-start `<env>` commit log), and the agent confabulated the filenames on top of it.
-**Previous:** 1.1 — §4 hardened: empty the trace directory rather than equalising it. **Created:** 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
+**Version:** 1.4 — Recorded round 4 (2026-08-24, #154/#155) in §8: read set −25.7%, with the shrunken effect traced to a specific post-round-1 commit rather than left as unexplained noise. Third occurrence of the §4a confabulation leak, from a spawn prompt that named zero filenames — strengthens §4a's evidence, no wording change needed.
+**Previous:** 1.3 — §7 hardened: cleanup must happen same-session. Backfilled §8 with the #148/#149 and #152/#153 rounds, both discovered still open on 2026-08-24 during pre-flight for a new round; #148/#149's data was unrecoverable by the time it was found. **Created:** 2026-08-21. Extracted from the ST-000131 and #134 test rounds; codifies the baseline-choice, story-choice, and contamination rules those runs learned the hard way. Devkit-internal, not mirrored to `templates/`.
