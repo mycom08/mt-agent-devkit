@@ -38,6 +38,9 @@ Keywords: `[KNOWN_ISSUE]`, `Blocked_Request_Template.md`, capital-T typo, `--tes
 ### Fact 10 — Locate the real mechanism behind a "described but not visibly implemented" AC claim
 Keywords: runtime mechanism, files logged by an earlier stage, computed at runtime, pre-existing rule/instruction text, unverified claim
 
+### Fact 11 — `test:benchmark`-labeled stories: never merge, skip the test-scenario doc, follow the spawn prompt over standing §4
+Keywords: `test:benchmark` label, harness benchmark, spawn-cost-only, never merge close after run, test-scenario doc exception, BENCH5-B, orchestrator per-run instructions override
+
 ## Troubleshooting Facts
 
 No troubleshooting facts recorded yet.

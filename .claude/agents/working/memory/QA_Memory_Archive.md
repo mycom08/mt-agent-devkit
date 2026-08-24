@@ -63,3 +63,9 @@
 - **Applies when:** an AC's scope or exclusion list is defined in terms of a log, state, or computed set rather than a static file list.
 - **Evidence:** ST-000037 (Stage 4 audit-pass scope traced to Stage 2's written-files log + "Log every file written" + "Checksum skip is silent" rules, all pre-existing).
 - **Expires when:** never.
+
+### Fact 11
+- **Rule:** A story carrying the `test:benchmark` label ("Harness-benchmark story: measures agent spawn cost only. Never merge; close after the run.") is validated for AC correctness exactly as any real story, but the orchestrator's per-run spawn prompt for these — not standing `QA_Rules.md §4`'s test-scenario-document requirement — governs deliverable scope: skip producing/committing a test-scenario doc unless the spawn prompt asks for one, never merge the PR regardless of AC outcome, and move the issue label to `status:done` on a full pass while leaving the PR open. Treat the narrower spawn prompt as the operative instruction for this task class, not a rule violation.
+- **Applies when:** the issue carries `test:benchmark`.
+- **Evidence:** BENCH5-B / issue #158 / PR #160.
+- **Expires when:** the benchmark harness starts requiring standard full-deliverable QA output.
