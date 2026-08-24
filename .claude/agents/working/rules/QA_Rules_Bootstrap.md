@@ -1,7 +1,8 @@
-# QA Rules
+# QA Rules — Bootstrap
 
-**Applies to:** QA agent  
+**Applies to:** QA agent — devkit's own team only (`.claude/agents/working/`).
 **Reference from:** `.claude/agents/working/instructions/qa_instructions.md`
+**Purpose:** The whole of QA's bootstrap-tier rules — everything that is true on *every* QA spawn regardless of what the task is. Read this file in full per the Pre-Work Checklist. Read `QA_Rules_Read_On_Demand.md` only when a trigger in §14 actually fires.
 
 ---
 
@@ -124,13 +125,13 @@ After all story AC are verified, confirm no regression was introduced:
 
 ## 9. Pre-PR Gate (when acting as Implementer)
 
-Rare — only when QA is the story Implementer. Checklist in `QA_Rules_Extended.md §1`.
+Rare — only when QA is the story Implementer. Checklist in `QA_Rules_Read_On_Demand.md §1`.
 
 ---
 
 ## 10. Live User Instruction Conflicts (when acting as Implementer)
 
-Rare — only when QA is the story Implementer. Rule in `QA_Rules_Extended.md §2`.
+Rare — only when QA is the story Implementer. Rule in `QA_Rules_Read_On_Demand.md §2`.
 
 ---
 
@@ -154,8 +155,22 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ---
 
+## 14. On-Demand Rules — Routing Table
+
+§1–§13 above are loaded at spawn. Nothing in `QA_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill — not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| QA is the story Implementer | `QA_Rules_Read_On_Demand.md §1` (pre-PR gate), `§2` (live user instruction conflicts) |
+| A bug is found after story is `status:done` (hotfix) | `QA_Rules_Read_On_Demand.md §3` |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit, troubleshooting — are routed by `Agent_Common_Bootstrap.md §5` and §12–§13 above.
+
+---
+
 ## Version
 
-**Version:** 1.4 — Relocated §9 Pre-PR Gate and §10 Live User Instruction Conflicts (both "when acting as Implementer") to `QA_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first)  
-**Previous:** 1.3 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
+**Version:** 1.5 — Renamed `QA_Rules.md` → `QA_Rules_Bootstrap.md` and `QA_Rules_Extended.md` → `QA_Rules_Read_On_Demand.md`, matching `Developer_Rules_Bootstrap.md`'s naming convention; added §14 routing table. Content boundary unchanged — the existing §1–§13/Extended split already isolates only the rare "acting as implementer" and post-Done hotfix scenarios, which was verified to satisfy the bootstrap/on-demand axis (see `Bootstrap_OnDemand_Split_Notes.md` open items). Instructions-level "otherwise skip" flagging for both on-demand triggers was added to `qa_instructions.md` in the same pass, closing the gap where these pointers previously lived only inside this file.
+**Previous:** 1.4 — Relocated §9 Pre-PR Gate and §10 Live User Instruction Conflicts (both "when acting as Implementer") to `QA_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first)  
+**1.3:** §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
 **Created:** 2026-06-16

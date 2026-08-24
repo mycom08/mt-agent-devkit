@@ -33,7 +33,7 @@
 
 ## 6. Hotfix (Post-Done Bug) — QA Role
 
-Only when a bug is found after story is `status:done` — steps in `QA_Rules_Extended.md §3`. Otherwise skip.
+Only when a bug is found after story is `status:done` — steps in `QA_Rules_Read_On_Demand.md §3`. Otherwise skip.
 
 ---
 

@@ -24,8 +24,20 @@ Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it
 |---|---|
 | Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/QA_Working_Record.md` |
-| Rules | `.claude/agents/working/rules/QA_Rules.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.claude/agents/working/rules/QA_Rules_Bootstrap.md` |
 | Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.claude/agents/working/memory/QA_Memory.md` |
+
+---
+
+## When Acting as Story Implementer
+
+Rare — only when QA is the story Implementer. Pre-PR gate checklist in `.claude/agents/working/rules/QA_Rules_Read_On_Demand.md §1`; live user instruction conflicts rule in `§2`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+
+---
+
+## Post-Done Bug (Hotfix)
+
+Only when a bug is found after a story is `status:done` — steps in `.claude/agents/working/rules/QA_Rules_Read_On_Demand.md §3`. Otherwise skip.
 
 ---
 
