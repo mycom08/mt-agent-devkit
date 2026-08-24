@@ -85,7 +85,7 @@ Scope decision or AC clarification.
 
 ## 13. Story Creation Template
 
-Full template (title/label conventions, body skeleton, bug-repro block, AC-writing guidance) relocated to `Product_Owner_Rules_Extended.md §5` — triggers whenever you create a new story (most PO spawns are status/comment work on existing stories, not this). Read it before your first `gh issue create`/`gh issue edit --body-file` of the session.
+Full template (title/label conventions, body skeleton, bug-repro block, AC-writing guidance) relocated to `Product_Owner_Rules_Read_On_Demand.md §5` — triggers whenever you create a new story (most PO spawns are status/comment work on existing stories, not this). Read it before your first `gh issue create`/`gh issue edit --body-file` of the session.
 
 ---
 

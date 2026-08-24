@@ -1,6 +1,6 @@
-# Product Owner Rules — Extended (Scenario-Conditional)
+# Product Owner Rules — Read On Demand (Scenario-Conditional)
 
-**Applies to:** Product Owner agent — devkit's own team only (`.claude/agents/working/`). Relocated out of `product_owner_instructions.md` and `Product_Owner_Rules.md` 2026-08-20, applying the pattern from issue #123 to the devkit's own agent team first (the distributable `.claude/agents/templates/` role rules are unchanged — a separate story). PO's instructions file carried three full task blocks (Story Closure, Refine Sprint, Plan Next Sprint) that each apply only when the orchestrator explicitly assigns that stage — none of the three runs on most PO spawns. §4 (Roadmap Story Drain) is the same shape: it only fires when authoring/updating a roadmap doc, which this repo currently does rarely (non-feature sprints only). Read this file **only when the matching scenario actually occurs** — do not read it as part of the standard Pre-Work Sequence. `product_owner_instructions.md`'s three task headings and `Product_Owner_Rules.md` §11a each still carry a one-line pointer to their relocated section here.
+**Applies to:** Product Owner agent — devkit's own team only (`.claude/agents/working/`). Relocated out of `product_owner_instructions.md` and `Product_Owner_Rules_Bootstrap.md` (formerly `Product_Owner_Rules.md`) 2026-08-20, applying the pattern from issue #123 to the devkit's own agent team first (the distributable `.claude/agents/templates/` role rules are unchanged — a separate story). Renamed from `Product_Owner_Rules_Extended.md` to match `Developer_Rules_Read_On_Demand.md`'s naming convention — see `Bootstrap_OnDemand_Split_Notes.md`. PO's instructions file carried three full task blocks (Story Closure, Refine Sprint, Plan Next Sprint) that each apply only when the orchestrator explicitly assigns that stage — none of the three runs on most PO spawns. §4 (Roadmap Story Drain) is the same shape: it only fires when authoring/updating a roadmap doc, which this repo currently does rarely (non-feature sprints only). Read this file **only when the matching scenario actually occurs** — do not read it as part of the standard Pre-Work Sequence. `product_owner_instructions.md`'s three task headings and `Product_Owner_Rules_Bootstrap.md` §11a each still carry a one-line pointer to their relocated section here.
 
 ---
 
@@ -8,13 +8,13 @@
 
 Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, read only:
 - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
-- `.claude/agents/working/rules/Product_Owner_Rules.md`
+- `.claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md`
 - `.claude/agents/working/memory/Product_Owner_Memory.md`
 
 Then execute:
 1. Read the full story issue body — review all AC checkboxes
 2. Read the QA/TL comment threads to confirm all AC have been verified and passing
-3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (§15)
+3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (`Story_Standard_PO.md §15`)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo mycom08/mt-agent-devkit`
 6. Write your retrospective section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` — read `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
@@ -78,7 +78,7 @@ After the orchestrator confirms all answers are filled in, verify every `A:` fie
 
 ## 4. Roadmap Story Drain (mandatory whenever a roadmap doc is authored or updated)
 
-Triggered from `Product_Owner_Rules.md §11a` — cited by that section number from `Plan_Sprint_Workflow.md` Stage 1, so keep this section's content in sync with that citation even if renumbered here.
+Triggered from `Product_Owner_Rules_Bootstrap.md §11a` — cited by that section number from `Plan_Sprint_Workflow.md` Stage 1, so keep this section's content in sync with that citation even if renumbered here.
 
 **Applies whenever you author or update a roadmap/planning doc that defines stories ahead of pickup — the Implementation Roadmap or any `*Roadmap*.md` under `docs/feature/<feature_name>/plan/` — in a context where a story tracker already exists** (this devkit repo's own tracker, GitHub Issues in `mycom08/mt-agent-devkit`, always exists; this rule doesn't apply to the Analyst workflow's pre-repo `implementation_roadmap.md`, which has no tracker and no real story IDs yet).
 
@@ -147,5 +147,6 @@ Triggered from `Story_Standard_PO.md §13`. Read before your first `gh issue cre
 
 ## Version
 
-**Version:** 1.1 — Added §5 (Story Creation Template), relocated from `Story_Standard_PO.md` §13 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
-**Previous:** 1.0 (created 2026-08-20, split out of `product_owner_instructions.md` and `Product_Owner_Rules.md` v1.2 per devkit issue #123).
+**Version:** 1.2 — Renamed from `Product_Owner_Rules_Extended.md` to `Product_Owner_Rules_Read_On_Demand.md`, matching `Developer_Rules_Read_On_Demand.md`'s naming convention (no content change) — see `Bootstrap_OnDemand_Split_Notes.md`.
+**Previous:** 1.1 — Added §5 (Story Creation Template), relocated from `Story_Standard_PO.md` §13 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
+**1.0:** (created 2026-08-20, split out of `product_owner_instructions.md` and `Product_Owner_Rules.md` v1.2 per devkit issue #123).

@@ -25,7 +25,7 @@ Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it
 |---|---|
 | Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/Product_Owner_Working_Record.md` |
-| Rules | `.claude/agents/working/rules/Product_Owner_Rules.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md` |
 | Memory | `.claude/agents/working/memory/Product_Owner_Memory.md` |
 
 When writing or managing stories, also read **Story Standard (PO)** — `.claude/agents/working/rules/Story_Standard_PO.md`.
@@ -40,19 +40,19 @@ Record durable facts in `.claude/agents/working/memory/Product_Owner_Memory.md`.
 
 ## Story Closure Task (Stage 4)
 
-Only when the orchestrator asks you to close a story — reduced read set and full procedure in `.claude/agents/working/rules/Product_Owner_Rules_Extended.md §1`. Otherwise skip.
+Only when the orchestrator asks you to close a story — reduced read set and full procedure in `.claude/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md §1`. Otherwise skip.
 
 ---
 
 ## Refine Sprint Task
 
-Only when the orchestrator asks you to participate in a **Sprint Refinement** — both roles (Answer Scope/AC Questions, Final Status Update) in `.claude/agents/working/rules/Product_Owner_Rules_Extended.md §2`. Otherwise skip.
+Only when the orchestrator asks you to participate in a **Sprint Refinement** — both roles (Answer Scope/AC Questions, Final Status Update) in `.claude/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md §2`. Otherwise skip.
 
 ---
 
 ## Plan Next Sprint Task
 
-Only when the orchestrator asks you to run the **Plan Next Sprint** workflow — full 5-step procedure in `.claude/agents/working/rules/Product_Owner_Rules_Extended.md §3`. Otherwise skip.
+Only when the orchestrator asks you to run the **Plan Next Sprint** workflow — full 5-step procedure in `.claude/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md §3`. Otherwise skip.
 
 ---
 

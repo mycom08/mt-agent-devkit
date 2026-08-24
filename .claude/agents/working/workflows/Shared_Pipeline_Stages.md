@@ -295,7 +295,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
    - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
-   - `.claude/agents/working/rules/Product_Owner_Rules.md`
+   - `.claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md`
    - `.claude/agents/working/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:
    - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.

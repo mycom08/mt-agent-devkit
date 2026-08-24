@@ -1,7 +1,8 @@
-# Product Owner Rules
+# Product Owner Rules — Bootstrap
 
-**Applies to:** Product Owner agent  
+**Applies to:** Product Owner agent — devkit's own team only (`.claude/agents/working/`).
 **Reference from:** `.claude/agents/working/instructions/product_owner_instructions.md`
+**Purpose:** The whole of PO's bootstrap-tier rules — everything that is true on *every* PO spawn regardless of what the task is. Read this file in full per the Pre-Work Checklist. Read `Product_Owner_Rules_Read_On_Demand.md` only when a trigger in §13 actually fires.
 
 ---
 
@@ -141,7 +142,7 @@ After creating or updating any project plan file (Sprint Overviews, Product Back
 
 ## 11a. Roadmap Story Drain (mandatory whenever a roadmap doc is authored or updated)
 
-Only when you author or update a roadmap/planning doc that defines stories ahead of pickup — full procedure in `Product_Owner_Rules_Extended.md §4`. Otherwise skip; do not read it as part of the standard Pre-Work Sequence.
+Only when you author or update a roadmap/planning doc that defines stories ahead of pickup — full procedure in `Product_Owner_Rules_Read_On_Demand.md §4`. Otherwise skip; do not read it as part of the standard Pre-Work Sequence.
 
 ---
 
@@ -157,8 +158,25 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 
 ---
 
+## 13. On-Demand Rules — Routing Table
+
+§1–§12 above are loaded at spawn. Nothing in `Product_Owner_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill — not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| Orchestrator asks you to close a story (Stage 4) | `Product_Owner_Rules_Read_On_Demand.md §1` |
+| Orchestrator asks you to participate in a Sprint Refinement | `Product_Owner_Rules_Read_On_Demand.md §2` |
+| Orchestrator asks you to run the Plan Next Sprint workflow | `Product_Owner_Rules_Read_On_Demand.md §3` |
+| Authoring or updating a roadmap/planning doc that defines stories ahead of pickup | `Product_Owner_Rules_Read_On_Demand.md §4` (also triggered from §11a above) |
+| Your first `gh issue create`/`gh issue edit --body-file` of the session | `Product_Owner_Rules_Read_On_Demand.md §5` (also triggered from `Story_Standard_PO.md §13`) |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit — are routed by `Agent_Common_Bootstrap.md §5` and §12 above. These five triggers were already flagged individually in `product_owner_instructions.md`; this table restates them in one place for scanning.
+
+---
+
 ## Version
 
-**Version:** 1.2 — Relocated §11a Roadmap Story Drain's full procedure to `Product_Owner_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first); §11a heading kept in place since `Plan_Sprint_Workflow.md` cites it by number  
-**Previous:** 1.1 — New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop  
+**Version:** 1.3 — Renamed `Product_Owner_Rules.md` → `Product_Owner_Rules_Bootstrap.md` and `Product_Owner_Rules_Extended.md` → `Product_Owner_Rules_Read_On_Demand.md`, matching `Developer_Rules_Bootstrap.md`'s naming convention; added §13 routing table. Content boundary unchanged — PO's instructions file already flagged every on-demand trigger explicitly ("otherwise skip") before this pass, unlike TL/QA, so this pass is pure rename + citation fix (see `Bootstrap_OnDemand_Split_Notes.md` open items).
+**Previous:** 1.2 — Relocated §11a Roadmap Story Drain's full procedure to `Product_Owner_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first); §11a heading kept in place since `Plan_Sprint_Workflow.md` cites it by number  
+**1.1:** New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop  
 **Created:** 2026-06-16
