@@ -95,7 +95,7 @@ Update at **start of session** (read last story's context, sync story statuses f
 
 A separate `Blockers & Watch-outs` section (≤ 5 lines) carries sprint-scoped conditions forward across rewrites until resolved or sprint end.
 
-Entries are **bullets, not paragraphs** — one line per item with story ID + outcome + PR/commit ref; detail lives in the retro/PR/memory fact by pointer (see `Agent_Common.md §5`).
+Entries are **bullets, not paragraphs** — one line per item with story ID + outcome + PR/commit ref; detail lives in the retro/PR/memory fact by pointer (see `Agent_Common_Bootstrap.md §1`).
 
 ---
 

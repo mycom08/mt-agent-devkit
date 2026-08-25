@@ -75,7 +75,7 @@ When integration tests share setup/teardown state (e.g. a shared fixture cleared
 - Always check whether integration tests exist for the story
 - If integration tests can be run, **they must be run** — no exceptions
 - The only valid reasons to skip: the story is API-contract only, **or** TL has explicitly stated not to run them in a Story comment
-- If you encounter a constraint not covered by the above reasons (e.g., auth mechanism incompatibility, mode-gated endpoints, missing sandbox configuration, **a credential/secret needed for the verification is not available in the working environment — see `Agent_Common.md §7`**), you **must not skip unilaterally** — report the constraint to the user and await their decision before proceeding. If the user directs you to escalate to TL, post a comment on the GitHub Issue tagging **TL**, describe the constraint, and await TL's explicit reply. Quote the approved decision (user or TL) in the QA sign-off comment.
+- If you encounter a constraint not covered by the above reasons (e.g., auth mechanism incompatibility, mode-gated endpoints, missing sandbox configuration, **a credential/secret needed for the verification is not available in the working environment — see `Agent_Common_Read_On_Demand.md §6`**), you **must not skip unilaterally** — report the constraint to the user and await their decision before proceeding. If the user directs you to escalate to TL, post a comment on the GitHub Issue tagging **TL**, describe the constraint, and await TL's explicit reply. Quote the approved decision (user or TL) in the QA sign-off comment.
 - Record integration test results (pass/fail + evidence) as a Comment on the GitHub Issue
 
 **Integration test script failures — fix or block, never workaround:**
@@ -226,19 +226,19 @@ Do not silently follow the old decision, and do not block awaiting re-confirmati
 
 - Keep working record updates short and fact-based (story IDs, test results, AC status)
 - Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
 
 ---
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 13. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common.md §3`.
+On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 

@@ -48,9 +48,9 @@ fi
 #    real scaffold output for that file (byte tokens alone are not sufficient — some
 #    per-project rewrites use plain prose with no {} marker at all).
 VERBATIM_RULES=(
-  Agent_Common Audit_Rules Blocked_Request CICD_Validation_Guide Clean_Code_Rules
-  Product_Owner_Rules Retro_Rules Story_Standard_TL Strict_Mode_Story_Guide
-  UI_Prototype_Rules
+  Agent_Common_Bootstrap Agent_Common_Read_On_Demand Audit_Rules Blocked_Request
+  CICD_Validation_Guide Clean_Code_Rules Product_Owner_Rules Retro_Rules
+  Story_Standard_TL Strict_Mode_Story_Guide UI_Prototype_Rules
 )
 GH_ORG="${GH_SLUG%%/*}"
 GH_REPO="${GH_SLUG##*/}"
@@ -119,7 +119,7 @@ for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Des
   printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
 done
 
-# 7. Blank working-record files (rewrite-in-place snapshot format — see Agent_Common.md §5)
+# 7. Blank working-record files (rewrite-in-place snapshot format — see Agent_Common_Bootstrap.md §1)
 for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
   if [[ "$role" == "UI_UX_Designer" ]]; then
     role_label="UI/UX Designer"

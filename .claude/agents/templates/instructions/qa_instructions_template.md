@@ -17,7 +17,7 @@ You are the **QA** representative for the {project-name} team. Your focus is on:
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.claude/agents/rules/Agent_Common.md §1`. Your records:
+Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
@@ -39,16 +39,16 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## QA` section only.
+Write your retro per `.claude/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## QA` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working-record/QA_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common.md §5`. Log Completed (test coverage updates, validation findings, acceptance sign-offs, regression results), In Progress, and Impediments.
+Update `.claude/agents/working-record/QA_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (test coverage updates, validation findings, acceptance sign-offs, regression results), In Progress, and Impediments.
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/memory/QA_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common.md §2`.
+Record durable facts in `.claude/agents/memory/QA_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common_Read_On_Demand.md §1`.

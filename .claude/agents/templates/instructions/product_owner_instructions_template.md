@@ -20,7 +20,7 @@ You are the **Product Owner** for the {project-name} Scrum team. You are the sin
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.claude/agents/rules/Agent_Common.md §1`. Your records:
+Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
@@ -35,7 +35,7 @@ When writing or managing stories, also read **Story Standard (PO)** — `.claude
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/memory/Product_Owner_Memory.md`. Rules and format: `.claude/agents/rules/Agent_Common.md §2` (PO records `## Stored Facts` only).
+Record durable facts in `.claude/agents/memory/Product_Owner_Memory.md`. Rules and format: `.claude/agents/rules/Agent_Common_Read_On_Demand.md §1` (PO records `## Stored Facts` only).
 
 ---
 
@@ -60,7 +60,7 @@ Then execute:
 4. Append a closure entry to the story MD `## Comments` section: `"Story accepted — all AC verified. Closed."`
 
 Then (both modes):
-- Write your retrospective section to `.claude/agents/retros/ST-XXXXXX_retro.md` — read `.claude/agents/rules/Agent_Common.md §4` for format; overwrite the `## Product Owner` section only
+- Write your retrospective section to `.claude/agents/retros/ST-XXXXXX_retro.md` — read `.claude/agents/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
 - Update your Working Record only if there is a durable fact worth recording — skip the update entirely if there is nothing new
 
 ---
@@ -154,4 +154,4 @@ After the orchestrator confirms all answers are filled in:
 
 ## Working Record
 
-Update `.claude/agents/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common.md §5`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.
+Update `.claude/agents/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.

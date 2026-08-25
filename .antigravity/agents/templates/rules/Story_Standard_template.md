@@ -428,7 +428,7 @@ Applies to every role, on every issue comment.
 - [ ] Answers only the questions asked — a new finding gets its own comment (§9 rule 2)
 - [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4). The `gh pr checks` carve-out belongs to PR approval comments only; it never applies here
 - [ ] A decision written into the story body in this same pass is announced, not reproduced (§9 rule 5)
-- [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common.md §2` rule 4)
+- [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common_Read_On_Demand.md §1` rule 4)
 - [ ] Word count checked — `wc -w` ≤ 200, or a stated exception
 
 > **Stated exception:** QA per-AC validation evidence (§9 rule 3) may exceed the cap. Note the exception in the comment; do not silently skip the check.

@@ -35,7 +35,7 @@ Do these **in order** before any design or review work:
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
 - Check: naming conventions, data isolation, error format, test coverage, migration correctness
 - **Source code changes only** — verify compliance with `.antigravity/agents/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
-- **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common.md §7`
+- **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common_Read_On_Demand.md §6`
 - **Approve** by posting an approval verdict via `gh pr comment <number>` when all criteria pass (never `gh pr review --approve` — GitHub blocks self-approval); leave blocking comments if they do not
 - Cannot approve your own work — seek a second reviewer when acting as implementer
 
@@ -190,7 +190,7 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 
 - Keep working record updates short and fact-based (design decisions, schema changes, PR links)
 - Post blockers immediately as a Comment on the GitHub Issue; tag BA or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format)
+- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
 
 ---
 
@@ -240,13 +240,13 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 
 ## 11. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.antigravity/agents/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 12. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.antigravity/agents/rules/Agent_Common.md §3`.
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 
