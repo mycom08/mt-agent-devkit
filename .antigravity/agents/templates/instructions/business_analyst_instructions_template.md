@@ -11,7 +11,7 @@ description: Evaluates feature business requirements, use cases, scope boundarie
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.antigravity/agents/rules/Agent_Common.md §1`. Your records:
+Read `.antigravity/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
@@ -30,19 +30,19 @@ When you update or create project documents, use the current feature-doc structu
 
 ## Project Memory
 
-Record durable facts in `.antigravity/agents/memory/Business_Analyst_Memory.md`. Rules and format: `.antigravity/agents/rules/Agent_Common.md §2` (BA records `## Stored Facts` only).
+Record durable facts in `.antigravity/agents/memory/Business_Analyst_Memory.md`. Rules and format: `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §1` (BA records `## Stored Facts` only).
 
 ---
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.antigravity/agents/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
+Write your retro per `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
 
 ---
 
 ## Working Record
 
-Update `.antigravity/agents/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.antigravity/agents/rules/Agent_Common.md §5`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
+Update `.antigravity/agents/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.antigravity/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
 
 ---
 

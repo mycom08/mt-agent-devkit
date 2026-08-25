@@ -211,7 +211,8 @@ Changes to these files affect agent decision-making in every sprint:
 |---|---|
 | `rules/Story_Standard_template.md` | Source of truth for story lifecycle; all agents reference it |
 | `rules/Story_Standard_*_template.md` (5 role variants) | Role-specific view of the story lifecycle |
-| `rules/Agent_Common_template.md` | Pre-work sequence, memory format, retro format — read by all agents |
+| `rules/Agent_Common_Bootstrap_template.md` | Pre-work sequence (incl. Working Record) — read in full by all agents every spawn |
+| `rules/Agent_Common_Read_On_Demand_template.md` | Memory format, retro format, stage-transition commit, credential-gated verification — fetched section-by-section on demand |
 | `shared/workflows/Shared_Pipeline_Stages_Shared_template.md` | Pipeline stage logic — governs sprint execution |
 | `rules/Developer_Rules_template.md` | Dev implementation gate rules |
 | `rules/Technical_Lead_Rules_template.md` | TL review and design rules |

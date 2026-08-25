@@ -54,7 +54,7 @@ Using the routing in `community-retros/README.md`:
 |---|---|
 | `[context]` | `templates/context/Project_Priming_template.md` or a memory template |
 | `[instruction]` | `templates/instructions/{role}_instructions_template.md` |
-| `[workflow]` | a workflow template under `templates/shared/workflows/` or `templates/{mode}/workflows/`, or `templates/rules/Agent_Common_template.md` |
+| `[workflow]` | a workflow template under `templates/shared/workflows/` or `templates/{mode}/workflows/`, or `templates/rules/Agent_Common_Bootstrap_template.md` / `templates/rules/Agent_Common_Read_On_Demand_template.md` |
 | `[failure]` | a rules template (e.g. `templates/rules/Developer_Rules_template.md`) or an instruction template |
 
 If an item does not map to any template file (e.g. it only concerns a devkit-internal workflow), still list it but mark its target as `devkit-internal (no changes.json entry)`.

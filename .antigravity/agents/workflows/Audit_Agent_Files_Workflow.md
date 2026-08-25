@@ -75,7 +75,7 @@ Step 2 — scan these paths only:
 - .antigravity/agents/working/     (EXCLUDING .antigravity/agents/working/tmp/, .antigravity/agents/working/working-record/, .antigravity/agents/working/retros/, .antigravity/agents/internal/ — these are runtime/output paths, not corpus)
 
 Step 3 — for each finding class, apply Audit_Rules.md's rules exactly:
-- D-n: byte-identical after whitespace-collapse only, >=15 contiguous lines, N>=2, target file already on the consuming agent's mandatory read list (Agent_Common.md §1's Project Priming/Rules/Memory sequence plus that role's own Rules file's own "Mandatory Reading" section — not a conditional trigger pointer).
+- D-n: byte-identical after whitespace-collapse only, >=15 contiguous lines, N>=2, target file already on the consuming agent's mandatory read list (Agent_Common_Bootstrap.md §1's Project Priming/Rules/Memory sequence plus that role's own Rules file's own "Mandatory Reading" section — not a conditional trigger pointer).
 - RP-n: whitespace-collapse + closed role-alias substitution, uniform substitution within each instance, N>=3, same >=15-line + mandatory-read-list gate, never YAML frontmatter or "## Your Role" sections.
 - C-n: same-subject + both-unconditional + co-reachable, with every carve-out in Audit_Rules.md §3 applied (mode bifurcation, template-vs-working mirrors, role-scoped views, lifecycle phases, audit:keep). Report-only — do not propose an edit or pick a side.
 - X-n: dead file-path or section-anchor references (per Audit_Rules.md §4's three-root resolution), and orphaned files. State a proposed fix only when the intended target is unambiguous; otherwise propose removal and say so.

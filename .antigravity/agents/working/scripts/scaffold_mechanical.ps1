@@ -30,9 +30,9 @@ if ($Mode -eq 'strict') {
 
 # 2. Verbatim rules files
 $VerbatimRules = @(
-    "Agent_Common", "Audit_Rules", "Blocked_Request", "CICD_Validation_Guide", "Clean_Code_Rules",
-    "Product_Owner_Rules", "Retro_Rules", "Story_Standard_TL", "Strict_Mode_Story_Guide",
-    "UI_Prototype_Rules"
+    "Agent_Common_Bootstrap", "Agent_Common_Read_On_Demand", "Audit_Rules", "Blocked_Request",
+    "CICD_Validation_Guide", "Clean_Code_Rules", "Product_Owner_Rules", "Retro_Rules",
+    "Story_Standard_TL", "Strict_Mode_Story_Guide", "UI_Prototype_Rules"
 )
 
 $ghOrg = ""

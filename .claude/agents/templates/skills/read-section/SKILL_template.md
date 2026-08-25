@@ -44,14 +44,14 @@ consistent heading prefix instead — e.g. a memory archive's `### Fact N`.
 
 ## Example
 
-`Agent_Common.md §2` (`.claude/agents/rules/Agent_Common.md`):
-`grep -nE "^## ([0-9]+[a-z]?\.|Version)" <file>` lists §1 (8), **§2 (26)**,
-§3 (81), ... Target `start=26`, next heading `end=81` → `sed -n '26,80p' <file>`.
+`Agent_Common_Read_On_Demand.md §1` (`.claude/agents/rules/Agent_Common_Read_On_Demand.md`):
+`grep -nE "^## ([0-9]+[a-z]?\.|Version)" <file>` lists **§1 (12)**, §2 (67),
+§3 (81), ... Target `start=12`, next heading `end=67` → `sed -n '12,66p' <file>`.
 
 That file is also the worked case for step 1's warning: a bare `grep -n "^## "`
-additionally matches `## Stored Facts` (59) and `## Troubleshooting Facts` (67),
-both of which sit *inside* §2. Taking 59 as the boundary gives `sed -n '26,58p'`,
-silently dropping §2's format block and everything after it — a short read, not
+additionally matches `## Stored Facts` (45) and `## Troubleshooting Facts` (53),
+both of which sit *inside* §1. Taking 45 as the boundary gives `sed -n '12,44p'`,
+silently dropping §1's format block and everything after it — a short read, not
 an error. Sub-headings inside a numbered section are common; assume nothing from
 heading level alone — match the numbering pattern, and match the whole family.
 

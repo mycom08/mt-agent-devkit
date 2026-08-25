@@ -149,6 +149,10 @@ ALLOWLIST_REMOVED_PATHS = {
     ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md",
     ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
     ".claude/agents/templates/workflows/Start_Story_Workflow_template.md",
+    # ST-000132: Agent_Common_template.md split into Agent_Common_Bootstrap_template.md
+    # and Agent_Common_Read_On_Demand_template.md. Many historical version records
+    # (pre-0.1.44) still reference the pre-split filename.
+    ".claude/agents/templates/rules/Agent_Common_template.md",
 }
 
 # Templates that predate changes.json tracking (added before v0.0.1).
@@ -161,7 +165,6 @@ ALLOWLIST_UNTRACKED_TEMPLATES = {
     ".claude/agents/templates/instructions/developer_instructions_template.md",
     ".claude/agents/templates/instructions/qa_instructions_template.md",
     ".claude/agents/templates/instructions/technical_lead_instructions_template.md",
-    ".claude/agents/templates/rules/Agent_Common_template.md",
     ".claude/agents/templates/rules/Blocked_Request_template.md",
     ".claude/agents/templates/rules/Business_Analyst_Rules_template.md",
     ".claude/agents/templates/rules/CICD_Validation_Guide_template.md",
@@ -215,7 +218,8 @@ KNOWN_ISSUE_REFS = {
 # references to the template file path (relative to REPO_ROOT) where heading N
 # is checked. Names NOT in this table are skipped -- prevents false positives.
 SECTION_REF_ALIAS = {
-    "Agent_Common": ".claude/agents/templates/rules/Agent_Common_template.md",
+    "Agent_Common_Bootstrap": ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md",
+    "Agent_Common_Read_On_Demand": ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md",
     "Business_Analyst_Rules": ".claude/agents/templates/rules/Business_Analyst_Rules_template.md",
     "Developer_Rules": ".claude/agents/templates/rules/Developer_Rules_template.md",
     "Product_Owner_Rules": ".claude/agents/templates/rules/Product_Owner_Rules_template.md",

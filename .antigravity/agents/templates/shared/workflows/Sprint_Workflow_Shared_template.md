@@ -155,7 +155,7 @@ The orchestrator maintains `.antigravity/agents/tmp/sprint_pipeline_state.md` to
 
      d. **If no:** skip to step 5 (Memory Pruning).
 
-  5. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `.antigravity/agents/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common.md §2` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
+  5. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `.antigravity/agents/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
 
   6. **Cleanup** — delete the state file, then delete any remaining files in `.antigravity/agents/tmp/` with `rm .antigravity/agents/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
 <!-- SHARED-END -->

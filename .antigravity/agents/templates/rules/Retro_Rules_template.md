@@ -88,10 +88,10 @@ Signal items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) must be w
 
 ## Sprint-End Memory Pruning
 
-Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common.md §2` rule 3).
+Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common_Read_On_Demand.md §1` rule 3).
 
 For each `.antigravity/agents/memory/*_Memory.md` file (glob, all roles):
-1. Apply the inclusion test and "Never record" list from `Agent_Common.md §2` to every `## Stored Facts` entry.
+1. Apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to every `## Stored Facts` entry.
 2. Delete or merge: facts whose `Expires when` premise has been met, duplicate/superseded facts, and history-only entries with no future action.
 3. Leave `## Troubleshooting Facts` entries as-is unless the same test clearly applies — they are already tied to a specific fix and less prone to the drift this step targets.
 4. Report a one-line summary per file to the user (kept / pruned counts). No edit needed if nothing qualifies for removal.

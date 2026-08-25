@@ -18,7 +18,7 @@ You are the **Developer** for the {project-name} Scrum team. Your focus is on:
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.antigravity/agents/rules/Agent_Common.md §1`. Your records:
+Read `.antigravity/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
@@ -31,7 +31,7 @@ Follow the read sequence in `.antigravity/agents/rules/Agent_Common.md §1`. You
 
 ## Project Memory
 
-Record durable facts in `.antigravity/agents/memory/Developer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.antigravity/agents/rules/Agent_Common.md §2`.
+Record durable facts in `.antigravity/agents/memory/Developer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §1`.
 
 ---
 
@@ -82,10 +82,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.antigravity/agents/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Developer` section only.
+Write your retro per `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Developer` section only.
 
 ---
 
 ## Working Record
 
-Update `.antigravity/agents/working-record/Developer_Working_Record.md` at start and end of each session per `.antigravity/agents/rules/Agent_Common.md §5`.
+Update `.antigravity/agents/working-record/Developer_Working_Record.md` at start and end of each session per `.antigravity/agents/rules/Agent_Common_Bootstrap.md §1`.
