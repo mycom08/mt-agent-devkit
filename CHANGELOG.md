@@ -19,6 +19,10 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [Unreleased]
 
+### Bug Fixes
+
+- [ST-000136] Fixed `Developer_Rules_Bootstrap_template.md`, `UI_UX_Designer_Rules_template.md`, and `Technical_Lead_Rules_Bootstrap_template.md` to agree with the rest of the corpus that PO, not QA, ticks Acceptance Criteria at story closure, across the Claude and Antigravity template surfaces.
+
 ### Changes
 
 - [ST-000135] Ported the two-tier memory pattern (live index + archive, fetched only on a keyword match) already validated on the devkit's own team into the distributable `templates/` tree for Developer, QA, and Technical Lead roles, across the Claude and Antigravity template surfaces.

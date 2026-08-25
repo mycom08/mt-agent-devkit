@@ -95,7 +95,7 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 
 - Move story to `status:review` when Dev opens a PR and tags you
 - Move story to `status:testing` after you approve the PR — **before** it is merged (QA tests the dev branch; merge happens only after QA automation passes)
-- Only QA ticks Acceptance Criteria — do not mark AC complete yourself
+- AC checkboxes are ticked by **PO at story closure (Stage 4)**, not by QA or TL — do not mark AC complete yourself
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
 

@@ -88,7 +88,7 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 
 - Update story status by changing the GitHub Issue label at each stage.
 - Cannot merge without: TL approval + QA sign-off on dev branch + local tests passing.
-- **Do NOT tick Acceptance Criteria** — AC is owned by QA. Ticking AC yourself is a role violation.
+- **Do NOT tick Acceptance Criteria** — AC checkboxes are ticked by **PO at story closure (Stage 4)**, not by Dev. Ticking AC yourself is a role violation.
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
@@ -145,7 +145,7 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 3. **For rename/refactor stories** (story title or scope contains "rename", "refactor", or changes a function/class/constant name): run `grep -rn "<old-name>" docs/` and update any stale references found before opening the PR
 4. PR created with title `[ST-XXXXXX][FEATURE] Story title`
 5. TL has reviewed and approved PR
-6. QA has tested on the dev branch and ticked all AC
+6. QA has tested on the dev branch and signed off on all AC (AC checkboxes are ticked by PO at story closure)
 7. Update story label to `status:done` after merge
 
 ---
