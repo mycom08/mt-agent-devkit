@@ -86,7 +86,7 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 
 - Update story status by changing the GitHub Issue label at each stage.
 - Cannot merge without: TL approval + local checks passing.
-- **Do NOT tick Acceptance Criteria** — AC is owned by QA. Ticking AC yourself is a role violation.
+- **Do NOT tick Acceptance Criteria** — AC checkboxes are ticked by **PO at story closure (Stage 4)**, not by UI/UX Designer. Ticking AC yourself is a role violation.
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
 

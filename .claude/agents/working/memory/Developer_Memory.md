@@ -49,6 +49,13 @@ Keywords: Antigravity, `read-section` skill, no `.claude/skills/` mirror, grep-l
 
 ## Troubleshooting Facts
 
+### Fix 3 — Worktree-isolated spawn has no `working-record/` directory on first write
+- **Problem:** Writing to `.claude/agents/working/working-record/<Role>_Working_Record.md` fails or the file appears empty/missing on a fresh worktree-isolated spawn, even though the same path reads fine from the shared checkout.
+- **Symptoms:** `Edit` tool errors "File does not exist" for the worktree-prefixed path; `ls` on `.claude/agents/working/working-record/` in the worktree returns "No such file or directory".
+- **Root Cause:** `.claude/agents/working/working-record/` is gitignored (confirmed via `.gitignore`), so `git worktree add` never populates it — unlike `memory/` and `retros/`, which are tracked (committed) and so are present in every worktree.
+- **Fix:** `mkdir -p .claude/agents/working/working-record` in the worktree, then `Write` the record fresh (reconstruct from the shared checkout's copy or PR/issue history if prior content is needed — `Read` can still reach the shared-checkout path even when `Edit`/`Bash` refuse it).
+- **Prevention:** On any worktree-isolated spawn, `mkdir -p` the working-record directory before the first write of the session rather than assuming it exists because memory/retros did.
+
 ### Fix 2 — Multi-number slash citation (`§4/§6/§12`) trips the bare-§N check
 - **Problem:** `validate_templates.py`'s section-ref checker flags a citation like `` `File.md` §4/§6/§12 `` as a bare, unqualified reference for every number after the first `/`.
 - **Symptoms:** `[ERROR] ... bare §N has no matching numbered heading in this file`, even though the sentence clearly names the source file once, up front.
