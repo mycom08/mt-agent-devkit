@@ -232,6 +232,7 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 | Trigger | Fetch |
 |---|---|
 | QA is the story Implementer | `QA_Rules_Read_On_Demand.md §1` (pre-PR gate), `§2` (live user instruction conflicts) |
+| A bug is found after story is `status:done` (hotfix) | `QA_Rules_Read_On_Demand.md §3` |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit and Troubleshooting Protocol are already resolved directly by §12/§13 above.
 
@@ -239,6 +240,7 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ## Version
 
-**Version:** 4.0 — Split into a bootstrap tier (this file: §1–§13, unconditional content read on every spawn) and an on-demand tier (`QA_Rules_Read_On_Demand.md`: Pre-PR Gate and Live User Instruction Conflicts, both "when acting as Implementer"), mirroring the boundary already validated on the devkit's own team (`working/rules/QA_Rules_Bootstrap.md` / `QA_Rules_Read_On_Demand.md`).
+**Version:** 4.1 — §14 routing table: new "A bug is found after story is `status:done` (hotfix)" row citing `QA_Rules_Read_On_Demand.md §3`, added there by the `Story_Standard_QA_template.md` trim (devkit issue #133 / ST-000134).
+**Previous:** 4.0 — Split into a bootstrap tier (this file: §1–§13, unconditional content read on every spawn) and an on-demand tier (`QA_Rules_Read_On_Demand.md`: Pre-PR Gate and Live User Instruction Conflicts, both "when acting as Implementer"), mirroring the boundary already validated on the devkit's own team (`working/rules/QA_Rules_Bootstrap.md` / `QA_Rules_Read_On_Demand.md`).
 **Previous:** 3.7 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)
 **Created:** 2026-05-01

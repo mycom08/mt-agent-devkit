@@ -193,9 +193,10 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 |---|---|
 | Blocked on a story and reporting it | `Developer_Rules_Read_On_Demand.md §7` (Reporting & Blockers) |
 | Creating or updating a project document | `Developer_Rules_Read_On_Demand.md §8` (Document Placement) |
-| Orchestrator assigns you as peer reviewer for a TL-implemented story | `Developer_Rules_Read_On_Demand.md §9` (Peer Review) |
+| Orchestrator assigns you as peer reviewer for a TL-implemented story | `Developer_Rules_Read_On_Demand.md §9` (checklist) and `§12` (full reviewer procedure) |
 | A question surfaces mid-implementation | `Developer_Rules_Read_On_Demand.md §10` (Mid-Implementation Consultation) |
 | A live user instruction contradicts a prior decision recorded in the issue thread | `Developer_Rules_Read_On_Demand.md §11` (Live User Instruction Conflicts) |
+| A post-Done bug (hotfix) | `Developer_Rules_Read_On_Demand.md §13` |
 | Signaling stage completion to the orchestrator, or you changed a memory file this session | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — mandatory before handoff |
 | A tooling/environment blocker | First scan your own `## Troubleshooting Facts` for a recorded fix; fetch `Agent_Common_Read_On_Demand.md §2` only for the diagnose-and-record-back procedure |
 
@@ -213,6 +214,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 ## Version
 
-**Version:** 3.0 — Split into a bootstrap tier (this file: §1–§6, unconditional content read on every spawn) and an on-demand tier (`Developer_Rules_Read_On_Demand.md`: §7 through §11, scenario-conditional content fetched only on trigger), mirroring the boundary already validated on the devkit's own team (`working/rules/Developer_Rules_Bootstrap.md` / `Developer_Rules_Read_On_Demand.md`). Mid-implementation consultation and live user instruction conflicts (previously inline in §2) and Peer Review (previously section 11) moved out; sections 9/10's prior pointer-only content (Stage-Transition Commit, Troubleshooting Protocol) retired in favor of the routing table above, since `Agent_Common_Bootstrap.md §5` already covers both universally.
+**Version:** 3.1 — §12 routing table: peer-reviewer row now also cites `Developer_Rules_Read_On_Demand.md §12` (full reviewer procedure), and a new hotfix row cites `§13` — both sections added there by the `Story_Standard_Dev_template.md` trim (devkit issue #133 / ST-000134).
+**Previous:** 3.0 — Split into a bootstrap tier (this file: §1–§6, unconditional content read on every spawn) and an on-demand tier (`Developer_Rules_Read_On_Demand.md`: §7 through §11, scenario-conditional content fetched only on trigger), mirroring the boundary already validated on the devkit's own team (`working/rules/Developer_Rules_Bootstrap.md` / `Developer_Rules_Read_On_Demand.md`). Mid-implementation consultation and live user instruction conflicts (previously inline in §2) and Peer Review (previously section 11) moved out; sections 9/10's prior pointer-only content (Stage-Transition Commit, Troubleshooting Protocol) retired in favor of the routing table above, since `Agent_Common_Bootstrap.md §5` already covers both universally.
 **Previous:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)
 **Created:** 2026-04-24

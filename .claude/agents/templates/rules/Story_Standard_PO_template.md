@@ -54,7 +54,7 @@ Keep stories concise (2-3 pages). Reference technical docs (`docs/feature/`) rat
 |------|--------|-----------|
 | **PO** | Create stories, define AC, clarify scope in Comment, tick AC checkboxes after QA confirms | Approve code, comment on implementation |
 
-**Red Flags:** PO ticking checkboxes before QA confirms; PO commenting on code decisions.
+**Red Flags:** ticking checkboxes before QA confirms; commenting on code decisions.
 
 ---
 
@@ -78,62 +78,14 @@ Scope decision or AC clarification.
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`). An `@` prefix triggers a GitHub mention to a real user account.
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text. A bare `#` creates a GitHub cross-reference to an unrelated issue or PR.
 - **One topic per comment** — answer what was asked and nothing else; a new finding gets its own comment. Batching replies to questions asked together is fine; an unasked finding smuggled into an answer is not.
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words — draft to shape (one short paragraph per topic: decision, one-line why, pointer) so the `wc -w` check is a backstop, not a trim-and-recount loop; corrections state the delta only; one close-out line per thread. When writing a decision into the story body: the decision itself, ≤ 5 lines, pointer to the resolving comment — the body stays current truth with no supersession notes. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; corrections state the delta only; one close-out line per thread. Story-body decisions: the decision itself, ≤ 5 lines, pointer to the resolving comment — current truth, no supersession notes. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
 - **Announce body edits, never reproduce them.** As the only role that edits the story body, you are the one at risk here: after amending an AC, the comment states *which* section changed, *what kind* of change, and *why* — never the resulting AC text. A wording copied into a comment goes stale the next time that AC is reworded, and the thread then contradicts the body. Example: "AC6 reworded — added an X carve-out, per the reviewer's point that <reason>. Body updated." (`Story_Standard.md §9` rule 5)
 
 ---
 
 ## 13. Story Creation Template
 
-**Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
-**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
-
-**Labels — feature story:** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`  
-**Labels — non-feature story:** `status:backlog`, `sprint-N`  
-**Labels — bug/defect story:** `status:backlog`, `bug`, `sprint-N` (add `feature:<name>` and `phase-N` if the bug is tied to a specific feature)
-
-> Omit the sprint label if the story has not been assigned to a sprint yet. Sprint and backlog stories are not scoped to a feature; use `feature:` and `phase-` labels only when the story is part of a named feature.  
-> Add `bug` to any story that reports a defect, regression, unexpected system behaviour, or infrastructure failure — even if it also carries a `feature:` label.
-
-```markdown
-**Phase:** [Phase/Sprint]  
-**Story Points:** [1-13]  
-**Priority:** Must-Have | Should-Have | Nice-to-Have  
-**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
-
-## User Story
-
-> As a **[persona]**,  
-> I want **[feature]**,  
-> So that **[benefit]**.
-
-## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## API Spec Reference
-
-[Affected endpoints and link to spec file, or "N/A"]
-
-## Technical Scope
-
-[Optional: architecture notes, API changes, database migrations]
-
-## Deliverables
-
-[Filled in after work complete: PR links, commits, artifacts]
-```
-
-> **Bug/defect stories** (carry the `bug` label): insert a `## Reproduction` section immediately after `## Acceptance Criteria` (before `## API Spec Reference`):
-> ```markdown
-> ## Reproduction
->
-> **Repro Command:** [exact command/test to run verbatim, or `unknown`]
-> **Expected:** [what should happen]
-> **Actual:** [what actually happens — the observed defect]
-> ```
-> The Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`, runs ahead of Stage 0) executes `Repro Command` verbatim before any implementer is spawned — it never parses AC prose to derive a command. If `Repro Command` is absent or `unknown`, pre-flight is skipped and Stage 1 proceeds normally (the implementer reproduces as part of its own work, same as before this convention existed). **Strict mode** has no label mechanism — the presence of a populated `## Reproduction` section in the story MD is itself the bug-story marker pre-flight checks for.
+Full template (title/label conventions, body skeleton, bug-repro block) relocated to `Product_Owner_Rules_Read_On_Demand.md` §2 — triggers whenever you create a new story (most PO spawns are status/comment work on existing stories, not this). Read it before your first `gh issue create`/`gh issue edit --body-file` of the session.
 
 ---
 

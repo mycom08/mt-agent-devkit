@@ -51,34 +51,13 @@
 
 ### Developer as Reviewer (when TL is implementer)
 
-When Developer is assigned the Stage 2 peer review role:
-1. Review the PR diff via `gh pr diff <number> --repo {github-org}/{repo-name}`
-2. Post inline PR comments for specific line-level feedback
-3. **Always post a brief notify comment on the GitHub Issue** — whether approving or requesting changes:
-
-   ```
-   ## PR #NNN peer review — <Approved | Changes Requested>
-   **Thread Status:** Open | Resolved
-   **Area:** Implementation
-
-   **Developer - YYYY-MM-DD**
-   <Summary of findings or approval rationale>
-
-   **Next:** TL to address CR items | None
-   ```
-
-4. Use `gh pr comment` for the PR-level verdict (not `gh pr review --approve` — GitHub blocks self-approval)
+Only when the orchestrator assigns Developer the Stage 2 peer review role — steps and notify-comment template in `Developer_Rules_Read_On_Demand.md` §12. Otherwise skip.
 
 ---
 
 ## 6. Hotfix (post-Done bug)
 
-When a bug is found after a story is `status:done`, **never fix on the feature branch or master**. Create a fix branch off the feature branch, then run the normal review/test cycle:
-
-1. Create `fix/ST-XXXXXX/short-description` from the feature branch; set the issue to `status:hotfix`
-2. Fix on that branch → open a PR targeting the **feature branch** → request TL review
-3. After TL approval, merge → set `status:testing` → notify QA to re-test the affected AC
-4. QA reports results → PO ticks AC → `status:done`
+Only when a bug is found after a story is `status:done` — steps in `Developer_Rules_Read_On_Demand.md` §13. Otherwise skip.
 
 Full procedure with red flags: `Story_Standard.md` §6.
 
@@ -90,7 +69,7 @@ Full procedure with red flags: `Story_Standard.md` §6.
 |------|--------|-----------|
 | **Developer** | Implement, write PR, ask for guidance, self-check AC | Tick AC, answer scope questions, review code |
 
-**Red Flags:** Developer ticking AC checkboxes; developer answering PO scope questions.
+**Red Flags:** ticking AC checkboxes; answering PO's scope questions.
 
 ---
 
@@ -131,7 +110,7 @@ Response and decision.
 - When a comment resolves a scope/AC question, update the issue body to match
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`). An `@` prefix triggers a GitHub mention to a real user account.
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text. A bare `#` creates a GitHub cross-reference to an unrelated issue or PR.
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words — draft to shape (one short paragraph per topic: decision, one-line why, pointer) so the `wc -w` check is a backstop, not a trim-and-recount loop; **never paste command output or check transcripts** — verdict in one line, logs go in your working record; the single carve-out is **gate-mandated CI evidence** — when you peer-review, the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires in a PR approval comment, which you must paste and nothing else; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; **never paste command output or check transcripts** — verdict in one line, logs in your working record; carve-out: paste the literal `gh pr checks <PR-number>` output when peer-reviewing (§12 Reviewer gate requires it in the approval comment) — nothing else gets pasted; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
 
 ---
 
@@ -149,9 +128,7 @@ Response and decision.
 
 ### Reviewer Gate — before approving a PR (Dev as peer reviewer)
 
-- [ ] All CI checks on the PR have **finished** — do not review while CI is still running
-- [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
-- [ ] Code review criteria pass (per `Developer_Rules_Read_On_Demand.md` §9)
+Only when Dev is the peer reviewer — checklist in `Developer_Rules_Read_On_Demand.md` §12.
 
 ### Merge Gate — before merging dev branch to feature branch
 

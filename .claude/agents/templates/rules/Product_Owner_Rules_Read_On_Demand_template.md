@@ -17,7 +17,7 @@ Every story the roadmap defines must become a tracked `status:backlog` issue/sto
    - **Mode: github** — `gh issue list --repo {github-org}/{repo-name} --search "\"<marker from step 1>\" in:body" --state all --json number,body`. Treat the result as a **candidate set, not a verdict**: GitHub's phrase search matches a contiguous token subsequence of the body, not an exact line, so a story whose title is a prefix of another already-drained story's title can return a false match. For each candidate, confirm the marker appears as an **exact, full line** in that issue's body before treating this story as already drained — skip creating it only then. Note: GitHub's search index is eventually consistent, so an issue you created moments earlier in this same pass may not be returned yet — track what you just created directly rather than relying on search to re-find it.
    - **Mode: strict** — grep `.claude/agents/docs/stories/*.md` for the exact marker line using a whole-line match (e.g. `grep -Fxq "<marker>"` per file, not a plain substring grep, which carries the same prefix-title false-positive risk). A match means this story is already drained — skip it.
 3. If no match, create the tracked issue/story:
-   - **Mode: github** — follow `Story_Standard_PO.md` §13's title/label/`--body-file` conventions, with the usual `**Roadmap Phase:** Phase N — <theme>` body line and `phase-N` label already used for roadmap-sourced stories (see `Plan_Sprint_Workflow.md` Stage 4, `Create_Stories_Workflow.md` Step 3) — those are your phase-reference tag (AC2). Add the new marker line from step 1 verbatim in the body too (alongside `**Phase:**`/`**Story Points:**`/`**Priority:**`/`**Assigned:**`) — that one exists purely for the idempotency check in step 2, not as a human-facing phase tag.
+   - **Mode: github** — follow §2 above's title/label/`--body-file` conventions, with the usual `**Roadmap Phase:** Phase N — <theme>` body line and `phase-N` label already used for roadmap-sourced stories (see `Plan_Sprint_Workflow.md` Stage 4, `Create_Stories_Workflow.md` Step 3) — those are your phase-reference tag (AC2). Add the new marker line from step 1 verbatim in the body too (alongside `**Phase:**`/`**Story Points:**`/`**Priority:**`/`**Assigned:**`) — that one exists purely for the idempotency check in step 2, not as a human-facing phase tag.
    - **Mode: strict** — follow `Create_Stories_Workflow.md` Step 4's strict-mode story-creation steps; set `**Feature:**`/`**Phase:**` from the roadmap entry as usual, and include the marker line from step 1 in the body for the same idempotency purpose.
 4. **Verification (idempotent re-run):** re-running steps 1–3 against an unchanged roadmap must return an existing match at step 2 for every story and create zero new issues/records — this is the mechanism that satisfies "re-authoring the same roadmap does not create duplicates."
 
@@ -25,7 +25,64 @@ Every story the roadmap defines must become a tracked `status:backlog` issue/sto
 
 ---
 
+## 2. Story Creation Template
+
+Triggered from `Story_Standard_PO.md` §13. Read before your first `gh issue create`/`gh issue edit --body-file` of the session.
+
+**Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`
+**GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
+
+**Labels — feature story:** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`
+**Labels — non-feature story:** `status:backlog`, `sprint-N`
+**Labels — bug/defect story:** `status:backlog`, `bug`, `sprint-N` (add `feature:<name>` and `phase-N` if the bug is tied to a specific feature)
+
+> Omit the sprint label if the story has not been assigned to a sprint yet. Sprint and backlog stories are not scoped to a feature; use `feature:` and `phase-` labels only when the story is part of a named feature.
+> Add `bug` to any story that reports a defect, regression, unexpected system behaviour, or infrastructure failure — even if it also carries a `feature:` label.
+
+```markdown
+**Phase:** [Phase/Sprint]  
+**Story Points:** [1-13]  
+**Priority:** Must-Have | Should-Have | Nice-to-Have  
+**Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
+
+## User Story
+
+> As a **[persona]**,  
+> I want **[feature]**,  
+> So that **[benefit]**.
+
+## Acceptance Criteria
+
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+## API Spec Reference
+
+[Affected endpoints and link to spec file, or "N/A"]
+
+## Technical Scope
+
+[Optional: architecture notes, API changes, database migrations]
+
+## Deliverables
+
+[Filled in after work complete: PR links, commits, artifacts]
+```
+
+> **Bug/defect stories** (carry the `bug` label): insert a `## Reproduction` section immediately after `## Acceptance Criteria` (before `## API Spec Reference`):
+> ```markdown
+> ## Reproduction
+>
+> **Repro Command:** [exact command/test to run verbatim, or `unknown`]
+> **Expected:** [what should happen]
+> **Actual:** [what actually happens — the observed defect]
+> ```
+> The Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`, runs ahead of Stage 0) executes `Repro Command` verbatim before any implementer is spawned — it never parses AC prose to derive a command. If `Repro Command` is absent or `unknown`, pre-flight is skipped and Stage 1 proceeds normally (the implementer reproduces as part of its own work, same as before this convention existed). **Strict mode** has no label mechanism — the presence of a populated `## Reproduction` section in the story MD is itself the bug-story marker pre-flight checks for.
+
+---
+
 ## Version
 
-**Version:** 1.0 — Split out of `Product_Owner_Rules_template.md` v1.9 (former section 11a's full procedure relocated here as §1; the section 11a heading stays in `Product_Owner_Rules_Bootstrap_template.md` as a pointer since it is cited by number externally), mirroring the boundary already validated on the devkit's own team.
+**Version:** 1.1 — Added §2 (Story Creation Template), relocated from `Story_Standard_PO_template.md` §13 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team; §1's internal citation to `Story_Standard_PO.md` §13 repointed to "§2 above" since the content is now co-located in this file.
+**Previous:** 1.0 — Split out of `Product_Owner_Rules_template.md` v1.9 (former section 11a's full procedure relocated here as §1; the section 11a heading stays in `Product_Owner_Rules_Bootstrap_template.md` as a pointer since it is cited by number externally), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25

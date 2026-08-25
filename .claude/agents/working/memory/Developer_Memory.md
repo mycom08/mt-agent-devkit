@@ -46,6 +46,13 @@ Keywords: `validate_templates.py` Invariant #2, single-backtick code span, `${ST
 
 ## Troubleshooting Facts
 
+### Fix 2 — Multi-number slash citation (`§4/§6/§12`) trips the bare-§N check
+- **Problem:** `validate_templates.py`'s section-ref checker flags a citation like `` `File.md` §4/§6/§12 `` as a bare, unqualified reference for every number after the first `/`.
+- **Symptoms:** `[ERROR] ... bare §N has no matching numbered heading in this file`, even though the sentence clearly names the source file once, up front.
+- **Root Cause:** The checker's regex only binds a filename prefix to the *immediately following* `§N` (`Name.md §N`). A `/`-separated chain (`§4/§6/§12`) only qualifies the first number; every number after a `/` has no `.md` or bare-word prefix directly before it, so it's evaluated as a same-file bare citation instead.
+- **Fix:** Reword as "sections 4, 6, and 12" (word "sections", not the `§` glyph) — same convention already used for gap-documenting prose (`Project_Priming_Read_On_Demand.md §15`: "write 'section N', never '§N'"). Applies equally to comma-separated chains without a repeated filename prefix.
+- **Prevention:** Never cite more than one section number after a single filename mention with `§` — repeat the filename per citation, or drop to "section N" prose, whenever a sentence needs to name more than one section number from the same file.
+
 ### Fix 1 — Working-record refs fail CI reference-integrity
 - **Problem:** Reference-integrity check fails in CI but passes locally.
 - **Symptoms:** `[ERROR]` on `.claude/agents/working-record/…` paths cited in instruction templates.
