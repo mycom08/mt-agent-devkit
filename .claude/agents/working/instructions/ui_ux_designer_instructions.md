@@ -32,8 +32,14 @@ Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it
 |---|---|
 | Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/UI_UX_Designer_Working_Record.md` |
-| Rules | `.claude/agents/working/rules/UI_UX_Designer_Rules.md` |
+| Rules | `.claude/agents/working/rules/UI_UX_Designer_Rules_Bootstrap.md` (read in full) |
 | Memory | `.claude/agents/working/memory/UI_UX_Designer_Memory.md` |
+
+---
+
+## Mid-Implementation Consultation / Live User Instruction Conflicts
+
+Rare, task-specific — full procedure in `.claude/agents/working/rules/UI_UX_Designer_Rules_Read_On_Demand.md §1` (a question surfaces during implementation) and `§2` (a live instruction contradicts a prior decision). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 

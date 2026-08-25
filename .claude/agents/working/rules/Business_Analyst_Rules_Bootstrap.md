@@ -1,7 +1,8 @@
-# Business Analyst Rules
+# Business Analyst Rules — Bootstrap
 
-**Applies to:** Business Analyst agent  
+**Applies to:** Business Analyst agent — devkit's own team only (`.claude/agents/working/`).
 **Reference from:** `.claude/agents/working/instructions/business_analyst_instructions.md`
+**Purpose:** The whole of BA's bootstrap-tier rules — everything true on *every* BA spawn regardless of task. Read this file in full per the Pre-Work Checklist. Read `Business_Analyst_Rules_Read_On_Demand.md` only when a trigger in §6 actually fires.
 
 ---
 
@@ -12,21 +13,6 @@ Do these **in order** before any analysis or documentation work:
 1. **Read Project Priming** — `.claude/agents/working/context/Project_Priming_Bootstrap.md`
 2. **Read your Working Record** — `.claude/agents/working/working-record/Business_Analyst_Working_Record.md`
 3. **Read the relevant GitHub Issues** — filter by `sprint-N` label for the current task
-
----
-
-## 2. Pre-PR Gate (when acting as Implementer)
-
-When BA is the story Implementer, run the applicable local checks before opening a PR:
-
-| Change type | Required local check |
-|---|---|
-| `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
-| `.ps1` files changed | PowerShell syntax check — zero parse errors |
-| `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| Docs / template / workflow only | Exempt |
-
-> **Gate:** Do not open a PR until all applicable checks pass.
 
 ---
 
@@ -53,7 +39,20 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ---
 
+## 6. On-Demand Rules — Routing Table
+
+§1, §3–§5 above are loaded at spawn. Nothing in `Business_Analyst_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill — not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| Orchestrator assigns BA as story implementer | `Business_Analyst_Rules_Read_On_Demand.md §1` (Pre-PR Gate) |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit, troubleshooting — are routed by `Agent_Common_Bootstrap.md §5` and §4–§5 above.
+
+---
+
 ## Version
 
-**Version:** 1.0 — Initial devkit-specific version  
+**Version:** 2.0 — Split into `Business_Analyst_Rules_Bootstrap.md` (this file) + `Business_Analyst_Rules_Read_On_Demand.md`, matching the Dev/TL/QA/PO bootstrap/on-demand convention. §2 (Pre-PR Gate, when acting as Implementer — rare, BA is not usually the story implementer) moved to the on-demand file; §1/§3–§5 stayed, being needed at spawn regardless of task. Added §6 routing table. `§2`'s number is retired, not reused.
+**Previous:** 1.0 — Initial devkit-specific version
 **Created:** 2026-06-16

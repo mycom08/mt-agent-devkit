@@ -17,8 +17,14 @@ Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it
 |---|---|
 | Project Priming | `.claude/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.claude/agents/working/working-record/Business_Analyst_Working_Record.md` |
-| Rules | `.claude/agents/working/rules/Business_Analyst_Rules.md` |
+| Rules | `.claude/agents/working/rules/Business_Analyst_Rules_Bootstrap.md` (read in full) |
 | Memory | `.claude/agents/working/memory/Business_Analyst_Memory.md` |
+
+---
+
+## When Acting as Story Implementer
+
+Rare — only when the orchestrator assigns you as the story implementer instead of analyst. Pre-PR gate procedure in `.claude/agents/working/rules/Business_Analyst_Rules_Read_On_Demand.md §1`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
