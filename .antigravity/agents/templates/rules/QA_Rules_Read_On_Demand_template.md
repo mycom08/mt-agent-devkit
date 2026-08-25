@@ -36,7 +36,18 @@ Do not silently follow the old decision, and do not block awaiting re-confirmati
 
 ---
 
+## 3. Hotfix (Post-Done Bug) — QA Role
+
+Triggered from `Story_Standard_QA.md` §6. When a bug is found after story is `status:done`:
+
+1. **Report:** Post Comment on original issue describing the bug; tag Dev and TL
+2. After Dev creates a fix branch and fix PR → **re-test** all affected AC against the API spec
+3. Report re-test results in Comment; notify PO
+
+---
+
 ## Version
 
-**Version:** 1.0 — Split out of `QA_Rules_template.md` v3.7 (former section 9 Pre-PR Gate and former section 10 Live User Instruction Conflicts, both "when acting as Implementer", relocated here as §1–§2), mirroring the boundary already validated on the devkit's own team.
+**Version:** 1.1 — Added §3 (Hotfix — QA Role), relocated from `Story_Standard_QA_template.md` §6 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
+**Previous:** 1.0 — Split out of `QA_Rules_template.md` v3.7 (former section 9 Pre-PR Gate and former section 10 Live User Instruction Conflicts, both "when acting as Implementer", relocated here as §1–§2), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25

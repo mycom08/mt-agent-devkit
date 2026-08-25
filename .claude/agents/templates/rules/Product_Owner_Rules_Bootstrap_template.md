@@ -193,6 +193,7 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 | Trigger | Fetch |
 |---|---|
 | Authoring or updating a roadmap/planning doc that defines stories ahead of pickup | `Product_Owner_Rules_Read_On_Demand.md §1` (also triggered from §11a above) |
+| Your first `gh issue create`/`gh issue edit --body-file` of the session | `Product_Owner_Rules_Read_On_Demand.md §2` (also triggered from `Story_Standard_PO.md §13`) |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit is already resolved directly by §12 above.
 
@@ -200,6 +201,7 @@ Commit agent memory file changes before signaling stage completion — see `.cla
 
 ## Version
 
-**Version:** 2.0 — Split into a bootstrap tier (this file: §1–§12, unconditional content read on every spawn) and an on-demand tier (`Product_Owner_Rules_Read_On_Demand.md`: the Roadmap Story Drain procedure), mirroring the boundary already validated on the devkit's own team (`working/rules/Product_Owner_Rules_Bootstrap.md` / `Product_Owner_Rules_Read_On_Demand.md`). Section 11a's full procedure moved out; the heading stays in place as a pointer since `Plan_Sprint_Workflow_Shared_template.md` cites it by number.
+**Version:** 2.1 — §13 routing table: new "Your first `gh issue create`/`gh issue edit --body-file` of the session" row citing `Product_Owner_Rules_Read_On_Demand.md §2`, added there by the `Story_Standard_PO_template.md` §13 trim (devkit issue #133 / ST-000134).
+**Previous:** 2.0 — Split into a bootstrap tier (this file: §1–§12, unconditional content read on every spawn) and an on-demand tier (`Product_Owner_Rules_Read_On_Demand.md`: the Roadmap Story Drain procedure), mirroring the boundary already validated on the devkit's own team (`working/rules/Product_Owner_Rules_Bootstrap.md` / `Product_Owner_Rules_Read_On_Demand.md`). Section 11a's full procedure moved out; the heading stays in place as a pointer since `Plan_Sprint_Workflow_Shared_template.md` cites it by number.
 **Previous:** 1.9 — New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue/story at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop
 **Created:** 2026-04-24

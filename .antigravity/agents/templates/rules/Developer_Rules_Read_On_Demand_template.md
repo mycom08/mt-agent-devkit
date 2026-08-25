@@ -81,7 +81,47 @@ Do not silently follow the old decision, and do not block awaiting re-confirmati
 
 ---
 
+## 12. Developer as Reviewer (when TL is implementer)
+
+Triggered from `Story_Standard_Dev.md` §4/§12. Only when the orchestrator assigns Developer the Stage 2 peer review role for a TL-implemented story:
+
+1. Review the PR diff via `gh pr diff <number> --repo {github-org}/{repo-name}`
+2. Post inline PR comments for specific line-level feedback
+3. **Always post a brief notify comment on the GitHub Issue** — whether approving or requesting changes:
+
+   ```
+   ## PR #NNN peer review — <Approved | Changes Requested>
+   **Thread Status:** Open | Resolved
+   **Area:** Implementation
+
+   **Developer - YYYY-MM-DD**
+   <Summary of findings or approval rationale>
+
+   **Next:** TL to address CR items | None
+   ```
+
+4. Use `gh pr comment` for the PR-level verdict (not `gh pr review --approve` — GitHub blocks self-approval)
+
+**Reviewer Gate — before approving:**
+- [ ] All CI checks on the PR have **finished** — do not review while CI is still running
+- [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
+- [ ] Code review criteria pass (per §9)
+
+---
+
+## 13. Hotfix (post-Done bug)
+
+Triggered from `Story_Standard_Dev.md` §6. When a bug is found after a story is `status:done`, **never fix on the feature branch or master**. Create a fix branch off the feature branch, then run the normal review/test cycle:
+
+1. Create `fix/ST-XXXXXX/short-description` from the feature branch; set the issue to `status:hotfix`
+2. Fix on that branch → open a PR targeting the **feature branch** → request TL review
+3. After TL approval, merge → set `status:testing` → notify QA to re-test the affected AC
+4. QA reports results → PO ticks AC → `status:done`
+
+---
+
 ## Version
 
-**Version:** 1.0 — Split out of `Developer_Rules_template.md` v2.11 (§7–§8 relocated as-is; §11 Peer Review relocated as-is, renumbered §9; Mid-Implementation Consultation and Live User Instruction Conflicts extracted from §2's inline text, new §10/§11), mirroring the boundary already validated on the devkit's own team.
+**Version:** 1.1 — Added §12 (Developer as Reviewer) and §13 (Hotfix), relocated from `Story_Standard_Dev_template.md` sections 4, 6, and 12 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
+**Previous:** 1.0 — Split out of `Developer_Rules_template.md` v2.11 (§7–§8 relocated as-is; §11 Peer Review relocated as-is, renumbered §9; Mid-Implementation Consultation and Live User Instruction Conflicts extracted from §2's inline text, new §10/§11), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25

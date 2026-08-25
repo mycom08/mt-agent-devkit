@@ -66,7 +66,36 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 
 ---
 
+## 4. TL as Implementer — Status Transitions
+
+Triggered from `Story_Standard_TL.md` §4. When `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation):
+
+### Status: In Progress → Review
+1. Remove `status:in-progress`, add `status:review`
+2. Create PR with title: `[ST-XXXXXX][FEATURE] Story title`
+3. **Add PR link to issue Deliverables section** — edit the issue body to include the PR URL under `## Deliverables` (use `gh issue edit --body-file`)
+4. Post a brief comment on the story notifying the Developer reviewer:
+
+   ```
+   ## PR ready for peer review
+   **Thread Status:** Open
+   **Area:** Implementation
+
+   **TL - YYYY-MM-DD**
+   PR #NNN opened for peer review. <one-line summary of changes>
+
+   **Next:** Developer
+   ```
+
+### Status: Review → In Progress (Developer feedback)
+1. Address all CR items in the branch
+2. Push new commits
+3. Re-request review via issue comment
+
+---
+
 ## Version
 
-**Version:** 1.0 — Split out of `Technical_Lead_Rules_template.md` v2.2 (former section 5's "When acting as Implementer" subsection, former section 9 Context Anchoring, former section 10 Pre-PR Gate as Implementer relocated here as §1–§3), mirroring the boundary already validated on the devkit's own team.
+**Version:** 1.1 — Added §4 (TL as Implementer — Status Transitions), relocated from `Story_Standard_TL_template.md` §4 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
+**Previous:** 1.0 — Split out of `Technical_Lead_Rules_template.md` v2.2 (former section 5's "When acting as Implementer" subsection, former section 9 Context Anchoring, former section 10 Pre-PR Gate as Implementer relocated here as §1–§3), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25
