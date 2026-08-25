@@ -44,6 +44,9 @@ Keywords: sync/update workflow expected-files list, merge-tier check, project-mu
 ### Fact 12 — Inline ALL-CAPS shell variable in prose trips the validator's placeholder check
 Keywords: `validate_templates.py` Invariant #2, single-backtick code span, `${START}`, placeholder false positive, lowercase shell variable
 
+### Fact 13 — Porting Claude-surface content to Antigravity: two asymmetries to check first
+Keywords: Antigravity, `read-section` skill, no `.claude/skills/` mirror, grep-locate rewrite, `scaffold_mechanical.ps1`, surface parity, symmetric file matrix, `find -iname`
+
 ## Troubleshooting Facts
 
 ### Fix 2 — Multi-number slash citation (`§4/§6/§12`) trips the bare-§N check
