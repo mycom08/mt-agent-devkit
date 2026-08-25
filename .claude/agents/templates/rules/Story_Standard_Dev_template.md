@@ -12,7 +12,7 @@
 | Ready | PO | After assigning to Developer | `status:ready` |
 | **In Progress** | **Developer** | Dev branch created | `status:in-progress` |
 | **Review** | **Developer** | After creating PR | `status:review` |
-| Testing | QA | After TL approval | `status:testing` |
+| Testing | TL | After TL approval | `status:testing` |
 | Done | PO | After all AC pass | `status:done` |
 | Hotfix | Developer | After hotfix branch created | `status:hotfix` |
 
@@ -45,9 +45,8 @@
 3. Re-request review in issue Comment
 
 ### Status: Review → Testing (after TL approval)
-1. Remove `status:review`, add `status:testing`
-2. Add PR/commit links in issue Deliverables section (edit issue body)
-3. Notify QA in issue Comment
+1. Add PR/commit links in issue Deliverables section (edit issue body)
+2. Notify QA in issue Comment
 
 ### Developer as Reviewer (when TL is implementer)
 
