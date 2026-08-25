@@ -87,13 +87,23 @@ Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.sh") -Destination 
 # 5. devkit_version.txt
 Copy-Item -Path (Join-Path $DevkitRoot "version.txt") -Destination (Join-Path $Agents "devkit_version.txt") -Force
 
-# 6. Blank memory and 7. Blank working records
+# 6. Blank memory files -- Developer/QA/Technical_Lead get a two-tier live-index + archive
+#    pair (blank shape per Agent_Common_Read_On_Demand.md section 8); the other three roles
+#    keep the single blank-file format unchanged.
+# 7. Blank working records
 $roles = @("Business_Analyst", "Developer", "Product_Owner", "QA", "Technical_Lead", "UI_UX_Designer")
+$twoTierRoles = @("Developer", "QA", "Technical_Lead")
 foreach ($role in $roles) {
     $roleLabel = if ($role -eq "UI_UX_Designer") { "UI/UX Designer" } else { $role -replace '_', ' ' }
-    
-    "# $roleLabel Memory`n`nNo facts recorded yet.`n" | Set-Content -Path (Join-Path $Agents "memory\${role}_Memory.md")
-    
+
+    if ($twoTierRoles -contains $role) {
+        "# $roleLabel Memory`n`n> Two-tier memory -- see Agent_Common_Read_On_Demand.md section 8. This is the lean, always-read index -- titles and grep-able keywords only, no fact bodies. Full text lives in ${role}_Memory_Archive.md. Before starting a task, scan the titles and keywords below for a match; if one matches, retrieve just that fact per the section 8 bounded-read recipe -- never read the whole archive.`n`n## Standing Checks`n`n*(none yet -- no current fact reduces to an unconditional always-do action; entries move here if a future fact qualifies)*`n`n## Keyword Index`n`n*(none yet)*`n`n## Troubleshooting Facts`n`n*(none yet)*`n" | Set-Content -Path (Join-Path $Agents "memory\${role}_Memory.md")
+
+        "# $roleLabel Memory Archive`n`n> Full-text archive for ${role}_Memory.md Keyword Index tier -- see Agent_Common_Read_On_Demand.md section 8. Not read every spawn; open only when an index line keyword matches your current task, locating the matching fact by grep (heading marker ^### Fact ) -- never a full-file read.`n`n## Stored Facts`n`n*(none yet)*`n" | Set-Content -Path (Join-Path $Agents "memory\${role}_Memory_Archive.md")
+    } else {
+        "# $roleLabel Memory`n`nNo facts recorded yet.`n" | Set-Content -Path (Join-Path $Agents "memory\${role}_Memory.md")
+    }
+
     "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** —`n**In Progress:** —`n**Impediments:** —`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
 }
 

@@ -75,3 +75,9 @@
 - **Applies when:** writing a template file's prose that shows shell variable syntax (`${VAR}`, `{VAR}`) outside a fenced block.
 - **Evidence:** ST-000044 — `read-section` skill doc, `{START}`/`{END}` in inline code at 2 lines, caught by CI-equivalent local run before PR.
 - **Expires when:** the check is scoped to fenced blocks only, or gains a backtick-span exclusion.
+
+### Fact 13
+- **Rule:** When porting a Claude-surface pattern to the Antigravity surface, check for two asymmetries before assuming a symmetric file/tool matrix: (1) Antigravity has no `read-section` skill and no `.claude/skills/` mirror — every "use the read-section skill" sentence needs a hand-adapted "locate by grep" rewrite, not a mechanical path find-replace; (2) the two surfaces' own file matrices are not symmetric — e.g. `.claude/agents/working/scripts/scaffold_mechanical.ps1` does not exist at all (only `.sh`), while the `.antigravity/` equivalent has both `.sh` and `.ps1`. Run `find -iname` for the exact file set before assuming a story's "both X/Y (both surfaces)" phrasing resolves to a symmetric 4-file matrix.
+- **Applies when:** porting any Claude-surface rule/skill/instruction content to the Antigravity surface.
+- **Evidence:** ST-000135 (issue #118) — three instruction files + `Agent_Common_Read_On_Demand_template.md §8` required hand-adapted "grep" phrasing on Antigravity; `scaffold_mechanical.ps1` has no Claude-surface counterpart.
+- **Expires when:** Antigravity gains its own skill mechanism, or the script matrix becomes symmetric.

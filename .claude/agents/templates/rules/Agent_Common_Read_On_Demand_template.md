@@ -4,7 +4,7 @@
 **Purpose:** Companion to `Agent_Common_Bootstrap.md`. Nothing here is read automatically — `Agent_Common_Bootstrap.md §5`'s routing table names the one section to fetch when its trigger fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
 
 > **Two things to know before extracting a section from this file.**
-> 1. **There is one intentional gap.** Numbering runs §1, §2, §3, §5, §6 — **section 4 is skipped**: it is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1`. Numbers are never reused: leave the gap rather than renumbering, so a stale citation resolves to nothing rather than to a different rule.
+> 1. **There are two intentional gaps.** Numbering runs §1, §2, §3, §5, §6, §8 — **sections 4 and 7 are skipped**: section 4 is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1`; section 7 was never populated in this file (the devkit's own working copy has a section 7 that is internal-only and not mirrored here). Numbers are never reused: leave the gaps rather than renumbering, so a stale citation resolves to nothing rather than to a different rule.
 > 2. **§1 contains unnumbered sub-headings** (`## Stored Facts`, `## Troubleshooting Facts`). Bound a section extraction on **numbered** headings only (`grep -nE "^## [0-9]+\."`) — a bare `^## ` treats those sub-headings as the end of §1 and silently returns a truncated section, dropping the format block and §1's closing two-tier note.
 
 ---
@@ -61,6 +61,8 @@ Update your memory file when you encounter a fact worth remembering for future s
 ```
 
 > PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The four-field Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts is unchanged and stays scoped to Dev/TL/QA.
+
+> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above** — see §8. PO, BA, and UI/UX Designer are unaffected.
 
 ---
 
@@ -120,7 +122,23 @@ Applies whenever a story's verification requires a runtime secret (API token, PA
 
 ---
 
+## 8. Two-Tier Memory (Developer, QA, Technical Lead only)
+
+Each role's `## Stored Facts` splits across two files:
+
+- **`<Role>_Memory.md`** (live, read every spawn): **Standing Checks** — unconditional always-do actions, no recall needed (leave `*(none yet)*` if none qualify) — plus a **Keyword Index**: one line per fact, `### Fact N — <short title>` + a `Keywords:` line, no fact body. `## Troubleshooting Facts` stays here too, unchanged §1 shape.
+- **`<Role>_Memory_Archive.md`** (conditional — open only on a keyword match): full four-field bodies, unchanged §1 shape.
+
+**Retrieval:** bounded read only, never a full-file read of the archive — use the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `).
+
+**Writing a fact:** append the body to the archive under the next number, then the matching index line — both files change together; an entry in one without the other is a defect. Numbers are never reused — retire gaps rather than renumbering.
+
+**Caps:** the live file falls under §1's ≤ 10,000-char cap and should stay far under it by construction (no fact bodies). The archive has no separate cap yet — treat §1's cap as its working ceiling until a retention policy is settled.
+
+---
+
 ## Version
 
-**Version:** 2.0 — Split out of the single `Agent_Common.md` (companion file: `Agent_Common_Bootstrap.md`). Section 4 stays a gap: it is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1` — see this devkit's own team's identical split (`working/rules/Agent_Common_Read_On_Demand.md`, PR #162) for the numbering precedent. Do not renumber to close the gap; a stale reference to that section should resolve to nothing, not silently to a different rule.
+**Version:** 2.1 — New §8 (Two-Tier Memory, Developer/QA/Technical Lead only), ported from the devkit's own team's already-validated split (`working/rules/Agent_Common_Read_On_Demand.md §8`, PR #139/#162) — ST-000135 (issue #118).
+**Previous:** 2.0 — Split out of the single `Agent_Common.md` (companion file: `Agent_Common_Bootstrap.md`). Section 4 stays a gap: it is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1` — see this devkit's own team's identical split (`working/rules/Agent_Common_Read_On_Demand.md`, PR #162) for the numbering precedent. Do not renumber to close the gap; a stale reference to that section should resolve to nothing, not silently to a different rule.
 **Previous:** 1.x — single `Agent_Common.md` (see `changes.json` history for that file's prior versions).

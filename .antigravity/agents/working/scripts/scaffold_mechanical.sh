@@ -111,13 +111,28 @@ cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"
 # Note: role_label is derived from role by replacing "_" with " " -- UI_UX_Designer is the one
 # exception (its underscores are a filename-safe stand-in for "UI/UX", not word breaks), so its
 # label is set explicitly rather than derived.
+# Developer/QA/Technical_Lead get a two-tier live-index + archive pair (blank shape per
+# Agent_Common_Read_On_Demand.md §8); Business_Analyst/Product_Owner/UI_UX_Designer keep the
+# single blank-file format unchanged.
+TWO_TIER_ROLES=(Developer QA Technical_Lead)
 for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
   if [[ "$role" == "UI_UX_Designer" ]]; then
     role_label="UI/UX Designer"
   else
     role_label="${role//_/ }"
   fi
-  printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
+  is_two_tier=false
+  for r in "${TWO_TIER_ROLES[@]}"; do
+    [[ "$role" == "$r" ]] && is_two_tier=true
+  done
+  if [[ "$is_two_tier" == true ]]; then
+    printf '# %s Memory\n\n> Two-tier memory — see `Agent_Common_Read_On_Demand.md §8`. This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `%s_Memory_Archive.md`. Before starting a task, scan the titles and keywords below for a match; if one matches, retrieve just that fact per the §8 bounded-read recipe — never read the whole archive.\n\n## Standing Checks\n\n*(none yet — no current fact reduces to an unconditional always-do action; entries move here if a future fact qualifies)*\n\n## Keyword Index\n\n*(none yet)*\n\n## Troubleshooting Facts\n\n*(none yet)*\n' \
+      "$role_label" "$role" > "$AGENTS/memory/${role}_Memory.md"
+    printf '# %s Memory Archive\n\n> Full-text archive for `%s_Memory.md` Keyword Index tier — see `Agent_Common_Read_On_Demand.md §8`. Not read every spawn; open only when an index line keyword matches your current task, locating the matching fact by grep (heading marker `^### Fact `) — never a full-file read.\n\n## Stored Facts\n\n*(none yet)*\n' \
+      "$role_label" "$role" > "$AGENTS/memory/${role}_Memory_Archive.md"
+  else
+    printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
+  fi
 done
 
 # 7. Blank working-record files (rewrite-in-place snapshot format — see Agent_Common_Bootstrap.md §1)

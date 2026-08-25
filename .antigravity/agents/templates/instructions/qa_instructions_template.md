@@ -24,7 +24,7 @@ Read `.antigravity/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is
 | Project Priming | `.antigravity/agents/context/Project_Priming.md` |
 | Working Record | `.antigravity/agents/working-record/QA_Working_Record.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `.antigravity/agents/rules/QA_Rules_Bootstrap.md` |
-| Memory | `.antigravity/agents/memory/QA_Memory.md` |
+| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.antigravity/agents/memory/QA_Memory.md` |
 
 ---
 
@@ -51,4 +51,4 @@ Update `.antigravity/agents/working-record/QA_Working_Record.md` at start and en
 
 ## Project Memory
 
-Record durable facts in `.antigravity/agents/memory/QA_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §1`.
+Record durable facts in `.antigravity/agents/memory/QA_Memory.md` (live index) with full fact bodies in `.antigravity/agents/memory/QA_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, locating the matching fact by grep. This role uses the two-tier split — rules and format: `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
