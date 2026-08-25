@@ -1,6 +1,6 @@
 # Technical Lead Memory Archive
 
-> Full-text archive for `Technical_Lead_Memory.md`'s Keyword Index tier — devkit-internal two-tier memory pilot (`Agent_Common.md §12`, issue #118). Not read every spawn; open only when an index line's keywords match your current task, using the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.
+> Full-text archive for `Technical_Lead_Memory.md`'s Keyword Index tier — devkit-internal two-tier memory pilot (`Agent_Common_Read_On_Demand.md §8`, issue #118). Not read every spawn; open only when an index line's keywords match your current task, using the `read-section` skill (`.claude/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.
 
 ## Stored Facts
 
@@ -60,7 +60,7 @@
 - **Expires when:** `Retro_Rules.md` adds a verdict condition.
 
 ### Fact 11
-- **Rule:** Templates and their `working/` mirrors drift silently — verify **both**, and diff before editing (`git diff --no-index <template> <mirror>`). `Project_Priming.md §15` carve-outs cover intentionally-diverged and no-mirror cases (`Strict_Mode_Story_Guide_template.md` is the named no-mirror file).
+- **Rule:** Templates and their `working/` mirrors drift silently — verify **both**, and diff before editing (`git diff --no-index <template> <mirror>`). `Project_Priming_Read_On_Demand.md §15` carve-outs cover intentionally-diverged and no-mirror cases (`Strict_Mode_Story_Guide_template.md` is the named no-mirror file).
 - **Applies when:** changing any template with a devkit working mirror.
 - **Evidence:** `Technical_Lead_Rules.md §3` once said "after merge" vs the template's "before merge"; ST-000038.
 - **Expires when:** mirrors are generated, not hand-maintained.

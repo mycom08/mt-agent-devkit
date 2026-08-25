@@ -1,7 +1,8 @@
-# Product Owner Rules
+# Product Owner Rules — Bootstrap
 
-**Applies to:** Product Owner agent  
+**Applies to:** Product Owner agent — devkit's own team only (`.claude/agents/working/`).
 **Reference from:** `.claude/agents/working/instructions/product_owner_instructions.md`
+**Purpose:** The whole of PO's bootstrap-tier rules — everything that is true on *every* PO spawn regardless of what the task is. Read this file in full per the Pre-Work Checklist. Read `Product_Owner_Rules_Read_On_Demand.md` only when a trigger in §13 actually fires.
 
 ---
 
@@ -121,7 +122,7 @@ You approve the devkit version bump when all Must-Have stories in the sprint are
 ---
 
 ## 10. Document Placement Rules
-- When you update or create project documents, use the current structure. Refer to `Project_Priming.md §6`.
+- When you update or create project documents, use the current structure. Refer to `Project_Priming_Read_On_Demand.md §6`.
 - Use `Title_Case_With_Underscores` format for document names.
 
 ---
@@ -141,33 +142,41 @@ After creating or updating any project plan file (Sprint Overviews, Product Back
 
 ## 11a. Roadmap Story Drain (mandatory whenever a roadmap doc is authored or updated)
 
-**Applies whenever you author or update a roadmap/planning doc that defines stories ahead of pickup — the Implementation Roadmap or any `*Roadmap*.md` under `docs/feature/<feature_name>/plan/` — in a context where a story tracker already exists** (this devkit repo's own tracker, GitHub Issues in `mycom08/mt-agent-devkit`, always exists; this rule doesn't apply to the Analyst workflow's pre-repo `implementation_roadmap.md`, which has no tracker and no real story IDs yet).
-
-Every story the roadmap defines must become a tracked `status:backlog` issue **at this same moment** — do not defer this to sprint planning, and do not wait for `plan next sprint`/`create stories` to notice it.
-
-1. For each story the roadmap defines (each Phase/theme entry), build the idempotency marker: `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>`.
-2. Check whether a tracked issue already carries this exact marker **before creating anything** — this is what makes re-authoring or updating the same roadmap safe against duplicates; run it for every story on every write, not just the ones you think are new: `gh issue list --repo mycom08/mt-agent-devkit --search "\"<marker from step 1>\" in:body" --state all --json number,body`. Treat the result as a **candidate set, not a verdict**: GitHub's phrase search matches a contiguous token subsequence of the body, not an exact line, so a story whose title is a prefix of another already-drained story's title can return a false match. For each candidate, confirm the marker appears as an **exact, full line** in that issue's body before treating this story as already drained — skip creating it only then. Note: GitHub's search index is eventually consistent, so an issue you created moments earlier in this same pass may not be returned yet — track what you just created directly rather than relying on search to re-find it.
-3. If no match, create the tracked issue following `Story_Standard_PO.md` §13's title/label/`--body-file` conventions, with the usual `**Roadmap Phase:** Phase N — <theme>` body line and `phase-N` label already used for roadmap-sourced stories (see `Plan_Sprint_Workflow.md` Stage 4) — those are your phase-reference tag (AC2). Add the new marker line from step 1 verbatim in the body too (alongside `**Phase:**`/`**Story Points:**`/`**Priority:**`/`**Assigned:**`) — that one exists purely for the idempotency check in step 2, not as a human-facing phase tag.
-4. **Verification (idempotent re-run):** re-running steps 1–3 against an unchanged roadmap must return an existing match at step 2 for every story and create zero new issues — this is the mechanism that satisfies "re-authoring the same roadmap does not create duplicates."
-
-> This is separate from, and happens earlier than, `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop. That backstop exists only to catch drift if a roadmap somehow got out of sync with tracked issues despite this rule (e.g. a manual edit made outside your own workflow) — it is not a substitute for draining at authoring time.
+Only when you author or update a roadmap/planning doc that defines stories ahead of pickup — full procedure in `Product_Owner_Rules_Read_On_Demand.md §4`. Otherwise skip; do not read it as part of the standard Pre-Work Sequence.
 
 ---
 
 ## 11b. Working Record Retention
 
-Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common.md §5` for the char cap and snapshot format).
+Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format).
 
 ---
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common.md §6`.
+Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
+
+---
+
+## 13. On-Demand Rules — Routing Table
+
+§1–§12 above are loaded at spawn. Nothing in `Product_Owner_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill — not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| Orchestrator asks you to close a story (Stage 4) | `Product_Owner_Rules_Read_On_Demand.md §1` |
+| Orchestrator asks you to participate in a Sprint Refinement | `Product_Owner_Rules_Read_On_Demand.md §2` |
+| Orchestrator asks you to run the Plan Next Sprint workflow | `Product_Owner_Rules_Read_On_Demand.md §3` |
+| Authoring or updating a roadmap/planning doc that defines stories ahead of pickup | `Product_Owner_Rules_Read_On_Demand.md §4` (also triggered from §11a above) |
+| Your first `gh issue create`/`gh issue edit --body-file` of the session | `Product_Owner_Rules_Read_On_Demand.md §5` (also triggered from `Story_Standard_PO.md §13`) |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit — are routed by `Agent_Common_Bootstrap.md §5` and §12 above. These five triggers were already flagged individually in `product_owner_instructions.md`; this table restates them in one place for scanning.
 
 ---
 
 ## Version
 
-**Version:** 1.1 — New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop  
-**Previous:** 1.0 — Initial devkit-specific version  
+**Version:** 1.3 — Renamed `Product_Owner_Rules.md` → `Product_Owner_Rules_Bootstrap.md` and `Product_Owner_Rules_Extended.md` → `Product_Owner_Rules_Read_On_Demand.md`, matching `Developer_Rules_Bootstrap.md`'s naming convention; added §13 routing table. Content boundary unchanged — PO's instructions file already flagged every on-demand trigger explicitly ("otherwise skip") before this pass, unlike TL/QA, so this pass is pure rename + citation fix (see `Bootstrap_OnDemand_Split_Notes.md` open items).
+**Previous:** 1.2 — Relocated §11a Roadmap Story Drain's full procedure to `Product_Owner_Rules_Extended.md` (devkit#123 pattern, applied to the devkit's own team first); §11a heading kept in place since `Plan_Sprint_Workflow.md` cites it by number  
+**1.1:** New §11a Roadmap Story Drain: authoring/updating a roadmap doc now mandatorily drains every story it defines into a tracked `status:backlog` issue at that same moment (idempotent via a `**Roadmap Source:**` marker-line query), rather than deferring to sprint planning; cross-references `Plan_Sprint_Workflow.md` Stage 1's reconciliation backstop  
 **Created:** 2026-06-16

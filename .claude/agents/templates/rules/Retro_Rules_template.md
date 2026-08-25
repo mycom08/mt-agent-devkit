@@ -22,7 +22,7 @@ At the end of your stage work, **before reporting back to the orchestrator**, wr
 
 Answer these three questions in your section. Bullet points only. Be specific to this story.
 
-### 1. Impediments & Unclear Points
+### Impediments & Unclear Points
 
 Things that slowed you down or required an unguided judgement call: missing permissions, incorrect technical design, ambiguous AC, unclear workflow steps.
 
@@ -34,13 +34,13 @@ Prefix each bullet with its signal type:
 
 If nothing: write `- None.`
 
-### 2. Process Suggestions
+### Process Suggestions
 
 Concrete suggestions to improve the process, workflow files, or instruction files — based only on what you directly encountered this story. Use the same signal-type prefixes.
 
 If nothing: write `- None.`
 
-### 3. What Worked Well
+### What Worked Well
 
 Things that should be explicitly preserved: a rule that caught a real problem, a workflow step that ran smoothly, a pattern that produced good output.
 

@@ -1,6 +1,6 @@
 # Technical Lead Memory
 
-> Two-tier memory (devkit-internal pilot, `Agent_Common.md §12`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `Technical_Lead_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §12's bounded-read recipe — never read the whole archive. Numbering gaps (6, 13–16) are pruned facts — do not renumber, here or in the archive.
+> Two-tier memory (devkit-internal pilot, `Agent_Common_Read_On_Demand.md §8`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `Technical_Lead_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §8's bounded-read recipe — never read the whole archive. Numbering gaps (6, 13–16) are pruned facts — do not renumber, here or in the archive.
 
 ## Standing Checks
 
@@ -17,7 +17,7 @@ Keywords: `_FILEREF_RE`, `.md`-only, `_resolve_file_ref`, three roots, `SCAN_DIR
 ### Fact 3 — Thin variants are comment-only; github/strict deploy byte-identical files
 Keywords: split workflow, `scaffold_mechanical.sh:88-93`, github mode, strict mode, mode-dependent AC, shared file prose
 
-### Fact 4 — Resume-branch completeness (see `Technical_Lead_Rules.md §2`)
+### Fact 4 — Resume-branch completeness (see `Technical_Lead_Rules_Bootstrap.md §2`)
 Keywords: resume gap, pipeline/loop state file, instruction change vs warning, unconditional step, file-presence check
 
 ### Fact 5 — Phrase CRs and fix menus as non-exhaustive ("at minimum these, plus any site sharing the mechanism")
@@ -27,7 +27,7 @@ Keywords: change request, fix menu, enumerated list treated as exhaustive, misse
 Keywords: `gh issue list --json`, `--search`, eventually-consistent index, contiguous-token phrase matching, prefix-title collision, `grep -Fxq`, `--repo` explicit
 
 ### Fact 8 — Narrowing an AC is TL scope; adding a standalone AC is PO scope
-Keywords: TL/PO boundary, Technical Scope section, new deliverable, refinement question, `Technical_Lead_Rules.md §2`, `Story_Standard_TL.md §7`
+Keywords: TL/PO boundary, Technical Scope section, new deliverable, refinement question, `Technical_Lead_Rules_Bootstrap.md §2`, `Story_Standard_TL.md §7`
 
 ### Fact 9 — Round-2 scope confirmation via `git diff <round1-head> <round2-head> --stat`
 Keywords: re-review, CHANGES REQUESTED, round-1 clean findings, own memory commit exclusion, "reuses existing mechanism" verification
@@ -36,7 +36,7 @@ Keywords: re-review, CHANGES REQUESTED, round-1 clean findings, own memory commi
 Keywords: `Retro_Rules.md`, unconditional, CHANGES REQUESTED, addenda per round
 
 ### Fact 11 — Templates and their `working/` mirrors drift silently — verify both
-Keywords: `git diff --no-index`, template/mirror drift, `Project_Priming.md §15` carve-outs, `Strict_Mode_Story_Guide_template.md` no-mirror
+Keywords: `git diff --no-index`, template/mirror drift, `Project_Priming_Read_On_Demand.md §15` carve-outs, `Strict_Mode_Story_Guide_template.md` no-mirror
 
 ### Fact 12 — A file-location or renumbering change must update every referrer (grep the final branch, not diff hunks)
 Keywords: path-move, scaffold-location, renumbering, Nth-enumerated-item, `git show <branch>:<file>`, self-healing migration, `changes.json` entry

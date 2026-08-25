@@ -8,7 +8,7 @@
 
 Before doing anything else, read the following files to understand the project context:
 
-1. `.claude/agents/working/context/Project_Priming.md` — project overview, glossary, architecture, and current state
+1. `.claude/agents/working/context/Project_Priming_Bootstrap.md` — project overview, glossary, architecture, and current state
 2. `version.txt` — current devkit version
 
 ---
@@ -45,13 +45,97 @@ Detailed activity logs go in the agent's Working Record — not in the orchestra
 
 ---
 
+## Token-Trace Log (devkit-internal only — deliberately not mirrored to `templates/`)
+
+**This section is the sole home of the trace convention.** No agent rules file carries it: the directive
+travels in the spawn prompt, not via a rule an agent has to fetch. That is deliberate — a trace must
+account for the agent's own pre-work reads, which happen before any rule could be read, so any agent-side
+placement is either circular (on-demand) or charges every spawn for a convention most spawns never use
+(bootstrap; measured, and it did not improve the traces). Never write a spawn prompt that asks for a trace
+without including the block below — an agent that is not given the format will not produce one.
+
+**Why devkit-only.** Observability for our own team's spawn cost, not a designed target-project feature —
+`Agent_Common_template.md` does not carry it and neither does any template. Intentional
+`Project_Priming_Read_On_Demand.md §15`-style divergence.
+
+> **Two similarly-named directories — do not confuse them.** `token-trace_sprint/` holds the per-story
+> trace **output** written by agents and is gitignored; it accumulates over a sprint and is cleared at
+> sprint end. `tokentrace/` (no hyphen) holds the **tooling** — `token_cost.sh` and its README — and is
+> committed. The `_sprint` suffix exists to keep the two apart at a glance.
+
+### What you paste into the spawn/resume prompt
+
+Include this verbatim when you want a trace from a spawned or resumed pipeline agent (Developer,
+Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer):
+
+> Before reporting back, write a step trace to
+> `.claude/agents/working/token-trace_sprint/<StoryID>_<RoleTag>_steps_done.md` (`RoleTag`: `dev`, `TL`,
+> `qa`, `po`, `ba`, `uiux` — never share a file across roles or stories; gitignored, never commit).
+> Format:
+> ```markdown
+> # <StoryID> — <Role> Step Trace
+>
+> **Session:** spawn | resume
+> **Round:** <1 for first entry; increment per loop-back>
+> **Steps:** <count of step lines below>
+>
+> - Step 1: <what you did> — ~<N> tokens approx (<why, e.g. "read Agent_Common_Bootstrap.md + own rules + memory">)
+> - Step 2: <what you did> — ~<N> tokens approx
+> ...
+> **Estimated total:** ~<sum of the step values above — add them up; do not estimate the total separately>
+> **Actual total (orchestrator-reported):** <left blank — the orchestrator fills this in>
+> ```
+> Base each estimate on a visible proxy (files read, tool calls made, comment length written) — never a
+> guess pulled from nowhere, and never present a step estimate as exact; you have no introspective access
+> to your real per-step usage. Your estimates will run well under the orchestrator-reported actual, which
+> also includes per-turn fixed overhead (system prompt, tool schemas, injected reminders), your own output
+> and reasoning tokens, and any retried or failed calls — none of which are visible to you. That gap is
+> expected; don't spend tokens re-deriving or apologising for it.
+
+**Why the `Session:` field matters.** Spawn-vs-resume is the largest single cost lever you have — a resumed
+round skips all pre-work reads and re-establishes no context, and has measured several times cheaper per
+step than a cold spawn. `CLAUDE.md`'s resume-over-spawn rule depends on it; this field is what makes it
+verifiable rather than assumed.
+
+### What you do after the agent completes
+
+Append the real `subagent_tokens` figure to the same file — the one real number in it; every line above is
+the agent's own approximation.
+
+**Record the reported figure verbatim, and label what it covers.** On a **resumed** session the reported
+`subagent_tokens` has been observed to be a session-lifetime cumulative, not the cost of that call alone.
+Never silently write a subtracted figure as if it were reported. Write both, labelled:
+
+```md
+**Actual total (orchestrator-reported):** <figure exactly as reported> (session-cumulative | per-call)
+**This round (derived):** <cumulative minus the prior round's recorded figure — omit on round 1>
+```
+
+If the completion report does not make clear which of the two it is, write `(unlabelled)` rather than
+guessing. A derived number presented as a measurement is worse than an honest gap. Treat
+`subagent_tokens` as unresolved in general: rounds have reported 70,652 / 77,975 / 77,274 where round 3
+made zero tool calls and still came in lower than round 2, so it is neither per-call nor strictly
+cumulative. Do not derive from it beyond the labelled subtraction above.
+
+---
+
+## Harness Benchmark Runs
+
+Trigger: user says **"run harness benchmark"** (aliases: "benchmark the harness", "A/B the harness")
+
+Read `.claude/agents/working/enhancement/Harness_Benchmark_Guide.md` and follow it. It covers baseline choice, story selection, the four kinds of state that survive a branch checkout and contaminate the second arm, the runbook, and the traps in reading the result.
+
+Devkit-internal, like the trace convention above. **Never give this file to a spawned agent** — an agent that knows it is being benchmarked changes what it reads. The agent gets its arm's issue and the trace block, nothing else.
+
+---
+
 ## Orchestrator Working Record
 
-**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common.md §5` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
+**Location:** `.claude/agents/working/working-record/Orchestrator_Working_Record.md` — gitignored, same folder and rewrite-in-place snapshot format as agent working records (see `Agent_Common_Bootstrap.md` for the full spec: **Completed / In Progress / Impediments** overwritten in place each write, not appended alongside the prior entry).
 
-**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 10,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common.md §5`: *would the next session take a different action if this line were missing?*
+**Retention:** keep only the **3 most recent entries** — the retention unit is a distinct piece of work, not a calendar day. Most entries are keyed `**Story:** ST-XXXXXX`; an entry with no single owning story (an `apply retros` batch, an `update project` run, a multi-story sprint stage) is keyed by that workflow name and date instead, e.g. `**Story:** apply retros — 2026-07-30`. Delete older entries before writing a new one. Enforced cap is **≤ 10,000 characters** (`wc -c`), not a line count. Apply the same inclusion test as `Agent_Common_Bootstrap.md`: *would the next session take a different action if this line were missing?*
 
-**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common.md §5`.
+**Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common_Bootstrap.md`.
 
 **When to update (rewrite the current entry in place, or start a new one for a new piece of work):**
 - **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, versions bumped, PR/story refs).
@@ -162,7 +246,7 @@ Scaffolds these files into the target project. The exact structure depends on th
 ├── CLAUDE.md                          ← Mode: github + sprint workflow commands
 ├── .gitignore                         ← .claude/agents/tmp/ + /result/ added
 └── .claude/agents/
-    ├── context/Project_Priming.md
+    ├── context/Project_Priming_Bootstrap.md
     ├── instructions/                  ← 5 agent instruction files
     ├── rules/                         ← Story standard + per-role rules
     ├── memory/                        ← Blank agent memory files (5 files)
@@ -176,7 +260,7 @@ Scaffolds these files into the target project. The exact structure depends on th
 ├── CLAUDE.md                          ← Mode: strict + sprint workflow commands
 ├── .gitignore                         ← .claude/agents/ (entire folder) + /result/ added
 └── .claude/agents/                    ← entirely gitignored
-    ├── context/Project_Priming.md
+    ├── context/Project_Priming_Bootstrap.md
     ├── instructions/                  ← 5 agent instruction files
     ├── rules/                         ← Story standard + per-role rules + Strict_Mode_Story_Guide.md
     ├── memory/                        ← Blank agent memory files (5 files)

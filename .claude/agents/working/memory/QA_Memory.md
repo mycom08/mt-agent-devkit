@@ -1,6 +1,6 @@
 # QA Memory
 
-> Two-tier memory (devkit-internal pilot, `Agent_Common.md §12`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `QA_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §12's bounded-read recipe — never read the whole archive.
+> Two-tier memory (devkit-internal pilot, `Agent_Common_Read_On_Demand.md §8`, issue #118). This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `QA_Memory_Archive.md`. Before starting a task, scan the titles/keywords below for a match; if one matches, retrieve just that fact per §8's bounded-read recipe — never read the whole archive.
 
 ## Standing Checks
 

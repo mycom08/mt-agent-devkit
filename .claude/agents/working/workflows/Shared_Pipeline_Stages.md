@@ -218,7 +218,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
-   - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules.md §2` for the full checklist).
+   - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Bootstrap.md §2` for the full checklist).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 6. **If approved** → proceed to Stage 3
@@ -251,9 +251,9 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Behavioral path (`Type: behavioral`)
 
 5. **Spawn** QA agent (**model: sonnet**); save its `agentId` as `qa_session`
-6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules.md`
+6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules_Bootstrap.md`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
-   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust it. Skip the test-scenario document per `QA_Rules.md §4`'s verification-only exception.
+   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust it. Skip the test-scenario document per `QA_Rules_Bootstrap.md §4`'s verification-only exception.
 8. **If story AC issues found** → resume Implementer via `SendMessage` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `SendMessage` to `qa_session`** to revalidate (spawn new if expired)
 9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (see QA Rules §8–§9)
    - **If automation fails** → QA reports regression failures as a story comment → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
@@ -295,7 +295,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
    - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
-   - `.claude/agents/working/rules/Product_Owner_Rules.md`
+   - `.claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md`
    - `.claude/agents/working/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:
    - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.
@@ -343,7 +343,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 - `[skipped-step]` Orchestrator observations written to `## Orchestrator` section?
 - `[skipped-step]` Retro file verified — no remaining `*(pending)*` placeholders?
 - `[skipped-step]` Ran `wc -c .claude/agents/working/working-record/*_Working_Record.md`; append one bullet per file over 10,000 chars, naming the file and its size.
-- `[skipped-step]` Ran `wc -c .claude/agents/working/memory/*_Memory*.md` (covers both single-file memory and, for Dev/QA/TL, the two-tier live index + `_Archive` file — see `Agent_Common.md §12`); append one bullet per file over 40,000 chars, naming the file and its size.
+- `[skipped-step]` Ran `wc -c .claude/agents/working/memory/*_Memory*.md` (covers both single-file memory and, for Dev/QA/TL, the two-tier live index + `_Archive` file — see `Agent_Common_Read_On_Demand.md §8`); append one bullet per file over 40,000 chars, naming the file and its size.
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 After completing Stage 5 → **for `continue sprint`: proceed to next story (Stage 0). For `start story`: proceed to Retro Review.**
