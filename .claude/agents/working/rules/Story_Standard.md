@@ -332,6 +332,8 @@ When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit
 [Filled in after work complete: PR links, commits, artifacts]
 ```
 
+> **Porting an already-validated pattern:** if this story replicates a split, refactor, or pattern already implemented and validated elsewhere in the repo (a prior story, a reference commit), name the exact reference commit SHA and/or file(s) to model in `Technical Scope` — not just the target file names or a prose description of the desired end state. An implementer given only the outcome has to reverse-engineer the actual boundary (which content moved where, section renumbering, deliberate gaps) via git archaeology before writing anything (ST-000132 retro).
+
 ---
 
 ## 14. AC Checkbox Rules

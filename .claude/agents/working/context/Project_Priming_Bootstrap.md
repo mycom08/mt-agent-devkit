@@ -12,7 +12,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.cl
 
 | Trigger | Fetch |
 |---|---|
-| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering. Also covers **adding a new agent role** — the corpus-wide ripple checklist is the `Adding a New Agent Role` sub-section inside §15 | `§15` (How to Update a Template) |
+| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering. Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
 | You have been assigned a story | `§3` (Story Workflow) |
 | Starting a complex change — new workflow stage, major template restructure, new devkit command | `§4` (Design First Before Implementation) |
 | Creating or updating a project document | `§6` (Internal Project Documents) — the canonical paths |

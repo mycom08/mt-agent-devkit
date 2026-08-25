@@ -117,6 +117,18 @@ Grep the existing role list (e.g. `grep -rn "Developer\`, \`Technical Lead\`, \`
 
 **Working-record mirror:** a new role's working-record file is never created at scaffold time for the devkit's own team — `.claude/agents/working/working-record/` is gitignored (root `.gitignore`). Only `instructions/`, `rules/`, `memory/` mirrors need to exist; the working-record file is created at runtime on first use, never committed.
 
+### Splitting a Shared Rules/Instructions File into Bootstrap/On-Demand Tiers
+
+Porting an already-validated bootstrap/on-demand split (e.g. the devkit-team's own `Agent_Common.md` → `Agent_Common_Bootstrap.md` + `Agent_Common_Read_On_Demand.md`, PR #162) into a new target — the `templates/` tree, a not-yet-split role, the Antigravity mirror — touches more than the two new files. Checklist (ST-000132 retro):
+
+- **The two new files themselves** — same section boundary and numbering as the validated reference (bootstrap = unconditional-before-first-tool-call content; on-demand = everything else). Keep numbering gaps rather than renumbering when a section moves to the companion file — a stale citation should resolve to nothing, not silently to a different rule.
+- **Every citing file** — grep the *old* filename with `§` across both `templates/` and `working/` (`grep -rn "OldFile.md §"`) and re-point each hit at the correct tier file and (possibly shifted) section number.
+- **Workflow enumerations** — `init project` / `sync devkit` / `update project` workflow files and the scaffold scripts (`scaffold_mechanical.sh`/`.ps1`, both `.claude/` and `.antigravity/` surfaces) that list template files by name.
+- **`changes.json`** — new/renamed file entries (see the dual-update steps above).
+- **`scripts/validate_templates.py`'s `SECTION_REF_ALIAS`** — if the old filename's stem was a valid alias target, confirm it still resolves (or is removed if the old file is deleted) and that the new files' stems are added if anything cites them.
+- **The `read-section` skill's own worked example** — if the example cites a file this change deletes or splits, repoint it to the correct successor file/section as part of the *same* change, not as an afterthought discovered later. Update both the template copy (`templates/skills/read-section/SKILL_template.md`) and the working copy (`.claude/skills/read-section/SKILL.md`) together — they must not drift to two different examples.
+- **Numbering-gap prose vs. the validator:** `validate_templates.py`'s section-ref checker treats any bare `§N` substring as a citation needing a real heading — it cannot tell a real citation from prose *describing* an intentional gap. When documenting a gap in prose (e.g. in a `## Version` footer), write "section N", never "§N" — the glyph is what triggers the check.
+
 ---
 
 ## 16. Reference Links

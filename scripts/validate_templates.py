@@ -387,7 +387,15 @@ def _extract_alias_stem(raw: str) -> str:
 
 def check_section_refs(path, lines: list, fenced: list,
                         findings: list) -> None:
-    """Invariant #1B: §N references resolve to real headings."""
+    """Invariant #1B: §N references resolve to real headings.
+
+    NOTE: this cannot distinguish a real citation from prose that merely
+    *describes* an intentional numbering gap (e.g. "section 4 is skipped").
+    Any literal "§4" substring is checked as if it were a citation. When
+    documenting a gap in prose, write "section N" -- never the "§" glyph --
+    to avoid a false positive (see ST-000132 retro; convention documented in
+    Project_Priming_Read_On_Demand.md §15).
+    """
     # Build the set of numbered headings in the current file (for bare §N).
     current_headings = _get_file_headings(rel(path))
     # Only validate bare §N references if this file uses numbered-section style.
