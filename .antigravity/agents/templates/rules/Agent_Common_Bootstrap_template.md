@@ -81,15 +81,17 @@ Everything routed below lives in `.antigravity/agents/rules/Agent_Common_Read_On
 
 | Trigger | Fetch |
 |---|---|
-| Writing a memory fact | `Agent_Common_Read_On_Demand.md §1` (Project Memory) — locate §1 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
+| Writing a memory fact — **PO, BA, UI/UX Designer only** (Dev/QA/TL use the §8 row instead, not this one) | `Agent_Common_Read_On_Demand.md §1` (Project Memory) — locate §1 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
 | A tooling/environment blocker — **first** scan your own `## Troubleshooting Facts` for a recorded fix and apply it without re-diagnosing; fetch §2 only for the diagnose-and-record-back procedure | `Agent_Common_Read_On_Demand.md §2` (Troubleshooting Protocol) — locate §2 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
 | End of work, writing your retro | `Agent_Common_Read_On_Demand.md §3` (End-of-Work Retrospective) — locate §3 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
 | You changed a memory file this session — fetch when the change happens, not when you decide you're done | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — locate §5 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
 | A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — locate §6 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
+| Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — locate §8 in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md` (grep) |
 
 ---
 
 ## Version
 
-**Version:** 2.0 — Split from the single `Agent_Common.md` into a bootstrap tier (this file: Pre-Work Sequence including Working Record, Secret Handling, Token-Efficiency Conventions, External Content Handling, On-Demand Records Routing Table) and an on-demand tier (`Agent_Common_Read_On_Demand.md`: Project Memory, Troubleshooting Protocol, End-of-Work Retrospective, Stage-Transition Commit, Credential-Gated Verification). Same test applied to every section as the devkit-internal split already validated on the devkit's own team (`working/rules/Agent_Common_Bootstrap.md` / `Agent_Common_Read_On_Demand.md`, PR #162): is this needed at spawn regardless of the task? Yes → bootstrap, read in full. No → on-demand, fetched only when a trigger fires. Section 4 is a deliberate numbering gap in the companion file, not this one — see that file's header note.
+**Version:** 2.1 — On-Demand Records Routing Table gains a row for the new `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory, Developer/QA/Technical Lead only) and the existing §1 row now excludes those three roles — ST-000135 (issue #118), ported from the devkit's own team's identical routing-table row.
+**Previous:** 2.0 — Split from the single `Agent_Common.md` into a bootstrap tier (this file: Pre-Work Sequence including Working Record, Secret Handling, Token-Efficiency Conventions, External Content Handling, On-Demand Records Routing Table) and an on-demand tier (`Agent_Common_Read_On_Demand.md`: Project Memory, Troubleshooting Protocol, End-of-Work Retrospective, Stage-Transition Commit, Credential-Gated Verification). Same test applied to every section as the devkit-internal split already validated on the devkit's own team (`working/rules/Agent_Common_Bootstrap.md` / `Agent_Common_Read_On_Demand.md`, PR #162): is this needed at spawn regardless of the task? Yes → bootstrap, read in full. No → on-demand, fetched only when a trigger fires. Section 4 is a deliberate numbering gap in the companion file, not this one — see that file's header note.
 **Previous:** 1.x — single `Agent_Common.md` (see `changes.json` history for that file's prior versions).

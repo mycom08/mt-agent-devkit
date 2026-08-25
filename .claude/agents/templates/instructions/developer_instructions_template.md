@@ -25,13 +25,13 @@ Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the 
 | Project Priming | `.claude/agents/context/Project_Priming.md` |
 | Working Record | `.claude/agents/working-record/Developer_Working_Record.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `.claude/agents/rules/Developer_Rules_Bootstrap.md` |
-| Memory | `.claude/agents/memory/Developer_Memory.md` |
+| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.claude/agents/memory/Developer_Memory.md` |
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/memory/Developer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common_Read_On_Demand.md §1`.
+Record durable facts in `.claude/agents/memory/Developer_Memory.md` (live index) with full fact bodies in `.claude/agents/memory/Developer_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `.claude/agents/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
 
 ---
 
