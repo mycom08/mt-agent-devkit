@@ -150,7 +150,7 @@ Response and decision.
 
 - [ ] All CI checks on the PR have **finished** — do not review while CI is still running
 - [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
-- [ ] Code review criteria pass (per `Developer_Rules.md` §11)
+- [ ] Code review criteria pass (per `Developer_Rules_Read_On_Demand.md` §9)
 
 ### Merge Gate — before merging dev branch to feature branch
 

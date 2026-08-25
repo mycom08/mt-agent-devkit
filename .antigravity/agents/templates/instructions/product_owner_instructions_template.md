@@ -26,7 +26,7 @@ Read `.antigravity/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is
 |---|---|
 | Project Priming | `.antigravity/agents/context/Project_Priming.md` |
 | Working Record | `.antigravity/agents/working-record/Product_Owner_Working_Record.md` |
-| Rules | `.antigravity/agents/rules/Product_Owner_Rules.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md` |
 | Memory | `.antigravity/agents/memory/Product_Owner_Memory.md` |
 
 When writing or managing stories, also read **Story Standard (PO)** — `.antigravity/agents/rules/Story_Standard_PO.md`.
@@ -43,7 +43,7 @@ Record durable facts in `.antigravity/agents/memory/Product_Owner_Memory.md`. Ru
 
 When the orchestrator asks you to close a story, this is a **lightweight task** — do not read Project_Priming or your Working Record. Read only:
 - `.antigravity/agents/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
-- `.antigravity/agents/rules/Product_Owner_Rules.md`
+- `.antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md`
 - `.antigravity/agents/memory/Product_Owner_Memory.md`
 
 Then execute:

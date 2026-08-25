@@ -153,6 +153,14 @@ ALLOWLIST_REMOVED_PATHS = {
     # and Agent_Common_Read_On_Demand_template.md. Many historical version records
     # (pre-0.1.44) still reference the pre-split filename.
     ".claude/agents/templates/rules/Agent_Common_template.md",
+    # ST-000133: Developer_Rules_template.md, Technical_Lead_Rules_template.md,
+    # QA_Rules_template.md, and Product_Owner_Rules_template.md each split into a
+    # Bootstrap_template.md + Read_On_Demand_template.md pair. Many historical
+    # version records (pre-0.1.44) still reference the pre-split filenames.
+    ".claude/agents/templates/rules/Developer_Rules_template.md",
+    ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+    ".claude/agents/templates/rules/QA_Rules_template.md",
+    ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
 }
 
 # Templates that predate changes.json tracking (added before v0.0.1).
@@ -221,17 +229,21 @@ SECTION_REF_ALIAS = {
     "Agent_Common_Bootstrap": ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md",
     "Agent_Common_Read_On_Demand": ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md",
     "Business_Analyst_Rules": ".claude/agents/templates/rules/Business_Analyst_Rules_template.md",
-    "Developer_Rules": ".claude/agents/templates/rules/Developer_Rules_template.md",
-    "Product_Owner_Rules": ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
+    "Developer_Rules_Bootstrap": ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md",
+    "Developer_Rules_Read_On_Demand": ".claude/agents/templates/rules/Developer_Rules_Read_On_Demand_template.md",
+    "Product_Owner_Rules_Bootstrap": ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md",
+    "Product_Owner_Rules_Read_On_Demand": ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md",
     "Project_Priming": ".claude/agents/templates/context/Project_Priming_template.md",
-    "QA_Rules": ".claude/agents/templates/rules/QA_Rules_template.md",
+    "QA_Rules_Bootstrap": ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md",
+    "QA_Rules_Read_On_Demand": ".claude/agents/templates/rules/QA_Rules_Read_On_Demand_template.md",
     "Retro_Rules": ".claude/agents/templates/rules/Retro_Rules_template.md",
     "Story_Standard": ".claude/agents/templates/rules/Story_Standard_template.md",
     "Story_Standard_Dev": ".claude/agents/templates/rules/Story_Standard_Dev_template.md",
     "Story_Standard_PO": ".claude/agents/templates/rules/Story_Standard_PO_template.md",
     "Story_Standard_QA": ".claude/agents/templates/rules/Story_Standard_QA_template.md",
     "Story_Standard_TL": ".claude/agents/templates/rules/Story_Standard_TL_template.md",
-    "Technical_Lead_Rules": ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
+    "Technical_Lead_Rules_Bootstrap": ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md",
+    "Technical_Lead_Rules_Read_On_Demand": ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md",
 }
 
 # ---------------------------------------------------------------------------

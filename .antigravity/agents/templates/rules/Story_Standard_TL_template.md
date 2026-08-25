@@ -57,7 +57,7 @@ When `**Assigned:** Technical Lead` and TL is running Stage 1 (implementation):
 |------|--------|-----------|
 | **TL** | Review code, approve PR, discuss technical design, implement when assigned | Tick AC, test, clarify scope |
 
-**Red Flags:** TL ticking AC checkboxes; TL commenting on scope (PO only) — see `Technical_Lead_Rules.md` §2 for how this differs from a routine AC-clarification edit; TL self-approving PR (GitHub blocks it — use `gh pr comment` instead).
+**Red Flags:** TL ticking AC checkboxes; TL commenting on scope (PO only) — see `Technical_Lead_Rules_Bootstrap.md` §2 for how this differs from a routine AC-clarification edit; TL self-approving PR (GitHub blocks it — use `gh pr comment` instead).
 
 ---
 
@@ -101,7 +101,7 @@ Technical decision or review feedback.
 - [ ] All CI checks on the PR have **finished** — do not review while CI is still running
 - [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
 - [ ] **Zero checks reported is not automatically "CI failing."** First confirm whether the head commit only touched paths excluded by a `paths-ignore`/`paths` filter, or is a docs-only `[skip ci]` commit — if so, that's "nothing runnable changed," not a blocker, note it and proceed. If the head commit did touch CI-relevant paths and still shows zero checks, that's CI genuinely missing — do not approve; require a real run or an explicit human-authorized deviation note first.
-- [ ] Code review criteria pass (per `Technical_Lead_Rules.md` §2)
+- [ ] Code review criteria pass (per `Technical_Lead_Rules_Bootstrap.md` §2)
 
 ---
 

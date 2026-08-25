@@ -25,7 +25,7 @@ Read `.antigravity/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is
 |---|---|
 | Project Priming | `.antigravity/agents/context/Project_Priming.md` |
 | Working Record | `.antigravity/agents/working-record/Technical_Lead_Working_Record.md` |
-| Rules | `.antigravity/agents/rules/Technical_Lead_Rules.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md` |
 | Memory | `.antigravity/agents/memory/Technical_Lead_Memory.md` |
 
 ---

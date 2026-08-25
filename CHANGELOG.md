@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000133] Split `Developer_Rules_template.md`, `Technical_Lead_Rules_template.md`, `QA_Rules_template.md`, and `Product_Owner_Rules_template.md` into bootstrap/on-demand tier pairs across the Claude and Antigravity template surfaces, mirroring the boundary already validated on the devkit's own team.
 - [ST-000132] Split `Agent_Common_template.md` into a bootstrap tier and an on-demand tier across the Claude and Antigravity template surfaces, mirroring the boundary already validated on the devkit's own team.
 - [ST-000113] Fixed `Story_Standard_Dev_template.md` to agree with the master `Story_Standard_template.md` that TL, not QA or Developer, sets `status:testing`.
 - [Enhancement #142] Fixed the `read-section` skill's sub-section citation recipe, which could silently over-read to end of file.

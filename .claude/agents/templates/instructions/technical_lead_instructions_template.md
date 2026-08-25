@@ -25,7 +25,7 @@ Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the 
 |---|---|
 | Project Priming | `.claude/agents/context/Project_Priming.md` |
 | Working Record | `.claude/agents/working-record/Technical_Lead_Working_Record.md` |
-| Rules | `.claude/agents/rules/Technical_Lead_Rules.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.claude/agents/rules/Technical_Lead_Rules_Bootstrap.md` |
 | Memory | `.claude/agents/memory/Technical_Lead_Memory.md` |
 
 ---
