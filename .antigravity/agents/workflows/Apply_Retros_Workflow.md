@@ -55,7 +55,7 @@ Using the routing in `community-retros/README.md`:
 | `[context]` | `templates/context/Project_Priming_template.md` or a memory template |
 | `[instruction]` | `templates/instructions/{role}_instructions_template.md` |
 | `[workflow]` | a workflow template under `templates/shared/workflows/` or `templates/{mode}/workflows/`, or `templates/rules/Agent_Common_Bootstrap_template.md` / `templates/rules/Agent_Common_Read_On_Demand_template.md` |
-| `[failure]` | a rules template (e.g. `templates/rules/Developer_Rules_template.md`) or an instruction template |
+| `[failure]` | a rules template (e.g. `templates/rules/Developer_Rules_Bootstrap_template.md`) or an instruction template |
 
 If an item does not map to any template file (e.g. it only concerns a devkit-internal workflow), still list it but mark its target as `devkit-internal (no changes.json entry)`.
 
@@ -81,7 +81,7 @@ Present the prioritized items as a numbered table. Do **not** edit any file yet.
 Retro improvements found across N issue(s):
 
 #  Pri  Type         Freq  Target file                                  Proposed change
-1  ★★★  [failure]    1     rules/Developer_Rules_template.md            Add pre-push secret-scan gate; credentials from env, no inline literal
+1  ★★★  [failure]    1     rules/Developer_Rules_Bootstrap_template.md            Add pre-push secret-scan gate; credentials from env, no inline literal
 2  ★★   [workflow]   2     shared/workflows/Sprint_Workflow_Shared…     Flag "automation collection update required" when response shapes change
 3  ★    [instruction]1     instructions/qa_instructions_template.md     Define "no domain label" test-folder fallback
 …
@@ -118,10 +118,10 @@ Apply **one** version increment covering all changes from this run.
    "0.1.16": {
      "new": [],
      "modified": [
-       ".antigravity/agents/templates/rules/Developer_Rules_template.md"
+       ".antigravity/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
      ],
      "descriptions": {
-       ".antigravity/agents/templates/rules/Developer_Rules_template.md": "Retro (#27): add pre-push secret-scan gate — credentials must source from env with no inline literal default"
+       ".antigravity/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "Retro (#27): add pre-push secret-scan gate — credentials must source from env with no inline literal default"
      }
    }
    ```

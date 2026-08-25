@@ -1,7 +1,8 @@
-# Developer Rules
+# Developer Rules — Bootstrap
 
-**Applies to:** Developer agent  
-**Reference from:** `.claude/agents/developer_instructions.md`
+**Applies to:** Developer agent
+**Reference from:** `.antigravity/agents/developer_instructions.md`
+**Purpose:** The whole of the Developer's bootstrap-tier rules — everything that is true on *every* Dev spawn regardless of what the task is. Read this file in full at step 3 of `Agent_Common_Bootstrap.md §1`. Read nothing else from the Developer rules set until a trigger in §12 actually fires.
 
 ---
 
@@ -11,7 +12,7 @@ Before writing a single line of code on any story, Dev **must** read:
 
 | Document | Path |
 |---|---|
-| Story Standard (Dev) | `.claude/agents/rules/Story_Standard_Dev.md` |
+| Story Standard (Dev) | `.antigravity/agents/rules/Story_Standard_Dev.md` |
 
 The key Development Standards rules are already embedded in §4–§6 of this document (naming, testing, git workflow). Only read `docs/wiki/Development_Standards.md` if you encounter a specific convention question not covered here.
 
@@ -54,20 +55,20 @@ Once all blocking questions are resolved:
 **Clean Code (source code stories only):**
 
 If the story involves writing or modifying source code files, read before writing any code:
-- `.claude/agents/rules/Clean_Code_Rules.md`
+- `.antigravity/agents/rules/Clean_Code_Rules.md`
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
 **Logging Standard (source code stories only):**
 
 If the story involves writing or modifying log statements, read before writing any code:
-- `.claude/agents/rules/Logging_Standard.md`
+- `.antigravity/agents/rules/Logging_Standard.md`
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
 **UI Prototype reference (UI-bearing repos only):**
 
-If this repo has (or is paired with) a `-ui-prototype` companion repo, read `.claude/agents/rules/UI_Prototype_Rules.md` before implementing any screen with a prototype counterpart — it governs what may (and must not) be reused from the prototype.
+If this repo has (or is paired with) a `-ui-prototype` companion repo, read `.antigravity/agents/rules/UI_Prototype_Rules.md` before implementing any screen with a prototype counterpart — it governs what may (and must not) be reused from the prototype.
 
 **For Clean Code or refactor stories** (title or scope contains "Clean Code", "refactor", or "violation"): read `Clean_Code_Rules.md` **in full** before touching any file — do not limit reading to chapters that appear relevant by violation label. Chapter scope is not always obvious from violation names alone.
 
@@ -77,47 +78,7 @@ If the story is complex (8+ points, multiple layers, data model changes, third-p
 
 > If the story is complex, follow the design-first rule — refer to `Project_Priming.md` §Design First.
 
-**Mid-implementation consultation (when a question surfaces during implementation):**
-
-If you encounter an unclear AC, scope ambiguity, or technical decision point while implementing — and making a judgment call is not appropriate — do NOT use the Blocked Story Procedure and do NOT ask the user. Instead:
-
-1. Identify who owns the question:
-   - Scope or AC question → **PO**
-   - Technical or design question → **TL**
-   - Both → **PO + TL**
-2. Record the question on the story:
-   - **GitHub mode:** post a comment on the GitHub Issue tagging the right role(s)
-   - **Strict mode:** append a comment entry to the story MD `## Comments` section tagging the right role(s)
-
-   Use the format:
-   ```
-   **Mid-implementation question — [TL / PO / both]**
-   <specific question — one clear sentence>
-   **Decision needed:** <what answer would unblock you>
-   ```
-3. Report back to the orchestrator using this format:
-   ```
-   Mid-implementation consultation needed — ST-XXXXXX
-   Owner: <TL / PO / both>
-   Question: <same question as posted on issue>
-   Decision needed: <same decision needed>
-   Implementation paused at: <brief description of where you stopped>
-   Question recorded on story: posted
-   ```
-4. Do NOT change the story label. The orchestrator will spawn or resume TL and/or PO to answer in the issue thread, then resume you with their response.
-5. When the orchestrator resumes you with the answer: read it, apply it, and continue implementation from where you paused.
-
-> Use this for genuine ambiguities that would otherwise require a judgment call affecting scope or design. Do not use it for implementation details you can reasonably decide yourself.
-
-**Live user instruction conflicts (mandatory rule during implementation):**
-
-If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread (by PO, TL, or the user themselves), the live instruction takes precedence. When this happens:
-
-1. Acknowledge the conflict explicitly — state what the prior decision was and what the new instruction is
-2. Proceed with the live instruction
-3. Document the override in the PR description so the reviewer understands why the prior decision was not followed
-
-Do not silently follow the old decision, and do not block awaiting re-confirmation — the user's live instruction is the authoritative signal.
+Scenario-conditional rules — mid-implementation consultation and live user instruction conflicts — are `Developer_Rules_Read_On_Demand.md` §10 and §11. Fetch only if that scenario actually occurs.
 
 ---
 
@@ -152,7 +113,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Story files:**
 - **GitHub mode:** Stories are GitHub Issues — title format `[ST-XXXXXX][FEATURE] Title In Title Case`. No `.md` story files are created or tracked.
-- **Strict mode:** Stories are `.md` files under `.claude/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
+- **Strict mode:** Stories are `.md` files under `.antigravity/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
 
 ---
 
@@ -220,52 +181,38 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 - **GitHub mode:** Format: `<type>(<scope>): <subject>` (Conventional Commits). Subject: imperative mood, ≤ 50 characters. Body (when needed): explain *why*, wrap at 72 characters. Footer: always include `Story: ST-XXXXXX`. See `docs/wiki/Development_Standards.md §2` for the full type list.
 - **Strict mode:** Format: `<primary-id> [<secondary-id>]: <message>` — see `Strict_Mode_Story_Guide.md §Commit Message Format` for the complete spec. No `Story:` footer, no Conventional Commits type prefix.
 - **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`), not just the text after the colon. A reviewer who finds a length violation notes it in a PR comment but must **not** withhold approval, request changes, or trigger a fix-loop over length alone. Everything else in the commit-message convention (type/scope format, imperative mood, `Story:` footer, body wrap) remains blocking.
-- **Docs-only pushes skip CI (github mode):** when every file in the push is non-code (`docs/**`, `*.md`, `.claude/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
+- **Docs-only pushes skip CI (github mode):** when every file in the push is non-code (`docs/**`, `*.md`, `.antigravity/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
 
 ---
 
-## 7. Reporting & Blockers
+## 12. On-Demand Rules — Routing Table
+
+§1–§6 above are loaded at spawn. Nothing in `Developer_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section — locate it with grep, not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| Blocked on a story and reporting it | `Developer_Rules_Read_On_Demand.md §7` (Reporting & Blockers) |
+| Creating or updating a project document | `Developer_Rules_Read_On_Demand.md §8` (Document Placement) |
+| Orchestrator assigns you as peer reviewer for a TL-implemented story | `Developer_Rules_Read_On_Demand.md §9` (Peer Review) |
+| A question surfaces mid-implementation | `Developer_Rules_Read_On_Demand.md §10` (Mid-Implementation Consultation) |
+| A live user instruction contradicts a prior decision recorded in the issue thread | `Developer_Rules_Read_On_Demand.md §11` (Live User Instruction Conflicts) |
+| Signaling stage completion to the orchestrator, or you changed a memory file this session | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — mandatory before handoff |
+| A tooling/environment blocker | First scan your own `## Troubleshooting Facts` for a recorded fix; fetch `Agent_Common_Read_On_Demand.md §2` only for the diagnose-and-record-back procedure |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`.
+
+---
+
+## 13. Always-On
 
 - Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
-- Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
 - **When starting a session:** Read your working record, then **sync story statuses with GitHub** — check the current label on each in-progress or recently completed story and correct the record before reporting status
 - **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
 
 ---
 
-## 8. Document Placement
-- When you update or create project documents, use the current feature-doc structure. Refer section `## 4. Internal Project Documents` in project priming document.
-
----
-
-## 9. Stage-Transition Commit (mandatory before handoff)
-
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
-
----
-
-## 10. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
-
-On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common_Read_On_Demand.md §2`.
-
----
-
-## 11. Peer Review (when Dev acts as reviewer for a TL-implemented story)
-
-When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.md` §12 Reviewer Gate, then apply this checklist:
-
-**Review checklist:**
-- Verify the PR follows naming conventions, commit message format, and test coverage rules from §4–§5 — except commit subject-line **length**, which is a non-blocking nit per §6: note it in a comment, never request changes over it alone
-- Check for obvious logic errors, missing error handling at system boundaries, and security issues
-- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules.md §2` for the full detail of these checks (same rules apply to peer review)
-- **Stub/TODO re-check:** confirm stub markers/trivial-return patterns in AC-functional methods were scanned and any hit has an owning backlog story
-- Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
-- When all criteria pass, post approval as a comment on the PR (GitHub blocks self-approval — use `gh pr comment`)
-
----
-
 ## Version
 
-**Version:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
-**Previous:** 2.10 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
+**Version:** 3.0 — Split into a bootstrap tier (this file: §1–§6, unconditional content read on every spawn) and an on-demand tier (`Developer_Rules_Read_On_Demand.md`: §7 through §11, scenario-conditional content fetched only on trigger), mirroring the boundary already validated on the devkit's own team (`working/rules/Developer_Rules_Bootstrap.md` / `Developer_Rules_Read_On_Demand.md`). Mid-implementation consultation and live user instruction conflicts (previously inline in §2) and Peer Review (previously section 11) moved out; sections 9/10's prior pointer-only content (Stage-Transition Commit, Troubleshooting Protocol) retired in favor of the routing table above, since `Agent_Common_Bootstrap.md §5` already covers both universally.
+**Previous:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)
 **Created:** 2026-04-24

@@ -1,7 +1,8 @@
-# QA Rules
+# QA Rules — Bootstrap
 
-**Applies to:** QA agent  
+**Applies to:** QA agent
 **Reference from:** `.claude/agents/qa_instructions.md`
+**Purpose:** The whole of QA's bootstrap-tier rules — everything that is true on *every* QA spawn regardless of what the task is. Read this file in full per the Pre-Work Checklist. Read `QA_Rules_Read_On_Demand.md` only when a trigger in §14 actually fires.
 
 ---
 
@@ -192,33 +193,15 @@ After all story Acceptance Criteria are verified and before giving merge sign-of
 
 ## 9. Pre-PR Gate (when acting as Implementer)
 
-When QA is the story Implementer (not validator), run the applicable local checks before opening a PR. Do not open the PR if any check fails.
+Rare — only when QA is the story Implementer. Checklist in `QA_Rules_Read_On_Demand.md §1`.
 
 > This rule applies to QA as **Implementer**. §8 (Automation Regression Run) applies to QA as **Validator** — they are separate gates at different pipeline stages.
-
-| Change type | Required local check |
-|---|---|
-| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
-| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
-| Both source and tests changed | Both checks above required |
-| CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
-| Docs or config only | Exempt |
-
-Include a one-line test result note in the PR description (e.g., "integration tests — PASS").
-
-> **Gate:** Do not open a PR until all applicable checks pass.
 
 ---
 
 ## 10. Live User Instruction Conflicts (when acting as Implementer)
 
-If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread (by PO, TL, or the user themselves), the live instruction takes precedence. When this happens:
-
-1. Acknowledge the conflict explicitly — state what the prior decision was and what the new instruction is
-2. Proceed with the live instruction
-3. Document the override in the PR description so the reviewer understands why the prior decision was not followed
-
-Do not silently follow the old decision, and do not block awaiting re-confirmation — the user's live instruction is the authoritative signal.
+Rare — only when QA is the story Implementer. Rule in `QA_Rules_Read_On_Demand.md §2`.
 
 ---
 
@@ -242,8 +225,20 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 ---
 
+## 14. On-Demand Rules — Routing Table
+
+§1–§13 above are loaded at spawn. Nothing in `QA_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill — not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| QA is the story Implementer | `QA_Rules_Read_On_Demand.md §1` (pre-PR gate), `§2` (live user instruction conflicts) |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit and Troubleshooting Protocol are already resolved directly by §12/§13 above.
+
+---
+
 ## Version
 
-**Version:** 3.7 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)  
-**Previous:** 3.6 — §4: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)  
+**Version:** 4.0 — Split into a bootstrap tier (this file: §1–§13, unconditional content read on every spawn) and an on-demand tier (`QA_Rules_Read_On_Demand.md`: Pre-PR Gate and Live User Instruction Conflicts, both "when acting as Implementer"), mirroring the boundary already validated on the devkit's own team (`working/rules/QA_Rules_Bootstrap.md` / `QA_Rules_Read_On_Demand.md`).
+**Previous:** 3.7 — §1: added `Read your Memory` step, matching `Technical_Lead_Rules.md` §1 (ST-000033)
 **Created:** 2026-05-01

@@ -1,7 +1,8 @@
-# Technical Lead Rules
+# Technical Lead Rules — Bootstrap
 
-**Applies to:** Technical Lead agent  
-**Reference from:** `.claude/agents/technical_lead_instructions.md`
+**Applies to:** Technical Lead agent
+**Reference from:** `.antigravity/agents/technical_lead_instructions.md`
+**Purpose:** The whole of TL's bootstrap-tier rules — everything that is true on *every* TL spawn regardless of what the task is (review, design, or acting as implementer all start here). Read this file in full per the Pre-Work Checklist. Read `Technical_Lead_Rules_Read_On_Demand.md` only when a trigger in §13 actually fires.
 
 ---
 
@@ -9,10 +10,10 @@
 
 Do these **in order** before any design or review work:
 
-1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
-2. **Read Story Standard (TL)** — `.claude/agents/rules/Story_Standard_TL.md`
-3. **Read your Working Record** — `.claude/agents/working-record/Technical_Lead_Working_Record.md`
-4. **Read your Memory** — `.claude/agents/memory/Technical_Lead_Memory.md`
+1. **Read Project Priming** — `.antigravity/agents/context/Project_Priming.md`
+2. **Read Story Standard (TL)** — `.antigravity/agents/rules/Story_Standard_TL.md`
+3. **Read your Working Record** — `.antigravity/agents/working-record/Technical_Lead_Working_Record.md`
+4. **Read your Memory** — `.antigravity/agents/memory/Technical_Lead_Memory.md`
 5. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
 ---
@@ -34,7 +35,7 @@ Do these **in order** before any design or review work:
 - **Citation accuracy:** before citing a rule as `<file> §N`, open the file and confirm N is the section's actual heading number — a `grep -n` result is a *line* number, not a section number, and a wrong-but-existing section number ships silently past casual review.
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
 - Check: naming conventions, data isolation, error format, test coverage, migration correctness
-- **Source code changes only** — verify compliance with `.claude/agents/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
+- **Source code changes only** — verify compliance with `.antigravity/agents/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
 - **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common_Read_On_Demand.md §6`
 - **Approve** by posting an approval verdict via `gh pr comment <number>` when all criteria pass (never `gh pr review --approve` — GitHub blocks self-approval); leave blocking comments if they do not
 - Cannot approve your own work — seek a second reviewer when acting as implementer
@@ -68,7 +69,7 @@ Review checklist differs from code review — focus on:
 - **Path-reference stories:** If the story updates file path references inside a document, grep that file for the old path string before approving: `grep -n "old_path" <file>`. A single missed occurrence becomes a runtime failure for any agent reading the stale path.
 
 **UI Prototype PRs (UI-bearing repos only):**
-If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.claude/agents/rules/UI_Prototype_Rules.md` before approving any PR for a screen with a prototype counterpart.
+If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.antigravity/agents/rules/UI_Prototype_Rules.md` before approving any PR for a screen with a prototype counterpart.
 
 **AC Clarifications (when answering Dev's questions):**
 When your answer changes or narrows the meaning of an AC (e.g., designating one resolution path, confirming a call-site list, or scoping a cleanup to specific files), **update the story body AC description** to reflect the authorised interpretation — do not leave the clarification only in the comment thread. Dev and QA use the story body as their single source of truth.
@@ -155,17 +156,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ### When acting as Implementer
 
-When TL is the story implementer (not reviewer), follow the same branch and PR workflow as Developer:
-
-1. Create a dev branch from the feature branch — **never work directly on the feature branch or master**:
-   ```
-   git checkout -b ST-XXXXXX/short-description
-   ```
-2. Push all implementation work to that dev branch
-3. Open a PR from the dev branch → **feature branch** (NOT master)
-4. PR title: `[ST-XXXXXX][FEATURE] Story title`
-
-> **Gate:** Do not open a PR targeting master. The feature branch is the merge target for all story PRs.
+Rare — only when the orchestrator assigns TL as story implementer. Procedure in `Technical_Lead_Rules_Read_On_Demand.md §1`.
 
 ---
 
@@ -196,62 +187,44 @@ When TL is the story implementer (not reviewer), follow the same branch and PR w
 
 ## 9. Context Anchoring
 
-After each working session on an unfinished feature, create or update a context-anchoring note so work can resume without losing state.
-
-**Placement:** `docs/feature/<feature_name>/questions/` unless another subfolder is a better fit  
-**Filename:** Must contain the feature name, `Title_Case_With_Underscores`  
-**Length:** Under 50 lines — decisions with reasoning, active constraints, open questions, and a done/remaining checklist
-
-Template:
-```md
-# Feature: <feature_name>
-
-## Decisions
-| Decision | Reason | Rejected Alternative |
-|----------|--------|----------------------|
-
-## Constraints
-
-## Open Questions
-
-## State
-```
+After each working session on an unfinished feature, create or update a context-anchoring note so work can resume without losing state — template and placement rule in `Technical_Lead_Rules_Read_On_Demand.md §2`.
 
 ---
 
 ## 10. Pre-PR Gate (when acting as Implementer)
 
-When TL is the story Implementer (not reviewer), run the applicable local checks before opening a PR. Do not open the PR if any check fails.
-
-| Change type | Required local check |
-|---|---|
-| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
-| API spec changed (`docs/api/{api-spec-file}` or lint config) | `{api-lint-command}` (zero errors) AND `{code-gen-command}` then `git diff --exit-code {generated-file-path}` (no diff) — skip code-gen check if project does not use spec-driven generation |
-| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
-| Both source and tests changed | Both checks above required |
-| CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
-| Docs or config only | Exempt |
-
-Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+Rare — only when acting as Implementer per §5. Checklist in `Technical_Lead_Rules_Read_On_Demand.md §3`.
 
 ---
 
 ## 11. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Commit agent memory file changes before signaling stage completion — see `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 12. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.antigravity/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+
+---
+
+## 13. On-Demand Rules — Routing Table
+
+§1–§12 above are loaded at spawn. Nothing in `Technical_Lead_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section — locate it with grep, not the whole file.
+
+| Trigger | Fetch |
+|---|---|
+| Orchestrator assigns TL as story implementer | `Technical_Lead_Rules_Read_On_Demand.md §1` (branch/PR procedure) |
+| End of a working session on an unfinished story | `Technical_Lead_Rules_Read_On_Demand.md §2` (Context Anchoring) |
+| TL is acting as Implementer and about to open a PR | `Technical_Lead_Rules_Read_On_Demand.md §3` (Pre-PR Gate) |
+
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit and Troubleshooting Protocol are already resolved directly by §11/§12 above.
 
 ---
 
 ## Version
 
-**Version:** 2.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)  
-**Previous:** 2.1 — §2: CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, dependency-pin, and missing-credential checks added; new CI/Workflow abbreviated checklist  
+**Version:** 3.0 — Split into a bootstrap tier (this file: §1–§12, unconditional content read on every spawn) and an on-demand tier (`Technical_Lead_Rules_Read_On_Demand.md`: the "When acting as Implementer" branch/PR procedure, Context Anchoring, and Pre-PR Gate as Implementer), mirroring the boundary already validated on the devkit's own team (`working/rules/Technical_Lead_Rules_Bootstrap.md` / `Technical_Lead_Rules_Read_On_Demand.md`). §2 Code Review & PR Approval — the reason TL exists on most spawns — was deliberately not moved.
+**Previous:** 2.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)
 **Created:** 2026-05-01

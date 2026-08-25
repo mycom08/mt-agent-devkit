@@ -182,7 +182,7 @@ When a rule, workflow, or instruction file needs to change, update the source te
 
 **Steps (always in this order):**
 
-1. **Edit the template file** under `.antigravity/agents/templates/` (e.g., `.antigravity/agents/templates/rules/QA_Rules_template.md`)
+1. **Edit the template file** under `.antigravity/agents/templates/` (e.g., `.antigravity/agents/templates/rules/QA_Rules_Bootstrap_template.md`)
 2. **Bump the patch version** in `version.txt` (e.g., `0.1.5` → `0.1.6`)
 3. **Add a new entry** to `changes.json` — place it **first**, at the **top** of the object, immediately after the opening `{`. This file is ordered **newest-first (descending)**: the current first key is the latest version and the last key is `0.0.1`:
 
@@ -190,10 +190,10 @@ When a rule, workflow, or instruction file needs to change, update the source te
 "0.1.6": {
   "new": [],
   "modified": [
-    ".antigravity/agents/templates/rules/QA_Rules_template.md"
+    ".antigravity/agents/templates/rules/QA_Rules_Bootstrap_template.md"
   ],
   "descriptions": {
-    ".antigravity/agents/templates/rules/QA_Rules_template.md": "Fix: one-line summary of what changed and why"
+    ".antigravity/agents/templates/rules/QA_Rules_Bootstrap_template.md": "Fix: one-line summary of what changed and why"
   }
 }
 ```
