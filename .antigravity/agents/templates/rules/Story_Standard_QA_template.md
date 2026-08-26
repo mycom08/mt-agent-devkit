@@ -79,18 +79,3 @@ Test results and findings per AC.
 - `- [x]` = Signed off by **PO** after QA confirms
 
 **QA:** Test each AC criterion and report pass/fail in a Comment. Do **not** tick checkboxes. Notify PO when all AC have passed.
-
----
-
-## 15. Shell Command Rules — Permissions and Tool Choice
-
-**Use either PowerShell or Bash for `gh` CLI calls (PowerShell is preferred on Windows).** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. PowerShell `.NET` methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a permission prompt regardless of allow-list entries, and PowerShell interprets backticks as escape characters, silently corrupting Markdown. Never prepend `cd /path` to a command; the working directory is already set.
-
-For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
-
-```bash
-gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
-gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
-```
-
-Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.antigravity/agents/tmp/`.

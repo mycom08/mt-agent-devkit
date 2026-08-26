@@ -54,7 +54,7 @@ Also ask: **"Which sprint should these stories be assigned to? (e.g., sprint-1, 
 
 For each confirmed story, create a GitHub Issue following `Story_Standard_PO.md` §13:
 - Labels: `status:backlog`, `feature:<name>` (if feature), `phase-N` (if feature), `sprint-N` (if sprint assigned)
-- Use `--body-file` pattern (see §15)
+- Use `--body-file` pattern (see `Agent_Common_Bootstrap.md` §6)
 - Report created issue URLs to the user
 
 **If `Mode: strict`:**

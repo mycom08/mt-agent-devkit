@@ -79,3 +79,18 @@ Everything routed below lives in `.claude/agents/working/rules/Agent_Common_Read
 | You changed a memory file this session — fetch when the change happens, not when you decide you're done | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §5 |
 | A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §6 |
 | Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory (devkit-internal pilot) | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §8 |
+
+---
+
+## 6. Shell Command Rules — Permissions and Tool Choice
+
+**Always use Bash (not PowerShell) for all `gh` CLI calls.** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. PowerShell `.NET` methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a permission prompt regardless of allow-list entries, and PowerShell interprets backticks as escape characters, silently corrupting Markdown. Never prepend `cd /path` to a command; the working directory is already set.
+
+For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
+
+```bash
+gh issue edit <number> --repo mycom08/mt-agent-devkit --body-file /tmp/body.md
+gh issue comment <number> --repo mycom08/mt-agent-devkit --body-file /tmp/comment.md
+```
+
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/working/tmp/`.

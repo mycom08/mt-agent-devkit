@@ -42,7 +42,7 @@ Record durable facts in `.claude/agents/memory/Product_Owner_Memory.md`. Rules a
 ## Story Closure Task (Stage 4)
 
 When the orchestrator asks you to close a story, this is a **lightweight task** — do not read Project_Priming or your Working Record. Read only:
-- `.claude/agents/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
+- `.claude/agents/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
 - `.claude/agents/rules/Product_Owner_Rules_Bootstrap.md`
 - `.claude/agents/memory/Product_Owner_Memory.md`
 
@@ -51,7 +51,7 @@ Then execute:
 2. Read the QA/TL comment threads to confirm all AC have been verified and passing
 
 **If `Mode: github`:**
-3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (§15)
+3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (`Agent_Common_Bootstrap.md §6`)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo {github-org}/{repo-name}`
 
@@ -143,7 +143,7 @@ After the orchestrator confirms all answers are filled in:
   1. Create `docs/feature/<feature_name>/plan/Sprint_{N+1}_Overview.md` — follow the format of existing Sprint Overview files exactly
   2. Update `docs/feature/<feature_name>/plan/Product_Backlog.md` — add new sprint section; mark sprint status as `🔲 Planned`
 - **Non-feature sprint**: no Sprint Overview file — GitHub issue labels are the only artifact
-- For stories without GitHub Issues: create issues following `Story_Standard_PO.md` §13 — use `--body-file` (see §15 for PowerShell safety rule)
+- For stories without GitHub Issues: create issues following `Story_Standard_PO.md` §13 — use `--body-file` (see `Agent_Common_Bootstrap.md §6` for PowerShell safety rule)
   - **Feature story labels:** `status:backlog` + `feature:<feature_name>` + `phase-N` + `sprint-N`
   - **Non-feature story labels:** `status:backlog` + `sprint-N`
 - For stories that already have GitHub Issues: add `sprint-N` label if missing — **do not change `status:backlog` to `status:ready`**

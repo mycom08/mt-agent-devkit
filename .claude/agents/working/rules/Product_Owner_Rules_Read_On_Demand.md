@@ -7,14 +7,14 @@
 ## 1. Story Closure Task (Stage 4)
 
 Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, read only:
-- `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
+- `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
 - `.claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md`
 - `.claude/agents/working/memory/Product_Owner_Memory.md`
 
 Then execute:
 1. Read the full story issue body — review all AC checkboxes
 2. Read the QA/TL comment threads to confirm all AC have been verified and passing
-3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (`Story_Standard_PO.md §15`)
+3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (`Agent_Common_Bootstrap.md §6`)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo mycom08/mt-agent-devkit`
 6. Write your retrospective section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` — read `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
