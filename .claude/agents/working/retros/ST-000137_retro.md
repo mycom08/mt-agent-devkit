@@ -10,10 +10,11 @@
 
 ### Process Suggestions
 - `[workflow]` When a story's Technical Scope embeds a "canonical text to move" block sourced from one surface (here, the Claude templates), it should explicitly call out any per-surface content divergence beyond simple placeholder substitution (e.g. a `--repo` value) — this story had a real wording difference (Bash-only vs. PowerShell-preferred) between the Claude and Antigravity template surfaces that wasn't mentioned in the canonical text block, requiring an extra verification pass to avoid silently dropping a platform-specific convention.
+- `[failure]` A change-manifest file with both a per-version array (`new`/`modified` paths) and a separate nested per-path description dict is easy to half-update: appending to the array satisfies a schema-shape check but silently skips the description dict if the implementer only pattern-matches on the array structure during exploration. Caught in Stage 2 review, not self-caught. **Addendum:** re-verified by inspecting the manifest's actual nested structure (not just the top-level arrays) before writing the fix, then confirmed via key-count diff (`36 → 40`, matching the 4 newly-modified paths) that every touched path had a description — this two-step check (structure-first, then count-diff) is the concrete guard worth carrying into any future manifest edit on this file.
 
 ### What Worked Well
 - The issue's exhaustive, numbered site list (5 working + 8 Claude template + 8 Antigravity mirror) made the mechanical repoint work verifiable file-by-file with a simple pre/post `§15` grep across the whole touched tree — zero stray citations remained after the pass.
-- `python scripts/validate_templates.py` passed clean on the first run after all edits — no rework needed.
+- `python scripts/validate_templates.py` passed clean on the first run after all edits, and again after the fix-loop's `changes.json` addendum — no further rework.
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
