@@ -50,11 +50,12 @@ For each story ask:
 - Are all referenced API endpoints defined in `docs/api/`? (technical question → tag TL)
 - Are there implementation dependencies, design decisions, or architecture questions not answered in the story? (technical question → tag TL)
 - Are there acceptance criteria that conflict with or are missing from the roadmap? (scope question → tag PO)
+- **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
 
-If a story has **no open points**, mark it as clear — do not post a comment.
+If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
 
 ### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Story_Standard.md` §9 comment format:
+For each story with open points, post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format:
 - Group technical questions under a `**TL**` heading
 - Group scope/AC questions under a `**PO**` heading
 - Set `**Thread Status:** Open`
