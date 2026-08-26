@@ -94,21 +94,6 @@ Full template (title/label conventions, body skeleton, bug-repro block, AC-writi
 - `- [ ]` = Not yet signed off
 - `- [x]` = Signed off by **PO** after QA confirms
 
-**PO:** After receiving QA confirmation, tick each AC checkbox `[x]` in the issue body. Always use `--body-file` (see §15).
+**PO:** After receiving QA confirmation, tick each AC checkbox `[x]` in the issue body. Always use `--body-file` (see `Agent_Common_Bootstrap.md §6`).
 
 **Authoritative verification signal:** The closing signal for AC ticking is QA's final testing-pass comment on the story issue. A Developer or TL comment alone is not sufficient.
-
----
-
-## 15. Shell Command Rules — Permissions and Tool Choice
-
-**Always use Bash (not PowerShell) for all `gh` CLI calls.** Never prepend `cd /path` to a command; the working directory is already set.
-
-For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
-
-```bash
-gh issue edit <number> --repo mycom08/mt-agent-devkit --body-file /tmp/body.md
-gh issue comment <number> --repo mycom08/mt-agent-devkit --body-file /tmp/comment.md
-```
-
-Delete the temp file immediately after the `gh` call completes.

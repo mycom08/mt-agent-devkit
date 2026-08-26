@@ -77,18 +77,3 @@ Validation results and findings per AC.
 - `- [x]` = Signed off by **PO** after QA confirms
 
 **QA:** Validate each AC criterion and report pass/fail in a Comment. Do **not** tick checkboxes. Notify PO when all AC have passed.
-
----
-
-## 15. Shell Command Rules — Permissions and Tool Choice
-
-**Always use Bash (not PowerShell) for all `gh` CLI calls.** Never prepend `cd /path` to a command; the working directory is already set.
-
-For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
-
-```bash
-gh issue edit <number> --repo mycom08/mt-agent-devkit --body-file /tmp/body.md
-gh issue comment <number> --repo mycom08/mt-agent-devkit --body-file /tmp/comment.md
-```
-
-Delete the temp file immediately after the `gh` call completes.

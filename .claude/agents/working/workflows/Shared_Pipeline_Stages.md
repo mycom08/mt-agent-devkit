@@ -294,7 +294,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
-   - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
+   - `.claude/agents/working/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
    - `.claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md`
    - `.claude/agents/working/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:

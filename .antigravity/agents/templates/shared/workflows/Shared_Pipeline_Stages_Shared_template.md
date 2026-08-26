@@ -355,7 +355,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 1. **Define** Product Owner agent using `define_subagent`, then **Invoke** using `invoke_subagent` (**model: Gemini Flash Lite**); save its `conversationId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
-   - `.antigravity/agents/rules/Story_Standard_PO.md` (§14 AC rules, §15 PowerShell safety)
+   - `.antigravity/agents/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
    - `.antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md`
    - `.antigravity/agents/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:

@@ -72,7 +72,7 @@ After all implementer agents report back, check: **did every agent report all th
 2. **Spawn or resume** TL (**model: opus**) first (reuse `tl_session` if active); save/update `tl_session` in state file
 3. TL answers all technical questions across all stories in a single pass and signals completion
 4. **Then spawn or resume** PO (**model: sonnet**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions
-5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC: PO updates the issue body (`--body-file` per `Story_Standard_PO.md` §15)
+5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC: PO updates the issue body (`--body-file` per `Agent_Common_Bootstrap.md` §6)
 6. Each agent appends answers in the same comment thread — does not open new threads for the same topic
 7. Each agent signals completion to the orchestrator (max 5-bullet summary)
 8. Orchestrator updates state file (`Stage: 3`) → proceeds to Stage 3

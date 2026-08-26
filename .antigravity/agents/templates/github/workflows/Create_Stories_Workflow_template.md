@@ -2,4 +2,4 @@
 
 <!-- GitHub mode: stories are created as GitHub Issues via gh CLI. -->
 <!-- Next sprint resolution: use gh issue list with jq numeric sort (do NOT use gh label list). -->
-<!-- Story creation: use --body-file pattern per Story_Standard_PO.md §15. -->
+<!-- Story creation: use --body-file pattern per Agent_Common_Bootstrap.md §6. -->

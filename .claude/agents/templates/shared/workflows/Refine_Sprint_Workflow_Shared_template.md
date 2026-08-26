@@ -82,7 +82,7 @@ After all implementer agents report back, check: **did every agent report all th
 3. TL answers all technical questions across all stories in a single pass and signals completion
 4. **Then spawn or resume** PO (**model: sonnet**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions
 5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC:
-   - **GitHub mode:** PO updates the issue body (`--body-file` per `Story_Standard_PO.md` §15)
+   - **GitHub mode:** PO updates the issue body (`--body-file` per `Agent_Common_Bootstrap.md` §6)
    - **Strict mode:** PO edits the AC section in the story MD file directly, then appends a comment entry to `## Comments` noting the change
 6. Each agent appends answers in the same comment thread / `## Comments` section — does not open new threads for the same topic
 7. Each agent signals completion to the orchestrator (max 5-bullet summary)
