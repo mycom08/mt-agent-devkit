@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000144] Ignored `.antigravity/` runtime files (working records, token-trace logs) the same way `.claude/` ones already were, and untracked the 12 files that had been committed by mistake.
 - [ST-000136] Fixed `Developer_Rules_Bootstrap_template.md`, `UI_UX_Designer_Rules_template.md`, and `Technical_Lead_Rules_Bootstrap_template.md` to agree with the rest of the corpus that PO, not QA, ticks Acceptance Criteria at story closure, across the Claude and Antigravity template surfaces.
 
 ### Changes

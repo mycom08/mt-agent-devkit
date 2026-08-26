@@ -39,6 +39,8 @@ docker/sandbox/.env
 # Agent working files — not tracked (session state, working records)
 .claude/agents/working/working-record/
 .claude/agents/working/tmp/
+.antigravity/agents/working/working-record/
+.antigravity/agents/working/tmp/
 
 # Audit workflow reports — runtime output, never committed
 .claude/agents/internal/
@@ -48,6 +50,7 @@ docker/sandbox/.env
 # `tokentrace/` directory (no hyphen, no suffix) holds token_cost.sh + README
 # and IS committed. The _sprint suffix keeps the two apart.
 .claude/agents/working/token-trace_sprint/
+.antigravity/agents/working/token-trace_sprint/
 
 # Python
 __pycache__/
