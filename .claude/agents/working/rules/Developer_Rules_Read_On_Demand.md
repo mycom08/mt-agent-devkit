@@ -81,11 +81,12 @@ For each story ask:
 - Is every AC criterion specific, testable, and unambiguous? (scope/AC question → tag PO)
 - Are there implementation dependencies, design decisions, or workflow questions not answered in the story? (technical question → tag TL)
 - Are there acceptance criteria that conflict with or are missing from context? (scope question → tag PO)
+- **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
 
-If a story has **no open points**, mark it as clear — do not post a comment.
+If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
 
 ### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Story_Standard.md` §9 comment format. Set `**Thread Status:** Open`. One comment per story.
+For each story with open points, post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format. Set `**Thread Status:** Open`. One comment per story.
 
 ### Step 4 — Review Answers and Confirm
 After the orchestrator notifies you that TL and PO have answered:

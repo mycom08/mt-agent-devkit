@@ -21,6 +21,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000138] Fixed the Developer role's condensed "Refine Sprint Task" steps (working rules and both Claude/Antigravity instruction templates) to match `Refine_Sprint_Workflow.md`'s authoritative Stage 1 steps: added the step-positioning check, required an explicit cleared-note comment instead of silence on a clear story, and corrected a comment-format citation to `Story_Standard_Dev.md`.
 - [ST-000144] Ignored `.antigravity/` runtime files (working records, token-trace logs) the same way `.claude/` ones already were, and untracked the 12 files that had been committed by mistake.
 - [ST-000136] Fixed `Developer_Rules_Bootstrap_template.md`, `UI_UX_Designer_Rules_template.md`, and `Technical_Lead_Rules_Bootstrap_template.md` to agree with the rest of the corpus that PO, not QA, ticks Acceptance Criteria at story closure, across the Claude and Antigravity template surfaces.
 
