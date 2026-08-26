@@ -15,34 +15,34 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+*(not submitted)*
 
 ### Process Suggestions
-*(pending)*
+*(not submitted)*
 
 ### What Worked Well
-*(pending)*
+*(not submitted)*
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+*(not submitted)*
 
 ### Process Suggestions
-*(pending)*
+*(not submitted)*
 
 ### What Worked Well
-*(pending)*
+*(not submitted)*
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+*(not submitted)*
 
 ### Process Suggestions
-*(pending)*
+*(not submitted)*
 
 ### What Worked Well
-*(pending)*
+*(not submitted)*
 
 ## Orchestrator
 ### Observations
-*(pending)*
+*(none)*
