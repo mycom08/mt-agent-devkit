@@ -96,7 +96,7 @@ For each `.claude/agents/memory/*_Memory.md` file (glob, all roles):
 3. Leave `## Troubleshooting Facts` entries as-is unless the same test clearly applies — they are already tied to a specific fix and less prone to the drift this step targets.
 4. Report a one-line summary per file to the user (kept / pruned counts). No edit needed if nothing qualifies for removal.
 
-This step does not enforce the ≤ 10,000-character cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
+This step does not enforce the configured memory-file cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`), checked against the `**Memory file cap:**` value in `CLAUDE.md` (default 10,000). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
 
 ---
 

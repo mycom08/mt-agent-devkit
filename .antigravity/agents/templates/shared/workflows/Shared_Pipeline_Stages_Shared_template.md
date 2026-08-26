@@ -404,8 +404,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 - `[skipped-step]` Retro file skeleton created at Stage 1 before spawning implementer?
 - `[skipped-step]` Orchestrator observations written to `## Orchestrator` section?
 - `[skipped-step]` Retro file verified — no remaining `*(pending)*` placeholders?
-- `[skipped-step]` Ran `wc -c .antigravity/agents/working-record/*_Working_Record.md`; append one bullet per file over 4,000 chars, naming the file and its size.
-- `[skipped-step]` Ran `wc -c .antigravity/agents/memory/*_Memory.md`; append one bullet per file over 10,000 chars, naming the file and its size.
+- `[skipped-step]` Ran `wc -c .antigravity/agents/working-record/*_Working_Record.md`; append one bullet per file over the `**Working record cap:**` value in `CLAUDE.md` (default 4,000 if absent), naming the file and its size.
+- `[skipped-step]` Ran `wc -c .antigravity/agents/memory/*_Memory.md`; append one bullet per file over the `**Memory file cap:**` value in `CLAUDE.md` (default 10,000 if absent), naming the file and its size.
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 After completing Stage 5 → **for `continue sprint`: proceed to next story (Stage 0). For `start story`: proceed to Retro Review.**

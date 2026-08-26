@@ -35,7 +35,7 @@ Update your memory file when you encounter a fact worth remembering for future s
 4. **Point, don't mirror.** If the substance lives in a committed project doc or another role's session artifacts, store a one-line pointer plus only your role-specific delta — never a full re-derivation.
    > **Scope: memory writes *and* issue comments.** The same failure is more expensive in a comment, because a comment is re-read by every downstream role on the story. A fact already recorded in your own memory file is cited (`Developer_Memory.md` Fact N), never re-explained in a thread. Enforced by the Commenter gate in `Story_Standard.md §12`.
 
-**Enforced file-level cap:** **≤ 10,000 characters** per memory file, measured with `wc -c` — not a line count. `≤ 200 lines` is retained only as non-enforced structural guidance; it does not track token cost (a fully rule-compliant 60-line file can already run ~7,250 tokens) and is never itself checked.
+**Enforced file-level cap:** the value of **`**Memory file cap:**`** in this project's `CLAUDE.md` (default **10,000** if the field is absent), measured with `wc -c` — not a line count. `≤ 200 lines` is retained only as non-enforced structural guidance; it does not track token cost (a fully rule-compliant 60-line file can already run ~7,250 tokens) and is never itself checked.
 
 **Format:**
 
@@ -133,12 +133,13 @@ Each role's `## Stored Facts` splits across two files:
 
 **Writing a fact:** append the body to the archive under the next number, then the matching index line — both files change together; an entry in one without the other is a defect. Numbers are never reused — retire gaps rather than renumbering.
 
-**Caps:** the live file falls under §1's ≤ 10,000-char cap and should stay far under it by construction (no fact bodies). The archive has no separate cap yet — treat §1's cap as its working ceiling until a retention policy is settled.
+**Caps:** the live file falls under §1's cap (the configured `**Memory file cap:**` value, default 10,000) and should stay far under it by construction (no fact bodies). The archive has no separate cap yet — treat §1's cap as its working ceiling until a retention policy is settled.
 
 ---
 
 ## Version
 
-**Version:** 2.1 — New §8 (Two-Tier Memory, Developer/QA/Technical Lead only), ported from the devkit's own team's already-validated split (`working/rules/Agent_Common_Read_On_Demand.md §8`, PR #139/#162) — ST-000135 (issue #118).
+**Version:** 2.2 — §1's memory-file cap is now project-configurable via a `**Memory file cap:**` field in `CLAUDE.md` (default 10,000, unchanged, if the field is absent), replacing the literal number that a `sync devkit` overwrite would silently re-impose over any local override; §8's cap cross-reference updated to match — issue #128 (ST-000140).
+**Previous:** 2.1 — New §8 (Two-Tier Memory, Developer/QA/Technical Lead only), ported from the devkit's own team's already-validated split (`working/rules/Agent_Common_Read_On_Demand.md §8`, PR #139/#162) — ST-000135 (issue #118).
 **Previous:** 2.0 — Split out of the single `Agent_Common.md` (companion file: `Agent_Common_Bootstrap.md`). Section 4 stays a gap: it is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1` — see this devkit's own team's identical split (`working/rules/Agent_Common_Read_On_Demand.md`, PR #162) for the numbering precedent. Do not renumber to close the gap; a stale reference to that section should resolve to nothing, not silently to a different rule.
 **Previous:** 1.x — single `Agent_Common.md` (see `changes.json` history for that file's prior versions).
