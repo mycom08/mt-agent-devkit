@@ -11,9 +11,9 @@ Before writing a single file on any story, UI/UX Designer **must** read:
 
 | Document | Path |
 |---|---|
-| Story Standard | `.antigravity/agents/rules/Story_Standard.md` |
+| Story Standard (UI/UX Designer) | `.antigravity/agents/rules/Story_Standard_UIUX.md` |
 
-> **Gate:** Do not begin prototype work until `Story_Standard.md` has been read in the current session.
+> **Gate:** Do not begin prototype work until `Story_Standard_UIUX.md` has been read in the current session.
 
 ---
 
@@ -88,7 +88,7 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 - Cannot merge without: TL approval + local checks passing.
 - **Do NOT tick Acceptance Criteria** — AC checkboxes are ticked by **PO at story closure (Stage 4)**, not by UI/UX Designer. Ticking AC yourself is a role violation.
 
-See `Story_Standard.md` §4 for the full workflow and gate conditions.
+See `Story_Standard_UIUX.md` §1 for status workflow and gate conditions.
 
 ---
 
@@ -158,7 +158,7 @@ Tag **TL** in the comment to request review.
 
 ## 7. Document Placement
 
-Place the prototype source under the project's standard feature-doc/source structure — see `Project_Priming.md §Internal Documents` for the current paths. Link the wireframe/design source in the story's **Design Source** field (see `Story_Standard.md §2`) rather than pasting it into the story body.
+Place the prototype source under the project's standard feature-doc/source structure — see `Project_Priming.md §Internal Documents` for the current paths. Link the wireframe/design source in the story's **Design Source** field (see `Story_Standard_UIUX.md §2`) rather than pasting it into the story body.
 
 ---
 
@@ -184,6 +184,7 @@ On any tooling/environment blocker (prototype won't start, mock backend won't ru
 
 ## Version
 
-**Version:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022)
+**Version:** 1.2 — §1 gate table and the §3/§7 `Story_Standard.md` citations repointed to the new role-scoped `Story_Standard_UIUX.md`, matching the Dev/PO/TL/QA view convention (ST-000124). This file is not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
+**Previous:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022)
 **Previous:** 1.0 — initial version
 **Created:** 2026-07-20

@@ -12,9 +12,9 @@ Before writing a single file on any story, UI/UX Designer **must** read:
 
 | Document | Path |
 |---|---|
-| Story Standard | `.claude/agents/working/rules/Story_Standard.md` |
+| Story Standard (UI/UX Designer) | `.claude/agents/working/rules/Story_Standard_UIUX.md` |
 
-> **Gate:** Do not begin prototype work until `Story_Standard.md` has been read in the current session.
+> **Gate:** Do not begin prototype work until `Story_Standard_UIUX.md` has been read in the current session.
 
 ---
 
@@ -160,6 +160,7 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 2.0 — Split into `UI_UX_Designer_Rules_Bootstrap.md` (this file) + `UI_UX_Designer_Rules_Read_On_Demand.md`, matching the Dev/TL/QA/PO/BA bootstrap/on-demand convention. §2's "Mid-implementation consultation" and "Live user instruction conflicts" sub-blocks (task-specific, not needed at every story) moved to the on-demand file as §1/§2; the rest of §2 (reading the story, raising questions, starting implementation) and all other sections stayed, being needed at spawn regardless of task. Added §10 routing table. Section numbers §1, §3–§9 unchanged, so `UI_Prototype_Rules.md`'s existing citation of this file's §4 still resolves correctly.
+**Version:** 2.1 — §1 gate table repointed from `Story_Standard.md` to the new role-scoped `Story_Standard_UIUX.md` (~4.1k chars vs. the full 22.7k-char master), matching the Dev/PO/TL/QA view convention (ST-000124). §3's `Story_Standard.md §4` citation is unchanged — the new view does not carry the Implementer Workflow section, since this file's own §2 already restates that workflow inline.
+**Previous:** 2.0 — Split into `UI_UX_Designer_Rules_Bootstrap.md` (this file) + `UI_UX_Designer_Rules_Read_On_Demand.md`, matching the Dev/TL/QA/PO/BA bootstrap/on-demand convention. §2's "Mid-implementation consultation" and "Live user instruction conflicts" sub-blocks (task-specific, not needed at every story) moved to the on-demand file as §1/§2; the rest of §2 (reading the story, raising questions, starting implementation) and all other sections stayed, being needed at spawn regardless of task. Added §10 routing table. Section numbers §1, §3–§9 unchanged, so `UI_Prototype_Rules.md`'s existing citation of this file's §4 still resolves correctly.
 **Previous:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022; intentionally-diverged mirror note, devkit itself has no UI-bearing repos)
 **Created:** 2026-07-20

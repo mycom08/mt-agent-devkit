@@ -26,6 +26,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000124] Added the missing `Story_Standard_UIUX.md` role view (and its distributable template pair, Claude + Antigravity) so UI/UX Designer reads a lean role-scoped file instead of the full `Story_Standard.md` master on every spawn; repointed `UI_UX_Designer_Rules_Bootstrap.md`, `UI_UX_Designer_Rules_template.md`, and the `Refine_Prototype_Workflow_Shared_template.md` lean-3-role scaffold list accordingly.
 - [ST-000135] Ported the two-tier memory pattern (live index + archive, fetched only on a keyword match) already validated on the devkit's own team into the distributable `templates/` tree for Developer, QA, and Technical Lead roles, across the Claude and Antigravity template surfaces.
 - [ST-000134] Trimmed `Story_Standard_Dev_template.md`, `Story_Standard_TL_template.md`, `Story_Standard_QA_template.md`, and `Story_Standard_PO_template.md` to match the boundary already validated on the devkit's own team, folding relocated scenario-conditional content into each role's existing `*_Rules_Read_On_Demand_template.md` across the Claude and Antigravity template surfaces.
 - [ST-000133] Split `Developer_Rules_template.md`, `Technical_Lead_Rules_template.md`, `QA_Rules_template.md`, and `Product_Owner_Rules_template.md` into bootstrap/on-demand tier pairs across the Claude and Antigravity template surfaces, mirroring the boundary already validated on the devkit's own team.
