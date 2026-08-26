@@ -35,6 +35,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 **Java GroupId:** <the shared groupId for every Java repo in this build, e.g. `com.example`, or empty if not yet asked>
 **Java Build Tool:** <maven | gradle, shared by every Java repo in this build, or empty if not yet asked>
 **Docker Preference:** <docker | own-setup | none, shared by every repo in this build, or empty if not yet asked>
+**Project Board Preference:** <yes | no, monolith only — empty if not yet asked; not used for multi-repo>
 **Sessions:**
 - tl_session: <agentId or empty>
 - po_session: <agentId or empty>
@@ -57,7 +58,7 @@ The orchestrator maintains `.claude/agents/tmp/build_software_state.md` to suppo
 - **Stage 1 — resumed:** Re-run Stage 1 from scratch. The `analyze` workflow manages its own state file (`analyst_workflow_state.md`) and will resume internally if that file exists. After Stage 1 completes, re-confirm with user before Stage 2.
 - **Stage 2 — resumed:** Check if `/result/build/repo_structure.md` already exists. If it does, skip Stage 2 execution and present the existing file to the user for re-confirmation before Stage 3. If it does not exist, run Stage 2 normally.
 - **Stage 3 — resumed:** Check if per-repo split files already exist under `/result/build/<repo-name>/`. If all expected repo folders exist (count from state file `Repo Count`), skip Stage 3. If any are missing, re-run Stage 3 for missing repos only.
-- **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL. Also check `Java Skeleton References`, `Java GroupId`, and `Java Build Tool`: if any Java-tech-stack repo in `repo_structure.md` has no `Java Skeleton References` entry yet, or `Java GroupId`/`Java Build Tool` is still empty, run Entry step 4 (Java Repo Consultation) before continuing, even if some repos are already scaffolded. Also check `Docker Preference`: if it's still empty, run Entry step 5 (Docker Consultation) before continuing. **Path B interrupted-wave case:** if a repo is **not yet** in `Scaffolded Repos` but its folder is `git init`-initialized **and** has a `.claude/agents/docs/build_state.md` (the same filesystem-fallback check above, extended to this case) — treat that repo's steps a–g as already done; do not re-run them. This is the state a wave can be left in if the pipeline crashes after some/all repos finish g but before that wave's step h (CI Bootstrap batch) / step i (wave append) complete. Resume the wave at step h: re-run the CI Bootstrap batch check for that wave's still-qualifying repos — safe even for a repo whose CI Bootstrap agent already completed before the crash, since step h's own guard (`full` **and** no existing `ci.yml`) skips an already-bootstrapped repo rather than double-running it. Then proceed to step i's wave append.
+- **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.claude/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL. Also check `Java Skeleton References`, `Java GroupId`, and `Java Build Tool`: if any Java-tech-stack repo in `repo_structure.md` has no `Java Skeleton References` entry yet, or `Java GroupId`/`Java Build Tool` is still empty, run Entry step 4 (Java Repo Consultation) before continuing, even if some repos are already scaffolded. Also check `Docker Preference`: if it's still empty, run Entry step 5 (Docker Consultation) before continuing. Also check `Project Board Preference`: if repo count is 1 (Path A) and it's still empty, run Entry step 6 (GitHub Project Consultation) before continuing. **Path B interrupted-wave case:** if a repo is **not yet** in `Scaffolded Repos` but its folder is `git init`-initialized **and** has a `.claude/agents/docs/build_state.md` (the same filesystem-fallback check above, extended to this case) — treat that repo's steps a–g as already done; do not re-run them. This is the state a wave can be left in if the pipeline crashes after some/all repos finish g but before that wave's step h (CI Bootstrap batch) / step i (wave append) complete. Resume the wave at step h: re-run the CI Bootstrap batch check for that wave's still-qualifying repos — safe even for a repo whose CI Bootstrap agent already completed before the crash, since step h's own guard (`full` **and** no existing `ci.yml`) skips an already-bootstrapped repo rather than double-running it. Then proceed to step i's wave append.
 - **Stage 5 — resumed:** For each repo, check `.claude/agents/docs/analysis/` against the **full expected file list** — `summary.md`, `architecture.md`, `testing_plan.md`, `business_requirements.md`, `diagrams/` (non-empty), `implementation_roadmap_<repo-name>.md`, `architecture_<repo-name>.md`, plus `ui_design.md` **if and only if** `/result/analyst/ui_design.md` exists (conditional — a repo from a build with no detected UI layer never gets this file, so its absence there doesn't mean incomplete). This check only gates Doc Copy steps 1–3 (it covers exactly what those steps write): if any applicable file is missing, or the folder is non-empty-but-incomplete (e.g. an interrupted copy that only got partway through step 2/3), re-run steps 1–3 for that repo, which safely re-copies/overwrites any files already there. **Step 4 (roadmap drain) is unconditional on resume — always re-run it for every repo, regardless of whether steps 1–3 were skipped or re-run.** It never gates on file presence: it is idempotent per-story via its own marker-exact-match check (step 4b), so re-running it against a repo that was already fully drained costs one no-op pass and creates nothing new, while skipping it on a repo whose drain never ran would lose that repo's stories permanently. Step 5 (commit/push) has no equivalent idempotency guard — see the "Resume note" under Pipeline Rules below for how to handle it on resume.
 
 ---
@@ -331,6 +332,14 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 5. **Docker Consultation (batch, up front — before any repo folder or agent work begins).** If `Docker Preference` in the state file is already populated, skip this step (resume). Otherwise, run the Docker Consultation flow defined in `.claude/agents/working/skeletons/docker/Docker_Conventions.md` (the orchestrator asks directly, same rationale as the Java Repo Consultation above — Stage 4 stays orchestrator-direct for its consultation gates): ask the user once whether to generate Docker artifacts, detect `docker --version` if the answer is "yes"/"default", and offer a best-effort install if it's missing. Record the resolved answer in the state file's `Docker Preference` field (`docker`, `own-setup`, or `none`) before proceeding — this is what lets Path A/B's Java Skeleton Generation step (and any future non-Java Docker generation) know whether to write Docker artifacts at all, without re-asking per repo.
 
+6. **GitHub Project Consultation (Path A only, up front).** If routing (Entry step 3) determined Path B, skip this step entirely and record nothing — Path B keeps creating a GitHub Project unconditionally, unchanged (see Path B steps 4–5). If `Project Board Preference` in the state file is already populated, skip this step (resume). Otherwise, ask the user once:
+
+   ```
+   Do you want a GitHub Project board created for this repo? (yes/no, default: no — the devkit's own sprint pipeline drives entirely off Issues/PRs and sprint-N labels; a Project board is a kanban-view convenience with nothing downstream reading it for a single repo).
+   ```
+
+   Record `yes` or `no` in the state file's `Project Board Preference` field — a blank reply or a literal "default" reply records `no`.
+
 ### Path A — Monolith
 
 1. **Local folder:** If the user provided a path in Stage 3 (or state file), use it. If no path is available, ask the user: **"Where should I create the project folder? Provide an absolute path."** Wait for the answer before continuing.
@@ -351,9 +360,9 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 7. **CI Bootstrap (conditional — see "CI Bootstrap" below for full rules):** if this repo's `repo_structure.md` row is classified `full` **and** the folder has no `.github/workflows/ci.yml` yet, spawn one general-purpose agent to generate a baseline CI workflow. Runs after step 6 — a Java repo already got its `ci.yml` from Java skeleton generation and is therefore skipped by this step's own guard. Single-repo degenerate case of Path B's wave-batched version (there's only ever one repo here, so no batching question applies).
 
-8. Run `gh project create` to create a GitHub Project named after the product (from the user's idea). Store the returned project URL.
+8. **Conditional on `Project Board Preference`.** If `yes`: run `gh project create` to create a GitHub Project named after the product (from the user's idea) and store the returned project URL as `<project-url-or-na>`. If `no`: skip `gh project create` entirely and set `<project-url-or-na>` to the literal string `N/A — not created for this build`.
 
-9. Link the repo to the project: `gh project link <project-number> --owner <owner> --repo <owner>/<repo-name>` (**not** `gh project item-add` — that subcommand only accepts Issue/PR URLs and returns "resource not found" for a bare repo URL; `gh project link` is the correct command for attaching a repository to a Project).
+9. **Skipped whenever step 8 was skipped** (nothing to link). Otherwise, link the repo to the project: `gh project link <project-number> --owner <owner> --repo <owner>/<repo-name>` (**not** `gh project item-add` — that subcommand only accepts Issue/PR URLs and returns "resource not found" for a bare repo URL; `gh project link` is the correct command for attaching a repository to a Project).
 
 10. Write `.claude/agents/docs/build_state.md` inside the repo:
 
@@ -361,12 +370,12 @@ After both agents complete, the orchestrator copies the following files from `/r
    # Build State
    **Product:** <product name from user's idea>
    **Repo Role:** monolith
-   **GitHub Project URL:** <project-url>
+   **GitHub Project URL:** <project-url-or-na>
    **Phase:** scaffold
    **Analysis Docs:** .claude/agents/docs/analysis/
    ```
 
-11. Update state file: `Stage: 4`, `GitHub Project URL: <url>`, `Scaffolded Repos: <repo-name>`, `Updated: <now>`.
+11. Update state file: `Stage: 4`, `GitHub Project URL: <project-url-or-na>`, `Scaffolded Repos: <repo-name>`, `Updated: <now>`.
 
 12. Proceed to Stage 5.
 
@@ -725,6 +734,8 @@ GitHub Project: <github-project-url>
 Next step:
 ```
 
+> Substitute `<github-project-url>` with whatever value Stage 4 stored — the real project URL, or (Path A only, when `Project Board Preference` was `no`) the literal string `N/A — not created for this build`. Print it exactly as stored; never assume a URL is always present.
+
 **For monolith:**
 ```
 - Open a Claude Code session in <repo-path> and run: plan next sprint
@@ -764,6 +775,7 @@ Next step:
 - **Project-orchestrator root gets its own `Project_Priming.md`** — Path B step 8 writes `.claude/agents/context/Project_Priming.md` at the orchestrator root (orchestrator-direct, from `templates/context/Project_Orchestrator_Priming_template.md`), covering what the product does, how it's split into repos, and that this folder isn't a Scrum team. Distinct from the full per-repo `Project_Priming.md` template — this one is scoped to what an orchestrator-folder session needs.
 - **Project-orchestrator root supports `sync devkit` too** — step 7 stamps `CLAUDE.md` with `Devkit source`/`Devkit version`, step 9 also writes `Sync_Devkit_Project_Workflow.md`, and step 10 writes `devkit_version.txt` + the version-check scripts + the `settings.json` hook — the same mechanical pieces `scaffold_mechanical.sh` gives every sub-repo, just written directly since this folder never runs that script. Scoped to only the 3 files this folder owns (`CLAUDE.md`, `Project_Priming.md` [skipped], `Build_Software_Project_Workflow.md`) — see `Sync_Devkit_Project_Workflow_template.md`, not the full per-repo `Sync_Devkit_Workflow.md`.
 - **Docker Consultation happens once, up front, for the whole build** (Stage 4 Entry step 5) — same rationale as the Java Repo Consultation: orchestrator-direct, not a spawned agent, asked before any repo folder or agent work begins so later steps (including Path B's parallel wave-spawn) never stop mid-flow for this. The resolved `Docker Preference` gates every Docker-specific artifact across every repo in the build, Java or not.
+- **GitHub Project Consultation happens once, up front, for Path A (monolith) builds only** (Stage 4 Entry step 6) — Path B always creates a Project board by default, no consultation needed. The resolved `Project Board Preference` gates whether Path A steps 8–9 run `gh project create`/`gh project link` at all; when the answer is `no`, the literal string `N/A — not created for this build` is used everywhere a project URL would otherwise be written (`build_state.md`, the state file, the Handoff Message).
 - **Stop on blocker** — if any agent reports a blocking issue, stop and report to the user before continuing
 - **Completion reports** — each spawned agent returns its results to the orchestrator; orchestrator relays a brief status to the user after each stage
 - **State file deleted on Stage 5 success** — if Stage 5 fails mid-copy, the state file remains for resume; only delete after all copies complete

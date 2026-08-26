@@ -27,6 +27,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000139] Made `gh project create` optional for single-repo (monolith) Build Software builds via a new up-front GitHub Project Consultation, gated by a `Project Board Preference` state-file field; multi-repo (Path B) builds still create a Project board unconditionally.
 - [ST-000137] Centralized "Shell Command Rules — Permissions and Tool Choice" into `Agent_Common_Bootstrap.md` §6 (and its template pair, Claude + Antigravity), removing the near-identical §15 restatement from all five `Story_Standard_<role>` role views (working tree and both template surfaces) and repointing every external citation.
 - [ST-000124] Added the missing `Story_Standard_UIUX.md` role view (and its distributable template pair, Claude + Antigravity) so UI/UX Designer reads a lean role-scoped file instead of the full `Story_Standard.md` master on every spawn; repointed `UI_UX_Designer_Rules_Bootstrap.md`, `UI_UX_Designer_Rules_template.md`, and the `Refine_Prototype_Workflow_Shared_template.md` lean-3-role scaffold list accordingly.
 - [ST-000135] Ported the two-tier memory pattern (live index + archive, fetched only on a keyword match) already validated on the devkit's own team into the distributable `templates/` tree for Developer, QA, and Technical Lead roles, across the Claude and Antigravity template surfaces.
