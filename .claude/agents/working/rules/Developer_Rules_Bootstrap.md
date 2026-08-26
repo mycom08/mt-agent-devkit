@@ -84,10 +84,18 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 ```json
 "X.Y.Z": {
   "new": ["<relative-path-to-new-file>"],
-  "modified": ["<relative-path-to-modified-file>"]
+  "modified": ["<relative-path-to-modified-file>"],
+  "descriptions": {
+    "<relative-path>": "[ST-NNNNNN] <8-15 word plain-language delta>"
+  }
 }
 ```
 Older entries in the file use different formats — ignore them. Always use `new`/`modified` for any entry you write.
+
+**`descriptions` field — one line per file, shown verbatim in `sync devkit`'s update plan:** `[ST-NNNNNN] <short delta>`, one clause per story, joined with `; `. State only what changed, not why — the rationale already lives in `CHANGELOG.md` and the commit. No `"New/Fix (ST-XXXXXX, no separate version bump):"` wrapper prose, no issue backstory, no `"same X mirrored under Y"` notes.
+
+If your story touches a file another still-unreleased-version story already described, **append your own `[ST-NNNNNN] ...` clause — never restate or wrap the earlier clauses in new prose.** Example, after two stories touch the same file:
+`[ST-000132] Split out of Agent_Common as the bootstrap tier. [ST-000140] §1 Working Record cap now configurable via CLAUDE.md.`
 
 **Rules files:** `Title_Case_With_Underscores` — `Developer_Rules_template.md`, `Agent_Common_template.md`.
 
