@@ -148,6 +148,7 @@ ALLOWLIST_REMOVED_PATHS = {
     '.claude/agents/templates/shared/CLAUDE_Shared_template.md',
     '.claude/agents/templates/github/CLAUDE_template.md',
     '.claude/agents/templates/strict/CLAUDE_template.md',
+    '.claude/agents/templates/strict/CLAUDE_template.md',
     ".claude/agents/templates/CLAUDE_TEMPLATE.md",
     ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md",
     ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md",
@@ -174,9 +175,6 @@ ALLOWLIST_REMOVED_PATHS = {
 # Their absence from changes.json is a historical gap, not an error.
 # Backlog item: add a v0.0.0 baseline entry to changes.json covering these files.
 ALLOWLIST_UNTRACKED_TEMPLATES = {
-    '.claude/agents/templates/Project_Orchestrator_template.md',
-    '.claude/agents/templates/shared/Orchestrator_Shared_template.md',
-    '.claude/agents/templates/github/Orchestrator_template.md',
     '.claude/agents/templates/strict/Orchestrator_template.md',
     ".claude/agents/templates/context/Document_Index_template.md",
     ".claude/agents/templates/context/Project_Priming_template.md",
