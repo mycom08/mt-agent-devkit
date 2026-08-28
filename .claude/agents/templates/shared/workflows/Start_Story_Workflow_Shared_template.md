@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Start Story Workflow
 
-Triggered by: `"start story ST-XXXXXX"` or `"/story ST-XXXXXX"` in {{ORCHESTRATOR_FILE}}
+Triggered by: `"start story ST-XXXXXX"` or `"/story ST-XXXXXX"` in {{ROOT_FILE}}
 
 The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for the specified story only. **Pipeline stops after Stage 4 — PO does NOT promote the next story.**
 

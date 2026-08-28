@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Refine Sprint Workflow
 
-Triggered by: `"refine sprint"` or `"/refine-sprint"` in {{ORCHESTRATOR_FILE}}
+Triggered by: `"refine sprint"` or `"/refine-sprint"` in {{ROOT_FILE}}
 
 **Sprint identification:**
 - **Feature sprint:** Read `Product_Backlog.md` to find the sprint marked `🔲 Planned`. Use that sprint's `sprint-N` value as the target.

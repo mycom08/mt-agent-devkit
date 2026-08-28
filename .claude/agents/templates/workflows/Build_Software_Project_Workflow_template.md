@@ -1,6 +1,6 @@
 # Build Software Project Workflow
 
-Triggered by: `"build software"` in the project orchestrator `{{ORCHESTRATOR_FILE}}`
+Triggered by: `"build software"` in the project orchestrator `{{ROOT_FILE}}`
 
 This is **Phase 2** of the `build software` pipeline. It assumes:
 - Phase 1 (Stages 1–3 of `Build_Software_Workflow.md`) is complete
@@ -45,7 +45,7 @@ Read the `**Repo Role:**` field in `build_state.md`:
 
 ## Monolith Path
 
-The project folder is the single repo. The standard `{{ORCHESTRATOR_FILE}}` (already injected by Stage 4) handles all sprint workflows.
+The project folder is the single repo. The standard `{{ROOT_FILE}}` (already injected by Stage 4) handles all sprint workflows.
 
 1. Print to the user:
 
@@ -59,7 +59,7 @@ The project folder is the single repo. The standard `{{ORCHESTRATOR_FILE}}` (alr
 
      2. Then run: continue sprint
 
-   All scrum team commands are available in this folder's {{ORCHESTRATOR_FILE}}.
+   All scrum team commands are available in this folder's {{ROOT_FILE}}.
    ```
 
 2. Stop. No further orchestration is needed.
@@ -80,7 +80,7 @@ For each repo, determine:
 - **Repo path** — absolute path on disk
 - **Repo role** — the `name` value from `repo_structure.md` (e.g., `api-service`, `web-app`)
 - **Analysis docs path** — `<repo-path>/{{AGENT_DIR_PREFIX}}/agents/docs/analysis/` (where Stage 4 placed the split docs)
-- **{{ORCHESTRATOR_FILE}} path** — `<repo-path>/{{ORCHESTRATOR_FILE}}`
+- **{{ROOT_FILE}} path** — `<repo-path>/{{ROOT_FILE}}`
 - **Sprint workflow path** — `<repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Sprint_Workflow.md` (or equivalent for the installed mode)
 
 ### Step 5 — Spawn repo orchestrators (parallel)
@@ -99,12 +99,12 @@ You are a repo orchestrator for the project build pipeline. Your job is to run `
 - **Repo path (absolute):** <absolute-repo-path>
 - **Repo role:** <repo-role>
 - **Analysis docs:** <absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/docs/analysis/
-- **{{ORCHESTRATOR_FILE}}:** <absolute-repo-path>/{{ORCHESTRATOR_FILE}}
+- **{{ROOT_FILE}}:** <absolute-repo-path>/{{ROOT_FILE}}
 - **Sprint workflow:** <absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Sprint_Workflow.md
 
 ## What to do
 
-1. Read `<absolute-repo-path>/{{ORCHESTRATOR_FILE}}` to understand the repo's mode (github or strict) and available triggers.
+1. Read `<absolute-repo-path>/{{ROOT_FILE}}` to understand the repo's mode (github or strict) and available triggers.
 2. Read `<absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/docs/analysis/` — this folder contains the split analysis documents for this repo (implementation roadmap, architecture, etc.).
 3. Run `create stories` using the analysis docs as input:
    - Read `<absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Create_Stories_Workflow.md` for instructions.

@@ -40,7 +40,7 @@ CHANGES_JSON = REPO_ROOT / "changes.json"
 # Add new names here when introducing a new {{PLACEHOLDER}} in a template.
 KNOWN_DOUBLE_BRACE_TOKENS = {
     'AGENT_DIR_PREFIX',
-    'ORCHESTRATOR_FILE',
+    'ROOT_FILE',
     'AGENT_CLI_NAME',
     "ANTIPATTERNS",
     "AUTOMATION_SUITE",

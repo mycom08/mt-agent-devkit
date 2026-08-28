@@ -19,6 +19,13 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [Unreleased]
 
+## 0.1.46 (2026-08-28)
+
+### Changes
+
+- [Enhancement] Renamed `Orchestrator_Guide.md` to `orchestrator_instructions.md` so the orchestrator reference follows the same naming convention as the six agent instruction files, renamed the three source templates to `Orchestrator_Instructions*_template.md`, and added a one-time deletion of the leftover `Orchestrator_Guide.md` to `sync devkit` / `update project`.
+- [Enhancement] Renamed the repo-root template family (`Orchestrator*_template.md` -> `Repo_Root*_template.md`, `Project_Orchestrator*_template.md` -> `Project_Root*_template.md`) since "Orchestrator" named a role, not the repo-root file, and collided with `orchestrator_instructions.md`; renamed the `{{ORCHESTRATOR_FILE}}` placeholder to `{{ROOT_FILE}}` to match.
+
 ## 0.1.45 (2026-08-28)
 
 ### Bug Fixes

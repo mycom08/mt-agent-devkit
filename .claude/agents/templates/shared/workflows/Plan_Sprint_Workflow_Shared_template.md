@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Plan Next Sprint Workflow
 
-Triggered by: `"plan next sprint [feature-name]"` or `"/plan-sprint [feature-name]"` in {{ORCHESTRATOR_FILE}}
+Triggered by: `"plan next sprint [feature-name]"` or `"/plan-sprint [feature-name]"` in {{ROOT_FILE}}
 
 **Sprint Capacity:** 60 points (update this value to change capacity)
 

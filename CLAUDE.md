@@ -2,7 +2,7 @@
 
 ## Orchestrator Reference
 
-The orchestrator (this top-level session) must read `.claude/agents/working/Orchestrator_Guide.md` before executing any workflow — it carries the Orchestrator Startup sequence, all workflow trigger tables (devkit + sprint), session management, working-record rules, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
+The orchestrator (this top-level session) must read `.claude/agents/working/instructions/orchestrator_instructions.md` before executing any workflow — it carries the Orchestrator Startup sequence, all workflow trigger tables (devkit + sprint), session management, working-record rules, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
 
 ---
 

@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Sprint Workflow
 
-Triggered by: `"continue sprint"` or `"/sprint"` in {{ORCHESTRATOR_FILE}}
+Triggered by: `"continue sprint"` or `"/sprint"` in {{ROOT_FILE}}
 
 The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable. Pipeline completes when no more `status:ready` stories exist.
 

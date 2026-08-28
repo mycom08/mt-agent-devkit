@@ -109,7 +109,7 @@ Adding a role to the roster is a corpus-wide ripple, not a two-file change. Beyo
 - `Story_Standard_template.md` (+ PO variant) — `**Assigned:**` valid-values list
 - `Product_Owner_Rules_template.md` — roadmap `**Assigned:**` rule
 - `Create_Stories_Workflow_Shared_template.md`, `Sprint_Workflow_Shared_template.md` — implementer-role enumerations
-- `Orchestrator_Shared_template.md` — Agent Roster table
+- `Repo_Root_Shared_template.md` — Agent Roster table
 - Devkit-internal file-count tables/prose in `Init_Project_Workflow.md`, `Build_Software_Workflow.md`, `Update_Project_Workflow.md`, `Sync_Devkit_Workflow*` (both the "Applies to" and separate "Expected files — rules/" enumerations — these are two distinct lists, easy to update only one)
 - `scaffold_mechanical.sh`'s role loops (memory + working-record)
 

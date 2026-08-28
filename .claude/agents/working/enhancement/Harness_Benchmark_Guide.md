@@ -1,6 +1,6 @@
 # Harness Benchmark Guide
 
-> **Devkit-internal only — deliberately not mirrored to `templates/`.** This measures our own harness's spawn cost; it is not a feature target projects receive. Same intentional divergence as the Token-Trace Log (`Orchestrator_Guide.md`).
+> **Devkit-internal only — deliberately not mirrored to `templates/`.** This measures our own harness's spawn cost; it is not a feature target projects receive. Same intentional divergence as the Token-Trace Log (`orchestrator_instructions.md`).
 >
 > **Read by the orchestrator.** A spawned Developer must not read this file — knowing it is being benchmarked changes what it reads. Give the agent only the arm's issue and the trace block.
 
@@ -81,7 +81,7 @@ Measured on 2026-08-21: both baseline-arm agents, in separate runs, reported tha
 2. Snapshot the two untracked directories into the scratchpad:
    `cp -r .claude/agents/working/working-record .claude/agents/working/token-trace_sprint <scratchpad>/bench-snapshot/`
 3. `git checkout -b bench-b/<slug> <baseline>` — spawn Developer on the arm B issue.
-4. **Paste the trace block verbatim** from `Orchestrator_Guide.md § Token-Trace Log`. Without it the agent produces no trace and the run is wasted.
+4. **Paste the trace block verbatim** from `orchestrator_instructions.md § Token-Trace Log`. Without it the agent produces no trace and the run is wasted.
 5. On completion, append the real `subagent_tokens` to the trace file, labelled `session-cumulative` or `per-call` — or `(unlabelled)` if the report does not say. Never write a derived figure as a measurement.
 6. Restore the snapshot from step 2.
 7. `git checkout -b bench-a/<slug> <treatment>` — repeat steps 3–5 for arm A.
@@ -93,7 +93,7 @@ Compare **pre-work read sets first, cost second.** The read set is the thing the
 
 Known traps, all previously hit:
 
-- **`subagent_tokens` is unresolved.** Rounds have reported 70,652 / 77,975 / 77,274 where round 3 made zero tool calls and still came in lower than round 2 — neither per-call nor strictly cumulative. Do not derive from it beyond the labelled subtraction in `Orchestrator_Guide.md`.
+- **`subagent_tokens` is unresolved.** Rounds have reported 70,652 / 77,975 / 77,274 where round 3 made zero tool calls and still came in lower than round 2 — neither per-call nor strictly cumulative. Do not derive from it beyond the labelled subtraction in `orchestrator_instructions.md`.
 - **Step granularity is not comparable across arms.** 15 steps vs 36 steps for the same story means the two agents chunked their own reporting differently. Compare files read, not step counts, and treat self-reported totals as ordinal at best.
 - **The JSONL transcript has written 0 bytes on every run so far** — a reproducible harness limitation. Read sets are self-reported and corroborated only by behavioural tells (which grep patterns appeared, which sections got quoted). Say so in the findings.
 - **Task shape flips the sign.** A tiered harness is cheaper on narrow tasks and dearer on full story spawns — measured at −63% and +15% on the same file. One story shape does not generalise; state which shape you ran.

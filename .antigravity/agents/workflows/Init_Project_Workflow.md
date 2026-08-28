@@ -92,7 +92,7 @@ Scaffold files split into two tiers (see full detail below):
 
 | Template file | Target path in generated project | Tier |
 |---|---|---|
-| `templates/{mode}/Orchestrator_template.md` (shared content from `templates/shared/Orchestrator_Shared_template.md`) | `AGENTS.md` (root) | Adaptive |
+| `templates/{mode}/Repo_Root_template.md` (shared content from `templates/shared/Repo_Root_Shared_template.md`) | `AGENTS.md` (root) | Adaptive |
 | `templates/README_template.md` | `README.md` (root) | Adaptive |
 | `templates/context/Project_Priming_template.md` | `.antigravity/agents/context/Project_Priming.md` | Adaptive |
 | `templates/context/Document_Index_template.md` | `.antigravity/agents/context/Document_Index.md` | Adaptive |
@@ -117,17 +117,17 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 - `Workflow_Guide_template.md`
 - `Build_Software_Project_Workflow_template.md` (not deployed to target projects)
 
-**AGENTS.md generation:** Read `templates/shared/Orchestrator_Shared_template.md` for the full content. The mode-specific file at `templates/{mode}/Orchestrator_template.md` contains only a reference comment — use the shared file's `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block as the actual template content.
+**AGENTS.md generation:** Read `templates/shared/Repo_Root_Shared_template.md` for the full content. The mode-specific file at `templates/{mode}/Repo_Root_template.md` contains only a reference comment — use the shared file's `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block as the actual template content.
 
 > **Strip the `_template` suffix** when writing to the target project. The suffix is devkit-only — generated files use clean names.
 
 ### Files to generate
 
-**Global Substitution Rule:** For every adaptive file generated in this section, always replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`, `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`, and `{{AGENT_CLI_NAME}}` with `Antigravity`.
+**Global Substitution Rule:** For every adaptive file generated in this section, always replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`, `{{ROOT_FILE}}` with `AGENTS.md`, and `{{AGENT_CLI_NAME}}` with `Antigravity`.
 
 #### `AGENTS.md`
 
-**Source:** `templates/{mode}/Orchestrator_template.md` ← must match the Stage 2 source table entry above; run `grep -n "Orchestrator_template" Init_Project_Workflow.md` when updating to catch all occurrences
+**Source:** `templates/{mode}/Repo_Root_template.md` ← must match the Stage 2 source table entry above; run `grep -n "Orchestrator_template" Init_Project_Workflow.md` when updating to catch all occurrences
 
 If `AGENTS.md` exists at `TARGET_PROJECT` root → generate a **AGENTS.md addition** (a block to append, not a full replacement).
 If `AGENTS.md` does not exist → generate a **full AGENTS.md**.

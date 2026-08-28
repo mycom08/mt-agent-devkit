@@ -4,7 +4,7 @@
 **Purpose:** Companion to `Agent_Common_Bootstrap.md`. Nothing here is read automatically — `Agent_Common_Bootstrap.md §5`'s routing table names the one section to fetch when its trigger fires. §8 is devkit-internal only (not mirrored to `templates/`). Where this file and a role-specific rule disagree, the role-specific rule wins.
 
 > **Two things to know before extracting a section from this file.**
-> 1. **There are two intentional gaps.** Numbering runs §1, §2, §3, §5, §6, §8. **§4** is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1`. **§7** is where the *Token-Trace Log* sat before it left the agent rules altogether for `Orchestrator_Guide.md`. Numbers are never reused: leave the gap rather than renumbering, so a stale citation resolves to nothing rather than to a different rule (same convention as `Technical_Lead_Memory.md`'s fact numbering).
+> 1. **There are two intentional gaps.** Numbering runs §1, §2, §3, §5, §6, §8. **§4** is where the pre-split *Working Record* section sat before it was folded into `Agent_Common_Bootstrap.md §1`. **§7** is where the *Token-Trace Log* sat before it left the agent rules altogether for `orchestrator_instructions.md`. Numbers are never reused: leave the gap rather than renumbering, so a stale citation resolves to nothing rather than to a different rule (same convention as `Technical_Lead_Memory.md`'s fact numbering).
 > 2. **§1 contains unnumbered sub-headings** (`## Stored Facts`, `## Troubleshooting Facts`). Bound a section extraction on **numbered** headings only (`grep -nE "^## [0-9]+\."`) — a bare `^## ` treats those sub-headings as the end of §1 and silently returns a truncated section, dropping the format block and §1's closing two-tier note.
 
 ---
@@ -119,7 +119,7 @@ Applies whenever a story's verification requires a runtime secret (API token, PA
 
 ## 7. Token-Trace Log — RETIRED
 
-> **The Token-Trace Log is no longer an agent-tier rule at all.** It sat here as §7, moved to `Agent_Common_Bootstrap.md §6` on 2026-08-21, and on 2026-08-21 left the agent rules entirely: the format now lives only in `Orchestrator_Guide.md`, and the orchestrator injects it verbatim into the spawn prompt of any agent it wants a trace from. An agent never reads a rule to learn the format — it reads the prompt. That removes the circularity the bootstrap move was chasing (a trace must account for the pre-work reads, which happen before any rule could be fetched) without charging any spawn for a convention most spawns never use. §7 stays retired and is never reused; a stale `§7` or `Agent_Common_Bootstrap.md §6` citation must resolve to nothing.
+> **The Token-Trace Log is no longer an agent-tier rule at all.** It sat here as §7, moved to `Agent_Common_Bootstrap.md §6` on 2026-08-21, and on 2026-08-21 left the agent rules entirely: the format now lives only in `orchestrator_instructions.md`, and the orchestrator injects it verbatim into the spawn prompt of any agent it wants a trace from. An agent never reads a rule to learn the format — it reads the prompt. That removes the circularity the bootstrap move was chasing (a trace must account for the pre-work reads, which happen before any rule could be fetched) without charging any spawn for a convention most spawns never use. §7 stays retired and is never reused; a stale `§7` or `Agent_Common_Bootstrap.md §6` citation must resolve to nothing.
 
 ---
 

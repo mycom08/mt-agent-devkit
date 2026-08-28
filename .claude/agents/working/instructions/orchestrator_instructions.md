@@ -1,4 +1,4 @@
-# Orchestrator Guide
+# Orchestrator Instructions
 
 > Read by the orchestrator only — workflow routing, session management, and completion-report format for running the devkit's own AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Project Overview, Agent Roster, PR Approval Rule) lives in `CLAUDE.md`.
 

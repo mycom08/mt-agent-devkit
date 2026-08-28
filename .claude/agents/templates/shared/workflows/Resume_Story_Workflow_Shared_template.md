@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Resume Blocked Story Workflow
 
-Triggered by: `"resume story ST-XXXXXX"` or `"/resume-story ST-XXXXXX"` in {{ORCHESTRATOR_FILE}}
+Triggered by: `"resume story ST-XXXXXX"` or `"/resume-story ST-XXXXXX"` in {{ROOT_FILE}}
 
 Use this when a story has `status:blocked` and the required external information has been provided.
 

@@ -100,13 +100,13 @@ for f in "${SPLIT_WORKFLOWS[@]}"; do
   fi
 done
 
-# 3b. Orchestrator Guide — shared + mode-specific combine, same mechanism as the split
+# 3b. Orchestrator Instructions — shared + mode-specific combine, same mechanism as the split
 #    workflow files above (step 3), but this is a single file living directly under
 #    .antigravity/agents/, not under workflows/. Devkit-merged/protected (see AGENTS.md's
 #    Agent File Integrity table) — carries no project-specific placeholders (only framework variables substituted at the end).
-og_shared="$TPL/shared/Orchestrator_Guide_Shared_template.md"
-og_modefile="$TPL/$MODE/Orchestrator_Guide_template.md"
-og_dst="$AGENTS/Orchestrator_Guide.md"
+og_shared="$TPL/shared/Orchestrator_Instructions_Shared_template.md"
+og_modefile="$TPL/$MODE/Orchestrator_Instructions_template.md"
+og_dst="$AGENTS/orchestrator_instructions.md"
 awk '/<!-- SHARED-START -->/{flag=1;next}/<!-- SHARED-END -->/{flag=0}flag' "$og_shared" > "$og_dst"
 og_mode_body="$(tail -n +2 "$og_modefile" | grep -vE '^<!--.*-->[[:space:]]*$' || true)"
 if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
@@ -277,7 +277,7 @@ fi
 # 11. Substitute framework placeholders in all generated mechanical files
 find "$AGENTS" "$TARGET/.antigravity/skills" -type f \( -name "*.md" -o -name "*.sh" -o -name "*.ps1" \) -exec sed -i \
   -e 's/{{AGENT_DIR_PREFIX}}/.antigravity/g' \
-  -e 's/{{ORCHESTRATOR_FILE}}/AGENTS.md/g' \
+  -e 's/{{ROOT_FILE}}/AGENTS.md/g' \
   -e 's/{{AGENT_CLI_NAME}}/Antigravity/g' {} +
 
 echo "Mechanical scaffold complete: $TARGET"

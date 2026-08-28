@@ -31,7 +31,7 @@ if ($Mode -eq 'strict') {
 function Copy-And-Substitute {
     param ($src, $dst)
     (Get-Content $src -Raw) -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' 
-                             -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' 
+                             -replace '\{\{ROOT_FILE\}\}', 'AGENTS.md' 
                              -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity' | Set-Content $dst -NoNewline
 }
 # 2. Verbatim rules files
@@ -116,7 +116,7 @@ foreach ($role in $roles) {
 # 8. Substitute framework placeholders in all generated mechanical files
 Get-ChildItem -Path $Agents -File -Recurse -Include *.md, *.sh, *.ps1 | ForEach-Object {
     $c = Get-Content $_.FullName -Raw
-    $newContent = $c -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'
+    $newContent = $c -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' -replace '\{\{ROOT_FILE\}\}', 'AGENTS.md' -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'
     if ($newContent -cne $c) {
         Set-Content -Path $_.FullName -Value $newContent -NoNewline -Encoding UTF8
     }

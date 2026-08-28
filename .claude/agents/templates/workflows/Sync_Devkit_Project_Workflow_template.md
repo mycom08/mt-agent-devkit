@@ -2,7 +2,7 @@
 
 > **Note:** This file is for reference only in the devkit repo. The `sync devkit` command runs in a **project-orchestrator root folder** (injected by `build software`'s Stage 4 Path B), not in the devkit itself. This is the orchestrator-scoped counterpart to the regular-repo `Sync_Devkit_Workflow.md` — much smaller, since this folder owns only 3 devkit-templated files instead of a full Scrum-team scaffold.
 
-Triggered by: `"sync devkit"` or `"sync devkit --auto"` in this project-orchestrator folder's `{{ORCHESTRATOR_FILE}}`
+Triggered by: `"sync devkit"` or `"sync devkit --auto"` in this project-orchestrator folder's `{{ROOT_FILE}}`
 
 The `--auto` flag skips the Stage 1 user confirmation. The update plan is still printed but no reply is required before writing begins.
 
@@ -12,7 +12,7 @@ Fetches the latest orchestrator template files from the devkit GitHub repository
 
 ## Prerequisites
 
-Before starting, read from this folder's `{{ORCHESTRATOR_FILE}}`:
+Before starting, read from this folder's `{{ROOT_FILE}}`:
 - `**Devkit source:**` — the raw GitHub base URL (e.g. `https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main`)
 - `**Devkit version:**` — the version currently installed in this folder
 
@@ -22,7 +22,7 @@ If either field is missing or contains a placeholder URL, stop and notify the us
 
 ## Stage 0 — Version Check
 
-1. Read `**Devkit version:**` from `{{ORCHESTRATOR_FILE}}` → `CURRENT_VERSION`
+1. Read `**Devkit version:**` from `{{ROOT_FILE}}` → `CURRENT_VERSION`
 2. Fetch `{DEVKIT_SOURCE_URL}/version.txt` using WebFetch → `LATEST_VERSION`
    - If the fetch fails (network error, 404) → stop and notify the user; do not modify any files
 3. Compare versions:
@@ -39,8 +39,8 @@ From the resolved file set, keep only the files relevant to this folder (ignore 
 
 | File | Relevant `changes.json` path |
 |---|---|
-| `{{ORCHESTRATOR_FILE}}` | `{{AGENT_DIR_PREFIX}}/agents/templates/Project_Orchestrator_template.md` |
-| `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` | `{{AGENT_DIR_PREFIX}}/agents/templates/context/Project_Orchestrator_Priming_template.md` |
+| `{{ROOT_FILE}}` | `{{AGENT_DIR_PREFIX}}/agents/templates/Project_Root_template.md` |
+| `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` | `{{AGENT_DIR_PREFIX}}/agents/templates/context/Project_Root_Priming_template.md` |
 | `{{AGENT_DIR_PREFIX}}/agents/workflows/Build_Software_Project_Workflow.md` | `{{AGENT_DIR_PREFIX}}/agents/templates/workflows/Build_Software_Project_Workflow_template.md` |
 | `{{AGENT_DIR_PREFIX}}/agents/workflows/Sync_Devkit_Project_Workflow.md` (this file) | `{{AGENT_DIR_PREFIX}}/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md` |
 
@@ -52,7 +52,7 @@ Report the update plan to the user before writing anything:
 Update plan: v{CURRENT_VERSION} → v{LATEST_VERSION}
 
 Files to update:
-  - {{ORCHESTRATOR_FILE}} (merge)
+  - {{ROOT_FILE}} (merge)
   - workflows/Build_Software_Project_Workflow.md (overwrite)
 
 Skipped (project-owned):
@@ -84,12 +84,12 @@ If both WebFetch and curl fail for a file, log the failure and skip that file; d
 
 ### Merge strategy by file
 
-#### `{{ORCHESTRATOR_FILE}}` — Merge
+#### `{{ROOT_FILE}}` — Merge
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/Project_Orchestrator_template.md`
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/Project_Root_template.md`
 
 1. Fetch the latest template
-2. Read the existing local `{{ORCHESTRATOR_FILE}}`
+2. Read the existing local `{{ROOT_FILE}}`
 3. **Preserve** — never overwrite:
    - `**Mode:**`
    - `**Devkit source:**`
@@ -139,7 +139,7 @@ Check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
 
 ## Stage 3 — Finalize
 
-1. Update `**Devkit version:**` in `{{ORCHESTRATOR_FILE}}` to `LATEST_VERSION`
+1. Update `**Devkit version:**` in `{{ROOT_FILE}}` to `LATEST_VERSION`
 2. Write `LATEST_VERSION` to `{{AGENT_DIR_PREFIX}}/agents/devkit_version.txt`
 3. Report completion to the user:
 
@@ -159,7 +159,7 @@ Skipped (project-owned):
 
 - **Never write before user confirms** in Stage 1 — unless `--auto` flag was passed
 - **Never overwrite** `context/Project_Priming.md` — 100% project-owned
-- **Only 3 files are ever in scope** — `{{ORCHESTRATOR_FILE}}`, `context/Project_Priming.md` (skip), `workflows/Build_Software_Project_Workflow.md`, plus this workflow file itself. Ignore any `changes.json` entry for a regular-repo-only path (rules/instructions/memory/working-record/wiki) — those never apply to this folder.
+- **Only 3 files are ever in scope** — `{{ROOT_FILE}}`, `context/Project_Priming.md` (skip), `workflows/Build_Software_Project_Workflow.md`, plus this workflow file itself. Ignore any `changes.json` entry for a regular-repo-only path (rules/instructions/memory/working-record/wiki) — those never apply to this folder.
 - **Fail safe on network error** — if any fetch fails, log it and skip that file; never write partial content
 - **WebFetch fallback** — if WebFetch returns truncated or summarized content, retry with `curl -sf`; never write content that appears incomplete
 - **Missing version in changes.json = full scan** — scoped to the 3 files above only, never the regular-repo file set

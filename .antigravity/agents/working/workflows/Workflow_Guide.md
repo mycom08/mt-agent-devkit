@@ -98,6 +98,6 @@ backlog → ready → in-progress → review → testing → done
 | What | Where |
 |---|---|
 | Project overview and architecture | `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` |
-| All workflow trigger mappings | `.antigravity/agents/working/Orchestrator_Guide.md` §Sprint Workflows (Devkit) |
+| All workflow trigger mappings | `.antigravity/agents/working/instructions/orchestrator_instructions.md` §Sprint Workflows (Devkit) |
 | Agent roles and instruction files | `AGENTS.md` §Agent Roster |
 | CI/CD story validation | `.antigravity/agents/working/rules/CICD_Validation_Guide.md` |

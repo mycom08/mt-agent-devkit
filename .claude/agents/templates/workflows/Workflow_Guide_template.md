@@ -99,7 +99,7 @@ backlog → ready → in-progress → review → testing → done
 | What | Where |
 |---|---|
 | Project overview and architecture | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
-| All workflow trigger mappings | `{{AGENT_DIR_PREFIX}}/agents/Orchestrator_Guide.md` §Workflows |
-| Agent roles and instruction files | `{{ORCHESTRATOR_FILE}}` §Agent Roster |
+| All workflow trigger mappings | `{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md` §Workflows |
+| Agent roles and instruction files | `{{ROOT_FILE}}` §Agent Roster |
 | Strict-mode story format and operations | `{{AGENT_DIR_PREFIX}}/agents/rules/Strict_Mode_Story_Guide.md` |
 | CI/CD story validation (github mode only) | `{{AGENT_DIR_PREFIX}}/agents/rules/CICD_Validation_Guide.md` |

@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Create Stories Workflow
 
-Triggered by: `"create stories"` or `"/create-stories"` in {{ORCHESTRATOR_FILE}}
+Triggered by: `"create stories"` or `"/create-stories"` in {{ROOT_FILE}}
 
 The orchestrator acts as PO — read `{{AGENT_DIR_PREFIX}}/agents/product_owner_instructions.md` and `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` before proceeding. **Do not spawn a PO agent.**
 

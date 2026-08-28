@@ -1,9 +1,9 @@
-<!-- Included by: templates/github/Orchestrator_Guide_template.md, templates/strict/Orchestrator_Guide_template.md -->
+<!-- Included by: templates/github/Orchestrator_Instructions_template.md, templates/strict/Orchestrator_Instructions_template.md -->
 
 <!-- SHARED-START -->
-# Orchestrator Guide
+# Orchestrator Instructions
 
-> Read by the orchestrator only — workflow routing, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `{{ORCHESTRATOR_FILE}}`. **Agent Roster also stays in `{{ORCHESTRATOR_FILE}}`, not here** — it is project-mutable (per-project instruction paths, lean prototype rosters) and must survive `sync devkit`/`update project`, unlike everything in this file, which is always devkit-verbatim.
+> Read by the orchestrator only — workflow routing, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `{{ROOT_FILE}}`. **Agent Roster also stays in `{{ROOT_FILE}}`, not here** — it is project-mutable (per-project instruction paths, lean prototype rosters) and must survive `sync devkit`/`update project`, unlike everything in this file, which is always devkit-verbatim.
 
 ---
 
