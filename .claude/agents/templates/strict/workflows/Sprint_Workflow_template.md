@@ -2,7 +2,7 @@
 
 ## Story Discovery (Strict mode)
 
-Glob `.claude/agents/docs/stories/*.md`, read each file, filter by `**Status:** ready`. Sort by `**Sprint:**` field then by story ID (ascending). Process in that order.
+Glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, read each file, filter by `**Status:** ready`. Sort by `**Sprint:**` field then by story ID (ascending). Process in that order.
 
 ---
 

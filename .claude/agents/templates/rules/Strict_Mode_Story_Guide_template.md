@@ -1,13 +1,13 @@
 # Strict Mode Story Guide
 
-Reference for all agents operating in `mode: strict`. Replaces all GitHub Issues, GitHub PR, and GitHub Actions operations with local equivalents. All files live under `.claude/agents/` and are gitignored — no agent files are ever committed to the project.
+Reference for all agents operating in `mode: strict`. Replaces all GitHub Issues, GitHub PR, and GitHub Actions operations with local equivalents. All files live under `{{AGENT_DIR_PREFIX}}/agents/` and are gitignored — no agent files are ever committed to the project.
 
 ---
 
 ## Story File Location
 
 ```
-.claude/agents/docs/stories/ST-XXXXXX.md
+{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md
 ```
 
 All stories are single MD files. The story ID is the canonical identifier across all operations.
@@ -16,11 +16,11 @@ All stories are single MD files. The story ID is the canonical identifier across
 
 ## Story ID Generation
 
-1. Read `.claude/agents/docs/story_counter.txt` — contains the last used integer (e.g., `3`)
+1. Read `{{AGENT_DIR_PREFIX}}/agents/docs/story_counter.txt` — contains the last used integer (e.g., `3`)
 2. Increment by 1 → new ID integer (e.g., `4`)
 3. Format as zero-padded 6-digit string: `ST-000004`
 4. Write the new integer back to `story_counter.txt`
-5. Create the story file: `.claude/agents/docs/stories/ST-000004.md`
+5. Create the story file: `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-000004.md`
 
 Never reuse or skip numbers. If the counter file is missing, start from `0`.
 
@@ -116,7 +116,7 @@ Rules:
 
 Replaces `gh pr create` / `gh pr comment` / `gh pr diff`.
 
-**Location:** `.claude/agents/docs/reviews/ST-XXXXXX_review.md`
+**Location:** `{{AGENT_DIR_PREFIX}}/agents/docs/reviews/ST-XXXXXX_review.md`
 
 **Format:**
 
@@ -230,7 +230,7 @@ Quick lookup for all GitHub → strict-mode equivalents used in workflows.
 |---|---|
 | `gh issue list --label "status:X"` | Glob `docs/stories/*.md`, filter by `**Status:** X` |
 | `gh issue list --label "sprint-N"` | Glob `docs/stories/*.md`, filter by `**Sprint:** sprint-N` |
-| `gh issue view <n>` | Read `.claude/agents/docs/stories/ST-XXXXXX.md` |
+| `gh issue view <n>` | Read `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` |
 | `gh issue edit --add-label status:X` | Edit `**Status:** X` in story MD |
 | `gh issue edit --body-file` | Edit story MD body directly |
 | `gh issue comment -b "..."` | Append comment entry to `## Comments` in story MD |
@@ -245,5 +245,5 @@ Quick lookup for all GitHub → strict-mode equivalents used in workflows.
 | CI run URL in PR | Not required — CI gate skipped in strict mode |
 | `gh issue create` | Increment counter, write story MD |
 | `Agent: <message>` commit prefix | **Never use** — see `## Commit Message Format` above for the correct format |
-| `git add .claude/agents/...` | **Never do this** — entire `.claude/agents/` is gitignored |
+| `git add {{AGENT_DIR_PREFIX}}/agents/...` | **Never do this** — entire `{{AGENT_DIR_PREFIX}}/agents/` is gitignored |
 | Commit memory/working-record/docs | **Never commit agent files** — they are local-only by design |

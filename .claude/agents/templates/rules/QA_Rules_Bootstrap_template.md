@@ -1,7 +1,7 @@
 # QA Rules — Bootstrap
 
 **Applies to:** QA agent
-**Reference from:** `.claude/agents/qa_instructions.md`
+**Reference from:** `{{AGENT_DIR_PREFIX}}/agents/qa_instructions.md`
 **Purpose:** The whole of QA's bootstrap-tier rules — everything that is true on *every* QA spawn regardless of what the task is. Read this file in full per the Pre-Work Checklist. Read `QA_Rules_Read_On_Demand.md` only when a trigger in §14 actually fires.
 
 ---
@@ -10,10 +10,10 @@
 
 Do these **in order** before any testing or validation work:
 
-1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
-2. **Read Story Standard (QA)** — `.claude/agents/rules/Story_Standard_QA.md`
-3. **Read your Working Record** — `.claude/agents/working-record/QA_Working_Record.md`
-4. **Read your Memory** — `.claude/agents/memory/QA_Memory.md`
+1. **Read Project Priming** — `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md`
+2. **Read Story Standard (QA)** — `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_QA.md`
+3. **Read your Working Record** — `{{AGENT_DIR_PREFIX}}/agents/working-record/QA_Working_Record.md`
+4. **Read your Memory** — `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory.md`
 5. **Read the relevant GitHub Issues** — filter by `status:testing` label for the current task
 
 ---
@@ -127,10 +127,10 @@ Every test present in a test class or suite must pass. Tests must not be comment
 A test that exists but is expected to fail is a failing test.
 
 **UI Prototype validation (UI-bearing repos only):**
-If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.claude/agents/rules/UI_Prototype_Rules.md` before signing off any AC for a screen with a prototype counterpart.
+If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `{{AGENT_DIR_PREFIX}}/agents/rules/UI_Prototype_Rules.md` before signing off any AC for a screen with a prototype counterpart.
 
 **Logging review (source code stories only):**
-When reviewing a story that added or changed log statements, verify compliance with `.claude/agents/rules/Logging_Standard.md` (correct level, single-log rule, full stack trace only at ERROR, no sensitive data) before signing off AC.
+When reviewing a story that added or changed log statements, verify compliance with `{{AGENT_DIR_PREFIX}}/agents/rules/Logging_Standard.md` (correct level, single-log rule, full stack trace only at ERROR, no sensitive data) before signing off AC.
 
 **Field-removal stories (immutability enforcement):**
 When a story removes or marks fields as immutable on an endpoint request body (structural rejection, validation constraints, etc.), QA must verify BOTH branches explicitly:
@@ -143,7 +143,7 @@ A happy-path test alone is not sufficient — the rejection branch must be a sep
 
 ## 5. Document Placement
 
-- Place all new documents in the correct feature-doc subfolder — see `.claude/agents/context/Document_Index.md` for paths
+- Place all new documents in the correct feature-doc subfolder — see `{{AGENT_DIR_PREFIX}}/agents/context/Document_Index.md` for paths
 - Use `Title_Case_With_Underscores` for all document file names (e.g., `My_Technical_Document.md`)
 - Test scenario docs go under `docs/feature/<feature_name>/test-scenarios/`
 
@@ -215,13 +215,13 @@ Rare — only when QA is the story Implementer. Rule in `QA_Rules_Read_On_Demand
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 13. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 

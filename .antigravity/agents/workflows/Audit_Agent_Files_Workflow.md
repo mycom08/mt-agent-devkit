@@ -18,7 +18,7 @@ Triggered by: `"audit agent files"` in the devkit's `CLAUDE.md`.
 ```markdown
 # Audit Report — YYYYMMDD_HHMMSS
 **Devkit Version:** <version.txt contents at scan time>
-**Scanned:** <count> files across .antigravity/agents/templates, .antigravity/agents/workflows, .antigravity/agents/working
+**Scanned:** <count> files across .claude/agents/templates, .antigravity/agents/workflows, .antigravity/agents/working
 **Status:** pending-approval | applying | complete
 ```
 
@@ -70,7 +70,7 @@ Step 1 — read the detection spec in full before scanning anything:
 This file is the complete and only behavior spec for this scan: the four finding classes (D-n, RP-n, C-n, X-n), the duplication-matching normalization rules, the >=15-line + mandatory-read-list gate, the closed role-alias table, the N>=2/N>=3 thresholds, the three-condition contradiction test and its carve-outs, the <!-- audit:keep --> absolute exclusion, and the dead-reference resolution rule. Do not invent detection criteria beyond what that file states — if something is ambiguous under the spec, do not report it as a finding.
 
 Step 2 — scan these paths only:
-- .antigravity/agents/templates/   (EXCLUDING .antigravity/agents/templates/github/** and .antigravity/agents/templates/strict/** entirely — Audit_Rules.md §3 carve-out)
+- .claude/agents/templates/   (EXCLUDING .claude/agents/templates/github/** and .claude/agents/templates/strict/** entirely — Audit_Rules.md §3 carve-out)
 - .antigravity/agents/workflows/
 - .antigravity/agents/working/     (EXCLUDING .antigravity/agents/working/tmp/, .antigravity/agents/working/working-record/, .antigravity/agents/working/retros/, .antigravity/agents/internal/ — these are runtime/output paths, not corpus)
 
@@ -139,7 +139,7 @@ Runs only when at least one `D-n`/`RP-n`/`X-n` finding was approved.
 2. **Create a dedicated branch**: `audit/apply-YYYYMMDDHHMMSS` (same timestamp as the report), branched from the current branch.
 3. **Capture baseline:** `git diff --stat` (expected empty — confirms a clean start on the new branch) and a baseline validator run:
    ```
-   python scripts/validate_templates.py .antigravity/agents/templates .antigravity/agents/workflows .antigravity/agents/working
+   python scripts/validate_templates.py .claude/agents/templates .antigravity/agents/workflows .antigravity/agents/working
    ```
    Explicit path arguments, not the bare default scan — this is the only way `working/` gets real per-file Invariant #1B/#2/#6 coverage; the bare default only scans `templates/`+`workflows/`. Record the baseline `[ERROR]`/`[KNOWN_ISSUE]` lines verbatim.
 4. **Apply each approved finding's edit** directly to the corpus files, per `Audit_Rules.md`'s proposed-edit description for that class (`D-n`/`RP-n`: canonical block in the target file, pointer left behind in the others; `X-n`: fix or remove the dead reference).
@@ -147,7 +147,7 @@ Runs only when at least one `D-n`/`RP-n`/`X-n` finding was approved.
 6. **Compare validator runs.** Any `[ERROR]` line present after the batch that was not present in the baseline is a **new finding** — regardless of which file it's in or whether it looks related to this batch's edits.
    - **New finding found → revert the whole batch.** `git checkout -- <every file listed in the post-edit git diff --stat>`. This restores those files to their pre-batch state. Do not attempt a partial keep — the whole batch reverts together, since a new validator finding cannot be reliably attributed to only one of the applied edits.
    - **No new finding → keep the batch.** Stage the changed files and commit them on the dedicated branch, message: `audit: apply <N> finding(s) from audit_report_YYYYMMDD_HHMMSS.md` listing the applied finding IDs in the body.
-7. **Update `changes.json` for any applied edit under `.antigravity/agents/templates/`** — target-project `update project`/`sync devkit` diff against `changes.json` by version, so a template fix left out of it is silently invisible to already-initialized projects. Add each touched template path to the **current** `version.txt` version's `modified` array (create the entry if this is the first template change since the last bump) and append a one-line cause note to that path's `descriptions` entry (append to an existing description if the path already has one this version, e.g. from other same-version work) — same fold-in-without-bumping pattern used for any other small fix landed against the current version. Only bump `version.txt` if the user explicitly asks for one; a Tier A audit fix on its own does not warrant a version bump. Edits confined to `.antigravity/agents/workflows/` or `.antigravity/agents/working/` are devkit-internal and never touch `changes.json` (same rule `Apply_Retros_Workflow.md` and the `CLAUDE.md` Apply Retros section already state). Include this file in the same commit as step 6.
+7. **Update `changes.json` for any applied edit under `.claude/agents/templates/`** — target-project `update project`/`sync devkit` diff against `changes.json` by version, so a template fix left out of it is silently invisible to already-initialized projects. Add each touched template path to the **current** `version.txt` version's `modified` array (create the entry if this is the first template change since the last bump) and append a one-line cause note to that path's `descriptions` entry (append to an existing description if the path already has one this version, e.g. from other same-version work) — same fold-in-without-bumping pattern used for any other small fix landed against the current version. Only bump `version.txt` if the user explicitly asks for one; a Tier A audit fix on its own does not warrant a version bump. Edits confined to `.antigravity/agents/workflows/` or `.antigravity/agents/working/` are devkit-internal and never touch `changes.json` (same rule `Apply_Retros_Workflow.md` and the `CLAUDE.md` Apply Retros section already state). Include this file in the same commit as step 6.
 8. **Git is the primary revert mechanism, not the validator verdict** — the validator comparison in step 6 is what *triggers* a revert decision, but the actual undo is `git checkout --`, scoped to exactly the files this batch touched (from step 5's diff --stat), never a wider `git reset`/`git clean`. If a revert happens after `changes.json` was already updated in step 7, `git checkout --` the `changes.json` edit too — it's part of the same batch and reverts with it.
 
 ---
@@ -177,7 +177,7 @@ Runs only when at least one `D-n`/`RP-n`/`X-n` finding was approved.
 - **`RP-n` is always opt-in, individually.** This is a hard rule, not a suggestion — see Stage 3's approval semantics.
 - **`C-n` never produces a file edit.** Its "approval" is the user's stated resolution, recorded for the audit trail only.
 - **Dedicated branch, git-scoped revert.** Stage 4 never edits directly on the branch the workflow was invoked from; revert is always `git checkout -- <files>` scoped to the batch's own `git diff --stat`, never a broader destructive command.
-- **Validator gate uses explicit paths.** Always `python scripts/validate_templates.py .antigravity/agents/templates .antigravity/agents/workflows .antigravity/agents/working` in Stage 4 — the bare default scan omits `working/` and would silently drop the only real coverage this workflow's edits get there.
+- **Validator gate uses explicit paths.** Always `python scripts/validate_templates.py .claude/agents/templates .antigravity/agents/workflows .antigravity/agents/working` in Stage 4 — the bare default scan omits `working/` and would silently drop the only real coverage this workflow's edits get there.
 - **Accepted gap, not fixed here:** `working/` coverage under the validator's Invariant #1A remains weaker than `templates/`/`workflows/` (see `Audit_Rules.md §4`) — git diff/revert is the actual safety net for that gap, not the validator verdict alone.
-- **`changes.json` update is mandatory for applied `templates/` edits, not optional.** Stage 4 step 7 — a kept batch that touches `.antigravity/agents/templates/` and skips `changes.json` is invisible to target-project `update project`/`sync devkit` runs, which diff by version. Fold into the current version, don't bump `version.txt`, unless the user says otherwise.
+- **`changes.json` update is mandatory for applied `templates/` edits, not optional.** Stage 4 step 7 — a kept batch that touches `.claude/agents/templates/` and skips `changes.json` is invisible to target-project `update project`/`sync devkit` runs, which diff by version. Fold into the current version, don't bump `version.txt`, unless the user says otherwise.
 - **This is a workflow, not a role.** No `**Assigned:**` value, no roster row, no memory file, no working record. See the header note above for the full list of enumerations this workflow is deliberately absent from.

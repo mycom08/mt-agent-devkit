@@ -1,10 +1,10 @@
 # Init Project Workflow
 
-Triggered by: `"init project"` or `"init project [path]"` in ANTIGRAVITY.md
+Triggered by: `"init project"` or `"init project [path]"` in AGENTS.md
 
 Scaffolds all Antigravity agent files in a target project. Scans the project's tech stack and structure, generates customized agent files, asks the user for permission, then writes everything in place.
 
-All template source files live under `.antigravity/agents/templates/` in this devkit.
+All template source files live under `.claude/agents/templates/` in this devkit.
 
 ---
 
@@ -65,7 +65,7 @@ Read the target project to understand its context. Look for:
 | Framework(s) | Dependencies in manifest files; import patterns in source files |
 | Key directories | Top-level folder names (src, internal, api, docs, tests, cmd, lib, etc.) |
 | Existing agent files | Check if `.antigravity/agents/` already exists in `TARGET_PROJECT` |
-| Existing ANTIGRAVITY.md | Check if `ANTIGRAVITY.md` exists at `TARGET_PROJECT` root |
+| Existing AGENTS.md | Check if `AGENTS.md` exists at `TARGET_PROJECT` root |
 | CI/CD setup | `.github/workflows/`, `Makefile`, `Dockerfile`, `docker-compose.yml` |
 | Test tooling | Test framework imports/config files (jest.config, pytest.ini, go test, etc.) |
 | API style | OpenAPI/Swagger files, GraphQL schemas, gRPC .proto files |
@@ -86,13 +86,13 @@ Summarize findings to the user in 5 bullets max before proceeding to Stage 2.
 
 Scaffold files split into two tiers (see full detail below):
 - **Mechanical tier** — 12/25 rules files, all 10 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md`.
-- **Adaptive tier** — `ANTIGRAVITY.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, 13/25 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.antigravity/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
+- **Adaptive tier** — `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, 13/25 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.claude/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
 
 ### Source template paths (in this devkit)
 
 | Template file | Target path in generated project | Tier |
 |---|---|---|
-| `templates/{mode}/ANTIGRAVITY_template.md` (shared content from `templates/shared/ANTIGRAVITY_Shared_template.md`) | `ANTIGRAVITY.md` (root) | Adaptive |
+| `templates/{mode}/Orchestrator_template.md` (shared content from `templates/shared/Orchestrator_Shared_template.md`) | `AGENTS.md` (root) | Adaptive |
 | `templates/README_template.md` | `README.md` (root) | Adaptive |
 | `templates/context/Project_Priming_template.md` | `.antigravity/agents/context/Project_Priming.md` | Adaptive |
 | `templates/context/Document_Index_template.md` | `.antigravity/agents/context/Document_Index.md` | Adaptive |
@@ -117,24 +117,27 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 - `Workflow_Guide_template.md`
 - `Build_Software_Project_Workflow_template.md` (not deployed to target projects)
 
-**ANTIGRAVITY.md generation:** Read `templates/shared/ANTIGRAVITY_Shared_template.md` for the full content. The mode-specific file at `templates/{mode}/ANTIGRAVITY_template.md` contains only a reference comment — use the shared file's `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block as the actual template content.
+**AGENTS.md generation:** Read `templates/shared/Orchestrator_Shared_template.md` for the full content. The mode-specific file at `templates/{mode}/Orchestrator_template.md` contains only a reference comment — use the shared file's `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block as the actual template content.
 
 > **Strip the `_template` suffix** when writing to the target project. The suffix is devkit-only — generated files use clean names.
 
 ### Files to generate
 
-#### `ANTIGRAVITY.md`
+#### `AGENTS.md`
 
-**Source:** `templates/{mode}/ANTIGRAVITY_template.md` ← must match the Stage 2 source table entry above; run `grep -n "ANTIGRAVITY_template" Init_Project_Workflow.md` when updating to catch all occurrences
+**Source:** `templates/{mode}/Orchestrator_template.md` ← must match the Stage 2 source table entry above; run `grep -n "ANTIGRAVITY_template" Init_Project_Workflow.md` when updating to catch all occurrences
 
-If `ANTIGRAVITY.md` exists at `TARGET_PROJECT` root → generate a **ANTIGRAVITY.md addition** (a block to append, not a full replacement).
-If `ANTIGRAVITY.md` does not exist → generate a **full ANTIGRAVITY.md**.
+If `AGENTS.md` exists at `TARGET_PROJECT` root → generate a **AGENTS.md addition** (a block to append, not a full replacement).
+If `AGENTS.md` does not exist → generate a **full AGENTS.md**.
 
 Adapt the template:
 - Replace `{{PROJECT_NAME}}` with the detected project name
 - Replace `{{PROJECT_DESCRIPTION}}` with a 1–2 sentence description of the project's purpose and tech stack, derived from the Stage 1 scan
 - Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
-- Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `ANTIGRAVITY.md`
+- Replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`
+- Replace `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`
+- Replace `{{AGENT_CLI_NAME}}` with `Antigravity`
+- Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `AGENTS.md`
 - Replace `{{DEVKIT_VERSION}}` with the content of `version.txt` at the devkit root
 - All other content is copied verbatim from the template
 
@@ -142,18 +145,21 @@ Adapt the template:
 
 **Source:** `templates/README_template.md`
 
-If `README.md` exists at `TARGET_PROJECT` root → do not overwrite it. Instead append an `## AI Scrum Team` section (with a `---` separator) pointing to `ANTIGRAVITY.md`, `.antigravity/agents/context/Project_Priming.md`, and the `workflow help` command — same append-not-replace handling as `ANTIGRAVITY.md`.
+If `README.md` exists at `TARGET_PROJECT` root → do not overwrite it. Instead append an `## AI Scrum Team` section (with a `---` separator) pointing to `AGENTS.md`, `.antigravity/agents/context/Project_Priming.md`, and the `workflow help` command — same append-not-replace handling as `AGENTS.md`.
 If `README.md` does not exist → generate a full README from the template.
 
 Adapt the template:
 - Replace `{{PROJECT_NAME}}` with the detected project name
-- Replace `{{PROJECT_DESCRIPTION}}` with the same 1–2 sentence description used for `ANTIGRAVITY.md`
+- Replace `{{PROJECT_DESCRIPTION}}` with the same 1–2 sentence description used for `AGENTS.md`
 - Replace `{{TECH_STACK}}` with a short bulleted or comma-separated list of the detected/decided languages, frameworks, and key dependencies (from Stage 1 scan, or from `architecture.md` if this is a brand-new repo scaffolded under Build Software with no code to scan yet)
 - Replace `{{KEY_DIRECTORIES}}` with a short list of the project's top-level directories and their purpose (from Stage 1 scan; for a brand-new repo, use the directories the Java Skeleton Generation step created, or a generic placeholder noting the structure isn't established yet)
 - Replace `{{GETTING_STARTED}}` with real build/run/test commands if determinable (e.g., `./mvnw spring-boot:run`, `npm install && npm start`) — if no code exists yet, say so plainly rather than inventing commands
 - **If a `Dockerfile` and/or `docker-compose.yml` exist at the repo root** (written by Build Software's Java Skeleton Generation, or already present in an existing project being scanned), `{{GETTING_STARTED}}` must lead with the exact `docker compose up --build` (or plain `docker build`/`docker run` if there's a Dockerfile but no compose file) command, a short table of required environment variables (name, purpose, dev default — read the `${ENV_VAR:default}` placeholders out of the actual config file, e.g. `application.properties`), and the port(s) the service listens on. If there's a start script (`start.sh`/`start.ps1`) instead, cover that command in the same place.
-- Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `ANTIGRAVITY.md`
+- Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `AGENTS.md`
 - Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
+- Replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`
+- Replace `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`
+- Replace `{{AGENT_CLI_NAME}}` with `Antigravity`
 
 #### `.antigravity/agents/context/Document_Index.md`
 
@@ -221,7 +227,7 @@ If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the
 
 Everything below needs real judgment and should go through an agent (a much smaller one now — it's no longer also carrying ~35 mechanical files). Read the target repo's already-known context (`architecture.md` / `architecture_<repo>.md`, `repo_structure.md`, Stage 1 scan results) and write:
 
-- `ANTIGRAVITY.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`
+- `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`
 - 6 agent instruction files — adapt pre-PR gates to detected tooling (e.g., `npm test`, `pytest`, `cargo test`, `./mvnw test`)
 - **13 of 25 rules files need real adaptation**, not just token substitution — confirmed by diffing real generated repos, not by scanning for `{}` tokens (several of these have zero bracketed placeholders and still needed rewriting):
   - `Developer_Rules_Bootstrap.md` — adapt §5 (testing & verification commands) to detected tooling; its pair `Developer_Rules_Read_On_Demand.md` carries no tooling-specific content but rides along in this tier (not yet byte-diff-verified as safe for the mechanical script)
@@ -362,7 +368,7 @@ Generate blank working record files:
 Present a summary of what will be written:
 
 1. List every file that will be **created** and every file that will be **overwritten** (if applicable).
-2. For `ANTIGRAVITY.md`: specify whether it will be **appended to** or **created new**.
+2. For `AGENTS.md`: specify whether it will be **appended to** or **created new**.
 3. State the total file count.
 
 Then ask: **"May I write these files to `[TARGET_PROJECT]`? Reply yes to proceed or no to cancel."**
@@ -387,8 +393,8 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```
    This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 
-2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `ANTIGRAVITY.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 13 adaptive rules files, 4 wiki docs.
-   - For `ANTIGRAVITY.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.
+2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 13 adaptive rules files, 4 wiki docs.
+   - For `AGENTS.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.
 
 3. **Only if the mechanical script reported `settings.json` already existed:** read the existing `.antigravity/settings.json` and merge the `SessionStart` hook under `hooks` (do not remove existing hooks or keys) — use the same Windows/Mac-Linux hook JSON the script would have written (see the script source for both forms).
 
@@ -415,7 +421,7 @@ Next steps:
 1. Edit .antigravity/agents/context/Project_Priming.md
    Fill in any [PLACEHOLDER] sections with your project's actual details.
 
-2. Review ANTIGRAVITY.md
+2. Review AGENTS.md
    Confirm the agent instruction file paths are correct for your project layout.
 
 3. Configure permissions in .antigravity/settings.json
@@ -440,7 +446,7 @@ Next steps:
 1. Edit .antigravity/agents/context/Project_Priming.md
    Fill in any [PLACEHOLDER] sections with your project's actual details.
 
-2. Review ANTIGRAVITY.md and confirm: Mode: strict
+2. Review AGENTS.md and confirm: Mode: strict
 
 3. Configure permissions in .antigravity/settings.json
    Add the shell commands your agents will need (e.g., npm, pytest, cargo, docker).
@@ -466,7 +472,7 @@ Next steps:
 - **Overwrite transparency** — always list existing files that will be overwritten before asking for confirmation
 - **No assumptions about tech stack** — if the scan is inconclusive, use generic placeholders and note what needs manual completion
 - **Stop on path error** — if `TARGET_PROJECT` does not exist or is not accessible, stop immediately and report
-- **ANTIGRAVITY.md and README.md are additive** — never overwrite an existing file of either in full; always append the orchestrator block
+- **AGENTS.md and README.md are additive** — never overwrite an existing file of either in full; always append the orchestrator block
 - **Strip `_template` suffix** — all files written to the target project use clean names without the suffix
 - **Never copy devkit-internal files** — `Analyst_Workflow.md` and `Init_Project_Workflow.md` are devkit-only; never write them to the target project
 - **State file cleanup** — always delete the state file after successful Stage 4 completion or user cancellation

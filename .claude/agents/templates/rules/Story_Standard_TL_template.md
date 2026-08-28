@@ -1,6 +1,6 @@
-﻿# Story Standard — Technical Lead View
+# Story Standard — Technical Lead View
 
-> Technical Lead working rules for story work. This is your day-to-day reference. `.claude/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
+> Technical Lead working rules for story work. This is your day-to-day reference. `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
 
 ---
 

@@ -1,7 +1,7 @@
 # Product Owner Rules — Bootstrap
 
 **Applies to:** Product Owner agent
-**Reference from:** `.claude/agents/product_owner_instructions.md`
+**Reference from:** `{{AGENT_DIR_PREFIX}}/agents/product_owner_instructions.md`
 **Purpose:** The whole of PO's bootstrap-tier rules — everything that is true on *every* PO spawn regardless of what the task is. Read this file in full per the Pre-Work Checklist. Read `Product_Owner_Rules_Read_On_Demand.md` only when a trigger in §13 actually fires.
 
 ---
@@ -161,7 +161,7 @@ After creating or updating any project plan file (Sprint Overviews, Product Back
 - Push before continuing
 
 **If `Mode: strict`:**
-- Plan files live under `.claude/agents/docs/` which is gitignored — never run `git add` on any file under `.claude/agents/`
+- Plan files live under `{{AGENT_DIR_PREFIX}}/agents/docs/` which is gitignored — never run `git add` on any file under `{{AGENT_DIR_PREFIX}}/agents/`
 - Skip the commit step entirely — write the file and continue immediately
 
 > **Gate (github mode only):** Never leave plan file changes uncommitted while continuing other work.
@@ -182,7 +182,7 @@ Delete entries older than the 3 most recent story entries before writing a new o
 
 ## 12. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

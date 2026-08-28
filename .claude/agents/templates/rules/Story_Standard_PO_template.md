@@ -1,6 +1,6 @@
-﻿# Story Standard — Product Owner View
+# Story Standard — Product Owner View
 
-> Product Owner working rules for story work. This is your day-to-day reference. `.claude/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
+> Product Owner working rules for story work. This is your day-to-day reference. `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard.md` remains the full cross-role source for anything not covered here.
 
 ---
 

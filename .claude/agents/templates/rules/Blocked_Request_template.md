@@ -19,8 +19,8 @@ Run these checks in order and stop at the first match:
 ### Step 2 — Post the blocked comment
 
 1. Fill in the template below — story ID, resolved `Waiting on` value, what's confirmed, what's missing
-2. Write the filled-in comment to `.claude/agents/tmp/blocked_<story-id>.md`
-3. Post it: `gh issue comment <number> --repo {github-org}/{repo-name} --body-file .claude/agents/tmp/blocked_<story-id>.md`
+2. Write the filled-in comment to `{{AGENT_DIR_PREFIX}}/agents/tmp/blocked_<story-id>.md`
+3. Post it: `gh issue comment <number> --repo {github-org}/{repo-name} --body-file {{AGENT_DIR_PREFIX}}/agents/tmp/blocked_<story-id>.md`
 4. Change the story label: `gh issue edit <number> --repo {github-org}/{repo-name} --remove-label "status:ready" --add-label "status:blocked"`
 5. Return to the orchestrator: `"Blocked — awaiting external input. Comment posted on issue #<number>."`
 

@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Orchestrator Guide
 
-> Read by the orchestrator only — workflow routing, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `CLAUDE.md`. **Agent Roster also stays in `CLAUDE.md`, not here** — it is project-mutable (per-project instruction paths, lean prototype rosters) and must survive `sync devkit`/`update project`, unlike everything in this file, which is always devkit-verbatim.
+> Read by the orchestrator only — workflow routing, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `{{ORCHESTRATOR_FILE}}`. **Agent Roster also stays in `{{ORCHESTRATOR_FILE}}`, not here** — it is project-mutable (per-project instruction paths, lean prototype rosters) and must survive `sync devkit`/`update project`, unlike everything in this file, which is always devkit-verbatim.
 
 ---
 
@@ -43,15 +43,15 @@ Read the linked file before executing any workflow.
 
 | Trigger | Workflow File |
 |---|---|
-| `workflow help` | `.claude/agents/workflows/Workflow_Guide.md` |
-| `continue sprint` | `.claude/agents/workflows/Sprint_Workflow.md` |
-| `start story ST-XXXXXX` | `.claude/agents/workflows/Start_Story_Workflow.md` |
-| `resume story ST-XXXXXX` | `.claude/agents/workflows/Resume_Story_Workflow.md` |
-| `refine sprint` | `.claude/agents/workflows/Refine_Sprint_Workflow.md` |
-| `plan next sprint` / `plan sprint` | `.claude/agents/workflows/Plan_Sprint_Workflow.md` |
-| `create stories` | `.claude/agents/workflows/Create_Stories_Workflow.md` |
-| `refine prototype` | `.claude/agents/workflows/Refine_Prototype_Workflow.md` |
-| `sync devkit` | `.claude/agents/workflows/Sync_Devkit_Workflow.md` |
+| `workflow help` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Workflow_Guide.md` |
+| `continue sprint` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Sprint_Workflow.md` |
+| `start story ST-XXXXXX` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Start_Story_Workflow.md` |
+| `resume story ST-XXXXXX` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Resume_Story_Workflow.md` |
+| `refine sprint` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Refine_Sprint_Workflow.md` |
+| `plan next sprint` / `plan sprint` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Plan_Sprint_Workflow.md` |
+| `create stories` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Create_Stories_Workflow.md` |
+| `refine prototype` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Refine_Prototype_Workflow.md` |
+| `sync devkit` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Sync_Devkit_Workflow.md` |
 
-Sprint and Start Story workflows share pipeline stages — see `.claude/agents/workflows/Shared_Pipeline_Stages.md`.
+Sprint and Start Story workflows share pipeline stages — see `{{AGENT_DIR_PREFIX}}/agents/workflows/Shared_Pipeline_Stages.md`.
 <!-- SHARED-END -->

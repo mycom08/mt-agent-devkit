@@ -154,7 +154,7 @@ Files: `Orchestrator_Guide.md` (1 file).
 
 ### CLAUDE.md — Merge
 
-**Source:** `.claude/agents/templates/shared/CLAUDE_Shared_template.md` (local devkit — use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content)
+**Source:** `.claude/agents/templates/shared/Orchestrator_Shared_template.md` (local devkit — use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content)
 **Target:** `{TARGET_PROJECT}/CLAUDE.md`
 
 1. Read the local template

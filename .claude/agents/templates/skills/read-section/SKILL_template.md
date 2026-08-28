@@ -44,7 +44,7 @@ consistent heading prefix instead — e.g. a memory archive's `### Fact N`.
 
 ## Example
 
-`Agent_Common_Read_On_Demand.md §1` (`.claude/agents/rules/Agent_Common_Read_On_Demand.md`):
+`Agent_Common_Read_On_Demand.md §1` (`{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md`):
 `grep -nE "^## ([0-9]+[a-z]?\.|Version)" <file>` lists **§1 (12)**, §2 (67),
 §3 (81), ... Target `start=12`, next heading `end=67` → `sed -n '12,66p' <file>`.
 

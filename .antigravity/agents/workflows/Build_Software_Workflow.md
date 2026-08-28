@@ -439,14 +439,14 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 **Steps 7–11 apply only if a project orchestrator folder was created in step 3** (skip all five for the service+api-spec-only case):
 
-7. Read `.antigravity/agents/templates/Project_CLAUDE_template.md` and write it to the project orchestrator folder as `CLAUDE.md`, substituting:
+7. Read `.claude/agents/templates/Project_CLAUDE_template.md` and write it to the project orchestrator folder as `CLAUDE.md`, substituting:
    - `{{PROJECT_NAME}}` → product name from user's idea
    - `{{MODE}}` → `github`
    - `{{DEVKIT_SOURCE_URL}}` → this devkit's own `**Devkit source:**` value (from the devkit's own `CLAUDE.md`)
    - `{{DEVKIT_VERSION}}` → the current content of `version.txt` at the devkit root
    - `{{REPOS}}` → a Markdown table listing each sub-repo: name, purpose, absolute local path, GitHub repo URL
 
-8. **Project Priming Context (orchestrator-direct, no agent).** Read `.antigravity/agents/templates/context/Project_Orchestrator_Priming_template.md` and write it to the project orchestrator folder as `.antigravity/agents/context/Project_Priming.md`, substituting:
+8. **Project Priming Context (orchestrator-direct, no agent).** Read `.claude/agents/templates/context/Project_Orchestrator_Priming_template.md` and write it to the project orchestrator folder as `.antigravity/agents/context/Project_Priming.md`, substituting:
    - `{{PROJECT_NAME}}` → product name from user's idea
    - `{{PROJECT_OVERVIEW}}` → a 2–4 sentence summary of what the product does, drawn from `/result/analyst/summary.md`'s opening description (copy/condense, don't invent)
    - `{{REPOS}}` → the same repo table used for `CLAUDE.md`'s `{{REPOS}}` substitution in step 7 (reuse it, don't regenerate)
@@ -454,11 +454,11 @@ After both agents complete, the orchestrator copies the following files from `/r
 
    Without this file, a session opened in the orchestrator folder has no cheap way to learn what the product is, how it's split, or that this folder isn't a Scrum team — it would have to read `CLAUDE.md` plus every doc under `docs/` cold. Mirrors the per-repo `.antigravity/agents/context/Project_Priming.md` every scaffolded repo gets (via the adaptive tier, see `Init_Project_Workflow.md`), but scoped to what an orchestrator-folder session actually needs — not the full Scrum-team priming template (no story workflow, no agent roster, none of that applies here).
 
-9. Read `.antigravity/agents/templates/workflows/Build_Software_Project_Workflow_template.md` and write it to the project orchestrator folder as `.antigravity/agents/workflows/Build_Software_Project_Workflow.md` (strip the `_template` suffix). Also read `.antigravity/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md` and write it as `.antigravity/agents/workflows/Sync_Devkit_Project_Workflow.md` (same strip-suffix pattern) — this is what step 7's `sync devkit` trigger and `## Sync Devkit Workflow` section point at.
+9. Read `.claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md` and write it to the project orchestrator folder as `.antigravity/agents/workflows/Build_Software_Project_Workflow.md` (strip the `_template` suffix). Also read `.claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md` and write it as `.antigravity/agents/workflows/Sync_Devkit_Project_Workflow.md` (same strip-suffix pattern) — this is what step 7's `sync devkit` trigger and `## Sync Devkit Workflow` section point at.
 
 10. **Sync Devkit support files (orchestrator-direct, mechanical — no agent).** Without these, `sync devkit` (wired into `CLAUDE.md` in step 7) has nothing to check against. Reuse the exact same content/logic `scaffold_mechanical.sh` already writes for every sub-repo — don't reinvent it:
     - Write `.antigravity/agents/devkit_version.txt` containing the current content of `version.txt` at the devkit root.
-    - Copy `.antigravity/agents/templates/scripts/check_devkit_version.ps1` and `.sh` verbatim to `.antigravity/agents/scripts/` in the orchestrator folder.
+    - Copy `.claude/agents/templates/scripts/check_devkit_version.ps1` and `.sh` verbatim to `.antigravity/agents/scripts/` in the orchestrator folder.
     - Inject the `.antigravity/settings.json` `SessionStart` hook (same OS-detection logic as `scaffold_mechanical.sh`'s settings.json step — only if `settings.json` doesn't already exist).
 
 11. Write `.antigravity/agents/docs/build_state.md` inside the project orchestrator folder:
@@ -589,8 +589,8 @@ If either condition fails, **skip entirely** — do not touch the repo's code.
    Step 1 — read your inputs:
    1. /result/build/<repo-name>/ui_design.md (copied from /result/analyst/ui_design.md by Stage 3/5's full-copy step) — this is the screen/component inventory, layout, and interaction notes you are building from. If it does not exist at that path, check /result/analyst/ui_design.md directly.
    2. The paired repo's tech stack from /result/build/repo_structure.md and (if already scaffolded) its architecture_<paired-repo-name>.md — use this to decide the prototype's framework: build in the same framework family as the paired repo (e.g. paired repo is React → prototype is React; paired repo is Flutter → prototype is Flutter), so layout/interaction patterns transfer visually without transferring code.
-   3. .antigravity/agents/templates/instructions/ui_ux_designer_instructions_template.md — the Definition of Done for a prototype (real routes/components, a local mock backend, at least one real wired interaction per primary flow, single documented start command).
-   4. .antigravity/agents/templates/rules/UI_UX_Designer_Rules_template.md §4 (Prototype Standard) — the same runnable-prototype bar a real UI/UX Designer story would be held to.
+   3. .claude/agents/templates/instructions/ui_ux_designer_instructions_template.md — the Definition of Done for a prototype (real routes/components, a local mock backend, at least one real wired interaction per primary flow, single documented start command).
+   4. .claude/agents/templates/rules/UI_UX_Designer_Rules_template.md §4 (Prototype Standard) — the same runnable-prototype bar a real UI/UX Designer story would be held to.
 
    Step 2 — generate:
    - Real routes/components for every screen `ui_design.md` names — reachable by navigating the running app.

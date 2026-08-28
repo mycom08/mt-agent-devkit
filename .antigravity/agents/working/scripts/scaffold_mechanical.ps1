@@ -7,7 +7,7 @@ param (
 
 $ErrorActionPreference = 'Stop'
 
-$Tpl = Join-Path $DevkitRoot ".antigravity\agents\templates"
+$Tpl = Join-Path $DevkitRoot ".claude\agents\templates"
 $Agents = Join-Path $TargetProject ".antigravity\agents"
 
 # 1. Directories
@@ -28,6 +28,12 @@ if ($Mode -eq 'strict') {
     Set-Content -Path (Join-Path $Agents "docs\story_counter.txt") -Value "0"
 }
 
+function Copy-And-Substitute {
+    param ($src, $dst)
+    (Get-Content $src -Raw) -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' 
+                             -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' 
+                             -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity' | Set-Content $dst -NoNewline
+}
 # 2. Verbatim rules files
 $VerbatimRules = @(
     "Agent_Common_Bootstrap", "Agent_Common_Read_On_Demand", "Audit_Rules", "Blocked_Request",
@@ -53,14 +59,14 @@ foreach ($f in $VerbatimRules) {
     if (-not [string]::IsNullOrEmpty($GhSlug)) {
         (Get-Content -Path $src -Raw) -replace '\{github-org\}', $ghOrg -replace '\{repo-name\}', $ghRepo | Set-Content -Path $dst -NoNewline
     } else {
-        Copy-Item -Path $src -Destination $dst -Force
+        Copy-And-Substitute -src $src -dst $dst
     }
 }
 
 # 3. Workflow files
 $NonSplitWorkflows = @("Sync_Devkit_Workflow", "Workflow_Guide")
 foreach ($f in $NonSplitWorkflows) {
-    Copy-Item -Path (Join-Path $Tpl "workflows\${f}_template.md") -Destination (Join-Path $Agents "workflows\${f}.md") -Force
+    Copy-And-Substitute -src (Join-Path $Tpl "workflows\${f}_template.md") -dst (Join-Path $Agents "workflows\${f}.md")
 }
 
 $SplitWorkflows = @(
@@ -81,8 +87,8 @@ foreach ($f in $SplitWorkflows) {
 }
 
 # 4. Version check scripts
-Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.ps1") -Destination (Join-Path $Agents "scripts\check_devkit_version.ps1") -Force
-Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.sh") -Destination (Join-Path $Agents "scripts\check_devkit_version.sh") -Force
+Copy-And-Substitute -src (Join-Path $Tpl "scripts\check_devkit_version.ps1") -dst (Join-Path $Agents "scripts\check_devkit_version.ps1")
+Copy-And-Substitute -src (Join-Path $Tpl "scripts\check_devkit_version.sh") -dst (Join-Path $Agents "scripts\check_devkit_version.sh")
 
 # 5. devkit_version.txt
 Copy-Item -Path (Join-Path $DevkitRoot "version.txt") -Destination (Join-Path $Agents "devkit_version.txt") -Force

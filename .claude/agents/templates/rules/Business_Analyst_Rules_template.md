@@ -1,7 +1,7 @@
 # Business Analyst Rules
 
 **Applies to:** Business Analyst agent  
-**Reference from:** `.claude/agents/business_analyst_instructions.md`
+**Reference from:** `{{AGENT_DIR_PREFIX}}/agents/business_analyst_instructions.md`
 
 ---
 
@@ -9,8 +9,8 @@
 
 Do these **in order** before any analysis or documentation work:
 
-1. **Read Project Priming** — `.claude/agents/context/Project_Priming.md`
-2. **Read your Working Record** — `.claude/agents/working-record/Business_Analyst_Working_Record.md`
+1. **Read Project Priming** — `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md`
+2. **Read your Working Record** — `{{AGENT_DIR_PREFIX}}/agents/working-record/Business_Analyst_Working_Record.md`
 3. **Read the relevant GitHub Issues** — filter by `{feature-label}` label for the current task
 
 ---
@@ -46,13 +46,13 @@ When posting comments on GitHub Issues:
 
 ## 4. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 5. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 

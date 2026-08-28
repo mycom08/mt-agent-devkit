@@ -32,7 +32,7 @@
 
 **GitHub mode:** Stories are **GitHub Issues** in `{github-org}/{repo-name}` (label: `{feature-label}`, title format: `[ST-XXXXXX][FEATURE] Title`).
 
-**Strict mode:** Stories are **local MD files** under `.claude/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues are created. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
+**Strict mode:** Stories are **local MD files** under `{{AGENT_DIR_PREFIX}}/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues are created. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
 
 **Status flow:**
 
@@ -57,7 +57,7 @@ Backlog → Ready → In Progress → Review → Testing → Done
 - **Strict mode:** All discussions are appended to the `## Comments` section of the story MD file
 - One topic per comment thread
 
-For the full workflow (status transitions, role boundaries, AC rules, merge gate, comment format): `.claude/agents/rules/Story_Standard.md`
+For the full workflow (status transitions, role boundaries, AC rules, merge gate, comment format): `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard.md`
 
 ---
 
@@ -81,11 +81,11 @@ For complex features, the team follows a design-first process before any code is
 
 ## 5. Agent Working Records
 
-**Location:** `.claude/agents/working-record/{Agent_Name}_Working_Record.md`
+**Location:** `{{AGENT_DIR_PREFIX}}/agents/working-record/{Agent_Name}_Working_Record.md`
 
 **Access control:** Read and update only your own record. Never read or modify another agent's record.
 
-Update at **start of session** (read last story's context, sync story statuses from GitHub) and at **end of session** (rewrite completed work, in-progress items, impediments in place). Keep the 3 most recent story entries — the retention unit is story entries, not calendar days — capped at the `**Working record cap:**` value in `CLAUDE.md` (default ≤ 4,000 characters, `wc -c`, not a line count).
+Update at **start of session** (read last story's context, sync story statuses from GitHub) and at **end of session** (rewrite completed work, in-progress items, impediments in place). Keep the 3 most recent story entries — the retention unit is story entries, not calendar days — capped at the `**Working record cap:**` value in `{{ORCHESTRATOR_FILE}}` (default ≤ 4,000 characters, `wc -c`, not a line count).
 
 **Format:** Rewrite-in-place snapshot semantics — each story is recorded as a snapshot entry (replacing the prior session's, not appended alongside it) with:
 - **Story:** ST-XXXXXX

@@ -15,7 +15,7 @@ Runs once per story, every time this story would enter Stage 0 — Sprint Workfl
 
 **1. Is this story subject to pre-flight?**
 - **GitHub mode:** read the issue's labels (`gh issue view <number> --json labels`) — subject to pre-flight only if the `bug` label is present.
-- **Strict mode:** read `.claude/agents/docs/stories/ST-XXXXXX.md` — subject to pre-flight only if the body contains a `## Reproduction` section (strict mode has no label mechanism; the section's presence is the bug-story marker — see `Story_Standard_PO.md §13`).
+- **Strict mode:** read `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` — subject to pre-flight only if the body contains a `## Reproduction` section (strict mode has no label mechanism; the section's presence is the bug-story marker — see `Story_Standard_PO.md §13`).
 - **Not a bug story** → skip this entire section; proceed directly to Stage 0.
 
 **2. Read the Repro Command.** Parse `**Repro Command:**` from the story's `## Reproduction` section (GitHub: issue body; strict: story MD body).
@@ -47,7 +47,7 @@ Runs once per story, every time this story would enter Stage 0 — Sprint Workfl
 
 **If `Mode: github`:** Run `gh issue view <number> --json body,labels` to read the story body and labels.
 
-**If `Mode: strict`:** Read `.claude/agents/docs/stories/ST-XXXXXX.md` directly.
+**If `Mode: strict`:** Read `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` directly.
 
 Store `Implementer` in the pipeline state file. This determines which agent runs Stage 1 and which agent reviews in Stage 2.
 
@@ -83,7 +83,7 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 ## Stage 1 — Implementation
 
-**Orchestrator pre-spawn: create the retro file skeleton** before spawning the implementer. Use the story ID and title from Stage 0. Write `.claude/agents/retros/ST-XXXXXX_retro.md`:
+**Orchestrator pre-spawn: create the retro file skeleton** before spawning the implementer. Use the story ID and title from Stage 0. Write `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md`:
 
 ```markdown
 # Retrospective — ST-XXXXXX
@@ -142,7 +142,7 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 3. Agent reads its own instruction files, memory, and rules
 4. **Read the story:**
    - **GitHub mode:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
-   - **Strict mode:** Agent reads `.claude/agents/docs/stories/ST-XXXXXX.md` directly
+   - **Strict mode:** Agent reads `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` directly
 5. **Before writing any code or files** → update story status to `in-progress`:
    - **GitHub mode:** update story label to `status:in-progress`
    - **Strict mode:** edit `**Status:** in-progress` in the story MD file
@@ -151,7 +151,7 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
    - `git checkout sprint-N-dev` (sprint dev branch must exist — created by Sprint/Start Story workflow pre-step)
    - `git checkout -b story/<external-id>-<slug>` (or `story/ST-XXXXXX-<slug>` if no External ID)
 7. **CI/CD check:**
-   - **GitHub mode:** if the story's Technical Scope includes any file under `.github/workflows/`, the implementer **must** follow `.claude/agents/rules/CICD_Validation_Guide.md` before opening a PR
+   - **GitHub mode:** if the story's Technical Scope includes any file under `.github/workflows/`, the implementer **must** follow `{{AGENT_DIR_PREFIX}}/agents/rules/CICD_Validation_Guide.md` before opening a PR
    - **Strict mode:** CI gate is skipped entirely — no CI validation required
 8. **Deletion pre-check** — if the story involves deleting files (housekeeping, cleanup, or any story whose scope lists files to remove): before executing any `git rm` or file deletion, record the planned deletions, then proceed immediately. This gives the reviewer and user a visible record of what was removed and why.
    - **GitHub mode:** post a comment on the GitHub Issue listing every file planned for deletion
@@ -159,8 +159,8 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 9. Agent implements and updates working record; commits use the format `<external-id> [ST-XXXXXX]: <message>` or `ST-XXXXXX: <message>` (see `Strict_Mode_Story_Guide.md` §Commit Message Format)
 10. **After implementation is ready for review** → update story status to `review`:
     - **GitHub mode:** open PR; update story label to `status:review`
-    - **Strict mode:** create `.claude/agents/docs/reviews/ST-XXXXXX_review.md` (see `Strict_Mode_Story_Guide.md` §Local Review Record); edit `**Status:** review` in the story MD; append comment entry to `## Comments` noting branch is ready for review
-11. Agent writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+    - **Strict mode:** create `{{AGENT_DIR_PREFIX}}/agents/docs/reviews/ST-XXXXXX_review.md` (see `Strict_Mode_Story_Guide.md` §Local Review Record); edit `**Status:** review` in the story MD; append comment entry to `## Comments` noting branch is ready for review
+11. Agent writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 12. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 13. On completion → proceed to Stage 2
 
@@ -206,9 +206,9 @@ When the implementer returns with a mid-implementation consultation report inste
 
 ### Blocked Story Procedure (agent executes when external input is required)
 
-1. Resolve **who to tag** following the lookup order in `.claude/agents/rules/Blocked_Request.md` § Step 1 — if no match is found, report back to the orchestrator to ask the user before proceeding
+1. Resolve **who to tag** following the lookup order in `{{AGENT_DIR_PREFIX}}/agents/rules/Blocked_Request.md` § Step 1 — if no match is found, report back to the orchestrator to ask the user before proceeding
 2. Fill in the template with the resolved name, confirmed items, missing items, and helpful commands
-3. Write the filled-in content to `.claude/agents/tmp/blocked_<story-id>.md`
+3. Write the filled-in content to `{{AGENT_DIR_PREFIX}}/agents/tmp/blocked_<story-id>.md`
 4. Record the block:
    - **GitHub mode:** post the filled-in comment on the story issue; change the story label to `status:blocked`
    - **Strict mode:** append the filled-in content as a comment entry to the story MD `## Comments` section; edit `**Status:** blocked` in the story MD
@@ -223,7 +223,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
 - `[skipped-step]` If story deletes files: deletion plan recorded (GitHub Issue comment or story MD comment) before any `git rm` executed?
 - `[skipped-step]` Story status updated to `review` after implementation was ready?
 - `[skipped-step]` **Strict mode only:** Story branch created from sprint dev branch before implementation started?
-- `[skipped-step]` **Strict mode only:** Review-record MD created at `.claude/agents/docs/reviews/ST-XXXXXX_review.md`?
+- `[skipped-step]` **Strict mode only:** Review-record MD created at `{{AGENT_DIR_PREFIX}}/agents/docs/reviews/ST-XXXXXX_review.md`?
 - `[skipped-step]` **GitHub mode only:** If story touches `.github/workflows/`: passing `ci-validation` run URL present in PR description?
 - `[skipped-step]` `impl_session` saved in state file immediately after spawn?
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
@@ -259,7 +259,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD; appends summary comment entry to story MD `## Comments`
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers/trivial-return patterns in AC-functional methods. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Bootstrap.md §2` for the full review checklist, including the CI-execution/SHA/red-diagnosis and dependency-pin checks).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
-5. Reviewer writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+5. Reviewer writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 6. **If approved:**
    - **GitHub mode:** update the story label to `status:testing` — do this immediately, before proceeding to Stage 3. QA tests on the dev branch before merge; the label signals QA to begin
    - **Do NOT execute the Merge Procedure here** — it fires only after QA automation passes (Stage 3 behavioral path step 9). TL approval is not a merge signal
@@ -306,7 +306,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
      - **GitHub mode:** as a story comment
      - **Strict mode:** append to story MD `## Comments`
      → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
-   - **If automation passes** → QA writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back; orchestrator executes the **Merge Procedure** below
+   - **If automation passes** → QA writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back; orchestrator executes the **Merge Procedure** below
 10. On merge confirmed → proceed to Stage 4
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
@@ -355,15 +355,15 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
-   - `.claude/agents/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
-   - `.claude/agents/rules/Product_Owner_Rules_Bootstrap.md`
-   - `.claude/agents/memory/Product_Owner_Memory.md`
+   - `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
+   - `{{AGENT_DIR_PREFIX}}/agents/rules/Product_Owner_Rules_Bootstrap.md`
+   - `{{AGENT_DIR_PREFIX}}/agents/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:
    - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.
    - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal is the reviewer's final approval plus a confirmed merge — not a separate validator-confirms event.
    - **GitHub mode:** tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` in the story MD; edit `**Status:** done`; append PO closure comment entry to story MD `## Comments`
-4. PO writes retro section to `.claude/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+4. PO writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
 5. **Start Story Workflow:** pipeline ends here
 
 ### Orchestrator Observation Check — Stage 4
@@ -392,7 +392,7 @@ Read `Observations:` from the state file:
 
 ### 5.2 — Verify retro file
 
-Read `.claude/agents/retros/ST-XXXXXX_retro.md`. Check that all expected sections are populated (no remaining `*(pending)*` placeholders).
+Read `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md`. Check that all expected sections are populated (no remaining `*(pending)*` placeholders).
 
 - **Section still shows `*(pending)*`** → replace with `*(not submitted)*` — do not spawn agents to collect it.
 - **Section shows `*(stage skipped)*`** → correct; leave as-is.
@@ -404,8 +404,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 - `[skipped-step]` Retro file skeleton created at Stage 1 before spawning implementer?
 - `[skipped-step]` Orchestrator observations written to `## Orchestrator` section?
 - `[skipped-step]` Retro file verified — no remaining `*(pending)*` placeholders?
-- `[skipped-step]` Ran `wc -c .claude/agents/working-record/*_Working_Record.md`; append one bullet per file over the `**Working record cap:**` value in `CLAUDE.md` (default 4,000 if absent), naming the file and its size.
-- `[skipped-step]` Ran `wc -c .claude/agents/memory/*_Memory.md`; append one bullet per file over the `**Memory file cap:**` value in `CLAUDE.md` (default 10,000 if absent), naming the file and its size.
+- `[skipped-step]` Ran `wc -c {{AGENT_DIR_PREFIX}}/agents/working-record/*_Working_Record.md`; append one bullet per file over the `**Working record cap:**` value in `{{ORCHESTRATOR_FILE}}` (default 4,000 if absent), naming the file and its size.
+- `[skipped-step]` Ran `wc -c {{AGENT_DIR_PREFIX}}/agents/memory/*_Memory.md`; append one bullet per file over the `**Memory file cap:**` value in `{{ORCHESTRATOR_FILE}}` (default 10,000 if absent), naming the file and its size.
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 After completing Stage 5 → **for `continue sprint`: proceed to next story (Stage 0). For `start story`: proceed to Retro Review.**

@@ -37,6 +37,15 @@ if [[ "$MODE" == "strict" ]]; then
   echo "0" > "$AGENTS/docs/story_counter.txt"
 fi
 
+# Copy and substitute placeholders
+function cp_sub() {
+  local src="$1"
+  local dst="$2"
+  sed -e 's/{{AGENT_DIR_PREFIX}}/.claude/g' \
+      -e 's/{{ORCHESTRATOR_FILE}}/CLAUDE.md/g' \
+      -e 's/{{AGENT_CLI_NAME}}/Claude Code/g' \
+      "$src" > "$dst"
+}
 # 2. Verbatim rules files — content-diffed against real scaffold output to confirm they
 #    carry no project-specific judgment beyond {github-org}/{repo-name} substitution. NOT
 #    the same set Init_Project_Workflow.md's prose implies: Story_Standard_Dev/PO/QA all
@@ -71,7 +80,7 @@ done
 #    these files are intentionally left literal for runtime resolution (devkit convention).
 NONSPLIT_WORKFLOWS=(Sync_Devkit_Workflow Workflow_Guide)
 for f in "${NONSPLIT_WORKFLOWS[@]}"; do
-  cp "$TPL/workflows/${f}_template.md" "$AGENTS/workflows/${f}.md"
+  cp_sub "$TPL/workflows/${f}_template.md" "$AGENTS/workflows/${f}.md"
 done
 
 SPLIT_WORKFLOWS=(
@@ -119,13 +128,13 @@ if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
 fi
 
 # 4. Version-check scripts (verbatim)
-cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
-cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
+cp_sub "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
+cp_sub "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
 
 # 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
 #    .claude/skills/, a sibling of .claude/agents/, not under it, since that is
 #    where Claude Code discovers project-level skills.
-cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.claude/skills/read-section/SKILL.md"
+cp_sub "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.claude/skills/read-section/SKILL.md"
 
 # 5. devkit_version.txt
 cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"

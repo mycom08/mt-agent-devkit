@@ -11,7 +11,7 @@ This is a **devkit-internal maintainer workflow** — it is never deployed to ta
 ## Prerequisites
 
 - `gh` must be authenticated (`gh auth status`). If not, stop and tell the user to authenticate — this workflow reads and closes GitHub Issues.
-- All edits target template files under `.antigravity/agents/templates/` only. Devkit-internal workflow files (`.antigravity/agents/workflows/`) may be improved too, but they do **not** count toward `changes.json`.
+- All edits target template files under `.claude/agents/templates/` only. Devkit-internal workflow files (`.antigravity/agents/workflows/`) may be improved too, but they do **not** count toward `changes.json`.
 
 ---
 
@@ -102,9 +102,9 @@ For each **accepted** item, the orchestrator edits the target file directly — 
 1. Read the target template, make the minimal edit that addresses the signal, and preserve surrounding style.
 2. If a change affects a template that also has a devkit working copy kept in sync (the **dual-update pattern** — e.g. a `shared/workflows/*_Shared_template.md` change that mirrors `.antigravity/agents/working/workflows/*.md`), update both copies.
 3. Group edits by file so each file is touched once.
-4. Track, for every changed template under `.antigravity/agents/templates/`, a one-line description for `changes.json`. Separate `new` (first-time files) from `modified` (already existed).
+4. Track, for every changed template under `.claude/agents/templates/`, a one-line description for `changes.json`. Separate `new` (first-time files) from `modified` (already existed).
 
-> Never edit a target project's installed copy. Only edit the source templates under `.antigravity/agents/templates/` (and devkit working copies where the dual-update pattern applies).
+> Never edit a target project's installed copy. Only edit the source templates under `.claude/agents/templates/` (and devkit working copies where the dual-update pattern applies).
 
 ---
 
@@ -118,10 +118,10 @@ Apply **one** version increment covering all changes from this run.
    "0.1.16": {
      "new": [],
      "modified": [
-       ".antigravity/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
+       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
      ],
      "descriptions": {
-       ".antigravity/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "Retro (#27): add pre-push secret-scan gate — credentials must source from env with no inline literal default"
+       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "Retro (#27): add pre-push secret-scan gate — credentials must source from env with no inline literal default"
      }
    }
    ```
@@ -169,7 +169,7 @@ What worked well (preserve — do not regress):
 
 - **Never edit before the user confirms** in Stage 3.
 - **One version bump per run** — all accepted changes share a single new version and a single `changes.json` entry.
-- **Only `.antigravity/agents/templates/` files go in `changes.json`** — devkit-internal workflow edits do not.
+- **Only `.claude/agents/templates/` files go in `changes.json`** — devkit-internal workflow edits do not.
 - **Dual-update pattern** — when a shared template has a synced devkit working copy, update both.
 - **`gh` required** — the workflow reads and closes GitHub Issues; stop early if `gh` is unauthenticated.
 - **Privacy is already enforced upstream** — retro Issues are privacy-filtered at export. If any signal still contains project-specific detail, generalize it before writing it into a template, per `Retro_Rules.md`.

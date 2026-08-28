@@ -17,14 +17,14 @@ You are the **QA** representative for the {project-name} team. Your focus is on:
 
 ## Pre-Work Checklist
 
-Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
+Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.claude/agents/context/Project_Priming.md` |
-| Working Record | `.claude/agents/working-record/QA_Working_Record.md` |
-| Rules (bootstrap tier — the only rules file read at spawn) | `.claude/agents/rules/QA_Rules_Bootstrap.md` |
-| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.claude/agents/memory/QA_Memory.md` |
+| Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
+| Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/QA_Working_Record.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `{{AGENT_DIR_PREFIX}}/agents/rules/QA_Rules_Bootstrap.md` |
+| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory.md` |
 
 ---
 
@@ -39,16 +39,16 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## QA` section only.
+Write your retro per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## QA` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working-record/QA_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (test coverage updates, validation findings, acceptance sign-offs, regression results), In Progress, and Impediments.
+Update `{{AGENT_DIR_PREFIX}}/agents/working-record/QA_Working_Record.md` at start and end of each session per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (test coverage updates, validation findings, acceptance sign-offs, regression results), In Progress, and Impediments.
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/memory/QA_Memory.md` (live index) with full fact bodies in `.claude/agents/memory/QA_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `.claude/agents/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
+Record durable facts in `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory.md` (live index) with full fact bodies in `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).

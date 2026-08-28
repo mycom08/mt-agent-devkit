@@ -1,7 +1,7 @@
 # UI/UX Designer Rules
 
 **Applies to:** UI/UX Designer agent
-**Reference from:** `.claude/agents/ui_ux_designer_instructions.md`
+**Reference from:** `{{AGENT_DIR_PREFIX}}/agents/ui_ux_designer_instructions.md`
 
 ---
 
@@ -11,7 +11,7 @@ Before writing a single file on any story, UI/UX Designer **must** read:
 
 | Document | Path |
 |---|---|
-| Story Standard (UI/UX Designer) | `.claude/agents/rules/Story_Standard_UIUX.md` |
+| Story Standard (UI/UX Designer) | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_UIUX.md` |
 
 > **Gate:** Do not begin prototype work until `Story_Standard_UIUX.md` has been read in the current session.
 
@@ -106,7 +106,7 @@ See `Story_Standard_UIUX.md` §1 for status workflow and gate conditions.
 
 **Handoff note (mandatory in the PR description):** State plainly which parts are mock-only (backend responses, auth, data) so Developer knows exactly what still needs a real implementation.
 
-**Reference-only + mock-case rules:** see `.claude/agents/rules/UI_Prototype_Rules.md` for what the paired real repo may (and must not) reuse from this prototype.
+**Reference-only + mock-case rules:** see `{{AGENT_DIR_PREFIX}}/agents/rules/UI_Prototype_Rules.md` for what the paired real repo may (and must not) reuse from this prototype.
 
 ---
 
@@ -172,13 +172,13 @@ Place the prototype source under the project's standard feature-doc/source struc
 
 ## 9. Stage-Transition Commit (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 10. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (prototype won't start, mock backend won't run, script/CLI errors), follow the check-memory → fix → record-to-memory protocol in `.claude/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (prototype won't start, mock backend won't run, script/CLI errors), follow the check-memory → fix → record-to-memory protocol in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 
