@@ -1,7 +1,7 @@
 # Audit Rules — Tier A Detection Spec
 
 **Applies to:** the `audit agent files` workflow's scan subagent (`.antigravity/agents/workflows/Audit_Agent_Files_Workflow.md`).
-**Scope:** devkit-internal corpus audit only — `.antigravity/agents/templates/**`, `.antigravity/agents/workflows/**`, `.antigravity/agents/working/**` (excluding this file's own findings-output directory, `.antigravity/agents/internal/`).
+**Scope:** devkit-internal corpus audit only — `.claude/agents/templates/**`, `.antigravity/agents/workflows/**`, `.antigravity/agents/working/**` (excluding this file's own findings-output directory, `.antigravity/agents/internal/`).
 
 This file defines **what counts as a finding**. It does not define report mechanics, approval flow, apply/revert, or crash handling — those live in `Audit_Agent_Files_Workflow.md`.
 
@@ -84,7 +84,7 @@ A contradiction finding requires **all three** of:
 
 ### Carve-outs — never a contradiction
 
-- **Mode bifurcation.** Anything guarded by `**GitHub mode:**` / `**Strict mode:**` prose. Stronger: `.antigravity/agents/templates/github/**` and `.antigravity/agents/templates/strict/**` are **excluded from scanning entirely** (both duplication and contradiction). Their thin variants are comment-only — `scaffold_mechanical.sh` strips every all-comment mode body before append, so both modes deploy byte-identical files. A thin variant contributes no deployed content; it can neither contradict nor duplicate the shared file, because overlapping with it is the design.
+- **Mode bifurcation.** Anything guarded by `**GitHub mode:**` / `**Strict mode:**` prose. Stronger: `.claude/agents/templates/github/**` and `.claude/agents/templates/strict/**` are **excluded from scanning entirely** (both duplication and contradiction). Their thin variants are comment-only — `scaffold_mechanical.sh` strips every all-comment mode body before append, so both modes deploy byte-identical files. A thin variant contributes no deployed content; it can neither contradict nor duplicate the shared file, because overlapping with it is the design.
 - **Template vs. `working/` mirror.** Never compare `templates/X_template.md` against `working/X.md`. `Project_Priming_Read_On_Demand.md §15` explicitly sanctions intentionally-diverged mirrors (the devkit runs GitHub-mode-only while templates stay target-generic). Divergence there is drift, tracked by the §15 dual-update rule — out of Tier A scope entirely; scanning it would false-positive across most of the corpus.
 - **Role-scoped views.** E.g. `Story_Standard.md` (full) vs. `Story_Standard_QA.md` (role view). A view that omits or narrows does not contradict the file it's scoped from.
 - **Different lifecycle phases.** Statements about different gates ("before merge" vs. "after merge") are not opposites.

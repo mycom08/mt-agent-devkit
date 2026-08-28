@@ -22,7 +22,7 @@
 
 ### Actions Applied
 - `.antigravity/agents/working/rules/Technical_Lead_Rules.md` — added file-deletion/rename verification step and old-path grep step to §2 documentation review checklist; added `changes.json` scope note to §4
-- `.antigravity/agents/templates/rules/Technical_Lead_Rules_template.md` — added file-deletion/rename and old-path grep bullets to documentation stories review checklist
+- `.claude/agents/templates/rules/Technical_Lead_Rules_template.md` — added file-deletion/rename and old-path grep bullets to documentation stories review checklist
 - `.antigravity/agents/working/context/Project_Priming.md` — expanded `changes.json` row in §7 with scope note
 - `.antigravity/agents/workflows/Init_Project_Workflow.md` — added drift-guard comment to AGENTS.md `**Source:**` line in Files to generate subsection
 
@@ -35,7 +35,7 @@
 ### Findings
 - `[instruction]` Reference files named but the section-boundary/renumbering scheme itself had to be reverse-engineered via `git show` before any file could be written *(Developer)*
 - `[workflow]` `validate_templates.py`'s section-ref checker treats any bare `§N` substring as a citation, with no carve-out for prose describing an intentional numbering gap *(Developer)*
-- `[context]` `changes.json` only ever tracks `.antigravity/agents/templates/...` paths, never `.antigravity/...` — no manifest-integrity check for the Antigravity template split *(Developer)*
+- `[context]` `changes.json` only ever tracks `.claude/agents/templates/...` paths, never `.antigravity/...` — no manifest-integrity check for the Antigravity template split *(Developer)*
 - `[workflow]` A "splitting a shared rules file into bootstrap/on-demand tiers" checklist would turn a multi-hour discovery pass into a lookup *(Developer)*
 - `[instruction]` Dev branch should be confirmed as created before the *first file write*, not just before the first commit *(Developer)*
 - `[workflow]` The `read-section` skill's own worked example went stale when its cited source file was deleted/split; no documented convention for repointing it, and two independent ad hoc fixes have now happened *(Developer)*

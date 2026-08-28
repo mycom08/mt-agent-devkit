@@ -306,7 +306,7 @@ Trigger: user says **"init project"** or **"init project [path]"**
 
 The optional `[path]` argument is the absolute path to the target project. If omitted, the workflow asks the user.
 
-Scaffolds a complete AI Scrum team setup into the target project by adapting `.antigravity/agents/templates/CLAUDE_template.md` and all supporting agent files.
+Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/CLAUDE_template.md` and all supporting agent files.
 
 Read `.antigravity/agents/workflows/Init_Project_Workflow.md` for the complete pipeline before executing.
 
@@ -351,7 +351,7 @@ Maintainer workflow that scans community retro contribution Issues on `mycom08/m
 
 - Default scope is **all** open `retro:contribution` Issues. If a label is supplied, only Issues carrying both that label and `retro:contribution` are scanned.
 - Items are ordered most-worth-applying first: critical `[failure]` guardrails, then token/efficiency reductions, then workflow-correctness fixes, then recurring signals, then clarity tweaks.
-- Only template files under `.antigravity/agents/templates/` count toward `changes.json`; devkit-internal workflow edits do not.
+- Only template files under `.claude/agents/templates/` count toward `changes.json`; devkit-internal workflow edits do not.
 
 Read `.antigravity/agents/workflows/Apply_Retros_Workflow.md` for the complete pipeline before executing.
 
@@ -361,7 +361,7 @@ Read `.antigravity/agents/workflows/Apply_Retros_Workflow.md` for the complete p
 
 Trigger: user says **"audit agent files"**
 
-Devkit-internal maintainer workflow that scans the devkit's own agent instruction/rules/workflow corpus (`.antigravity/agents/templates/`, `.antigravity/agents/workflows/`, `.antigravity/agents/working/`) for Tier A findings only: cross-file duplication (byte-identical and role-parallel), contradictions, and dead or orphaned references. Spawns a general-purpose subagent to perform the scan so the corpus text never enters the orchestrator's own context. Writes a single timestamped report and applies **only** user-approved findings — per-finding approval, never a whole-report accept — on a dedicated branch with a git-diff-scoped revert path.
+Devkit-internal maintainer workflow that scans the devkit's own agent instruction/rules/workflow corpus (`.claude/agents/templates/`, `.antigravity/agents/workflows/`, `.antigravity/agents/working/`) for Tier A findings only: cross-file duplication (byte-identical and role-parallel), contradictions, and dead or orphaned references. Spawns a general-purpose subagent to perform the scan so the corpus text never enters the orchestrator's own context. Writes a single timestamped report and applies **only** user-approved findings — per-finding approval, never a whole-report accept — on a dedicated branch with a git-diff-scoped revert path.
 
 **Not an agent role.** There is no `auditor_instructions.md` and no roster entry — this workflow is reached purely through this trigger row, the same pattern `analyze` already uses.
 

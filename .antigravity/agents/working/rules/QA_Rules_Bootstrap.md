@@ -58,7 +58,7 @@ See `Story_Standard.md` §4 and `Shared_Pipeline_Stages.md` Stage 3/4 for the fu
 **Template and workflow validation:**
 - Read every template file changed by the story
 - Verify all placeholders (`{{PROJECT_NAME}}`, `{github-org}`, etc.) are correct and present where expected
-- Verify that the file name follows the `_template` suffix convention if it lives under `.antigravity/agents/templates/`
+- Verify that the file name follows the `_template` suffix convention if it lives under `.claude/agents/templates/`
 - Verify path references inside the file match the actual file structure of the devkit
 - Check that GitHub mode content is complete and accurate; check strict mode content separately if the story affects strict mode
 
@@ -115,7 +115,7 @@ After all story AC are verified, confirm no regression was introduced:
 
 1. Review the changed files and consider the blast radius
 2. Specifically check: does the change affect `init project` behavior? Does it affect `sync devkit`? Does it affect both GitHub and strict mode?
-3. **For template or workflow changes** (`.antigravity/agents/templates/**` or `.antigravity/agents/workflows/**`) → follow `docs/Template_Test_Strategy.md` as the test approach; run the Layer-1 gate (`python scripts/validate_templates.py` + `bash scripts/test/run.sh`, both must exit 0) as the regression suite
+3. **For template or workflow changes** (`.claude/agents/templates/**` or `.antigravity/agents/workflows/**`) → follow `docs/Template_Test_Strategy.md` as the test approach; run the Layer-1 gate (`python scripts/validate_templates.py` + `bash scripts/test/run.sh`, both must exit 0) as the regression suite
 4. **If regression risk is identified** → post a comment on the story issue tagging **Dev**; treat as a QA failure and loop back for a fix
 
 > **Gate:** Do not give merge sign-off until the regression check is complete.

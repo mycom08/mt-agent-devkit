@@ -39,14 +39,14 @@ Two formats are supported. Entries for older versions use a plain array; entries
 
 ```json
 {
-  "0.0.7": ["{{AGENT_DIR_PREFIX}}/agents/templates/..."],
+  "0.0.7": [".claude/agents/templates/..."],
   "0.0.8": {
-    "files": ["{{AGENT_DIR_PREFIX}}/agents/templates/..."],
+    "files": [".claude/agents/templates/..."],
     "descriptions": {
-      "{{AGENT_DIR_PREFIX}}/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Added auto-approve, checksums, WebFetch fallback"
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Added auto-approve, checksums, WebFetch fallback"
     },
     "checksums": {
-      "{{AGENT_DIR_PREFIX}}/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:abc123"
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "sha256:abc123"
     }
   }
 }
@@ -123,6 +123,9 @@ curl -sf "{DEVKIT_SOURCE_URL}/path/to/file"
 If both WebFetch and curl fail for a file, log the failure and skip that file; do not write partial content.
 
 ### Merge strategy by file type
+    
+**Global Substitution Rule:** Before applying any of the merge strategies below, you must substitute framework placeholders in the fetched template content. Replace every instance of the `AGENT_DIR_PREFIX` placeholder (in double curly braces) with `{{AGENT_DIR_PREFIX}}`, the `ORCHESTRATOR_FILE` placeholder with `{{ORCHESTRATOR_FILE}}`, and the `AGENT_CLI_NAME` placeholder with `{{AGENT_CLI_NAME}}`. Do this for ALL files before considering them "verbatim" or merging them.
+
 
 #### Rules files — Adapt to mode
 

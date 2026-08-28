@@ -92,7 +92,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **When evaluating approaches:**
 - Always consider: backward compatibility with existing target projects, template clarity for agents, maintainability of the devkit
-- Reference existing patterns in `.antigravity/agents/templates/` and `.antigravity/agents/workflows/`
+- Reference existing patterns in `.claude/agents/templates/` and `.antigravity/agents/workflows/`
 - Focus on current sprint scope; do not over-engineer for future features
 
 **When making recommendations:**
@@ -104,7 +104,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 - Every new template section must have a clear purpose; avoid adding sections agents won't use
 - Every new workflow stage must have a clear completion signal
 - Ensure `changes.json` is updated when template files change — this enables `sync devkit` to apply targeted updates
-- `changes.json` tracks **template files deployed to target projects only** (under `.antigravity/agents/templates/`). Devkit-internal workflow files (`.antigravity/agents/workflows/`) are **not tracked** — edit them in-place with no `changes.json` entry.
+- `changes.json` tracks **template files deployed to target projects only** (under `.claude/agents/templates/`). Devkit-internal workflow files (`.antigravity/agents/workflows/`) are **not tracked** — edit them in-place with no `changes.json` entry.
 
 **Key design questions for any devkit change:**
 - Does this require a `changes.json` entry for `sync devkit` to pick it up?
@@ -114,7 +114,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Technical constraints (non-negotiable):**
 - No breaking changes to template file names without a migration path
-- Maintain `_template` suffix for all files under `.antigravity/agents/templates/`
+- Maintain `_template` suffix for all files under `.claude/agents/templates/`
 - Keep `version.txt` and `changes.json` in sync
 
 ---

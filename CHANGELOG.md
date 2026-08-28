@@ -4,9 +4,7 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## Contribution Convention
 
-Entries are added under the current `## [Unreleased]
-
-## 0.1.45 (2026-08-28)` version as work merges to
+Entries are added under the current `## [Unreleased]` version as work merges to
 main. Use the following subsections:
 
 - **Changes** — new features, enhancements, refactors, documentation, CI/tooling

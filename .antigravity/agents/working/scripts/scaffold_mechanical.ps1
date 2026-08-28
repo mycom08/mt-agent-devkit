@@ -1,4 +1,4 @@
-param (
+﻿param (
     [Parameter(Mandatory=$true)][string]$DevkitRoot,
     [Parameter(Mandatory=$true)][string]$TargetProject,
     [Parameter(Mandatory=$true)][ValidateSet('strict', 'github')][string]$Mode,
@@ -59,14 +59,14 @@ foreach ($f in $VerbatimRules) {
     if (-not [string]::IsNullOrEmpty($GhSlug)) {
         (Get-Content -Path $src -Raw) -replace '\{github-org\}', $ghOrg -replace '\{repo-name\}', $ghRepo | Set-Content -Path $dst -NoNewline
     } else {
-        Copy-And-Substitute -src $src -dst $dst
+        Copy-Item -Path $src -Destination $dst -Force
     }
 }
 
 # 3. Workflow files
 $NonSplitWorkflows = @("Sync_Devkit_Workflow", "Workflow_Guide")
 foreach ($f in $NonSplitWorkflows) {
-    Copy-And-Substitute -src (Join-Path $Tpl "workflows\${f}_template.md") -dst (Join-Path $Agents "workflows\${f}.md")
+    Copy-Item -Path (Join-Path $Tpl "workflows\${f}_template.md") -Destination (Join-Path $Agents "workflows\${f}.md") -Force
 }
 
 $SplitWorkflows = @(
@@ -87,8 +87,8 @@ foreach ($f in $SplitWorkflows) {
 }
 
 # 4. Version check scripts
-Copy-And-Substitute -src (Join-Path $Tpl "scripts\check_devkit_version.ps1") -dst (Join-Path $Agents "scripts\check_devkit_version.ps1")
-Copy-And-Substitute -src (Join-Path $Tpl "scripts\check_devkit_version.sh") -dst (Join-Path $Agents "scripts\check_devkit_version.sh")
+Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.ps1") -Destination (Join-Path $Agents "scripts\check_devkit_version.ps1") -Force
+Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.sh") -Destination (Join-Path $Agents "scripts\check_devkit_version.sh") -Force
 
 # 5. devkit_version.txt
 Copy-Item -Path (Join-Path $DevkitRoot "version.txt") -Destination (Join-Path $Agents "devkit_version.txt") -Force
@@ -111,6 +111,15 @@ foreach ($role in $roles) {
     }
 
     "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** —`n**In Progress:** —`n**Impediments:** —`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
+}
+
+# 8. Substitute framework placeholders in all generated mechanical files
+Get-ChildItem -Path $Agents -File -Recurse | ForEach-Object {
+    $c = Get-Content $_.FullName -Raw
+    $newContent = $c -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'
+    if ($newContent -cne $c) {
+        Set-Content -Path $_.FullName -Value $newContent -NoNewline -Encoding UTF8
+    }
 }
 
 Write-Host "Mechanical scaffold complete: $TargetProject"

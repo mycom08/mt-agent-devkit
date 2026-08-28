@@ -72,7 +72,7 @@ Sprint execution commands (`continue sprint`, `start story`, etc.) live in the *
 
 ## 15. How to Update a Template
 
-When a rule, workflow, or instruction file needs to change, update the source template in `.antigravity/agents/templates/` — never edit a target project's installed copy directly.
+When a rule, workflow, or instruction file needs to change, update the source template in `.claude/agents/templates/` — never edit a target project's installed copy directly.
 
 > **Dual-update + drift check:** Many templates have a devkit working mirror under `.antigravity/agents/working/` (e.g. `templates/rules/Story_Standard_template.md` ↔ `working/rules/Story_Standard.md`). Update **both** copies in the same change. Before editing, diff the mirror against its template (`git diff --no-index <template> <mirror>`, or read them side by side) and flag any **pre-existing** divergence — fix it in scope or record it as a follow-up story, so the two copies don't silently drift.
 >
@@ -82,7 +82,7 @@ When a rule, workflow, or instruction file needs to change, update the source te
 
 **Steps (always in this order):**
 
-1. **Edit the template file** under `.antigravity/agents/templates/` (e.g., `.antigravity/agents/templates/rules/QA_Rules_Bootstrap_template.md`)
+1. **Edit the template file** under `.claude/agents/templates/` (e.g., `.claude/agents/templates/rules/QA_Rules_Bootstrap_template.md`)
 2. **Bump the patch version** in `version.txt` (e.g., `0.1.5` → `0.1.6`)
 3. **Add a new entry** to `changes.json` — place it **first**, at the **top** of the object, immediately after the opening `{`. This file is ordered **newest-first (descending)**: the current first key is the latest version and the last key is `0.0.1`:
 
@@ -90,10 +90,10 @@ When a rule, workflow, or instruction file needs to change, update the source te
 "0.1.6": {
   "new": [],
   "modified": [
-    ".antigravity/agents/templates/rules/QA_Rules_Bootstrap_template.md"
+    ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md"
   ],
   "descriptions": {
-    ".antigravity/agents/templates/rules/QA_Rules_Bootstrap_template.md": "Fix: one-line summary of what changed and why"
+    ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md": "Fix: one-line summary of what changed and why"
   }
 }
 ```

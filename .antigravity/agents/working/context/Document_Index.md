@@ -49,7 +49,7 @@ Quick lookup for all project documents and external references. Update this file
 | Agent Rules | `.antigravity/agents/working/rules/` |
 | Agent Memory | `.antigravity/agents/working/memory/` |
 | Agent Working Records | `.antigravity/agents/working/working-record/` |
-| Devkit Templates | `.antigravity/agents/templates/` |
+| Devkit Templates | `.claude/agents/templates/` |
 | Devkit Workflows | `.antigravity/agents/workflows/` |
 | Sprint Workflows | `.antigravity/agents/working/workflows/` |
 

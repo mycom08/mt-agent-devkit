@@ -126,7 +126,7 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 
 #### `CLAUDE.md`
 
-**Source:** `templates/{mode}/Orchestrator_template.md` ← must match the Stage 2 source table entry above; run `grep -n "CLAUDE_template" Init_Project_Workflow.md` when updating to catch all occurrences
+**Source:** `templates/{mode}/Orchestrator_template.md` ← must match the Stage 2 source table entry above; run `grep -n "Orchestrator_template" Init_Project_Workflow.md` when updating to catch all occurrences
 
 If `CLAUDE.md` exists at `TARGET_PROJECT` root → generate a **CLAUDE.md addition** (a block to append, not a full replacement).
 If `CLAUDE.md` does not exist → generate a **full CLAUDE.md**.
@@ -229,6 +229,8 @@ If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the
 #### Adaptive tier — everything the mechanical script does NOT cover
 
 Everything below needs real judgment and should go through an agent (a much smaller one now — it's no longer also carrying ~35 mechanical files). Read the target repo's already-known context (`architecture.md` / `architecture_<repo>.md`, `repo_structure.md`, Stage 1 scan results) and write:
+
+**Universal substitutions:** For every adaptive file generated, always replace `{{AGENT_DIR_PREFIX}}` with `.claude`, `{{ORCHESTRATOR_FILE}}` with `CLAUDE.md`, and `{{AGENT_CLI_NAME}}` with `Claude Code`.
 
 - `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`
 - 6 agent instruction files — adapt pre-PR gates to detected tooling (e.g., `npm test`, `pytest`, `cargo test`, `./mvnw test`)

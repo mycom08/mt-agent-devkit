@@ -439,7 +439,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 **Steps 7–11 apply only if a project orchestrator folder was created in step 3** (skip all five for the service+api-spec-only case):
 
-7. Read `.claude/agents/templates/Project_CLAUDE_template.md` and write it to the project orchestrator folder as `CLAUDE.md`, substituting:
+7. Read `.claude/agents/templates/Project_Orchestrator_template.md` and write it to the project orchestrator folder as `CLAUDE.md`, substituting:
    - `{{PROJECT_NAME}}` → product name from user's idea
    - `{{MODE}}` → `github`
    - `{{DEVKIT_SOURCE_URL}}` → this devkit's own `**Devkit source:**` value (from the devkit's own `CLAUDE.md`)

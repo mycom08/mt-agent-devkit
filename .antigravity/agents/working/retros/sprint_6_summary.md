@@ -22,7 +22,7 @@
 - Non-behavioral fast path (Stage 2/3/4, no agent spawn) verified cleanly against the diff and Technical Scope with no domain-knowledge gaps — all 10 AC confirmed directly. *(Orchestrator)*
 
 ### Actions Applied
-- `.antigravity/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md` + working mirror `Shared_Pipeline_Stages.md` — GitHub mode closure-comment-ordering note rewritten from a prose warning into a mandatory `gh issue view --json state` pre-check with an explicit branch, since the prose-only version had already recurred once despite being documented. Applied directly, no version bump (devkit-internal reliability fix).
+- `.claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md` + working mirror `Shared_Pipeline_Stages.md` — GitHub mode closure-comment-ordering note rewritten from a prose warning into a mandatory `gh issue view --json state` pre-check with an explicit branch, since the prose-only version had already recurred once despite being documented. Applied directly, no version bump (devkit-internal reliability fix).
 - Wrong `validate_templates.py` path in Developer's spawn-prompt reference — not applied; user did not select it this round.
 - Developer branch-before-first-file sequencing — not applied; treated as a one-off execution slip, not a missing rule.
 - 3 carried-over workflow items (AC boilerplate impossibility, structurally divergent §1 sections) — not applied; deferred again.
@@ -38,7 +38,7 @@
 - `[context]` The pruning-schedule AC referenced "existing sprint-end cleanup" without naming a file — Developer had to grep for `Sprint_Workflow.md`'s "Sprint end" sequence rather than follow a pointer. *(Developer)*
 - `[context]` No refinement-thread decision existed for exactly where the once-per-sprint pruning step should live (unlike the other 5 AC points, all resolved with worked examples) — Developer made a judgment call: new "Sprint-End Memory Pruning" section in `Retro_Rules.md` + a new step in `Sprint_Workflow.md`'s Sprint-end sequence. *(Developer)*
 - `[workflow]` When a design-first refinement thread resolves most but not all AC points explicitly, flag the remaining point(s) so the implementer knows a judgment call is expected there rather than assuming full thread coverage. *(Developer)*
-- `[failure]` Both original PR commits carried `[skip ci]`, including the feat commit touching `.antigravity/agents/templates/**` — the exact path this repo's CI validates. `Developer_Rules.md §6`'s docs-only-push rule (`.antigravity/agents/**` = non-code) is correct for target projects but mis-scoped when mirrored verbatim into the devkit's own working copy. CI never ran until the orchestrator's unrelated changes.json-merge commit (no tag) triggered it for real — recovered, but only incidentally. *(Orchestrator)*
+- `[failure]` Both original PR commits carried `[skip ci]`, including the feat commit touching `.claude/agents/templates/**` — the exact path this repo's CI validates. `Developer_Rules.md §6`'s docs-only-push rule (`.antigravity/agents/**` = non-code) is correct for target projects but mis-scoped when mirrored verbatim into the devkit's own working copy. CI never ran until the orchestrator's unrelated changes.json-merge commit (no tag) triggered it for real — recovered, but only incidentally. *(Orchestrator)*
 - `[context]` No version bump this run, per explicit user instruction — files merged into the existing `"0.1.40"` `changes.json` entry instead of a new version key. *(Orchestrator)*
 
 ### What Worked Well

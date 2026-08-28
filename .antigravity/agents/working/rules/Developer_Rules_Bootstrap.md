@@ -76,7 +76,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ## 4. File Naming
 
-**Template files:** Use descriptive names with `_template` suffix for files under `.antigravity/agents/templates/`. Strip the suffix when writing to target projects.
+**Template files:** Use descriptive names with `_template` suffix for files under `.claude/agents/templates/`. Strip the suffix when writing to target projects.
 
 **Workflow files:** Use `Title_Case_With_Underscores` — `Sprint_Workflow_template.md`, `Sync_Devkit_Workflow_template.md`.
 

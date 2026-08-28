@@ -17,7 +17,7 @@
 
 ### Actions Applied
 - `.antigravity/agents/working/rules/Product_Owner_Rules.md` — added Version-bump AC rule: write "`version.txt` bumped" without predicting the exact target number
-- `.antigravity/agents/templates/rules/Product_Owner_Rules_template.md` — mirrored the same addition
+- `.claude/agents/templates/rules/Product_Owner_Rules_template.md` — mirrored the same addition
 
 ---
 

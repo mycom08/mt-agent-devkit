@@ -37,15 +37,7 @@ if [[ "$MODE" == "strict" ]]; then
   echo "0" > "$AGENTS/docs/story_counter.txt"
 fi
 
-# Copy and substitute placeholders
-function cp_sub() {
-  local src="$1"
-  local dst="$2"
-  sed -e 's/{{AGENT_DIR_PREFIX}}/.claude/g' \
-      -e 's/{{ORCHESTRATOR_FILE}}/CLAUDE.md/g' \
-      -e 's/{{AGENT_CLI_NAME}}/Claude Code/g' \
-      "$src" > "$dst"
-}
+
 # 2. Verbatim rules files — content-diffed against real scaffold output to confirm they
 #    carry no project-specific judgment beyond {github-org}/{repo-name} substitution. NOT
 #    the same set Init_Project_Workflow.md's prose implies: Story_Standard_Dev/PO/QA all
@@ -76,11 +68,11 @@ for f in "${VERBATIM_RULES[@]}"; do
   sed -i '1s/^\xEF\xBB\xBF//' "$dst"
 done
 
-# 3. Workflow files — never adapted; {github-org}/{repo-name} and every {{PLACEHOLDER}} in
-#    these files are intentionally left literal for runtime resolution (devkit convention).
+# 3. Workflow files — never adapted; {github-org}/{repo-name} and runtime-resolved placeholders
+#    are intentionally left literal (except framework variables substituted at the end of this script).
 NONSPLIT_WORKFLOWS=(Sync_Devkit_Workflow Workflow_Guide)
 for f in "${NONSPLIT_WORKFLOWS[@]}"; do
-  cp_sub "$TPL/workflows/${f}_template.md" "$AGENTS/workflows/${f}.md"
+  cp "$TPL/workflows/${f}_template.md" "$AGENTS/workflows/${f}.md"
 done
 
 SPLIT_WORKFLOWS=(
@@ -112,7 +104,7 @@ done
 # 3b. Orchestrator Guide — shared + mode-specific combine, same mechanism as the split
 #    workflow files above (step 3), but this is a single file living directly under
 #    .claude/agents/, not under workflows/. Devkit-merged/protected (see CLAUDE.md's
-#    Agent File Integrity table) — carries no project-specific placeholders.
+#    Agent File Integrity table) — carries no project-specific placeholders (only framework variables substituted at the end).
 og_shared="$TPL/shared/Orchestrator_Guide_Shared_template.md"
 og_modefile="$TPL/$MODE/Orchestrator_Guide_template.md"
 og_dst="$AGENTS/Orchestrator_Guide.md"
@@ -128,13 +120,13 @@ if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
 fi
 
 # 4. Version-check scripts (verbatim)
-cp_sub "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
-cp_sub "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
+cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
+cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
 
 # 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
 #    .claude/skills/, a sibling of .claude/agents/, not under it, since that is
 #    where Claude Code discovers project-level skills.
-cp_sub "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.claude/skills/read-section/SKILL.md"
+cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.claude/skills/read-section/SKILL.md"
 
 # 5. devkit_version.txt
 cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"
@@ -281,5 +273,11 @@ EOF
 else
   echo "settings.json: already exists — SessionStart hook NOT merged, do this separately"
 fi
+
+# 11. Substitute framework placeholders in all generated mechanical files
+find "$AGENTS" "$TARGET/.claude/skills" -type f -exec sed -i \
+  -e 's/{{AGENT_DIR_PREFIX}}/.claude/g' \
+  -e 's/{{ORCHESTRATOR_FILE}}/CLAUDE.md/g' \
+  -e 's/{{AGENT_CLI_NAME}}/Claude Code/g' {} +
 
 echo "Mechanical scaffold complete: $TARGET"

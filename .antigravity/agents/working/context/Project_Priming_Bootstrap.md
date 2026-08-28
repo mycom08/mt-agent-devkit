@@ -12,7 +12,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.an
 
 | Trigger | Fetch |
 |---|---|
-| **Editing any file under `.antigravity/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering. Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
+| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering. Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
 | You have been assigned a story | `§3` (Story Workflow) |
 | Starting a complex change — new workflow stage, major template restructure, new devkit command | `§4` (Design First Before Implementation) |
 | Creating or updating a project document | `§6` (Internal Project Documents) — the canonical paths |
@@ -44,7 +44,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.an
 | BA | Business Analyst — aligns requirements, flags scope creep |
 | AC | Acceptance Criteria |
 | Devkit | mt-agent-devkit — this project |
-| Template | A `_template.md` file under `.antigravity/agents/templates/` used by `init project` |
+| Template | A `_template.md` file under `.claude/agents/templates/` used by `init project` |
 | Target project | A project that has had `init project` run on it |
 | Workflow | An `.md` instruction file read by the orchestrator to run a pipeline |
 
@@ -64,11 +64,11 @@ Write format, access control, retention and the character cap are owned by `Agen
 |------|------|
 | Devkit orchestrator | `AGENTS.md` |
 | Devkit workflows | `.antigravity/agents/workflows/` |
-| Templates (for target projects) | `.antigravity/agents/templates/` |
+| Templates (for target projects) | `.claude/agents/templates/` |
 | Agent working files | `.antigravity/agents/working/` |
 | Analyst output | `result/analyst/` |
 | Version | `version.txt` |
-| Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.antigravity/agents/templates/`); devkit-internal workflows (`.antigravity/agents/workflows/`) are excluded |
+| Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.claude/agents/templates/`); devkit-internal workflows (`.antigravity/agents/workflows/`) are excluded |
 
 ---
 
@@ -81,7 +81,7 @@ Write format, access control, retention and the character cap are owned by `Agen
 | Unix scripts | Shell (.sh) |
 | VCS | Git / GitHub |
 
-There is no compiled binary, no database, no web server, and no test framework. Pre-PR gate for `.sh` files: `bash -n <file>`. For `.ps1` files: PowerShell syntax check. For any PR touching `.antigravity/agents/templates/**` or `.antigravity/agents/workflows/**`: `python scripts/validate_templates.py` (Layer-1 corpus invariant check — must exit 0). See `docs/Template_Test_Strategy.md` for the full template test approach (3-layer model, the 6 invariant specs, risk tiers, and deferred Layer-2/3 coverage).
+There is no compiled binary, no database, no web server, and no test framework. Pre-PR gate for `.sh` files: `bash -n <file>`. For `.ps1` files: PowerShell syntax check. For any PR touching `.claude/agents/templates/**` or `.antigravity/agents/workflows/**`: `python scripts/validate_templates.py` (Layer-1 corpus invariant check — must exit 0). See `docs/Template_Test_Strategy.md` for the full template test approach (3-layer model, the 6 invariant specs, risk tiers, and deferred Layer-2/3 coverage).
 
 ---
 
@@ -103,7 +103,7 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 ## 12. Architectural Patterns
 
-**Template injection:** `init project` reads from `.antigravity/agents/templates/`, adapts content, and writes to the target project's `.antigravity/agents/`.
+**Template injection:** `init project` reads from `.claude/agents/templates/`, adapts content, and writes to the target project's `.antigravity/agents/`.
 
 **Version tracking:** `version.txt` + `changes.json` allow `sync devkit` (in target projects) to fetch only changed files from GitHub rather than re-installing everything.
 

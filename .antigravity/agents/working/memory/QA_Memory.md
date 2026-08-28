@@ -30,7 +30,7 @@ Keywords: `git diff main origin/<branch>`, untouched bullet, zero `+`/`-` lines,
 Keywords: `gh` query, idempotency, dedup, filters, adversarial input, prefix-title case, exact-line-match
 
 ### Fact 8 — Regression scope for additive-only PRs
-Keywords: `git diff main..HEAD --name-only`, additive-only, `.antigravity/agents/templates/`, `.antigravity/agents/workflows/`, non-template PR
+Keywords: `git diff main..HEAD --name-only`, additive-only, `.claude/agents/templates/`, `.antigravity/agents/workflows/`, non-template PR
 
 ### Fact 9 — `validate_templates.py` `[KNOWN_ISSUE]` vs `[ERROR]`, and fixture flags
 Keywords: `[KNOWN_ISSUE]`, `Blocked_Request_Template.md`, capital-T typo, `--test-retired-trigger`, `RETIRED_TRIGGERS`, Invariant #4, Invariant #5
