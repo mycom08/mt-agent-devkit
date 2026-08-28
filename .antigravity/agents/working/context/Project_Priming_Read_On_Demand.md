@@ -1,33 +1,8 @@
-# mt-agent-devkit — Priming Context
+# mt-agent-devkit — Priming Context (Read On Demand)
 
-> This is a cheat sheet for AI agents — the minimum context needed to understand the project, architecture, and team workflow. It is not comprehensive documentation.
+> Companion to `Project_Priming_Bootstrap.md`. **Never read as part of the Pre-Work Sequence, in whole or in part.** Fetch one section when its trigger fires; the routing table in the bootstrap file names which.
 
-## 1. Project Overview
-
-**mt-agent-devkit** is a Claude Code devkit that scaffolds a complete AI Scrum team into any target project.
-
-**Purpose:** Gives any project a fully wired AI agent team (Developer, TL, QA, PO, BA) plus sprint workflow files. Developers trigger the devkit once (`init project`), then run `continue sprint` or `start story` inside their project using the injected workflows.
-
-**Status:** 🔄 Active development — see `version.txt` for current version
-
-**Key traits:** Markdown-first, no compiled artifact, no runtime service. All deliverables are `.md` template files, `.ps1`/`.sh` scripts, and workflow instruction files.
-
----
-
-## 2. Glossary
-
-| Term | Definition |
-|------|-----------|
-| PO | Product Owner — owns stories, defines AC, ticks checkboxes after QA confirms |
-| TL | Technical Lead — owns architecture, reviews and approves PRs |
-| Dev | Developer — implements stories, writes PRs |
-| QA | Quality Assurance — tests AC, reports results, notifies PO |
-| BA | Business Analyst — aligns requirements, flags scope creep |
-| AC | Acceptance Criteria |
-| Devkit | mt-agent-devkit — this project |
-| Template | A `_template.md` file under `.antigravity/agents/templates/` used by `init project` |
-| Target project | A project that has had `init project` run on it |
-| Workflow | An `.md` instruction file read by the orchestrator to run a pipeline |
+> **Numbering is shared with the bootstrap file and never reused**, so every pre-split `Project_Priming.md §N` citation still resolves — to whichever of the two files holds that number.
 
 ---
 
@@ -71,16 +46,6 @@ For complex changes (new workflow stage, major template restructure, new devkit 
 
 ---
 
-## 5. Agent Working Records
-
-**Location:** `.antigravity/agents/working/working-record/{Agent_Name}_Working_Record.md`
-
-**Access control:** Read and update only your own record. Never read or modify another agent's record.
-
-Update at **start of session** and **end of session**, using rewrite-in-place snapshot semantics (see `Agent_Common.md §5`). Keep the **3 most recent story entries** — the retention unit is story entries, not calendar days — capped at ≤ 4,000 characters (`wc -c`), not a line count.
-
----
-
 ## 6. Internal Project Documents
 
 | Document | Path |
@@ -89,39 +54,6 @@ Update at **start of session** and **end of session**, using rewrite-in-place sn
 | Implementation Roadmap | `docs/plan/Implementation_Roadmap.md` |
 | Product Backlog | `docs/plan/Product_Backlog.md` |
 | Sprint Overviews | `docs/sprints/Sprint_N_Overview.md` |
-
----
-
-## 7. Key Directories
-
-| What | Path |
-|------|------|
-| Devkit orchestrator | `CLAUDE.md` |
-| Devkit workflows | `.antigravity/agents/workflows/` |
-| Templates (for target projects) | `.antigravity/agents/templates/` |
-| Agent working files | `.antigravity/agents/working/` |
-| Analyst output | `result/analyst/` |
-| Version | `version.txt` |
-| Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.antigravity/agents/templates/`); devkit-internal workflows (`.antigravity/agents/workflows/`) are excluded |
-
----
-
-## 8. Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Instruction files | Markdown (.md) |
-| Windows scripts | PowerShell (.ps1) |
-| Unix scripts | Shell (.sh) |
-| VCS | Git / GitHub |
-
-There is no compiled binary, no database, no web server, and no test framework. Pre-PR gate for `.sh` files: `bash -n <file>`. For `.ps1` files: PowerShell syntax check. For any PR touching `.antigravity/agents/templates/**` or `.antigravity/agents/workflows/**`: `python scripts/validate_templates.py` (Layer-1 corpus invariant check — must exit 0). See `docs/Template_Test_Strategy.md` for the full template test approach (3-layer model, the 6 invariant specs, risk tiers, and deferred Layer-2/3 coverage).
-
----
-
-## 9. API Standards
-
-Not applicable — this project has no API.
 
 ---
 
@@ -134,39 +66,7 @@ Not applicable — this project has no API.
 | `update project [path]` | Applies current local templates to an already-initialized project |
 | `workflow help` | Shows this devkit's available commands |
 
-Sprint execution commands (`continue sprint`, `start story`, etc.) live in the **target project** CLAUDE.md, not here.
-
----
-
-## 11. Current State
-
-The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint workflow files, 2 version-check scripts) into any target project. Two modes: `github` (full GitHub integration) and `strict` (local-only, no GitHub required).
-
-**Known limitations:**
-- ❌ No automated test suite for verifying template correctness
-- ❌ Sprint workflow commands not yet wired into the devkit's own CLAUDE.md
-
----
-
-## 12. Architectural Patterns
-
-**Template injection:** `init project` reads from `.antigravity/agents/templates/`, adapts content, and writes to the target project's `.antigravity/agents/`.
-
-**Version tracking:** `version.txt` + `changes.json` allow `sync devkit` (in target projects) to fetch only changed files from GitHub rather than re-installing everything.
-
-**Mode bifurcation:** GitHub mode uses GitHub Issues/PRs/Actions. Strict mode stores everything locally and gitignores the entire `.antigravity/agents/` folder.
-
----
-
-## 13. Feature Current State
-
-No active feature sprint — devkit maintenance is handled as individual stories.
-
----
-
-## 14. Local Sandbox Environment
-
-Not applicable — no Docker or sandbox environment.
+Sprint execution commands (`continue sprint`, `start story`, etc.) live in the **target project** AGENTS.md, not here.
 
 ---
 
@@ -202,7 +102,7 @@ Use `"new"` for files added for the first time; `"modified"` for files that alre
 
 > Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Keep the file's **newest-first (descending)** order — inserting out of order will cause `sync devkit` to skip or double-apply changes. `validate_templates.py` checks semver parseability only, never ordering direction, so a misplaced entry will not be caught by CI.
 
-### 15a. Adding a New Agent Role (Nth Role)
+### Adding a New Agent Role (Nth Role)
 
 Adding a role to the roster is a corpus-wide ripple, not a two-file change. Beyond the role's own instruction/rules template pair, check every existing enumeration of the current role list:
 
@@ -217,6 +117,18 @@ Grep the existing role list (e.g. `grep -rn "Developer\`, \`Technical Lead\`, \`
 
 **Working-record mirror:** a new role's working-record file is never created at scaffold time for the devkit's own team — `.antigravity/agents/working/working-record/` is gitignored (root `.gitignore`). Only `instructions/`, `rules/`, `memory/` mirrors need to exist; the working-record file is created at runtime on first use, never committed.
 
+### Splitting a Shared Rules/Instructions File into Bootstrap/On-Demand Tiers
+
+Porting an already-validated bootstrap/on-demand split (e.g. the devkit-team's own `Agent_Common.md` → `Agent_Common_Bootstrap.md` + `Agent_Common_Read_On_Demand.md`, PR #162) into a new target — the `templates/` tree, a not-yet-split role, the Antigravity mirror — touches more than the two new files. Checklist (ST-000132 retro):
+
+- **The two new files themselves** — same section boundary and numbering as the validated reference (bootstrap = unconditional-before-first-tool-call content; on-demand = everything else). Keep numbering gaps rather than renumbering when a section moves to the companion file — a stale citation should resolve to nothing, not silently to a different rule.
+- **Every citing file** — grep the *old* filename with `§` across both `templates/` and `working/` (`grep -rn "OldFile.md §"`) and re-point each hit at the correct tier file and (possibly shifted) section number.
+- **Workflow enumerations** — `init project` / `sync devkit` / `update project` workflow files and the scaffold scripts (`scaffold_mechanical.sh`/`.ps1`, both `.antigravity/` and `.antigravity/` surfaces) that list template files by name.
+- **`changes.json`** — new/renamed file entries (see the dual-update steps above).
+- **`scripts/validate_templates.py`'s `SECTION_REF_ALIAS`** — if the old filename's stem was a valid alias target, confirm it still resolves (or is removed if the old file is deleted) and that the new files' stems are added if anything cites them.
+- **The `read-section` skill's own worked example** — if the example cites a file this change deletes or splits, repoint it to the correct successor file/section as part of the *same* change, not as an afterthought discovered later. Update both the template copy (`templates/skills/read-section/SKILL_template.md`) and the working copy (`.antigravity/skills/read-section/SKILL.md`) together — they must not drift to two different examples.
+- **Numbering-gap prose vs. the validator:** `validate_templates.py`'s section-ref checker treats any bare `§N` substring as a citation needing a real heading — it cannot tell a real citation from prose *describing* an intentional gap. When documenting a gap in prose (e.g. in a `## Version` footer), write "section N", never "§N" — the glyph is what triggers the check.
+
 ---
 
 ## 16. Reference Links
@@ -226,6 +138,6 @@ Grep the existing role list (e.g. `grep -rn "Developer\`, \`Technical Lead\`, \`
 
 ---
 
-**Document Version:** 1.1
-**Last Updated:** 2026-06-24
+**Document Version:** 1.1 — §15a de-numbered to an unnumbered `### Adding a New Agent Role (Nth Role)` sub-heading of §15: it was never wanted without §15, and as a flat `## 15a.` it bounded a §15 extraction and forced a second fetch. Preamble trimmed to drop the section inventory duplicated from the bootstrap file.
+**Previous:** 1.0 — created 2026-08-21, split out of `Project_Priming.md` v1.1 (devkit's own team only).
 **Audience:** Development team, architects, AI agents

@@ -129,7 +129,7 @@
 - Full TL review (chosen over the fast path) verified reference targets actually exist (`Sync_Devkit_Workflow`, `Agent_Common §4`, `Document_Index` paths), catching what a text-only diff review would miss *(Orchestrator/TL)*
 
 ### Actions Applied
-- `CLAUDE.md` (devkit-internal) — line 240 stale `update agents` → `sync devkit` [no version bump]
+- `AGENTS.md` (devkit-internal) — line 240 stale `update agents` → `sync devkit` [no version bump]
 - Created follow-up story **ST-000018** (Issue #39) — fix the same AND-query bug in `product_owner_instructions` Plan-Next-Sprint step (FU-2 / `[failure]`)
 - Created follow-up story **ST-000019** (Issue #40) — add implementer reference-trace rule (implementer-responsibility framing, per maintainer), reconcile reviewer reference-integrity checks between `Technical_Lead_Rules` template/mirror, and align `Document_Index` with Project_Priming §6 (FU-1 reviewer signals + FU-3)
 - *(De-scoped by maintainer — RF-010 retro-skeleton/`Retro_Rules` Analyst-BA header alignment: low priority, not tracked)*

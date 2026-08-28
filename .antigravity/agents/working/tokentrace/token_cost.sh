@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Computes real token usage + cost for one finished sub-agent, from its own
-# Claude Code transcript file. See README.md in this folder for why the
+# Antigravity transcript file. See README.md in this folder for why the
 # dedup step below is required — skipping it overcounts tokens.
 #
 # Usage:
@@ -9,7 +9,7 @@
 # Price args are optional — if omitted, the script looks up the model found
 # in the transcript against the table below (standard API rate, $/MTok).
 # This table WILL go stale — verify against shared/models.md in the
-# claude-api skill (or platform.claude.com/docs/en/pricing) before trusting
+# claude-api skill (or platform.antigravity.com/docs/en/pricing) before trusting
 # a cost figure for a model not listed, or after a pricing change.
 
 set -euo pipefail

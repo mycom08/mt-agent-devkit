@@ -53,7 +53,7 @@ Plus each role's derived file-name forms, e.g. for Developer: `developer_instruc
 
 A finding is only raised when **both** hold:
 1. The shared block is **>= 15 contiguous lines** (post-normalization).
-2. The proposed target file is **already on the consuming agent's mandatory read list** — i.e. a file that role's instruction/rules chain requires reading unconditionally every session (`Agent_Common.md §1`'s Project Priming/Rules/Memory sequence, plus that role's own Rules file's own "Mandatory Reading" section). A file only reachable via a conditional trigger pointer ("read X before doing Y") does not satisfy this — the duplicate would only be *replaced* with a pointer the consuming agent won't reliably follow.
+2. The proposed target file is **already on the consuming agent's mandatory read list** — i.e. a file that role's instruction/rules chain requires reading unconditionally every session (`Agent_Common_Bootstrap.md §1`'s Project Priming/Rules/Memory sequence, plus that role's own Rules file's own "Mandatory Reading" section). A file only reachable via a conditional trigger pointer ("read X before doing Y") does not satisfy this — the duplicate would only be *replaced* with a pointer the consuming agent won't reliably follow.
 
 ### `D-n` — byte-identical duplication
 
@@ -85,7 +85,7 @@ A contradiction finding requires **all three** of:
 ### Carve-outs — never a contradiction
 
 - **Mode bifurcation.** Anything guarded by `**GitHub mode:**` / `**Strict mode:**` prose. Stronger: `.antigravity/agents/templates/github/**` and `.antigravity/agents/templates/strict/**` are **excluded from scanning entirely** (both duplication and contradiction). Their thin variants are comment-only — `scaffold_mechanical.sh` strips every all-comment mode body before append, so both modes deploy byte-identical files. A thin variant contributes no deployed content; it can neither contradict nor duplicate the shared file, because overlapping with it is the design.
-- **Template vs. `working/` mirror.** Never compare `templates/X_template.md` against `working/X.md`. `Project_Priming.md §15` explicitly sanctions intentionally-diverged mirrors (the devkit runs GitHub-mode-only while templates stay target-generic). Divergence there is drift, tracked by the §15 dual-update rule — out of Tier A scope entirely; scanning it would false-positive across most of the corpus.
+- **Template vs. `working/` mirror.** Never compare `templates/X_template.md` against `working/X.md`. `Project_Priming_Read_On_Demand.md §15` explicitly sanctions intentionally-diverged mirrors (the devkit runs GitHub-mode-only while templates stay target-generic). Divergence there is drift, tracked by the §15 dual-update rule — out of Tier A scope entirely; scanning it would false-positive across most of the corpus.
 - **Role-scoped views.** E.g. `Story_Standard.md` (full) vs. `Story_Standard_QA.md` (role view). A view that omits or narrows does not contradict the file it's scoped from.
 - **Different lifecycle phases.** Statements about different gates ("before merge" vs. "after merge") are not opposites.
 - **`<!-- audit:keep -->`** content, per §1 above.
@@ -103,7 +103,7 @@ A finding in this class is a reference inside the scanned corpus that does not r
 
 - **Dead file-path reference** — a `.antigravity/agents/...` path cited in prose (backtick-quoted or plain) that does not exist under any of the three resolution roots `validate_templates.py`'s `_resolve_file_ref` already uses (repo-verbatim, `working/` mirror, `<stem>_template.md` fallback). If it resolves through any of the three roots, it is **not** a finding — the audit's `X-n` class is for references that fail all three, not a stricter check than the validator's.
 - **Dead section-anchor reference** — a `<File> §N` / `<File> §Name` citation where the target file exists but no heading matching that section number/name exists in it.
-- **Orphaned reference** — a file present in a scanned directory that is not referenced from any other in-scope file's mandatory-read list, trigger-pointer, or workflow routing table, and is not itself an entry point (`CLAUDE.md`, a workflow file reachable from a `CLAUDE.md` trigger row, `Project_Priming.md`). An orphaned file is reported, not deleted automatically — the proposed edit is stated per finding (remove the file, or re-link it from wherever it should be referenced), and remains subject to the same per-finding approval as `D-n`/`RP-n`.
+- **Orphaned reference** — a file present in a scanned directory that is not referenced from any other in-scope file's mandatory-read list, trigger-pointer, or workflow routing table, and is not itself an entry point (`AGENTS.md`, a workflow file reachable from a `AGENTS.md` trigger row, `Project_Priming_Bootstrap.md`). An orphaned file is reported, not deleted automatically — the proposed edit is stated per finding (remove the file, or re-link it from wherever it should be referenced), and remains subject to the same per-finding approval as `D-n`/`RP-n`.
 
 Proposed edit: correct the reference (fix the path/anchor) if the intended target is unambiguous from context; otherwise propose removal of the dead reference and state the ambiguity in the rationale so the user decides at approval time.
 

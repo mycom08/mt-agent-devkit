@@ -8,7 +8,7 @@ Read this file and present its contents to the user as a formatted summary. Do n
 
 ## What Are These Workflows?
 
-This project uses Claude Code as an AI Scrum team. Workflows are commands you type in the chat that trigger a multi-agent pipeline — Claude orchestrates specialized agents (Product Owner, Technical Lead, Developer, QA) to plan, implement, review, and close stories automatically.
+This project uses Antigravity as an AI Scrum team. Workflows are commands you type in the chat that trigger a multi-agent pipeline — Claude orchestrates specialized agents (Product Owner, Technical Lead, Developer, QA) to plan, implement, review, and close stories automatically.
 
 ---
 
@@ -97,7 +97,7 @@ backlog → ready → in-progress → review → testing → done
 
 | What | Where |
 |---|---|
-| Project overview and architecture | `.antigravity/agents/working/context/Project_Priming.md` |
-| All workflow trigger mappings | `CLAUDE.md` §Workflows |
-| Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
+| Project overview and architecture | `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` |
+| All workflow trigger mappings | `.antigravity/agents/working/Orchestrator_Guide.md` §Sprint Workflows (Devkit) |
+| Agent roles and instruction files | `AGENTS.md` §Agent Roster |
 | CI/CD story validation | `.antigravity/agents/working/rules/CICD_Validation_Guide.md` |

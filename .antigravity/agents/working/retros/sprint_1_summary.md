@@ -52,5 +52,5 @@
 - `[context]` `changes.json` has inconsistent formats across older entries; story prescribed the `new`/`modified` format but no rule documented it — **Fix applied:** `changes.json` format rule added to Developer_Rules.md §4
 
 ### What Worked Well
-- Pre-work read sequence identified that ST-000002 had already wired the CLAUDE.md trigger — prevented duplicate work
+- Pre-work read sequence identified that ST-000002 had already wired the AGENTS.md trigger — prevented duplicate work
 - Working Record key decisions section confirmed the target version (0.1.1) without needing to re-derive it

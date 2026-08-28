@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Writes every scaffold file that needs zero project-specific judgment — pure copy or
-# fixed-token substitution. Run this BEFORE generating the adaptive-tier files (CLAUDE.md,
+# fixed-token substitution. Run this BEFORE generating the adaptive-tier files (AGENTS.md,
 # README.md, Project_Priming.md, Document_Index.md, 6 instruction files, 10 rules files that
 # need real adaptation, 4 wiki docs) so an LLM agent never has to touch content it would
 # only reproduce byte-for-byte.
@@ -28,7 +28,7 @@ fi
 # 1. Directories
 mkdir -p "$AGENTS/context" "$AGENTS/memory" "$AGENTS/rules" "$AGENTS/working-record" \
          "$AGENTS/workflows" "$AGENTS/scripts" "$AGENTS/retros" "$AGENTS/tmp" "$AGENTS/docs" \
-         "$TARGET/docs/wiki"
+         "$TARGET/docs/wiki" "$TARGET/.antigravity/skills/read-section"
 # No .gitkeep for retros/ — it's gitignored below (github mode) or covered by the blanket
 # .antigravity/agents/ ignore (strict mode), so an empty-dir placeholder would never be committed.
 
@@ -100,9 +100,32 @@ for f in "${SPLIT_WORKFLOWS[@]}"; do
   fi
 done
 
+# 3b. Orchestrator Guide — shared + mode-specific combine, same mechanism as the split
+#    workflow files above (step 3), but this is a single file living directly under
+#    .antigravity/agents/, not under workflows/. Devkit-merged/protected (see AGENTS.md's
+#    Agent File Integrity table) — carries no project-specific placeholders.
+og_shared="$TPL/shared/Orchestrator_Guide_Shared_template.md"
+og_modefile="$TPL/$MODE/Orchestrator_Guide_template.md"
+og_dst="$AGENTS/Orchestrator_Guide.md"
+awk '/<!-- SHARED-START -->/{flag=1;next}/<!-- SHARED-END -->/{flag=0}flag' "$og_shared" > "$og_dst"
+og_mode_body="$(tail -n +2 "$og_modefile" | grep -vE '^<!--.*-->[[:space:]]*$' || true)"
+if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
+  og_trimmed="$(printf '%s\n' "$og_mode_body" | awk '
+    NF{p=1} p{buf[++n]=$0}
+    END{last=1; for(i=n;i>=1;i--){if(buf[i]!~/^[ \t]*$/){last=i;break}}
+        for(i=1;i<=last;i++) print buf[i]}')"
+  printf '\n---\n\n' >> "$og_dst"
+  printf '%s\n' "$og_trimmed" >> "$og_dst"
+fi
+
 # 4. Version-check scripts (verbatim)
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
+
+# 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
+#    .antigravity/skills/, a sibling of .antigravity/agents/, not under it, since that is
+#    where Antigravity discovers project-level skills.
+cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.antigravity/skills/read-section/SKILL.md"
 
 # 5. devkit_version.txt
 cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"
@@ -128,14 +151,16 @@ for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Des
   if [[ "$is_two_tier" == true ]]; then
     printf '# %s Memory\n\n> Two-tier memory — see `Agent_Common_Read_On_Demand.md §8`. This is the lean, always-read index — titles and grep-able keywords only, no fact bodies. Full text lives in `%s_Memory_Archive.md`. Before starting a task, scan the titles and keywords below for a match; if one matches, retrieve just that fact per the §8 bounded-read recipe — never read the whole archive.\n\n## Standing Checks\n\n*(none yet — no current fact reduces to an unconditional always-do action; entries move here if a future fact qualifies)*\n\n## Keyword Index\n\n*(none yet)*\n\n## Troubleshooting Facts\n\n*(none yet)*\n' \
       "$role_label" "$role" > "$AGENTS/memory/${role}_Memory.md"
-    printf '# %s Memory Archive\n\n> Full-text archive for `%s_Memory.md` Keyword Index tier — see `Agent_Common_Read_On_Demand.md §8`. Not read every spawn; open only when an index line keyword matches your current task, locating the matching fact by grep (heading marker `^### Fact `) — never a full-file read.\n\n## Stored Facts\n\n*(none yet)*\n' \
+    printf '# %s Memory Archive\n\n> Full-text archive for `%s_Memory.md` Keyword Index tier — see `Agent_Common_Read_On_Demand.md §8`. Not read every spawn; open only when an index line keyword matches your current task, using the `read-section` skill (`.antigravity/skills/read-section/`, heading marker `^### Fact `) — never a full-file read.\n\n## Stored Facts\n\n*(none yet)*\n' \
       "$role_label" "$role" > "$AGENTS/memory/${role}_Memory_Archive.md"
   else
     printf '# %s Memory\n\nNo facts recorded yet.\n' "$role_label" > "$AGENTS/memory/${role}_Memory.md"
   fi
 done
 
-# 7. Blank working-record files (rewrite-in-place snapshot format — see Agent_Common_Bootstrap.md §1)
+# 7. Blank working-record files (rewrite-in-place snapshot format — see the
+#    *scaffolded target project's* Agent_Common_Bootstrap.md §1. The target's
+#    own copy is split the same way the devkit's own working copy is.)
 for role in Business_Analyst Developer Product_Owner QA Technical_Lead UI_UX_Designer; do
   if [[ "$role" == "UI_UX_Designer" ]]; then
     role_label="UI/UX Designer"
@@ -150,7 +175,7 @@ done
 if [[ "$MODE" == "github" ]]; then
   cat >> "$TARGET/.gitignore" <<'EOF'
 
-# Claude Code agent temp files
+# Antigravity agent temp files
 .antigravity/agents/tmp/
 
 # Workflow output documents
@@ -168,7 +193,7 @@ EOF
 else
   cat >> "$TARGET/.gitignore" <<'EOF'
 
-# Claude Code agent files — all agent infrastructure and docs are local-only
+# Antigravity agent files — all agent infrastructure and docs are local-only
 .antigravity/agents/
 
 # Workflow output documents
@@ -213,7 +238,7 @@ fi
 #    since merging into arbitrary existing JSON safely needs a real parser, not sed. If the
 #    file already exists, this step is skipped and must be merged separately (this is the
 #    uncommon case for brand-new repos, which is the primary caller of this script).
-mkdir -p "$TARGET/.claude"
+mkdir -p "$TARGET/.antigravity"
 if [[ ! -f "$TARGET/.antigravity/settings.json" ]]; then
   UNAME_S="$(uname -s 2>/dev/null || echo unknown)"
   if [[ "$UNAME_S" == MINGW* || "$UNAME_S" == MSYS* || "${OS:-}" == "Windows_NT" ]]; then

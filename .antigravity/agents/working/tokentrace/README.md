@@ -1,6 +1,6 @@
 # Token Cost from Sub-Agent Transcripts
 
-Computes real token usage and $ cost for one finished sub-agent, from Claude Code's own transcript file — not an estimate, not the live terminal counter.
+Computes real token usage and $ cost for one finished sub-agent, from Antigravity's own transcript file — not an estimate, not the live terminal counter.
 
 ## Where the data lives
 
@@ -72,9 +72,9 @@ Requires `jq`. No `jq`? Ask a fresh agent to port the `jq` filter in the script 
 
 The script has a small hardcoded price table (`$/MTok` by model), current as of when this was written. It **will** go stale. Before trusting a cost figure:
 - Check the `model` field in the output matches what you expect.
-- Cross-check the rate against `shared/models.md` in the `claude-api` skill, or platform.claude.com/docs/en/pricing.
+- Cross-check the rate against `shared/models.md` in the `claude-api` skill, or platform.antigravity.com/docs/en/pricing.
 - If the model isn't in the table, `cost_usd` comes back all zero with a warning — pass the two price args explicitly.
 
 ## Why this exists, not the terminal counter
 
-The live number Claude Code shows while a sub-agent runs is a rough running total for that agent's context — useful as a progress signal, not a billing figure. It doesn't break out cache-read vs cache-write vs fresh tokens, and isn't reliable for cost math. This script uses the same `usage` object the API actually bills from.
+The live number Antigravity shows while a sub-agent runs is a rough running total for that agent's context — useful as a progress signal, not a billing figure. It doesn't break out cache-read vs cache-write vs fresh tokens, and isn't reliable for cost math. This script uses the same `usage` object the API actually bills from.

@@ -1,6 +1,6 @@
 # Create Stories Workflow
 
-Triggered by: `"create stories"` or `"/create-stories"` in CLAUDE.md
+Triggered by: `"create stories"` or `"/create-stories"` in AGENTS.md
 
 The orchestrator acts as PO — read `.antigravity/agents/working/instructions/product_owner_instructions.md` and `.antigravity/agents/working/rules/Story_Standard_PO.md` before proceeding. **Do not spawn a PO agent.**
 
@@ -47,5 +47,5 @@ Also ask: **"Which sprint should these stories be assigned to? (e.g., sprint-1, 
 
 For each confirmed story, create a GitHub Issue following `Story_Standard_PO.md` §13:
 - Labels: `status:backlog`, `feature:<name>` (if feature), `phase-N` (if feature), `sprint-N` (if sprint assigned)
-- Use `--body-file` pattern (see §15)
+- Use `--body-file` pattern (see `Agent_Common_Bootstrap.md` §6)
 - Report created issue URLs to the user

@@ -1,6 +1,6 @@
 # Sprint Workflow
 
-Triggered by: `"continue sprint"` or `"/sprint"` in CLAUDE.md
+Triggered by: `"continue sprint"` or `"/sprint"` in AGENTS.md
 
 The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable. Pipeline completes when no more `status:ready` stories exist.
 
@@ -31,17 +31,17 @@ The orchestrator maintains `.antigravity/agents/working/tmp/sprint_pipeline_stat
 **Loop Impl→QA:** <count>
 **Repro Skipped:** <comma-separated story IDs not reproduced this run, or empty>
 **Sessions:**
-- impl_session: <conversationId or empty>
-- reviewer_session: <conversationId or empty>
-- qa_session: <conversationId or empty>
-- po_session: <conversationId or empty>
+- impl_session: <agentId or empty>
+- reviewer_session: <agentId or empty>
+- qa_session: <agentId or empty>
+- po_session: <agentId or empty>
 **Updated:** YYYY-MM-DDTHH:MM
 **Observations:**
 ```
 
 > `Sprint Branch` and `Story Branch` are strict-mode only fields. In GitHub mode write `Sprint Branch: n/a` and `Story Branch: n/a`.
 
-**Write rules:** Create/overwrite at Stage 0 entry of each new story — carry forward any existing `Observations:` **and `Repro Skipped:`** entries when overwriting. **After every stage transition, update both `Stage` and `Updated` — these are mandatory, not optional.** Update `Sessions` on every agent spawn — **write `impl_session: PENDING` (or the relevant session field) to the state file immediately before making the spawn call**; overwrite with the real conversationId as soon as the spawn returns. Never leave a session ID empty after spawning. Update loop counts at each retry cycle start. Set `Type` at Stage 0 based on story classification (see Shared Pipeline Stages §Stage 0). Set `Sprint` at Stage 0 by reading the sprint value from the story (`sprint-N` label in GitHub mode; `**Sprint:**` field in strict mode). Set `Sprint Branch` and `Story Branch` at Stage 0 in strict mode (derived per `Strict_Mode_Story_Guide.md` §Branch Naming); write `n/a` in GitHub mode. Set `Docs SHA` at Stage 0 via `git rev-parse --short HEAD`. Append the story ID to `Repro Skipped:` whenever the Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`) determines a story was not reproduced — this field persists across story transitions within the current run only; it is never carried into a fresh run (a new `continue sprint` after the state file is deleted starts with `Repro Skipped:` empty, so a story a human has since added repro steps to is re-attempted). Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow or an agent reports friction. Delete after workflow review is complete.
+**Write rules:** Create/overwrite at Stage 0 entry of each new story — carry forward any existing `Observations:` **and `Repro Skipped:`** entries when overwriting. **After every stage transition, update both `Stage` and `Updated` — these are mandatory, not optional.** Update `Sessions` on every agent spawn — **write `impl_session: PENDING` (or the relevant session field) to the state file immediately before making the spawn call**; overwrite with the real agentId as soon as the spawn returns. Never leave a session ID empty after spawning. Update loop counts at each retry cycle start. Set `Type` at Stage 0 based on story classification (see Shared Pipeline Stages §Stage 0). Set `Sprint` at Stage 0 by reading the sprint value from the story (`sprint-N` label in GitHub mode; `**Sprint:**` field in strict mode). Set `Sprint Branch` and `Story Branch` at Stage 0 in strict mode (derived per `Strict_Mode_Story_Guide.md` §Branch Naming); write `n/a` in GitHub mode. Set `Docs SHA` at Stage 0 via `git rev-parse --short HEAD`. Append the story ID to `Repro Skipped:` whenever the Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`) determines a story was not reproduced — this field persists across story transitions within the current run only; it is never carried into a fresh run (a new `continue sprint` after the state file is deleted starts with `Repro Skipped:` empty, so a story a human has since added repro steps to is re-attempted). Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow or an agent reports friction. Delete after workflow review is complete.
 
 ---
 
@@ -140,6 +140,6 @@ The orchestrator maintains `.antigravity/agents/working/tmp/sprint_pipeline_stat
 
      d. **If no:** skip to step 4 (Memory Pruning).
 
-  4. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `.antigravity/agents/working/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common.md §2` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
+  4. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `.antigravity/agents/working/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
 
   5. **Cleanup** — delete the state file, then delete any remaining files in `.antigravity/agents/working/tmp/` with `rm .antigravity/agents/working/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).

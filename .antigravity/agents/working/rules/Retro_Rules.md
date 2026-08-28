@@ -22,7 +22,7 @@ At the end of your stage work, **before reporting back to the orchestrator**, wr
 
 Answer these three questions in your section. Bullet points only. Be specific to this story.
 
-### 1. Impediments & Unclear Points
+### Impediments & Unclear Points
 
 Things that slowed you down or required an unguided judgement call: missing permissions, incorrect technical design, ambiguous AC, unclear workflow steps.
 
@@ -34,13 +34,13 @@ Prefix each bullet with its signal type:
 
 If nothing: write `- None.`
 
-### 2. Process Suggestions
+### Process Suggestions
 
 Concrete suggestions to improve the process, workflow files, or instruction files — based only on what you directly encountered this story. Use the same signal-type prefixes.
 
 If nothing: write `- None.`
 
-### 3. What Worked Well
+### What Worked Well
 
 Things that should be explicitly preserved: a rule that caught a real problem, a workflow step that ran smoothly, a pattern that produced good output.
 
@@ -88,15 +88,21 @@ Signal items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) must be w
 
 ## Sprint-End Memory Pruning
 
-Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common.md §2` rule 3).
+Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common_Read_On_Demand.md §1` rule 3).
 
-For each `.antigravity/agents/working/memory/*_Memory.md` file (glob, all roles):
-1. Apply the inclusion test and "Never record" list from `Agent_Common.md §2` to every `## Stored Facts` entry.
+For PO, BA, and UI/UX Designer — single-file memory, `.antigravity/agents/working/memory/*_Memory.md` (glob, these 3 roles only):
+1. Apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to every `## Stored Facts` entry.
 2. Delete or merge: facts whose `Expires when` premise has been met, duplicate/superseded facts, and history-only entries with no future action.
 3. Leave `## Troubleshooting Facts` entries as-is unless the same test clearly applies — they are already tied to a specific fix and less prone to the drift this step targets.
 4. Report a one-line summary per file to the user (kept / pruned counts). No edit needed if nothing qualifies for removal.
 
-This step does not enforce the ≤ 10,000-character cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
+For Developer, QA, and Technical Lead — two-tier memory (`Agent_Common_Read_On_Demand.md §8`):
+1. Apply the same test to every `## Stored Facts` entry in `.antigravity/agents/working/memory/<Role>_Memory_Archive.md`, not the live index file (`## Stored Facts` no longer lives there).
+2. Delete or merge in the archive exactly as above. **Then mirror the deletion in the live file's `## Keyword Index`** — remove the matching `### Fact N` index entry so no index line ever points at a fact that no longer exists in the archive. A merge that keeps the archive fact under a different number requires renumbering the index line to match, not leaving a stale pointer.
+3. Leave `## Troubleshooting Facts` as-is (unchanged from the single-file case — it lives in the live file for these roles too, see §8).
+4. Report a one-line summary per role to the user (kept / pruned counts, archive + index both).
+
+This step does not enforce the ≤ 40,000-character cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
 
 ---
 
