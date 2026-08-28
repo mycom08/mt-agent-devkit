@@ -275,7 +275,7 @@ else
 fi
 
 # 11. Substitute framework placeholders in all generated mechanical files
-find "$AGENTS" "$TARGET/.claude/skills" -type f -exec sed -i \
+find "$AGENTS" "$TARGET/.claude/skills" -type f \( -name "*.md" -o -name "*.sh" -o -name "*.ps1" \) -exec sed -i \
   -e 's/{{AGENT_DIR_PREFIX}}/.claude/g' \
   -e 's/{{ORCHESTRATOR_FILE}}/CLAUDE.md/g' \
   -e 's/{{AGENT_CLI_NAME}}/Claude Code/g' {} +

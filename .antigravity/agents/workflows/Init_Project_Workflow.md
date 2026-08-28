@@ -123,6 +123,8 @@ Where `{mode}` is `github` or `strict` based on the user's Stage 0 choice.
 
 ### Files to generate
 
+**Global Substitution Rule:** For every adaptive file generated in this section, always replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`, `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`, and `{{AGENT_CLI_NAME}}` with `Antigravity`.
+
 #### `AGENTS.md`
 
 **Source:** `templates/{mode}/Orchestrator_template.md` ← must match the Stage 2 source table entry above; run `grep -n "Orchestrator_template" Init_Project_Workflow.md` when updating to catch all occurrences
@@ -134,9 +136,6 @@ Adapt the template:
 - Replace `{{PROJECT_NAME}}` with the detected project name
 - Replace `{{PROJECT_DESCRIPTION}}` with a 1–2 sentence description of the project's purpose and tech stack, derived from the Stage 1 scan
 - Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
-- Replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`
-- Replace `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`
-- Replace `{{AGENT_CLI_NAME}}` with `Antigravity`
 - Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `AGENTS.md`
 - Replace `{{DEVKIT_VERSION}}` with the content of `version.txt` at the devkit root
 - All other content is copied verbatim from the template
@@ -157,9 +156,6 @@ Adapt the template:
 - **If a `Dockerfile` and/or `docker-compose.yml` exist at the repo root** (written by Build Software's Java Skeleton Generation, or already present in an existing project being scanned), `{{GETTING_STARTED}}` must lead with the exact `docker compose up --build` (or plain `docker build`/`docker run` if there's a Dockerfile but no compose file) command, a short table of required environment variables (name, purpose, dev default — read the `${ENV_VAR:default}` placeholders out of the actual config file, e.g. `application.properties`), and the port(s) the service listens on. If there's a start script (`start.sh`/`start.ps1`) instead, cover that command in the same place.
 - Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `AGENTS.md`
 - Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
-- Replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`
-- Replace `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`
-- Replace `{{AGENT_CLI_NAME}}` with `Antigravity`
 
 #### `.antigravity/agents/context/Document_Index.md`
 
@@ -226,8 +222,6 @@ If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the
 #### Adaptive tier — everything the mechanical script does NOT cover
 
 Everything below needs real judgment and should go through an agent (a much smaller one now — it's no longer also carrying ~35 mechanical files). Read the target repo's already-known context (`architecture.md` / `architecture_<repo>.md`, `repo_structure.md`, Stage 1 scan results) and write:
-
-**Universal substitutions:** For every adaptive file generated, always replace `{{AGENT_DIR_PREFIX}}` with `.antigravity`, `{{ORCHESTRATOR_FILE}}` with `AGENTS.md`, and `{{AGENT_CLI_NAME}}` with `Antigravity`.
 
 - `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`
 - 6 agent instruction files — adapt pre-PR gates to detected tooling (e.g., `npm test`, `pytest`, `cargo test`, `./mvnw test`)

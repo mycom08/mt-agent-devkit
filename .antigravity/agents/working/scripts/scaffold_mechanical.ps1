@@ -1,4 +1,4 @@
-﻿param (
+param (
     [Parameter(Mandatory=$true)][string]$DevkitRoot,
     [Parameter(Mandatory=$true)][string]$TargetProject,
     [Parameter(Mandatory=$true)][ValidateSet('strict', 'github')][string]$Mode,
@@ -110,11 +110,11 @@ foreach ($role in $roles) {
         "# $roleLabel Memory`n`nNo facts recorded yet.`n" | Set-Content -Path (Join-Path $Agents "memory\${role}_Memory.md")
     }
 
-    "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** —`n**In Progress:** —`n**Impediments:** —`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
+    "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** -`n**In Progress:** -`n**Impediments:** -`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
 }
 
 # 8. Substitute framework placeholders in all generated mechanical files
-Get-ChildItem -Path $Agents -File -Recurse | ForEach-Object {
+Get-ChildItem -Path $Agents -File -Recurse -Include *.md, *.sh, *.ps1 | ForEach-Object {
     $c = Get-Content $_.FullName -Raw
     $newContent = $c -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'
     if ($newContent -cne $c) {
