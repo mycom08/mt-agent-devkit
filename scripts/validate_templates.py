@@ -39,6 +39,9 @@ CHANGES_JSON = REPO_ROOT / "changes.json"
 # All legal {{TOKEN}} double-brace names in the corpus.
 # Add new names here when introducing a new {{PLACEHOLDER}} in a template.
 KNOWN_DOUBLE_BRACE_TOKENS = {
+    'AGENT_DIR_PREFIX',
+    'ORCHESTRATOR_FILE',
+    'AGENT_CLI_NAME',
     "ANTIPATTERNS",
     "AUTOMATION_SUITE",
     "BACKWARD_COMPATIBILITY_RULES",

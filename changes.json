@@ -94,7 +94,7 @@
       ".claude/agents/templates/strict/Orchestrator_Guide_template.md"
     ],
     "modified": [
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
       ".claude/agents/templates/workflows/Workflow_Guide_template.md",
       ".claude/agents/templates/instructions/developer_instructions_template.md",
@@ -104,7 +104,7 @@
       ".claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md": "[ST-000043] New: orchestrator-only routing/session-management/completion-report content moved out of CLAUDE.md into this devkit-merged file (no subagent reads it). Agent Roster stays in CLAUDE.md (project-mutable, round-2 CR-2).",
       ".claude/agents/templates/github/Orchestrator_Guide_template.md": "[ST-000043] New: github-mode thin wrapper for Orchestrator_Guide_Shared_template.md — no github-only content.",
       ".claude/agents/templates/strict/Orchestrator_Guide_template.md": "[ST-000043] New: strict-mode thin wrapper for Orchestrator_Guide_Shared_template.md — no strict-only content.",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000043] Trimmed to shared-by-every-role content: Agent Session Management, Agent Completion Reports, and Workflows moved to new Orchestrator_Guide.md, replaced with a one-line pointer. Agent Roster/Agent File Integrity/PR Approval Rule stay (project-mutable). Round-2: Agent Roster, initially moved too, reverted back into CLAUDE.md after it broke the lean 3-role prototype roster override and instruction-path repair.",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "[ST-000043] Trimmed to shared-by-every-role content: Agent Session Management, Agent Completion Reports, and Workflows moved to new Orchestrator_Guide.md, replaced with a one-line pointer. Agent Roster/Agent File Integrity/PR Approval Rule stay (project-mutable). Round-2: Agent Roster, initially moved too, reverted back into CLAUDE.md after it broke the lean 3-role prototype roster override and instruction-path repair.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000043] CLAUDE.md merge's stale 'Replace verbatim' section list corrected to the real heading set; added a one-time auto-split migration for pre-ST-000043 installs; added an Orchestrator_Guide.md — Overwrite merge section that runs before the CLAUDE.md migration.",
       ".claude/agents/templates/workflows/Workflow_Guide_template.md": "[ST-000043] 'Key Files for New Users' pointer updated to Orchestrator_Guide.md; Agent Roster pointer stays on CLAUDE.md.",
       ".claude/agents/templates/instructions/developer_instructions_template.md": "[ST-000043] Removed the dangling Refine Sprint Task 'Read CLAUDE.md §Refine Sprint Workflow' pointer (no such heading ever existed; wrong shape of instruction per issue #122).",
@@ -137,13 +137,13 @@
       ".claude/agents/templates/rules/Audit_Rules_template.md"
     ],
     "modified": [
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md"
     ],
     "descriptions": {
       ".claude/agents/templates/rules/Audit_Rules_template.md": "[ST-000037] New: injectable detect-only counterpart to devkit-internal Audit_Rules.md — scoped to orphan headings, dangling GitHub references in strict-mode files, partial-mode-strip contradictions, and broken cross-references. Report-only, never edits.",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000037] Agent File Integrity gains an audit carve-out naming sync devkit/update project's detect-only audit pass as a workflow step, not a third writer of protected paths.",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "[ST-000037] Agent File Integrity gains an audit carve-out naming sync devkit/update project's detect-only audit pass as a workflow step, not a third writer of protected paths.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000037] New final Stage 4 — Audit Pass (detect-only): scoped to files this run wrote, silent when clean, spawns a fresh subagent against the deployed Audit_Rules.md, files findings as an audit:contribution Issue (or prompts manual filing), deletes the local report.",
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000037 CR-1 round-2] Universal set scaffold count for -ui-prototype repos bumped 9→10, Audit_Rules inserted."
     }
@@ -208,14 +208,14 @@
       ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md"
     ],
     "modified": [
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
     "descriptions": {
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000028] New refine prototype workflow: orchestrator acts as UI/UX Designer directly (no spawn) for a lightweight no-story iteration loop against a -ui-prototype companion repo, reusing Build Software's Path B repo conventions. Progress tracked in the target project's .claude/agents/tmp/refine_prototype_state.md; each iteration commits with a 'prototype adaptation:' prefix (github pushes live, strict stays local); loop end reuses Create_Stories_Workflow.md to create stories in the paired production repo.",
       ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: github-mode thin variant — repo creation uses gh repo create, each iteration pushes live.",
       ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: strict-mode thin variant — local git init only, no push after any iteration.",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000028] Added refine prototype row to the Workflows trigger table.",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "[ST-000028] Added refine prototype row to the Workflows trigger table.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000028] Added Refine_Prototype_Workflow.md to the split-candidates fetch list and workflows/ expected-files list."
     }
   },
@@ -321,7 +321,7 @@
       ".claude/agents/templates/rules/Story_Standard_template.md",
       ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
       ".claude/agents/templates/rules/Story_Standard_PO_template.md",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
       ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
@@ -332,7 +332,7 @@
       ".claude/agents/templates/rules/Story_Standard_template.md": "[#57/ST-000021] §2/§4/§7/§11/§13 add UI/UX Designer as a sixth valid Assigned role and role-boundary row.",
       ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[#57/ST-000021] Assignee valid-values list gains UI/UX Designer.",
       ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[#57/ST-000021] Assigned valid-values and story-creation template gain UI/UX Designer.",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[#57/ST-000021] Agent Roster table gains the UI/UX Designer row.",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "[#57/ST-000021] Agent Roster table gains the UI/UX Designer row.",
       ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[#57/ST-000021] Implementer-role list gains UI/UX Designer.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[#57/ST-000021] Implementer role list gains UI/UX Designer.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[#57/ST-000021] Memory/working-record file counts updated 5→6 for the new sixth role."
@@ -416,20 +416,20 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
     ],
     "modified": [
-      ".claude/agents/templates/Project_CLAUDE_template.md"
+      ".claude/agents/templates/Project_Orchestrator_template.md"
     ],
     "descriptions": {
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "[Feat] Dedicated, lightweight sync devkit workflow scoped to the project-orchestrator root's 3 owned files (CLAUDE.md merge, Project_Priming.md skip, Build_Software_Project_Workflow.md overwrite).",
-      ".claude/agents/templates/Project_CLAUDE_template.md": "[Feat] Project-orchestrator CLAUDE.md now carries Devkit source/version fields and a sync devkit trigger/section."
+      ".claude/agents/templates/Project_Orchestrator_template.md": "[Feat] Project-orchestrator CLAUDE.md now carries Devkit source/version fields and a sync devkit trigger/section."
     }
   },
   "0.1.24": {
     "new": [],
     "modified": [
-      ".claude/agents/templates/Project_CLAUDE_template.md"
+      ".claude/agents/templates/Project_Orchestrator_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/Project_CLAUDE_template.md": "[Feat] Project-orchestrator CLAUDE.md gains an Orchestrator Startup section requiring Project_Priming.md to be read at session start."
+      ".claude/agents/templates/Project_Orchestrator_template.md": "[Feat] Project-orchestrator CLAUDE.md gains an Orchestrator Startup section requiring Project_Priming.md to be read at session start."
     }
   },
   "0.1.23": {
@@ -466,7 +466,7 @@
     "modified": [
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
       ".claude/agents/templates/context/Project_Priming_template.md",
       ".claude/agents/templates/instructions/product_owner_instructions_template.md",
       ".claude/agents/templates/instructions/business_analyst_instructions_template.md"
@@ -474,7 +474,7 @@
     "descriptions": {
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[RF-012/ST-000014] Stage 1 step 3 non-feature GitHub mode: replaced a single 3-label AND query (always 0 results) with three unioned per-label queries.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[RF-014/ST-000014] Sprint-end Devkit Contribution fallback: replaced 'open a PR' with 'open an Issue labeled retro:contribution'.",
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[RF-011/ST-000014] Agent File Integrity: replaced undefined 'update agents'/Update_Agents_Workflow.md with correct 'sync devkit'/Sync_Devkit_Workflow.md.",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "[RF-011/ST-000014] Agent File Integrity: replaced undefined 'update agents'/Update_Agents_Workflow.md with correct 'sync devkit'/Sync_Devkit_Workflow.md.",
       ".claude/agents/templates/context/Project_Priming_template.md": "[RF-007/RF-008/ST-000014] §6 doc paths aligned with Document_Index flat paths; Sprint_1_Overview.md parameterized to Sprint_N_Overview.md.",
       ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[RF-009/ST-000014] Story Closure Task retro reference changed from Retro_Rules.md to Agent_Common.md §4, matching other role instruction files.",
       ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "[RF-010/ST-000014] Retro section header relabeled '## Implementer — Business Analyst' to '## Analyst — Business Analyst'."
@@ -647,9 +647,9 @@
   },
   "0.1.5": {
     "new": [
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
-      ".claude/agents/templates/github/CLAUDE_template.md",
-      ".claude/agents/templates/strict/CLAUDE_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
+      ".claude/agents/templates/github/Orchestrator_template.md",
+      ".claude/agents/templates/strict/Orchestrator_template.md",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
       ".claude/agents/templates/github/workflows/Sprint_Workflow_template.md",
       ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md",
@@ -676,9 +676,9 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "New: shared CLAUDE.md template content (mode-neutral); replaces CLAUDE_TEMPLATE.md",
-      ".claude/agents/templates/github/CLAUDE_template.md": "New: github-mode CLAUDE.md variant (references shared file)",
-      ".claude/agents/templates/strict/CLAUDE_template.md": "New: strict-mode CLAUDE.md variant (references shared file)",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "New: shared CLAUDE.md template content (mode-neutral); replaces CLAUDE_TEMPLATE.md",
+      ".claude/agents/templates/github/Orchestrator_template.md": "New: github-mode CLAUDE.md variant (references shared file)",
+      ".claude/agents/templates/strict/Orchestrator_template.md": "New: strict-mode CLAUDE.md variant (references shared file)",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "New: shared Sprint Workflow content",
       ".claude/agents/templates/github/workflows/Sprint_Workflow_template.md": "New: github-mode Sprint Workflow variant",
       ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md": "New: strict-mode Sprint Workflow variant",
@@ -743,7 +743,7 @@
   },
   "0.1.1": {
     "new": [
-      ".claude/agents/templates/Project_CLAUDE_template.md",
+      ".claude/agents/templates/Project_Orchestrator_template.md",
       ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md"
     ],
     "modified": []
