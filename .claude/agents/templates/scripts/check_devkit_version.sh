@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-VERSION_FILE=".claude/agents/devkit_version.txt"
+VERSION_FILE="{{AGENT_DIR_PREFIX}}/agents/devkit_version.txt"
 [ -f "$VERSION_FILE" ] || exit 0
 CURRENT=$(tr -d '[:space:]' < "$VERSION_FILE")
 
-[ -f "CLAUDE.md" ] || exit 0
-SOURCE_URL=$(grep -oP '(?<=\*\*Devkit source:\*\* )https?://\S+' CLAUDE.md 2>/dev/null | head -1)
+[ -f "{{ORCHESTRATOR_FILE}}" ] || exit 0
+SOURCE_URL=$(grep -oP '(?<=\*\*Devkit source:\*\* )https?://\S+' {{ORCHESTRATOR_FILE}} 2>/dev/null | head -1)
 [ -n "${SOURCE_URL:-}" ] || exit 0
 SOURCE_URL="${SOURCE_URL%/}"
 

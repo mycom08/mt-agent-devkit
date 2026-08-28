@@ -1,4 +1,175 @@
 {
+  "0.1.45": {
+    "new": [
+      ".claude/agents/templates/Project_Orchestrator_template.md",
+      ".claude/agents/templates/github/Orchestrator_template.md",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md",
+      ".claude/agents/templates/strict/Orchestrator_template.md"
+    ],
+    "modified": [
+      ".claude/agents/templates/README_template.md",
+      ".claude/agents/templates/context/Document_Index_template.md",
+      ".claude/agents/templates/context/Project_Orchestrator_Priming_template.md",
+      ".claude/agents/templates/context/Project_Priming_template.md",
+      ".claude/agents/templates/github/Orchestrator_Guide_template.md",
+      ".claude/agents/templates/github/workflows/Create_Stories_Workflow_template.md",
+      ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md",
+      ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md",
+      ".claude/agents/templates/github/workflows/Refine_Sprint_Workflow_template.md",
+      ".claude/agents/templates/github/workflows/Resume_Story_Workflow_template.md",
+      ".claude/agents/templates/github/workflows/Shared_Pipeline_Stages_template.md",
+      ".claude/agents/templates/github/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/github/workflows/Start_Story_Workflow_template.md",
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md",
+      ".claude/agents/templates/instructions/developer_instructions_template.md",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md",
+      ".claude/agents/templates/instructions/qa_instructions_template.md",
+      ".claude/agents/templates/instructions/technical_lead_instructions_template.md",
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md",
+      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/Audit_Rules_template.md",
+      ".claude/agents/templates/rules/Blocked_Request_template.md",
+      ".claude/agents/templates/rules/Business_Analyst_Rules_template.md",
+      ".claude/agents/templates/rules/CICD_Validation_Guide_template.md",
+      ".claude/agents/templates/rules/Clean_Code_Rules_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/Logging_Standard_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/QA_Rules_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/Retro_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md",
+      ".claude/agents/templates/rules/Story_Standard_UIUX_template.md",
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/UI_Prototype_Rules_template.md",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1",
+      ".claude/agents/templates/scripts/check_devkit_version.sh",
+      ".claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Resume_Story_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md",
+      ".claude/agents/templates/skills/read-section/SKILL_template.md",
+      ".claude/agents/templates/strict/Orchestrator_Guide_template.md",
+      ".claude/agents/templates/strict/workflows/Create_Stories_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Plan_Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Refine_Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Resume_Story_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Shared_Pipeline_Stages_template.md",
+      ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Start_Story_Workflow_template.md",
+      ".claude/agents/templates/wiki/Code_Review_Checklist_template.md",
+      ".claude/agents/templates/wiki/Development_Standards_template.md",
+      ".claude/agents/templates/wiki/Language_Style_Guide_template.md",
+      ".claude/agents/templates/wiki/Testing_Guidelines_template.md",
+      ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Workflow_Guide_template.md"
+    ],
+    "removed": [
+      ".claude/agents/templates/Project_CLAUDE_template.md",
+      ".claude/agents/templates/github/CLAUDE_template.md",
+      ".claude/agents/templates/shared/CLAUDE_Shared_template.md",
+      ".claude/agents/templates/strict/CLAUDE_template.md"
+    ],
+    "descriptions": {
+      "_note": "[Enhancement] Unified Claude and Antigravity templates into a single source of truth. Parameterized framework terms and renamed CLAUDE_... to Orchestrator_...",
+      ".claude/agents/templates/Project_Orchestrator_template.md": "Renamed from CLAUDE variant to generic Orchestrator variant.",
+      ".claude/agents/templates/github/Orchestrator_template.md": "Renamed from CLAUDE variant to generic Orchestrator variant.",
+      ".claude/agents/templates/shared/Orchestrator_Shared_template.md": "Renamed from CLAUDE variant to generic Orchestrator variant.",
+      ".claude/agents/templates/strict/Orchestrator_template.md": "Renamed from CLAUDE variant to generic Orchestrator variant.",
+      ".claude/agents/templates/README_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/context/Document_Index_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/context/Project_Orchestrator_Priming_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/context/Project_Priming_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/Orchestrator_Guide_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Create_Stories_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Refine_Sprint_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Resume_Story_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Shared_Pipeline_Stages_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Sprint_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/github/workflows/Start_Story_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/instructions/developer_instructions_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/instructions/qa_instructions_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/instructions/technical_lead_instructions_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Audit_Rules_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Blocked_Request_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Business_Analyst_Rules_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/CICD_Validation_Guide_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Clean_Code_Rules_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Developer_Rules_Read_On_Demand_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Logging_Standard_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/QA_Rules_Read_On_Demand_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Retro_Rules_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Story_Standard_UIUX_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/UI_Prototype_Rules_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/scripts/check_devkit_version.sh": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Resume_Story_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/skills/read-section/SKILL_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/Orchestrator_Guide_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Create_Stories_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Plan_Sprint_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Refine_Sprint_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Resume_Story_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Shared_Pipeline_Stages_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/strict/workflows/Start_Story_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/wiki/Code_Review_Checklist_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/wiki/Development_Standards_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/wiki/Language_Style_Guide_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/wiki/Testing_Guidelines_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc).",
+      ".claude/agents/templates/workflows/Workflow_Guide_template.md": "Parameterized framework-specific terms (CLAUDE.md -> {{ORCHESTRATOR_FILE}}, etc)."
+    }
+  },
   "0.1.44": {
     "new": [
       ".claude/agents/templates/skills/read-section/SKILL_template.md",
@@ -45,46 +216,46 @@
       ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/skills/read-section/SKILL_template.md": "[ST-000044] New skill: extract one numbered/heading-prefixed Markdown section (issue #127); generalized to any heading prefix (issue #118); fixed a narrowed-marker over-read bug that silently swallowed later sections (issue #142). [ST-000132] Worked example re-pointed to Agent_Common_Read_On_Demand_template.md §1.",
-      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000132] Split out of Agent_Common as the bootstrap tier. [ST-000135] +§8 two-tier memory routing row. [ST-000137] +§6 Shell Command Rules. [ST-000140] §1 Working Record cap now configurable via CLAUDE.md.",
-      ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000132] Split out of Agent_Common as the on-demand tier (§1 Project Memory, §2 Troubleshooting, §3 Retrospective, §5 Stage-Transition Commit, §6 Credential-Gated Verification; §4 gap preserved). [ST-000135] +§8 two-tier memory (Dev/QA/TL); instructions templates and scaffold updated to match. [ST-000140] §1 memory-file cap now configurable via CLAUDE.md; §8 cross-reference updated.",
-      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000133] Split out of Developer_Rules as the bootstrap tier (§1–§6, always read); §12 On-Demand routing table, §13 Always-On. [ST-000134] §12 routing table gains peer-reviewer and hotfix rows. [ST-000136] §3 AC-ticking line corrected to name PO, not QA.",
-      ".claude/agents/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of Developer_Rules as the on-demand tier (§7 Reporting & Blockers, §8 Document Placement, §9 Peer Review, §10 Mid-Implementation Consultation, §11 Live User Instruction Conflicts). [ST-000134] +§12 Developer as Reviewer, +§13 Hotfix (relocated from Story_Standard_Dev).",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "[ST-000133] Split out of Technical_Lead_Rules as the bootstrap tier (§1–§12; §9/§10 kept as pointer stubs into the on-demand file). [ST-000134] §13 routing table gains an implementer row. [ST-000136] §3 corrected to name PO, not QA, as AC-ticker.",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of Technical_Lead_Rules as the on-demand tier (§1 When Acting as Implementer, §2 Context Anchoring, §3 Pre-PR Gate as Implementer). [ST-000134] +§4 TL as Implementer — Status Transitions.",
-      ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000133] Split out of QA_Rules as the bootstrap tier (§1–§13; §9/§10 kept as pointer stubs). [ST-000134] §14 routing table gains a hotfix row.",
-      ".claude/agents/templates/rules/QA_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of QA_Rules as the on-demand tier (§1 Pre-PR Gate, §2 Live User Instruction Conflicts, both as Implementer). [ST-000134] +§3 Hotfix — QA Role.",
-      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "[ST-000133] Split out of Product_Owner_Rules as the bootstrap tier (§1–§12; §11a kept as pointer stub); promoted to the verbatim-tier scaffold set. [ST-000134] §13 routing table gains a row for the first gh issue create.",
-      ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of Product_Owner_Rules as the on-demand tier (§1 Roadmap Story Drain). [ST-000134] +§2 Story Creation Template (relocated from Story_Standard_PO).",
-      ".claude/agents/templates/rules/Story_Standard_UIUX_template.md": "[ST-000124] New: the missing UI/UX Designer role-scoped Story_Standard view (§1, §2, §7, §9, §14, §15). [ST-000137] §15 Shell Command Rules removed, centralized in Agent_Common_Bootstrap §6.",
+      ".claude/agents/templates/skills/read-section/SKILL_template.md": "[ST-000044] New skill: extract one numbered/heading-prefixed Markdown section (issue #127); generalized to any heading prefix (issue #118); fixed a narrowed-marker over-read bug that silently swallowed later sections (issue #142). [ST-000132] Worked example re-pointed to Agent_Common_Read_On_Demand_template.md \u00c2\u00a71.",
+      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000132] Split out of Agent_Common as the bootstrap tier. [ST-000135] +\u00c2\u00a78 two-tier memory routing row. [ST-000137] +\u00c2\u00a76 Shell Command Rules. [ST-000140] \u00c2\u00a71 Working Record cap now configurable via CLAUDE.md.",
+      ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000132] Split out of Agent_Common as the on-demand tier (\u00c2\u00a71 Project Memory, \u00c2\u00a72 Troubleshooting, \u00c2\u00a73 Retrospective, \u00c2\u00a75 Stage-Transition Commit, \u00c2\u00a76 Credential-Gated Verification; \u00c2\u00a74 gap preserved). [ST-000135] +\u00c2\u00a78 two-tier memory (Dev/QA/TL); instructions templates and scaffold updated to match. [ST-000140] \u00c2\u00a71 memory-file cap now configurable via CLAUDE.md; \u00c2\u00a78 cross-reference updated.",
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000133] Split out of Developer_Rules as the bootstrap tier (\u00c2\u00a71\u00e2\u20ac\u201c\u00c2\u00a76, always read); \u00c2\u00a712 On-Demand routing table, \u00c2\u00a713 Always-On. [ST-000134] \u00c2\u00a712 routing table gains peer-reviewer and hotfix rows. [ST-000136] \u00c2\u00a73 AC-ticking line corrected to name PO, not QA.",
+      ".claude/agents/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of Developer_Rules as the on-demand tier (\u00c2\u00a77 Reporting & Blockers, \u00c2\u00a78 Document Placement, \u00c2\u00a79 Peer Review, \u00c2\u00a710 Mid-Implementation Consultation, \u00c2\u00a711 Live User Instruction Conflicts). [ST-000134] +\u00c2\u00a712 Developer as Reviewer, +\u00c2\u00a713 Hotfix (relocated from Story_Standard_Dev).",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "[ST-000133] Split out of Technical_Lead_Rules as the bootstrap tier (\u00c2\u00a71\u00e2\u20ac\u201c\u00c2\u00a712; \u00c2\u00a79/\u00c2\u00a710 kept as pointer stubs into the on-demand file). [ST-000134] \u00c2\u00a713 routing table gains an implementer row. [ST-000136] \u00c2\u00a73 corrected to name PO, not QA, as AC-ticker.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of Technical_Lead_Rules as the on-demand tier (\u00c2\u00a71 When Acting as Implementer, \u00c2\u00a72 Context Anchoring, \u00c2\u00a73 Pre-PR Gate as Implementer). [ST-000134] +\u00c2\u00a74 TL as Implementer \u00e2\u20ac\u201d Status Transitions.",
+      ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000133] Split out of QA_Rules as the bootstrap tier (\u00c2\u00a71\u00e2\u20ac\u201c\u00c2\u00a713; \u00c2\u00a79/\u00c2\u00a710 kept as pointer stubs). [ST-000134] \u00c2\u00a714 routing table gains a hotfix row.",
+      ".claude/agents/templates/rules/QA_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of QA_Rules as the on-demand tier (\u00c2\u00a71 Pre-PR Gate, \u00c2\u00a72 Live User Instruction Conflicts, both as Implementer). [ST-000134] +\u00c2\u00a73 Hotfix \u00e2\u20ac\u201d QA Role.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "[ST-000133] Split out of Product_Owner_Rules as the bootstrap tier (\u00c2\u00a71\u00e2\u20ac\u201c\u00c2\u00a712; \u00c2\u00a711a kept as pointer stub); promoted to the verbatim-tier scaffold set. [ST-000134] \u00c2\u00a713 routing table gains a row for the first gh issue create.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000133] Split out of Product_Owner_Rules as the on-demand tier (\u00c2\u00a71 Roadmap Story Drain). [ST-000134] +\u00c2\u00a72 Story Creation Template (relocated from Story_Standard_PO).",
+      ".claude/agents/templates/rules/Story_Standard_UIUX_template.md": "[ST-000124] New: the missing UI/UX Designer role-scoped Story_Standard view (\u00c2\u00a71, \u00c2\u00a72, \u00c2\u00a77, \u00c2\u00a79, \u00c2\u00a714, \u00c2\u00a715). [ST-000137] \u00c2\u00a715 Shell Command Rules removed, centralized in Agent_Common_Bootstrap \u00c2\u00a76.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000044] +Skill-files overwrite merge strategy (fetches .claude/skills/read-section/SKILL.md). [ST-000132] Merge/cleanup lists re-pointed from Agent_Common to its Bootstrap/Read-On-Demand split. [ST-000133] Same lists re-pointed for Developer/Technical_Lead/QA/Product_Owner Rules Bootstrap/Read-On-Demand pairs.",
-      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000044] Universal fetch set for new -ui-prototype repos gains the read-section skill. [ST-000132] Verbatim-tier rules list re-pointed to Agent_Common's Bootstrap/Read-On-Demand split (10→11 files). [ST-000133] Same list's Product_Owner_Rules and lean 3-role entries re-pointed to Bootstrap/Read-On-Demand pairs. [ST-000124] Lean 3-role list gains Story_Standard_UIUX for UI/UX Designer.",
-      ".claude/agents/templates/rules/Retro_Rules_template.md": "[issue #142] De-numbered the 3 retro-question headings to plain prose (matches working mirror). [ST-000132] Citations re-pointed to Agent_Common_Read_On_Demand §1. [ST-000140] Memory-pruning note now references the configured CLAUDE.md cap, not a literal 10,000-char number.",
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000132] Rule-4 citation re-pointed to Agent_Common_Read_On_Demand §1. [ST-000133] status:testing note re-pointed to Technical_Lead_Rules_Bootstrap §3.",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[ST-000132/ST-000133] Citations re-pointed to the Technical_Lead_Rules Bootstrap/Read-On-Demand split. [ST-000134] Trimmed to match the working-copy boundary: §4 (TL as Implementer) collapsed to a pointer, §7 shortened, §9 compressed. [ST-000137] §15 Shell Command Rules removed, centralized.",
-      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[ST-000133] Pre-merge-checklist Peer Review citation re-pointed to Developer_Rules_Read_On_Demand §9. [ST-000134] Trimmed: §4 (Reviewer) and §6 (Hotfix) collapsed to pointers, §7 shortened, §9 compressed. [ST-000137] §15 Shell Command Rules removed, centralized.",
-      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "[ST-000134] Trimmed: §6 (Hotfix) collapsed to a pointer into QA_Rules_Read_On_Demand §3, §9 compressed. [ST-000137] §15 Shell Command Rules removed, centralized.",
-      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000134] Trimmed: §13 (Story Creation Template) collapsed to a pointer into Product_Owner_Rules_Read_On_Demand §2, §7 shortened, §9 compressed. [ST-000137] §15 Shell Command Rules removed; §14 self-citation re-pointed.",
-      ".claude/agents/templates/rules/Business_Analyst_Rules_template.md": "[ST-000132] Stage-Transition Commit and Troubleshooting Protocol citations re-pointed to Agent_Common_Read_On_Demand §5/§2.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[ST-000132] Citations re-pointed following the Agent_Common split. [ST-000133] Superseded — file split into Developer_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[ST-000132] Citations re-pointed following the Agent_Common split. [ST-000133] Superseded — file split into QA_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[ST-000132] Working Record and Stage-Transition Commit citations re-pointed. [ST-000133] Superseded — file split into Product_Owner_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[ST-000132] Citations re-pointed following the Agent_Common split. [ST-000133] Superseded — file split into Technical_Lead_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
-      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000132] Working Record/Stage-Transition Commit/Troubleshooting citations re-pointed. [ST-000136] §3 AC-ticking line corrected to name PO, not QA. [ST-000124] §1/§3/§7 citations re-pointed to the new Story_Standard_UIUX view (not yet split into Bootstrap/Read-On-Demand tiers — issue #143).",
-      ".claude/agents/templates/context/Project_Priming_template.md": "[ST-000132] Working Record pointer re-pointed to Agent_Common_Bootstrap §1. [ST-000140] Working-record retention note now references the configured CLAUDE.md cap, not a literal 4,000-char number.",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000044] Universal fetch set for new -ui-prototype repos gains the read-section skill. [ST-000132] Verbatim-tier rules list re-pointed to Agent_Common's Bootstrap/Read-On-Demand split (10\u00e2\u2020\u201911 files). [ST-000133] Same list's Product_Owner_Rules and lean 3-role entries re-pointed to Bootstrap/Read-On-Demand pairs. [ST-000124] Lean 3-role list gains Story_Standard_UIUX for UI/UX Designer.",
+      ".claude/agents/templates/rules/Retro_Rules_template.md": "[issue #142] De-numbered the 3 retro-question headings to plain prose (matches working mirror). [ST-000132] Citations re-pointed to Agent_Common_Read_On_Demand \u00c2\u00a71. [ST-000140] Memory-pruning note now references the configured CLAUDE.md cap, not a literal 10,000-char number.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000132] Rule-4 citation re-pointed to Agent_Common_Read_On_Demand \u00c2\u00a71. [ST-000133] status:testing note re-pointed to Technical_Lead_Rules_Bootstrap \u00c2\u00a73.",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[ST-000132/ST-000133] Citations re-pointed to the Technical_Lead_Rules Bootstrap/Read-On-Demand split. [ST-000134] Trimmed to match the working-copy boundary: \u00c2\u00a74 (TL as Implementer) collapsed to a pointer, \u00c2\u00a77 shortened, \u00c2\u00a79 compressed. [ST-000137] \u00c2\u00a715 Shell Command Rules removed, centralized.",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[ST-000133] Pre-merge-checklist Peer Review citation re-pointed to Developer_Rules_Read_On_Demand \u00c2\u00a79. [ST-000134] Trimmed: \u00c2\u00a74 (Reviewer) and \u00c2\u00a76 (Hotfix) collapsed to pointers, \u00c2\u00a77 shortened, \u00c2\u00a79 compressed. [ST-000137] \u00c2\u00a715 Shell Command Rules removed, centralized.",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "[ST-000134] Trimmed: \u00c2\u00a76 (Hotfix) collapsed to a pointer into QA_Rules_Read_On_Demand \u00c2\u00a73, \u00c2\u00a79 compressed. [ST-000137] \u00c2\u00a715 Shell Command Rules removed, centralized.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000134] Trimmed: \u00c2\u00a713 (Story Creation Template) collapsed to a pointer into Product_Owner_Rules_Read_On_Demand \u00c2\u00a72, \u00c2\u00a77 shortened, \u00c2\u00a79 compressed. [ST-000137] \u00c2\u00a715 Shell Command Rules removed; \u00c2\u00a714 self-citation re-pointed.",
+      ".claude/agents/templates/rules/Business_Analyst_Rules_template.md": "[ST-000132] Stage-Transition Commit and Troubleshooting Protocol citations re-pointed to Agent_Common_Read_On_Demand \u00c2\u00a75/\u00c2\u00a72.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[ST-000132] Citations re-pointed following the Agent_Common split. [ST-000133] Superseded \u00e2\u20ac\u201d file split into Developer_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[ST-000132] Citations re-pointed following the Agent_Common split. [ST-000133] Superseded \u00e2\u20ac\u201d file split into QA_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[ST-000132] Working Record and Stage-Transition Commit citations re-pointed. [ST-000133] Superseded \u00e2\u20ac\u201d file split into Product_Owner_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[ST-000132] Citations re-pointed following the Agent_Common split. [ST-000133] Superseded \u00e2\u20ac\u201d file split into Technical_Lead_Rules_Bootstrap/Read_On_Demand and removed from templates/; entry kept for changes.json history.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000132] Working Record/Stage-Transition Commit/Troubleshooting citations re-pointed. [ST-000136] \u00c2\u00a73 AC-ticking line corrected to name PO, not QA. [ST-000124] \u00c2\u00a71/\u00c2\u00a73/\u00c2\u00a77 citations re-pointed to the new Story_Standard_UIUX view (not yet split into Bootstrap/Read-On-Demand tiers \u00e2\u20ac\u201d issue #143).",
+      ".claude/agents/templates/context/Project_Priming_template.md": "[ST-000132] Working Record pointer re-pointed to Agent_Common_Bootstrap \u00c2\u00a71. [ST-000140] Working-record retention note now references the configured CLAUDE.md cap, not a literal 4,000-char number.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000132] Sprint-End Memory Pruning citation re-pointed. [ST-000133] Release Decision and plan-file-commit citations re-pointed to Product_Owner_Rules_Bootstrap.",
-      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000133] Roadmap Story Drain citations re-pointed to Product_Owner_Rules_Bootstrap §11a. [ST-000137] --body-file pattern citation re-pointed to Agent_Common_Bootstrap §6.",
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000133] Peer-review, PO Story Closure, and QA Stage-1 citations re-pointed to the Bootstrap/Read-On-Demand split. [ST-000137] PO Story Closure read-list split into Story_Standard_PO §14 and Agent_Common_Bootstrap §6. [ST-000140] Working Record/Memory wc -c checks now reference configured CLAUDE.md caps, not literal numbers.",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000133] Roadmap Story Drain citations re-pointed to Product_Owner_Rules_Bootstrap \u00c2\u00a711a. [ST-000137] --body-file pattern citation re-pointed to Agent_Common_Bootstrap \u00c2\u00a76.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000133] Peer-review, PO Story Closure, and QA Stage-1 citations re-pointed to the Bootstrap/Read-On-Demand split. [ST-000137] PO Story Closure read-list split into Story_Standard_PO \u00c2\u00a714 and Agent_Common_Bootstrap \u00c2\u00a76. [ST-000140] Working Record/Memory wc -c checks now reference configured CLAUDE.md caps, not literal numbers.",
       ".claude/agents/templates/instructions/developer_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed to the Bootstrap/Read-On-Demand split. [ST-000133] Rules table row re-pointed to Developer_Rules_Bootstrap. [ST-000135] Memory row/section updated for the two-tier memory split. [ST-000138] Condensed Refine Sprint Task step fixed: step-positioning check, explicit cleared-note comment, Story_Standard_Dev citation.",
       ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed to the Bootstrap/Read-On-Demand split.",
       ".claude/agents/templates/instructions/qa_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed. [ST-000133] Rules table row re-pointed to QA_Rules_Bootstrap. [ST-000135] Memory row/section updated for the two-tier memory split.",
       ".claude/agents/templates/instructions/technical_lead_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed. [ST-000133] Rules table row re-pointed to Technical_Lead_Rules_Bootstrap. [ST-000135] Memory row/section updated for the two-tier memory split.",
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed. [ST-000133] Rules table row and Story Closure read-list re-pointed to Product_Owner_Rules_Bootstrap. [ST-000137] Three §15 citations re-pointed to Agent_Common_Bootstrap §6.",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed. [ST-000133] Rules table row and Story Closure read-list re-pointed to Product_Owner_Rules_Bootstrap. [ST-000137] Three \u00c2\u00a715 citations re-pointed to Agent_Common_Bootstrap \u00c2\u00a76.",
       ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "[ST-000132] Pre-Work Checklist and record pointers re-pointed to the Bootstrap/Read-On-Demand split.",
-      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000137] PO answers-questions step's body-file-pattern citation re-pointed to Agent_Common_Bootstrap §6.",
-      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[ST-000137] --body-file pattern citation re-pointed to Agent_Common_Bootstrap §6.",
-      ".claude/agents/templates/github/workflows/Create_Stories_Workflow_template.md": "[ST-000137] Mode-stub comment citation re-pointed to Agent_Common_Bootstrap §6 (comment-only, not live agent-read content).",
-      ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md": "[ST-000137] Mode-stub comment citation re-pointed to Agent_Common_Bootstrap §6 (comment-only, not live agent-read content)."
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000137] PO answers-questions step's body-file-pattern citation re-pointed to Agent_Common_Bootstrap \u00c2\u00a76.",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[ST-000137] --body-file pattern citation re-pointed to Agent_Common_Bootstrap \u00c2\u00a76.",
+      ".claude/agents/templates/github/workflows/Create_Stories_Workflow_template.md": "[ST-000137] Mode-stub comment citation re-pointed to Agent_Common_Bootstrap \u00c2\u00a76 (comment-only, not live agent-read content).",
+      ".claude/agents/templates/github/workflows/Plan_Sprint_Workflow_template.md": "[ST-000137] Mode-stub comment citation re-pointed to Agent_Common_Bootstrap \u00c2\u00a76 (comment-only, not live agent-read content)."
     }
   },
   "0.1.43": {
@@ -102,12 +273,12 @@
     ],
     "descriptions": {
       ".claude/agents/templates/shared/Orchestrator_Guide_Shared_template.md": "[ST-000043] New: orchestrator-only routing/session-management/completion-report content moved out of CLAUDE.md into this devkit-merged file (no subagent reads it). Agent Roster stays in CLAUDE.md (project-mutable, round-2 CR-2).",
-      ".claude/agents/templates/github/Orchestrator_Guide_template.md": "[ST-000043] New: github-mode thin wrapper for Orchestrator_Guide_Shared_template.md — no github-only content.",
-      ".claude/agents/templates/strict/Orchestrator_Guide_template.md": "[ST-000043] New: strict-mode thin wrapper for Orchestrator_Guide_Shared_template.md — no strict-only content.",
+      ".claude/agents/templates/github/Orchestrator_Guide_template.md": "[ST-000043] New: github-mode thin wrapper for Orchestrator_Guide_Shared_template.md \u00e2\u20ac\u201d no github-only content.",
+      ".claude/agents/templates/strict/Orchestrator_Guide_template.md": "[ST-000043] New: strict-mode thin wrapper for Orchestrator_Guide_Shared_template.md \u00e2\u20ac\u201d no strict-only content.",
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000043] Trimmed to shared-by-every-role content: Agent Session Management, Agent Completion Reports, and Workflows moved to new Orchestrator_Guide.md, replaced with a one-line pointer. Agent Roster/Agent File Integrity/PR Approval Rule stay (project-mutable). Round-2: Agent Roster, initially moved too, reverted back into CLAUDE.md after it broke the lean 3-role prototype roster override and instruction-path repair.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000043] CLAUDE.md merge's stale 'Replace verbatim' section list corrected to the real heading set; added a one-time auto-split migration for pre-ST-000043 installs; added an Orchestrator_Guide.md — Overwrite merge section that runs before the CLAUDE.md migration.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000043] CLAUDE.md merge's stale 'Replace verbatim' section list corrected to the real heading set; added a one-time auto-split migration for pre-ST-000043 installs; added an Orchestrator_Guide.md \u00e2\u20ac\u201d Overwrite merge section that runs before the CLAUDE.md migration.",
       ".claude/agents/templates/workflows/Workflow_Guide_template.md": "[ST-000043] 'Key Files for New Users' pointer updated to Orchestrator_Guide.md; Agent Roster pointer stays on CLAUDE.md.",
-      ".claude/agents/templates/instructions/developer_instructions_template.md": "[ST-000043] Removed the dangling Refine Sprint Task 'Read CLAUDE.md §Refine Sprint Workflow' pointer (no such heading ever existed; wrong shape of instruction per issue #122).",
+      ".claude/agents/templates/instructions/developer_instructions_template.md": "[ST-000043] Removed the dangling Refine Sprint Task 'Read CLAUDE.md \u00c2\u00a7Refine Sprint Workflow' pointer (no such heading ever existed; wrong shape of instruction per issue #122).",
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000043 round-2] Universal set for new -ui-prototype companion repos gains Orchestrator_Guide.md (remote-fetch path can't use scaffold_mechanical.sh and had missed it)."
     }
   },
@@ -123,13 +294,13 @@
       ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000038] §12 gains a Commenter gate (wc -w self-check, ~150-200 word cap) for issue comments, same move as memory's wc -c. §9: one-topic-per-comment promoted to rule 2 (batching replies to joint questions allowed); rule 4 bans pasting command/check/verification output except gate-mandated gh pr checks CI evidence; new rule 5, body edits are announced not reproduced. Round 3: rule 3 sets a draft-to-shape target so the wc -w check rarely fires; Commenter gate split into before-draft/before-post items.",
-      ".claude/agents/templates/rules/Agent_Common_template.md": "[ST-000038] §2 rule 4 'Point, don't mirror' scoped to issue comments as well as memory writes; enforced via the new Commenter gate.",
-      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[ST-000038] §9 carries the same delta as the cross-role source (one-topic-per-comment, wc -w cap, transcript ban with CI-evidence carve-out, announce-don't-reproduce, cite-don't-re-explain, §12 Commenter gate pointer). Round 3: draft-to-shape target.",
-      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000038] §9 carries the same delta; PO's body-edit rule stated explicitly (announce the edit, never reproduce new AC text) since PO is the only body-editing role. Round 3: draft-to-shape target.",
-      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "[ST-000038] §9 carries the same delta; QA's per-AC evidence exemption preserved (exempts word cap only, not the one-topic/transcript rules). Round 3: draft-to-shape target — one line per AC.",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[ST-000038] §9 carries the same delta, phrased for the reviewer role (a mid-review finding posts as its own comment; only gate-mandated gh pr checks output goes inline). Round 3: draft-to-shape target.",
-      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[ST-000038] Local comment-entry writing standard gets the same §9 delta (Commenter gate applies, transcript carve-out inapplicable — no PRs in strict mode). Round 3: draft-to-shape target."
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000038] \u00c2\u00a712 gains a Commenter gate (wc -w self-check, ~150-200 word cap) for issue comments, same move as memory's wc -c. \u00c2\u00a79: one-topic-per-comment promoted to rule 2 (batching replies to joint questions allowed); rule 4 bans pasting command/check/verification output except gate-mandated gh pr checks CI evidence; new rule 5, body edits are announced not reproduced. Round 3: rule 3 sets a draft-to-shape target so the wc -w check rarely fires; Commenter gate split into before-draft/before-post items.",
+      ".claude/agents/templates/rules/Agent_Common_template.md": "[ST-000038] \u00c2\u00a72 rule 4 'Point, don't mirror' scoped to issue comments as well as memory writes; enforced via the new Commenter gate.",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[ST-000038] \u00c2\u00a79 carries the same delta as the cross-role source (one-topic-per-comment, wc -w cap, transcript ban with CI-evidence carve-out, announce-don't-reproduce, cite-don't-re-explain, \u00c2\u00a712 Commenter gate pointer). Round 3: draft-to-shape target.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000038] \u00c2\u00a79 carries the same delta; PO's body-edit rule stated explicitly (announce the edit, never reproduce new AC text) since PO is the only body-editing role. Round 3: draft-to-shape target.",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "[ST-000038] \u00c2\u00a79 carries the same delta; QA's per-AC evidence exemption preserved (exempts word cap only, not the one-topic/transcript rules). Round 3: draft-to-shape target \u00e2\u20ac\u201d one line per AC.",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[ST-000038] \u00c2\u00a79 carries the same delta, phrased for the reviewer role (a mid-review finding posts as its own comment; only gate-mandated gh pr checks output goes inline). Round 3: draft-to-shape target.",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[ST-000038] Local comment-entry writing standard gets the same \u00c2\u00a79 delta (Commenter gate applies, transcript carve-out inapplicable \u00e2\u20ac\u201d no PRs in strict mode). Round 3: draft-to-shape target."
     }
   },
   "0.1.41": {
@@ -142,10 +313,10 @@
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Audit_Rules_template.md": "[ST-000037] New: injectable detect-only counterpart to devkit-internal Audit_Rules.md — scoped to orphan headings, dangling GitHub references in strict-mode files, partial-mode-strip contradictions, and broken cross-references. Report-only, never edits.",
+      ".claude/agents/templates/rules/Audit_Rules_template.md": "[ST-000037] New: injectable detect-only counterpart to devkit-internal Audit_Rules.md \u00e2\u20ac\u201d scoped to orphan headings, dangling GitHub references in strict-mode files, partial-mode-strip contradictions, and broken cross-references. Report-only, never edits.",
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000037] Agent File Integrity gains an audit carve-out naming sync devkit/update project's detect-only audit pass as a workflow step, not a third writer of protected paths.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000037] New final Stage 4 — Audit Pass (detect-only): scoped to files this run wrote, silent when clean, spawns a fresh subagent against the deployed Audit_Rules.md, files findings as an audit:contribution Issue (or prompts manual filing), deletes the local report.",
-      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000037 CR-1 round-2] Universal set scaffold count for -ui-prototype repos bumped 9→10, Audit_Rules inserted."
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000037] New final Stage 4 \u00e2\u20ac\u201d Audit Pass (detect-only): scoped to files this run wrote, silent when clean, spawns a fresh subagent against the deployed Audit_Rules.md, files findings as an audit:contribution Issue (or prompts manual filing), deletes the local report.",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000037 CR-1 round-2] Universal set scaffold count for -ui-prototype repos bumped 9\u00e2\u2020\u201910, Audit_Rules inserted."
     }
   },
   "0.1.40": {
@@ -165,15 +336,15 @@
       ".claude/agents/templates/shared/workflows/Resume_Story_Workflow_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Agent_Common_template.md": "[#91] §5 Working Record rewrite-in-place rework. [#92/ST-000033] §2 Project Memory rework.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#91] Working Record retention pointer unified to '3 most recent story entries', pointing to Agent_Common.md §5 for cap/format.",
+      ".claude/agents/templates/rules/Agent_Common_template.md": "[#91] \u00c2\u00a75 Working Record rewrite-in-place rework. [#92/ST-000033] \u00c2\u00a72 Project Memory rework.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#91] Working Record retention pointer unified to '3 most recent story entries', pointing to Agent_Common.md \u00c2\u00a75 for cap/format.",
       ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#91] Same Working Record retention pointer unification as Developer_Rules.md.",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[#91] Working Record retention pointer unified to '3 most recent story entries' (already story-based; wording only). [#92/ST-000033] §1 checklist gains a Read your Memory step (QA-only).",
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[#91] §11b Working Record Retention unified to '3 most recent story entries', pointing to Agent_Common.md §5.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[#91] Working Record retention pointer unified to '3 most recent story entries' (already story-based; wording only). [#92/ST-000033] \u00c2\u00a71 checklist gains a Read your Memory step (QA-only).",
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[#91] \u00c2\u00a711b Working Record Retention unified to '3 most recent story entries', pointing to Agent_Common.md \u00c2\u00a75.",
       ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[#91] Working Record retention pointer unified, same as other roles.",
-      ".claude/agents/templates/context/Project_Priming_template.md": "[#91] §5 Agent Working Records updated to the story-entry retention unit, ≤4,000-char cap, rewrite-in-place format.",
+      ".claude/agents/templates/context/Project_Priming_template.md": "[#91] \u00c2\u00a75 Agent Working Records updated to the story-entry retention unit, \u00e2\u2030\u00a44,000-char cap, rewrite-in-place format.",
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[#91/#92] Working Record/Memory size-detection bullets. [ST-000036] Blocked_Request reference fix.",
-      ".claude/agents/templates/rules/Retro_Rules_template.md": "[#92/ST-000033] New Sprint-End Memory Pruning section — scheduled once-per-sprint pass applying Agent_Common §2's inclusion test to Stored Facts entries.",
+      ".claude/agents/templates/rules/Retro_Rules_template.md": "[#92/ST-000033] New Sprint-End Memory Pruning section \u00e2\u20ac\u201d scheduled once-per-sprint pass applying Agent_Common \u00c2\u00a72's inclusion test to Stored Facts entries.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[#92/ST-000033] Sprint-end sequence gains a Memory Pruning step (after Devkit Contribution, before Cleanup), delegating to Retro_Rules.md.",
       ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[Fix] Stage-1 clear stories now post an explicit cleared note so Stage 4 can promote them (previously fell into the no-final-comment/leave-as-backlog branch). All-Clear Shortcut retested on question-presence, not comment-presence.",
       ".claude/agents/templates/shared/workflows/Resume_Story_Workflow_Shared_template.md": "[ST-000036] Blocked_Request reference fix, 2 occurrences."
@@ -185,7 +356,7 @@
       ".claude/agents/templates/rules/QA_Rules_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[#77] §3 contradicted Stage 4 (PO ticks AC at closure, not QA); rewritten so QA validates AC and records sign-off via comment while PO ticks checkboxes and sets status:done. Also fixed 'tick AC'→'sign off' and 'ticked'→'validated' wording."
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[#77] \u00c2\u00a73 contradicted Stage 4 (PO ticks AC at closure, not QA); rewritten so QA validates AC and records sign-off via comment while PO ticks checkboxes and sets status:done. Also fixed 'tick AC'\u00e2\u2020\u2019'sign off' and 'ticked'\u00e2\u2020\u2019'validated' wording."
     }
   },
   "0.1.38": {
@@ -196,7 +367,7 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[sprint-5 retro] §2 Review checklist gains resume-rule branch-completeness and §N-citation-accuracy checks (recurring ST-000025/026/028). Change Requests gains a fix/call-site-menu-not-exhaustive phrasing convention (ST-000026/028).",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[sprint-5 retro] \u00c2\u00a72 Review checklist gains resume-rule branch-completeness and \u00c2\u00a7N-citation-accuracy checks (recurring ST-000025/026/028). Change Requests gains a fix/call-site-menu-not-exhaustive phrasing convention (ST-000026/028).",
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[sprint-5 retro] Stage 4 gains a GitHub-mode closure-comment-ordering note: post closure comments via a separate gh issue comment call, never combined with gh issue close --comment (auto-close silently drops the comment; recurring, first reported #76).",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[sprint-5 retro] Fixed the Settings-hook injection step pointing at a stale, devkit-internal init project Stage 4 step target projects never receive; restated the OS-detection + hook JSON inline instead (ST-000028 CR-1/CR-2 pattern)."
     }
@@ -213,8 +384,8 @@
     ],
     "descriptions": {
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000028] New refine prototype workflow: orchestrator acts as UI/UX Designer directly (no spawn) for a lightweight no-story iteration loop against a -ui-prototype companion repo, reusing Build Software's Path B repo conventions. Progress tracked in the target project's .claude/agents/tmp/refine_prototype_state.md; each iteration commits with a 'prototype adaptation:' prefix (github pushes live, strict stays local); loop end reuses Create_Stories_Workflow.md to create stories in the paired production repo.",
-      ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: github-mode thin variant — repo creation uses gh repo create, each iteration pushes live.",
-      ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: strict-mode thin variant — local git init only, no push after any iteration.",
+      ".claude/agents/templates/github/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: github-mode thin variant \u00e2\u20ac\u201d repo creation uses gh repo create, each iteration pushes live.",
+      ".claude/agents/templates/strict/workflows/Refine_Prototype_Workflow_template.md": "[ST-000028] New: strict-mode thin variant \u00e2\u20ac\u201d local git init only, no push after any iteration.",
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[ST-000028] Added refine prototype row to the Workflows trigger table.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000028] Added Refine_Prototype_Workflow.md to the split-candidates fetch list and workflows/ expected-files list."
     }
@@ -228,8 +399,8 @@
       ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000027] §13: bug/defect stories (bug label) add a Reproduction section (Repro Command/Expected/Actual) after AC. Bug Reproduction Pre-Flight runs Repro Command verbatim before any implementer spawns; absent/unknown falls back to implementer-reproduces. Strict mode uses the section's presence as the bug marker.",
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000027] New Bug Reproduction Pre-Flight section runs ahead of Stage 0 for bug-labeled/Reproduction-bearing stories. Reproduced → Stage 1 gets the confirmed repro artifact; not reproduced → no spawn, repro steps + result reported, status unchanged.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[ST-000027] \u00c2\u00a713: bug/defect stories (bug label) add a Reproduction section (Repro Command/Expected/Actual) after AC. Bug Reproduction Pre-Flight runs Repro Command verbatim before any implementer spawns; absent/unknown falls back to implementer-reproduces. Strict mode uses the section's presence as the bug marker.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000027] New Bug Reproduction Pre-Flight section runs ahead of Stage 0 for bug-labeled/Reproduction-bearing stories. Reproduced \u00e2\u2020\u2019 Stage 1 gets the confirmed repro artifact; not reproduced \u00e2\u2020\u2019 no spawn, repro steps + result reported, status unchanged.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000027] Pipeline state file gains a Repro Skipped: field (story IDs not reproduced, carried across per-story overwrites, cleared on fresh run); Pipeline Rule skips re-selecting those stories.",
       ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md": "[ST-000027] Stage Entry Check now runs Bug Reproduction Pre-Flight ahead of Stage 0; not-reproduced stops the pipeline for the targeted story (no skip-and-continue here)."
     }
@@ -241,8 +412,8 @@
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[ST-000026] New §11a Roadmap Story Drain: authoring/updating a roadmap doc now drains every story it defines into a tracked status:backlog issue immediately, not at sprint planning. Idempotent via a 'Roadmap Source: <file> :: Phase N :: <title>' exact-line marker checked before each create.",
-      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000026] Stage 1 gains step 7, Roadmap reconciliation backstop (feature sprints): checks every roadmap-defined story against tracked issues in any status via the exact-line Roadmap Source marker, surfacing untracked stories as drift — a safety net now that draining happens at authoring time."
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[ST-000026] New \u00c2\u00a711a Roadmap Story Drain: authoring/updating a roadmap doc now drains every story it defines into a tracked status:backlog issue immediately, not at sprint planning. Idempotent via a 'Roadmap Source: <file> :: Phase N :: <title>' exact-line marker checked before each create.",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000026] Stage 1 gains step 7, Roadmap reconciliation backstop (feature sprints): checks every roadmap-defined story against tracked issues in any status via the exact-line Roadmap Source marker, surfacing untracked stories as drift \u00e2\u20ac\u201d a safety net now that draining happens at authoring time."
     }
   },
   "0.1.34": {
@@ -252,8 +423,8 @@
       ".claude/agents/templates/rules/Story_Standard_TL_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[sprint-5 refine] §2 AC Clarifications gains a rule distinguishing it from the §7 'TL commenting on scope' red flag: narrowing an AC's technical interpretation is TL's job, but an answer creating a genuinely new deliverable must flag PO.",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[sprint-5 refine] §7 Red Flags line now points to Technical_Lead_Rules.md §2 for the AC-clarification-vs-scope-creep distinction."
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[sprint-5 refine] \u00c2\u00a72 AC Clarifications gains a rule distinguishing it from the \u00c2\u00a77 'TL commenting on scope' red flag: narrowing an AC's technical interpretation is TL's job, but an answer creating a genuinely new deliverable must flag PO.",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[sprint-5 refine] \u00c2\u00a77 Red Flags line now points to Technical_Lead_Rules.md \u00c2\u00a72 for the AC-clarification-vs-scope-creep distinction."
     }
   },
   "0.1.33": {
@@ -263,8 +434,8 @@
       ".claude/agents/templates/rules/Developer_Rules_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[#76/#78 retro] §12 Reviewer Gate gains a branch for zero-checks-reported PRs: distinguishes 'nothing runnable changed' (not a blocker) from 'CI genuinely missing' (no approval without a real run or deviation note).",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#76/#78 retro] §5 pre-PR checks table gains a Lint/format row covering self-authored test files, not just production source. §2 Step 3 gains a git branch --show-current check before the first commit."
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[#76/#78 retro] \u00c2\u00a712 Reviewer Gate gains a branch for zero-checks-reported PRs: distinguishes 'nothing runnable changed' (not a blocker) from 'CI genuinely missing' (no approval without a real run or deviation note).",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#76/#78 retro] \u00c2\u00a75 pre-PR checks table gains a Lint/format row covering self-authored test files, not just production source. \u00c2\u00a72 Step 3 gains a git branch --show-current check before the first commit."
     }
   },
   "0.1.32": {
@@ -286,9 +457,9 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Logging_Standard_template.md": "[#64/ST-000023] New: logging standard — 4 levels (ERROR/WARN/INFO/DEBUG), use-with-weight rule, single-log rule, sensitive-data prohibition, default Java log-pattern example the deploying agent adapts.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#64/ST-000023] §2 adds a trigger pointer to Logging_Standard.md for source code stories.",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[#64/ST-000023] §4 adds a trigger pointer to Logging_Standard.md for source code stories.",
+      ".claude/agents/templates/rules/Logging_Standard_template.md": "[#64/ST-000023] New: logging standard \u00e2\u20ac\u201d 4 levels (ERROR/WARN/INFO/DEBUG), use-with-weight rule, single-log rule, sensitive-data prohibition, default Java log-pattern example the deploying agent adapts.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#64/ST-000023] \u00c2\u00a72 adds a trigger pointer to Logging_Standard.md for source code stories.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[#64/ST-000023] \u00c2\u00a74 adds a trigger pointer to Logging_Standard.md for source code stories.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[#64/ST-000023] Rules-adapt-to-mode and Expected-files lists gain Logging_Standard.md."
     }
   },
@@ -305,11 +476,11 @@
     ],
     "descriptions": {
       ".claude/agents/templates/rules/UI_Prototype_Rules_template.md": "[#57/ST-000022] New: shared reference-only + mock-case rules for repos paired with a UI/UX prototype companion repo, per-role Dev/TL/QA/UI-UX-Designer sections.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#57/ST-000022] §2 adds a trigger pointer to UI_Prototype_Rules.md for UI-bearing repos.",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#57/ST-000022] §2 adds a trigger pointer to UI_Prototype_Rules.md for UI-bearing repos.",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[#57/ST-000022] §4 adds a trigger pointer to UI_Prototype_Rules.md for UI-bearing repos.",
-      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[#57/ST-000022] §4 adds a trigger pointer to UI_Prototype_Rules.md.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[#57/ST-000022] Expected-files/Applies-to lists were missing UI_UX_Designer_Rules.md (pre-existing gap) — added, plus new UI_Prototype_Rules.md; stale instructions/memory/working-record counts fixed 5→6."
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#57/ST-000022] \u00c2\u00a72 adds a trigger pointer to UI_Prototype_Rules.md for UI-bearing repos.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#57/ST-000022] \u00c2\u00a72 adds a trigger pointer to UI_Prototype_Rules.md for UI-bearing repos.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[#57/ST-000022] \u00c2\u00a74 adds a trigger pointer to UI_Prototype_Rules.md for UI-bearing repos.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[#57/ST-000022] \u00c2\u00a74 adds a trigger pointer to UI_Prototype_Rules.md.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[#57/ST-000022] Expected-files/Applies-to lists were missing UI_UX_Designer_Rules.md (pre-existing gap) \u00e2\u20ac\u201d added, plus new UI_Prototype_Rules.md; stale instructions/memory/working-record counts fixed 5\u00e2\u2020\u20196."
     }
   },
   "0.1.29": {
@@ -327,15 +498,15 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "[#57/ST-000021] New: sixth agent role — UI/UX Designer — turns a wireframe/backlog story into a runnable prototype, never a static mockup.",
-      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[#57/ST-000021] New: UI/UX Designer working rules — pre-start steps, runnable-prototype standard (§4), pre-PR gate, git workflow.",
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[#57/ST-000021] §2/§4/§7/§11/§13 add UI/UX Designer as a sixth valid Assigned role and role-boundary row.",
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "[#57/ST-000021] New: sixth agent role \u00e2\u20ac\u201d UI/UX Designer \u00e2\u20ac\u201d turns a wireframe/backlog story into a runnable prototype, never a static mockup.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[#57/ST-000021] New: UI/UX Designer working rules \u00e2\u20ac\u201d pre-start steps, runnable-prototype standard (\u00c2\u00a74), pre-PR gate, git workflow.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[#57/ST-000021] \u00c2\u00a72/\u00c2\u00a74/\u00c2\u00a77/\u00c2\u00a711/\u00c2\u00a713 add UI/UX Designer as a sixth valid Assigned role and role-boundary row.",
       ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[#57/ST-000021] Assignee valid-values list gains UI/UX Designer.",
       ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[#57/ST-000021] Assigned valid-values and story-creation template gain UI/UX Designer.",
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[#57/ST-000021] Agent Roster table gains the UI/UX Designer row.",
       ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[#57/ST-000021] Implementer-role list gains UI/UX Designer.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[#57/ST-000021] Implementer role list gains UI/UX Designer.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[#57/ST-000021] Memory/working-record file counts updated 5→6 for the new sixth role."
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[#57/ST-000021] Memory/working-record file counts updated 5\u00e2\u2020\u20196 for the new sixth role."
     }
   },
   "0.1.28": {
@@ -345,8 +516,8 @@
       ".claude/agents/templates/rules/Developer_Rules_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Agent_Common_template.md": "[Fix] §6 stage-transition memory commits append [skip ci] so memory-only pushes stop triggering CI; head-commit semantics documented.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[Fix] §6 docs-only pushes (docs/, *.md, .claude/agents/) append [skip ci]; never used on pushes containing code/config/build-file changes."
+      ".claude/agents/templates/rules/Agent_Common_template.md": "[Fix] \u00c2\u00a76 stage-transition memory commits append [skip ci] so memory-only pushes stop triggering CI; head-commit semantics documented.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[Fix] \u00c2\u00a76 docs-only pushes (docs/, *.md, .claude/agents/) append [skip ci]; never used on pushes containing code/config/build-file changes."
     }
   },
   "0.1.27": {
@@ -367,17 +538,17 @@
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#55] §6 commit subject-line length is a non-blocking style nit (≤50-char limit covers the whole header); §11 peer-review checklist carries the same carve-out.",
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[#58/#61] §9 gains a comment-writing standard (decision-first, ~150-200-word soft cap with QA-report exemption, evidence by pointer, delta-only corrections, one close-out per thread). §3 gains AC hygiene and Body Amendments edit-time rules (decisions not derivations, ≤5 lines). §2 legitimizes optional pointer-style sections and adds one-list-per-concern.",
-      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[#58] §9 adds condensed comment-writing standard pointer (decision-first, capped, evidence by pointer).",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[#58/#61] §9 adds condensed comment-writing standard plus the ≤5-line decision-only rule for refinement outcomes.",
-      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "[#58] §9 adds condensed comment-writing standard with an exemption for per-AC validation reports.",
-      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[#58/#61] §9 adds condensed comment-writing standard plus body-amendment rules (decision-only edits).",
-      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[#58] Comments Section rules gain the same writing standard as GitHub-mode Story_Standard §9.",
-      ".claude/agents/templates/rules/Agent_Common_template.md": "[#59/#56] §2 memory fact-writing rules (rule-first, ~100-120-word cap, corrections rewrite in place, point-don't-mirror); §5 working-record entry rules (bullets, ~100-150-word daily cap); new §9 Token-Efficiency Conventions.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#55] \u00c2\u00a76 commit subject-line length is a non-blocking style nit (\u00e2\u2030\u00a450-char limit covers the whole header); \u00c2\u00a711 peer-review checklist carries the same carve-out.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[#58/#61] \u00c2\u00a79 gains a comment-writing standard (decision-first, ~150-200-word soft cap with QA-report exemption, evidence by pointer, delta-only corrections, one close-out per thread). \u00c2\u00a73 gains AC hygiene and Body Amendments edit-time rules (decisions not derivations, \u00e2\u2030\u00a45 lines). \u00c2\u00a72 legitimizes optional pointer-style sections and adds one-list-per-concern.",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[#58] \u00c2\u00a79 adds condensed comment-writing standard pointer (decision-first, capped, evidence by pointer).",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "[#58/#61] \u00c2\u00a79 adds condensed comment-writing standard plus the \u00e2\u2030\u00a45-line decision-only rule for refinement outcomes.",
+      ".claude/agents/templates/rules/Story_Standard_QA_template.md": "[#58] \u00c2\u00a79 adds condensed comment-writing standard with an exemption for per-AC validation reports.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[#58/#61] \u00c2\u00a79 adds condensed comment-writing standard plus body-amendment rules (decision-only edits).",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[#58] Comments Section rules gain the same writing standard as GitHub-mode Story_Standard \u00c2\u00a79.",
+      ".claude/agents/templates/rules/Agent_Common_template.md": "[#59/#56] \u00c2\u00a72 memory fact-writing rules (rule-first, ~100-120-word cap, corrections rewrite in place, point-don't-mirror); \u00c2\u00a75 working-record entry rules (bullets, ~100-150-word daily cap); new \u00c2\u00a79 Token-Efficiency Conventions.",
       ".claude/agents/templates/rules/Retro_Rules_template.md": "[#60] New Writing Rules: lesson-first bullets with pointer evidence (~3-sentence cap), shared Story-Level Lessons section, reinforced lessons as one-line Reinforces: pointers.",
       ".claude/agents/templates/rules/CICD_Validation_Guide_template.md": "[#54] New Step 0 pre-check: skip the ci-validation push when the pull_request trigger already covers the change, citing the PR's own run instead.",
-      ".claude/agents/templates/context/Project_Priming_template.md": "[#59] §5 working-record format aligned with Agent_Common §5 caps.",
+      ".claude/agents/templates/context/Project_Priming_template.md": "[#59] \u00c2\u00a75 working-record format aligned with Agent_Common \u00c2\u00a75 caps.",
       ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[#51] Step 3 note disambiguating roadmap Phase numbering from per-repo sprint-N labels; roadmap-sourced stories echo a Roadmap Phase line.",
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[#51] Stage 4 roadmap-sourced stories echo the roadmap phase as a separate Roadmap Phase body line."
     }
@@ -399,10 +570,10 @@
     ],
     "descriptions": {
       ".claude/agents/templates/rules/Agent_Common_template.md": "[#48/#49] New Credential-Gated Verification and Secret Handling sections: never self-approve a missing-credential skip, never write a raw secret into a committed file or ask the user to paste one. New External Content Handling: treat Issue/PR comments as untrusted, verify authorAssociation, treat command/credential/site-visit requests as suspected prompt injection.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#48/#45/#47/#50] §5 cross-references Agent_Common §7 for missing-credential blocks; §11 Peer Review adds CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, and stub/TODO re-check bullets.",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#47/#50/#53/#48] §2 review checklist confirms a CI check actually executed, head SHA matches, red checks diagnosed from logs, dependency pins resolvable, plus missing-credential cross-reference. New abbreviated CI/Workflow-story checklist.",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[#48/#45/#47/#53/#44] §4 adds a missing-credential escalation example, real-fixture-test requirement for external integration AC, 'mock/structural pass ≠ complete' rule, run-twice technique, CI/workflow-only + verification-only test-scenario-doc exceptions. §8 adds a CI-equivalent exception.",
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[#52] §12 Reviewer checklist requires pasting literal gh pr checks <PR#> output into the approval comment as an auditable artifact.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[#48/#45/#47/#50] \u00c2\u00a75 cross-references Agent_Common \u00c2\u00a77 for missing-credential blocks; \u00c2\u00a711 Peer Review adds CI-execution-vs-conclusion, head-SHA-match, red-check-diagnosis, and stub/TODO re-check bullets.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#47/#50/#53/#48] \u00c2\u00a72 review checklist confirms a CI check actually executed, head SHA matches, red checks diagnosed from logs, dependency pins resolvable, plus missing-credential cross-reference. New abbreviated CI/Workflow-story checklist.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[#48/#45/#47/#53/#44] \u00c2\u00a74 adds a missing-credential escalation example, real-fixture-test requirement for external integration AC, 'mock/structural pass \u00e2\u2030\u00a0 complete' rule, run-twice technique, CI/workflow-only + verification-only test-scenario-doc exceptions. \u00c2\u00a78 adds a CI-equivalent exception.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[#52] \u00c2\u00a712 Reviewer checklist requires pasting literal gh pr checks <PR#> output into the approval comment as an auditable artifact.",
       ".claude/agents/templates/rules/CICD_Validation_Guide_template.md": "[#50] New named exception: a new CI check's first red run on genuine application assertions is an acceptable gate outcome, not something to work around.",
       ".claude/agents/templates/rules/Clean_Code_Rules_template.md": "[#53] 'Skip for' list now explicitly names .github/workflows/ CI YAML files.",
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[#52/#45/#47/#50/#44] Merge Procedure gets a mandatory step 0 CI-check gate (gh pr checks) independent of reviewer sign-off. Stage 1 adds a stub/TODO scan + self-certified Outcome: verification-only tag; Stage 2/3 route verification-only stories to a spot-check; Stage 4 adds an elevated-QA-requirement closure check.",
@@ -447,7 +618,7 @@
       ".claude/agents/templates/rules/Product_Owner_Rules_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[Fix] §9 Release Gate no longer scopes VERSION/CHANGELOG.md to Java-skeleton repos — universal convention now; only the automated release.yml cut stays Java-specific."
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[Fix] \u00c2\u00a79 Release Gate no longer scopes VERSION/CHANGELOG.md to Java-skeleton repos \u00e2\u20ac\u201d universal convention now; only the automated release.yml cut stays Java-specific."
     }
   },
   "0.1.21": {
@@ -458,7 +629,7 @@
     ],
     "descriptions": {
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[Feat] Sprint-end Release Decision step: checks for a Java-skeleton VERSION file, asks before stripping -SNAPSHOT and triggering release.yml if the CHANGELOG has real entries; never releases automatically.",
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[Feat] §9 Release Gate cross-references the new Sprint_Workflow.md Release Decision step for Java-skeleton repos."
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[Feat] \u00c2\u00a79 Release Gate cross-references the new Sprint_Workflow.md Release Decision step for Java-skeleton repos."
     }
   },
   "0.1.20": {
@@ -475,9 +646,9 @@
       ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[RF-012/ST-000014] Stage 1 step 3 non-feature GitHub mode: replaced a single 3-label AND query (always 0 results) with three unioned per-label queries.",
       ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[RF-014/ST-000014] Sprint-end Devkit Contribution fallback: replaced 'open a PR' with 'open an Issue labeled retro:contribution'.",
       ".claude/agents/templates/shared/CLAUDE_Shared_template.md": "[RF-011/ST-000014] Agent File Integrity: replaced undefined 'update agents'/Update_Agents_Workflow.md with correct 'sync devkit'/Sync_Devkit_Workflow.md.",
-      ".claude/agents/templates/context/Project_Priming_template.md": "[RF-007/RF-008/ST-000014] §6 doc paths aligned with Document_Index flat paths; Sprint_1_Overview.md parameterized to Sprint_N_Overview.md.",
-      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[RF-009/ST-000014] Story Closure Task retro reference changed from Retro_Rules.md to Agent_Common.md §4, matching other role instruction files.",
-      ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "[RF-010/ST-000014] Retro section header relabeled '## Implementer — Business Analyst' to '## Analyst — Business Analyst'."
+      ".claude/agents/templates/context/Project_Priming_template.md": "[RF-007/RF-008/ST-000014] \u00c2\u00a76 doc paths aligned with Document_Index flat paths; Sprint_1_Overview.md parameterized to Sprint_N_Overview.md.",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[RF-009/ST-000014] Story Closure Task retro reference changed from Retro_Rules.md to Agent_Common.md \u00c2\u00a74, matching other role instruction files.",
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "[RF-010/ST-000014] Retro section header relabeled '## Implementer \u00e2\u20ac\u201d Business Analyst' to '## Analyst \u00e2\u20ac\u201d Business Analyst'."
     }
   },
   "0.1.19": {
@@ -488,9 +659,9 @@
       ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[RF-005/RF-003/ST-000013] §4 Story files line mode-gated (GitHub: Issues; Strict: Strict_Mode_Story_Guide.md). §6 Commit Message Rules split GitHub (Conventional Commits) vs Strict (primary-id format).",
-      ".claude/agents/templates/context/Project_Priming_template.md": "[RF-006/ST-000013] §3 story-workflow opener mode-gated; Collaboration rules split GitHub (Issues-comments) vs Strict (## Comments section).",
-      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[RF-003/ST-000013] §Commit Message Format: replaced vague 'project's own style' with an explicit spec (lowercase imperative, ≤60 chars)."
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[RF-005/RF-003/ST-000013] \u00c2\u00a74 Story files line mode-gated (GitHub: Issues; Strict: Strict_Mode_Story_Guide.md). \u00c2\u00a76 Commit Message Rules split GitHub (Conventional Commits) vs Strict (primary-id format).",
+      ".claude/agents/templates/context/Project_Priming_template.md": "[RF-006/ST-000013] \u00c2\u00a73 story-workflow opener mode-gated; Collaboration rules split GitHub (Issues-comments) vs Strict (## Comments section).",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[RF-003/ST-000013] \u00c2\u00a7Commit Message Format: replaced vague 'project's own style' with an explicit spec (lowercase imperative, \u00e2\u2030\u00a460 chars)."
     }
   },
   "0.1.18": {
@@ -499,7 +670,7 @@
       ".claude/agents/templates/rules/Story_Standard_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000012 retro] §12 reviewer checklist adds the flag-vs-block rule: a PR-introduced contradiction blocks approval; a pre-existing out-of-scope problem is approved and recorded as a follow-up story."
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000012 retro] \u00c2\u00a712 reviewer checklist adds the flag-vs-block rule: a PR-introduced contradiction blocks approval; a pre-existing out-of-scope problem is approved and recorded as a follow-up story."
     }
   },
   "0.1.17": {
@@ -510,8 +681,8 @@
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[RF-001/002/004] §1 Testing row owner corrected to TL (was QA); §4 removes conflicting Review→Testing step; §2 distinguishes GitHub Assignee from body Assigned field; §12 adds QA sign-off requirement; §13 clarifies Assignee is optional.",
-      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[RF-004] §1 Testing row owner corrected to TL; §2 distinguishes GitHub Assignee from Assigned field; §13 clarifies Assignee is optional.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[RF-001/002/004] \u00c2\u00a71 Testing row owner corrected to TL (was QA); \u00c2\u00a74 removes conflicting Review\u00e2\u2020\u2019Testing step; \u00c2\u00a72 distinguishes GitHub Assignee from body Assigned field; \u00c2\u00a712 adds QA sign-off requirement; \u00c2\u00a713 clarifies Assignee is optional.",
+      ".claude/agents/templates/rules/Story_Standard_PO_template.md": "[RF-004] \u00c2\u00a71 Testing row owner corrected to TL; \u00c2\u00a72 distinguishes GitHub Assignee from Assigned field; \u00c2\u00a713 clarifies Assignee is optional.",
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[RF-013] Stage 4 non-behavioral/behavioral paths: removed promote-next-story steps, delegated to Stage 0 (Story Discovery)."
     }
   },
@@ -522,7 +693,7 @@
       ".claude/agents/templates/rules/CICD_Validation_Guide_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000016 retro] §3 distinguishes per-file vs global/aggregate checks in fixture-coverage AC; §9 requires reconciling body AC when a design-first comment narrows/supersedes one.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[ST-000016 retro] \u00c2\u00a73 distinguishes per-file vs global/aggregate checks in fixture-coverage AC; \u00c2\u00a79 requires reconciling body AC when a design-first comment narrows/supersedes one.",
       ".claude/agents/templates/rules/CICD_Validation_Guide_template.md": "[ST-000016 retro] PR-triggered CI gates must also include a push:[ci-validation] trigger for a referenceable run; gitignored reference paths won't exist on the runner."
     }
   },
@@ -544,8 +715,8 @@
     ],
     "descriptions": {
       ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[#22] Repoint Plan Next Sprint references from CLAUDE.md to Plan_Sprint_Workflow.md.",
-      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[#22] §4 deferred-phase label example phase:2 → phase-2, matching the canonical phase-N scheme.",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#20] PR-approval contradiction resolved (mandate gh pr comment, never gh pr review --approve); Memory added to §1 pre-start read sequence; sections renumbered sequentially."
+      ".claude/agents/templates/rules/Product_Owner_Rules_template.md": "[#22] \u00c2\u00a74 deferred-phase label example phase:2 \u00e2\u2020\u2019 phase-2, matching the canonical phase-N scheme.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "[#20] PR-approval contradiction resolved (mandate gh pr comment, never gh pr review --approve); Memory added to \u00c2\u00a71 pre-start read sequence; sections renumbered sequentially."
     }
   },
   "0.1.13": {
@@ -572,7 +743,7 @@
     "new": [],
     "modified": [],
     "descriptions": {
-      "_note": "[ST-000010] Created community-retros/README.md — no template files changed; version bump only."
+      "_note": "[ST-000010] Created community-retros/README.md \u00e2\u20ac\u201d no template files changed; version bump only."
     }
   },
   "0.1.10": {
@@ -597,11 +768,11 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/wiki/Testing_Guidelines_template.md": "New: wiki template for Testing_Guidelines.md — sections with {{PLACEHOLDER}} markers filled by init project from tech stack scan",
-      ".claude/agents/templates/wiki/Development_Standards_template.md": "New: wiki template for Development_Standards.md — git branching, commit format, testing standards, linting, file structure",
-      ".claude/agents/templates/wiki/Code_Review_Checklist_template.md": "New: wiki template for Code_Review_Checklist.md — developer pre-PR checklist and TL review criteria",
-      ".claude/agents/templates/wiki/Language_Style_Guide_template.md": "New: wiki template for {Language}_Style_Guide.md — naming, error handling, concurrency, design patterns per detected language",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Feat: add wiki files merge strategy — new template sections appended with [UPDATE REQUIRED]; existing project content never overwritten"
+      ".claude/agents/templates/wiki/Testing_Guidelines_template.md": "New: wiki template for Testing_Guidelines.md \u00e2\u20ac\u201d sections with {{PLACEHOLDER}} markers filled by init project from tech stack scan",
+      ".claude/agents/templates/wiki/Development_Standards_template.md": "New: wiki template for Development_Standards.md \u00e2\u20ac\u201d git branching, commit format, testing standards, linting, file structure",
+      ".claude/agents/templates/wiki/Code_Review_Checklist_template.md": "New: wiki template for Code_Review_Checklist.md \u00e2\u20ac\u201d developer pre-PR checklist and TL review criteria",
+      ".claude/agents/templates/wiki/Language_Style_Guide_template.md": "New: wiki template for {Language}_Style_Guide.md \u00e2\u20ac\u201d naming, error handling, concurrency, design patterns per detected language",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Feat: add wiki files merge strategy \u00e2\u20ac\u201d new template sections appended with [UPDATE REQUIRED]; existing project content never overwritten"
     }
   },
   "0.1.8": {
@@ -613,10 +784,10 @@
       ".claude/agents/templates/rules/QA_Rules_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 2 step 6 — add explicit status:testing label step and do-not-merge warning before proceeding to Stage 3",
-      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix: §2 PR Approval — remove 'ready to merge' phrase; add explicit no-merge instruction. Fix: §3 — status:testing set before merge, not after",
-      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix: §1 Testing row — status:testing set after TL approval and before merge (QA tests dev branch)",
-      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: §8 — add no-skip rule requiring escalation to user if sandbox/automation cannot be run; self-approval of skip is not permitted"
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Fix: Stage 2 step 6 \u00e2\u20ac\u201d add explicit status:testing label step and do-not-merge warning before proceeding to Stage 3",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_template.md": "Fix: \u00c2\u00a72 PR Approval \u00e2\u20ac\u201d remove 'ready to merge' phrase; add explicit no-merge instruction. Fix: \u00c2\u00a73 \u00e2\u20ac\u201d status:testing set before merge, not after",
+      ".claude/agents/templates/rules/Story_Standard_TL_template.md": "Fix: \u00c2\u00a71 Testing row \u00e2\u20ac\u201d status:testing set after TL approval and before merge (QA tests dev branch)",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "Fix: \u00c2\u00a78 \u00e2\u20ac\u201d add no-skip rule requiring escalation to user if sandbox/automation cannot be run; self-approval of skip is not permitted"
     }
   },
   "0.1.7": {
@@ -627,9 +798,9 @@
       ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers → sonnet; Stage 2 TL reviewer → opus; Stage 2 Dev peer reviewer → sonnet; Stage 3 QA → sonnet; Stage 4 PO behavioral → haiku; mid-impl consultation agents → sonnet)",
-      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (PO → sonnet; question-answering agents → sonnet)",
-      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA → sonnet; Stage 1/2 TL → opus; Stage 2 PO → sonnet)"
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 implementers \u00e2\u2020\u2019 sonnet; Stage 2 TL reviewer \u00e2\u2020\u2019 opus; Stage 2 Dev peer reviewer \u00e2\u2020\u2019 sonnet; Stage 3 QA \u00e2\u2020\u2019 sonnet; Stage 4 PO behavioral \u00e2\u2020\u2019 haiku; mid-impl consultation agents \u00e2\u2020\u2019 sonnet)",
+      ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (PO \u00e2\u2020\u2019 sonnet; question-answering agents \u00e2\u2020\u2019 sonnet)",
+      ".claude/agents/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "Feat: annotate all agent spawn calls with model assignments (Stage 1 Dev/QA/BA \u00e2\u2020\u2019 sonnet; Stage 1/2 TL \u00e2\u2020\u2019 opus; Stage 2 PO \u00e2\u2020\u2019 sonnet)"
     }
   },
   "0.1.6": {
@@ -640,8 +811,8 @@
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
     ],
     "descriptions": {
-      ".claude/agents/templates/rules/QA_Rules_template.md": "[Fix] §4 coverage audit: updating broken tests is a regression fix, not new coverage. §4 integration test skip: report unlisted skip constraints to user first, then escalate to TL if directed.",
-      ".claude/agents/templates/rules/Developer_Rules_template.md": "[Fix] §5 spec-first rule: when a story has an API Spec Reference section, update the spec before writing any implementation code.",
+      ".claude/agents/templates/rules/QA_Rules_template.md": "[Fix] \u00c2\u00a74 coverage audit: updating broken tests is a regression fix, not new coverage. \u00c2\u00a74 integration test skip: report unlisted skip constraints to user first, then escalate to TL if directed.",
+      ".claude/agents/templates/rules/Developer_Rules_template.md": "[Fix] \u00c2\u00a75 spec-first rule: when a story has an API Spec Reference section, update the spec before writing any implementation code.",
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[Fix] Stage 3 merge gate: explicit warning that the Merge Procedure fires only at behavioral path step 9, not at Stage 3 entry."
     }
   },
@@ -728,9 +899,9 @@
       ".claude/agents/templates/CLAUDE_TEMPLATE.md": "Refactor: removed inline workflow content; replaced with clean routing table pointing to workflow files",
       ".claude/agents/templates/workflows/Sprint_Workflow_template.md": "Fix: Observations write rule now requires agent role prefix on agent-reported items",
       ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md": "Fix: added next-sprint resolution logic for both GitHub mode (gh issue list jq numeric sort + gh label list warning) and strict mode (glob + numeric parse)",
-      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md": "Fix: Stage 4 step 4 — explicit feature/non-feature story label sub-bullets instead of implicit conditional",
+      ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md": "Fix: Stage 4 step 4 \u00e2\u20ac\u201d explicit feature/non-feature story label sub-bullets instead of implicit conditional",
       ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md": "Fix: replaced gh label list | grep (alphabetical sort bug) with gh issue list jq numeric sort for non-feature sprint identification; added gh label list warning",
-      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md": "Fix: deletion pre-check — added trigger examples and proceed-immediately rationale; Stage 2 and Stage 3 fast-path fallback — added domain knowledge examples"
+      ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md": "Fix: deletion pre-check \u00e2\u20ac\u201d added trigger examples and proceed-immediately rationale; Stage 2 and Stage 3 fast-path fallback \u00e2\u20ac\u201d added domain knowledge examples"
     }
   },
   "0.1.2": {

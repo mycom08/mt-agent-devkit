@@ -1,7 +1,7 @@
 # Developer Rules — Bootstrap
 
 **Applies to:** Developer agent
-**Reference from:** `.claude/agents/developer_instructions.md`
+**Reference from:** `{{AGENT_DIR_PREFIX}}/agents/developer_instructions.md`
 **Purpose:** The whole of the Developer's bootstrap-tier rules — everything that is true on *every* Dev spawn regardless of what the task is. Read this file in full at step 3 of `Agent_Common_Bootstrap.md §1`. Read nothing else from the Developer rules set until a trigger in §12 actually fires.
 
 ---
@@ -12,7 +12,7 @@ Before writing a single line of code on any story, Dev **must** read:
 
 | Document | Path |
 |---|---|
-| Story Standard (Dev) | `.claude/agents/rules/Story_Standard_Dev.md` |
+| Story Standard (Dev) | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_Dev.md` |
 
 The key Development Standards rules are already embedded in §4–§6 of this document (naming, testing, git workflow). Only read `docs/wiki/Development_Standards.md` if you encounter a specific convention question not covered here.
 
@@ -55,20 +55,20 @@ Once all blocking questions are resolved:
 **Clean Code (source code stories only):**
 
 If the story involves writing or modifying source code files, read before writing any code:
-- `.claude/agents/rules/Clean_Code_Rules.md`
+- `{{AGENT_DIR_PREFIX}}/agents/rules/Clean_Code_Rules.md`
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
 **Logging Standard (source code stories only):**
 
 If the story involves writing or modifying log statements, read before writing any code:
-- `.claude/agents/rules/Logging_Standard.md`
+- `{{AGENT_DIR_PREFIX}}/agents/rules/Logging_Standard.md`
 
 Skip for documentation, API spec, Dockerfile, docker-compose, migration SQL, or config-only stories.
 
 **UI Prototype reference (UI-bearing repos only):**
 
-If this repo has (or is paired with) a `-ui-prototype` companion repo, read `.claude/agents/rules/UI_Prototype_Rules.md` before implementing any screen with a prototype counterpart — it governs what may (and must not) be reused from the prototype.
+If this repo has (or is paired with) a `-ui-prototype` companion repo, read `{{AGENT_DIR_PREFIX}}/agents/rules/UI_Prototype_Rules.md` before implementing any screen with a prototype counterpart — it governs what may (and must not) be reused from the prototype.
 
 **For Clean Code or refactor stories** (title or scope contains "Clean Code", "refactor", or "violation"): read `Clean_Code_Rules.md` **in full** before touching any file — do not limit reading to chapters that appear relevant by violation label. Chapter scope is not always obvious from violation names alone.
 
@@ -113,7 +113,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Story files:**
 - **GitHub mode:** Stories are GitHub Issues — title format `[ST-XXXXXX][FEATURE] Title In Title Case`. No `.md` story files are created or tracked.
-- **Strict mode:** Stories are `.md` files under `.claude/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
+- **Strict mode:** Stories are `.md` files under `{{AGENT_DIR_PREFIX}}/agents/docs/stories/` (filename: `ST-XXXXXX.md`). No GitHub Issues. See `Strict_Mode_Story_Guide.md` for the full format and lifecycle.
 
 ---
 
@@ -181,13 +181,13 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 - **GitHub mode:** Format: `<type>(<scope>): <subject>` (Conventional Commits). Subject: imperative mood, ≤ 50 characters. Body (when needed): explain *why*, wrap at 72 characters. Footer: always include `Story: ST-XXXXXX`. See `docs/wiki/Development_Standards.md §2` for the full type list.
 - **Strict mode:** Format: `<primary-id> [<secondary-id>]: <message>` — see `Strict_Mode_Story_Guide.md §Commit Message Format` for the complete spec. No `Story:` footer, no Conventional Commits type prefix.
 - **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`), not just the text after the colon. A reviewer who finds a length violation notes it in a PR comment but must **not** withhold approval, request changes, or trigger a fix-loop over length alone. Everything else in the commit-message convention (type/scope format, imperative mood, `Story:` footer, body wrap) remains blocking.
-- **Docs-only pushes skip CI (github mode):** when every file in the push is non-code (`docs/**`, `*.md`, `.claude/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
+- **Docs-only pushes skip CI (github mode):** when every file in the push is non-code (`docs/**`, `*.md`, `{{AGENT_DIR_PREFIX}}/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
 
 ---
 
 ## 12. On-Demand Rules — Routing Table
 
-§1–§6 above are loaded at spawn. Nothing in `Developer_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill (`.claude/skills/read-section/`) — not the whole file.
+§1–§6 above are loaded at spawn. Nothing in `Developer_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill (`{{AGENT_DIR_PREFIX}}/skills/read-section/`) — not the whole file.
 
 | Trigger | Fetch |
 |---|---|

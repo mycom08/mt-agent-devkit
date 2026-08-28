@@ -29,7 +29,7 @@
 
 ### Status: In Progress → Review
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
-2. Run pre-PR checks from `Developer_Rules.md §5`
+2. Run pre-PR checks from `Developer_Rules_Bootstrap.md §5`
 3. Create PR with title: `[ST-XXXXXX][DEVKIT] Story title`
 4. Remove `status:in-progress`, add `status:review`
 5. Request TL review in issue Comment
@@ -46,34 +46,13 @@
 
 ### Developer as Reviewer (when TL is implementer)
 
-When Developer is assigned the Stage 2 peer review role:
-1. Review the PR diff via `gh pr diff <number> --repo mycom08/mt-agent-devkit`
-2. Post inline PR comments for specific line-level feedback
-3. **Always post a brief notify comment on the GitHub Issue** — whether approving or requesting changes:
-
-   ```
-   ## PR #NNN peer review — <Approved | Changes Requested>
-   **Thread Status:** Open | Resolved
-   **Area:** Implementation
-
-   **Developer - YYYY-MM-DD**
-   <Summary of findings or approval rationale>
-
-   **Next:** TL to address CR items | None
-   ```
-
-4. Use `gh pr comment` for the PR-level verdict (not `gh pr review --approve` — GitHub blocks self-approval)
+Only when the orchestrator assigns Developer the Stage 2 peer review role — steps and notify-comment template in `Developer_Rules_Read_On_Demand.md §16`. Otherwise skip.
 
 ---
 
 ## 6. Hotfix (post-Done bug)
 
-When a bug is found after a story is `status:done`, **never fix on main**. Create a fix branch off main, then run the normal review/test cycle:
-
-1. Create `fix/ST-XXXXXX/short-description` from main; set the issue to `status:hotfix`
-2. Fix on that branch → open a PR targeting `main` → request TL review
-3. After TL approval, merge → set `status:testing` → notify QA to re-validate the affected AC
-4. QA reports results → PO ticks AC → `status:done`
+Only when a bug is found after a story is `status:done` — steps in `Developer_Rules_Read_On_Demand.md §17`. Otherwise skip.
 
 ---
 
@@ -83,7 +62,7 @@ When a bug is found after a story is `status:done`, **never fix on main**. Creat
 |------|--------|-----------|
 | **Developer** | Implement, write PR, ask for guidance, self-check AC | Tick AC, answer scope questions, review code |
 
-**Red Flags:** Developer ticking AC checkboxes; developer answering PO scope questions.
+**Red Flags:** ticking AC checkboxes; answering PO's scope questions.
 
 ---
 
@@ -109,7 +88,7 @@ Response and decision.
 - When a comment resolves a scope/AC question, update the issue body to match
 - **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words — draft to shape (one short paragraph per topic: decision, one-line why, pointer) so the `wc -w` check is a backstop, not a trim-and-recount loop; **never paste command output or check transcripts** — verdict in one line, logs go in your working record; the single carve-out is **gate-mandated CI evidence** — when you peer-review, the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires in a PR approval comment, which you must paste and nothing else; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; **never paste command output or check transcripts** — verdict in one line, logs in your working record; carve-out: paste the literal `gh pr checks <PR-number>` output when peer-reviewing (§12 Reviewer gate requires it in the approval comment) — nothing else gets pasted; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
 
 ---
 
@@ -117,28 +96,11 @@ Response and decision.
 
 ### Reviewer Gate — before approving a PR (Dev as peer reviewer)
 
-- [ ] All CI checks on the PR have **finished**
-- [ ] No CI check is in a **failed** state
-- [ ] Code review criteria pass (per `Developer_Rules.md §11`)
+Only when Dev is the peer reviewer — checklist in `Developer_Rules_Read_On_Demand.md §16`.
 
 ### Merge Gate — before merging dev branch to main
 
 - [ ] Self-checked all AC locally (do NOT tick checkboxes)
-- [ ] Pre-PR checks pass (see `Developer_Rules.md §5`)
+- [ ] Pre-PR checks pass (see `Developer_Rules_Bootstrap.md §5`)
 - [ ] PR created with story ID in title: `[ST-XXXXXX][DEVKIT] ...`
 - [ ] TL has reviewed and approved PR ✓
-
----
-
-## 15. Shell Command Rules — Permissions and Tool Choice
-
-**Use either PowerShell or Bash for `gh` CLI calls (PowerShell is preferred on Windows).** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. Never prepend `cd /path` to a command; the working directory is already set.
-
-For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
-
-```bash
-gh issue edit <number> --repo mycom08/mt-agent-devkit --body-file /tmp/body.md
-gh issue comment <number> --repo mycom08/mt-agent-devkit --body-file /tmp/comment.md
-```
-
-Delete the temp file immediately after the `gh` call completes.

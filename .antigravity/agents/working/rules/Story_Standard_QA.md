@@ -33,11 +33,7 @@
 
 ## 6. Hotfix (Post-Done Bug) — QA Role
 
-When a bug is found after story is `status:done`:
-
-1. **Report:** Post Comment on original issue describing the bug; tag Dev and TL
-2. After Dev creates a fix branch and fix PR → **re-validate** all affected AC
-3. Report re-test results in Comment; notify PO
+Only when a bug is found after story is `status:done` — steps in `QA_Rules_Read_On_Demand.md §3`. Otherwise skip.
 
 ---
 
@@ -47,7 +43,7 @@ When a bug is found after story is `status:done`:
 |------|--------|-----------|
 | **QA** | Validate AC, report results in Comment, notify PO when all AC pass | Tick AC, review code, approve stories |
 
-**Red Flags:** QA ticking AC checkboxes (only PO, after QA confirms); QA commenting on technical design instead of AC fitness.
+**Red Flags:** ticking AC (PO's job, after QA confirms); commenting on technical design instead of AC fitness.
 
 ---
 
@@ -70,7 +66,7 @@ Validation results and findings per AC.
 - **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`)
 - **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
 - **One topic per comment** — a finding outside the AC you were asked to validate gets its own comment, not a paragraph inside the validation report.
-- **Writing standard:** decision-first (first line = the verdict), evidence by pointer, corrections state the delta only, no comments about comments, one close-out line per thread. **Never paste raw command output or test transcripts** — one-line verdict per AC, full logs in your working record. **Draft to shape:** your shape is one line per AC — criterion, verdict, pointer — so length follows the AC count and never needs trimming down. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Writing standard:** decision-first (first line = the verdict), evidence by pointer, corrections state the delta only, no comments about comments, one close-out line per thread. **Never paste raw command output or test transcripts** — one-line verdict per AC, full logs in your working record. **Draft to shape:** one line per AC — criterion, verdict, pointer. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
 - **Exemption — yours alone:** per-AC validation reports may exceed the general ~150–200 word cap; thorough per-AC evidence is high-signal and expected. The gate's `wc -w` item is satisfied by stating the exemption in the comment — it is an exemption from the *cap*, not from the transcript and one-topic rules, which still apply.
 
 ---
@@ -81,18 +77,3 @@ Validation results and findings per AC.
 - `- [x]` = Signed off by **PO** after QA confirms
 
 **QA:** Validate each AC criterion and report pass/fail in a Comment. Do **not** tick checkboxes. Notify PO when all AC have passed.
-
----
-
-## 15. Shell Command Rules — Permissions and Tool Choice
-
-**Use either PowerShell or Bash for `gh` CLI calls (PowerShell is preferred on Windows).** Never prepend `cd /path` to a command; the working directory is already set.
-
-For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
-
-```bash
-gh issue edit <number> --repo mycom08/mt-agent-devkit --body-file /tmp/body.md
-gh issue comment <number> --repo mycom08/mt-agent-devkit --body-file /tmp/comment.md
-```
-
-Delete the temp file immediately after the `gh` call completes.

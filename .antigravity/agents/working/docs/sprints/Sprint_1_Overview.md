@@ -32,7 +32,7 @@ Stages 4–5 appended to `Build_Software_Workflow.md`. Creates local project fol
 New `Project_CLAUDE_template.md` with `build software` + `workflow help` triggers and repo roster placeholder. New `Build_Software_Project_Workflow_template.md`. Phase 2 workflow reads `build_state.md` / `repo_structure.md`, spawns repo orchestrators in parallel (multi-repo) or delegates directly (monolith), updates `build_state.md` to `ready` phase, and prints per-repo handoff.
 
 **ST-000005 (2 pts — Must-Have)**  
-Devkit `CLAUDE.md` wired with `build software` trigger. `workflow help` table updated. `changes.json` new version entry listing new template files. `version.txt` bumped to `0.0.9`. README prerequisites updated for `gh` CLI requirement.
+Devkit `AGENTS.md` wired with `build software` trigger. `workflow help` table updated. `changes.json` new version entry listing new template files. `version.txt` bumped to `0.0.9`. README prerequisites updated for `gh` CLI requirement.
 
 **ST-000001 (3 pts — Should-Have)**  
 `Shared_Pipeline_Stages_template.md` retro step instructs agents to mark modified sections with `<!-- retro-adapted: preserve on sync -->`. `Sync_Devkit_Workflow_template.md` overwrite and adapt-to-mode strategies preserve retro-marked sections. Stage 2 completion report in `sync devkit` lists preserved sections. `changes.json` updated.

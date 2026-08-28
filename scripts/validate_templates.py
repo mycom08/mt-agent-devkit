@@ -39,6 +39,9 @@ CHANGES_JSON = REPO_ROOT / "changes.json"
 # All legal {{TOKEN}} double-brace names in the corpus.
 # Add new names here when introducing a new {{PLACEHOLDER}} in a template.
 KNOWN_DOUBLE_BRACE_TOKENS = {
+    'AGENT_DIR_PREFIX',
+    'ORCHESTRATOR_FILE',
+    'AGENT_CLI_NAME',
     "ANTIPATTERNS",
     "AUTOMATION_SUITE",
     "BACKWARD_COMPATIBILITY_RULES",
@@ -141,6 +144,10 @@ RETIRED_TRIGGERS: list = []
 # (templates split into github/strict/shared layout). These entries remain in
 # historical version records but the files no longer exist on disk.
 ALLOWLIST_REMOVED_PATHS = {
+    '.claude/agents/templates/Project_CLAUDE_template.md',
+    '.claude/agents/templates/shared/CLAUDE_Shared_template.md',
+    '.claude/agents/templates/github/CLAUDE_template.md',
+    '.claude/agents/templates/strict/CLAUDE_template.md',
     ".claude/agents/templates/CLAUDE_TEMPLATE.md",
     ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md",
     ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md",

@@ -8,7 +8,7 @@ Read this file and present its contents to the user as a formatted summary. Do n
 
 ## What Are These Workflows?
 
-This project uses Claude Code as an AI Scrum team. Workflows are commands you type in the chat that trigger a multi-agent pipeline — Claude orchestrates specialized agents (Product Owner, Technical Lead, Developer, QA) to plan, implement, review, and close stories automatically.
+This project uses {{AGENT_CLI_NAME}} as an AI Scrum team. Workflows are commands you type in the chat that trigger a multi-agent pipeline — Claude orchestrates specialized agents (Product Owner, Technical Lead, Developer, QA) to plan, implement, review, and close stories automatically.
 
 ---
 
@@ -98,8 +98,8 @@ backlog → ready → in-progress → review → testing → done
 
 | What | Where |
 |---|---|
-| Project overview and architecture | `.claude/agents/context/Project_Priming.md` |
-| All workflow trigger mappings | `.claude/agents/Orchestrator_Guide.md` §Workflows |
-| Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
-| Strict-mode story format and operations | `.claude/agents/rules/Strict_Mode_Story_Guide.md` |
-| CI/CD story validation (github mode only) | `.claude/agents/rules/CICD_Validation_Guide.md` |
+| Project overview and architecture | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
+| All workflow trigger mappings | `{{AGENT_DIR_PREFIX}}/agents/Orchestrator_Guide.md` §Workflows |
+| Agent roles and instruction files | `{{ORCHESTRATOR_FILE}}` §Agent Roster |
+| Strict-mode story format and operations | `{{AGENT_DIR_PREFIX}}/agents/rules/Strict_Mode_Story_Guide.md` |
+| CI/CD story validation (github mode only) | `{{AGENT_DIR_PREFIX}}/agents/rules/CICD_Validation_Guide.md` |

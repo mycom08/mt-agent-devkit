@@ -1,6 +1,6 @@
 # Build Software Project Workflow
 
-Triggered by: `"build software"` in the project orchestrator `CLAUDE.md`
+Triggered by: `"build software"` in the project orchestrator `{{ORCHESTRATOR_FILE}}`
 
 This is **Phase 2** of the `build software` pipeline. It assumes:
 - Phase 1 (Stages 1–3 of `Build_Software_Workflow.md`) is complete
@@ -15,7 +15,7 @@ This is **Phase 2** of the `build software` pipeline. It assumes:
 
 ### Step 1 — Read state files
 
-1. Read `.claude/agents/docs/build_state.md` (relative to this project orchestrator folder).
+1. Read `{{AGENT_DIR_PREFIX}}/agents/docs/build_state.md` (relative to this project orchestrator folder).
 2. Read `/result/build/repo_structure.md`.
 
 ### Step 2 — Phase guard
@@ -29,7 +29,7 @@ This is **Phase 2** of the `build software` pipeline. It assumes:
   Phase 2 can only run when repos have been scaffolded and are awaiting sprint planning.
   Current phase indicates this workflow has already run or was not started correctly.
 
-  If you believe this is wrong, check .claude/agents/docs/build_state.md and correct the Phase field manually.
+  If you believe this is wrong, check {{AGENT_DIR_PREFIX}}/agents/docs/build_state.md and correct the Phase field manually.
   ```
 
 - If phase is `scaffold` → continue to Step 3.
@@ -45,7 +45,7 @@ Read the `**Repo Role:**` field in `build_state.md`:
 
 ## Monolith Path
 
-The project folder is the single repo. The standard `CLAUDE.md` (already injected by Stage 4) handles all sprint workflows.
+The project folder is the single repo. The standard `{{ORCHESTRATOR_FILE}}` (already injected by Stage 4) handles all sprint workflows.
 
 1. Print to the user:
 
@@ -55,11 +55,11 @@ The project folder is the single repo. The standard `CLAUDE.md` (already injecte
    The scrum team is already set up in this folder. To begin sprint execution:
 
      1. Run: plan next sprint
-        (uses the analysis docs in .claude/agents/docs/analysis/ as input)
+        (uses the analysis docs in {{AGENT_DIR_PREFIX}}/agents/docs/analysis/ as input)
 
      2. Then run: continue sprint
 
-   All scrum team commands are available in this folder's CLAUDE.md.
+   All scrum team commands are available in this folder's {{ORCHESTRATOR_FILE}}.
    ```
 
 2. Stop. No further orchestration is needed.
@@ -79,9 +79,9 @@ From `build_state.md`, confirm the GitHub Project URL for context.
 For each repo, determine:
 - **Repo path** — absolute path on disk
 - **Repo role** — the `name` value from `repo_structure.md` (e.g., `api-service`, `web-app`)
-- **Analysis docs path** — `<repo-path>/.claude/agents/docs/analysis/` (where Stage 4 placed the split docs)
-- **CLAUDE.md path** — `<repo-path>/CLAUDE.md`
-- **Sprint workflow path** — `<repo-path>/.claude/agents/workflows/Sprint_Workflow.md` (or equivalent for the installed mode)
+- **Analysis docs path** — `<repo-path>/{{AGENT_DIR_PREFIX}}/agents/docs/analysis/` (where Stage 4 placed the split docs)
+- **{{ORCHESTRATOR_FILE}} path** — `<repo-path>/{{ORCHESTRATOR_FILE}}`
+- **Sprint workflow path** — `<repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Sprint_Workflow.md` (or equivalent for the installed mode)
 
 ### Step 5 — Spawn repo orchestrators (parallel)
 
@@ -98,19 +98,19 @@ You are a repo orchestrator for the project build pipeline. Your job is to run `
 
 - **Repo path (absolute):** <absolute-repo-path>
 - **Repo role:** <repo-role>
-- **Analysis docs:** <absolute-repo-path>/.claude/agents/docs/analysis/
-- **CLAUDE.md:** <absolute-repo-path>/CLAUDE.md
-- **Sprint workflow:** <absolute-repo-path>/.claude/agents/workflows/Sprint_Workflow.md
+- **Analysis docs:** <absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/docs/analysis/
+- **{{ORCHESTRATOR_FILE}}:** <absolute-repo-path>/{{ORCHESTRATOR_FILE}}
+- **Sprint workflow:** <absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Sprint_Workflow.md
 
 ## What to do
 
-1. Read `<absolute-repo-path>/CLAUDE.md` to understand the repo's mode (github or strict) and available triggers.
-2. Read `<absolute-repo-path>/.claude/agents/docs/analysis/` — this folder contains the split analysis documents for this repo (implementation roadmap, architecture, etc.).
+1. Read `<absolute-repo-path>/{{ORCHESTRATOR_FILE}}` to understand the repo's mode (github or strict) and available triggers.
+2. Read `<absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/docs/analysis/` — this folder contains the split analysis documents for this repo (implementation roadmap, architecture, etc.).
 3. Run `create stories` using the analysis docs as input:
-   - Read `<absolute-repo-path>/.claude/agents/workflows/Create_Stories_Workflow.md` for instructions.
+   - Read `<absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Create_Stories_Workflow.md` for instructions.
    - All story files, issue operations, and gh commands must use the absolute repo path `<absolute-repo-path>` and, for GitHub mode, `--repo <github-org/repo-slug>`.
 4. After stories are created, run `plan next sprint`:
-   - Read `<absolute-repo-path>/.claude/agents/workflows/Plan_Sprint_Workflow.md` for instructions.
+   - Read `<absolute-repo-path>/{{AGENT_DIR_PREFIX}}/agents/workflows/Plan_Sprint_Workflow.md` for instructions.
    - All file operations and gh commands must use the absolute repo path.
 5. Report back when sprint 1 is planned. Your report must include:
    - Repo path
@@ -137,7 +137,7 @@ Collect the completion report from each repo orchestrator. Do not proceed until 
 
 After all repos report sprint 1 planned:
 
-1. Read `.claude/agents/docs/build_state.md`.
+1. Read `{{AGENT_DIR_PREFIX}}/agents/docs/build_state.md`.
 2. Update the `**Phase:**` field from `scaffold` to `ready`.
 3. Write the updated file back.
 

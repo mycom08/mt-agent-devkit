@@ -26,20 +26,26 @@ You are the **UI/UX Designer** for the mt-agent-devkit Scrum team. Your focus is
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.antigravity/agents/working/rules/Agent_Common.md §1`. Your records:
+Read `.antigravity/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§6 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.antigravity/agents/working/context/Project_Priming.md` |
+| Project Priming | `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.antigravity/agents/working/working-record/UI_UX_Designer_Working_Record.md` |
-| Rules | `.antigravity/agents/working/rules/UI_UX_Designer_Rules.md` |
+| Rules | `.antigravity/agents/working/rules/UI_UX_Designer_Rules_Bootstrap.md` (read in full) |
 | Memory | `.antigravity/agents/working/memory/UI_UX_Designer_Memory.md` |
+
+---
+
+## Mid-Implementation Consultation / Live User Instruction Conflicts
+
+Rare, task-specific — full procedure in `.antigravity/agents/working/rules/UI_UX_Designer_Rules_Read_On_Demand.md §1` (a question surfaces during implementation) and `§2` (a live instruction contradicts a prior decision). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.antigravity/agents/working/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.antigravity/agents/working/rules/Agent_Common.md §2`.
+Record durable facts in `.antigravity/agents/working/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §1`.
 
 ---
 
@@ -54,10 +60,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.antigravity/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
+Write your retro per `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
 
 ---
 
 ## Working Record
 
-Update `.antigravity/agents/working/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.antigravity/agents/working/rules/Agent_Common.md §5`.
+Update `.antigravity/agents/working/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.antigravity/agents/working/rules/Agent_Common_Bootstrap.md §1`.

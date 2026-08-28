@@ -19,6 +19,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [Unreleased]
 
+## 0.1.45 (2026-08-28)
+
 ### Bug Fixes
 
 - [ST-000138] Fixed the Developer role's condensed "Refine Sprint Task" steps (working rules and both Claude/Antigravity instruction templates) to match `Refine_Sprint_Workflow.md`'s authoritative Stage 1 steps: added the step-positioning check, required an explicit cleared-note comment instead of silence on a clear story, and corrected a comment-format citation to `Story_Standard_Dev.md`.
@@ -26,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000136] Fixed `Developer_Rules_Bootstrap_template.md`, `UI_UX_Designer_Rules_template.md`, and `Technical_Lead_Rules_Bootstrap_template.md` to agree with the rest of the corpus that PO, not QA, ticks Acceptance Criteria at story closure, across the Claude and Antigravity template surfaces.
 
 ### Changes
+
+- [Enhancement] Unified Claude and Antigravity templates into a single source of truth. Removed .antigravity/agents/templates and parameterized framework-specific terms (CLAUDE.md, .claude, Claude Code) with {{ORCHESTRATOR_FILE}}, {{AGENT_DIR_PREFIX}}, and {{AGENT_CLI_NAME}}. Renamed CLAUDE_... orchestrator templates to Orchestrator_....
 
 - [ST-000140] Made the memory-file and Working-Record character caps project-configurable via `**Memory file cap:**` / `**Working record cap:**` fields in `CLAUDE.md` (defaults unchanged: 10,000 / 4,000), replacing the literal numbers in `Agent_Common_Bootstrap_template.md`, `Agent_Common_Read_On_Demand_template.md`, `Retro_Rules_template.md`, `Project_Priming_template.md`, and `Shared_Pipeline_Stages_Shared_template.md`'s Stage 5 enforcement check — across the Claude and Antigravity template surfaces — so a local override in `CLAUDE.md` (which `sync devkit` already merges rather than overwrites) survives every sync instead of being silently re-imposed by the next overwrite-synced rules file.
 - [ST-000139] Made `gh project create` optional for single-repo (monolith) Build Software builds via a new up-front GitHub Project Consultation, gated by a `Project Board Preference` state-file field; multi-repo (Path B) builds still create a Project board unconditionally.
@@ -104,6 +108,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Enhancement] Unified Claude and Antigravity templates into a single source of truth. Removed .antigravity/agents/templates and parameterized framework-specific terms (CLAUDE.md, .claude, Claude Code) with {{ORCHESTRATOR_FILE}}, {{AGENT_DIR_PREFIX}}, and {{AGENT_CLI_NAME}}. Renamed CLAUDE_... orchestrator templates to Orchestrator_....
+
 - [ST-000007] Wired per-workflow model assignments (opus/sonnet/haiku) into all agent spawn calls.
 
 ---
@@ -111,6 +117,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ## [0.1.5]
 
 ### Changes
+
+- [Enhancement] Unified Claude and Antigravity templates into a single source of truth. Removed .antigravity/agents/templates and parameterized framework-specific terms (CLAUDE.md, .claude, Claude Code) with {{ORCHESTRATOR_FILE}}, {{AGENT_DIR_PREFIX}}, and {{AGENT_CLI_NAME}}. Renamed CLAUDE_... orchestrator templates to Orchestrator_....
 
 - [ST-000006] Split mixed templates into GitHub-mode and strict-mode variants with shared content extracted.
 
@@ -120,6 +128,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Enhancement] Unified Claude and Antigravity templates into a single source of truth. Removed .antigravity/agents/templates and parameterized framework-specific terms (CLAUDE.md, .claude, Claude Code) with {{ORCHESTRATOR_FILE}}, {{AGENT_DIR_PREFIX}}, and {{AGENT_CLI_NAME}}. Renamed CLAUDE_... orchestrator templates to Orchestrator_....
+
 - Added an AC-synchronization rule requiring the Product Owner to update the story body before `status:ready`.
 - Added a stale-content check and mid-implementation consultation procedure for the Developer role.
 
@@ -128,6 +138,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ## [0.1.1]
 
 ### Changes
+
+- [Enhancement] Unified Claude and Antigravity templates into a single source of truth. Removed .antigravity/agents/templates and parameterized framework-specific terms (CLAUDE.md, .claude, Claude Code) with {{ORCHESTRATOR_FILE}}, {{AGENT_DIR_PREFIX}}, and {{AGENT_CLI_NAME}}. Renamed CLAUDE_... orchestrator templates to Orchestrator_....
 
 - [ST-000005] Added `changes.json` entries for new deployable templates and bumped `version.txt`.
 - [ST-000003] Added inline repo scaffolding and doc-copy stages to `build software`.

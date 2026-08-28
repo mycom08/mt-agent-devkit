@@ -1,4 +1,4 @@
-﻿# Story Standard
+# Story Standard
 
 **Applies to:** All agents (Developer, TL, QA, PO, BA, UI/UX Designer)  
 **Location:** GitHub Issues in repository `{github-org}/{repo-name}`  
@@ -526,10 +526,10 @@ The working directory is automatically set to the project root for every tool ca
 
 ```bash
 # WRONG — compound command won't match allow-list patterns
-cd "/path/to/project"; git status --short ".claude/"
+cd "/path/to/project"; git status --short "{{AGENT_DIR_PREFIX}}/"
 
 # CORRECT — run the command directly
-git status --short ".claude/"
+git status --short "{{AGENT_DIR_PREFIX}}/"
 ```
 
 This applies to both Bash and PowerShell tool calls.
@@ -555,7 +555,7 @@ gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comme
 gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
 ```
 
-Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `{{AGENT_DIR_PREFIX}}/agents/tmp/`.
 
 ### Changing Labels
 

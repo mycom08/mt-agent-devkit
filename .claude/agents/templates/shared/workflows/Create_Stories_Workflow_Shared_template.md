@@ -3,9 +3,9 @@
 <!-- SHARED-START -->
 # Create Stories Workflow
 
-Triggered by: `"create stories"` or `"/create-stories"` in CLAUDE.md
+Triggered by: `"create stories"` or `"/create-stories"` in {{ORCHESTRATOR_FILE}}
 
-The orchestrator acts as PO — read `.claude/agents/product_owner_instructions.md` and `.claude/agents/rules/Story_Standard_PO.md` before proceeding. **Do not spawn a PO agent.**
+The orchestrator acts as PO — read `{{AGENT_DIR_PREFIX}}/agents/product_owner_instructions.md` and `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` before proceeding. **Do not spawn a PO agent.**
 
 ---
 
@@ -18,7 +18,7 @@ Ask the user to describe the work they need stories for. Collect until scope is 
 - Estimated story points (1–13)
 - Target sprint (if known). If the user says "next sprint" without a number, resolve it:
   - **GitHub mode:** run `gh issue list --state closed --limit 5 --json labels,closedAt --jq 'sort_by(.closedAt) | reverse | [.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'` to find the highest sprint on recently closed issues, then add 1. **Do not use `gh label list` — it sorts alphabetically, making `sprint-3` appear higher than `sprint-13`.**
-  - **Strict mode:** glob `.claude/agents/docs/stories/*.md`, collect all unique `**Sprint:**` field values, parse the trailing number from each (e.g. `sprint-3` → 3), take the highest, then add 1.
+  - **Strict mode:** glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, collect all unique `**Sprint:**` field values, parse the trailing number from each (e.g. `sprint-3` → 3), take the highest, then add 1.
 
 Ask open questions to resolve any ambiguities before drafting.
 
@@ -60,12 +60,12 @@ For each confirmed story, create a GitHub Issue following `Story_Standard_PO.md`
 **If `Mode: strict`:**
 
 For each confirmed story:
-1. Read `.claude/agents/docs/story_counter.txt`, increment by 1, write back — derive the new `ST-XXXXXX` ID
+1. Read `{{AGENT_DIR_PREFIX}}/agents/docs/story_counter.txt`, increment by 1, write back — derive the new `ST-XXXXXX` ID
 2. Ask the user (once, not per story): **"Does your project use an external story ID system (e.g. Jira, Linear)? If yes, provide the external ID for each story now, or leave blank to skip."**
-3. Write `.claude/agents/docs/stories/ST-XXXXXX.md` using the format from `Strict_Mode_Story_Guide.md` §Story MD Format:
+3. Write `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` using the format from `Strict_Mode_Story_Guide.md` §Story MD Format:
    - `**Status:** backlog`
    - `**External ID:**` — set if provided, omit the line if blank
    - `**Sprint:**` — set if user provided a sprint, omit the line if blank
    - `**Feature:**` / `**Phase:**` — set from Step 3
-4. Report created story file paths to the user (e.g., `.claude/agents/docs/stories/ST-000001.md`)
+4. Report created story file paths to the user (e.g., `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-000001.md`)
 <!-- SHARED-END -->

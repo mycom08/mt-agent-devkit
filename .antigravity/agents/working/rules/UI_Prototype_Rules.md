@@ -50,7 +50,7 @@ The real UI **always** implements against real data and real APIs. If the real b
 
 ### UI/UX Designer
 
-- The prototype you build is the reference artifact, not a deliverable that ships to end users — see `UI_UX_Designer_Rules.md §4` for the runnable-prototype standard itself.
+- The prototype you build is the reference artifact, not a deliverable that ships to end users — see `UI_UX_Designer_Rules_Bootstrap.md §4` for the runnable-prototype standard itself.
 - Keep mock cases clearly labeled (e.g. a visible "mock" badge, an obviously fake account name) so nobody mistakes prototype behavior for real backend behavior later.
 - When the real backend later diverges from what you mocked (a different error shape, an extra required field), that is expected — the prototype is a point-in-time layout/interaction reference, not a contract the backend must match.
 

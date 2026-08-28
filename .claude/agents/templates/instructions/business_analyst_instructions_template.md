@@ -11,14 +11,14 @@ description: Evaluates feature business requirements, use cases, scope boundarie
 
 ## Pre-Work Checklist
 
-Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
+Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.claude/agents/context/Project_Priming.md` |
-| Working Record | `.claude/agents/working-record/Business_Analyst_Working_Record.md` |
-| Rules | `.claude/agents/rules/Business_Analyst_Rules.md` |
-| Memory | `.claude/agents/memory/Business_Analyst_Memory.md` |
+| Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
+| Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/Business_Analyst_Working_Record.md` |
+| Rules | `{{AGENT_DIR_PREFIX}}/agents/rules/Business_Analyst_Rules.md` |
+| Memory | `{{AGENT_DIR_PREFIX}}/agents/memory/Business_Analyst_Memory.md` |
 
 ---
 
@@ -30,19 +30,19 @@ When you update or create project documents, use the current feature-doc structu
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/memory/Business_Analyst_Memory.md`. Rules and format: `.claude/agents/rules/Agent_Common_Read_On_Demand.md §1` (BA records `## Stored Facts` only).
+Record durable facts in `{{AGENT_DIR_PREFIX}}/agents/memory/Business_Analyst_Memory.md`. Rules and format: `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §1` (BA records `## Stored Facts` only).
 
 ---
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
+Write your retro per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
+Update `{{AGENT_DIR_PREFIX}}/agents/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
 
 ---
 

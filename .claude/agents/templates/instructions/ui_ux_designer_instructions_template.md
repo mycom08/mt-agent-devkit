@@ -24,20 +24,20 @@ You are the **UI/UX Designer** for the {project-name} Scrum team. Your focus is 
 
 ## Pre-Work Checklist
 
-Read `.claude/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
+Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.claude/agents/context/Project_Priming.md` |
-| Working Record | `.claude/agents/working-record/UI_UX_Designer_Working_Record.md` |
-| Rules | `.claude/agents/rules/UI_UX_Designer_Rules.md` |
-| Memory | `.claude/agents/memory/UI_UX_Designer_Memory.md` |
+| Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
+| Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/UI_UX_Designer_Working_Record.md` |
+| Rules | `{{AGENT_DIR_PREFIX}}/agents/rules/UI_UX_Designer_Rules.md` |
+| Memory | `{{AGENT_DIR_PREFIX}}/agents/memory/UI_UX_Designer_Memory.md` |
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.claude/agents/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.claude/agents/rules/Agent_Common_Read_On_Demand.md §1`.
+Record durable facts in `{{AGENT_DIR_PREFIX}}/agents/memory/UI_UX_Designer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §1`.
 
 ---
 
@@ -52,10 +52,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.claude/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
+Write your retro per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — UI/UX Designer` section only.
 
 ---
 
 ## Working Record
 
-Update `.claude/agents/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `.claude/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (prototypes delivered, story IDs, PR/commit refs), In Progress, and Impediments.
+Update `{{AGENT_DIR_PREFIX}}/agents/working-record/UI_UX_Designer_Working_Record.md` at start and end of each session per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (prototypes delivered, story IDs, PR/commit refs), In Progress, and Impediments.

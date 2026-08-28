@@ -8,7 +8,7 @@
 
 At the end of your stage work, **before reporting back to the orchestrator**, write your retrospective section to the story retro file. The orchestrator creates this file at Stage 1 with `*(pending)*` placeholders — overwrite only your own section.
 
-**File path:** `.claude/agents/retros/ST-XXXXXX_retro.md` (the story ID is passed in your spawn prompt)
+**File path:** `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` (the story ID is passed in your spawn prompt)
 
 **Your section heading** matches your role:
 - Implementer → `## Implementer — <your role>`
@@ -90,13 +90,13 @@ Signal items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) must be w
 
 Runs once per sprint, orchestrator-direct (no agent spawn), alongside the existing sprint-end cleanup in `Sprint_Workflow.md`'s "Sprint end" sequence — not as a per-write judgment call (see `Agent_Common_Read_On_Demand.md §1` rule 3).
 
-For each `.claude/agents/memory/*_Memory.md` file (glob, all roles):
+For each `{{AGENT_DIR_PREFIX}}/agents/memory/*_Memory.md` file (glob, all roles):
 1. Apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to every `## Stored Facts` entry.
 2. Delete or merge: facts whose `Expires when` premise has been met, duplicate/superseded facts, and history-only entries with no future action.
 3. Leave `## Troubleshooting Facts` entries as-is unless the same test clearly applies — they are already tied to a specific fix and less prone to the drift this step targets.
 4. Report a one-line summary per file to the user (kept / pruned counts). No edit needed if nothing qualifies for removal.
 
-This step does not enforce the configured memory-file cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`), checked against the `**Memory file cap:**` value in `CLAUDE.md` (default 10,000). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
+This step does not enforce the configured memory-file cap itself — that is Stage 5's `wc -c` detection (`Shared_Pipeline_Stages.md`), checked against the `**Memory file cap:**` value in `{{ORCHESTRATOR_FILE}}` (default 10,000). It only reduces the odds of hitting that cap by removing content nobody would re-derive from.
 
 ---
 

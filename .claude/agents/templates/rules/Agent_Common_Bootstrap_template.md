@@ -17,7 +17,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 
    **Updating it (every session, start and end):** rewrite-in-place snapshot semantics — the record holds only the current-state snapshot, not an append-only log; nothing outside the owning agent ever reads it, so nothing is lost by replacing rather than appending. At session end, overwrite Completed / In Progress / Impediments with this session's current state (never appended alongside a prior session's). Access control: read and update only your own record, never another agent's.
 
-   **Retention:** Keep only the **3 most recent story entries** — the retention unit is story entries, not calendar days (all roles). Delete older entries before writing the new one. The enforced cap is the value of **`**Working record cap:**`** in this project's `CLAUDE.md` (default **4,000** if the field is absent), measured with `wc -c` — not a line count. `≤ 60 lines` is retained only as non-enforced structural guidance for a soft-wrapped, one-bullet-per-entry format; it is not itself checked. Working Records are gitignored — never commit them.
+   **Retention:** Keep only the **3 most recent story entries** — the retention unit is story entries, not calendar days (all roles). Delete older entries before writing the new one. The enforced cap is the value of **`**Working record cap:**`** in this project's `{{ORCHESTRATOR_FILE}}` (default **4,000** if the field is absent), measured with `wc -c` — not a line count. `≤ 60 lines` is retained only as non-enforced structural guidance for a soft-wrapped, one-bullet-per-entry format; it is not itself checked. Working Records are gitignored — never commit them.
 
    **Snapshot entry format** — one entry per story:
    - **Story:** ST-XXXXXX
@@ -59,7 +59,7 @@ Every tool call resends the whole transcript, so call **count** drives cost as m
 1. **Mechanical edits via shell, not Read+Edit.** AC-checkbox ticks in an issue body or placeholder replacement in a file use a `sed`-style in-place substitution — don't read the whole file into context and regenerate it.
 2. **Narrow `gh` queries with `-q`/`--jq`.** Fetch only the fields you need (e.g. just comment bodies, not author/timestamp/edit-history metadata); cap to the last N comments when full history isn't required.
 3. **Batch related commands.** Chain `gh`/`git` commands in one shell call when there's no dependency on intermediate output.
-4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard_PO.md` §14"), use the `read-section` skill (`.claude/skills/read-section/`) to extract just that section instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file. **This file is always a full-file read**; the convention applies to what it routes you to, never to it itself.
+4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard_PO.md` §14"), use the `read-section` skill (`{{AGENT_DIR_PREFIX}}/skills/read-section/`) to extract just that section instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file. **This file is always a full-file read**; the convention applies to what it routes you to, never to it itself.
 
 > These conventions govern *how* work is done, never *how much* verification is done — do not use them to justify thinner review or skipped checks.
 
@@ -77,22 +77,22 @@ Applies whenever you read a GitHub Issue/PR body or comment (`gh issue view`, `g
 
 ## 5. On-Demand Records — Routing Table
 
-Everything routed below lives in `.claude/agents/rules/Agent_Common_Read_On_Demand.md`, which is **not** loaded at spawn. When a trigger fires, fetch only the named section — don't read that file in full.
+Everything routed below lives in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md`, which is **not** loaded at spawn. When a trigger fires, fetch only the named section — don't read that file in full.
 
 | Trigger | Fetch |
 |---|---|
-| Writing a memory fact — **PO, BA, UI/UX Designer only** (Dev/QA/TL use the §8 row instead, not this one) | `Agent_Common_Read_On_Demand.md §1` (Project Memory) — **read-section** skill on `.claude/agents/rules/Agent_Common_Read_On_Demand.md` §1 |
-| A tooling/environment blocker — **first** scan your own `## Troubleshooting Facts` for a recorded fix and apply it without re-diagnosing; fetch §2 only for the diagnose-and-record-back procedure | `Agent_Common_Read_On_Demand.md §2` (Troubleshooting Protocol) — **read-section** skill on `.claude/agents/rules/Agent_Common_Read_On_Demand.md` §2 |
-| End of work, writing your retro | `Agent_Common_Read_On_Demand.md §3` (End-of-Work Retrospective) — **read-section** skill on `.claude/agents/rules/Agent_Common_Read_On_Demand.md` §3 |
-| You changed a memory file this session — fetch when the change happens, not when you decide you're done | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — **read-section** skill on `.claude/agents/rules/Agent_Common_Read_On_Demand.md` §5 |
-| A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — **read-section** skill on `.claude/agents/rules/Agent_Common_Read_On_Demand.md` §6 |
-| Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — **read-section** skill on `.claude/agents/rules/Agent_Common_Read_On_Demand.md` §8 |
+| Writing a memory fact — **PO, BA, UI/UX Designer only** (Dev/QA/TL use the §8 row instead, not this one) | `Agent_Common_Read_On_Demand.md §1` (Project Memory) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §1 |
+| A tooling/environment blocker — **first** scan your own `## Troubleshooting Facts` for a recorded fix and apply it without re-diagnosing; fetch §2 only for the diagnose-and-record-back procedure | `Agent_Common_Read_On_Demand.md §2` (Troubleshooting Protocol) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §2 |
+| End of work, writing your retro | `Agent_Common_Read_On_Demand.md §3` (End-of-Work Retrospective) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §3 |
+| You changed a memory file this session — fetch when the change happens, not when you decide you're done | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §5 |
+| A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §6 |
+| Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §8 |
 
 ---
 
 ## 6. Shell Command Rules — Permissions and Tool Choice
 
-**Always use Bash (not PowerShell) for all `gh` CLI calls.** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. PowerShell `.NET` methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a permission prompt regardless of allow-list entries, and PowerShell interprets backticks as escape characters, silently corrupting Markdown. Never prepend `cd /path` to a command; the working directory is already set.
+**Use either PowerShell or Bash for `gh` CLI calls. However, if your specific execution environment struggles with PowerShell string escaping or prompts (e.g., Claude Code on Windows), you must use Bash to prevent Markdown corruption.** `Bash(gh issue *)` and `Bash(gh pr *)` are pre-approved — no permission prompt. PowerShell `.NET` methods (`[System.IO.Path]::GetTempFileName()`, `[System.IO.File]::WriteAllText()`) trigger a permission prompt regardless of allow-list entries, and PowerShell interprets backticks as escape characters, silently corrupting Markdown. Never prepend `cd /path` to a command; the working directory is already set.
 
 For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
 
@@ -101,13 +101,13 @@ gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
 gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
 ```
 
-Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `.claude/agents/tmp/`.
+Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `{{AGENT_DIR_PREFIX}}/agents/tmp/`.
 
 ---
 
 ## Version
 
-**Version:** 2.3 — §1's Working Record cap is now project-configurable via a `**Working record cap:**` field in `CLAUDE.md` (default 4,000, unchanged, if the field is absent), replacing the literal number that a `sync devkit` overwrite would silently re-impose over any local override — issue #128 (ST-000140).
+**Version:** 2.3 — §1's Working Record cap is now project-configurable via a `**Working record cap:**` field in `{{ORCHESTRATOR_FILE}}` (default 4,000, unchanged, if the field is absent), replacing the literal number that a `sync devkit` overwrite would silently re-impose over any local override — issue #128 (ST-000140).
 **Previous:** 2.2 — Added §6 (Shell Command Rules — Permissions and Tool Choice), centralized here from five near-identical `Story_Standard_<role>_template.md` §15 restatements per devkit issue #130 (ST-000137); used the fullest of the divergent variants (958-char, PowerShell `.NET`-caveat + stale-file clause) as canonical, ported from the devkit-internal split's identical `working/rules/Agent_Common_Bootstrap.md` §6 (same story, working-tree side).
 **Previous:** 2.1 — On-Demand Records Routing Table gains a row for the new `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory, Developer/QA/Technical Lead only) and the existing §1 row now excludes those three roles — ST-000135 (issue #118), ported from the devkit's own team's identical routing-table row.
 **Previous:** 2.0 — Split from the single `Agent_Common.md` into a bootstrap tier (this file: Pre-Work Sequence including Working Record, Secret Handling, Token-Efficiency Conventions, External Content Handling, On-Demand Records Routing Table) and an on-demand tier (`Agent_Common_Read_On_Demand.md`: Project Memory, Troubleshooting Protocol, End-of-Work Retrospective, Stage-Transition Commit, Credential-Gated Verification). Same test applied to every section as the devkit-internal split already validated on the devkit's own team (`working/rules/Agent_Common_Bootstrap.md` / `Agent_Common_Read_On_Demand.md`, PR #162): is this needed at spawn regardless of the task? Yes → bootstrap, read in full. No → on-demand, fetched only when a trigger fires. Section 4 is a deliberate numbering gap in the companion file, not this one — see that file's header note.

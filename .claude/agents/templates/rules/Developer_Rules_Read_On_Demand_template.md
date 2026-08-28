@@ -1,7 +1,7 @@
 # Developer Rules — Read On Demand
 
 **Applies to:** Developer agent.
-**Read this file:** never as part of the Pre-Work Checklist, in whole or in part. Fetch **one section** when its trigger fires — the trigger table in `Developer_Rules_Bootstrap.md` §12 names which. Use the `read-section` skill (`.claude/skills/read-section/`) with `grep -nE "^## [0-9]+\."` to bound the extraction; do not read the whole file.
+**Read this file:** never as part of the Pre-Work Checklist, in whole or in part. Fetch **one section** when its trigger fires — the trigger table in `Developer_Rules_Bootstrap.md` §12 names which. Use the `read-section` skill (`{{AGENT_DIR_PREFIX}}/skills/read-section/`) with `grep -nE "^## [0-9]+\."` to bound the extraction; do not read the whole file.
 
 **Numbering:** shares one numbering space with `Developer_Rules_Bootstrap.md` — sections 1–6 live there; §7–§11 live here. Numbers are never reused across the pair.
 

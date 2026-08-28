@@ -3,23 +3,23 @@
 <!-- SHARED-START -->
 # Refine Sprint Workflow
 
-Triggered by: `"refine sprint"` or `"/refine-sprint"` in CLAUDE.md
+Triggered by: `"refine sprint"` or `"/refine-sprint"` in {{ORCHESTRATOR_FILE}}
 
 **Sprint identification:**
 - **Feature sprint:** Read `Product_Backlog.md` to find the sprint marked `🔲 Planned`. Use that sprint's `sprint-N` value as the target.
 - **Non-feature sprint:**
   - **GitHub mode:** Run `gh issue list --state open --label "status:backlog" --json labels --jq '[.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'` to find the highest-numbered open sprint. That sprint is the target. **Do not use `gh label list` — it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.**
-  - **Strict mode:** Glob `.claude/agents/docs/stories/*.md`, collect all unique `**Sprint:**` field values, select the highest sprint number that has at least one story with `**Status:** backlog`. That sprint is the target.
+  - **Strict mode:** Glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, collect all unique `**Sprint:**` field values, select the highest sprint number that has at least one story with `**Status:** backlog`. That sprint is the target.
 
 **Story fetch:**
 - **GitHub mode:** `gh issue list --label "sprint-N" --label "status:backlog" --state open`
-- **Strict mode:** Glob `.claude/agents/docs/stories/*.md`, filter by `**Sprint:** sprint-N` AND `**Status:** backlog`
+- **Strict mode:** Glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, filter by `**Sprint:** sprint-N` AND `**Status:** backlog`
 
 ---
 
 ## Pipeline State
 
-The orchestrator maintains `.claude/agents/tmp/refine_pipeline_state.md` to support resumption after unexpected termination and to preserve session IDs across stages.
+The orchestrator maintains `{{AGENT_DIR_PREFIX}}/agents/tmp/refine_pipeline_state.md` to support resumption after unexpected termination and to preserve session IDs across stages.
 
 **On pipeline start — always check this file first:**
 - If the file **exists** → read it and resume from the recorded stage and sessions
@@ -122,7 +122,7 @@ After all implementer agents report back, check: **did every agent report all th
 5. **Workflow review:** read `Observations:` from the state file
    - If **non-empty**: present each observation as a proposed improvement to the user; apply approved changes to this workflow file
    - If **empty**: no action needed
-6. Orchestrator deletes `.claude/agents/tmp/refine_pipeline_state.md`, then deletes any remaining files in `.claude/agents/tmp/` with `rm .claude/agents/tmp/*.md`
+6. Orchestrator deletes `{{AGENT_DIR_PREFIX}}/agents/tmp/refine_pipeline_state.md`, then deletes any remaining files in `{{AGENT_DIR_PREFIX}}/agents/tmp/` with `rm {{AGENT_DIR_PREFIX}}/agents/tmp/*.md`
 
 ---
 

@@ -52,11 +52,11 @@ Quick lookup for all project documents and external references. Update this file
 ## Agent Working Files
 
 <!-- GitHub mode: stories are GitHub Issues — no local story MD files. -->
-<!-- Strict mode: all agent docs are local and gitignored under .claude/agents/. -->
+<!-- Strict mode: all agent docs are local and gitignored under {{AGENT_DIR_PREFIX}}/agents/. -->
 
 | What | Path |
 |---|---|
-| Sprint Retro Summaries | `.claude/agents/retros/sprint_N_summary.md` |
+| Sprint Retro Summaries | `{{AGENT_DIR_PREFIX}}/agents/retros/sprint_N_summary.md` |
 
 ---
 

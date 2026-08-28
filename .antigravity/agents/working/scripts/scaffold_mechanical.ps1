@@ -7,7 +7,7 @@ param (
 
 $ErrorActionPreference = 'Stop'
 
-$Tpl = Join-Path $DevkitRoot ".antigravity\agents\templates"
+$Tpl = Join-Path $DevkitRoot ".claude\agents\templates"
 $Agents = Join-Path $TargetProject ".antigravity\agents"
 
 # 1. Directories
@@ -28,6 +28,12 @@ if ($Mode -eq 'strict') {
     Set-Content -Path (Join-Path $Agents "docs\story_counter.txt") -Value "0"
 }
 
+function Copy-And-Substitute {
+    param ($src, $dst)
+    (Get-Content $src -Raw) -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' 
+                             -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' 
+                             -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity' | Set-Content $dst -NoNewline
+}
 # 2. Verbatim rules files
 $VerbatimRules = @(
     "Agent_Common_Bootstrap", "Agent_Common_Read_On_Demand", "Audit_Rules", "Blocked_Request",
@@ -104,7 +110,16 @@ foreach ($role in $roles) {
         "# $roleLabel Memory`n`nNo facts recorded yet.`n" | Set-Content -Path (Join-Path $Agents "memory\${role}_Memory.md")
     }
 
-    "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** —`n**In Progress:** —`n**Impediments:** —`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
+    "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** -`n**In Progress:** -`n**Impediments:** -`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
+}
+
+# 8. Substitute framework placeholders in all generated mechanical files
+Get-ChildItem -Path $Agents -File -Recurse -Include *.md, *.sh, *.ps1 | ForEach-Object {
+    $c = Get-Content $_.FullName -Raw
+    $newContent = $c -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' -replace '\{\{ORCHESTRATOR_FILE\}\}', 'AGENTS.md' -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'
+    if ($newContent -cne $c) {
+        Set-Content -Path $_.FullName -Value $newContent -NoNewline -Encoding UTF8
+    }
 }
 
 Write-Host "Mechanical scaffold complete: $TargetProject"

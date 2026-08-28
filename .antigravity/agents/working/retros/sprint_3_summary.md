@@ -54,8 +54,8 @@
 - AC was precise and testable — each of the 5 criteria mapped unambiguously to a deliverable *(PO)*
 
 ### Actions Applied
-- `.antigravity/agents/templates/rules/Story_Standard_template.md` (+ working copy) — §3 per-file vs global fixture-coverage AC guidance; §9 same-pass body-AC reconciliation when a design-first approval narrows an AC
-- `.antigravity/agents/templates/rules/CICD_Validation_Guide_template.md` (+ working copy) — notes: PR-triggered gates need a `push:[ci-validation]` trigger; gitignored reference paths won't exist on the runner
+- `.claude/agents/templates/rules/Story_Standard_template.md` (+ working copy) — §3 per-file vs global fixture-coverage AC guidance; §9 same-pass body-AC reconciliation when a design-first approval narrows an AC
+- `.claude/agents/templates/rules/CICD_Validation_Guide_template.md` (+ working copy) — notes: PR-triggered gates need a `push:[ci-validation]` trigger; gitignored reference paths won't exist on the runner
 - `version.txt` — bumped 0.1.15 → 0.1.16
 - `changes.json` — added 0.1.16 entry (both template files above)
 - *(Not applied — user declined: QA Rules §4/§8 timing + blast-radius shortcut)*
@@ -83,7 +83,7 @@
 - The validator pass acted as a fast-fail safety net for structural regressions even though the changes were purely textual *(Dev)*
 
 ### Actions Applied
-- `.antigravity/agents/templates/rules/Story_Standard_template.md` (+ working copy) — §12 reviewer flag-vs-block rule [P2, ships]
+- `.claude/agents/templates/rules/Story_Standard_template.md` (+ working copy) — §12 reviewer flag-vs-block rule [P2, ships]
 - `.antigravity/agents/working/context/Project_Priming.md` §15 — dual-update + pre-edit drift-check note [P4, devkit-internal]
 - `version.txt` 0.1.17 → 0.1.18; `changes.json` 0.1.18 entry; `CHANGELOG.md` updated
 - Created follow-up story **ST-000017** (Issue #36) — extend the RF-001 fix to the Dev/QA/TL role-view files
@@ -129,7 +129,7 @@
 - Full TL review (chosen over the fast path) verified reference targets actually exist (`Sync_Devkit_Workflow`, `Agent_Common §4`, `Document_Index` paths), catching what a text-only diff review would miss *(Orchestrator/TL)*
 
 ### Actions Applied
-- `CLAUDE.md` (devkit-internal) — line 240 stale `update agents` → `sync devkit` [no version bump]
+- `AGENTS.md` (devkit-internal) — line 240 stale `update agents` → `sync devkit` [no version bump]
 - Created follow-up story **ST-000018** (Issue #39) — fix the same AND-query bug in `product_owner_instructions` Plan-Next-Sprint step (FU-2 / `[failure]`)
 - Created follow-up story **ST-000019** (Issue #40) — add implementer reference-trace rule (implementer-responsibility framing, per maintainer), reconcile reviewer reference-integrity checks between `Technical_Lead_Rules` template/mirror, and align `Document_Index` with Project_Priming §6 (FU-1 reviewer signals + FU-3)
 - *(De-scoped by maintainer — RF-010 retro-skeleton/`Retro_Rules` Analyst-BA header alignment: low priority, not tracked)*

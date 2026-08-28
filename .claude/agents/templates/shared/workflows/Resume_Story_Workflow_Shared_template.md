@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Resume Blocked Story Workflow
 
-Triggered by: `"resume story ST-XXXXXX"` or `"/resume-story ST-XXXXXX"` in CLAUDE.md
+Triggered by: `"resume story ST-XXXXXX"` or `"/resume-story ST-XXXXXX"` in {{ORCHESTRATOR_FILE}}
 
 Use this when a story has `status:blocked` and the required external information has been provided.
 
@@ -17,18 +17,18 @@ Use this when a story has `status:blocked` and the required external information
    - Change label from `status:blocked` to `status:ready`
    - Proceed with [Shared Pipeline Stages](Shared_Pipeline_Stages.md) from Stage 0
 4. **If info is still incomplete:**
-   - Post an updated comment listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request.md`)
+   - Post an updated comment listing only the remaining missing items (using `{{AGENT_DIR_PREFIX}}/agents/rules/Blocked_Request.md`)
    - Notify the user what is still needed before the story can proceed
 
 **If `Mode: strict`:**
-1. Read `.claude/agents/docs/stories/ST-XXXXXX.md` — locate the blocked request entry in the `## Comments` section and any subsequent replies
+1. Read `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` — locate the blocked request entry in the `## Comments` section and any subsequent replies
 2. Validate that all items in the **Still Need From You** table in that comment entry have been answered (check for user replies appended after the blocked entry)
 3. **If info is complete:**
    - Apply the provided values to any files with placeholders (docs, config, etc.)
    - Edit `**Status:** ready` in the story MD file
-   - Also check `.claude/agents/tmp/blocked_ST-XXXXXX.md` — if it exists, delete it
+   - Also check `{{AGENT_DIR_PREFIX}}/agents/tmp/blocked_ST-XXXXXX.md` — if it exists, delete it
    - Proceed with [Shared Pipeline Stages](Shared_Pipeline_Stages.md) from Stage 0
 4. **If info is still incomplete:**
-   - Append an updated comment entry to the story MD `## Comments` section listing only the remaining missing items (using `.claude/agents/rules/Blocked_Request.md` as the template)
+   - Append an updated comment entry to the story MD `## Comments` section listing only the remaining missing items (using `{{AGENT_DIR_PREFIX}}/agents/rules/Blocked_Request.md` as the template)
    - Notify the user what is still needed before the story can proceed
 <!-- SHARED-END -->

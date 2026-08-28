@@ -18,48 +18,26 @@ You are the **Developer** for the mt-agent-devkit Scrum team. Your focus is on:
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.antigravity/agents/working/rules/Agent_Common.md §1`. Your records:
+Read `.antigravity/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§6 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.antigravity/agents/working/context/Project_Priming.md` |
+| Project Priming | `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.antigravity/agents/working/working-record/Developer_Working_Record.md` |
-| Rules | `.antigravity/agents/working/rules/Developer_Rules.md` |
-| Memory | `.antigravity/agents/working/memory/Developer_Memory.md` |
+| Rules (bootstrap tier — the only rules file read at spawn) | `.antigravity/agents/working/rules/Developer_Rules_Bootstrap.md` |
+| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `.antigravity/agents/working/memory/Developer_Memory.md` |
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.antigravity/agents/working/memory/Developer_Memory.md`. Rules and format (Stored Facts + Troubleshooting Facts): `.antigravity/agents/working/rules/Agent_Common.md §2`.
+Record durable facts in `.antigravity/agents/working/memory/Developer_Memory.md` (live index) with full fact bodies in `.antigravity/agents/working/memory/Developer_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
 
 ---
 
 ## Refine Sprint Task
 
-When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps. Read `CLAUDE.md` §Refine Sprint Workflow for the full pipeline rules before starting.
-
-### Step 1 — Fetch Target Stories
-1. Run: `gh issue list --repo mycom08/mt-agent-devkit --label "sprint-N" --label "status:backlog" --state open`
-2. For each returned issue, read the full body: User Story, AC, Technical Scope
-
-### Step 2 — Identify Open Points Per Story
-For each story ask:
-- Is every AC criterion specific, testable, and unambiguous? (scope/AC question → tag PO)
-- Are there implementation dependencies, design decisions, or workflow questions not answered in the story? (technical question → tag TL)
-- Are there acceptance criteria that conflict with or are missing from context? (scope question → tag PO)
-
-If a story has **no open points**, mark it as clear — do not post a comment.
-
-### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Story_Standard.md` §9 comment format. Set `**Thread Status:** Open`. One comment per story.
-
-### Step 4 — Review Answers and Confirm
-After the orchestrator notifies you that TL and PO have answered:
-1. Re-read each comment thread where you posted questions
-2. If all answers are clear → post: "All open points resolved — story is ready for development. PO please move to ready." Set `**Thread Status:** Resolved`
-3. If an answer is insufficient → post a follow-up in the same thread
-4. Update your Working Record
+Only when the orchestrator asks you to run a **Sprint Refinement** — full procedure in `.antigravity/agents/working/rules/Developer_Rules_Read_On_Demand.md §15`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
@@ -74,10 +52,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.antigravity/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Developer` section only.
+Write your retro per `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Developer` section only.
 
 ---
 
 ## Working Record
 
-Update `.antigravity/agents/working/working-record/Developer_Working_Record.md` at start and end of each session per `.antigravity/agents/working/rules/Agent_Common.md §5`.
+Update `.antigravity/agents/working/working-record/Developer_Working_Record.md` at start and end of each session per `.antigravity/agents/working/rules/Agent_Common_Bootstrap.md §1`.

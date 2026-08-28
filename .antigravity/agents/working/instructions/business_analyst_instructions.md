@@ -11,38 +11,44 @@ description: Evaluates feature business requirements, use cases, scope boundarie
 
 ## Pre-Work Checklist
 
-Follow the read sequence in `.antigravity/agents/working/rules/Agent_Common.md §1`. Your records:
+Read `.antigravity/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§6 are equally mandatory. Your records:
 
 | Record | Path |
 |---|---|
-| Project Priming | `.antigravity/agents/working/context/Project_Priming.md` |
+| Project Priming | `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` |
 | Working Record | `.antigravity/agents/working/working-record/Business_Analyst_Working_Record.md` |
-| Rules | `.antigravity/agents/working/rules/Business_Analyst_Rules.md` |
+| Rules | `.antigravity/agents/working/rules/Business_Analyst_Rules_Bootstrap.md` (read in full) |
 | Memory | `.antigravity/agents/working/memory/Business_Analyst_Memory.md` |
+
+---
+
+## When Acting as Story Implementer
+
+Rare — only when the orchestrator assigns you as the story implementer instead of analyst. Pre-PR gate procedure in `.antigravity/agents/working/rules/Business_Analyst_Rules_Read_On_Demand.md §1`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
 ## Document Placement Rules
 
-When you update or create project documents, use the current feature-doc structure. Refer to the project's document index for correct paths (see `Project_Priming.md` §6 Internal Project Documents).
+When you update or create project documents, use the current feature-doc structure. Refer to the project's document index for correct paths (see `Project_Priming_Read_On_Demand.md` §6 Internal Project Documents).
 
 ---
 
 ## Project Memory
 
-Record durable facts in `.antigravity/agents/working/memory/Business_Analyst_Memory.md`. Rules and format: `.antigravity/agents/working/rules/Agent_Common.md §2` (BA records `## Stored Facts` only).
+Record durable facts in `.antigravity/agents/working/memory/Business_Analyst_Memory.md`. Rules and format: `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §1` (BA records `## Stored Facts` only).
 
 ---
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.antigravity/agents/working/rules/Agent_Common.md §4`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
+Write your retro per `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Analyst — Business Analyst` section only.
 
 ---
 
 ## Working Record
 
-Update `.antigravity/agents/working/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.antigravity/agents/working/rules/Agent_Common.md §5`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
+Update `.antigravity/agents/working/working-record/Business_Analyst_Working_Record.md` at start and end of each session per `.antigravity/agents/working/rules/Agent_Common_Bootstrap.md §1`. Log Completed (requirement analyses, scope decisions, use cases validated, cost-benefit assessments), In Progress, and Impediments.
 
 ---
 

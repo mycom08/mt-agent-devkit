@@ -24,9 +24,9 @@ This product is split into the following repos. All local paths are absolute; ea
 
 **This folder coordinates across repos — it does not implement anything itself and is not a Scrum team.**
 
-- It has no `continue sprint`, `start story`, `plan next sprint`, or `refine sprint` triggers. Those live in each individual repo's own `CLAUDE.md` — open a session inside that repo folder to run them.
-- Its only workflow trigger is `build software`, which (once every repo is scaffolded) coordinates `create stories` + `plan next sprint` across all repos listed above. See `.claude/agents/workflows/Build_Software_Project_Workflow.md`.
-- `.claude/agents/docs/build_state.md` tracks this folder's own build phase and the GitHub Project URL shared by every repo.
+- It has no `continue sprint`, `start story`, `plan next sprint`, or `refine sprint` triggers. Those live in each individual repo's own `{{ORCHESTRATOR_FILE}}` — open a session inside that repo folder to run them.
+- Its only workflow trigger is `build software`, which (once every repo is scaffolded) coordinates `create stories` + `plan next sprint` across all repos listed above. See `{{AGENT_DIR_PREFIX}}/agents/workflows/Build_Software_Project_Workflow.md`.
+- `{{AGENT_DIR_PREFIX}}/agents/docs/build_state.md` tracks this folder's own build phase and the GitHub Project URL shared by every repo.
 - `docs/` holds the full analysis (architecture, business requirements, testing plan, implementation roadmap, diagrams) that every repo's own analysis docs were split from — read it here for whole-product context that no single repo's filtered docs cover.
 
 ---

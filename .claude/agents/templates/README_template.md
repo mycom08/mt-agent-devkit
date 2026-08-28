@@ -22,8 +22,8 @@
 
 This repo has an AI Scrum team wired in via [mt-agent-devkit]({{DEVKIT_SOURCE_URL}}) (**Mode:** {{MODE}}).
 
-- Agent instructions, rules, and workflows live under `.claude/agents/`
-- Full command reference: open Claude Code here and type `workflow help`
-- Project context for agents: `.claude/agents/context/Project_Priming.md`
+- Agent instructions, rules, and workflows live under `{{AGENT_DIR_PREFIX}}/agents/`
+- Full command reference: open {{AGENT_CLI_NAME}} here and type `workflow help`
+- Project context for agents: `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md`
 
-See `CLAUDE.md` for the full workflow set.
+See `{{ORCHESTRATOR_FILE}}` for the full workflow set.

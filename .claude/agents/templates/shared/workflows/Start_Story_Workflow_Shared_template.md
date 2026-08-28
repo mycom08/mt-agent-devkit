@@ -3,7 +3,7 @@
 <!-- SHARED-START -->
 # Start Story Workflow
 
-Triggered by: `"start story ST-XXXXXX"` or `"/story ST-XXXXXX"` in CLAUDE.md
+Triggered by: `"start story ST-XXXXXX"` or `"/story ST-XXXXXX"` in {{ORCHESTRATOR_FILE}}
 
 The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for the specified story only. **Pipeline stops after Stage 4 — PO does NOT promote the next story.**
 
@@ -21,7 +21,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 | `status:blocked` | Stop — story is blocked on external input; notify user to run `resume story ST-XXXXXX` once the required information has been provided |
 | `status:done` | Stop — story is already closed; notify user |
 
-**If `Mode: strict`** — read `**Status:**` field from `.claude/agents/docs/stories/ST-XXXXXX.md` and route using the same table above (status values are identical — see `Strict_Mode_Story_Guide.md` §Status Values).
+**If `Mode: strict`** — read `**Status:**` field from `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` and route using the same table above (status values are identical — see `Strict_Mode_Story_Guide.md` §Status Values).
 
 > If the status is missing or unrecognised, stop and notify the user before proceeding.
 > Bug Reproduction Pre-Flight only runs for the `status:ready`/`status:in-progress` entry point (see `Shared_Pipeline_Stages.md`); a story entering directly at Stage 2 or 3 is already past implementation and skips it. If pre-flight determines **not reproduced**, report the result to the user and stop — do not proceed to Stage 0.
@@ -37,11 +37,11 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 - **Pipeline stops after Stage 4 completes for the targeted story**
 - **Stage 5 (Retrospective)** — after Stage 4's observation check completes, check the Stage 5 heading in `Shared_Pipeline_Stages.md`: if `[BETA: enabled]`, run Stage 5; if `[BETA: disabled]`, skip and go directly to Retro Review.
 - **Retro Review** — after Stage 5 (or immediately after Stage 4 if Stage 5 is disabled):
-  1. Read `.claude/agents/retros/ST-XXXXXX_retro.md`
+  1. Read `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md`
   2. Collect all signal-tagged items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) from every section
   3. Present collected items to the user as proposed improvements; for each approved item, apply the change targeting the right artifact (same routing as the Batch Retro Review in Sprint_Workflow.md)
-  4. Read `Sprint` from the state file; append a story section to `.claude/agents/retros/sprint_N_summary.md` (see Sprint_Workflow.md for format; create the file if it does not exist)
-  5. Delete `.claude/agents/retros/ST-XXXXXX_retro.md`
+  4. Read `Sprint` from the state file; append a story section to `{{AGENT_DIR_PREFIX}}/agents/retros/sprint_N_summary.md` (see Sprint_Workflow.md for format; create the file if it does not exist)
+  5. Delete `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md`
   6. Delete the state file
 
 > The pipeline state file format and write rules are defined in [Sprint_Workflow.md](Sprint_Workflow.md) — the same file is shared between Sprint and Start Story workflows.
