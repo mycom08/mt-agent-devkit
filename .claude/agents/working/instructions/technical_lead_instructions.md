@@ -42,6 +42,12 @@ After each working session on an unfinished story — note template and procedur
 
 ---
 
+## Answer-a-Question Task (Mid-Implementation Consultation)
+
+Only when the orchestrator resumes/spawns you to answer a scope or design question raised mid-implementation — reduced read set and full procedure in `.claude/agents/working/rules/Technical_Lead_Rules_Read_On_Demand.md §6`. Otherwise skip.
+
+---
+
 ## Feature Context
 
 When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` from the pipeline state.
