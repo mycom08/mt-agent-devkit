@@ -17,7 +17,7 @@ Keywords: `_FILEREF_RE`, `.md`-only, `_resolve_file_ref`, three roots, `SCAN_DIR
 ### Fact 3 — Thin variants are comment-only; github/strict deploy byte-identical files
 Keywords: split workflow, `scaffold_mechanical.sh:88-93`, github mode, strict mode, mode-dependent AC, shared file prose
 
-### Fact 4 — Resume-branch completeness (see `Technical_Lead_Rules_Bootstrap.md §2`)
+### Fact 4 — Resume-branch completeness (see `Technical_Lead_Rules_Read_On_Demand.md §5`)
 Keywords: resume gap, pipeline/loop state file, instruction change vs warning, unconditional step, file-presence check
 
 ### Fact 5 — Phrase CRs and fix menus as non-exhaustive ("at minimum these, plus any site sharing the mechanism")
@@ -27,7 +27,7 @@ Keywords: change request, fix menu, enumerated list treated as exhaustive, misse
 Keywords: `gh issue list --json`, `--search`, eventually-consistent index, contiguous-token phrase matching, prefix-title collision, `grep -Fxq`, `--repo` explicit
 
 ### Fact 8 — Narrowing an AC is TL scope; adding a standalone AC is PO scope
-Keywords: TL/PO boundary, Technical Scope section, new deliverable, refinement question, `Technical_Lead_Rules_Bootstrap.md §2`, `Story_Standard_TL.md §7`
+Keywords: TL/PO boundary, Technical Scope section, new deliverable, refinement question, `Technical_Lead_Rules_Read_On_Demand.md §5`, `Story_Standard_TL.md §7`
 
 ### Fact 9 — Round-2 scope confirmation via `git diff <round1-head> <round2-head> --stat`
 Keywords: re-review, CHANGES REQUESTED, round-1 clean findings, own memory commit exclusion, "reuses existing mechanism" verification
