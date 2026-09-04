@@ -30,6 +30,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 - [ST-000146] Added a manually-triggered `release` workflow backed by a root `VERSION` file holding `x.y.z-SNAPSHOT` during development: it validates the snapshot, tag and CHANGELOG section, stamps and tags the release, and bumps main forward to the next snapshot. `CHANGELOG.md` now uses a single `## [x.y.z] - Unreleased | YYYY-MM-DD` heading format, `changes.json`'s in-progress key carries the `-SNAPSHOT` suffix, and `validate_templates.py` accepts it.
 - [ST-000146] The release workflow now pushes with `RELEASE_TOKEN` only when that secret exists and falls back to the built-in `GITHUB_TOKEN` otherwise, so a release can be cut with no secret configured while `main` is unprotected.
+- [ST-000147] `sync devkit` now follows released tags instead of `main`: `**Devkit source:**` holds the canonical repository URL, the latest version is resolved from the highest `vX.Y.Z` tag via `git ls-remote` (never the rate-limited GitHub REST API), and every file fetch is pinned to that tag so the reported version and the delivered content come from the same commit.
 - [ST-000144] Developer rules now require build-dependent behaviour to be verified against a production build rather than a dev server, require the repo's own aggregate local-CI command to be run before opening a PR (or the gates run in CI order when none exists), and state that a short-circuiting gate voids every downstream gate result.
 
 ## [0.1.46] - 2026-08-28

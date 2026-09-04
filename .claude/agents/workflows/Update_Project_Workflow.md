@@ -163,7 +163,7 @@ Files: `orchestrator_instructions.md` (1 file).
 2. Read the existing `CLAUDE.md` in the target project
 3. **Preserve** — never overwrite:
    - `**Mode:**`
-   - `**Devkit source:**`
+   - `**Devkit source:**` — one exception: if the local value is a raw base URL (`https://raw.githubusercontent.com/{owner}/{repo}/<ref>`), rewrite it in place to `https://github.com/{owner}/{repo}`, keeping the same `{owner}`/`{repo}`. This is the canonical shape `sync devkit`'s Stage 0 and the version-check scripts expect. Never substitute the template's own placeholder value. This workflow reads local devkit files only — it never fetches from a tag and gains no release-tag lookup of its own.
    - `**Devkit version:**` (updated in Stage 3)
    - `## Project Overview` content
    - `## Agent Roster` — project-mutable (per-project instruction-file paths, lean prototype rosters); if the template adds a new role row not already present locally, append that row only — never touch existing rows or replace the section wholesale

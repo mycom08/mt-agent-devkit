@@ -2,11 +2,21 @@
   "0.1.48-SNAPSHOT": {
     "new": [],
     "modified": [
-      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/scripts/check_devkit_version.sh",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md"
     ],
     "removed": [],
     "descriptions": {
-      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000144] §5 adds production-build verification, aggregate local-CI command, and short-circuiting-gate rules."
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000144] §5 adds production-build verification, aggregate local-CI command, and short-circuiting-gate rules.",
+      ".claude/agents/templates/scripts/check_devkit_version.sh": "[ST-000147] Resolves the latest version from the highest vX.Y.Z git tag instead of version.txt.",
+      ".claude/agents/templates/scripts/check_devkit_version.ps1": "[ST-000147] Resolves the latest version from the highest vX.Y.Z git tag instead of version.txt.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000147] Stage 0 resolves the latest release tag and pins every file fetch to that tag.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "[ST-000147] Same tag-resolved Stage 0 and tag-pinned fetch base as the regular-repo sync workflow.",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000147] Prototype-repo scaffold fetches from a tag-pinned raw base derived from the repo URL."
     }
   },
   "0.1.46": {
