@@ -21,7 +21,7 @@ Keywords: `scaffold_mechanical.sh`, awk merge, thin variant, github mode, strict
 Keywords: state file, resume, pipeline loop, terminal value, `ended`, `done`, `refine_prototype_state.md`, fall-through, active branch
 
 ### Fact 5 — `validate_templates.py` internals (Layer-1 invariant checker)
-Keywords: `validate_templates.py`, `RETIRED_TRIGGERS`, `--test-retired-trigger`, `_is_shared`, `_is_thin_variant`, `path.parts`, `RUNTIME_PATH_PREFIXES`, `working-record/`, `tmp/`, `docs/`, `retros/`
+Keywords: `validate_templates.py`, `RETIRED_TRIGGERS`, `--test-retired-trigger`, `_is_shared`, `_is_thin_variant`, `path.parts`, `RUNTIME_PATH_PREFIXES`, `working-record/`, `tmp/`, `docs/`, `retros/`, `KNOWN_SINGLE_BRACE_TOKENS`, single-brace placeholder, token rename
 
 ### Fact 6 — `changes.json` is newest-first; add new entries at the top
 Keywords: `changes.json`, version entry, newest-first, descending order, semver

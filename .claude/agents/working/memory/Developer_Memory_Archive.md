@@ -29,9 +29,9 @@
 - **Expires when:** never.
 
 ### Fact 5
-- **Rule:** `scripts/validate_templates.py` is the Layer-1 corpus invariant checker (6 invariants, cross-platform Python 3). `RETIRED_TRIGGERS=[]` by design; use `--test-retired-trigger <token>` for fixture testing. `_is_shared`/`_is_thin_variant` check `path.parts`, not TEMPLATES_DIR-relative paths, so fixtures work outside `templates/`. `RUNTIME_PATH_PREFIXES` covers `.claude/agents/working-record/`, `tmp/`, `docs/`, `retros/`.
-- **Applies when:** changing the validator or debugging a reference-integrity failure.
-- **Evidence:** ST-000016.
+- **Rule:** `scripts/validate_templates.py` is the Layer-1 corpus invariant checker (6 invariants, cross-platform Python 3). `RETIRED_TRIGGERS=[]` by design; use `--test-retired-trigger <token>` for fixture testing. `_is_shared`/`_is_thin_variant` check `path.parts`, not TEMPLATES_DIR-relative paths, so fixtures work outside `templates/`. `RUNTIME_PATH_PREFIXES` covers `.claude/agents/working-record/`, `tmp/`, `docs/`, `retros/`. **Invariant #2 also gates single-brace ALL-CAPS tokens against a hardcoded `KNOWN_SINGLE_BRACE_TOKENS` set** — introducing or renaming a `{TOKEN}` workflow variable in any template fails the validator on every occurrence until the new name is added to that set. Register the token in the same commit as the rename; nothing else links the two.
+- **Applies when:** changing the validator, debugging a reference-integrity failure, or introducing/renaming a single-brace `{TOKEN}` placeholder in a template.
+- **Evidence:** ST-000016; ST-000147 (`{DEVKIT_SOURCE_URL}` → `{DEVKIT_RAW_BASE}`, 25 errors until registered).
 - **Expires when:** the invariant set or path handling changes.
 
 ### Fact 6
