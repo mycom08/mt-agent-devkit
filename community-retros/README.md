@@ -142,10 +142,12 @@ For `[failure]` signals, apply a lower threshold: a single clear failure pattern
 For each approved template change:
 
 1. Edit the relevant file under `.claude/agents/templates/` (or the devkit workflow file if it is a workflow signal).
-2. Bump `version.txt` (patch version).
-3. Add a `changes.json` entry for any template file changed (devkit-internal workflow files do not go in `changes.json`).
-4. Update `CHANGELOG.md` under `[Unreleased]`.
-5. Open a PR and tag a second maintainer for review.
+2. Record the change by following **`.claude/agents/workflows/Apply_Retros_Workflow.md`, Stage 5** — the `changes.json` fold-in and the `CHANGELOG.md` bullet.
+3. Open a PR and tag a second maintainer for review.
+
+> **Follow that workflow rather than a copy of it here.** These steps were previously restated in this file and drifted: they still instructed a manual `version.txt` bump for two releases after the release job took ownership of the version. Stage 5 is the single source of truth for how a change is recorded — this section deliberately points at it instead of repeating it. If you find yourself wanting to spell the steps out again, fix Stage 5.
+
+The one thing worth knowing before you open Stage 5: the version is **never** edited by hand. `.github/workflows/release.yml` owns `VERSION`, and your change folds into the current `-SNAPSHOT` entry that already exists.
 
 ### Step 4 — Archive the export and close the Issue
 

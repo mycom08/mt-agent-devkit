@@ -17,7 +17,7 @@ Applies the current local devkit templates to an already-initialized target proj
 4. Read `**Devkit version:**` from `TARGET_PROJECT/CLAUDE.md` → `PROJECT_VERSION`
 5. Read `version.txt` from the devkit root → `DEVKIT_VERSION`
 
-> **`version.txt` is a frozen bridge file, not a live version.** It sits at `0.1.48` permanently — `.github/workflows/release.yml` owns the real version in `VERSION` and never touches `version.txt`. Reading it here still produces a valid stamp for already-initialized projects, but it lags the actual latest release. Do **not** "fix" this by bumping `version.txt`; repointing the stamp at the latest release tag is tracked separately (ST-000148 issue thread).
+> **`version.txt` is a frozen bridge file, not a live version.** It sits at `0.1.48` permanently — `.github/workflows/release.yml` owns the real version in `VERSION` and never touches `version.txt`. It lags the actual latest release, and the consequence is worse than a stale number: a project scaffolded or updated today is stamped `0.1.48`, which is exactly what `update project` reads back, so that project's `update project` stops at "already up to date" and is **permanently inert**. Do **not** "fix" this by bumping `version.txt` — repointing the stamp at the latest release tag is tracked as a follow-up story (ST-000148 issue thread).
 6. Compare:
    - If `PROJECT_VERSION == DEVKIT_VERSION` → notify: _"Project is already up to date (v{DEVKIT_VERSION})."_ Stop.
    - If `PROJECT_VERSION != DEVKIT_VERSION` → notify: _"Updating v{PROJECT_VERSION} → v{DEVKIT_VERSION}"_ and proceed to Stage 1.

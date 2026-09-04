@@ -132,7 +132,7 @@ Include a one-line check result note in the PR description (e.g., "bash -n check
 
 …then a dev-server observation is not evidence. Produce a production build and verify against its served/previewed output before opening the PR. Resolve the project's actual build and preview commands from its own priming/command surface. **Where a dev-server observation and a production-build observation could differ, the production-build observation is the one reported as evidence in the PR.** (Markdown-only in this repo today, so the trigger list rarely fires here — it stays in sync with the template per `Project_Priming_Read_On_Demand.md §15`.)
 
-**CHANGELOG.md rule:** Before opening any PR, add a bullet entry to `CHANGELOG.md` under `## [Unreleased]`. If `CHANGELOG.md` does not yet exist, create it using the standard format (see any existing entry as a template). Never skip this step — the first story that touches the repo is responsible for creating the file if absent.
+**CHANGELOG.md rule:** Before opening any PR, add a bullet entry to `CHANGELOG.md` under the current `## [x.y.z] - Unreleased` heading — the heading the release workflow already opened. Never add, edit, or rename a version heading by hand. If `CHANGELOG.md` does not yet exist, create it using the standard format (see any existing entry as a template). Never skip this step — the first story that touches the repo is responsible for creating the file if absent.
 
 **Pre-merge checklist:**
 1. All applicable checks above pass
