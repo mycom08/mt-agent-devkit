@@ -47,6 +47,9 @@ Keywords: never/always absolute, scoping preamble, per-role view restatement, `S
 ### Fact 18 — Moving content between files changes its merge/scaffold contract, not just its bytes
 Keywords: replace-verbatim list, project-preserved section, Adaptive vs Mechanical tier, relocation clobbers local correction, Agent Roster precedent
 
+### Fact 19 — Empty `statusCheckRollup` on a `templates/**` PR = suppressed check, not a pass
+Keywords: `[skip ci]`, `validate-templates.yml` path filter, empty rollup, head SHA local validator run, `Developer_Rules_Bootstrap` §6 `*.md` condition
+
 ## Troubleshooting Facts
 
 No troubleshooting facts recorded yet.
