@@ -105,8 +105,8 @@ done
 #    workflow files above (step 3), but this is a single file living directly under
 #    .claude/agents/, not under workflows/. Devkit-merged/protected (see CLAUDE.md's
 #    Agent File Integrity table) — carries no project-specific placeholders (only framework variables substituted at the end).
-og_shared="$TPL/shared/Orchestrator_Instructions_Shared_template.md"
-og_modefile="$TPL/$MODE/Orchestrator_Instructions_template.md"
+og_shared="$TPL/shared/orchestrator_instructions_shared_template.md"
+og_modefile="$TPL/$MODE/orchestrator_instructions_template.md"
 og_dst="$AGENTS/orchestrator_instructions.md"
 awk '/<!-- SHARED-START -->/{flag=1;next}/<!-- SHARED-END -->/{flag=0}flag' "$og_shared" > "$og_dst"
 og_mode_body="$(tail -n +2 "$og_modefile" | grep -vE '^<!--.*-->[[:space:]]*$' || true)"
