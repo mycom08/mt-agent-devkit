@@ -53,3 +53,10 @@ Keywords: runtime mechanism, files logged by an earlier stage, computed at runti
 - **Root Cause:** `python3` on `PATH` resolves to the Windows App Execution Alias stub, not the real interpreter; the real Python 3.12 install is only on `PATH` as `python`.
 - **Fix:** use `python`, not `python3`, for every Python invocation in this environment.
 - **Prevention:** default to `python` first; only fall back to `python3`/`py` if `python` itself is missing.
+
+### Fix 3 — `grep -oP` (PCRE lookbehind) silently fails in this Bash tool's default shell locale
+- **Problem:** A shell script using `grep -oP '(?<=...)...'` produces empty output and the script falls through its own "field missing"/silent-exit guard — even though the same script works correctly on a normal developer machine or CI.
+- **Symptoms:** `grep: -P supports only unibyte and UTF-8 locales` is the message when the grep line is run standalone; when the surrounding script suppresses stderr (`2>/dev/null`), there is no visible symptom at all — the script just behaves as if the pattern never matched.
+- **Root Cause:** This Bash tool's default shell environment has `LANG`/`LC_ALL` unset even though `locale` reports `C.UTF-8` for the individual `LC_*` categories; `grep -P` refuses to run under that combination.
+- **Fix:** prefix the command (or `export` once per session) with `LC_ALL=C.UTF-8` before running or testing any script that contains `grep -P`.
+- **Prevention:** when behaviorally testing a shell script that uses `grep -P` under this Bash tool, always set `LC_ALL=C.UTF-8` first — otherwise a real extraction/parsing step can silently no-op and get misread as an intentional silent-exit path. This is an environment quirk of the tool, not a defect in a script that behaves this way only because of it — confirm the affected line is unchanged by the diff under review before reporting it as a finding.
