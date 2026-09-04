@@ -143,7 +143,7 @@ Check whether the target project uses the old flat structure or the current subd
 
 ### orchestrator_instructions.md — Overwrite
 
-**Source:** `.claude/agents/templates/shared/Orchestrator_Instructions_Shared_template.md` (local devkit — use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `.claude/agents/templates/{mode}/Orchestrator_Instructions_template.md` — same combine rule as workflow files above.
+**Source:** `.claude/agents/templates/shared/orchestrator_instructions_shared_template.md` (local devkit — use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `.claude/agents/templates/{mode}/orchestrator_instructions_template.md` — same combine rule as workflow files above.
 **Target:** `{TARGET_PROJECT}/.claude/agents/orchestrator_instructions.md`
 
 Devkit-authored, devkit-merged (protected, same as `rules/` and `workflows/`) — carries no project-specific content, so always overwrite in full. Create the file if it does not exist locally yet (the common case on the first update after ST-000043).

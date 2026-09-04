@@ -15,6 +15,7 @@ Usage:
 """
 
 import sys
+import os
 import re
 import json
 from pathlib import Path
@@ -317,23 +318,51 @@ def _should_discard_ref(cand: str) -> bool:
     return False
 
 
+def _exists_cs(path: Path) -> bool:
+    """Path.exists(), but case-sensitive on every platform.
+
+    Windows and macOS resolve names case-insensitively, so a reference whose
+    casing does not match the file on disk resolves locally and fails on the
+    Linux CI runner -- a green local run that CI would never have given.
+    Walking the real directory listing keeps both platforms in agreement.
+    """
+    try:
+        rel = path.relative_to(REPO_ROOT)
+    except ValueError:
+        return path.exists()
+    current = REPO_ROOT
+    for part in rel.parts:
+        try:
+            if part not in os.listdir(current):
+                return False
+        except OSError:
+            return False
+        current = current / part
+    return True
+
+
 def _resolve_file_ref(cand: str) -> bool:
-    """True if the candidate path resolves under any of the 3 resolution roots."""
+    """True if the candidate path resolves under any of the 3 resolution roots.
+
+    Every root compares case-sensitively; see _exists_cs for why.
+    """
     # Root 1: verbatim from repo root.
-    if (REPO_ROOT / cand).exists():
+    if _exists_cs(REPO_ROOT / cand):
         return True
     # Root 2: devkit working mirror (.claude/agents/<rest> -> working/<rest>).
     if cand.startswith(".claude/agents/"):
         rest = cand[len(".claude/agents/"):]
-        if (REPO_ROOT / ".claude/agents/working" / rest).exists():
+        if _exists_cs(REPO_ROOT / ".claude/agents/working" / rest):
             return True
     # Root 3: template source -- map any .md basename to <stem>_template.md.
     if cand.endswith(".md"):
         stem = Path(cand).stem  # e.g. "Agent_Common" from "Agent_Common.md"
         template_name = f"{stem}_template.md"
         template_root = REPO_ROOT / ".claude/agents/templates"
-        for candidate_tpl in template_root.rglob(template_name):
-            if candidate_tpl.exists():
+        # rglob(template_name) matches case-insensitively on Windows; compare
+        # the real filename instead.
+        for candidate_tpl in template_root.rglob("*_template.md"):
+            if candidate_tpl.name == template_name:
                 return True
     return False
 

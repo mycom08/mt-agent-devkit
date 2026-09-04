@@ -208,7 +208,7 @@ Check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
 
 #### orchestrator_instructions.md — Overwrite
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/Orchestrator_Instructions_Shared_template.md` (use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `{DEVKIT_SOURCE_URL}/.claude/agents/templates/{mode}/Orchestrator_Instructions_template.md` — same combine rule as split workflow files above.
+**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/shared/orchestrator_instructions_shared_template.md` (use the `<!-- SHARED-START -->` / `<!-- SHARED-END -->` block content), combined with any non-comment content from `{DEVKIT_SOURCE_URL}/.claude/agents/templates/{mode}/orchestrator_instructions_template.md` — same combine rule as split workflow files above.
 **Target:** `{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md`
 
 Devkit-authored, devkit-merged (protected, same as `rules/` and `workflows/`) — carries no project-specific content, so always overwrite in full. Create the file if it does not exist locally yet (the common case on the first sync after ST-000043).

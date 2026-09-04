@@ -1,4 +1,4 @@
-<!-- Included by: templates/github/Orchestrator_Instructions_template.md, templates/strict/Orchestrator_Instructions_template.md -->
+<!-- Included by: templates/github/orchestrator_instructions_template.md, templates/strict/orchestrator_instructions_template.md -->
 
 <!-- SHARED-START -->
 # Orchestrator Instructions
