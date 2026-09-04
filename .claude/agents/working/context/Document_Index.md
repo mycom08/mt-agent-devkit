@@ -34,7 +34,7 @@ Quick lookup for all project documents and external references. Update this file
 | Resource | URL / Location |
 |---|---|
 | GitHub repo | https://github.com/mycom08/mt-agent-devkit |
-| Raw content base | https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main |
+| Raw content base | Derived at use time, pinned to a release tag: `https://raw.githubusercontent.com/mycom08/mt-agent-devkit/v<version>` — never `/main`, which carries unreleased work |
 
 ---
 

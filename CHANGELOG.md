@@ -33,6 +33,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Bug Fixes
 
 - [Fix] `check_devkit_version.sh` extracts the devkit source URL with POSIX `sed` instead of `grep -oP`. PCRE mode is refused under a non-UTF-8 locale and is absent from BSD grep (macOS), and the failure left the version check silently inert rather than reporting an error.
+- [Fix] `refine prototype` resolves its scaffold fetch tag from the devkit's release-tag list and falls back to the highest tag when the installed version has no tag of its own. Release tags begin at `v0.1.48`, so pinning to `v{DEVKIT_VERSION}` would have 404'd every fetch for any project installed at an earlier version.
+- [Fix] Reference-link entries in `Document_Index.md` and `Project_Priming_Read_On_Demand.md` no longer present `/main` as the raw content base; the base is derived at use time and pinned to a release tag.
 
 ---
 

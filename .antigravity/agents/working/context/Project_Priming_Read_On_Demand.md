@@ -134,7 +134,9 @@ Porting an already-validated bootstrap/on-demand split (e.g. the devkit-team's o
 ## 16. Reference Links
 
 1. **GitHub repo** — https://github.com/mycom08/mt-agent-devkit
-2. **Raw content base URL** — https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main
+2. **Raw content base URL** — derived at use time from the repo URL and pinned to a release tag:
+   `https://raw.githubusercontent.com/mycom08/mt-agent-devkit/v<version>`. Never fetch from `/main`;
+   it carries post-release work, so its contents do not match any version number.
 
 ---
 

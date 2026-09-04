@@ -119,6 +119,8 @@ KNOWN_SINGLE_BRACE_TOKENS = {
     "LATEST_VERSION",
     "METHOD",
     "MODE",
+    # Variables in Refine_Prototype_Workflow_Shared_template.md
+    "RESOLVED_VERSION",
     # Variables in Init_Project_Workflow.md and Update_Project_Workflow.md
     "DATE",
     "NFR",
