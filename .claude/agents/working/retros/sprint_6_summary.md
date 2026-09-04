@@ -147,3 +147,43 @@
 - `.github/workflows/release.yml` — pushes now use `${{ secrets.RELEASE_TOKEN || github.token }}` in all three places, so a release can be cut with no secret while `main` is unprotected (commit `61f8220`, direct to main at user's direction).
 - `CHANGELOG.md` — bullet recording the token fallback.
 - User reviewed the four proposed retro items (file N4 as a story, patch `CICD_Validation_Guide.md`, add the `status:backlog` Stage Entry Check row, add a scratch-script guardrail) and elected to skip all four this round; left as recorded observations.
+
+---
+
+## ST-000147 — sync devkit follows released tags instead of main
+**Date:** 2026-09-04
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[failure]` `check_devkit_version.sh` extracted the source URL with `grep -oP`; PCRE mode is refused under a non-UTF-8 locale and absent from BSD grep (macOS), and because the next guard exits 0 the whole version check went silently inert. Reproduced independently by both reviewer and QA in the same story. *(Technical Lead, QA)*
+- `[failure]` A resumed story left zero commits on the branch and a working tree carrying a renamed placeholder referenced in a sibling file but defined nowhere — a dangling reference no gate would have caught. A session ending mid-story should commit WIP. *(Developer)*
+- `[failure]` Renaming a `{TOKEN}` placeholder and registering it in `validate_templates.py`'s `KNOWN_SINGLE_BRACE_TOKENS` are one logical change with nothing linking them; the gate fails only after every content edit is done. Reproduced a second time by the orchestrator while applying this retro's own fixes. *(Developer, Technical Lead, Orchestrator)*
+- `[workflow]` `validate-templates.yml`'s `paths:` filter omitted `scripts/**` and the workflow itself, so a PR editing only the gate script ran no check — and the Merge Procedure treats "no checks reported" as a pass. Second independent report of the ST-000146 finding. *(Technical Lead)*
+- `[context]` The AC enumerated the files needing the source-field shape change by name, but a corpus grep found more call sites than the AC listed. AC-as-file-list is not a substitute for the grep. *(Developer, Technical Lead, Product Owner)*
+- `[workflow]` A story that changes the *shape* of a value read from a config field should require an explicit consumer inventory (grep every reader and writer, classify each as writes / reads / merely mentions) before editing. *(Developer, Product Owner)*
+- `[workflow]` For a silent-failure AC ("exit 0 without output when X"), test the distinct failure sub-paths separately — unreachable transport vs. reachable-but-empty-result share an observable outcome while exercising different code. *(QA)*
+- `[failure]` When two upstream roles report agreeing on a claimed matrix, re-deriving it against *different* fixture data is what adds signal; re-running the identical case set only confirms determinism. *(QA)*
+- `[context]` A change altering the shape of a persisted config field only self-heals when the merge step owning that field is scheduled to run. It is not, so migration rests permanently on every consumer's fallback parser — correct as built, but undocumented. *(Technical Lead)*
+- `[context]` The editing tool rewrote whole files to CRLF on this checkout; only `core.autocrlf` kept committed content LF. *(Developer)*
+- `[workflow]` Validating a "resolves highest release tag" AC against a repo holding 0 tags forced ad-hoc external fixture repos; a story gating behaviour on this repo's own tags should name its fixtures. *(QA)*
+- `[context]` `git show <rev>:<path>` is unusable through the Bash tool here — MSYS path conversion mangles it; the working tree at the head SHA is the substitute. *(Technical Lead)*
+
+### What Worked Well
+- Building real fixtures — a temp project root, substituted copies of both script twins, and a genuinely tagged public repo — exercised all six specified behaviours end-to-end, including the two silent-exit paths no static check can prove. *(Developer, QA)*
+- Running both language twins against an identical case matrix confirmed they agree, which per-script syntax gates alone would not show. *(Developer, QA)*
+- QA went beyond the story's worked example, testing the tag filter against a repo with pre-release-suffixed tags (`v1.38.0-alpha.0` sorting above the true latest release), giving independent confidence in the regex anchoring rather than just the sort-order claim. *(QA)*
+- Re-deriving the implementer's six-case matrix independently confirmed every claim *and* separately exposed the locale defect — duplicated verification that earned its cost. *(Technical Lead)*
+- Normalising placeholder substitutions before diffing a template against its working mirror reduced a 44 KB whole-file diff to a single line. *(Technical Lead)*
+- The story's explicit "accepted trade-off, do not treat as a defect" and "deliberate asymmetry" notes removed two would-be findings before they cost a round. *(Technical Lead, Product Owner)*
+- The dual-update carve-out guidance resolved both the file with no working mirror and the `.antigravity/` mirror's pre-existing leaner shape without a consultation round-trip or a false mismatch finding. *(Developer, QA)*
+- Zero review and zero QA loops; the release was cut within the merge window, proving the shipped mechanism end-to-end. *(Orchestrator)*
+
+### Actions Applied
+- `.claude/agents/templates/scripts/check_devkit_version.sh` — source-URL extraction moved from `grep -oP` to POSIX `sed`, verified against the live repo across all five paths in a shell where the old expression fails (commit `d3db474`, direct to main at user's direction).
+- `.github/workflows/validate-templates.yml` — `paths:` filter gains `scripts/**` and the workflow itself, so the gate can no longer be edited without running (commit `d3db474`).
+- `.claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md` — scaffold fetch tag now resolved from the release-tag list with a fallback to the highest tag; pinning to `v{DEVKIT_VERSION}` would have 404'd every fetch for any install below 0.1.48, the only tag that exists (commit `cdcb492`).
+- `.claude/agents/working/context/Document_Index.md`, `Project_Priming_Read_On_Demand.md` (+ both `.antigravity/` mirrors) — reference-link tables no longer advertise `/main` as the raw content base (commit `cdcb492`).
+- `scripts/validate_templates.py` — `RESOLVED_VERSION` registered in `KNOWN_SINGLE_BRACE_TOKENS` (commit `cdcb492`).
+- `changes.json` / `CHANGELOG.md` — the two template fixes folded into the `0.1.49-SNAPSHOT` entry with four CHANGELOG bullets.
+- Released **v0.1.48** by dispatching `release.yml` for the first time; both jobs succeeded, `changes.json`'s key de-snapshotted, `VERSION` opened at `0.1.49-SNAPSHOT`.
+- The three remaining process items (token↔allow-list checklist step in `§15`, consumer-inventory requirement, commit-WIP-on-session-end) were presented and **not applied** this round; left as recorded observations. The frozen-`version.txt` stranding gap was also presented and deliberately declined — the installed base is small enough that a manual `update project` is cheaper than maintaining the legacy pointer.
