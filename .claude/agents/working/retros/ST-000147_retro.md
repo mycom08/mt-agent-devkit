@@ -48,13 +48,18 @@
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+- `[context]` The story's 11 AC spanned three file categories (shell scripts, PowerShell scripts, Markdown workflows) plus dual-update requirements (working copies + templates + mirrors). QA's independent fixture builds and validator cross-checks were essential to verify completeness; a static checklist would have been blind to platform-specific defects (the locale-triggered PCRE failure TL caught).
+- `[context]` The accepted trade-off (sync devkit becomes invisible until release) was critical to state upfront because it reverses user-visible behavior post-deployment. Early scope documentation prevented later scope disputes.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` Stories with dual-update requirements should carry an explicit checklist (working copies, templates, mirrors, each file listed by path) to hand off to QA. The rule exists in memory; making it AC-visible eliminates one class of incompleteness gaps.
+- `[workflow]` For stories that alter a persisted config field shape, add an AC criterion naming the consumers and fallback-compatibility commitment (this story did this well: "schema changes" + "derived at use time"). Prevents reviewers from blocking on un-stated assumptions about how old instances will self-heal.
 
 ### What Worked Well
-*(pending)*
+- Scope was precisely bounded by 11 specific, testable AC. No feature creep, no scope disputes during implementation.
+- The story's pre-emptive framing of the accepted trade-off ("sync devkit becomes invisible until release; do not treat as a defect") prevented reviewer objections on a deliberate decision.
+- QA's independent fixture-based validation (real tagged repos, locale testing, multiple silent-exit paths tested separately) proved both the happy path and all five failure modes, giving confidence no edge case was missed.
+- Release delivery was immediate post-merge (v0.1.48 tagged within the merge window), proving the mechanism works end-to-end and the story's business value is realized at delivery time.
 
 ## Orchestrator
 ### Observations
