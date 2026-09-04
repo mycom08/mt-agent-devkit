@@ -4,8 +4,15 @@ All notable changes to mt-agent-devkit are documented here.
 
 ## Contribution Convention
 
-Entries are added under the current `## [Unreleased]` version as work merges to
-main. Use the following subsections:
+Version headings use exactly one format: `## [x.y.z] - Unreleased` while the
+version is in progress, and `## [x.y.z] - YYYY-MM-DD` once it is released.
+
+The implementer adds their bullets under the current `- Unreleased` heading as
+part of their own PR. **The version number is never edited by hand** — the
+`release` workflow (`.github/workflows/release.yml`) stamps the release date,
+opens the next `- Unreleased` section, and advances `VERSION`.
+
+Use the following subsections:
 
 - **Changes** — new features, enhancements, refactors, documentation, CI/tooling
 - **Bug Fixes** — defect corrections and hotfixes
@@ -17,20 +24,21 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [Unreleased]
+## [0.1.48] - Unreleased
 
 ### Changes
 
+- [ST-000146] Added a manually-triggered `release` workflow backed by a root `VERSION` file holding `x.y.z-SNAPSHOT` during development: it validates the snapshot, tag and CHANGELOG section, stamps and tags the release, and bumps main forward to the next snapshot. `CHANGELOG.md` now uses a single `## [x.y.z] - Unreleased | YYYY-MM-DD` heading format, `changes.json`'s in-progress key carries the `-SNAPSHOT` suffix, and `validate_templates.py` accepts it.
 - [ST-000144] Developer rules now require build-dependent behaviour to be verified against a production build rather than a dev server, require the repo's own aggregate local-CI command to be run before opening a PR (or the gates run in CI order when none exists), and state that a short-circuiting gate voids every downstream gate result.
 
-## 0.1.46 (2026-08-28)
+## [0.1.46] - 2026-08-28
 
 ### Changes
 
 - [Enhancement] Renamed `Orchestrator_Guide.md` to `orchestrator_instructions.md` so the orchestrator reference follows the same naming convention as the six agent instruction files, renamed the three source templates to `Orchestrator_Instructions*_template.md`, and added a one-time deletion of the leftover `Orchestrator_Guide.md` to `sync devkit` / `update project`.
 - [Enhancement] Renamed the repo-root template family (`Orchestrator*_template.md` -> `Repo_Root*_template.md`, `Project_Orchestrator*_template.md` -> `Project_Root*_template.md`) since "Orchestrator" named a role, not the repo-root file, and collided with `orchestrator_instructions.md`; renamed the `{{ORCHESTRATOR_FILE}}` placeholder to `{{ROOT_FILE}}` to match.
 
-## 0.1.45 (2026-08-28)
+## [0.1.45] - 2026-08-28
 
 ### Bug Fixes
 
@@ -115,7 +123,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.7]
+## [0.1.7] - 2026-06-26
 
 ### Changes
 
@@ -125,7 +133,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.5]
+## [0.1.5] - 2026-06-23
 
 ### Changes
 
@@ -135,7 +143,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.2]
+## [0.1.2] - 2026-06-17
 
 ### Changes
 
@@ -146,7 +154,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.1]
+## [0.1.1] - 2026-06-17
 
 ### Changes
 
