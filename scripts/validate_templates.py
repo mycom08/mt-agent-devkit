@@ -687,14 +687,19 @@ def check_manifest_integrity(findings: list) -> None:
 
     # Verify every version key is a valid semver string (no ordering check --
     # the file uses newest-first (descending) convention which is intentional).
+    # The in-progress (newest) key carries a "-SNAPSHOT" suffix matching the root
+    # VERSION file; the release workflow renames it to the clean version at
+    # release time. Strip that suffix before the numeric check.
     for version_key in data:
+        base_key = version_key[: -len("-SNAPSHOT")] if version_key.endswith("-SNAPSHOT") else version_key
         try:
-            parts = [int(x) for x in version_key.split(".")]
+            parts = [int(x) for x in base_key.split(".")]
             if len(parts) != 3:
                 raise ValueError("not 3 components")
         except ValueError:
             emit(findings, "ERROR", CHANGES_JSON, 0,
-                 f"version key '{version_key}' is not valid semver (expected N.N.N)")
+                 f"version key '{version_key}' is not valid semver "
+                 f"(expected N.N.N or N.N.N-SNAPSHOT)")
 
     # Collect all paths listed and check existence.
     all_listed: set = set()

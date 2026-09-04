@@ -40,4 +40,16 @@ Keywords: runtime mechanism, files logged by an earlier stage, computed at runti
 
 ## Troubleshooting Facts
 
-No troubleshooting facts recorded yet.
+### Fix 1 — `git show <ref>:<path>` fails with "unknown revision" in this Bash tool
+- **Problem:** `git show origin/<branch>:<path/with/slashes>` errors instead of printing the blob.
+- **Symptoms:** `fatal: ambiguous argument 'origin\<branch>\<path>;<file>': unknown revision or path not in the working tree.` — the `/` and `:` in the argument have been silently mangled to `\` and `;`.
+- **Root Cause:** MSYS/Git-Bash path-conversion heuristics rewrite any argument that looks like a path, and a colon-syntax `ref:path` git argument matches that heuristic even though it is not a filesystem path.
+- **Fix:** prefix the command with `MSYS_NO_PATHCONV=1`, e.g. `MSYS_NO_PATHCONV=1 git show origin/<branch>:<path>`.
+- **Prevention:** always set `MSYS_NO_PATHCONV=1` for any git command whose argument contains a literal `:` (colon-syntax `ref:path`, `refspec:refspec`, etc.) run via the Bash tool on this platform.
+
+### Fix 2 — `python3` is a broken stub in this environment
+- **Problem:** `python3 -c ...` fails instead of running the script.
+- **Symptoms:** `Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.`
+- **Root Cause:** `python3` on `PATH` resolves to the Windows App Execution Alias stub, not the real interpreter; the real Python 3.12 install is only on `PATH` as `python`.
+- **Fix:** use `python`, not `python3`, for every Python invocation in this environment.
+- **Prevention:** default to `python` first; only fall back to `python3`/`py` if `python` itself is missing.
