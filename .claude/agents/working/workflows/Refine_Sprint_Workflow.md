@@ -42,7 +42,7 @@ The orchestrator maintains `.claude/agents/working/tmp/refine_pipeline_state.md`
 
 1. Orchestrator fetches all stories in the target sprint (using the story fetch method above), reads each story's `**Assigned:**` field, and groups stories by assignee role
 2. **Orchestrator pre-fetches full story content** and passes it directly in each agent prompt — agents do not need to re-fetch stories
-3. **Spawn** one agent per role that has assigned stories (**model: sonnet** for Developer/QA/Business Analyst; **model: opus** for Technical Lead); save session IDs to state file as `dev_session`, `tl_session`, `qa_session`, `ba_session`. If all stories belong to one role, spawn a single agent — no parallel spawn needed. If multiple roles are present, spawn them in parallel simultaneously.
+3. **Spawn** one agent per role that has assigned stories (**model: opus**, reasoning effort medium, for Developer; **model: sonnet** for QA/Business Analyst; **model: opus** for Technical Lead); save session IDs to state file as `dev_session`, `tl_session`, `qa_session`, `ba_session`. If all stories belong to one role, spawn a single agent — no parallel spawn needed. If multiple roles are present, spawn them in parallel simultaneously.
 4. Each agent reads its own instruction files (instructions + memory + rules)
 5. Each agent reviews the story bodies passed in the prompt and performs two mandatory checks per story:
    - **API surface check:** For every endpoint, field, or behavior referenced in the ACs, confirm it exists in the project's API spec (check `docs/api/` or equivalent) or is explicitly scoped for delivery within the same sprint. If not found, flag as an open question to TL.

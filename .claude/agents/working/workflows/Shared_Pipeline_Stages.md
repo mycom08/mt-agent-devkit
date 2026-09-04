@@ -66,7 +66,7 @@ Pass `Feature` and `Phase` to all agents spawned in Stages 1–3 so they can rou
 - `Type: behavioral` — any source code file, DB migration, or behavioral API change is listed
 - If Technical Scope is absent or ambiguous → default to `Type: behavioral`
 
-Store `Type` in the pipeline state file. It controls fast-path routing in Stages 2 and 3.
+Store `Type` in the pipeline state file. It controls fast-path routing in Stages 3 and 4. **`Type` never routes Stage 2** — in this repo the shipped product is its Markdown (templates, rules, instructions, workflows), so a `non-behavioral` diff is still a change to agent behaviour and always gets a full reviewer.
 
 ---
 
@@ -126,7 +126,7 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
-1. **Spawn** the agent matching the `Implementer` role (**model: sonnet**)
+1. **Spawn** the agent matching the `Implementer` role — **Developer → `model: opus`, reasoning effort medium**; any other implementer role → **model: sonnet**
    > **Spawn-prompt reminder (mandatory-reading references):** when the spawn prompt points the agent at a Story Standard file, name only the role-scoped variant already gated by that role's own Rules file (e.g. `Story_Standard_Dev.md` for Developer, `Story_Standard_TL.md` for Technical Lead) — never phrase it as "`Story_Standard.md` (or the role-scoped variant if one exists)". Offering both as options causes the agent to read the full cross-role file needlessly; the role's own Rules file gate already resolves which one to read.
 2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
 3. Agent reads its own instruction files, memory, and rules
@@ -201,22 +201,14 @@ After the implementer reports completion, append a bullet to `Observations:` for
 
 ## Stage 2 — Review
 
-### Non-behavioral fast path (`Type: non-behavioral`)
+> **No fast path here — every story gets a reviewer agent, whatever its `Type`.** A `Type: non-behavioral` diff in this repo still edits the Markdown that target-project agents execute, so an orchestrator-only diff read is not a substitute for Technical Lead review. Stages 3 and 4 keep their non-behavioral fast paths; Stage 2 does not have one.
 
-**Get the diff:** `gh pr diff <PR-number> --repo mycom08/mt-agent-devkit`
-
-1. Read each reference file listed in the story's Technical Scope using the Read tool
-2. Verify each AC against the diff and reference files:
-   - **Every AC confirmed from diff + reference files alone** → record approval: post approval as `gh pr comment` on the PR → proceed to Stage 3 without spawning a reviewer agent
-   - **Any AC requires domain knowledge not derivable from the diff or reference files** → fall back to the behavioral path below for full TL review
-3. If changes are needed, resume Implementer via `impl_session` (spawn new if expired); re-run this fast path on completion
-
-### Behavioral path (`Type: behavioral`)
+### Review (all stories, `Type: behavioral` and `Type: non-behavioral` alike)
 
 1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `agentId` as `reviewer_session`
    - Default: **Technical Lead** reviews (**model: opus**)
-   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: sonnet**)
-   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus.
+   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model: opus**, reasoning effort medium)
+   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus — Technical Lead reviewer only; a Developer peer reviewer stays on opus/medium.
    - When the reviewer is Technical Lead, the spawn prompt names `Technical_Lead_Rules_Read_On_Demand.md §5` (Code Review & PR Approval) as the section to fetch per its own §15 routing table.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
@@ -229,7 +221,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
 
 Append a bullet to `Observations:` for each item that did **not** happen:
 
-- `[skipped-step]` If behavioral path: `reviewer_session` saved in state file immediately after spawn?
+- `[skipped-step]` `reviewer_session` saved in state file immediately after spawn? (every story — Stage 2 has no fast path)
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?
 
 ---
@@ -242,11 +234,10 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
-2. **If Stage 2 fast path approved all ACs** → skip re-verification; record QA sign-off; execute the **Merge Procedure** below; proceed to Stage 4
-3. **If Stage 2 used the behavioral path** → read each AC from the story body and the current state of each file listed in Technical Scope via `gh pr diff` or Read tool:
+2. Read each AC from the story body and the current state of each file listed in Technical Scope via `gh pr diff` or Read tool:
    - **Every AC confirmed** → record QA sign-off; execute the **Merge Procedure** below; proceed to Stage 4
    - **Any AC requires domain knowledge not derivable from the files** → fall back to the behavioral path below for full QA agent validation
-4. If AC issues found, resume Implementer via `impl_session` (spawn new if expired); re-run this fast path on completion
+3. If AC issues found, resume Implementer via `impl_session` (spawn new if expired); re-run this fast path on completion
 
 **Record QA sign-off:** post QA sign-off comment on the GitHub Issue
 
