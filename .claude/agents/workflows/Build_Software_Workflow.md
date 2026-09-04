@@ -453,6 +453,8 @@ After both agents complete, the orchestrator copies the following files from `/r
    - `{{MODE}}` → `github`
    - `{{DEVKIT_SOURCE_URL}}` → this devkit's own `**Devkit source:**` value (from the devkit's own `CLAUDE.md`)
    - `{{DEVKIT_VERSION}}` → the current content of `version.txt` at the devkit root
+
+> **`version.txt` is a frozen bridge file, not a live version.** It sits at `0.1.48` permanently — `.github/workflows/release.yml` owns the real version in `VERSION` and never touches `version.txt`. Reading it here still produces a valid stamp for already-initialized projects, but it lags the actual latest release. Do **not** "fix" this by bumping `version.txt`; repointing the stamp at the latest release tag is tracked separately (ST-000148 issue thread).
    - `{{REPOS}}` → a Markdown table listing each sub-repo: name, purpose, absolute local path, GitHub repo URL
 
 8. **Project Priming Context (orchestrator-direct, no agent).** Read `.claude/agents/templates/context/Project_Root_Priming_template.md` and write it to the project orchestrator folder as `.claude/agents/context/Project_Priming.md`, substituting:

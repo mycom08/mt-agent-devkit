@@ -16,6 +16,8 @@ Applies the current local devkit templates to an already-initialized target proj
    - If missing → stop and notify: _"This project was initialized before version tracking was added. Add `**Devkit version:** 0.0.0` to its CLAUDE.md to enable updates."_
 4. Read `**Devkit version:**` from `TARGET_PROJECT/CLAUDE.md` → `PROJECT_VERSION`
 5. Read `version.txt` from the devkit root → `DEVKIT_VERSION`
+
+> **`version.txt` is a frozen bridge file, not a live version.** It sits at `0.1.48` permanently — `.github/workflows/release.yml` owns the real version in `VERSION` and never touches `version.txt`. Reading it here still produces a valid stamp for already-initialized projects, but it lags the actual latest release. Do **not** "fix" this by bumping `version.txt`; repointing the stamp at the latest release tag is tracked separately (ST-000148 issue thread).
 6. Compare:
    - If `PROJECT_VERSION == DEVKIT_VERSION` → notify: _"Project is already up to date (v{DEVKIT_VERSION})."_ Stop.
    - If `PROJECT_VERSION != DEVKIT_VERSION` → notify: _"Updating v{PROJECT_VERSION} → v{DEVKIT_VERSION}"_ and proceed to Stage 1.
