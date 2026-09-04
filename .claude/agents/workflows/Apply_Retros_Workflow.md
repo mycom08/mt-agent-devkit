@@ -123,11 +123,11 @@ Record everything from this run against the **current in-progress version** — 
        ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
      ],
      "descriptions": {
-       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "Retro (#27): add pre-push secret-scan gate — credentials must source from env with no inline literal default"
+       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[Retro #27] Add a pre-push secret-scan gate; credentials must source from env with no inline literal default."
      }
    }
    ```
-   - Reference the source Issue number(s) in each description (e.g. `Retro (#27)`).
+   - Tag each description with its source Issue number(s) as `[Retro #NN]`, matching the `[ST-NNNNNN]` clause shape used for story-sourced entries and the `CHANGELOG.md` contribution convention. State only what changed, not why — the rationale lives in `CHANGELOG.md` and the commit.
    - If a path already has a `descriptions` entry under this key (from earlier work on the same unreleased version), **append** your clause rather than replacing it.
    - Devkit-internal workflow edits (under `.claude/agents/workflows/`) are **not** listed in `changes.json`.
    - If **no** template files changed (all accepted items were devkit-internal), leave `changes.json` untouched — there is nothing for `sync devkit` to fetch.
