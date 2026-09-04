@@ -10,7 +10,7 @@ The orchestrator (this top-level session) must read `.claude/agents/working/inst
 
 A devkit that injects a complete AI Scrum team setup into any project. It provides three workflows of its own: **Analyst** (idea-to-plan analysis), **Init Project** (scaffold the AI Scrum team into a target project), and **Build Software** (end-to-end workflow from idea analysis through repo initialisation). All sprint execution workflows live in the generated `CLAUDE.md` that `init project` places into the target project.
 
-**Devkit source:** https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main
+**Devkit source:** https://github.com/mycom08/mt-agent-devkit
 
 ---
 

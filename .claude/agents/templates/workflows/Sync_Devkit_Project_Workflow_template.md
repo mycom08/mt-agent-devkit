@@ -13,19 +13,35 @@ Fetches the latest orchestrator template files from the devkit GitHub repository
 ## Prerequisites
 
 Before starting, read from this folder's `{{ROOT_FILE}}`:
-- `**Devkit source:**` — the raw GitHub base URL (e.g. `https://raw.githubusercontent.com/mycom08/mt-agent-devkit/main`)
+- `**Devkit source:**` — the devkit's GitHub repository URL (e.g. `https://github.com/mycom08/mt-agent-devkit`)
 - `**Devkit version:**` — the version currently installed in this folder
 
 If either field is missing or contains a placeholder URL, stop and notify the user that the devkit source is not configured.
 
+**Older installs may still hold a raw base URL** of the form `https://raw.githubusercontent.com/{owner}/{repo}/main`. Read `{owner}` and `{repo}` out of whichever shape is present and carry on; the `{{ROOT_FILE}} — Merge` step in Stage 2 rewrites the field to the canonical repository form.
+
 ---
 
-## Stage 0 — Version Check
+## Stage 0 — Resolve the Latest Release
 
 1. Read `**Devkit version:**` from `{{ROOT_FILE}}` → `CURRENT_VERSION`
-2. Fetch `{DEVKIT_SOURCE_URL}/version.txt` using WebFetch → `LATEST_VERSION`
-   - If the fetch fails (network error, 404) → stop and notify the user; do not modify any files
-3. Compare versions:
+2. Resolve `{owner}` and `{repo}` from `**Devkit source:**`, then list the devkit's release tags:
+
+   ```bash
+   git ls-remote --tags --refs --sort=-v:refname https://github.com/{owner}/{repo}.git
+   ```
+
+   Keep only tags matching `^v[0-9]+\.[0-9]+\.[0-9]+$`, take the first, and strip the leading `v` → `LATEST_VERSION`.
+
+   - **The tag filter is required.** `-v:refname` sorts a bare `v7`-style tag above `v7.0.0`, so an unfiltered first result can be a non-release tag.
+   - **Never use the GitHub REST API for this.** Unauthenticated calls are capped at 60 requests/hour per IP; `git ls-remote` on a public repo needs no credentials and has no such cap.
+   - If the command fails (network error, repo unreachable) or no tag matches the filter → stop and notify the user; do not modify any files.
+3. Set the fetch base for every remote read in this workflow:
+
+   `{DEVKIT_RAW_BASE}` = `https://raw.githubusercontent.com/{owner}/{repo}/v{LATEST_VERSION}`
+
+   Pinning it to the tag means the resolved version and the file contents come from the same immutable commit. **Never fetch from `/main`** — `main` carries work that has not been released.
+4. Compare versions:
    - If `CURRENT_VERSION == LATEST_VERSION` → notify the user: _"Agent files are already up to date (v{CURRENT_VERSION})."_ Stop.
    - If `CURRENT_VERSION != LATEST_VERSION` → notify the user: _"Update available: v{CURRENT_VERSION} → v{LATEST_VERSION}"_ and proceed to Stage 1
 
@@ -33,7 +49,7 @@ If either field is missing or contains a placeholder URL, stop and notify the us
 
 ## Stage 1 — Resolve Changed Files
 
-Fetch `{DEVKIT_SOURCE_URL}/changes.json` to determine which of this folder's 3 owned files need updating. Use the same version-range resolution as the regular-repo workflow: collect every version between `CURRENT_VERSION` (exclusive) and `LATEST_VERSION` (inclusive), gather each version's listed files, deduplicate. A missing version key still means "trigger full scan," but here a full scan only ever concerns the 3 files this folder owns — never fetch or reason about rules/instructions/memory/wiki files, none of which exist in this folder.
+Fetch `{DEVKIT_RAW_BASE}/changes.json` to determine which of this folder's 3 owned files need updating. Use the same version-range resolution as the regular-repo workflow: collect every version between `CURRENT_VERSION` (exclusive) and `LATEST_VERSION` (inclusive), gather each version's listed files, deduplicate. A missing version key still means "trigger full scan," but here a full scan only ever concerns the 3 files this folder owns — never fetch or reason about rules/instructions/memory/wiki files, none of which exist in this folder.
 
 From the resolved file set, keep only the files relevant to this folder (ignore any entry for a regular-repo-only path like `templates/rules/*` or `templates/instructions/*` — those never apply here):
 
@@ -77,7 +93,7 @@ Apply only the files resolved in Stage 1. Log each file as it is written. If any
 Use WebFetch to retrieve remote files. If a fetched file appears truncated or summarized, fall back to Bash curl:
 
 ```bash
-curl -sf "{DEVKIT_SOURCE_URL}/path/to/file"
+curl -sf "{DEVKIT_RAW_BASE}/path/to/file"
 ```
 
 If both WebFetch and curl fail for a file, log the failure and skip that file; do not write partial content.
@@ -86,13 +102,13 @@ If both WebFetch and curl fail for a file, log the failure and skip that file; d
 
 #### `{{ROOT_FILE}}` — Merge
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/Project_Root_template.md`
+**Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/Project_Root_template.md`
 
 1. Fetch the latest template
 2. Read the existing local `{{ROOT_FILE}}`
 3. **Preserve** — never overwrite:
    - `**Mode:**`
-   - `**Devkit source:**`
+   - `**Devkit source:**` — one exception: if the local value is a raw base URL (`https://raw.githubusercontent.com/{owner}/{repo}/<ref>`), rewrite it in place to `https://github.com/{owner}/{repo}`, keeping the same `{owner}`/`{repo}`. This is the canonical shape Stage 0 and the version-check scripts expect. Never substitute the template's own placeholder value.
    - `**Devkit version:**` (updated in Stage 3)
    - `## Repo Roster` content (the actual repo table — project-specific)
 4. **Replace verbatim** from the updated template:
@@ -110,20 +126,20 @@ Never fetch or modify. This file is 100% project-specific (product overview, rep
 
 #### `workflows/Build_Software_Project_Workflow.md` — Overwrite
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md`
+**Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md`
 
 Fetch and write verbatim (strip the `_template` suffix). No project-specific content lives here.
 
 #### `workflows/Sync_Devkit_Project_Workflow.md` (this file) — Overwrite
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md`
+**Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md`
 
 Fetch and write verbatim (strip the `_template` suffix). This file updates itself — the new version takes effect after this run completes.
 
 #### Script files — Overwrite
 
-**Source:** `{DEVKIT_SOURCE_URL}/.claude/agents/templates/scripts/check_devkit_version.ps1`
-          `{DEVKIT_SOURCE_URL}/.claude/agents/templates/scripts/check_devkit_version.sh`
+**Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.ps1`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.sh`
 **Target:** `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.ps1`
           `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.sh`
 
@@ -157,6 +173,7 @@ Skipped (project-owned):
 
 ## Pipeline Rules
 
+- **Every remote read is pinned to the release tag** — `{DEVKIT_RAW_BASE}` resolved in Stage 0, never `/main`. A fetch from `main` would deliver unreleased content under a released version number
 - **Never write before user confirms** in Stage 1 — unless `--auto` flag was passed
 - **Never overwrite** `context/Project_Priming.md` — 100% project-owned
 - **Only 3 files are ever in scope** — `{{ROOT_FILE}}`, `context/Project_Priming.md` (skip), `workflows/Build_Software_Project_Workflow.md`, plus this workflow file itself. Ignore any `changes.json` entry for a regular-repo-only path (rules/instructions/memory/working-record/wiki) — those never apply to this folder.

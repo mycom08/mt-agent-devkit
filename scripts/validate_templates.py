@@ -112,6 +112,7 @@ KNOWN_DOUBLE_BRACE_TOKENS = {
 KNOWN_SINGLE_BRACE_TOKENS = {
     # Variables in Sync_Devkit_Workflow_template.md
     "CURRENT_VERSION",
+    "DEVKIT_RAW_BASE",
     "DEVKIT_SOURCE_URL",
     "DEVKIT_VERSION",
     "LANGUAGE",
