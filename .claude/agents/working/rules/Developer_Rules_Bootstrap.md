@@ -153,7 +153,12 @@ Tag **TL** in the comment to request review.
 - Subject: imperative mood, ≤ 50 characters
 - Footer: always include `Story: ST-XXXXXX`
 - **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`). A reviewer notes a violation in a PR comment but must **not** request changes or trigger a fix-loop over length alone; the rest of the convention remains blocking.
-- **Docs-only pushes skip CI:** when every file in the push is non-code (`docs/**`, `*.md`, `.claude/agents/**`), add `[skip ci]` on its own line in the head commit's message body — CI cannot be affected by these files and must not run for them. Never use `[skip ci]` on any push that contains code, config, or build-file changes.
+- **`[skip ci]` is decided by the CI path filter, not by file extension.** Before adding it, read the `paths:` list of every workflow in `.github/workflows/`. If **any** file in the push matches **any** of those paths, the push must **not** carry `[skip ci]` — regardless of file type.
+  - **In this repo that means:** a push touching `.claude/agents/templates/**` or `.claude/agents/workflows/**` never carries `[skip ci]`, even though every file in it is Markdown. `validate-templates.yml` filters on exactly those two paths, and this is the repo's most common change class.
+  - **Safe to skip:** everything else non-code — `docs/**`, retros, working records, memory files, `.claude/agents/working/**`, and any other `*.md` outside a CI path filter.
+  - **Why this is not a style nit:** `[skip ci]` suppresses the run entirely, so the PR is left with an **empty** check rollup — not a failing one. The mandatory merge gate reads "no checks failed" and the suppression is invisible unless someone compares the diff against the workflow's path filter by hand. A skipped required check and a repo with no CI configured are indistinguishable at the gate.
+  - **A `[skip ci]` head commit cannot be undone by an empty commit.** Path-filtered `pull_request` triggers evaluate the files a push changes; an empty commit changes none, so it matches no filter and fires nothing. Recovering a suppressed run needs a real change to a file under one of the filtered paths.
+  - Never use `[skip ci]` on any push that contains code, config, or build-file changes.
 
 ---
 
@@ -185,6 +190,7 @@ Tag **TL** in the comment to request review.
 
 ## Version
 
-**Version:** 2.0 — §1–§6 (mandatory reading, story pre-start, status management, file naming, pre-PR gate, git workflow) moved back in from `Developer_Rules_Read_On_Demand.md` at their original numbers. Measured on the 2026-08-21 full-story benchmark (#148/#149): a story spawn triggers all six, so the on-demand round-trip cost a `read-section` skill load plus a 7,640-char fetch and saved nothing — 11,268 chars vs the pre-split file's 11,688, a −3.6% wash. The old §1/§2 became §18/§19 rather than being displaced, so no number is reused. Narrow non-story spawns now pay for §1–§6 they will not use; that is the deliberate trade, since story spawns are the common path.
+**Version:** 2.1 — §6: `[skip ci]` now keys on the CI path filter instead of file extension. `.claude/agents/templates/**` is simultaneously all-Markdown and inside `validate-templates.yml`'s path filter, so the old extension-based rule authorised skipping the gate on this repo's most common change class; PR #181 merged that way unnoticed, and PR #189 hit it again. Records that a suppressed run leaves an empty rollup indistinguishable from no-CI-configured, and that an empty commit cannot re-fire a path-filtered trigger.
+**Previous:** 2.0 — §1–§6 (mandatory reading, story pre-start, status management, file naming, pre-PR gate, git workflow) moved back in from `Developer_Rules_Read_On_Demand.md` at their original numbers. Measured on the 2026-08-21 full-story benchmark (#148/#149): a story spawn triggers all six, so the on-demand round-trip cost a `read-section` skill load plus a 7,640-char fetch and saved nothing — 11,268 chars vs the pre-split file's 11,688, a −3.6% wash. The old §1/§2 became §18/§19 rather than being displaced, so no number is reused. Narrow non-story spawns now pay for §1–§6 they will not use; that is the deliberate trade, since story spawns are the common path.
 **Previous:** 1.1 — Routing table repointed to `Developer_Rules_Read_On_Demand.md` §12–§17 after `Developer_Rules_Extended.md` was merged into it (one on-demand file per role, not two).
 **Created:** 2026-08-21
