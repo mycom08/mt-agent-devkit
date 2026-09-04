@@ -19,13 +19,19 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[workflow]` A "remove instruction X" story's grep scope was implicitly the agent corpus, but the one live residue sat in a **contributor-facing README** that restates a maintainer workflow's steps rather than pointing at it. Duplicated procedure outside the agent directories is invisible to a corpus-shaped search and to the dual-update/mirror rules, yet it is read by the same agent running that workflow.
+- `[context]` Freezing a file that other workflows *read* can invert an equality comparison into a permanent no-op: an update path that stops when installed version equals source version goes inert once the source is pinned. The residue is not the stale value but the comparison built on it — a class the "removed instruction" AC has no reason to look at.
+- `[failure]` The retro's existing `[skip ci]`/path-filter finding is **partly wrong and was tested rather than inherited**: a bookkeeping-only commit whose own files sit outside the CI path filter still produced a run and a green rollup at the new head. The hosted CI evaluates a pull-request path filter against the PR's whole changed-file set, not the pushed commit's — so the only mechanism that empties the rollup here is the skip-CI token in the head commit message. A reviewer inheriting the implementer's stated cause would have drawn the wrong conclusion about their own commit.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` Add a "duplicated-procedure sweep" to removal-story review: after the corpus edits, grep the retired instruction's *verb* across the whole repo including READMEs and contributor docs, not just the agent directories. Better still, treat a doc that restates a workflow's steps as a defect in its own right and replace it with a pointer.
+- `[workflow]` When a mitigation is "a note at each read site", enumerate the read sites from the grep and check the note count against it — one of four sites was missed here, and it was the executable one.
+- `[failure]` Correct the skip-CI rule to key on the **head commit's message token**, not on which files a push touched: a pull-request path filter is evaluated against the PR's whole changed-file set, so the "land bookkeeping first / re-touch a filtered file last" ordering advice is unnecessary and misdiagnoses the cause. Reviewers should verify a rollup claim against the run list at the head SHA rather than reasoning from the filter.
 
 ### What Worked Well
-*(pending)*
+- The differential-validator discipline (same explicit-path command on base and head in parallel worktrees, line numbers stripped, sorted output diffed) separated 169 pre-existing findings from zero regressions in one comparison and made the "explicit paths produce errors on a clean tree" observation a non-event rather than an investigation.
+- Checking mirror parity on the *version-bearing lines only*, path-normalised, rather than on whole files, isolated this PR's edits from the mirror's known pre-existing drift without needing to adjudicate that drift.
+- The implementer raising the out-of-scope residue as an explicit consultation, with a stated decision and rationale, made the scope verdict a confirmation rather than a re-derivation — and surfaced the inert-`update project` consequence that neither the AC nor the grep would have.
 
 ## QA
 ### Impediments & Unclear Points
