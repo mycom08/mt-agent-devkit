@@ -27,7 +27,7 @@ Title format: `[ST-XXXXXX][DEVKIT] Story Title` | Labels: `status:backlog` + `sp
 
 **Documentation stories — AC depth signal:** When writing AC for a documentation or template story, each criterion must state the expected depth explicitly.
 
-**Version-bump AC rule:** When a story requires a `version.txt` bump, write the AC as "`version.txt` bumped" — do not specify the exact target version number. Version numbers are assigned at implementation time; predicting them in the AC creates a mismatch whenever a prior story lands first and shifts the number.
+**Never write a version-bump AC.** The version is owned by the release workflow, not by any story — no story bumps `VERSION`, names a target version number, or creates a `changes.json` version key. Where a story's changes need recording, the AC says the change is folded into the **current** unreleased version's `changes.json` entry and gets a `CHANGELOG.md` bullet — never which version that is.
 
 ---
 
@@ -117,7 +117,7 @@ If any answer is **No**, the story is **not accepted**. State clearly what is mi
 
 ## 9. Release Gate — Sign-Off
 
-You approve the devkit version bump when all Must-Have stories in the sprint are done.
+You approve cutting a devkit release when all Must-Have stories in the sprint are done. The release itself is a manual `release` workflow dispatch — the version number is computed by that job, never chosen by you.
 
 ---
 

@@ -12,7 +12,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.an
 
 | Trigger | Fetch |
 |---|---|
-| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `version.txt` bump, `changes.json` entry shape and ordering. Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
+| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `changes.json` fold-in shape and ordering (the version itself is never hand-edited). Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
 | You have been assigned a story | `§3` (Story Workflow) |
 | Starting a complex change — new workflow stage, major template restructure, new devkit command | `§4` (Design First Before Implementation) |
 | Creating or updating a project document | `§6` (Internal Project Documents) — the canonical paths |
@@ -27,7 +27,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.an
 
 **Purpose:** Gives any project a fully wired AI agent team (Developer, TL, QA, PO, BA) plus sprint workflow files. Developers trigger the devkit once (`init project`), then run `continue sprint` or `start story` inside their project using the injected workflows.
 
-**Status:** 🔄 Active development — see `version.txt` for current version
+**Status:** 🔄 Active development — see `VERSION` for the current in-progress version
 
 **Key traits:** Markdown-first, no compiled artifact, no runtime service. All deliverables are `.md` template files, `.ps1`/`.sh` scripts, and workflow instruction files.
 
@@ -67,7 +67,7 @@ Write format, access control, retention and the character cap are owned by `Agen
 | Templates (for target projects) | `.claude/agents/templates/` |
 | Agent working files | `.antigravity/agents/working/` |
 | Analyst output | `result/analyst/` |
-| Version | `version.txt` |
+| Version | `VERSION` (`x.y.z-SNAPSHOT` on `main`) — owned by `.github/workflows/release.yml`, never hand-edited |
 | Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.claude/agents/templates/`); devkit-internal workflows (`.antigravity/agents/workflows/`) are excluded |
 
 ---
@@ -105,7 +105,7 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 **Template injection:** `init project` reads from `.claude/agents/templates/`, adapts content, and writes to the target project's `.antigravity/agents/`.
 
-**Version tracking:** `version.txt` + `changes.json` allow `sync devkit` (in target projects) to fetch only changed files from GitHub rather than re-installing everything.
+**Version tracking:** `VERSION` + `changes.json` + released `vX.Y.Z` tags allow `sync devkit` (in target projects) to fetch only changed files from GitHub rather than re-installing everything. `sync devkit` resolves the latest release from the highest tag and reads that tag's `changes.json`; the release job stamps `VERSION`, the `CHANGELOG.md` heading, and the `changes.json` key together, so no agent ever edits a version by hand. (`version.txt` is a frozen `0.1.48` bridge artifact for installs predating the tag-based scheme — never bumped, never deleted.)
 
 **Mode bifurcation:** GitHub mode uses GitHub Issues/PRs/Actions. Strict mode stores everything locally and gitignores the entire `.antigravity/agents/` folder.
 

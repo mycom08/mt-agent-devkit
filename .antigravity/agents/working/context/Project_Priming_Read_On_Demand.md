@@ -83,11 +83,11 @@ When a rule, workflow, or instruction file needs to change, update the source te
 **Steps (always in this order):**
 
 1. **Edit the template file** under `.claude/agents/templates/` (e.g., `.claude/agents/templates/rules/QA_Rules_Bootstrap_template.md`)
-2. **Bump the patch version** in `version.txt` (e.g., `0.1.5` → `0.1.6`)
-3. **Add a new entry** to `changes.json` — place it **first**, at the **top** of the object, immediately after the opening `{`. This file is ordered **newest-first (descending)**: the current first key is the latest version and the last key is `0.0.1`:
+2. **Never touch the version.** `.github/workflows/release.yml` owns `VERSION` end to end — at release time it strips the `-SNAPSHOT` suffix, stamps the `CHANGELOG.md` heading, renames the `changes.json` key, tags the release, then opens the next snapshot in all three files. Read `VERSION` to learn the current key; do not edit it, and do not create a `changes.json` version key.
+3. **Fold your files into the existing `-SNAPSHOT` entry** in `changes.json` — the top key, named by `VERSION` (e.g. `0.1.49-SNAPSHOT`). This file is ordered **newest-first (descending)**: the current first key is the version in progress and the last key is `0.0.1`. If a path already carries a `descriptions` clause from earlier work on the same unreleased version, **append** yours rather than replacing it:
 
 ```json
-"0.1.6": {
+"0.1.49-SNAPSHOT": {
   "new": [],
   "modified": [
     ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md"
@@ -100,7 +100,7 @@ When a rule, workflow, or instruction file needs to change, update the source te
 
 Use `"new"` for files added for the first time; `"modified"` for files that already existed. Both can be non-empty in the same entry.
 
-> Target projects running `sync devkit` compare their installed version against `version.txt` and fetch only the files listed in every version entry between their current version and the latest. Keep the file's **newest-first (descending)** order — inserting out of order will cause `sync devkit` to skip or double-apply changes. `validate_templates.py` checks semver parseability only, never ordering direction, so a misplaced entry will not be caught by CI.
+> Target projects running `sync devkit` resolve the latest release from the highest `vX.Y.Z` tag, compare it against their installed version, and fetch only the files listed in every version entry between their current version and the latest. Keep the file's **newest-first (descending)** order — inserting out of order will cause `sync devkit` to skip or double-apply changes. `validate_templates.py` checks semver parseability only, never ordering direction, so a misplaced entry will not be caught by CI.
 
 ### Adding a New Agent Role (Nth Role)
 
