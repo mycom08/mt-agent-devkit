@@ -35,24 +35,30 @@
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+*(stage skipped)*
 
 ### Process Suggestions
-*(pending)*
+*(stage skipped)*
 
 ### What Worked Well
-*(pending)*
+*(stage skipped)*
 
 ## Product Owner
 ### Impediments & Unclear Points
-*(pending)*
+*(stage skipped)*
 
 ### Process Suggestions
-*(pending)*
+*(stage skipped)*
 
 ### What Worked Well
-*(pending)*
+*(stage skipped)*
 
 ## Orchestrator
 ### Observations
-*(pending)*
+- **Stage 1 spanned two sessions and the first session's `impl_session` was dead on resume, forcing a cold re-spawn.** The rule text had been committed without the §15 release bookkeeping (`version.txt`, `changes.json`), so the story read as finished — clean tree, green validator — while two ACs were unstarted. A rule-text commit and its release bookkeeping landing on opposite sides of a commit boundary is the shape that hid it.
+- **The merge gate was unpassable as designed.** `[skip ci]` on an agent-authored commit suppressed `validate-templates.yml`, leaving an **empty** check rollup — which the gate cannot distinguish from a repo with no CI configured. Fixed at the root in `65e0f1e`: §6 now decides `[skip ci]` by CI path filter, not file extension.
+- **An empty commit cannot re-fire a path-filtered `pull_request` trigger.** First attempt at recovering the suppressed run pushed an empty commit; no workflow ran, because such triggers evaluate the files a push changes. A real file-changing push (the merge of `main`) did fire it.
+- **The first real CI run in this repo since `6f51815` failed immediately, on pre-existing breakage.** Four unresolved references to `.claude/agents/orchestrator_instructions.md`: the templates had been renamed to `Orchestrator_Instructions_template.md` while the file they generate stayed lowercase. Fixed in `dd04c89` by renaming the templates to match what they produce.
+- **Local validator runs were not equivalent to CI, and nobody could have known from the output.** `_resolve_file_ref` used `rglob`, case-insensitive on Windows and case-sensitive on Linux, so both the Developer and the TL got a green local gate on a corpus CI rejects. Now case-sensitive on all three resolution roots. This is the highest-value finding of the story: every "validator passed locally" claim made before `dd04c89` was weaker evidence than it appeared.
+- **Three defects, none in the story's scope, all found by trying to merge it honestly.** Had the merge been taken on substituted local evidence, all three would still be live on `main`.
+- Stages 3 and 4 ran as orchestrator fast paths (non-behavioral); no QA or PO agent was spawned, hence `*(stage skipped)*` above. Stage 2 ran a full TL review — mandatory for every story as of `87e1e4a`, regardless of `Type`.
