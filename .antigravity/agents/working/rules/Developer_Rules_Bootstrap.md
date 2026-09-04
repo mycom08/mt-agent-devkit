@@ -118,6 +118,20 @@ If your story touches a file another still-unreleased-version story already desc
 
 Include a one-line check result note in the PR description (e.g., "bash -n check — PASS on all .sh files").
 
+**Run the repo's own aggregate local-CI command — do not run the gates by hand one at a time.** If the repo has a single entry point that runs the full local check set, run that one command; resolve its name from the project's own priming/command surface. Only if no such entry point exists, run the gates individually **in the order CI runs them** — otherwise an early gate that short-circuits the rest is silently skipped. The PR evidence line must name which of the two paths was taken.
+
+**A short-circuiting gate makes every downstream result meaningless.** If a gate CI runs before the others fails or was never run, no later gate result is evidence — a passing gate run after a failing earlier one proves nothing. Fix the failing gate and re-run from it onward.
+
+**Build-dependent behaviour is verified against a production build, never a dev server alone.** Match your change against this trigger list — if it depends on **any** of:
+
+- module bundling, chunk splitting, or import-order rewriting
+- asset hoisting or injection order (stylesheets, scripts, fonts)
+- CSS cascade or specificity order between separately-imported stylesheets
+- minification, tree-shaking, or dead-code elimination
+- code paths compiled out of one build mode but present in the other
+
+…then a dev-server observation is not evidence. Produce a production build and verify against its served/previewed output before opening the PR. Resolve the project's actual build and preview commands from its own priming/command surface. **Where a dev-server observation and a production-build observation could differ, the production-build observation is the one reported as evidence in the PR.** (Markdown-only in this repo today, so the trigger list rarely fires here — it stays in sync with the template per `Project_Priming_Read_On_Demand.md §15`.)
+
 **CHANGELOG.md rule:** Before opening any PR, add a bullet entry to `CHANGELOG.md` under `## [Unreleased]`. If `CHANGELOG.md` does not yet exist, create it using the standard format (see any existing entry as a template). Never skip this step — the first story that touches the repo is responsible for creating the file if absent.
 
 **Pre-merge checklist:**
@@ -190,7 +204,8 @@ Tag **TL** in the comment to request review.
 
 ## Version
 
-**Version:** 2.1 — §6: `[skip ci]` now keys on the CI path filter instead of file extension. `.claude/agents/templates/**` is simultaneously all-Markdown and inside `validate-templates.yml`'s path filter, so the old extension-based rule authorised skipping the gate on this repo's most common change class; PR #181 merged that way unnoticed, and PR #189 hit it again. Records that a suppressed run leaves an empty rollup indistinguishable from no-CI-configured, and that an empty commit cannot re-fire a path-filtered trigger.
+**Version:** 2.2 — §5: production-build verification rule, aggregate local-CI command rule, and short-circuiting-gate rule, mirroring `Developer_Rules_Bootstrap_template.md` v3.2 (ST-000144).
+**Previous:** 2.1 — §6: `[skip ci]` now keys on the CI path filter instead of file extension. `.claude/agents/templates/**` is simultaneously all-Markdown and inside `validate-templates.yml`'s path filter, so the old extension-based rule authorised skipping the gate on this repo's most common change class; PR #181 merged that way unnoticed, and PR #189 hit it again. Records that a suppressed run leaves an empty rollup indistinguishable from no-CI-configured, and that an empty commit cannot re-fire a path-filtered trigger.
 **Previous:** 2.0 — §1–§6 (mandatory reading, story pre-start, status management, file naming, pre-PR gate, git workflow) moved back in from `Developer_Rules_Read_On_Demand.md` at their original numbers. Measured on the 2026-08-21 full-story benchmark (#148/#149): a story spawn triggers all six, so the on-demand round-trip cost a `read-section` skill load plus a 7,640-char fetch and saved nothing — 11,268 chars vs the pre-split file's 11,688, a −3.6% wash. The old §1/§2 became §18/§19 rather than being displaced, so no number is reused. Narrow non-story spawns now pay for §1–§6 they will not use; that is the deliberate trade, since story spawns are the common path.
 **Previous:** 1.1 — Routing table repointed to `Developer_Rules_Read_On_Demand.md` §12–§17 after `Developer_Rules_Extended.md` was merged into it (one on-demand file per role, not two).
 **Created:** 2026-08-21

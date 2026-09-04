@@ -1,4 +1,14 @@
 {
+  "0.1.47": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
+    ],
+    "removed": [],
+    "descriptions": {
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000144] §5 adds production-build verification, aggregate local-CI command, and short-circuiting-gate rules."
+    }
+  },
   "0.1.46": {
     "new": [
       ".claude/agents/templates/github/orchestrator_instructions_template.md",

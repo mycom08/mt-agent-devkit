@@ -83,4 +83,10 @@
 - **Evidence:** ST-000043 PR #137 CR-2 — Agent Roster was the one moved section never listed as replace-verbatim.
 - **Expires when:** never.
 
+### Fact 19
+- **Rule:** An empty `statusCheckRollup` on a `.claude/agents/templates/**` PR means the check was **suppressed**, not passed. `validate-templates.yml`'s `pull_request` path filter matches those files, but `[skip ci]` in the head commit's message cancels the run for the whole PR — so the reviewer CI gate has nothing to read and must not be scored as green. Reproduce `python scripts/validate_templates.py` locally on the exact head SHA with a clean tree, and cite that run instead. Root cause worth a story: `Developer_Rules_Bootstrap` §6 authorises `[skip ci]` whenever every file is `*.md`, but this repo's most common change class is simultaneously all-`*.md` and inside the CI path filter — the exclusion should key on the path filter, not the extension.
+- **Applies when:** reviewing any PR that touches `.claude/agents/templates/**` or `.claude/agents/workflows/**`.
+- **Evidence:** ST-000144 PR #189 (head `0dcb2be`, empty rollup, approved on a local run); same shape on PR #181.
+- **Expires when:** §6's `[skip ci]` condition is rewritten to key on the CI path filter.
+
 > Numbering gaps (6, 13–16) are pruned facts — do not renumber.
