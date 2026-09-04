@@ -132,6 +132,20 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 | API spec drift check | Spec changed and code generation is used | `{code-gen-command}` then `git diff --exit-code {generated-file-path}` | No diff — generated file matches spec |
 | Integration test run | Source code changed | `{integration-test-command}` (start sandbox first) | All assertions pass |
 
+**Run the repo's own aggregate local-CI command — do not run the gates by hand one at a time.** If the repo has a single entry point that runs the full local check set, run that one command; resolve its name from the project's own priming/command surface. Only if no such entry point exists, run the gates individually **in the order CI runs them** — otherwise an early gate that short-circuits the rest is silently skipped. The PR evidence line must name which of the two paths was taken.
+
+**A short-circuiting gate makes every downstream result meaningless.** If a gate CI runs before the others fails or was never run, no later gate result is evidence — a passing gate run after a failing earlier one proves nothing. Fix the failing gate and re-run from it onward.
+
+**Build-dependent behaviour is verified against a production build, never a dev server alone.** Match your change against this trigger list — if it depends on **any** of:
+
+- module bundling, chunk splitting, or import-order rewriting
+- asset hoisting or injection order (stylesheets, scripts, fonts)
+- CSS cascade or specificity order between separately-imported stylesheets
+- minification, tree-shaking, or dead-code elimination
+- code paths compiled out of one build mode but present in the other
+
+…then a dev-server observation is not evidence. Produce a production build and verify against its served/previewed output before opening the PR. Resolve the project's actual build and preview commands from its own priming/command surface. **Where a dev-server observation and a production-build observation could differ, the production-build observation is the one reported as evidence in the PR.**
+
 **Spec-first rule — when story has an API Spec Reference section:**
 When the story's **API Spec Reference** section names one or more endpoints, update the API spec **before** writing any implementation code. Run codegen immediately after the spec update and commit both as the first working commit on the branch. This ensures the spec is the source of truth and prevents a spec-update CR cycle.
 
@@ -214,7 +228,8 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 ## Version
 
-**Version:** 3.1 — §12 routing table: peer-reviewer row now also cites `Developer_Rules_Read_On_Demand.md §12` (full reviewer procedure), and a new hotfix row cites `§13` — both sections added there by the `Story_Standard_Dev_template.md` trim (devkit issue #133 / ST-000134).
+**Version:** 3.2 — §5: production-build verification rule (trigger list for bundling/hoisting/cascade/minification-dependent behaviour; production-build observation is the one reported), aggregate local-CI command rule (run the repo's own entry point, else the gates in CI order, and name which path the PR evidence used), and the short-circuiting-gate rule (ST-000144).
+**Previous:** 3.1 — §12 routing table: peer-reviewer row now also cites `Developer_Rules_Read_On_Demand.md §12` (full reviewer procedure), and a new hotfix row cites `§13` — both sections added there by the `Story_Standard_Dev_template.md` trim (devkit issue #133 / ST-000134).
 **Previous:** 3.0 — Split into a bootstrap tier (this file: §1–§6, unconditional content read on every spawn) and an on-demand tier (`Developer_Rules_Read_On_Demand.md`: §7 through §11, scenario-conditional content fetched only on trigger), mirroring the boundary already validated on the devkit's own team (`working/rules/Developer_Rules_Bootstrap.md` / `Developer_Rules_Read_On_Demand.md`). Mid-implementation consultation and live user instruction conflicts (previously inline in §2) and Peer Review (previously section 11) moved out; sections 9/10's prior pointer-only content (Stage-Transition Commit, Troubleshooting Protocol) retired in favor of the routing table above, since `Agent_Common_Bootstrap.md §5` already covers both universally.
 **Previous:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)
 **Created:** 2026-04-24
