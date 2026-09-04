@@ -20,13 +20,17 @@
 
 ## Reviewer — Technical Lead
 ### Impediments & Unclear Points
-*(pending)*
+- `[failure]` Reproducing a script's behavioural matrix surfaced a locale-dependent failure the implementer's own green run could not have shown: a PCRE-mode regex flag is refused outright under a non-UTF-8 locale, and because the call suppresses stderr the whole check goes silently inert. Same-environment verification cannot prove environment-independence; the failure is invisible precisely where it matters.
+- `[context]` A change that alters the *shape* of a persisted config field only self-heals when the merge step owning that field is actually scheduled to run. Here it is not, so the migration rests permanently on every consumer's fallback parser — correct as built, but nothing in the review inputs states that dependency, so a later change could delete one fallback believing the field had migrated.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` For a story that changes how a value is *resolved* (a fetch base, a version lookup), the reviewer's differential should be "every consumer of the old shape" from a corpus grep, not the diff's file list — the mirror-tree delta line count before and after is a cheap proxy for whether a mirror was converted completely or only partly.
+- `[failure]` Reinforces the retro's implementer bullet on token allow-lists: when a story registers a new token in an invariant checker, the checker file itself is often outside the paths that trigger the checker's own CI job. Worth a standing note that a gate-script edit may not be gated.
 
 ### What Worked Well
-*(pending)*
+- Re-running the implementer's stated six-case matrix independently in both languages, rather than accepting the reported table, confirmed every claim and separately exposed the locale defect — a case where duplicating the implementer's verification was worth its cost rather than wasteful.
+- Normalising placeholder substitutions before diffing a template against its working mirror reduced a 44 KB whole-file diff to a single line, making the mirror-drift check (Memory Fact 11) actually usable on a large file.
+- The story's explicit "accepted trade-off, do not treat as a defect" and "deliberate asymmetry" notes removed two would-be findings before they cost a round — story-level pre-emption of predictable reviewer objections works.
 
 ## QA
 ### Impediments & Unclear Points
