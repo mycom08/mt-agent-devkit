@@ -19,6 +19,10 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [Unreleased]
 
+### Changes
+
+- [ST-000144] Developer rules now require build-dependent behaviour to be verified against a production build rather than a dev server, require the repo's own aggregate local-CI command to be run before opening a PR (or the gates run in CI order when none exists), and state that a short-circuiting gate voids every downstream gate result.
+
 ## 0.1.46 (2026-08-28)
 
 ### Changes
