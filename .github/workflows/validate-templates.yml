@@ -8,6 +8,11 @@ on:
     paths:
       - ".claude/agents/templates/**"
       - ".claude/agents/workflows/**"
+      # The gate script and this workflow must trigger their own gate. Without
+      # these, a PR editing only validate_templates.py runs no check at all, and
+      # `gh pr checks` reporting nothing satisfies the merge gate by default.
+      - "scripts/**"
+      - ".github/workflows/validate-templates.yml"
 
 jobs:
   layer1-validate:

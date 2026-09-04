@@ -5,7 +5,10 @@ VERSION_FILE="{{AGENT_DIR_PREFIX}}/agents/devkit_version.txt"
 CURRENT=$(tr -d '[:space:]' < "$VERSION_FILE")
 
 [ -f "{{ROOT_FILE}}" ] || exit 0
-SOURCE_URL=$(grep -oP '(?<=\*\*Devkit source:\*\* )https?://\S+' {{ROOT_FILE}} 2>/dev/null | head -1)
+# POSIX sed, not `grep -oP`: PCRE mode is refused under a non-UTF-8 locale and is
+# absent entirely from BSD grep (macOS). Because the failure leaves SOURCE_URL empty
+# and the next line exits 0, a PCRE-less host would silently never report an update.
+SOURCE_URL=$(sed -n 's/.*\*\*Devkit source:\*\* \(https*:\/\/[^[:space:]]*\).*/\1/p' {{ROOT_FILE}} 2>/dev/null | head -1)
 [ -n "${SOURCE_URL:-}" ] || exit 0
 SOURCE_URL="${SOURCE_URL%/}"
 SOURCE_URL="${SOURCE_URL%.git}"

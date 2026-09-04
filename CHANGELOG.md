@@ -28,7 +28,11 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Fix] `validate-templates.yml` now also triggers on `scripts/**` and on itself, so a PR that edits only the gate script or the gate workflow still runs the gate instead of reporting no checks at all.
+
 ### Bug Fixes
+
+- [Fix] `check_devkit_version.sh` extracts the devkit source URL with POSIX `sed` instead of `grep -oP`. PCRE mode is refused under a non-UTF-8 locale and is absent from BSD grep (macOS), and the failure left the version check silently inert rather than reporting an error.
 
 ---
 

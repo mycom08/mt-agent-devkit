@@ -1,9 +1,13 @@
 {
   "0.1.49-SNAPSHOT": {
     "new": [],
-    "modified": [],
+    "modified": [
+      ".claude/agents/templates/scripts/check_devkit_version.sh"
+    ],
     "removed": [],
-    "descriptions": {}
+    "descriptions": {
+      ".claude/agents/templates/scripts/check_devkit_version.sh": "[Fix] Extracts the source URL with POSIX sed instead of `grep -oP`, which is refused under a non-UTF-8 locale and absent from BSD grep (macOS) - the failure left the check silently inert."
+    }
   },
   "0.1.48": {
     "new": [],
