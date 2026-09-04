@@ -5,9 +5,13 @@ name: Release
 # Minor/major releases are cut by hand-editing VERSION (and the matching CHANGELOG
 # heading) on main before running this job — the bump-forward step is patch-only.
 #
-# Requires repository secret RELEASE_TOKEN — a PAT (or app token) with `contents:
-# write` that is allowed to push to main. The default GITHUB_TOKEN is not assumed
-# to be able to push to a protected branch.
+# Pushes with RELEASE_TOKEN when that repository secret exists, otherwise with the
+# built-in GITHUB_TOKEN (which `permissions: contents: write` below authorises).
+# `main` is currently unprotected, so GITHUB_TOKEN is sufficient and no secret is
+# required. Protecting `main` later means adding a RELEASE_TOKEN secret — a PAT or
+# app token with `contents: write` allowed to bypass the protection — and this
+# workflow picks it up with no edit. Note that pushes made with GITHUB_TOKEN do not
+# trigger further workflow runs, while pushes made with a PAT do.
 on:
   workflow_dispatch:
 
@@ -37,7 +41,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
 
       - name: Configure Git identity
         run: |
@@ -105,7 +109,7 @@ jobs:
 
       - name: Create tag and GitHub Release
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           gh release create "v${VERSION}" \
@@ -125,7 +129,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
 
       - name: Configure Git identity
         run: |
