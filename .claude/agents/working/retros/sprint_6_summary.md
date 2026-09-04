@@ -1,6 +1,6 @@
 # Sprint 6 — Retro Summary
 **Sprint:** sprint-6
-**Last Updated:** 2026-07-31
+**Last Updated:** 2026-09-04
 
 ---
 
@@ -117,3 +117,33 @@
 
 ### Actions Applied
 *(none — user reviewed all 3 proposed items (§15a enumeration-ripple checklist, reviewer grep-first checklist, TL Memory Fact 9 round-2 diff-recipe fix) and deferred applying any of them this round; left as recorded observations for a future pass.)*
+
+---
+
+## ST-000146 — Release process: VERSION file, single CHANGELOG format, and a manual release job
+**Date:** 2026-09-04
+**Loop counts:** Impl→Reviewer: 0 | Impl→QA: 0
+
+### Findings
+- `[failure]` The story's `RELEASE_TOKEN` requirement rested on an unverified premise: the orchestrator raised "if `main` is protected, `GITHUB_TOKEN` cannot push" as a conditional during requirements gathering, the user answered it, and the conditional was carried into the AC as settled without ever checking. Both `main` and the reference repo's `master` are unprotected, so the merged workflow hard-required a secret that was not needed and would have failed at checkout. *(Orchestrator)*
+- `[failure]` PR #193 fired no CI at all — no changed path matched `validate-templates.yml`'s `paths:` filter — so it reached the merge gate with an empty check rollup that is visually indistinguishable from "all checks passed". The repo's `[skip ci]` rule covers only the inverse case. *(Developer, Technical Lead, Orchestrator)*
+- `[workflow]` `validate-templates.yml`'s `paths:` filter omits `scripts/**`, so a PR editing the gate script itself never runs the gate (TL nit N4). *(Technical Lead)*
+- `[instruction]` The reviewer gate can only distinguish "the right check ran" from "a different check ran and nothing covers the rest" by manually diffing every workflow's `paths:` against the PR's changed paths; neither `Story_Standard_TL.md` §12 nor `CICD_Validation_Guide.md` asks for that comparison. *(Technical Lead)*
+- `[instruction]` `CICD_Validation_Guide.md` has no branch for a PR on which no workflow fires at all — implementer and reviewer each reasoned it out from first principles, from opposite sides. *(Developer, Technical Lead)*
+- `[failure]` A rehearsal script's scratch `mkdir` failed on an unset temp-path variable; the chained sequence kept running in the repo root and overwrote three tracked files mid-implementation, with no error at the point of damage. *(Developer)*
+- `[workflow]` `Start_Story_Workflow.md`'s Stage Entry Check has no `status:backlog` row, so a freshly created story cannot be started without an undocumented orchestrator promotion. *(Orchestrator)*
+- `[failure]` TL approved at `b1fb4f0`, then three agent-authored commits landed before merge, so the merged head was never reviewer-inspected — same class as ST-000145 (#186). *(Orchestrator)*
+- `[context]` The named reference implementation carried a latent defect in one of its own validation checks; following the three listed divergences faithfully would still have copied it. *(Developer)*
+- `[context]` Two `read-section` invocations each re-loaded the full skill instructions before returning anything, costing more than the sections extracted. *(Developer)*
+- `[context]` `git show <ref>:<path>` needs `MSYS_NO_PATHCONV=1` in this Bash tool, and `python3` resolves to a broken Windows Store stub — both recorded as QA_Memory Troubleshooting Facts. *(QA)*
+
+### What Worked Well
+- Both reviewer and QA independently rehearsed the dispatch-only workflow's shell pipelines against copies of the real `VERSION`/`CHANGELOG.md`/`changes.json` rather than reading the YAML — that is what caught the CHANGELOG guard issue and confirmed the bump-forward output. *(Technical Lead, QA)*
+- The implementer's undeclared fourth divergence from the reference (matching `- ` rather than `-`) was correct and load-bearing; TL and QA each reproduced it independently and found the stated rationale wrong while the change itself was required. *(Technical Lead, QA)*
+- QA re-derived all 15 AC from live branch content rather than from the TL's summary, and arrived at the same figures independently. *(QA)*
+- Zero review and zero QA loops — the story closed on the first pass through every stage. *(Orchestrator)*
+
+### Actions Applied
+- `.github/workflows/release.yml` — pushes now use `${{ secrets.RELEASE_TOKEN || github.token }}` in all three places, so a release can be cut with no secret while `main` is unprotected (commit `61f8220`, direct to main at user's direction).
+- `CHANGELOG.md` — bullet recording the token fallback.
+- User reviewed the four proposed retro items (file N4 as a story, patch `CICD_Validation_Guide.md`, add the `status:backlog` Stage Entry Check row, add a scratch-script guardrail) and elected to skip all four this round; left as recorded observations.
