@@ -34,13 +34,17 @@
 
 ## QA
 ### Impediments & Unclear Points
-*(pending)*
+- `[context]` Reinforces: TL's bullet above on the PCRE-lookbehind locale failure. Independently reproduced the same silent-inert path against the unchanged (pre-existing, non-diff) extraction line, in a shell environment whose `locale` output itself reported a UTF-8 category yet still refused the flag — confirming the defect is real and environment-triggering conditions are wider than "non-UTF-8 locale" alone.
+- `[workflow]` Validating a "resolves highest release tag" AC against this repo's own history is impossible while it holds 0 tags (a known, already-raised sequencing gap) — every live-tag assertion had to target external fixture repos instead, which a story's technical scope never names in advance. A story that gates behavior on this repo's own tags should say so explicitly enough that QA doesn't have to invent fixtures from scratch each time.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` For a silent-failure AC ("exit 0 without output when X"), test the *distinct* failure sub-paths separately (unreachable transport vs. reachable-but-empty-result) rather than one representative case — they can share an identical observable outcome while exercising different code, and a matrix that collapses them risks missing a defect unique to one path.
+- `[failure]` When two upstream roles report agreeing on the same claimed matrix, re-deriving it against different fixture data (not just re-running the same fixture) is what actually adds signal — repeating the identical repo/case set would only confirm determinism, not correctness.
 
 ### What Worked Well
-*(pending)*
+- Building fresh scratch fixtures per case (six directories, each a substituted copy of both script twins) let every AC be exercised end-to-end in both languages side by side, including the two silent-exit paths that no static/syntax check can prove.
+- Testing the tag filter against a repo with real pre-release-suffixed tags (`v1.38.0-alpha.0` sorting above the true latest release) went beyond the story's own worked example and gave independent confidence in the regex anchoring itself, not just the sort-order claim.
+- The dual-update carve-out guidance (accounting for the `.antigravity/` mirror's pre-existing leaner shape rather than expecting byte-parity) avoided a false mismatch finding on a file that was already asymmetric before this story touched it.
 
 ## Product Owner
 ### Impediments & Unclear Points
