@@ -61,4 +61,18 @@
 
 ## Orchestrator
 ### Observations
-*(pending)*
+- [orchestrator] Story entered at `status:backlog`, which `Start_Story_Workflow.md`'s Stage Entry Check has no row for; promoted to `status:ready` by hand. Same undocumented step recorded as a retro finding in ST-000146 and skipped at that retro.
+- [Developer] `[skip ci]` guidance in `Developer_Rules_Bootstrap.md §6` is stated per push, but suppression is decided by the PR head commit; a bookkeeping commit landing on top of filtered content emptied the rollup.
+- [Developer] The same shape bit from the opposite direction: a bookkeeping push without `[skip ci]` also emptied the rollup, because a new head SHA re-evaluates the path filter and check runs attach to a SHA. The durable fix is ordering, not phrasing.
+- [Developer] `validate_templates.py` with explicit path arguments reports 160 errors on a clean `main` here, while CI's bare invocation exits 0; `Audit_Agent_Files_Workflow.md` tells agents to use the explicit-path form.
+- [Developer] "Remove instruction X from the corpus" stories need an explicit classification step in the AC, not just a grep instruction — the hit count was ~3x the edit count and three of four hit classes would be corrupted by a blanket replace.
+- [Technical Lead] AC 7 said "the corpus", but the one real miss lives in a contributor-facing README outside the agent directories; corpus-shaped searches and the mirror rules both structurally exclude it.
+- [Technical Lead] `community-retros/README.md` restates `Apply_Retros_Workflow.md` Stage 5 rather than pointing at it; the duplication is the real defect and will re-break on the next release-process change.
+- [Technical Lead] A "note at each read site" mitigation should be verified by counting notes against the grep's site list — 3 of 4 got one, and the miss was the shell script.
+- [Technical Lead] Two consecutive PRs have spent reviewer effort adjudicating empty-vs-populated check rollups on partly-wrong folk theories; the real mechanism (head-commit skip token, PR-wide path filter) deserves one authoritative line in the rules.
+- [orchestrator] TL disproved the Developer's commit-ordering theory by experiment: a `pull_request` `paths:` filter is evaluated against the PR's whole changed-file set, not the pushed commit, so only a skip token in the head commit message empties the rollup.
+- [orchestrator] The story was resumed in a fresh session with the Stage 2 loop-back never executed: the Developer pushed its fix commit but its session ended before it posted a fix-round PR comment or handed back, leaving an approved-looking branch stuck at `status:review`. Nothing in the state file distinguishes "reviewer not yet resumed" from "reviewer running".
+- [orchestrator] The pipeline state file lives at `.claude/agents/working/tmp/`, but `orchestrator_instructions.md`'s Build Software section names `.claude/agents/tmp/` for its own state file; checking the wrong one first reads as a missing state file and invites a needless rebuild.
+- [Technical Lead] The fix round landed with no PR fix-round comment, forcing the reviewer to reconstruct the CR-to-hunk mapping from the commit message alone.
+- [Technical Lead] A review CR that names a call-site ordinal ("the 4th site") without naming the tree it was counted in reads as an under-delivered fix in a dual-surface corpus; round 1's "4th site" and the fix commit's "three sites" were both correct against different trees (`scaffold_mechanical.ps1` exists only under `.antigravity/`).
+- [Technical Lead] PowerShell here-string syntax (`-m @'...'@`) used inside a Bash call silently produced a commit subject prefixed with a literal `@` — the `Agent_Common_Bootstrap.md §6` corruption class, in the opposite direction.
