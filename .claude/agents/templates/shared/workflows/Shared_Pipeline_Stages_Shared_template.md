@@ -241,8 +241,8 @@ After the implementer reports completion, append a bullet to `Observations:` for
 1. Read each reference file listed in the story's Technical Scope using the Read tool
 2. Verify each AC against the diff and reference files:
    - **Every AC confirmed from diff + reference files alone** → record approval:
-     - **GitHub mode:** post approval as `gh pr comment` on the PR
-     - **Strict mode:** update review-record MD `**Status:** approved` and `## Verdict` section; append approval comment entry to story MD `## Comments`
+     - **GitHub mode:** post approval as `gh pr comment` on the PR, citing the current head SHA as `**Approved-SHA:** <sha>` (`gh pr view <PR-number> --json headRefOid --jq '.headRefOid'`) — the Merge Procedure's Approval-scope gate reads this back later
+     - **Strict mode:** update review-record MD `**Status:** approved` and `## Verdict` section, recording `**Approved-SHA:** <sha>` (`git rev-parse HEAD` on the story branch); append approval comment entry to story MD `## Comments`
      → proceed to Stage 3 without spawning a reviewer agent
    - **Any AC requires domain knowledge not derivable from the diff or reference files** (runtime behaviour, architecture, external system specifics) → fall back to the behavioral path below for full TL review
 3. If changes are needed, resume Implementer via `impl_session` (spawn new if expired); re-run this fast path on completion
@@ -255,8 +255,8 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of a full environment re-verification; escalate to full re-verification only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus for verification-only reviews.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the implementation:**
-   - **GitHub mode:** reviewer reviews PR (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
-   - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD; appends summary comment entry to story MD `## Comments`
+   - **GitHub mode:** reviewer reviews PR (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`); an approval comment cites the current head SHA as `**Approved-SHA:** <sha>` (`gh pr view <PR-number> --json headRefOid --jq '.headRefOid'`) — the Merge Procedure's Approval-scope gate reads this back later
+   - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD, recording `**Approved-SHA:** <sha>` (`git rev-parse HEAD` on the story branch) on approval; appends summary comment entry to story MD `## Comments`
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers/trivial-return patterns in AC-functional methods. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Bootstrap.md §2` for the full review checklist, including the CI-execution/SHA/red-diagnosis and dependency-pin checks).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
@@ -312,14 +312,24 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
 
 **If `Mode: github`:**
-0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo {github-org}/{repo-name}`. If any check is `fail`, or any check has not yet reached a `completed` state, **abort the merge** — report the failing/pending check(s) to the user/PO instead of proceeding. This runs regardless of what the reviewer's approval comment claims; it is a mechanical backstop, not a re-trust of the reviewer.
+0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo {github-org}/{repo-name}`. This mechanical backstop recognizes three distinct states at head — resolve each on its own terms, and never treat "no checks reported" as equivalent to "checks passed":
+   - **State 1 — checks reported, all `completed`, none `fail`:** gate satisfied against the head SHA.
+   - **State 2 — any check `fail`, or any check not yet `completed`:** **abort the merge** — report the failing/pending check(s) to the user/PO instead of proceeding. This runs regardless of what the reviewer's approval comment claims; it is a mechanical backstop, not a re-trust of the reviewer.
+   - **State 3 — zero checks reported:** this is **not** State 1. Determine which of two distinct causes applies before proceeding — they resolve differently:
+     - **(a) A CI-suppression token (e.g. `[skip ci]`) sits in the head commit's message.** This suppresses the run for the whole push, not for a specific path — a `pull_request`-triggered `paths:` filter is evaluated against the PR's entire changed-file set on every push, not the individually pushed commit, so a bookkeeping-only commit landing last does not by itself explain an empty rollup when the total diff still contains a CI-eligible path (tested and disproven — ST-000148: a retro-only push still produced a fresh green run at the new head; there is no commit-ordering hazard). To resolve: walk the branch's commits backward from head and find the most recent SHA that actually has a recorded check-run (e.g. `gh api repos/{github-org}/{repo-name}/commits/<SHA>/check-runs`) — that SHA is the last push that wasn't suppressed. If its run is `completed` and passing, the gate is satisfied **against that SHA**, not head; record which SHA was used. If no such run exists, or it failed, treat this the same as State 2 and abort.
+     - **(b) No commit's push ever produced a run because no path in the PR's whole changed-file set (`gh pr diff <PR-number> --name-only`) matches any workflow's `paths:` filter.** Nothing was ever eligible — there is no run to find at any SHA, and none will appear. State this outcome explicitly rather than proceeding silently: the merge decision rests entirely on reviewer sign-off, with the absence of any eligible check recorded as a deliberate, evidenced exception — not as a passed check.
+   - **Audit requirement (whichever state leads to a merge):** before step 2 below, post a `gh pr comment` recording which state applied (1 / 3a / 3b) and the evidence used — the head SHA for State 1, the resolved SHA and its run for 3(a), or the `paths:` non-match determination for 3(b). This is what makes the merge decision auditable after the fact.
+0a. **Approval-scope gate (mandatory, independent of the CI gate):** find the most recent `**Approved-SHA:**` the reviewer cited at Stage 2 and diff it against the current head: `git diff <Approved-SHA> <head-SHA> --name-only`.
+    - **Permitted post-approval additions:** files this same pipeline mandates land after Stage 2 sign-off as another stage's own designated duty — agent memory-file commits (Stage-Transition Commit, `Agent_Common_Read_On_Demand.md §5`), the story's own retro file (`Retro_Rules.md`), and QA's test-scenario document (`QA_Rules_Bootstrap.md §4`). These are compatible with this gate because the pipeline itself schedules them here, not because they are "just docs" — no other post-approval addition gets a pass on that basis.
+    - **Anything else added or modified since the Approved-SHA** (any AC-functional, template, workflow, or code content the reviewer did not see) → the sign-off no longer covers the artifact about to merge. Do not merge; resume the reviewer (`reviewer_session`) with just the post-approval delta for a fresh look, and get a refreshed `Approved-SHA` before retrying this gate.
+    - Add the outcome (unchanged / bookkeeping-only / re-review triggered) to the same audit comment as step 0.
 1. Get the PR branch name: `gh pr view <PR-number> --repo {github-org}/{repo-name} --json headRefName --jq '.headRefName'`
 2. Merge the PR: `gh pr merge <PR-number> --repo {github-org}/{repo-name} --merge`
 3. Delete the remote dev branch: `git push origin --delete <branch-name>`
 4. Switch local branch to target: `git checkout <target-branch>`
 5. Pull to sync: `git pull origin <target-branch>`
 
-> **No-branch-protection note:** on a repo without required-status-checks support (e.g. a private repo without a paid plan), step 0 above is the *only* enforcement that exists — there is no platform backstop to fall back on if it's skipped. Treat it as non-optional baseline pipeline behavior, not best-effort guidance.
+> **No-branch-protection note:** on a repo without required-status-checks support (e.g. a private repo without a paid plan), steps 0 and 0a above are the *only* enforcement that exists — there is no platform backstop to fall back on if either is skipped. Treat both as non-optional baseline pipeline behavior, not best-effort guidance.
 
 **If `Mode: strict`:**
 1. Get the story branch name from the pipeline state file (`Story Branch:` field)
@@ -330,6 +340,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 6. Notify user: `"ST-XXXXXX done — merged into sprint-N-dev"`
    - Do NOT touch the user's branch
    - Do NOT push to remote
+
+> **Strict mode has no CI concept** — State 1/2/3 and the CI-check gate are GitHub-mode only, since strict mode never runs CI checks at all. The Approval-scope gate's underlying principle still applies (the review-record MD's `**Approved-SHA:**` names a specific commit) but is documented here as a principle, not a mechanically enforced step, since strict-mode merges are a direct `git merge` with no PR object to gate.
 
 ### Orchestrator Observation Check — Stage 3
 

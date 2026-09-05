@@ -4,13 +4,15 @@
     "modified": [
       ".claude/agents/templates/scripts/check_devkit_version.sh",
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md",
-      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md"
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md"
     ],
     "removed": [],
     "descriptions": {
       ".claude/agents/templates/scripts/check_devkit_version.sh": "[Fix] Extracts the source URL with POSIX sed instead of `grep -oP`, which is refused under a non-UTF-8 locale and absent from BSD grep (macOS) - the failure left the check silently inert.",
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[Fix] Resolves the scaffold fetch tag by listing release tags and falling back to the highest one when the installed version has no tag of its own; tags begin at v0.1.48, so pinning to v{DEVKIT_VERSION} 404s for every earlier install.",
-      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "[ST-000148] The version-bump AC rule becomes a ban: no story bumps VERSION or names a target version number."
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "[ST-000148] The version-bump AC rule becomes a ban: no story bumps VERSION or names a target version number.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000145] Merge Procedure's CI-check gate now distinguishes checks-passing / checks-failing-pending / zero-checks-reported, resolves zero-checks against the last commit with a real run or an explicit no-eligible-path outcome, and requires the merge decision to be recorded in the PR. Adds an Approval-scope gate comparing the file set at reviewer sign-off against the file set at merge, permitting only pipeline-mandated bookkeeping (memory/retro/test-scenario) commits to land after approval without a fresh review."
     }
   },
   "0.1.48": {
