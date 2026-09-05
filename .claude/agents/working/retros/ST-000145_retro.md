@@ -16,13 +16,16 @@
 
 ## Reviewer — Developer
 ### Impediments & Unclear Points
-*(pending)*
+- `[workflow]` The `read-section` skill returned its own usage instructions instead of extracting the target section when invoked with `skill` + `args`, for two separate citations. Fell back to the documented grep/sed recipe both times with no loss of accuracy, but the skill itself did not do the extraction it exists for.
+- None beyond that on the review content itself — the AC list, the disproven-ordering fact, and the validator's explicit-path baseline were all already correctly recorded in prior stories' records and reused directly.
 
 ### Process Suggestions
-*(pending)*
+- `[workflow]` A differential worktree check (`git worktree add --detach <dir> <ref>`) against a plain branch name for the base ref left the main checkout on the feature branch after the worktrees were removed, rather than the `main` it started on — the repeated `git status --porcelain` check that would have caught it immediately after worktree creation was skipped until after the removal step. Recommend checking `git branch --show-current` on the primary checkout immediately after any worktree operation that references a branch name (not just a commit SHA), not only at session end.
+- `[workflow]` A gate this size (three CI states plus an independent approval-scope gate, mirrored across a template and two working copies) benefits from a differential worktree check as the default verification method for `validate_templates.py`, rather than trusting a single-tree run — the same recipe used here (bare CI-equivalent invocation plus an explicit-path diff against a same-tree base) cleanly separated "new regression" from "known pre-existing findings" without re-deriving the ~160-line baseline from scratch.
 
 ### What Worked Well
-*(pending)*
+- Comparing the touched section of the two working mirrors (`.claude/agents/working/workflows/Shared_Pipeline_Stages.md` and its `.antigravity` counterpart) as an exact line-range diff — rather than reading each in full — caught full parity on the actual PR delta in one command, with no risk of the mirror's known pre-existing staleness being misread as this story's fault.
+- The disproven-ordering fact and the two-cause empty-rollup breakdown were both already on record from a prior story; the new gate text cites the disproof correctly instead of re-introducing the folk theory, confirming the record transferred cleanly into new instruction text.
 
 ## QA
 ### Impediments & Unclear Points
