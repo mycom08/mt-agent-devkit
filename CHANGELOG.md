@@ -29,6 +29,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Changes
 
 - [Fix] `validate-templates.yml` now also triggers on `scripts/**` and on itself, so a PR that edits only the gate script or the gate workflow still runs the gate instead of reporting no checks at all.
+- [ST-000148] Removed manual version bumping from the agent corpus. `apply retros`, `audit agent files`, the TL and PO rules, the project priming files, the orchestrator instructions and the README now point at `VERSION` and the `release` workflow that owns it; agents fold their changes into the current `-SNAPSHOT` key in `changes.json` and never edit a version number.
 
 ### Bug Fixes
 

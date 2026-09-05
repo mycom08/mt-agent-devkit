@@ -138,6 +138,8 @@ Adapt the template:
 - Replace `{{MODE}}` with `strict` or `github` based on the user's Stage 0 choice
 - Replace `{{DEVKIT_SOURCE_URL}}` with the value of `**Devkit source:**` read from this devkit's own `AGENTS.md`
 - Replace `{{DEVKIT_VERSION}}` with the content of `version.txt` at the devkit root
+
+> **`version.txt` is a frozen bridge file, not a live version.** It sits at `0.1.48` permanently — `.github/workflows/release.yml` owns the real version in `VERSION` and never touches `version.txt`. It lags the actual latest release, and the consequence is worse than a stale number: a project scaffolded or updated today is stamped `0.1.48`, which is exactly what `update project` reads back, so that project's `update project` stops at "already up to date" and is **permanently inert**. Do **not** "fix" this by bumping `version.txt` — repointing the stamp at the latest release tag is tracked as a follow-up story (ST-000148 issue thread).
 - All other content is copied verbatim from the template
 
 #### `README.md`

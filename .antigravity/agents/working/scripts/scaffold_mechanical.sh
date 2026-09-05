@@ -128,6 +128,14 @@ cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.
 cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.antigravity/skills/read-section/SKILL.md"
 
 # 5. devkit_version.txt
+# version.txt is a FROZEN BRIDGE FILE, not a live version -- it sits at 0.1.48
+# permanently. release.yml owns the real version in VERSION and never touches
+# version.txt. The stamp written here therefore lags the actual latest release,
+# and the consequence is worse than a stale number: this project is stamped
+# 0.1.48, which is exactly what `update project` reads back, so `update project`
+# stops at "already up to date" and is permanently inert for it. Do NOT "fix"
+# this by bumping version.txt -- repointing the stamp at the latest release tag
+# is tracked as a follow-up story (ST-000148 issue thread).
 cp "$DEVKIT_ROOT/version.txt" "$AGENTS/devkit_version.txt"
 
 # 6. Blank memory files

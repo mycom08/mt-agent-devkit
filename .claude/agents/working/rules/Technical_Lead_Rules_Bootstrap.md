@@ -58,7 +58,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 **Technical constraints (non-negotiable):**
 - No breaking changes to template file names without a migration path
 - Maintain `_template` suffix for all files under `.claude/agents/templates/`
-- Keep `version.txt` and `changes.json` in sync
+- Keep `changes.json` folded into the current `-SNAPSHOT` key named by the root `VERSION` file. `VERSION` is owned end to end by `.github/workflows/release.yml` — never hand-edit it, and never let a PR add a new `changes.json` version key
 
 ---
 

@@ -9,7 +9,7 @@
 Before doing anything else, read the following files to understand the project context:
 
 1. `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` — project overview, glossary, architecture, and current state
-2. `version.txt` — current devkit version
+2. `VERSION` — the current in-progress devkit version (`x.y.z-SNAPSHOT`). Owned by `.github/workflows/release.yml`; never edit it by hand.
 
 ---
 
@@ -138,7 +138,7 @@ Devkit-internal, like the trace convention above. **Never give this file to a sp
 **Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common_Bootstrap.md`.
 
 **When to update (rewrite the current entry in place, or start a new one for a new piece of work):**
-- **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, versions bumped, PR/story refs).
+- **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, PR/story refs).
 - **On explicit close** — if the user says "end session" or "wrap up", finalize the current entry before ending, even if no stage completed since the last write.
 
 **Trigger:** user says **"report working status"** (aliases: "status report", "daily status"). No agents are spawned — read the record directly and summarize the most recent entry to the user (include earlier retained entries only if asked for more history).
@@ -164,7 +164,7 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 | `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project (prompts for mode) |
 | `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project (same logic as `sync devkit` but uses local files) |
 | `build software <idea>` | — | End-to-end workflow: analyze idea, plan repo structure, split docs per repo, initialise repos, and wire the AI Scrum team (Stages 1–3 available; Stages 4–5 in a future release) |
-| `apply retros [label]` | `process retros` | Scan community retro contribution Issues (label `retro:contribution`), prioritise the signals, let you pick which to apply, edit the templates, and bump the version once |
+| `apply retros [label]` | `process retros` | Scan community retro contribution Issues (label `retro:contribution`), prioritise the signals, let you pick which to apply, edit the templates, and fold the batch into the current unreleased version's `changes.json` entry |
 | `audit agent files` | — | Scan the devkit's own agent instruction/rules/workflow corpus for cross-file duplication, contradictions, and dead references (Tier A detection only); write a timestamped report and apply only user-approved findings on a dedicated branch |
 
 ---
@@ -347,7 +347,7 @@ Read `.antigravity/agents/workflows/Build_Software_Workflow.md` for the complete
 
 Trigger: user says **"apply retros"** or **"process retros"** (optionally followed by a label, e.g. `apply retros sprint-3`).
 
-Maintainer workflow that scans community retro contribution Issues on `mycom08/mt-agent-devkit` (label `retro:contribution`), aggregates and prioritises the signals, lets the user pick which to apply, edits the relevant templates directly, and bumps the version once for the whole batch — then archives and closes the processed Issues.
+Maintainer workflow that scans community retro contribution Issues on `mycom08/mt-agent-devkit` (label `retro:contribution`), aggregates and prioritises the signals, lets the user pick which to apply, edits the relevant templates directly, and records the whole batch against the current unreleased version's `changes.json` entry and `CHANGELOG.md` section — then archives and closes the processed Issues. `VERSION` is never edited by hand; `.github/workflows/release.yml` owns it.
 
 - Default scope is **all** open `retro:contribution` Issues. If a label is supplied, only Issues carrying both that label and `retro:contribution` are scanned.
 - Items are ordered most-worth-applying first: critical `[failure]` guardrails, then token/efficiency reductions, then workflow-correctness fixes, then recurring signals, then clarity tweaks.

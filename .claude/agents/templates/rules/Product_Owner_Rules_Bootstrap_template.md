@@ -34,7 +34,7 @@ Without a depth signal, the implementer must guess, which produces either thin s
 
 **PATCH/PUT stories — field mutability gate:** Before marking a story `status:ready`, every field in the request schema must have its mutability explicitly stated in the AC. For each field: is it mutable (can be changed after creation) or immutable (excluded from updates)? Ambiguous mutability is a blocking gap — resolve it at story creation, not during refinement or development.
 
-**Version-bump AC rule:** When a story requires a `version.txt` bump, write the AC as "`version.txt` bumped" — do not specify the exact target version number. Version numbers are assigned at implementation time; predicting them in the AC creates a mismatch whenever a prior story lands first and shifts the number.
+**Never write a version-bump AC.** The repo's `VERSION` file is owned by its release process, not by any story — no story bumps it or names a target version number. Where a story's changes need recording, the AC says the change is recorded against the **current** unreleased version (its `CHANGELOG.md` section, and any change manifest the repo keeps) — never which version that is.
 
 ---
 

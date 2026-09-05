@@ -81,3 +81,9 @@
 - **Applies when:** porting any Claude-surface rule/skill/instruction content to the Antigravity surface.
 - **Evidence:** ST-000135 (issue #118) — three instruction files + `Agent_Common_Read_On_Demand_template.md §8` required hand-adapted "grep" phrasing on Antigravity; `scaffold_mechanical.ps1` has no Claude-surface counterpart.
 - **Expires when:** Antigravity gains its own skill mechanism, or the script matrix becomes symmetric.
+
+### Fact 14
+- **Rule:** Mirror a multi-file edit into a parallel surface mechanically, never by re-running the edits by hand. Diff each primary file against its committed parent (`git show HEAD:<path>`), group the opcodes into hunks with ~3 lines of context, then locate and replace each hunk in the mirror **matching on path-normalised lines** (`.antigravity/` → `.claude/` for comparison only) and re-applying the mirror's own prefixes on write. Verify by normalising both files' `git diff -U0` output and asserting equality. Hand-repeating the edits flattens the mirror's intentional path divergences; the raw-context match fails on lines where the prefix differs, which is why normalisation is the key step.
+- **Applies when:** any change touching both `.claude/agents/` and `.antigravity/agents/` copies of the same file.
+- **Evidence:** ST-000148 — 23 hunks across 7 file pairs mirrored in one pass; normalised-diff equality check confirmed parity on all 7.
+- **Expires when:** the two surfaces stop carrying per-surface path prefixes, or a dedicated mirror tool lands in `scripts/`.

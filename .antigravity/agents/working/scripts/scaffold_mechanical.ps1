@@ -91,6 +91,14 @@ Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.ps1") -Destination
 Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.sh") -Destination (Join-Path $Agents "scripts\check_devkit_version.sh") -Force
 
 # 5. devkit_version.txt
+# version.txt is a FROZEN BRIDGE FILE, not a live version -- it sits at 0.1.48
+# permanently. release.yml owns the real version in VERSION and never touches
+# version.txt. The stamp written here therefore lags the actual latest release,
+# and the consequence is worse than a stale number: this project is stamped
+# 0.1.48, which is exactly what `update project` reads back, so `update project`
+# stops at "already up to date" and is permanently inert for it. Do NOT "fix"
+# this by bumping version.txt -- repointing the stamp at the latest release tag
+# is tracked as a follow-up story (ST-000148 issue thread).
 Copy-Item -Path (Join-Path $DevkitRoot "version.txt") -Destination (Join-Path $Agents "devkit_version.txt") -Force
 
 # 6. Blank memory files -- Developer/QA/Technical_Lead get a two-tier live-index + archive

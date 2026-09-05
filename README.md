@@ -114,7 +114,7 @@ There are two ways to sync devkit improvements into an already-initialized proje
 sync devkit
 ```
 
-Fetches the latest templates directly from the devkit GitHub repository. Compares `**Devkit version:**` in `CLAUDE.md` against `version.txt` on GitHub. If an update is available, resolves which files changed via `changes.json`, shows a preview, and asks for confirmation before writing anything.
+Fetches the latest templates directly from the devkit GitHub repository. Resolves the latest release from the highest `vX.Y.Z` tag on GitHub and compares it against `**Devkit version:**` in `CLAUDE.md`. If an update is available, resolves which files changed via `changes.json`, shows a preview, and asks for confirmation before writing anything.
 
 Best for: project teams who don't have the devkit locally.
 
@@ -141,13 +141,14 @@ After a successful update, `**Devkit version:**` in `CLAUDE.md` and `.claude/age
 
 ## Devkit versioning (for maintainers)
 
-When you change template files, bump the version and record what changed so target projects know exactly what to update.
+When you change template files, record what changed so target projects know exactly what to update. The version number itself is never edited by hand — the `release` workflow owns it.
 
 ### Files to maintain
 
 | File | Purpose |
 |---|---|
-| `version.txt` | Current devkit version (e.g. `0.0.3`) — fetched by `sync devkit` to detect updates |
+| `VERSION` | Current in-progress version (`x.y.z-SNAPSHOT`) — owned by `.github/workflows/release.yml`, never edited by hand |
+| `CHANGELOG.md` | One bullet per merged change under the current `- Unreleased` heading |
 | `changes.json` | Maps each version to the list of template files that changed in that release |
 
 ### `changes.json` format
@@ -172,10 +173,13 @@ When you change template files, bump the version and record what changed so targ
 
 ```
 1. Make your changes to template files under .claude/agents/templates/
-2. Bump version.txt (e.g. 0.0.3 → 0.0.4)
-3. Add the new version entry to changes.json listing only changed template files
+2. Fold the changed template paths into the current -SNAPSHOT entry in changes.json
+   (the key named by VERSION — never add a new version key)
+3. Add a CHANGELOG.md bullet under the current "- Unreleased" heading
 4. Commit and push
-5. Optionally run: update project /path/to/project  ← to update local projects immediately
+5. To cut a release, run the "Release" workflow from the Actions tab. It strips
+   -SNAPSHOT from VERSION, stamps the CHANGELOG heading and changes.json key,
+   tags vX.Y.Z, and opens the next snapshot. VERSION is never edited by hand.
 ```
 
 ---
@@ -322,7 +326,8 @@ your-project/
 mt-agent-devkit/
 ├── CLAUDE.md                          ← orchestrator triggers and pipeline rules
 ├── README.md
-├── version.txt                        ← current devkit version stamp
+├── VERSION                            ← current in-progress version (x.y.z-SNAPSHOT)
+├── CHANGELOG.md                       ← per-version change log
 ├── changes.json                       ← per-version list of changed template files
 └── .claude/
     └── agents/

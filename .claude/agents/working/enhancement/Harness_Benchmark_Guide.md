@@ -35,7 +35,7 @@ The story must be **the same work on both arms**. Requirements:
 
 - **Touches no file that differs between the arms.** Check with `git diff --name-only <baseline>..<treatment>` and pick a target outside that list. A story editing a file the treatment branch renamed does different work on each arm and measures nothing.
 - **Small and fully specified.** Ambiguity lets the two arms diverge on judgment rather than on harness. Spell out the ACs.
-- **No version bump.** Both arms would bump to the same number from different bases, producing divergent releases. Put `version.txt` and `changes.json` explicitly out of scope in the story body.
+- **No manifest bookkeeping.** No story bumps a version any more (the `release` workflow owns `VERSION`), but both arms would still fold into the same `changes.json` key from different bases and conflict. Put `changes.json` and `CHANGELOG.md` explicitly out of scope in the story body.
 - **Realistic path.** It should still exercise branch → edit → validate → commit → PR, or it will not touch the rules the harness change affects.
 
 Real backlog work is preferable to synthetic work — the winning arm's PR can then be reopened as genuine delivery.

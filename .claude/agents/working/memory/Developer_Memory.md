@@ -47,6 +47,9 @@ Keywords: `validate_templates.py` Invariant #2, single-backtick code span, `${ST
 ### Fact 13 — Porting Claude-surface content to Antigravity: two asymmetries to check first
 Keywords: Antigravity, `read-section` skill, no `.claude/skills/` mirror, grep-locate rewrite, `scaffold_mechanical.ps1`, surface parity, symmetric file matrix, `find -iname`
 
+### Fact 14 — Mirror multi-file edits mechanically via normalised hunk replay, not by hand
+Keywords: `.antigravity/` mirror, dual-surface edit, hunk replay, `git show HEAD:<path>`, difflib opcodes, path-normalised match, prefix divergence, normalised-diff parity check
+
 ## Troubleshooting Facts
 
 ### Fix 3 — Worktree-isolated spawn has no `working-record/` directory on first write

@@ -2,7 +2,7 @@
 
 Triggered by: `"apply retros"` or `"process retros"` (optional label filter, e.g. `apply retros sprint-3`) in the devkit's CLAUDE.md.
 
-Scans community retro contribution Issues on `mycom08/mt-agent-devkit`, aggregates their signal items into a prioritized list of devkit improvements, lets the user choose which to apply, edits the relevant templates directly, and bumps the version once for the whole batch. Then archives and closes the processed Issues.
+Scans community retro contribution Issues on `mycom08/mt-agent-devkit`, aggregates their signal items into a prioritized list of devkit improvements, lets the user choose which to apply, edits the relevant templates directly, and records the whole batch against the current unreleased version's `changes.json` entry and `CHANGELOG.md` section. Then archives and closes the processed Issues. The version number itself is never touched — the `release` workflow owns it.
 
 This is a **devkit-internal maintainer workflow** — it is never deployed to target projects and the workflow file itself does not appear in `changes.json`. Only the template files it edits during a run are versioned.
 
@@ -108,27 +108,30 @@ For each **accepted** item, the orchestrator edits the target file directly — 
 
 ---
 
-## Stage 5 — Version Bump (single version for the whole batch)
+## Stage 5 — Manifest & Changelog (one fold-in for the whole batch)
 
-Apply **one** version increment covering all changes from this run.
+Record everything from this run against the **current in-progress version** — the `x.y.z-SNAPSHOT` value in the root `VERSION` file.
 
-1. **Bump `version.txt`** — increment the patch number once (e.g. `0.1.15` → `0.1.16`). Read the current value; do not predict it ahead of time.
-2. **Prepend one `changes.json` entry** at the top of the object (the file is ordered newest-first, immediately after the opening `{`). List every changed **template** file under `new` / `modified`, with a `descriptions` entry per file:
+> **Never edit `VERSION` by hand.** The `release` workflow (`.github/workflows/release.yml`) owns it end to end: it strips the `-SNAPSHOT` suffix, stamps the `CHANGELOG.md` heading and the `changes.json` key, tags the release, then opens the next snapshot in all three files. There is no version-bump step in this pipeline.
+
+1. **Read the current snapshot version** from `VERSION` (e.g. `0.1.49-SNAPSHOT`). Its `changes.json` key and its `## [0.1.49] - Unreleased` `CHANGELOG.md` heading already exist — the release job created both. Read the value; do not predict it.
+2. **Fold this run's changes into that existing `changes.json` entry** — do **not** create a new version key. List every changed **template** file under `new` / `modified`, with a `descriptions` entry per file:
    ```json
-   "0.1.16": {
+   "0.1.49-SNAPSHOT": {
      "new": [],
      "modified": [
        ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
      ],
      "descriptions": {
-       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "Retro (#27): add pre-push secret-scan gate — credentials must source from env with no inline literal default"
+       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[Retro #27] Add a pre-push secret-scan gate; credentials must source from env with no inline literal default."
      }
    }
    ```
-   - Reference the source Issue number(s) in each description (e.g. `Retro (#27)`).
+   - Tag each description with its source Issue number(s) as `[Retro #NN]`, matching the `[ST-NNNNNN]` clause shape used for story-sourced entries and the `CHANGELOG.md` contribution convention. State only what changed, not why — the rationale lives in `CHANGELOG.md` and the commit.
+   - If a path already has a `descriptions` entry under this key (from earlier work on the same unreleased version), **append** your clause rather than replacing it.
    - Devkit-internal workflow edits (under `.antigravity/agents/workflows/`) are **not** listed in `changes.json`.
-   - If **no** template files changed (all accepted items were devkit-internal), still bump the version and add an entry with empty `new`/`modified` and a `_note` description explaining the version-only bump.
-3. **Update `CHANGELOG.md`** — add the applied changes under `## [Unreleased]` (`### Added` / `### Changed` / `### Fixed`), referencing the source Issue(s).
+   - If **no** template files changed (all accepted items were devkit-internal), leave `changes.json` untouched — there is nothing for `sync devkit` to fetch.
+3. **Update `CHANGELOG.md`** — add the applied changes under the current `## [x.y.z] - Unreleased` heading (`### Changes` / `### Bug Fixes`), referencing the source Issue(s). Never add or edit a version heading by hand.
 
 ---
 
@@ -137,10 +140,10 @@ Apply **one** version increment covering all changes from this run.
 For each Issue whose signals were processed this run (applied or explicitly rejected by the user):
 
 1. **Archive** — save the Issue body to `community-retros/archive/sprint-<N>_<YYYY-MM-DD>.md` (resolve `N` and the date from the Retro Export header). Create `community-retros/archive/` if it does not exist. The archived file is the audit trail — never delete it.
-2. **Close** — close the Issue with a comment summarizing the outcome and linking the version:
+2. **Close** — close the Issue with a comment summarizing the outcome and naming the unreleased version it landed in (`VERSION` minus its `-SNAPSHOT` suffix):
    ```bash
    gh issue close <number> --repo mycom08/mt-agent-devkit \
-     --comment "Processed in v<NEW_VERSION>. Applied: <list or 'none'>. Skipped: <list or 'none'>. See CHANGELOG.md."
+     --comment "Processed for the upcoming v<UNRELEASED_VERSION>. Applied: <list or 'none'>. Skipped: <list or 'none'>. See CHANGELOG.md."
    ```
 3. Issues that were in scope but had **no** accepted items remain **open** unless the user said to close them.
 
@@ -151,7 +154,7 @@ For each Issue whose signals were processed this run (applied or explicitly reje
 Summarize to the user (concise):
 
 ```
-apply retros complete — v<OLD> → v<NEW>
+apply retros complete — recorded against v<UNRELEASED_VERSION> (unreleased)
 
 Scanned:   N issue(s) [scope]
 Applied:   M change(s) across K template file(s)
@@ -168,7 +171,7 @@ What worked well (preserve — do not regress):
 ## Pipeline Rules
 
 - **Never edit before the user confirms** in Stage 3.
-- **One version bump per run** — all accepted changes share a single new version and a single `changes.json` entry.
+- **Never hand-edit `VERSION`** — the `release` workflow owns it. All accepted changes fold into the current `-SNAPSHOT` key's existing `changes.json` entry; a run never creates a version key.
 - **Only `.claude/agents/templates/` files go in `changes.json`** — devkit-internal workflow edits do not.
 - **Dual-update pattern** — when a shared template has a synced devkit working copy, update both.
 - **`gh` required** — the workflow reads and closes GitHub Issues; stop early if `gh` is unauthenticated.
