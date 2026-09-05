@@ -30,6 +30,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 - [Fix] `validate-templates.yml` now also triggers on `scripts/**` and on itself, so a PR that edits only the gate script or the gate workflow still runs the gate instead of reporting no checks at all.
 - [ST-000148] Removed manual version bumping from the agent corpus. `apply retros`, `audit agent files`, the TL and PO rules, the project priming files, the orchestrator instructions and the README now point at `VERSION` and the `release` workflow that owns it; agents fold their changes into the current `-SNAPSHOT` key in `changes.json` and never edit a version number.
+- [ST-000145] The Merge Procedure's CI-check gate now distinguishes checks-passing, checks-failing/pending, and zero-checks-reported at the PR head, and never treats the last as equivalent to passing: a `[skip ci]` head commit resolves against the most recent commit with a real run, and a PR whose whole diff never touched a CI-eligible path resolves to an explicit, recorded no-run outcome instead of silence. Adds an Approval-scope gate that diffs the file set at reviewer sign-off against the file set at merge, so agent bookkeeping commits (memory/retro/test-scenario) can land after approval without invalidating it, while any other post-approval change forces a fresh review. Both gates require the merge decision to be recorded on the PR.
 
 ### Bug Fixes
 

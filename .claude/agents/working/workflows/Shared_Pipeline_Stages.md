@@ -211,7 +211,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model: sonnet** instead of opus — Technical Lead reviewer only; a Developer peer reviewer stays on opus/medium.
    - When the reviewer is Technical Lead, the spawn prompt names `Technical_Lead_Rules_Read_On_Demand.md §5` (Code Review & PR Approval) as the section to fetch per its own §15 routing table.
 2. Reviewer reads its own instruction files, memory, and rules
-3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`)
+3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`); an approval comment cites the current head SHA as `**Approved-SHA:** <sha>` (`gh pr view <PR-number> --json headRefOid --jq '.headRefOid'`) — the Merge Procedure's Approval-scope gate reads this back later
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Read_On_Demand.md §5` for the full checklist).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
 5. Reviewer writes retro section to `.claude/agents/working/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
@@ -255,14 +255,24 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
 
-0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo mycom08/mt-agent-devkit`. If any check is `fail`, or any check has not yet reached a `completed` state, **abort the merge** — report the failing/pending check(s) to the user instead of proceeding. This runs regardless of what the reviewer's approval comment claims.
+0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo mycom08/mt-agent-devkit`. Three distinct states at head — resolve each on its own terms, and never treat "no checks reported" as equivalent to "checks passed":
+   - **State 1 — checks reported, all `completed`, none `fail`:** gate satisfied against the head SHA.
+   - **State 2 — any check `fail`, or any check not yet `completed`:** **abort the merge** — report the failing/pending check(s) to the user instead of proceeding. This runs regardless of what the reviewer's approval comment claims.
+   - **State 3 — zero checks reported:** this is **not** State 1. Determine which of two distinct causes applies before proceeding — they resolve differently:
+     - **(a) A CI-suppression token (e.g. `[skip ci]`) sits in the head commit's message.** This suppresses the run for the whole push — `validate-templates.yml`'s `paths:` filter is evaluated against the PR's entire changed-file set on every push, not the individually pushed commit, so a bookkeeping-only commit landing last does not by itself explain an empty rollup when the total diff still touches `.claude/agents/templates/**` or `.claude/agents/workflows/**` (tested and disproven — ST-000148: a retro-only push still produced a fresh green run at the new head; there is no commit-ordering hazard). To resolve: walk the branch's commits backward from head and find the most recent SHA that actually has a recorded check-run (`gh api repos/mycom08/mt-agent-devkit/commits/<SHA>/check-runs`) — that SHA is the last push that wasn't suppressed. If its run is `completed` and passing, the gate is satisfied **against that SHA**, not head; record which SHA was used. If no such run exists, or it failed, treat this the same as State 2 and abort.
+     - **(b) No commit's push ever produced a run because no path in the PR's whole changed-file set (`gh pr diff <PR-number> --name-only`) matches `validate-templates.yml`'s `paths:` filter.** Nothing was ever eligible. State this outcome explicitly rather than proceeding silently: the merge decision rests entirely on reviewer sign-off, with the absence of any eligible check recorded as a deliberate, evidenced exception — not as a passed check.
+   - **Audit requirement (whichever state leads to a merge):** before step 2 below, post a `gh pr comment` recording which state applied (1 / 3a / 3b) and the evidence used.
+0a. **Approval-scope gate (mandatory, independent of the CI gate):** find the most recent `**Approved-SHA:**` the reviewer cited at Stage 2 and diff it against the current head: `git diff <Approved-SHA> <head-SHA> --name-only`.
+    - **Permitted post-approval additions:** agent memory-file commits (Stage-Transition Commit, `Agent_Common_Read_On_Demand.md §5`), the story's own retro file (`Retro_Rules.md`), and QA's test-scenario document (`QA_Rules_Bootstrap.md §4`) — the pipeline itself schedules these here, not because they are "just docs."
+    - **Anything else added or modified since the Approved-SHA** → the sign-off no longer covers the artifact about to merge. Do not merge; resume the reviewer (`reviewer_session`) with just the post-approval delta, and get a refreshed `Approved-SHA` before retrying this gate.
+    - Add the outcome (unchanged / bookkeeping-only / re-review triggered) to the same audit comment as step 0.
 1. Get the PR branch name: `gh pr view <PR-number> --repo mycom08/mt-agent-devkit --json headRefName --jq '.headRefName'`
 2. Merge the PR: `gh pr merge <PR-number> --repo mycom08/mt-agent-devkit --merge`
 3. Delete the remote dev branch: `git push origin --delete <branch-name>`
 4. Switch local branch to target: `git checkout main`
 5. Pull to sync: `git pull origin main`
 
-> **No-branch-protection note:** on a repo without required-status-checks support, step 0 above is the *only* enforcement that exists — treat it as non-optional baseline pipeline behavior.
+> **No-branch-protection note:** on a repo without required-status-checks support, steps 0 and 0a above are the *only* enforcement that exists — treat both as non-optional baseline pipeline behavior.
 
 ### Orchestrator Observation Check — Stage 3
 
