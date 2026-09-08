@@ -225,7 +225,5 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 3.1 — §13 routing table: "Orchestrator assigns TL as story implementer" row now also cites `Technical_Lead_Rules_Read_On_Demand.md §4` (status transitions), added there by the `Story_Standard_TL_template.md` trim (devkit issue #133 / ST-000134).
-**Previous:** 3.0 — Split into a bootstrap tier (this file: §1–§12, unconditional content read on every spawn) and an on-demand tier (`Technical_Lead_Rules_Read_On_Demand.md`: the "When acting as Implementer" branch/PR procedure, Context Anchoring, and Pre-PR Gate as Implementer), mirroring the boundary already validated on the devkit's own team (`working/rules/Technical_Lead_Rules_Bootstrap.md` / `Technical_Lead_Rules_Read_On_Demand.md`). §2 Code Review & PR Approval — the reason TL exists on most spawns — was deliberately not moved.
-**Previous:** 2.2 — §2: one-line trigger pointer to `UI_Prototype_Rules.md` for UI-bearing repos (ST-000022)
+**Version:** 3.1 (see `changes.json` for this file's change history)
 **Created:** 2026-05-01

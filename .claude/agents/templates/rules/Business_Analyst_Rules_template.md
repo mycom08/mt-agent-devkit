@@ -58,6 +58,5 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 1.2 — §3 Story Comment Rules added  
-**Previous:** 1.1 — §5 Troubleshooting Protocol: mandatory diagnose-fix-record loop for tooling/environment blockers  
+**Version:** 1.2 (see `changes.json` for this file's change history)
 **Created:** 2026-05-25

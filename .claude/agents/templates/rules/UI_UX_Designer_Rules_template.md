@@ -184,7 +184,5 @@ On any tooling/environment blocker (prototype won't start, mock backend won't ru
 
 ## Version
 
-**Version:** 1.2 — §1 gate table and the §3/§7 `Story_Standard.md` citations repointed to the new role-scoped `Story_Standard_UIUX.md`, matching the Dev/PO/TL/QA view convention (ST-000124). This file is not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
-**Previous:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022)
-**Previous:** 1.0 — initial version
+**Version:** 1.2 (see `changes.json` for this file's change history) — not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
 **Created:** 2026-07-20
