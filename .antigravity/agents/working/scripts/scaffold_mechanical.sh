@@ -244,45 +244,13 @@ Entry format: `- [ST-XXXXXX] Short description of the change.`
 EOF
 fi
 
-# 10. .antigravity/settings.json SessionStart hook — only handles the "file doesn't exist yet" case,
-#    since merging into arbitrary existing JSON safely needs a real parser, not sed. If the
-#    file already exists, this step is skipped and must be merged separately (this is the
-#    uncommon case for brand-new repos, which is the primary caller of this script).
+# 10. No settings.json SessionStart hook here — Antigravity has no session-start-equivalent
+#    event (only PreToolUse/PostToolUse/PreInvocation/PostInvocation/Stop), and its hooks
+#    read from .agents/hooks.json, not .antigravity/settings.json, so the Claude-Code-style
+#    hook this script used to write here never fired. The devkit-update notice for Antigravity
+#    is delivered instead by orchestrator_instructions.md's Devkit Version Check section,
+#    which runs check_devkit_version explicitly at the first routed command of a session.
 mkdir -p "$TARGET/.antigravity"
-if [[ ! -f "$TARGET/.antigravity/settings.json" ]]; then
-  UNAME_S="$(uname -s 2>/dev/null || echo unknown)"
-  if [[ "$UNAME_S" == MINGW* || "$UNAME_S" == MSYS* || "${OS:-}" == "Windows_NT" ]]; then
-    cat > "$TARGET/.antigravity/settings.json" <<'EOF'
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [{ "type": "command", "command": "powershell -File .antigravity/agents/scripts/check_devkit_version.ps1", "timeout": 10 }]
-      }
-    ]
-  }
-}
-EOF
-  else
-    cat > "$TARGET/.antigravity/settings.json" <<'EOF'
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [{ "type": "command", "command": "bash .antigravity/agents/scripts/check_devkit_version.sh", "timeout": 10 }]
-      }
-    ]
-  }
-}
-EOF
-  fi
-  echo "settings.json: created"
-else
-  echo "settings.json: already exists — SessionStart hook NOT merged, do this separately"
-fi
-
 
 # 11. Substitute framework placeholders in all generated mechanical files
 find "$AGENTS" "$TARGET/.antigravity/skills" -type f \( -name "*.md" -o -name "*.sh" -o -name "*.ps1" \) -exec sed -i \
