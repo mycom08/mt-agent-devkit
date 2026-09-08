@@ -1,9 +1,19 @@
 {
   "0.1.50-SNAPSHOT": {
     "new": [],
-    "modified": [],
+    "modified": [
+      ".claude/agents/templates/shared/orchestrator_instructions_shared_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md"
+    ],
     "removed": [],
-    "descriptions": {}
+    "descriptions": {
+      ".claude/agents/templates/shared/orchestrator_instructions_shared_template.md": "[Fix] New Devkit Version Check section: since Antigravity has no session-start-equivalent event, the orchestrator now runs `check_devkit_version` explicitly before routing the first command of a session and surfaces its message if present. No-op for Claude Code, which already gets this via its `SessionStart` hook.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[Fix] `settings.json`'s `SessionStart` hook is now injected only when `{{AGENT_CLI_NAME}}` is Claude Code - Antigravity doesn't read `settings.json` for hooks at all, so the previous unconditional injection was always dead for Antigravity installs.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "[Fix] Same `settings.json` hook fix as `Sync_Devkit_Workflow_template.md`, applied to the monorepo sub-project sync variant.",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[Fix] Universal scaffold-set description now notes the `settings.json` `SessionStart` hook is Claude Code only, matching the `sync devkit` fix."
+    }
   },
   "0.1.49": {
     "new": [

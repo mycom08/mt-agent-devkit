@@ -30,6 +30,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [Fix] The Antigravity devkit-update notice never fired: `sync devkit`/`init project` injected a Claude-Code-style `settings.json` `SessionStart` hook, but Antigravity has no session-start-equivalent event and reads hooks from `.agents/hooks.json`, not `settings.json` — the injected hook was always dead. `settings.json` is no longer touched for this on the Antigravity path; `orchestrator_instructions.md` gains a Devkit Version Check section that runs `check_devkit_version` explicitly before routing the first command of a session instead.
+
 ---
 
 ## [0.1.49] - 2026-09-08

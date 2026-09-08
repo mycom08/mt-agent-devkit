@@ -145,9 +145,11 @@ Fetch and write verbatim (strip the `_template` suffix). This file updates itsel
 
 Fetch and write verbatim. These are identical to the regular-repo versions — no orchestrator-specific behavior.
 
-#### Settings hook — Inject if missing
+#### Settings hook — Inject if missing (`{{AGENT_CLI_NAME}}` = Claude Code only)
 
-Check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
+Antigravity has no session-start-equivalent event and does not read `settings.json` for hooks (its hooks live in `.agents/hooks.json`) — skip this step when `{{AGENT_CLI_NAME}}` is `Antigravity`; its devkit-update notice comes from `orchestrator_instructions.md`'s Devkit Version Check section instead.
+
+When `{{AGENT_CLI_NAME}}` is `Claude Code`, check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
 - If a `SessionStart` entry whose command references `check_devkit_version` already exists → skip
 - If missing → inject it using the same OS-detection logic as `scaffold_mechanical.sh`'s settings.json step (merge into existing `settings.json`, or create it if absent)
 
