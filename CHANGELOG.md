@@ -24,6 +24,14 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
+## [0.1.50] - Unreleased
+
+### Changes
+
+### Bug Fixes
+
+---
+
 ## [0.1.49] - 2026-09-08
 
 ### Changes

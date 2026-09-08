@@ -1,4 +1,10 @@
 {
+  "0.1.50-SNAPSHOT": {
+    "new": [],
+    "modified": [],
+    "removed": [],
+    "descriptions": {}
+  },
   "0.1.49": {
     "new": [
       ".claude/agents/templates/skills/read-section/scripts/read_section.sh"
