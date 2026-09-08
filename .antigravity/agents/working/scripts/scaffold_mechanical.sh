@@ -28,7 +28,7 @@ fi
 # 1. Directories
 mkdir -p "$AGENTS/context" "$AGENTS/memory" "$AGENTS/rules" "$AGENTS/working-record" \
          "$AGENTS/workflows" "$AGENTS/scripts" "$AGENTS/retros" "$AGENTS/tmp" "$AGENTS/docs" \
-         "$TARGET/docs/wiki" "$TARGET/.antigravity/skills/read-section"
+         "$TARGET/docs/wiki" "$TARGET/.antigravity/skills/read-section/scripts"
 # No .gitkeep for retros/ — it's gitignored below (github mode) or covered by the blanket
 # .antigravity/agents/ ignore (strict mode), so an empty-dir placeholder would never be committed.
 
@@ -126,6 +126,8 @@ cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.
 #    .antigravity/skills/, a sibling of .antigravity/agents/, not under it, since that is
 #    where Antigravity discovers project-level skills.
 cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.antigravity/skills/read-section/SKILL.md"
+cp "$TPL/skills/read-section/scripts/read_section.sh" "$TARGET/.antigravity/skills/read-section/scripts/read_section.sh"
+chmod +x "$TARGET/.antigravity/skills/read-section/scripts/read_section.sh"
 
 # 5. devkit_version.txt
 # version.txt is a FROZEN BRIDGE FILE, not a live version -- it sits at 0.1.48

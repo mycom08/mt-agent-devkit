@@ -55,7 +55,7 @@ Files to update (targeted):        ← if changes.json resolved cleanly
   — or —
 
 Full scan triggered                ← if any version was missing from changes.json
-  Files to overwrite:  rules/ (N), workflows/ (N), orchestrator_instructions.md, skills/read-section/SKILL.md
+  Files to overwrite:  rules/ (N), workflows/ (N), orchestrator_instructions.md, skills/read-section/SKILL.md, skills/read-section/scripts/read_section.sh
   Files to merge:      instructions/ (6), CLAUDE.md
   Files to skip:       Project_Priming.md, memory/ (6), working-record/ (6)
 ```
@@ -111,9 +111,12 @@ Files: all workflow files listed above. Never write `Analyst_Workflow.md` or `In
 **Source:** `.claude/agents/templates/skills/read-section/SKILL_template.md` (local devkit)
 **Target:** `{TARGET_PROJECT}/.claude/skills/read-section/SKILL.md`
 
-Read the local template and write verbatim (strip the `_template` suffix). Create `{TARGET_PROJECT}/.claude/skills/read-section/` if it does not exist. Carries no project-specific content.
+**Source:** `.claude/agents/templates/skills/read-section/scripts/read_section.sh` (local devkit)
+**Target:** `{TARGET_PROJECT}/.claude/skills/read-section/scripts/read_section.sh`
 
-Files: `SKILL.md` under `skills/read-section/` (1 file).
+Read the local template and write verbatim (strip the `_template` suffix from `SKILL.md`; the script has no suffix to strip). Create `{TARGET_PROJECT}/.claude/skills/read-section/scripts/` if it does not exist (this also creates the parent `read-section/` dir). Make the script executable (`chmod +x`). Carries no project-specific content.
+
+Files: `SKILL.md` and `scripts/read_section.sh` under `skills/read-section/` (2 files).
 
 ### Instruction files — Merge
 

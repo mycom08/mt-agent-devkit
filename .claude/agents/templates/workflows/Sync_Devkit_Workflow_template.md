@@ -110,7 +110,7 @@ Files to update (targeted):
   — or —
 
 Full scan triggered (N files)
-  Files to overwrite:  rules/ (N), workflows/ (N), orchestrator_instructions.md, skills/read-section/SKILL.md
+  Files to overwrite:  rules/ (N), workflows/ (N), orchestrator_instructions.md, skills/read-section/SKILL.md, skills/read-section/scripts/read_section.sh
   Files to merge:      instructions/ (6), {{ROOT_FILE}}
   Files to skip:       Project_Priming.md, memory/ (6), working-record/ (6)
 ```
@@ -192,9 +192,12 @@ Fetch and write verbatim. Create `{{AGENT_DIR_PREFIX}}/agents/scripts/` if it do
 **Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/skills/read-section/SKILL_template.md`
 **Target:** `{{AGENT_DIR_PREFIX}}/skills/read-section/SKILL.md`
 
-Fetch and write verbatim (strip the `_template` suffix). Create `{{AGENT_DIR_PREFIX}}/skills/read-section/` if it does not exist. Carries no project-specific content, same reasoning as script files above.
+**Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/skills/read-section/scripts/read_section.sh`
+**Target:** `{{AGENT_DIR_PREFIX}}/skills/read-section/scripts/read_section.sh`
 
-Applies to: `SKILL.md` under `skills/read-section/` (1 file).
+Fetch and write verbatim (strip the `_template` suffix from `SKILL.md`; the script has no suffix to strip). Create `{{AGENT_DIR_PREFIX}}/skills/read-section/scripts/` if it does not exist (this also creates the parent `read-section/` dir). Make the script executable (`chmod +x`). Carries no project-specific content, same reasoning as script files above.
+
+Applies to: `SKILL.md` and `scripts/read_section.sh` under `skills/read-section/` (2 files).
 
 #### Settings hook — Inject if missing
 
@@ -311,7 +314,7 @@ After all updates are applied, scan each managed directory and flag any file not
 `check_devkit_version.ps1`, `check_devkit_version.sh`
 
 **Expected files — `{{AGENT_DIR_PREFIX}}/skills/`** (sibling of `{{AGENT_DIR_PREFIX}}/agents/`, not scanned as part of it — check separately):
-`read-section/SKILL.md`
+`read-section/SKILL.md`, `read-section/scripts/read_section.sh`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/`, `internal/` — these are project-owned, runtime-output, or agent-managed and may contain custom or transient files. `internal/` specifically holds only this workflow's own audit report while a Stage 4 run is in flight (see Stage 4) and is always empty between runs.
 

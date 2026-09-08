@@ -28,7 +28,7 @@ fi
 # 1. Directories
 mkdir -p "$AGENTS/context" "$AGENTS/memory" "$AGENTS/rules" "$AGENTS/working-record" \
          "$AGENTS/workflows" "$AGENTS/scripts" "$AGENTS/retros" "$AGENTS/tmp" "$AGENTS/docs" \
-         "$TARGET/docs/wiki" "$TARGET/.claude/skills/read-section"
+         "$TARGET/docs/wiki" "$TARGET/.claude/skills/read-section/scripts"
 # No .gitkeep for retros/ — it's gitignored below (github mode) or covered by the blanket
 # .claude/agents/ ignore (strict mode), so an empty-dir placeholder would never be committed.
 
@@ -127,6 +127,8 @@ cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.
 #    .claude/skills/, a sibling of .claude/agents/, not under it, since that is
 #    where Claude Code discovers project-level skills.
 cp "$TPL/skills/read-section/SKILL_template.md" "$TARGET/.claude/skills/read-section/SKILL.md"
+cp "$TPL/skills/read-section/scripts/read_section.sh" "$TARGET/.claude/skills/read-section/scripts/read_section.sh"
+chmod +x "$TARGET/.claude/skills/read-section/scripts/read_section.sh"
 
 # 5. devkit_version.txt
 # version.txt is a FROZEN BRIDGE FILE, not a live version -- it sits at 0.1.48
