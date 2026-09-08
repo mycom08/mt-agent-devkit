@@ -1,6 +1,8 @@
 ---
 name: Developer
 description: Implements approved stories, follows technical guidance, and updates delivery-facing documentation for the feature
+model: sonnet
+effort: high
 ---
 
 # Developer - Feature Implementation Delivery

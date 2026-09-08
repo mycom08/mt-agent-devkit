@@ -211,6 +211,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 | A question surfaces mid-implementation | `Developer_Rules_Read_On_Demand.md §10` (Mid-Implementation Consultation) |
 | A live user instruction contradicts a prior decision recorded in the issue thread | `Developer_Rules_Read_On_Demand.md §11` (Live User Instruction Conflicts) |
 | A post-Done bug (hotfix) | `Developer_Rules_Read_On_Demand.md §13` |
+| Orchestrator asks you to run a Sprint Refinement | `Developer_Rules_Read_On_Demand.md §14` (Refine Sprint Task) |
 | Signaling stage completion to the orchestrator, or you changed a memory file this session | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — mandatory before handoff |
 | A tooling/environment blocker | First scan your own `## Troubleshooting Facts` for a recorded fix; fetch `Agent_Common_Read_On_Demand.md §2` only for the diagnose-and-record-back procedure |
 
@@ -228,7 +229,8 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 ## Version
 
-**Version:** 3.2 — §5: production-build verification rule (trigger list for bundling/hoisting/cascade/minification-dependent behaviour; production-build observation is the one reported), aggregate local-CI command rule (run the repo's own entry point, else the gates in CI order, and name which path the PR evidence used), and the short-circuiting-gate rule (ST-000144).
+**Version:** 3.3 — §12 routing table: new row for `Developer_Rules_Read_On_Demand.md §14` (Refine Sprint Task), relocated out of `developer_instructions_template.md`.
+**Previous:** 3.2 — §5: production-build verification rule (trigger list for bundling/hoisting/cascade/minification-dependent behaviour; production-build observation is the one reported), aggregate local-CI command rule (run the repo's own entry point, else the gates in CI order, and name which path the PR evidence used), and the short-circuiting-gate rule (ST-000144).
 **Previous:** 3.1 — §12 routing table: peer-reviewer row now also cites `Developer_Rules_Read_On_Demand.md §12` (full reviewer procedure), and a new hotfix row cites `§13` — both sections added there by the `Story_Standard_Dev_template.md` trim (devkit issue #133 / ST-000134).
 **Previous:** 3.0 — Split into a bootstrap tier (this file: §1–§6, unconditional content read on every spawn) and an on-demand tier (`Developer_Rules_Read_On_Demand.md`: §7 through §11, scenario-conditional content fetched only on trigger), mirroring the boundary already validated on the devkit's own team (`working/rules/Developer_Rules_Bootstrap.md` / `Developer_Rules_Read_On_Demand.md`). Mid-implementation consultation and live user instruction conflicts (previously inline in §2) and Peer Review (previously section 11) moved out; sections 9/10's prior pointer-only content (Stage-Transition Commit, Troubleshooting Protocol) retired in favor of the routing table above, since `Agent_Common_Bootstrap.md §5` already covers both universally.
 **Previous:** 2.11 — §2: one-line trigger pointer to `Logging_Standard.md` for source code stories (ST-000023)

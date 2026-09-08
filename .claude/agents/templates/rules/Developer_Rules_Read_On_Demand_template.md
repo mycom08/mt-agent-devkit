@@ -120,8 +120,48 @@ Triggered from `Story_Standard_Dev.md` §6. When a bug is found after a story is
 
 ---
 
+## 14. Refine Sprint Task (only when the orchestrator asks for a Sprint Refinement)
+
+Triggered from `developer_instructions.md`'s Refine Sprint Task heading. The orchestrator-owned procedure is `Refine_Sprint_Workflow.md` Stages 1 and 3; this section is the Developer's view of it.
+
+When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps.
+
+### Step 1 — Fetch Target Stories
+1. Read `docs/feature/{feature-name}/plan/Product_Backlog.md` — find the sprint marked `🔲 Planned` and note its sprint label (e.g., `sprint-5`)
+2. Run: `gh issue list --repo {github-org}/{repo-name} --label "sprint-N" --label "status:backlog" --state open`
+3. For each returned issue, read the full body: User Story, AC, Technical Scope, API Spec Reference
+
+### Step 2 — Identify Open Points Per Story
+For each story ask:
+- Is every AC criterion specific, testable, and unambiguous? (scope/AC question → tag PO)
+- Are all referenced API endpoints defined in `docs/api/`? (technical question → tag TL)
+- Are there implementation dependencies, design decisions, or architecture questions not answered in the story? (technical question → tag TL)
+- Are there acceptance criteria that conflict with or are missing from the roadmap? (scope question → tag PO)
+- **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
+
+If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
+
+### Step 3 — Post Question Comments
+For each story with open points, post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format:
+- Group technical questions under a `**TL**` heading
+- Group scope/AC questions under a `**PO**` heading
+- Set `**Thread Status:** Open`
+- One comment per story — do not open separate comments for separate questions on the same story
+
+### Step 4 — Review Answers and Confirm
+After the orchestrator notifies you that TL and PO have answered:
+1. Re-read each comment thread where you posted questions
+2. If all answers are clear → post a final reply in the **same comment thread**:
+   > "All open points resolved — story is ready for development. PO please move to ready."
+   > Set `**Thread Status:** Resolved`
+3. If an answer is insufficient or raises a new question → post a follow-up in the **same thread** (do not open a new comment); report back to orchestrator to trigger another TL/PO answer cycle
+4. Update your Working Record
+
+---
+
 ## Version
 
-**Version:** 1.1 — Added §12 (Developer as Reviewer) and §13 (Hotfix), relocated from `Story_Standard_Dev_template.md` sections 4, 6, and 12 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
+**Version:** 1.2 — Added §14 (Refine Sprint Task), relocated verbatim from `developer_instructions_template.md`, which now carries a one-line trigger pointer instead of the full procedure; the instruction file is read on every Developer spawn, the refinement procedure applies to one workflow.
+**Previous:** 1.1 — Added §12 (Developer as Reviewer) and §13 (Hotfix), relocated from `Story_Standard_Dev_template.md` sections 4, 6, and 12 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
 **Previous:** 1.0 — Split out of `Developer_Rules_template.md` v2.11 (§7–§8 relocated as-is; §11 Peer Review relocated as-is, renumbered §9; Mid-Implementation Consultation and Live User Instruction Conflicts extracted from §2's inline text, new §10/§11), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25

@@ -25,50 +25,14 @@ Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` **in full** �
 | Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
 | Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/Developer_Working_Record.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `{{AGENT_DIR_PREFIX}}/agents/rules/Developer_Rules_Bootstrap.md` |
-| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory.md` |
-
----
-
-## Project Memory
-
-Record durable facts in `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory.md` (live index) with full fact bodies in `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
+| Memory — live index | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory.md` |
+| Memory — fact archive: **never** read at spawn and never read in full; open one section only when an index line's keywords match the task (mechanics: `Agent_Common_Read_On_Demand.md §8`) | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory_Archive.md` |
 
 ---
 
 ## Refine Sprint Task
 
-When the orchestrator asks you to run a **Sprint Refinement**, execute the following steps.
-
-### Step 1 — Fetch Target Stories
-1. Read `docs/feature/{feature-name}/plan/Product_Backlog.md` — find the sprint marked `🔲 Planned` and note its sprint label (e.g., `sprint-5`)
-2. Run: `gh issue list --repo {github-org}/{repo-name} --label "sprint-N" --label "status:backlog" --state open`
-3. For each returned issue, read the full body: User Story, AC, Technical Scope, API Spec Reference
-
-### Step 2 — Identify Open Points Per Story
-For each story ask:
-- Is every AC criterion specific, testable, and unambiguous? (scope/AC question → tag PO)
-- Are all referenced API endpoints defined in `docs/api/`? (technical question → tag TL)
-- Are there implementation dependencies, design decisions, or architecture questions not answered in the story? (technical question → tag TL)
-- Are there acceptance criteria that conflict with or are missing from the roadmap? (scope question → tag PO)
-- **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
-
-If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
-
-### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format:
-- Group technical questions under a `**TL**` heading
-- Group scope/AC questions under a `**PO**` heading
-- Set `**Thread Status:** Open`
-- One comment per story — do not open separate comments for separate questions on the same story
-
-### Step 4 — Review Answers and Confirm
-After the orchestrator notifies you that TL and PO have answered:
-1. Re-read each comment thread where you posted questions
-2. If all answers are clear → post a final reply in the **same comment thread**:
-   > "All open points resolved — story is ready for development. PO please move to ready."
-   > Set `**Thread Status:** Resolved`
-3. If an answer is insufficient or raises a new question → post a follow-up in the **same thread** (do not open a new comment); report back to orchestrator to trigger another TL/PO answer cycle
-4. Update your Working Record
+Only when the orchestrator asks you to run a **Sprint Refinement** — full procedure in `{{AGENT_DIR_PREFIX}}/agents/rules/Developer_Rules_Read_On_Demand.md §14`. Otherwise skip; it is not part of the standard Pre-Work Checklist.
 
 ---
 
@@ -84,9 +48,3 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 ## End-of-Work — Retrospective
 
 Write your retro per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Implementer — Developer` section only.
-
----
-
-## Working Record
-
-Update `{{AGENT_DIR_PREFIX}}/agents/working-record/Developer_Working_Record.md` at start and end of each session per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md §1`.
