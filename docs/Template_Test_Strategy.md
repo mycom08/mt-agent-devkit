@@ -5,6 +5,8 @@
 **Layer-1 tool:** `scripts/validate_templates.py`  
 **CI gate:** `.github/workflows/validate-templates.yml`
 
+**Behavioral companion:** [Agent Workflow Test Strategy](./Agent_Workflow_Test_Strategy.md)
+
 ---
 
 ## 1. Purpose and Scope

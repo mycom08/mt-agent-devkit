@@ -14,6 +14,20 @@ A devkit that injects a complete AI Scrum team setup into any project. It provid
 
 ---
 
+## Agent Harness Efficiency Work
+
+When working on agent context efficiency, stage-specific read profiles, or
+agent workflow testing, read in this order:
+
+1. `docs/reviews/Stage_Specific_Read_Profiles_Proposal.md`
+2. `docs/Agent_Workflow_Test_Strategy.md`
+
+Read `docs/reviews/Agent_Harness_Token_Efficiency_Analysis.md` only when
+supporting evidence or baseline measurements are needed. Read
+`docs/Template_Test_Strategy.md` when changing test infrastructure.
+
+---
+
 ## Agent Roster
 
 Each specialized agent must read its instruction file before starting any work.
