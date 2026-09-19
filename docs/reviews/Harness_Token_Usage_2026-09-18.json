@@ -1,0 +1,236 @@
+{
+  "method": "Assistant events grouped by message.id per transcript; first input/cache fields (verified invariant within groups), max output per group. Selected four role transcripts per story; excludes orchestrator, refinement and other sessions. Usage units, not invoice cost.",
+  "stories": {
+    "ST-000161": {
+      "agents": [
+        {
+          "role": "Developer",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\7bd6062a-54db-49d0-a764-74fabe26c334\\subagents\\agent-a07d70a9d60e51998.jsonl",
+          "requests": 120,
+          "models": [
+            "claude-sonnet-5"
+          ],
+          "usage": {
+            "input_tokens": 240,
+            "cache_creation_input_tokens": 598817,
+            "cache_read_input_tokens": 18015673,
+            "output_tokens": 58691
+          },
+          "first_request_input": 41946,
+          "last_request_all_tokens": 230388,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Bash": 82,
+            "Read": 26,
+            "Skill": 3,
+            "Edit": 11,
+            "Write": 3,
+            "ToolSearch": 2,
+            "Monitor": 1
+          }
+        },
+        {
+          "role": "TL",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\7bd6062a-54db-49d0-a764-74fabe26c334\\subagents\\agent-a826a28014f553485.jsonl",
+          "requests": 71,
+          "models": [
+            "claude-opus-5"
+          ],
+          "usage": {
+            "input_tokens": 142,
+            "cache_creation_input_tokens": 413475,
+            "cache_read_input_tokens": 7929834,
+            "output_tokens": 40537
+          },
+          "first_request_input": 36606,
+          "last_request_all_tokens": 160901,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Read": 8,
+            "Bash": 52,
+            "Edit": 15,
+            "Write": 1,
+            "ToolSearch": 1,
+            "Monitor": 1
+          }
+        },
+        {
+          "role": "QA",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\7bd6062a-54db-49d0-a764-74fabe26c334\\subagents\\agent-a55bf9a94e101b9a0.jsonl",
+          "requests": 146,
+          "models": [
+            "claude-sonnet-5"
+          ],
+          "usage": {
+            "input_tokens": 292,
+            "cache_creation_input_tokens": 491178,
+            "cache_read_input_tokens": 23627859,
+            "output_tokens": 47099
+          },
+          "first_request_input": 42009,
+          "last_request_all_tokens": 227766,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Bash": 89,
+            "Read": 22,
+            "Skill": 2,
+            "ToolSearch": 5,
+            "mcp__claude-in-chrome__list_connected_browsers": 1,
+            "mcp__claude-in-chrome__tabs_context_mcp": 1,
+            "mcp__claude-in-chrome__navigate": 3,
+            "mcp__claude-in-chrome__computer": 10,
+            "mcp__claude-in-chrome__javascript_tool": 3,
+            "mcp__claude-in-chrome__read_network_requests": 1,
+            "mcp__claude-in-chrome__tabs_create_mcp": 1,
+            "mcp__claude-in-chrome__tabs_close_mcp": 1,
+            "mcp__claude-in-chrome__resize_window": 1,
+            "Write": 2,
+            "Monitor": 3,
+            "Edit": 7,
+            "Grep": 5
+          }
+        },
+        {
+          "role": "PO",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\7bd6062a-54db-49d0-a764-74fabe26c334\\subagents\\agent-a96b6a0663fae1de3.jsonl",
+          "requests": 10,
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "usage": {
+            "input_tokens": 82,
+            "cache_creation_input_tokens": 54109,
+            "cache_read_input_tokens": 423709,
+            "output_tokens": 5146
+          },
+          "first_request_input": 31013,
+          "last_request_all_tokens": 55468,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Read": 4,
+            "Bash": 5,
+            "Write": 1,
+            "Edit": 1
+          }
+        }
+      ],
+      "totals": {
+        "input_tokens": 756,
+        "cache_creation_input_tokens": 1557579,
+        "cache_read_input_tokens": 49997075,
+        "output_tokens": 151473,
+        "requests": 347
+      }
+    },
+    "ST-000199": {
+      "agents": [
+        {
+          "role": "Developer",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\71172a21-ab41-43f4-ad11-a87f6559093b\\subagents\\agent-a978a88bf91e3abdd.jsonl",
+          "requests": 48,
+          "models": [
+            "claude-sonnet-5"
+          ],
+          "usage": {
+            "input_tokens": 96,
+            "cache_creation_input_tokens": 205525,
+            "cache_read_input_tokens": 4243395,
+            "output_tokens": 14284
+          },
+          "first_request_input": 42027,
+          "last_request_all_tokens": 109834,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Read": 8,
+            "Bash": 39,
+            "Edit": 3,
+            "Grep": 1,
+            "Skill": 2,
+            "Write": 1
+          }
+        },
+        {
+          "role": "TL",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\71172a21-ab41-43f4-ad11-a87f6559093b\\subagents\\agent-ae406e625b761ee60.jsonl",
+          "requests": 40,
+          "models": [
+            "claude-opus-5"
+          ],
+          "usage": {
+            "input_tokens": 80,
+            "cache_creation_input_tokens": 268513,
+            "cache_read_input_tokens": 3017643,
+            "output_tokens": 19041
+          },
+          "first_request_input": 36349,
+          "last_request_all_tokens": 99212,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Read": 6,
+            "Bash": 28,
+            "Edit": 9,
+            "Write": 1
+          }
+        },
+        {
+          "role": "QA",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\71172a21-ab41-43f4-ad11-a87f6559093b\\subagents\\agent-a205efd7743fe7ea0.jsonl",
+          "requests": 50,
+          "models": [
+            "claude-sonnet-5"
+          ],
+          "usage": {
+            "input_tokens": 100,
+            "cache_creation_input_tokens": 333790,
+            "cache_read_input_tokens": 4419632,
+            "output_tokens": 22782
+          },
+          "first_request_input": 42327,
+          "last_request_all_tokens": 123483,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Read": 9,
+            "Bash": 34,
+            "Skill": 2,
+            "Grep": 8,
+            "Edit": 4,
+            "Glob": 1,
+            "Write": 1
+          }
+        },
+        {
+          "role": "PO",
+          "source": "C:\\Users\\Admin\\.claude\\projects\\C--Users-Admin-Desktop-work-portfolio-site\\71172a21-ab41-43f4-ad11-a87f6559093b\\subagents\\agent-a46fb7d4703105f4f.jsonl",
+          "requests": 28,
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "usage": {
+            "input_tokens": 228,
+            "cache_creation_input_tokens": 57355,
+            "cache_read_input_tokens": 1338831,
+            "output_tokens": 7656
+          },
+          "first_request_input": 31214,
+          "last_request_all_tokens": 57828,
+          "input_fields_varied_within_message_id": [],
+          "tool_calls": {
+            "Read": 7,
+            "Skill": 1,
+            "PowerShell": 1,
+            "Bash": 17,
+            "Edit": 2,
+            "Write": 2
+          }
+        }
+      ],
+      "totals": {
+        "input_tokens": 504,
+        "cache_creation_input_tokens": 865183,
+        "cache_read_input_tokens": 13019501,
+        "output_tokens": 63763,
+        "requests": 166
+      }
+    }
+  }
+}
