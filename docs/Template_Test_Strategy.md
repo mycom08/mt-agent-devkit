@@ -301,6 +301,11 @@ Exit 0 = clean. Exit non-zero = violations printed; fix before opening a PR.
 bash scripts/test/run.sh
 ```
 
+This is also the canonical local telemetry command: it runs every
+`scripts.test.test_telemetry` case before the validator fixtures. On Windows
+hosts where Bash is unavailable, run the equivalent `powershell -File
+scripts/test/run.ps1`; Linux CI continues to use the shell runner.
+
 Five fixture files (one per invariant class tested) are in
 `scripts/test/fixtures/bad/`. The runner asserts each fixture produces at
 least one `[ERROR]` line. Invariant #5 (manifest integrity) is a global check

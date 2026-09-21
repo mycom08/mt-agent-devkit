@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# scripts/test/run.sh -- validator self-test: fixture files
+# scripts/test/run.sh -- telemetry and validator fixture tests
 #
-# Runs validate_templates.py against each bad fixture and asserts that every
-# fixture produces at least one [ERROR] line (proving each invariant fires).
+# Runs deterministic telemetry tests, then validates each bad fixture and
+# asserts that it produces at least one [ERROR] line.
 #
 # Usage (from repo root):
 #   bash scripts/test/run.sh
@@ -39,6 +39,16 @@ run_fixture() {
     fi
 }
 
+echo "=== telemetry.py -- deterministic tests ==="
+if python -m unittest scripts.test.test_telemetry; then
+    echo "[PASS] telemetry collector tests"
+    pass=$((pass + 1))
+else
+    echo "[FAIL] telemetry collector tests"
+    fail=$((fail + 1))
+fi
+
+echo ""
 echo "=== validate_templates.py -- fixture self-tests ==="
 echo ""
 

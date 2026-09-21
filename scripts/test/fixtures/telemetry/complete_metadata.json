@@ -1,0 +1,13 @@
+{
+  "run_id": "fixture-run-001",
+  "story_id": "ST-000161",
+  "role": "Developer",
+  "stage": "implementation",
+  "session_mode": "fresh",
+  "model": "fixture-model",
+  "started_at": "2026-09-21T00:00:00Z",
+  "ended_at": "2026-09-21T00:00:12Z",
+  "duration_ms": 12000,
+  "completion_status": "completed",
+  "notes": ""
+}

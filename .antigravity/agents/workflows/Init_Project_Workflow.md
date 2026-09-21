@@ -214,7 +214,7 @@ This one script call writes every file (or file family) that needs **zero projec
 It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` (no `.gitkeep` — gitignored, see below), `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
 - **12 of 25 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common_Bootstrap`, `Agent_Common_Read_On_Demand`, `Audit_Rules`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules_Bootstrap`, `Product_Owner_Rules_Read_On_Demand`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`, `UI_Prototype_Rules`
 - **All 10 workflow files** — the 8 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
-- Both version-check scripts, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.antigravity/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
+- Both version-check scripts plus `telemetry.py`, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.antigravity/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
 - `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` (single-next-version-heading format) at the target project root — a universal devkit convention, any language, written only if not already present (idempotent — a Java skeleton generation pass that ran earlier in `Build_Software_Workflow.md` never creates these itself anymore, so this is always the actual creator). See `.antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md` for the format.
 
 If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the 12 verbatim rules files are left as literal placeholders — fill them in with a follow-up run once the GitHub repo exists, or leave them (harmless, same convention as workflow files).
@@ -298,12 +298,12 @@ For each missing wiki file, fill every `{{PLACEHOLDER}}` in the template using t
 - `{{PROJECT_NAME}}` → detected project name
 - `{{LANGUAGE}}` → detected primary language (e.g., `Go`, `TypeScript`, `Python`)
 
-#### Version check scripts (2 files)
+#### Distributed scripts (3 files)
 
-**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`
-**Target:** `.antigravity/agents/scripts/check_devkit_version.ps1`, `.antigravity/agents/scripts/check_devkit_version.sh`
+**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`, `templates/scripts/telemetry.py`
+**Target:** `.antigravity/agents/scripts/check_devkit_version.ps1`, `.antigravity/agents/scripts/check_devkit_version.sh`, `.antigravity/agents/scripts/telemetry.py`
 
-Copy both scripts verbatim. These power the `SessionStart` hook that notifies users when a new devkit version is available.
+Copy all three scripts verbatim. The version-check pair powers the `SessionStart` hook; `telemetry.py` writes and aggregates privacy-safe agent-stage metrics in the gitignored runtime directory.
 
 ---
 
@@ -389,7 +389,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```bash
    bash .antigravity/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
-   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
+   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, the version-check pair plus `telemetry.py`, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 
 2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 13 adaptive rules files, 4 wiki docs.
    - For `AGENTS.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.
