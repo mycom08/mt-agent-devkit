@@ -21,6 +21,13 @@ Quick lookup for all project documents and external references. Update this file
 | Technical Analysis | `docs/technical/Technical_Analysis.md` |
 | Architecture Overview | `docs/technical/Architecture.md` |
 
+### Reviews and Improvement Guides
+
+| Document | Path |
+|---|---|
+| Top Four Agent Harness Fixes — Implementation Guide | `docs/reviews/fix_guidline/Top_Four_Agent_Harness_Fix_Guide.md` |
+| Four Agent Harness Fixes — Execution and Test Plan | `docs/reviews/fix_guidline/Four_Fix_Execution_and_Test_Plan.md` |
+
 ### Sprint Docs
 
 | Document | Path Pattern |
@@ -55,4 +62,4 @@ Quick lookup for all project documents and external references. Update this file
 
 ---
 
-**Last Updated:** 2026-06-16
+**Last Updated:** 2026-09-21
