@@ -1,9 +1,36 @@
 {
   "0.1.50-SNAPSHOT": {
-    "new": [],
-    "modified": [],
+    "new": [
+      ".claude/agents/templates/scripts/telemetry.py"
+    ],
+    "modified": [
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md",
+      ".claude/agents/templates/instructions/developer_instructions_template.md",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md",
+      ".claude/agents/templates/instructions/qa_instructions_template.md",
+      ".claude/agents/templates/instructions/technical_lead_instructions_template.md",
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md",
+      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
     "removed": [],
-    "descriptions": {}
+    "descriptions": {
+      ".claude/agents/templates/instructions/business_analyst_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/instructions/developer_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/instructions/product_owner_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/instructions/qa_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/instructions/technical_lead_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/scripts/telemetry.py": "[Enhancement #207] Adds privacy-safe schema-v1 telemetry collection and aggregation.",
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[Enhancement #207] Preserves telemetry collector distribution during prototype refinement.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[Enhancement #207] Requires one explicit stage telemetry record after completion.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "[Enhancement #207] Syncs the distributed telemetry collector for project-orchestrator workflows.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[Enhancement #207] Syncs the distributed telemetry collector script for pipeline-stage runtime measurements."
+    }
   },
   "0.1.49": {
     "new": [

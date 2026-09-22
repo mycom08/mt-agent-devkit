@@ -81,6 +81,20 @@ Store `Type` in the pipeline state file. It controls fast-path routing in Stages
 
 ---
 
+## Telemetry collection — mandatory after every completed stage
+
+After every completed agent stage (including a non-behavioral fast path), the orchestrator writes exactly one Schema v1 JSON Lines record to `{{AGENT_DIR_PREFIX}}/agents/tmp/token-metrics/<run-id>.jsonl`. This runtime directory is gitignored and must never be committed.
+
+Create a small metadata JSON object containing only: `run_id`, `story_id`, `role`, `stage`, `session_mode`, `model`, `started_at`, `ended_at`, `duration_ms`, `completion_status`, and `notes`. Do not put a transcript path, prompt content, secrets, issue tokens, tool input, or full tool output in metadata or notes.
+
+- When the completed agent's raw transcript is available, run `python {{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py extract --transcript <transcript> --metadata <metadata-json> --output {{AGENT_DIR_PREFIX}}/agents/tmp/token-metrics/<run-id>.jsonl --append`. This deduplicates requests by message ID, uses the maximum streamed output count, and counts raw tool-use events.
+- When only a harness final-context counter is available, include it as `session_final_tokens` in metadata and run the same command with `harness` instead of `extract`. The script records the unavailable cumulative fields as `null` and names all of them in `unavailable_fields`; it never estimates them.
+- When neither source is available, omit `session_final_tokens`, put a short factual explanation of the unavailable measurements in `notes`, and run `python {{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py harness --metadata <metadata-json> --output {{AGENT_DIR_PREFIX}}/agents/tmp/token-metrics/<run-id>.jsonl --append`. This writes `usage_source: unavailable` with every optional measurement explicitly `null`.
+- `session_final_tokens` is a final-call/session-context counter, not cumulative usage. Do not label it as total consumption or use it as a cost proxy.
+- Stop and report a clear error if collection rejects malformed input, a duplicate stage identity, or mixed schema versions. Aggregate only with `python {{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py aggregate --input {{AGENT_DIR_PREFIX}}/agents/tmp/token-metrics/<run-id>.jsonl`.
+
+---
+
 ## Stage 1 — Implementation
 
 **Orchestrator pre-spawn: create the retro file skeleton** before spawning the implementer. Use the story ID and title from Stage 0. Write `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md`:

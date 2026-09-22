@@ -42,6 +42,9 @@ docker/sandbox/.env
 .antigravity/agents/working/working-record/
 .antigravity/agents/working/tmp/
 
+# Agent-stage telemetry — runtime measurement only, never product history
+.antigravity/agents/tmp/token-metrics/
+
 # Audit workflow reports — runtime output, never committed
 .claude/agents/internal/
 

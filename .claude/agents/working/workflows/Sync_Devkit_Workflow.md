@@ -182,8 +182,10 @@ Applies to all 10 files listed above.
 
 **Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.ps1`
           `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.sh`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/telemetry.py`
 **Target:** `.claude/agents/scripts/check_devkit_version.ps1`
           `.claude/agents/scripts/check_devkit_version.sh`
+          `.claude/agents/scripts/telemetry.py`
 
 Fetch and write verbatim. Create `.claude/agents/scripts/` if it does not exist.
 
@@ -311,7 +313,7 @@ After all updates are applied, scan each managed directory and flag any file not
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 **Expected files — `scripts/`:**
-`check_devkit_version.ps1`, `check_devkit_version.sh`
+`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`
 
 **Expected files — `.claude/skills/`** (sibling of `.claude/agents/`, not scanned as part of it — check separately):
 `read-section/SKILL.md`, `read-section/scripts/read_section.sh`

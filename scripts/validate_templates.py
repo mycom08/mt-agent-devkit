@@ -3,7 +3,7 @@
 validate_templates.py -- Layer-1 corpus invariant checker for mt-agent-devkit.
 
 Scans .claude/agents/templates/**/*.md and .claude/agents/workflows/**/*.md
-and enforces 6 deterministic invariants. Exits non-zero on any hard violation.
+and enforces 7 deterministic invariants. Exits non-zero on any hard violation.
 
 Output contract: one line per finding
   [ERROR]        file:line -- <issue>   (counts toward non-zero exit)
@@ -141,7 +141,7 @@ KNOWN_SINGLE_BRACE_TOKENS = {
 RETIRED_TRIGGERS: list = []
 
 # ---------------------------------------------------------------------------
-# Invariant #5: changes.json allowlists
+# Invariant #6: changes.json allowlists
 # ---------------------------------------------------------------------------
 
 # Paths listed in changes.json that were legitimately removed/moved in ST-000006
@@ -261,8 +261,15 @@ SECTION_REF_ALIAS = {
 # Helpers
 # ---------------------------------------------------------------------------
 
-# Regex for a fenced-code block opening line (``` or ~~~, optional lang tag).
-_FENCE_OPEN = re.compile(r"^(`{3,}|~{3,})")
+# CommonMark permits up to three leading spaces on fenced code blocks.
+_FENCE_OPEN = re.compile(r"^ {0,3}(`{3,}|~{3,})")
+
+
+def _is_closing_fence(line: str, marker: str) -> bool:
+    """Return whether line closes a fence with at least the opening length."""
+    return bool(re.match(
+        rf"^ {{0,3}}{re.escape(marker[0])}{{{len(marker)},}}[ \t]*$", line
+    ))
 
 
 def parse_fenced_regions(lines: list) -> list:
@@ -279,7 +286,7 @@ def parse_fenced_regions(lines: list) -> list:
             in_fence = True
             fence_marker = m.group(1)[0] * len(m.group(1))
             inside.append(True)
-        elif in_fence and line.startswith(fence_marker):
+        elif in_fence and _is_closing_fence(line, fence_marker):
             inside.append(True)
             in_fence = False
             fence_marker = ""
@@ -672,11 +679,86 @@ def check_retired_triggers(path, lines: list, fenced: list,
 
 
 # ---------------------------------------------------------------------------
-# Invariant #5: changes.json manifest integrity
+# Invariant #5: full-read directives must not use numeric mandatory ranges
+# ---------------------------------------------------------------------------
+
+_FULL_READ_CLAUSE = re.compile(r"\bread\b[^.!?;]*?\bin\s+full\b", re.IGNORECASE)
+_NEGATED_FULL_READ = re.compile(
+    r"\b(?:do|does|did|must|should|need)\s+not\b"
+    r"|\bnever\b"
+    r"|\bnot\s+(?:the\s+)?file\s+in\s+full\b"
+    r"|\bnot\s+(?:need|required|necessary|expected)\b",
+    re.IGNORECASE,
+)
+_NUMERIC_SECTION_RANGE = re.compile(
+    r"(?:§\s*\d+\s*(?:[-–—]|\bto\b|\bthrough\b)\s*§?\s*\d+"
+    r"|\bsections?\s+\d+\s*(?:[-–—]|\bto\b|\bthrough\b)\s*"
+    r"(?:sections?\s+)?\d+)",
+    re.IGNORECASE,
+)
+
+
+def _is_affirmative_full_read(text: str, match) -> bool:
+    """Return whether the sentence/clause containing match is not negated."""
+    clause_start = max(
+        text.rfind(".", 0, match.start()),
+        text.rfind("!", 0, match.start()),
+        text.rfind("?", 0, match.start()),
+        text.rfind(";", 0, match.start()),
+    ) + 1
+    return not _NEGATED_FULL_READ.search(text[clause_start:match.end()])
+
+
+def check_full_read_mandatory_ranges(path, lines: list, fenced: list,
+                                     findings: list) -> None:
+    """Invariant #5: full-read prose cannot limit mandatory sections by range.
+
+    A directive and its numeric mandatory range may wrap across lines, so inspect
+    non-fenced prose paragraphs as a unit. Headings and list items start a new
+    unit; fenced examples and negated clauses are deliberately excluded.
+    """
+    paragraph: list[tuple[int, str]] = []
+
+    def check_paragraph() -> None:
+        if not paragraph:
+            return
+        text = " ".join(line for _, line in paragraph)
+        # Markdown emphasis/code markers should not make an otherwise plain
+        # directive invisible to the deterministic check.
+        plain = text.replace("**", "").replace("__", "").replace("`", "")
+        directive = next(
+            (match for match in _FULL_READ_CLAUSE.finditer(plain)
+             if _is_affirmative_full_read(plain, match)),
+            None,
+        )
+        if not (directive and "mandatory" in plain.lower()
+                and _NUMERIC_SECTION_RANGE.search(plain)):
+            return
+        range_line = next(
+            (lineno for lineno, line in paragraph if _NUMERIC_SECTION_RANGE.search(line)),
+            paragraph[0][0],
+        )
+        emit(findings, "ERROR", path, range_line,
+             "full-read directive uses a numeric mandatory-section range; use "
+             "'Read this file in full. Every section is mandatory.'")
+
+    for i, line in enumerate(lines):
+        starts_block = re.match(r"^ {0,3}(?:#{1,6}\s|[-+*]\s|\d+[.)]\s)", line)
+        if fenced[i] or not line.strip() or (starts_block and paragraph):
+            check_paragraph()
+            paragraph = []
+        if fenced[i] or not line.strip():
+            continue
+        paragraph.append((i + 1, line))
+    check_paragraph()
+
+
+# ---------------------------------------------------------------------------
+# Invariant #6: changes.json manifest integrity
 # ---------------------------------------------------------------------------
 
 def check_manifest_integrity(findings: list) -> None:
-    """Invariant #5: changes.json path existence and template coverage."""
+    """Invariant #6: changes.json path existence and template coverage."""
     if not CHANGES_JSON.exists():
         emit(findings, "ERROR", CHANGES_JSON, 0, "changes.json not found")
         return
@@ -729,14 +811,14 @@ def check_manifest_integrity(findings: list) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Invariant #6: Markdown well-formedness
+# Invariant #7: Markdown well-formedness
 # ---------------------------------------------------------------------------
 
 def check_markdown_wellformedness(path, lines: list, fenced: list,
                                    findings: list) -> None:
-    """Invariant #6: heading continuity, balanced fences, table pipe-counts."""
+    """Invariant #7: heading continuity, balanced fences, table pipe-counts."""
 
-    # 6b. Balanced code fences -- track unclosed open fences.
+    # 7b. Balanced code fences -- track unclosed open fences.
     unclosed_fences: list = []
     in_fence = False
     fence_marker = ""
@@ -746,7 +828,7 @@ def check_markdown_wellformedness(path, lines: list, fenced: list,
             in_fence = True
             fence_marker = m.group(1)[0] * len(m.group(1))
             unclosed_fences.append(i + 1)
-        elif in_fence and line.startswith(fence_marker):
+        elif in_fence and _is_closing_fence(line, fence_marker):
             in_fence = False
             fence_marker = ""
             if unclosed_fences:
@@ -756,7 +838,7 @@ def check_markdown_wellformedness(path, lines: list, fenced: list,
         emit(findings, "ERROR", path, unclosed_fences[-1],
              "unbalanced code fence (opened here, not closed)")
 
-    # 6a. Heading-level continuity (skip headings inside fenced regions).
+    # 7a. Heading-level continuity (skip headings inside fenced regions).
     prev_level = None
     for i, line in enumerate(lines):
         if fenced[i]:
@@ -769,7 +851,7 @@ def check_markdown_wellformedness(path, lines: list, fenced: list,
                      f"heading level jumps from {prev_level} to {level}")
             prev_level = level
 
-    # 6c. Table pipe-count consistency.
+    # 7c. Table pipe-count consistency.
     _check_table_pipes(path, lines, fenced, findings)
 
 
@@ -833,6 +915,7 @@ def scan_file(path, findings: list) -> None:
     check_placeholders(path, lines, fenced, findings)
     check_shared_integrity(path, lines, fenced, findings)
     check_retired_triggers(path, lines, fenced, findings)
+    check_full_read_mandatory_ranges(path, lines, fenced, findings)
     check_markdown_wellformedness(path, lines, fenced, findings)
 
 

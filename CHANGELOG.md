@@ -28,7 +28,11 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Enhancement #207] Added privacy-safe, versioned agent-stage telemetry collection and aggregation.
+
 ### Bug Fixes
+
+- [Fix] Replaced numeric mandatory-section ranges in full-read bootstrap instructions and added validator protection against their return.
 
 ---
 

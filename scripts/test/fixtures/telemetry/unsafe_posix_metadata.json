@@ -1,0 +1,13 @@
+{
+  "run_id": "fixture-run-posix-unsafe",
+  "story_id": "ST-000161",
+  "role": "Developer",
+  "stage": "implementation",
+  "session_mode": "fresh",
+  "model": "fixture-model",
+  "started_at": "2026-09-21T00:00:00Z",
+  "ended_at": "2026-09-21T00:00:01Z",
+  "duration_ms": 1000,
+  "completion_status": "failed",
+  "notes": "transcript=/home/example/raw.jsonl"
+}

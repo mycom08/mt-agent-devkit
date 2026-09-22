@@ -11,7 +11,7 @@ description: Evaluates feature business requirements, use cases, scope boundarie
 
 ## Pre-Work Checklist
 
-Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§5 are equally mandatory. Your records:
+Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Your records:
 
 | Record | Path |
 |---|---|

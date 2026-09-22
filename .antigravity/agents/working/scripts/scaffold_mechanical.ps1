@@ -30,9 +30,11 @@ if ($Mode -eq 'strict') {
 
 function Copy-And-Substitute {
     param ($src, $dst)
-    (Get-Content $src -Raw) -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' 
-                             -replace '\{\{ROOT_FILE\}\}', 'AGENTS.md' 
-                             -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity' | Set-Content $dst -NoNewline
+    $content = Get-Content $src -Raw
+    $content = $content -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity'
+    $content = $content -replace '\{\{ROOT_FILE\}\}', 'AGENTS.md'
+    $content = $content -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'
+    Set-Content -Path $dst -Value $content -NoNewline
 }
 # 2. Verbatim rules files
 $VerbatimRules = @(
@@ -86,9 +88,10 @@ foreach ($f in $SplitWorkflows) {
     Set-Content -Path $dst -Value $sharedContent -NoNewline
 }
 
-# 4. Version check scripts
+# 4. Distributed scripts
 Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.ps1") -Destination (Join-Path $Agents "scripts\check_devkit_version.ps1") -Force
 Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.sh") -Destination (Join-Path $Agents "scripts\check_devkit_version.sh") -Force
+Copy-Item -Path (Join-Path $Tpl "scripts\telemetry.py") -Destination (Join-Path $Agents "scripts\telemetry.py") -Force
 
 # 5. devkit_version.txt
 # version.txt is a FROZEN BRIDGE FILE, not a live version -- it sits at 0.1.48
@@ -121,7 +124,30 @@ foreach ($role in $roles) {
     "# $roleLabel Working Record`n`n**Story:** none yet`n**Completed:** -`n**In Progress:** -`n**Impediments:** -`n`n**Blockers & Watch-outs:**`n- (none)`n" | Set-Content -Path (Join-Path $Agents "working-record\${role}_Working_Record.md")
 }
 
-# 8. Substitute framework placeholders in all generated mechanical files
+# 8. Gitignore parity with the shell scaffold. Runtime telemetry must remain
+# outside product history in GitHub mode; strict mode ignores all agent files.
+$gitignore = Join-Path $TargetProject ".gitignore"
+$ignoreEntries = if ($Mode -eq 'github') {
+    @(
+        ".antigravity/agents/tmp/",
+        ".antigravity/agents/tmp/token-metrics/",
+        "/result/",
+        ".antigravity/agents/working-record/*_Working_Record.md",
+        ".antigravity/agents/retros/",
+        ".antigravity/agents/internal/"
+    )
+} else {
+    @(".antigravity/agents/", "/result/")
+}
+$existingIgnore = if (Test-Path $gitignore) { Get-Content -Path $gitignore -Raw } else { "" }
+foreach ($entry in $ignoreEntries) {
+    if ($existingIgnore -notlike "*$entry*") {
+        Add-Content -Path $gitignore -Value $entry
+        $existingIgnore += "`n$entry"
+    }
+}
+
+# 9. Substitute framework placeholders in all generated mechanical files
 Get-ChildItem -Path $Agents -File -Recurse -Include *.md, *.sh, *.ps1 | ForEach-Object {
     $c = Get-Content $_.FullName -Raw
     $newContent = $c -replace '\{\{AGENT_DIR_PREFIX\}\}', '.antigravity' -replace '\{\{ROOT_FILE\}\}', 'AGENTS.md' -replace '\{\{AGENT_CLI_NAME\}\}', 'Antigravity'

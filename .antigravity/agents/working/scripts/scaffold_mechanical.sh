@@ -118,9 +118,10 @@ if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
   printf '%s\n' "$og_trimmed" >> "$og_dst"
 fi
 
-# 4. Version-check scripts (verbatim)
+# 4. Distributed scripts (verbatim)
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
+cp "$TPL/scripts/telemetry.py" "$AGENTS/scripts/telemetry.py"
 
 # 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
 #    .antigravity/skills/, a sibling of .antigravity/agents/, not under it, since that is
@@ -187,6 +188,9 @@ if [[ "$MODE" == "github" ]]; then
 
 # Antigravity agent temp files
 .antigravity/agents/tmp/
+
+# Agent-stage telemetry — runtime measurement only, never product history
+.antigravity/agents/tmp/token-metrics/
 
 # Workflow output documents
 /result/

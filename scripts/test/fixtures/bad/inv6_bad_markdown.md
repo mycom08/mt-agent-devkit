@@ -1,4 +1,4 @@
-# Fixture: invariant #6 -- Markdown well-formedness
+# Fixture: legacy `inv6` filename; tests invariant #7 -- Markdown well-formedness
 
 ## 1. Normal H2 section
 
