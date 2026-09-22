@@ -1,8 +1,18 @@
 # mt-agent-devkit — Antigravity Instructions
 
+## Project Context
+
+At the start of every task in this repository, read `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` for the minimum project context. Follow its routing table and read sections from `Project_Priming_Read_On_Demand.md` only when the task matches a listed trigger.
+
+This lightweight project-priming read is required for normal repository tasks; it does not trigger the full orchestrator startup sequence.
+
+---
+
 ## Orchestrator Reference
 
-The orchestrator (this top-level session) must read `.antigravity/agents/working/instructions/orchestrator_instructions.md` before executing any workflow — it carries the Orchestrator Startup sequence, all workflow trigger tables (devkit + sprint), session management, working-record rules, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
+The orchestrator (this top-level session) must read `.antigravity/agents/working/instructions/orchestrator_instructions.md` only when the user explicitly asks to start or resume an Antigravity workflow, or asks to start or resume work on a story. It carries the Orchestrator Startup sequence, all workflow trigger tables (devkit + sprint), session management, working-record rules, and completion-report format.
+
+Do not read the orchestrator instructions for normal repository tasks, including project-status checks, locating files, inspecting code, answering questions, or making ordinary edits and fixes. Working in this repository or under `.antigravity/` does not by itself trigger the orchestrator workflow. No spawned subagent needs to read the orchestrator instructions; each workflow spawn receives its own instruction/rules/memory paths directly in its prompt.
 
 ---
 
