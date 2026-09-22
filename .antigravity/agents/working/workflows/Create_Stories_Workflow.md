@@ -39,6 +39,8 @@ Ask the user: **"Do these stories belong to a feature? If yes, provide the featu
 
 Also ask: **"Which sprint should these stories be assigned to? (e.g., sprint-1, or leave blank if not yet scheduled)"**
 
+Also ask once: **"Which existing branch is the immutable base for these stories?"** Record the exact answer as `**Base Branch:**` in every GitHub story before it may be refined or executed; never derive it from the current checkout.
+
 > **Roadmap phase vs sprint label:** if the stories come from a roadmap doc, its `Phase:` numbers are a global, cross-repo thematic sequence — independent of this repo's `sprint-N` labels, which count this repo's own executed sprints starting at 1. When drafting from a roadmap, echo the source phase as a `**Roadmap Phase:** Phase N — <theme>` line in the story body; never copy the roadmap phase number into the sprint label.
 
 ---
@@ -47,5 +49,6 @@ Also ask: **"Which sprint should these stories be assigned to? (e.g., sprint-1, 
 
 For each confirmed story, create a GitHub Issue following `Story_Standard_PO.md` §13:
 - Labels: `status:backlog`, `feature:<name>` (if feature), `phase-N` (if feature), `sprint-N` (if sprint assigned)
+- Issue body: include the selected immutable `**Base Branch:**`
 - Use `--body-file` pattern (see `Agent_Common_Bootstrap.md` §6)
 - Report created issue URLs to the user

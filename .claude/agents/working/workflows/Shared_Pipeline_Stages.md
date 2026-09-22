@@ -140,10 +140,10 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 
 1. **Spawn** the agent matching the `Implementer` role — **Developer → `model: opus`, reasoning effort medium**; any other implementer role → **model: sonnet**
    > **Spawn-prompt reminder (mandatory-reading references):** when the spawn prompt points the agent at a Story Standard file, name only the role-scoped variant already gated by that role's own Rules file (e.g. `Story_Standard_Dev.md` for Developer, `Story_Standard_TL.md` for Technical Lead) — never phrase it as "`Story_Standard.md` (or the role-scoped variant if one exists)". Offering both as options causes the agent to read the full cross-role file needlessly; the role's own Rules file gate already resolves which one to read.
-2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
-3. Agent reads its own instruction files, memory, and rules
-4. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
-5. **Before writing any code or files** → update story status to `in-progress`: update story label to `status:in-progress`
+2. Agent reads its own instruction files, memory, and rules
+3. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
+4. **Before the first state or product write** → read immutable `Base Branch` and run `branch_preflight.py inspect`. A missing legacy value blocks for explicit selection and is never inferred from checkout. Only PASS may record Base Branch and full Verified Base SHA; run `branch_preflight.py create` before changing status or writing product files, and record Story Branch only after successful full-SHA verification.
+5. **After successful branch creation** → write `impl_session: <agentId>` to state, then update story status to `in-progress`.
 6. **CI/CD check:** if the story's Technical Scope includes any file under `.github/workflows/`, the implementer **must** follow `.claude/agents/working/rules/CICD_Validation_Guide.md` before opening a PR
 7. **Deletion pre-check** — if the story involves deleting files: before executing any `git rm` or file deletion, post a comment on the GitHub Issue listing every file planned for deletion
 8. Agent implements and updates working record; commits use the format `[ST-XXXXXX][DEVKIT]: <message>`
@@ -275,7 +275,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
      - **(b) No commit's push ever produced a run because no path in the PR's whole changed-file set (`gh pr diff <PR-number> --name-only`) matches `validate-templates.yml`'s `paths:` filter.** Nothing was ever eligible. State this outcome explicitly rather than proceeding silently: the merge decision rests entirely on reviewer sign-off, with the absence of any eligible check recorded as a deliberate, evidenced exception — not as a passed check.
    - **Audit requirement (whichever state leads to a merge):** before step 2 below, post a `gh pr comment` recording which state applied (1 / 3a / 3b) and the evidence used.
 0a. **Approval-scope gate (mandatory, independent of the CI gate):** find the most recent `**Approved-SHA:**` the reviewer cited at Stage 2 and diff it against the current head: `git diff <Approved-SHA> <head-SHA> --name-only`.
-    - **Permitted post-approval additions:** agent memory-file commits (Stage-Transition Commit, `Agent_Common_Read_On_Demand.md §5`), the story's own retro file (`Retro_Rules.md`), and QA's test-scenario document (`QA_Rules_Bootstrap.md §4`) — the pipeline itself schedules these here, not because they are "just docs."
+    - **No post-approval exception for agent runtime state:** memory, working records, retrospectives, telemetry, and pipeline state stay uncommitted. Any tracked change since `Approved-SHA`, including a test-scenario document, requires refreshed review.
     - **Anything else added or modified since the Approved-SHA** → the sign-off no longer covers the artifact about to merge. Do not merge; resume the reviewer (`reviewer_session`) with just the post-approval delta, and get a refreshed `Approved-SHA` before retrying this gate.
     - Add the outcome (unchanged / bookkeeping-only / re-review triggered) to the same audit comment as step 0.
 1. Get the PR branch name: `gh pr view <PR-number> --repo mycom08/mt-agent-devkit --json headRefName --jq '.headRefName'`

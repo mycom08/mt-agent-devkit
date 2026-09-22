@@ -25,7 +25,7 @@
 2. Read the full story: User Story, all AC, Technical Scope, and linked technical docs
 3. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers
 4. **Read PO and TL answers** — push back in the same thread if insufficient; wait for all blocking points to resolve
-5. Create dev branch from main: `git checkout -b ST-XXXXXX/description`
+5. Create the dev branch only through `branch_preflight.py create`, using the explicit Base Branch and verified full SHA after a passing inspect.
 
 ### Status: In Progress → Review
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)

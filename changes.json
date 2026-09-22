@@ -1,7 +1,8 @@
 {
   "0.1.50-SNAPSHOT": {
     "new": [
-      ".claude/agents/templates/scripts/telemetry.py"
+      ".claude/agents/templates/scripts/telemetry.py",
+      ".claude/agents/templates/scripts/branch_preflight.py"
     ],
     "modified": [
       ".claude/agents/templates/instructions/business_analyst_instructions_template.md",
@@ -11,8 +12,24 @@
       ".claude/agents/templates/instructions/technical_lead_instructions_template.md",
       ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md",
       ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/Business_Analyst_Rules_template.md",
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md",
+      ".claude/agents/templates/rules/Story_Standard_template.md",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
       ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
       ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+      ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md",
+      ".claude/agents/templates/strict/workflows/Start_Story_Workflow_template.md",
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
     ],
@@ -25,11 +42,28 @@
       ".claude/agents/templates/instructions/technical_lead_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
       ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
       ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
+      ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md": "[Fix] Keeps agent runtime state out of product branch commits and pushes.",
+      ".claude/agents/templates/rules/Business_Analyst_Rules_template.md": "[Fix] Replaces memory commit handoff with local runtime-state handling.",
+      ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[Fix] Requires verified-base preflight before developer branch creation.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "[Fix] Replaces memory commit handoff with local runtime-state handling.",
+      ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[Fix] Adds immutable Base Branch to the GitHub story-authoring format.",
+      ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md": "[Fix] Replaces memory commit handoff with local runtime-state handling.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "[Fix] Replaces memory commit handoff with local runtime-state handling.",
+      ".claude/agents/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[Fix] Routes Technical Lead implementation branch creation through preflight.",
+      ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md": "[Fix] Replaces memory commit handoff with local runtime-state handling.",
+      ".claude/agents/templates/rules/Story_Standard_Dev_template.md": "[Fix] Requires preflight-backed developer branch creation.",
+      ".claude/agents/templates/rules/Story_Standard_template.md": "[Fix] Records immutable Base Branch on GitHub stories and routes active branch creation through preflight.",
+      ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md": "[Fix] Requires immutable Project Base Branch in strict story format, then records a verified sprint branch as each story's execution Base Branch before SHA-pinned branch creation.",
+      ".claude/agents/templates/scripts/branch_preflight.py": "[Fix] Adds bounded safe base verification before story branch creation.",
       ".claude/agents/templates/scripts/telemetry.py": "[Enhancement #207] Adds privacy-safe schema-v1 telemetry collection and aggregation.",
-      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[Enhancement #207] Preserves telemetry collector distribution during prototype refinement.",
-      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[Enhancement #207] Requires one explicit stage telemetry record after completion.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "[Enhancement #207] Syncs the distributed telemetry collector for project-orchestrator workflows.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[Enhancement #207] Syncs the distributed telemetry collector script for pipeline-stage runtime measurements."
+      ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[Enhancement #207] Preserves telemetry collector distribution during prototype refinement. [Fix] Adds the branch-preflight helper to the prototype universal scaffold set.",
+      ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[Fix] Requires authoring immutable GitHub Base Branch or strict Project Base Branch before refinement or execution.",
+      ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[Enhancement #207] Requires one explicit stage telemetry record after completion. [Fix] Gates every pipeline state/product write and branch creation on verified base preflight and removes runtime-state approval exceptions.",
+      ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[Fix] Records verified base identity only after successful preflight.",
+      ".claude/agents/templates/strict/workflows/Sprint_Workflow_template.md": "[Fix] Requires strict-mode base preflight before sprint branch creation.",
+      ".claude/agents/templates/strict/workflows/Start_Story_Workflow_template.md": "[Fix] Requires strict-mode base preflight before story entry branch creation.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "[Enhancement #207] Syncs the distributed telemetry collector for project-orchestrator workflows. [Fix] Syncs branch_preflight.py.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "[Enhancement #207] Syncs the distributed telemetry collector script for pipeline-stage runtime measurements. [Fix] Syncs branch_preflight.py."
     }
   },
   "0.1.49": {

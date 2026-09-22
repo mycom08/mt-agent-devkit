@@ -10,7 +10,7 @@ Triggered from `Technical_Lead_Rules_Bootstrap.md §5`. Rare — only when the o
 
 1. Create a dev branch from `main` — **never work directly on `main`**:
    ```
-   git checkout -b ST-XXXXXX/short-description
+   python .antigravity/agents/working/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
    ```
 2. Push all implementation work to that dev branch
 3. Open a PR from the dev branch → `main`

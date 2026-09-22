@@ -108,10 +108,10 @@ Files: all workflow files listed above. Never write `Analyst_Workflow.md` or `In
 
 ### Script files — Overwrite
 
-**Source:** `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.claude/agents/templates/scripts/check_devkit_version.sh`, `.claude/agents/templates/scripts/telemetry.py` (local devkit)
+**Source:** `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.claude/agents/templates/scripts/check_devkit_version.sh`, `.claude/agents/templates/scripts/telemetry.py`, `.claude/agents/templates/scripts/branch_preflight.py` (local devkit)
 **Target:** `{TARGET_PROJECT}/.antigravity/agents/scripts/` with the same filenames
 
-Copy all three scripts verbatim. `telemetry.py` is the authoritative Schema v1 collector and aggregator; its records belong only under the target's gitignored `.antigravity/agents/tmp/token-metrics/` runtime directory.
+Copy all four scripts verbatim. `telemetry.py` writes only gitignored metrics; `branch_preflight.py` verifies bases before branch creation.
 
 ### Instruction files — Merge
 
@@ -218,7 +218,7 @@ After all updates are applied, scan each managed directory in `TARGET_PROJECT` a
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 **Expected files — `scripts/`:**
-`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`
+`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`, `branch_preflight.py`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/`, `internal/` — these are project-owned, runtime-output, or agent-managed and may contain custom or transient files. `internal/` specifically holds only this workflow's own audit report while a Stage 4 run is in flight (see Stage 4) and is always empty between runs.
 

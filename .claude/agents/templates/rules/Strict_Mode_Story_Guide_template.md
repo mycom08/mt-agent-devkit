@@ -38,6 +38,8 @@ Never reuse or skip numbers. If the counter file is missing, start from `0`.
 **Sprint:** sprint-1
 **Feature:** none
 **Phase:** none
+**Project Base Branch:** <existing branch selected during story creation; immutable>
+**Base Branch:** <sprint-N-dev; written only after its successful preflight verification>
 **Created:** YYYY-MM-DD
 
 ---
@@ -155,13 +157,15 @@ The orchestrator creates this file before spawning the reviewer agent. The revie
 
 ## Branch Naming
 
+Every strict story MD must include the immutable `**Project Base Branch:** <existing branch selected during story creation>`; never infer it from checkout. The Sprint/Start Story pre-flight then writes `**Base Branch:** sprint-N-dev` and its full verified SHA as the immutable execution base for that story only after it verifies that sprint branch.
+
 ### Sprint dev branch
 ```
 sprint-N-dev
 ```
 Example: `sprint-1-dev`, `sprint-3-dev`
 
-Created from the user's current branch at sprint start. Never pushed to remote. The user merges this into their branch manually when ready.
+Created from the immutable Project Base Branch at sprint start. Never pushed to remote. The user merges this into their branch manually when ready.
 
 ### Story branch
 Created from the sprint dev branch. Named using the external ID when available, otherwise the internal ST-XXXX ID:
@@ -199,11 +203,12 @@ story/ST-000004-fix-token-refresh
 ```
 sprint start:
   check if sprint-N-dev exists (git branch --list sprint-N-dev)
-  → exists: git checkout sprint-N-dev
-  → missing: git checkout -b sprint-N-dev   (from current branch)
+  → missing: inspect/create sprint-N-dev from the immutable Project Base Branch and its verified SHA
+  → exists: git switch sprint-N-dev; inspect it as the base for the next story branch (never pass sprint-N-dev as its own story-branch target)
+  → only after create or resumed verification: record Sprint Branch and full SHA; set each story's Base Branch to sprint-N-dev with that SHA
 
 story start (Stage 1):
-  git checkout -b story/<id>-<slug>   (from sprint-N-dev)
+  inspect/create `story/<id>-<slug>` from Base Branch=sprint-N-dev and its recorded verified full SHA
 
 story done (after Stage 4 PO closure):
   git checkout sprint-N-dev

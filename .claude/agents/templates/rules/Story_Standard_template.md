@@ -135,7 +135,7 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 5. **Read PO and TL answers** — if an answer is insufficient or raises a new concern, post a push-back follow-up before proceeding; wait until all blocking points are fully resolved
 6. Create dev branch from the feature branch — **never work directly on the feature branch or master**:
    ```
-   git checkout -b ST-XXXXXX/short-description
+   python {{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
    ```
 
 ### Status: In Progress → Review
@@ -202,7 +202,7 @@ Scripts live in `tests/feature/<feature_name>/scripts/ST-XXXXXX_<description>.sh
 ### Step 2 — Branch
 - Developer creates a fix branch from the **feature branch**:
   ```
-  git checkout -b fix/ST-XXXXXX/short-description
+  python {{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch fix/ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
   ```
 - Developer removes label `status:done`, adds label `status:hotfix` on the issue
 
@@ -453,6 +453,7 @@ When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
 **Labels (feature story):** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`  
+**Body field:** `**Base Branch:** <existing branch selected during story creation>` — immutable; required before `status:ready` or execution.
 **Labels (non-feature story):** `status:backlog`, `sprint-N`  
 **GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 

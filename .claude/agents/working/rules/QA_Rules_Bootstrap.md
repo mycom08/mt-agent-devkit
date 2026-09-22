@@ -144,9 +144,9 @@ Rare — only when QA is the story Implementer. Rule in `QA_Rules_Read_On_Demand
 
 ---
 
-## 12. Stage-Transition Commit (mandatory before handoff)
+## 12. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

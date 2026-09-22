@@ -133,9 +133,9 @@ Tag **TL** in the comment to request review.
 
 ---
 
-## 8. Stage-Transition Commit (mandatory before handoff)
+## 8. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `.antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

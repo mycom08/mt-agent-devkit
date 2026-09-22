@@ -33,6 +33,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Bug Fixes
 
 - [Fix] Replaced numeric mandatory-section ranges in full-read bootstrap instructions and added validator protection against their return.
+- [Fix] Added verified-base branch preflight and kept agent runtime state out of product history.
 
 ---
 

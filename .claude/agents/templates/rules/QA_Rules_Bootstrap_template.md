@@ -213,9 +213,9 @@ Rare — only when QA is the story Implementer. Rule in `QA_Rules_Read_On_Demand
 
 ---
 
-## 12. Stage-Transition Commit (mandatory before handoff)
+## 12. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
@@ -234,7 +234,7 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 | QA is the story Implementer | `QA_Rules_Read_On_Demand.md §1` (pre-PR gate), `§2` (live user instruction conflicts) |
 | A bug is found after story is `status:done` (hotfix) | `QA_Rules_Read_On_Demand.md §3` |
 
-> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit and Troubleshooting Protocol are already resolved directly by §12/§13 above.
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Runtime-State Handoff and Troubleshooting Protocol are already resolved directly by §12/§13 above.
 
 ---
 

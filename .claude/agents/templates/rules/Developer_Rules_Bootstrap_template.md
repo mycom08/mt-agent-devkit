@@ -47,9 +47,9 @@ After reading, identify anything unclear: scope gaps, ambiguous AC, technical de
 
 Once all blocking questions are resolved:
 
-1. **Update story status** — Remove label `status:ready` (or `status:backlog`), add label `status:in-progress`
-2. Create your dev branch: `ST-XXXXXX/short-description` (branch off feature branch)
-3. **Verify the branch switch before committing anything** — run `git branch --show-current` and confirm it prints the dev branch name, not `main`/`master`/the feature branch. Do not make the first commit until this check passes.
+1. Run `branch_preflight.py inspect` and `create` for `ST-XXXXXX/short-description`, using the story's explicit Base Branch; do not create a branch directly. Record state only after PASS.
+2. **Verify the branch switch before any status, state, or product write** — the helper must report the requested branch at the recorded full SHA.
+3. **Update story status** — only now remove `status:ready` (or `status:backlog`), add `status:in-progress`.
 4. Begin implementation
 
 **Clean Code (source code stories only):**
@@ -212,7 +212,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 | A live user instruction contradicts a prior decision recorded in the issue thread | `Developer_Rules_Read_On_Demand.md §11` (Live User Instruction Conflicts) |
 | A post-Done bug (hotfix) | `Developer_Rules_Read_On_Demand.md §13` |
 | Orchestrator asks you to run a Sprint Refinement | `Developer_Rules_Read_On_Demand.md §14` (Refine Sprint Task) |
-| Signaling stage completion to the orchestrator, or you changed a memory file this session | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — mandatory before handoff |
+| Signaling stage completion to the orchestrator, or you changed runtime state this session | `Agent_Common_Read_On_Demand.md §5` (Runtime-State Handoff) — mandatory before handoff |
 | A tooling/environment blocker | First scan your own `## Troubleshooting Facts` for a recorded fix; fetch `Agent_Common_Read_On_Demand.md §2` only for the diagnose-and-record-back procedure |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`.

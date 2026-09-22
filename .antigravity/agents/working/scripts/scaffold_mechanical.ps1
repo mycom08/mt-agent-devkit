@@ -92,6 +92,7 @@ foreach ($f in $SplitWorkflows) {
 Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.ps1") -Destination (Join-Path $Agents "scripts\check_devkit_version.ps1") -Force
 Copy-Item -Path (Join-Path $Tpl "scripts\check_devkit_version.sh") -Destination (Join-Path $Agents "scripts\check_devkit_version.sh") -Force
 Copy-Item -Path (Join-Path $Tpl "scripts\telemetry.py") -Destination (Join-Path $Agents "scripts\telemetry.py") -Force
+Copy-Item -Path (Join-Path $Tpl "scripts\branch_preflight.py") -Destination (Join-Path $Agents "scripts\branch_preflight.py") -Force
 
 # 5. devkit_version.txt
 # version.txt is a FROZEN BRIDGE FILE, not a live version -- it sits at 0.1.48
@@ -132,12 +133,18 @@ $ignoreEntries = if ($Mode -eq 'github') {
         ".antigravity/agents/tmp/",
         ".antigravity/agents/tmp/token-metrics/",
         "/result/",
+        ".antigravity/agents/memory/",
         ".antigravity/agents/working-record/*_Working_Record.md",
         ".antigravity/agents/retros/",
-        ".antigravity/agents/internal/"
+        ".antigravity/agents/internal/",
+        ".claude/agents/memory/",
+        ".claude/agents/working-record/",
+        ".claude/agents/retros/",
+        ".claude/agents/tmp/",
+        ".claude/agents/internal/"
     )
 } else {
-    @(".antigravity/agents/", "/result/")
+    @(".antigravity/agents/", ".claude/agents/", "/result/")
 }
 $existingIgnore = if (Test-Path $gitignore) { Get-Content -Path $gitignore -Raw } else { "" }
 foreach ($entry in $ignoreEntries) {

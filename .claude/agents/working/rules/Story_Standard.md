@@ -102,7 +102,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 2. Read the full story: User Story, all AC, Technical Scope, and any linked technical docs
 3. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers
 4. **Read PO and TL answers** — push back in the same thread if insufficient; wait until all blocking points are fully resolved
-5. Create dev branch from main: `git checkout -b ST-XXXXXX/short-description`
+5. Before changing status or writing state/product files, run `branch_preflight.py inspect` then `branch_preflight.py create` from the story's explicit `Base Branch` and verified full SHA; record the Story Branch only after create succeeds.
 
 ### Status: In Progress → Review
 **When:** Work complete, ready for review  
@@ -153,10 +153,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 - Tag Developer and TL
 
 ### Step 2 — Branch
-- Developer creates a fix branch from `main`:
-  ```
-  git checkout -b fix/ST-XXXXXX/short-description
-  ```
+- Developer creates the fix branch only through `branch_preflight.py create`, from the story's explicit `Base Branch` and verified full SHA.
 - Developer removes label `status:done`, adds label `status:hotfix`
 
 ### Step 3 — Fix & Review
@@ -302,6 +299,7 @@ When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit
 
 **Issue title:** `[ST-XXXXXX][DEVKIT] Clear Title`  
 **Labels:** `status:backlog`, `sprint-N`  
+**Body field:** `**Base Branch:** <existing branch selected during story creation>` — immutable; required before `status:ready` or execution.
 **GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 
 **Issue body:**

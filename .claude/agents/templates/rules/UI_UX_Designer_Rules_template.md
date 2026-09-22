@@ -170,9 +170,9 @@ Place the prototype source under the project's standard feature-doc/source struc
 
 ---
 
-## 9. Stage-Transition Commit (mandatory before handoff)
+## 9. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

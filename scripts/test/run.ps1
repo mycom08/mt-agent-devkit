@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $repoRoot
 
-python -m unittest scripts.test.test_telemetry
+python -m unittest scripts.test.test_branch_preflight scripts.test.test_telemetry
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $previousErrorActionPreference = $ErrorActionPreference

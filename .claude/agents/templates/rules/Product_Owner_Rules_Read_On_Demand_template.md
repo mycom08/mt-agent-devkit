@@ -143,6 +143,7 @@ Every story the roadmap defines must become a tracked `status:backlog` issue/sto
 Triggered from `Story_Standard_PO.md` §13. Read before your first `gh issue create`/`gh issue edit --body-file` of the session.
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`
+**Base Branch:** <existing branch selected during story creation; immutable>
 **GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 
 **Labels — feature story:** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`

@@ -152,18 +152,15 @@ Create a small metadata JSON object containing only: `run_id`, `story_id`, `role
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
 1. **Spawn** the agent matching the `Implementer` role (**model: sonnet**)
-2. **Immediately write `impl_session: <agentId>` to the state file — do this before any other action after spawning.** Never leave `impl_session` empty after a spawn returns.
-3. Agent reads its own instruction files, memory, and rules
-4. **Read the story:**
+2. Agent reads its own instruction files, memory, and rules
+3. **Read the story:**
    - **GitHub mode:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
    - **Strict mode:** Agent reads `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` directly
-5. **Before writing any code or files** → update story status to `in-progress`:
+4. **Before the first state or product write** → read the story's immutable `Base Branch` value and run `branch_preflight.py inspect`. A missing legacy value blocks for explicit user selection; never infer it from the checked-out branch. Only a PASS may write Base Branch and the full Verified Base SHA to pipeline state. **GitHub mode** completes its matching preflight creation here with those values. **Strict mode** is inspect-only here; its one story-branch create is step 5. A block stops for direction; never stash, reset, rebase, or auto-repair.
+5. **Strict mode — create its one story branch before any state/status/product write:** derive `story/<external-id>-<slug>` (or `story/ST-XXXXXX-<slug>`), ensure `Base Branch` is the already verified `sprint-N-dev`, then run `branch_preflight.py create` using the recorded full sprint SHA. Record Story Branch only after successful full-SHA verification.
+6. **After successful branch creation** → write `impl_session: <agentId>` to state, then update story status to `in-progress`:
    - **GitHub mode:** update story label to `status:in-progress`
    - **Strict mode:** edit `**Status:** in-progress` in the story MD file
-6. **Strict mode — create story branch:**
-   Derive branch name from story fields (see `Strict_Mode_Story_Guide.md` §Branch Naming):
-   - `git checkout sprint-N-dev` (sprint dev branch must exist — created by Sprint/Start Story workflow pre-step)
-   - `git checkout -b story/<external-id>-<slug>` (or `story/ST-XXXXXX-<slug>` if no External ID)
 7. **CI/CD check:**
    - **GitHub mode:** if the story's Technical Scope includes any file under `.github/workflows/`, the implementer **must** follow `{{AGENT_DIR_PREFIX}}/agents/rules/CICD_Validation_Guide.md` before opening a PR
    - **Strict mode:** CI gate is skipped entirely — no CI validation required
@@ -334,7 +331,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
      - **(b) No commit's push ever produced a run because no path in the PR's whole changed-file set (`gh pr diff <PR-number> --name-only`) matches any workflow's `paths:` filter.** Nothing was ever eligible — there is no run to find at any SHA, and none will appear. State this outcome explicitly rather than proceeding silently: the merge decision rests entirely on reviewer sign-off, with the absence of any eligible check recorded as a deliberate, evidenced exception — not as a passed check.
    - **Audit requirement (whichever state leads to a merge):** before step 2 below, post a `gh pr comment` recording which state applied (1 / 3a / 3b) and the evidence used — the head SHA for State 1, the resolved SHA and its run for 3(a), or the `paths:` non-match determination for 3(b). This is what makes the merge decision auditable after the fact.
 0a. **Approval-scope gate (mandatory, independent of the CI gate):** find the most recent `**Approved-SHA:**` the reviewer cited at Stage 2 and diff it against the current head: `git diff <Approved-SHA> <head-SHA> --name-only`.
-    - **Permitted post-approval additions:** files this same pipeline mandates land after Stage 2 sign-off as another stage's own designated duty — agent memory-file commits (Stage-Transition Commit, `Agent_Common_Read_On_Demand.md §5`), the story's own retro file (`Retro_Rules.md`), and QA's test-scenario document (`QA_Rules_Bootstrap.md §4`). These are compatible with this gate because the pipeline itself schedules them here, not because they are "just docs" — no other post-approval addition gets a pass on that basis.
+    - **No post-approval exception for agent runtime state:** Memory, Working Records, retrospectives, telemetry, and pipeline state are uncommitted. Any tracked change since `Approved-SHA`, including a test-scenario document, requires a refreshed review.
     - **Anything else added or modified since the Approved-SHA** (any AC-functional, template, workflow, or code content the reviewer did not see) → the sign-off no longer covers the artifact about to merge. Do not merge; resume the reviewer (`reviewer_session`) with just the post-approval delta for a fresh look, and get a refreshed `Approved-SHA` before retrying this gate.
     - Add the outcome (unchanged / bookkeeping-only / re-review triggered) to the same audit comment as step 0.
 1. Get the PR branch name: `gh pr view <PR-number> --repo {github-org}/{repo-name} --json headRefName --jq '.headRefName'`
