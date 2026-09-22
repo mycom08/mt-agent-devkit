@@ -81,7 +81,7 @@ Write format, access control, retention and the character cap are owned by `Agen
 | Unix scripts | Shell (.sh) |
 | VCS | Git / GitHub |
 
-There is no compiled binary, no database, no web server, and no test framework. Pre-PR gate for `.sh` files: `bash -n <file>`. For `.ps1` files: PowerShell syntax check. For any PR touching `.claude/agents/templates/**` or `.claude/agents/workflows/**`: `python scripts/validate_templates.py` (Layer-1 corpus invariant check — must exit 0). See `docs/Template_Test_Strategy.md` for the full template test approach (3-layer model, the 6 invariant specs, risk tiers, and deferred Layer-2/3 coverage).
+There is no compiled binary, no database, no web server, and no test framework. Pre-PR gate for `.sh` files: `bash -n <file>`. For `.ps1` files: PowerShell syntax check. For any PR touching `.claude/agents/templates/**` or `.claude/agents/workflows/**`: `python scripts/validate_templates.py` (Layer-1 corpus invariant check — must exit 0). See `docs/Template_Test_Strategy.md` for the full template test approach (3-layer model, the 7 invariant specs, risk tiers, and deferred Layer-2/3 coverage).
 
 ---
 

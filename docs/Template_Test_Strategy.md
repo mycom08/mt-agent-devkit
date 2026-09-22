@@ -19,7 +19,7 @@ template correctness requires a dedicated validation strategy.
 
 This guide defines:
 - The 3-layer model (Layer-1 through Layer-3) for testing template files.
-- The 6 Layer-1 corpus invariants enforced by `validate_templates.py`.
+- The 7 Layer-1 corpus invariants enforced by `validate_templates.py`.
 - Risk tiers A/B/C for behavioral testing priority.
 - A coverage model linking invariants to files.
 - The AC-as-oracle pattern for change-scoped doc stories.
@@ -89,8 +89,9 @@ Known-issue notes print as `[KNOWN_ISSUE]` and do not affect exit code.
 Exit non-zero on any `[ERROR]`.
 
 **Cross-cutting rule:** The validator parses each file into fenced-code regions
-first (tracking ` ``` ` and `~~~` fences). Invariants #2 and #4 skip fenced
-regions so code examples are not falsely flagged.
+first (tracking ` ``` ` and `~~~` fences with up to three leading spaces).
+Invariants #2, #4, and #5 skip fenced regions so code examples are not falsely
+flagged.
 
 ### #1 Reference integrity
 
@@ -171,7 +172,16 @@ seeded into `RETIRED_TRIGGERS` for the templates scope.
 against `fixtures/bad/inv4_bad_trigger.md`. This proves the check fires without
 contaminating the real constant.
 
-### #5 Manifest integrity (git-free)
+### #5 Full-read directives use number-independent wording
+
+A directive that says a file must be read `in full` must not, in the same
+non-fenced paragraph, restrict mandatory content to a numeric section range
+such as `§2–§5`, `§2-§5`, `§2 to §5`, `§2 through §5`, or `Sections 2 through
+5`. The validator reports the range line and requires the canonical wording:
+`Read this file in full. Every section is mandatory.` This prevents later
+headings from making an otherwise full-read instruction stale.
+
+### #6 Manifest integrity (git-free)
 
 Checks `changes.json` (the version-tracking manifest for target-project sync):
 - Every path in every `new`/`modified` array exists on disk, unless listed in
@@ -188,7 +198,7 @@ The validator checks semver parseability but not ordering direction.
 **Backlog item:** Add a `v0.0.0` baseline entry covering all files in
 `ALLOWLIST_UNTRACKED_TEMPLATES` so the allowlist can eventually be emptied.
 
-### #6 Markdown well-formedness (regex, not full CommonMark)
+### #7 Markdown well-formedness (regex, not full CommonMark)
 
 - **Heading continuity** — when heading level increases, it must not jump by
   more than 1 (`#` → `###` skipping `##` is a violation). Decreases are fine.
@@ -255,8 +265,8 @@ These files do not directly drive agent decisions in the sprint pipeline:
 Layer-1 invariants apply corpus-wide (all 55+ template files and 5 workflow
 files). Coverage is tracked at two levels:
 
-**Invariant × file:** every file is subject to invariants #1, #2, #4, #6.
-Invariant #3 applies only to shared files and thin variant pairs. Invariant #5
+**Invariant × file:** every file is subject to invariants #1, #2, #4, #5, and #7.
+Invariant #3 applies only to shared files and thin variant pairs. Invariant #6
 is a global check (not per-file).
 
 **Behavioral walkthroughs:** defined by tier. Tier-A files receive a walkthrough
@@ -306,10 +316,13 @@ This is also the canonical local telemetry command: it runs every
 hosts where Bash is unavailable, run the equivalent `powershell -File
 scripts/test/run.ps1`; Linux CI continues to use the shell runner.
 
-Five fixture files (one per invariant class tested) are in
-`scripts/test/fixtures/bad/`. The runner asserts each fixture produces at
-least one `[ERROR]` line. Invariant #5 (manifest integrity) is a global check
-and is covered by the main `validate_templates.py` run on the full corpus.
+Six bad fixtures (one per tested invariant class) are in
+`scripts/test/fixtures/bad/`; the runner asserts each fixture's exact expected
+`[ERROR]` count. The full-read invariant also has an adversarial clean fixture
+under `scripts/test/fixtures/good/`, covering negated wording, separate list
+and heading boundaries, and a three-space-indented code fence. Invariant #6
+(manifest integrity) is a global check and is covered by the main
+`validate_templates.py` run on the full corpus.
 
 ### CI gate
 
