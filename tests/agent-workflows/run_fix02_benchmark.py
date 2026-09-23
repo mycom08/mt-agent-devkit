@@ -261,13 +261,13 @@ def parse_stream(path: Path) -> dict[str, Any]:
     raw_answer = result.get("result")
     outcome = None
     if isinstance(raw_answer, str):
-        found = re.search(r"\{[^{}]*\"outcome\"[^{}]*\}", raw_answer, re.S)
-        if found:
+        for found in re.finditer(r"\{", raw_answer):
             try:
-                parsed = json.loads(found.group())
-                if parsed.get("outcome") in {"completed", "approved", "closed",
-                                              "blocked", "rejected"}:
+                parsed, _ = json.JSONDecoder().raw_decode(raw_answer[found.start():])
+                if isinstance(parsed, dict) and parsed.get("outcome") in {
+                        "completed", "approved", "closed", "blocked", "rejected"}:
                     outcome = parsed["outcome"]
+                    break
             except json.JSONDecodeError:
                 pass
     return {
@@ -492,11 +492,14 @@ def main() -> int:
     candidate_section, candidate_hash = source_rule(args.candidate_ref)
     if base_hash == candidate_hash:
         parser.error("The compared common-rule sections are identical")
+    if args.max_budget_usd <= 0:
+        parser.error("--max-budget-usd must be positive")
     config = {"fixture_sha256": fixture_hash(), "environment": environment,
               "base_ref": args.base_ref,
               "candidate_ref": args.candidate_ref, "base_rule_sha256": base_hash,
               "candidate_rule_sha256": candidate_hash, "model": args.model,
-              "effort": args.effort, "tools": ["Read", "PowerShell", "Edit", "Write"],
+              "effort": args.effort, "max_budget_usd_per_stage": args.max_budget_usd,
+              "tools": ["Read", "PowerShell", "Edit", "Write"],
               "mode": "strict/local", "stages": list(STAGES),
               "pilot_repetitions_per_arm": 1,
               "full_benchmark_planned_repetitions_per_arm": frozen_refs["planned_repetitions_per_arm"],
@@ -504,8 +507,6 @@ def main() -> int:
     if args.inspect_only:
         print(json.dumps(config, indent=2))
         return 0
-    if args.max_budget_usd <= 0:
-        parser.error("--max-budget-usd must be positive")
     artifacts = args.artifacts_dir or Path(tempfile.mkdtemp(prefix="fix02-benchmark-"))
     artifacts = artifacts.resolve()
     if ROOT == artifacts or ROOT in artifacts.parents:

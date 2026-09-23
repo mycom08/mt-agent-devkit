@@ -98,6 +98,15 @@ class StreamTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "inconsistent usage.input_tokens"):
             parse([first, second, {"type": "result", "result": "done", "usage": {}}])
 
+    def test_fenced_json_outcome_with_braces_in_evidence(self) -> None:
+        events = [assistant("request-1", "tool-1", "git diff", 1),
+                  tool_result("tool-1", "diff --git a/x b/x"),
+                  {"type": "result", "result": (
+                      'Review note.\n```json\n{"outcome":"blocked",'
+                      '"evidence":"state has {pending} verdicts","checks_run":[]}\n```'),
+                   "usage": {}}]
+        self.assertEqual(parse(events)["agent_outcome"], "blocked")
+
 
 if __name__ == "__main__":
     unittest.main()
