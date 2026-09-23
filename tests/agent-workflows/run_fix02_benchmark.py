@@ -166,8 +166,8 @@ def prompt_for(role: str, prior: dict[str, Any]) -> str:
 
 
 def tool_result_success(block: dict[str, Any], *, require_tests: bool = False) -> bool:
-    """Require a matched result with an explicit zero command exit and clean test output."""
-    if block.get("is_error") is True:
+    """Require CLI success, any reported exit code zero, and clean test output."""
+    if block.get("is_error") is not False:
         return False
     content = block.get("content")
     fragments: list[str] = []
@@ -191,7 +191,7 @@ def tool_result_success(block: dict[str, Any], *, require_tests: bool = False) -
     output = "\n".join(fragments)
     exit_codes += [int(code) for code in re.findall(
         r"(?:exit\s*code\s*[:=]?|exited\s+with\s+code)\s*(\d+)", output, re.I)]
-    if not exit_codes or any(code != 0 for code in exit_codes):
+    if any(code != 0 for code in exit_codes):
         return False
     if require_tests:
         return bool(re.search(r"Ran 6 tests?", output)
@@ -312,8 +312,30 @@ def product_diff(repo: Path, expected: dict[str, Any]) -> dict[str, Any]:
     lines = [line for line in diff.splitlines() if line.startswith(("+", "-"))
              and not line.startswith(("+++", "---"))]
     return {"changed_paths": paths,
-            "matches_expected": paths == expected["expected_diff"]["changed_paths_exactly"]
+            "matches_expected": paths == sorted(expected["expected_diff"]["changed_paths_exactly"]
+                                                + ["state.json"])
             and lines == ["-" + removed, "+" + added]}
+
+
+def advance_state(repo: Path, role: str) -> dict[str, Any]:
+    """Record harness-owned stage transitions before the next fresh role starts."""
+    path = repo / "state.json"
+    state = json.loads(path.read_text(encoding="utf-8"))
+    if role == "developer":
+        state["current_stage"] = "technical_lead_review"
+        state["story_status"] = "implemented"
+    elif role == "technical_lead":
+        state["current_stage"] = "qa_verification"
+        state["technical_lead_verdict"] = "approved"
+    elif role == "qa":
+        state["current_stage"] = "product_owner_closure"
+        state["qa_verdict"] = "approved"
+    else:
+        state["current_stage"] = "complete"
+        state["story_status"] = "closed"
+        state["product_owner_closure"] = "closed"
+    path.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
+    return state
 
 
 def run_stage(repo: Path, raw: Path, role: str, prior: dict[str, Any], model: str,
@@ -365,33 +387,41 @@ def run_side(label: str, ref: str, root: Path, expected: dict[str, Any],
         raise ValueError(f"Unexpected seeded test result for {label}: {seeded}")
     stages = []
     prior: dict[str, Any] = {}
-    developer_snapshot = None
     reviewer_mutation = False
+    state_transitions = []
     for role in ROLES:
         if role == "product_owner" and (prior.get("technical_lead") != "approved"
                                          or prior.get("qa") != "approved"):
             break
+        before = (command(["git", "status", "--porcelain", "--untracked-files=all"], repo).stdout,
+                  command(["git", "diff", "--binary"], repo).stdout)
         metrics = run_stage(repo, side_root / f"{role}.jsonl", role, prior,
                             model, effort, budget, expected_model)
         stages.append(metrics)
         prior[role] = metrics["agent_outcome"]
         snapshot = (command(["git", "status", "--porcelain", "--untracked-files=all"], repo).stdout,
                     command(["git", "diff", "--binary"], repo).stdout)
-        if role == "developer":
-            developer_snapshot = snapshot
-        elif snapshot != developer_snapshot:
+        if role != "developer" and snapshot != before:
             reviewer_mutation = True
         if (metrics["cli_exit_code"] or metrics["is_error"]
                 or not metrics["resolved_model_matches_manifest"]
                 or metrics["agent_outcome"] != SUCCESS_OUTCOMES[role]):
             break
+        state_transitions.append({"after_role": role, "state": advance_state(repo, role)})
     final_tests = run_tests(repo)
     diff = product_diff(repo, expected)
+    final_state = json.loads((repo / "state.json").read_text(encoding="utf-8"))
+    expected_state = json.loads((FIXTURE / "state.json").read_text(encoding="utf-8"))
+    expected_state.update({"current_stage": "complete", "story_status": "closed",
+                           "technical_lead_verdict": "approved", "qa_verdict": "approved",
+                           "product_owner_closure": "closed"})
     return {"label": label, "ref": command(["git", "rev-parse", ref], ROOT).stdout.strip(),
             "section_3_sha256": section_hash, "preflight": preflight,
             "seeded_tests": seeded,
             "final_tests": final_tests, "product_diff": diff, "stages": stages,
             "reviewer_mutation_detected": reviewer_mutation,
+            "state_transitions": state_transitions,
+            "final_state": final_state,
             "local_quality_pass": len(stages) == len(ROLES)
             and all(stage["agent_outcome"] == SUCCESS_OUTCOMES[stage["role"]]
                     and stage["cli_exit_code"] == 0
@@ -401,6 +431,7 @@ def run_side(label: str, ref: str, root: Path, expected: dict[str, Any],
             and stages[2]["test_command_confirmed"]
             and not reviewer_mutation
             and final_tests == {"exit_code": 0, "tests_run": 6, "failures": 0, "errors": 0}
+            and final_state == expected_state
             and diff["matches_expected"]}
 
 

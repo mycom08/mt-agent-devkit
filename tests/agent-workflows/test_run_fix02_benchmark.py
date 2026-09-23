@@ -70,6 +70,28 @@ class StreamTests(unittest.TestCase):
         self.assertFalse(unmatched["test_command_confirmed"])
         self.assertEqual(unmatched["powershell_results_unverified"], 1)
 
+    def test_cli_success_without_exit_code_and_harness_state_transitions(self) -> None:
+        events = [
+            assistant("request-1", "tool-1", "python -m unittest discover -s tests -v", 2),
+            tool_result("tool-1", "Ran 6 tests in 0.001s\n\nOK"),
+            {"type": "result", "result": '{"outcome":"completed"}', "usage": {}},
+        ]
+        self.assertTrue(parse(events)["test_command_confirmed"])
+        state = {
+            "current_stage": "developer_implementation", "story_status": "ready",
+            "technical_lead_verdict": "pending", "qa_verdict": "pending",
+            "product_owner_closure": "pending"}
+        repo = mock.MagicMock()
+        state_file = repo.__truediv__.return_value
+        state_file.read_text.side_effect = lambda **_: json.dumps(state)
+        state_file.write_text.side_effect = lambda content, **_: state.update(json.loads(content))
+        for role in runner.ROLES:
+            runner.advance_state(repo, role)
+        self.assertEqual(state["current_stage"], "complete")
+        self.assertEqual(state["technical_lead_verdict"], "approved")
+        self.assertEqual(state["qa_verdict"], "approved")
+        self.assertEqual(state["product_owner_closure"], "closed")
+
     def test_request_usage_must_be_stable(self) -> None:
         first = assistant("request-1", "tool-1", "git diff", 1)
         second = assistant("request-1", "tool-1", "git diff", 2, input_tokens=11)
