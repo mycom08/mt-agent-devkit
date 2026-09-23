@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "manifest_status": "frozen_inputs_only",
+  "purpose": "Controlled before/after FIX-02 comparison; this file contains no measured result.",
+  "fixture": {
+    "id": "WF-002-business-logic",
+    "revision": 1,
+    "root": "tests/agent-workflows/fixtures/WF-002-business-logic",
+    "file_set_policy": "exactly_content_sha256_keys; reject missing or extra fixture files",
+    "content_sha256": {
+      "repo/README.md": "889357e4c59e1700dc5363134a2d522c552070d5fa446bf1fd7899defefe6205",
+      "repo/pricing.py": "e15980c8f6549b700012bbc1c45e8ee44d25a7aa31aa583919e8c125f05aec9d",
+      "repo/tests/test_pricing.py": "2ec426c2cdc2de9e3e7a34a9654debb66d496e0d1574f391c47880951f0dda13",
+      "story.md": "1ea57691d65c80138f1a99e08cf8aa1d2cd4bdeb1886104873923082ce6ccede",
+      "state.json": "4380f00e6ef978aa406906bee77947883202b491bf06211272869ecca51e2317",
+      "expected.json": "54bc7d39a40a34fa1a55cfe3222278736c6fe33e69b0e2a015f6848eec782dc0"
+    },
+    "initial_state": "state.json",
+    "story": "story.md",
+    "expected_result": "expected.json",
+    "repository": "repo",
+    "seeded_test_outcome": "Five tests pass; test_standard_at_threshold fails until the story is implemented."
+  },
+  "comparison": {
+    "baseline_harness_commit": "a30460a87c6d439b1193c45b77cc638a8f237fdb",
+    "candidate_harness_commit": "e2e700aa2e1014011c07c789458d13501a92f661",
+    "variable_under_test": "FIX-02 parallel tool execution guidance",
+    "planned_repetitions_per_arm": 3,
+    "exploratory_pilot_repetitions_per_arm": 1,
+    "exploratory_pilot_is_full_benchmark": false,
+    "same_fixture_model_tools_and_quality_gates_required": true,
+    "run_each_arm_in_a_fresh_isolated_copy": true,
+    "mode": "strict_local",
+    "remote_operations_allowed": false
+  },
+  "agent_configuration": {
+    "cli": "claude",
+    "cli_version": "2.1.280",
+    "cli_version_must_be_checked_in_each_run": true,
+    "model_alias": "sonnet",
+    "expected_resolved_model": "claude-sonnet-5",
+    "backend_model_revision": null,
+    "backend_model_revision_missing_reason": "The CLI reports a resolved model ID but does not pin a backend revision in these frozen inputs.",
+    "resolved_model_must_be_checked_in_each_run": true,
+    "reasoning_effort": "medium",
+    "role_models": {
+      "developer": "claude-sonnet-5",
+      "technical_lead": "claude-sonnet-5",
+      "qa": "claude-sonnet-5",
+      "product_owner": "claude-sonnet-5"
+    },
+    "tool_allowlist": ["Read", "PowerShell", "Edit", "Write"],
+    "tool_inventory_must_be_checked_in_each_run": true,
+    "python_command": "python",
+    "python_version": "3.12.10",
+    "python_version_must_be_checked_in_each_run": true,
+    "network_access": true,
+    "network_access_purpose": "Authenticated Claude API calls for agent execution.",
+    "repository_remote_operations_allowed": false,
+    "network_isolation_enforced_by_runner": false,
+    "fixture_external_services": [],
+    "fixture_credentials": [],
+    "host_claude_cli_authentication_required": true
+  },
+  "execution": {
+    "initial_stage": "developer_implementation",
+    "stage_order": [
+      "developer_implementation",
+      "technical_lead_review",
+      "qa_verification",
+      "product_owner_closure"
+    ],
+    "required_test_command_from_fixture_repo": "python -m unittest discover -s tests -v",
+    "quality_contract": "fixtures/WF-002-business-logic/expected.json",
+    "telemetry_source": "claude_cli_stream_json",
+    "full_pipeline_evidence": {
+      "field_policy": "Emit every listed key per stage; use null and unavailable_fields when a measurement is unavailable.",
+      "required_stage_record_fields": [
+        "schema_version",
+        "run_id",
+        "story_id",
+        "role",
+        "stage",
+        "session_mode",
+        "model",
+        "started_at",
+        "ended_at",
+        "duration_ms",
+        "completion_status",
+        "usage_source",
+        "session_final_tokens",
+        "requests",
+        "tool_invocations",
+        "input_tokens",
+        "cache_creation_input_tokens",
+        "cache_read_input_tokens",
+        "output_tokens",
+        "unavailable_fields",
+        "notes"
+      ],
+      "required_quality_gates": [
+        "expected_product_diff",
+        "targeted_and_aggregate_tests",
+        "independent_technical_lead_verdict",
+        "independent_qa_verdict",
+        "product_owner_closure"
+      ]
+    },
+    "exploratory_pilot_evidence": {
+      "scope": "One baseline/candidate pair of isolated local role simulations using Common Rule Section 3.",
+      "field_policy": "Usage values are captured when the CLI reports them; null values are not estimates.",
+      "available_stage_fields": [
+        "role",
+        "stage",
+        "session_mode",
+        "model_ids",
+        "agent_outcome",
+        "requests",
+        "tool_invocations",
+        "input_tokens",
+        "cache_creation_input_tokens",
+        "cache_read_input_tokens",
+        "output_tokens",
+        "duration_seconds",
+        "unavailable_fields"
+      ],
+      "known_unavailable_evidence": [
+        "session_final_tokens",
+        "installed_orchestrator_context_and_handoffs",
+        "remote_ci_result",
+        "three_repetitions_per_arm"
+      ],
+      "cannot_establish_g2_or_g6": true
+    },
+    "raw_artifact_root": "tempfile.gettempdir()/fix02-benchmark-<unique-id>",
+    "raw_artifact_root_outside_repository": true,
+    "sanitize_before_export": true
+  },
+  "run_evidence": {
+    "baseline": {
+      "status": "not_run",
+      "run_ids": [],
+      "result_artifacts": [],
+      "metrics": {
+        "requests": null,
+        "tool_invocations": null,
+        "input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "cache_read_input_tokens": null,
+        "output_tokens": null,
+        "session_final_tokens": null,
+        "duration_ms": null
+      },
+      "quality_result": null,
+      "unavailable_fields": [
+        "requests",
+        "tool_invocations",
+        "input_tokens",
+        "cache_creation_input_tokens",
+        "cache_read_input_tokens",
+        "output_tokens",
+        "session_final_tokens",
+        "duration_ms",
+        "quality_result"
+      ],
+      "missing_fields_reason": "No controlled baseline run has been executed."
+    },
+    "candidate": {
+      "status": "not_run",
+      "run_ids": [],
+      "result_artifacts": [],
+      "metrics": {
+        "requests": null,
+        "tool_invocations": null,
+        "input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "cache_read_input_tokens": null,
+        "output_tokens": null,
+        "session_final_tokens": null,
+        "duration_ms": null
+      },
+      "quality_result": null,
+      "unavailable_fields": [
+        "requests",
+        "tool_invocations",
+        "input_tokens",
+        "cache_creation_input_tokens",
+        "cache_read_input_tokens",
+        "output_tokens",
+        "session_final_tokens",
+        "duration_ms",
+        "quality_result"
+      ],
+      "missing_fields_reason": "No controlled candidate run has been executed."
+    }
+  }
+}

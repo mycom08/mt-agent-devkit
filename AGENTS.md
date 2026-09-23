@@ -2,9 +2,9 @@
 
 ## Project Context
 
-At the start of every task in this repository, read `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` for the minimum project context. Follow its routing table and read sections from `Project_Priming_Read_On_Demand.md` only when the task matches a listed trigger.
+When you first begin work in this repository during a session, read `.antigravity/agents/working/context/Project_Priming_Bootstrap.md` once for the minimum project context. Reuse that context for subsequent prompts and tasks in the same session; do not reread the bootstrap for every user message. Follow its routing table and read sections from `Project_Priming_Read_On_Demand.md` only when the current task matches a listed trigger.
 
-This lightweight project-priming read is required for normal repository tasks; it does not trigger the full orchestrator startup sequence.
+This one-time, lightweight project-priming read is required when repository work starts; it does not trigger the full orchestrator startup sequence.
 
 ---
 
