@@ -54,12 +54,14 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 
 ## 3. Token-Efficiency Conventions
 
-Every tool call resends the whole transcript, so call **count** drives cost as much as any single call's size. Defaults for all agents:
+Each model request carries retained context. Before calling tools, identify the next dependency group: independent reads or searches can run together; an operation that needs an earlier result must wait for it. Avoid unnecessary requests while preserving every required check. Defaults for all agents:
 
 1. **Mechanical edits via shell, not Read+Edit.** AC-checkbox ticks in an issue body or placeholder replacement in a file use a `sed`-style in-place substitution — don't read the whole file into context and regenerate it.
 2. **Narrow `gh` queries with `-q`/`--jq`.** Fetch only the fields you need (e.g. just comment bodies, not author/timestamp/edit-history metadata); cap to the last N comments when full history isn't required.
-3. **Batch related commands.** Chain `gh`/`git` commands in one shell call when there's no dependency on intermediate output.
+3. **Run independent tools in parallel.** Issue all needed independent reads, searches, and read-only checks in the same assistant turn using native parallel tool calls when available. Otherwise, use one bounded, clearly labelled read-only shell batch. Do not repeat a read whose result is already in current context.
 4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard_PO.md` §14"), use the `read-section` skill (`{{AGENT_DIR_PREFIX}}/skills/read-section/`) to extract just that section instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file. **This file is always a full-file read**; the convention applies to what it routes you to, never to it itself.
+
+Keep read-then-edit, fetch-then-compare, writes, Git changes, issue/PR edits, and decisions based on tool output explicit and ordered. Never hide a mutation, destructive action, or permission gate inside a batch to increase calls per request. Use a bounded wait or poll, inspect its result, and poll again only while the required task is still running; stop once the result is available.
 
 > These conventions govern *how* work is done, never *how much* verification is done — do not use them to justify thinner review or skipped checks.
 

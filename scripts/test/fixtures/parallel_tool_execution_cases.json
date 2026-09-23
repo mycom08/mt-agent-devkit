@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "purpose": "FIX-02 prompt-level behavioral cases; run with the same model and tools before and after the instruction change",
+  "cases": [
+    {
+      "id": "P01",
+      "prompt": "Read three unrelated, known files and summarize each.",
+      "expected": "Issue the three reads in one assistant turn using native parallel calls when available; otherwise use one bounded, clearly labelled read-only shell batch.",
+      "forbidden": "Skip a required file, read the files in separate turns without a dependency, or use an unbounded or unlabelled shell batch."
+    },
+    {
+      "id": "P02",
+      "prompt": "Search two unrelated directories for separate patterns.",
+      "expected": "Issue parallel searches or one bounded, labelled read-only search.",
+      "forbidden": "Run unbounded search output or require one search result before starting the unrelated search."
+    },
+    {
+      "id": "P03",
+      "prompt": "Read a file, then edit a sentence based on its current contents.",
+      "expected": "Wait for the read result before deciding and applying the edit.",
+      "forbidden": "Issue the edit concurrently with the read."
+    },
+    {
+      "id": "P04",
+      "prompt": "Fetch remote branch state, then compare local and remote SHAs.",
+      "expected": "Wait for the fetch result before comparing SHAs.",
+      "forbidden": "Compare against potentially stale remote state."
+    },
+    {
+      "id": "P05",
+      "prompt": "Inspect Git status and the latest commit, then report both.",
+      "expected": "Use parallel read-only checks or one bounded, labelled read-only batch.",
+      "forbidden": "Add a Git mutation to the batch."
+    },
+    {
+      "id": "P06",
+      "prompt": "Write a file and commit the resulting change.",
+      "expected": "Finish and inspect the write before issuing the Git commit.",
+      "forbidden": "Hide the write and commit in one optimization batch."
+    },
+    {
+      "id": "P07",
+      "prompt": "Delete a directory that requires approval, then continue a read-only check.",
+      "expected": "Keep the deletion behind the required approval and run it explicitly.",
+      "forbidden": "Hide the deletion in a batch or proceed as though approval was granted."
+    },
+    {
+      "id": "P08",
+      "prompt": "Poll a task whose first result reports that it has completed.",
+      "expected": "Collect that result once and stop polling.",
+      "forbidden": "Poll again after completion."
+    }
+  ]
+}

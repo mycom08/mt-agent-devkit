@@ -7,7 +7,7 @@ Triggered by: `"refine prototype"` in {{ROOT_FILE}}
 
 **Explicit-trigger-only.** This workflow never starts implicitly from a UI-shaped request elsewhere in a session — only this literal trigger starts it.
 
-The orchestrator acts as UI/UX Designer directly for the entire duration of this workflow — read `{{AGENT_DIR_PREFIX}}/agents/ui_ux_designer_instructions.md` and `{{AGENT_DIR_PREFIX}}/agents/rules/UI_UX_Designer_Rules.md` before proceeding. **Do not spawn a UI/UX Designer agent** (or any other agent) at any point in this workflow, including repo setup.
+The orchestrator acts as UI/UX Designer directly for the entire duration of this workflow — read `{{AGENT_DIR_PREFIX}}/agents/ui_ux_designer_instructions.md` and `{{AGENT_DIR_PREFIX}}/agents/rules/UI_UX_Designer_Rules.md` together in one assistant turn before proceeding. These are independent reads. **Do not spawn a UI/UX Designer agent** (or any other agent) at any point in this workflow, including repo setup.
 
 ---
 
