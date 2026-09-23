@@ -29,6 +29,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Changes
 
 - [Enhancement #207] Added privacy-safe, versioned agent-stage telemetry collection and aggregation.
+- [Fix] Directed agents to run independent read-only tools in parallel while keeping dependent and mutating work ordered.
 
 ### Bug Fixes
 

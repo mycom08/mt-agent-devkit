@@ -5,7 +5,7 @@
 
 Triggered by: `"create stories"` or `"/create-stories"` in {{ROOT_FILE}}
 
-The orchestrator acts as PO — read `{{AGENT_DIR_PREFIX}}/agents/product_owner_instructions.md` and `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` before proceeding. **Do not spawn a PO agent.**
+The orchestrator acts as PO — read `{{AGENT_DIR_PREFIX}}/agents/product_owner_instructions.md` and `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` together in one assistant turn before proceeding. These are independent reads. **Do not spawn a PO agent.**
 
 ---
 
