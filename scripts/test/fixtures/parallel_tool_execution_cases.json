@@ -5,8 +5,8 @@
     {
       "id": "P01",
       "prompt": "Read three unrelated, known files and summarize each.",
-      "expected": "Issue the three reads in one assistant turn using native parallel calls.",
-      "forbidden": "Skip a required file or read the files in separate turns without a dependency."
+      "expected": "Issue the three reads in one assistant turn using native parallel calls when available; otherwise use one bounded, clearly labelled read-only shell batch.",
+      "forbidden": "Skip a required file, read the files in separate turns without a dependency, or use an unbounded or unlabelled shell batch."
     },
     {
       "id": "P02",
