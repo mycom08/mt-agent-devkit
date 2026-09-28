@@ -2,6 +2,10 @@
 
 Do not read this file in full. Sections §2–§5 are mandatory.
 
+Do not read this file in full. Sections §2–§5 are required.
+
+This file need not be read in full. Sections 2 through 5 are necessary.
+
 You do not need to read this file in full. Sections §2–§5 are mandatory.
 
 Read the named section, but do not read this file in full. Sections §2–§5 are mandatory.

@@ -86,9 +86,13 @@ run_fixture "inv4: retired trigger string" 2 \
     --test-retired-trigger TEST_RETIRED_TRIGGER_DO_NOT_USE \
     "$FIXTURES_BAD/inv4_bad_trigger.md"
 
-# Invariant #5 -- a full-read directive must not use a numeric mandatory range
+# Invariant #5 -- a full-read directive must not require a numeric section range
 run_fixture "inv5: numeric full-read mandatory range" 1 \
     "$FIXTURES_BAD/inv5_bad_full_read_range.md"
+run_fixture "inv5: numeric full-read required range" 1 \
+    "$FIXTURES_BAD/inv5_bad_full_read_required.md"
+run_fixture "inv5: passive full-read necessary range" 1 \
+    "$FIXTURES_BAD/inv5_bad_full_read_necessary.md"
 
 run_clean_fixture "inv5: full-read exclusions (negation, boundaries, indented fence)" \
     "$SCRIPT_DIR/fixtures/good/inv5_full_read_exclusions.md"
