@@ -181,19 +181,9 @@ Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Pro
 
 Fetch and write verbatim. Create `.antigravity/agents/scripts/` if it does not exist.
 
-#### Settings hook — Inject if missing
+#### Settings hook — not applicable to Antigravity
 
-Check `.antigravity/settings.json` for the devkit update-check hook:
-- If a `SessionStart` entry whose command references `check_devkit_version` already exists → skip
-- If missing → detect OS from the environment `sync devkit` is running in, then inject the matching hook JSON. If `.antigravity/settings.json` already exists, merge this under its existing `hooks` key — do not remove existing hooks or keys. If it does not exist, create it with this content:
-  - **Windows:**
-    ```json
-    { "hooks": { "SessionStart": [{ "matcher": "startup", "hooks": [{ "type": "command", "command": "powershell -File .antigravity/agents/scripts/check_devkit_version.ps1", "timeout": 10 }] }] } }
-    ```
-  - **Mac/Linux:**
-    ```json
-    { "hooks": { "SessionStart": [{ "matcher": "startup", "hooks": [{ "type": "command", "command": "bash .antigravity/agents/scripts/check_devkit_version.sh", "timeout": 10 }] }] } }
-    ```
+Antigravity has no session-start-equivalent event and does not read `settings.json` for hooks at all (its hooks live in `.agents/hooks.json`, covering `PreToolUse`/`PostToolUse`/`PreInvocation`/`PostInvocation`/`Stop` only) — do not inject anything into `.antigravity/settings.json` for this purpose. The devkit-update notice comes from `orchestrator_instructions.md`'s Devkit Version Check section instead (see the Instruction files step below), which runs `check_devkit_version` explicitly at the first routed command of a session.
 
 #### Instruction files — Merge
 

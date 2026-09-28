@@ -85,7 +85,7 @@ Summarize findings to the user in 5 bullets max before proceeding to Stage 2.
 ## Stage 2 — Content Generation
 
 Scaffold files split into two tiers (see full detail below):
-- **Mechanical tier** — 12/25 rules files, all 10 workflow files, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`, `settings.json` hook. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md`.
+- **Mechanical tier** — 12/25 rules files, all 10 workflow files, the combined `orchestrator_instructions.md`, scripts, blank memory/working-record files, `.gitignore`, `VERSION`, `CHANGELOG.md`, `devkit_version.txt`. Zero project-specific judgment; written by `working/scripts/scaffold_mechanical.sh` in one call, not by reading+regenerating each template through an agent. `VERSION`/`CHANGELOG.md` are a universal devkit convention (any language) — see `.antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md`. No `settings.json` hook is written — Antigravity has no session-start-equivalent event; the devkit-update notice comes from `orchestrator_instructions.md`'s Devkit Version Check section instead.
 - **Adaptive tier** — `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, 13/25 rules files, 4 wiki docs. Genuinely needs the scanned project context; generate these by reading the source templates from `.claude/agents/templates/` and adapting their content. Replace all placeholder or example-specific content with content appropriate for the target project.
 
 ### Source template paths (in this devkit)
@@ -214,7 +214,7 @@ This one script call writes every file (or file family) that needs **zero projec
 It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` (no `.gitkeep` — gitignored, see below), `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
 - **12 of 25 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common_Bootstrap`, `Agent_Common_Read_On_Demand`, `Audit_Rules`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules_Bootstrap`, `Product_Owner_Rules_Read_On_Demand`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`, `UI_Prototype_Rules`
 - **All 10 workflow files** — the 8 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
-- Both version-check scripts, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.antigravity/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
+- Both version-check scripts, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed). **No `settings.json` `SessionStart` hook is written** — Antigravity has no session-start-equivalent event and doesn't read `settings.json` for hooks at all (its hooks live in `.agents/hooks.json`, covering `PreToolUse`/`PostToolUse`/`PreInvocation`/`PostInvocation`/`Stop` only), so a hook injected there never fired. The devkit-update notice for Antigravity instead comes from `orchestrator_instructions.md`'s Devkit Version Check section, which the mechanical script's combined `orchestrator_instructions.md` output already carries — it runs `check_devkit_version` explicitly before routing the first command of a session.
 - `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` (single-next-version-heading format) at the target project root — a universal devkit convention, any language, written only if not already present (idempotent — a Java skeleton generation pass that ran earlier in `Build_Software_Workflow.md` never creates these itself anymore, so this is always the actual creator). See `.antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md` for the format.
 
 If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the 12 verbatim rules files are left as literal placeholders — fill them in with a follow-up run once the GitHub repo exists, or leave them (harmless, same convention as workflow files).
@@ -303,7 +303,7 @@ For each missing wiki file, fill every `{{PLACEHOLDER}}` in the template using t
 **Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`
 **Target:** `.antigravity/agents/scripts/check_devkit_version.ps1`, `.antigravity/agents/scripts/check_devkit_version.sh`
 
-Copy both scripts verbatim. These power the `SessionStart` hook that notifies users when a new devkit version is available.
+Copy both scripts verbatim. `orchestrator_instructions.md`'s Devkit Version Check section runs these explicitly (no `SessionStart` hook — Antigravity has no such event).
 
 ---
 
@@ -389,15 +389,13 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```bash
    bash .antigravity/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
-   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
+   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, the combined `orchestrator_instructions.md`, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, and `.gitignore` additions. No `settings.json` hook step — Antigravity has no session-start-equivalent event, so nothing is written or merged into `settings.json` for this purpose; the devkit-update notice instead comes from the `orchestrator_instructions.md` just written (its Devkit Version Check section).
 
 2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 13 adaptive rules files, 4 wiki docs.
    - For `AGENTS.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.
 
-3. **Only if the mechanical script reported `settings.json` already existed:** read the existing `.antigravity/settings.json` and merge the `SessionStart` hook under `hooks` (do not remove existing hooks or keys) — use the same Windows/Mac-Linux hook JSON the script would have written (see the script source for both forms).
-
-4. Clean up any temporary files or scripts (like `adapt.cjs` or `adapt.js`) created during the adaptive generation process.
-   5. Report to the user:
+3. Clean up any temporary files or scripts (like `adapt.cjs` or `adapt.js`) created during the adaptive generation process.
+   4. Report to the user:
    - Files written (count and list)
    - Mode selected (`strict` or `github`)
    - Any files skipped (if "Skip existing" was chosen in Stage 1)

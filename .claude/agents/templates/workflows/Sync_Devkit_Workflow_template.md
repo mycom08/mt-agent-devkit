@@ -199,9 +199,11 @@ Fetch and write verbatim (strip the `_template` suffix from `SKILL.md`; the scri
 
 Applies to: `SKILL.md` and `scripts/read_section.sh` under `skills/read-section/` (2 files).
 
-#### Settings hook — Inject if missing
+#### Settings hook — Inject if missing (`{{AGENT_CLI_NAME}}` = Claude Code only)
 
-Check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
+Antigravity has no session-start-equivalent event and does not read `settings.json` for hooks at all (its hooks live in `.agents/hooks.json` and cover `PreToolUse`/`PostToolUse`/`PreInvocation`/`PostInvocation`/`Stop`) — a hook injected here would never fire. Skip this step entirely when `{{AGENT_CLI_NAME}}` is `Antigravity`; the devkit-update notice for Antigravity comes from `orchestrator_instructions.md`'s Devkit Version Check section instead (see the Instruction files step below), which runs `check_devkit_version` explicitly at the first routed command of a session.
+
+When `{{AGENT_CLI_NAME}}` is `Claude Code`, check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
 - If a `SessionStart` entry whose command references `check_devkit_version` already exists → skip
 - If missing → detect OS from the environment `sync devkit` is running in, then inject the matching hook JSON. If `{{AGENT_DIR_PREFIX}}/settings.json` already exists, merge this under its existing `hooks` key — do not remove existing hooks or keys. If it does not exist, create it with this content:
   - **Windows:**

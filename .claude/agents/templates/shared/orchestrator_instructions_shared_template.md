@@ -54,4 +54,15 @@ Read the linked file before executing any workflow.
 | `sync devkit` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Sync_Devkit_Workflow.md` |
 
 Sprint and Start Story workflows share pipeline stages — see `{{AGENT_DIR_PREFIX}}/agents/workflows/Shared_Pipeline_Stages.md`.
+
+---
+
+## Devkit Version Check (`{{AGENT_CLI_NAME}}` = Antigravity only)
+
+Claude Code gets an automatic devkit-update notice via a `SessionStart` hook. Antigravity has no equivalent event and does not read `settings.json` for hooks, so the orchestrator runs the same check explicitly instead — once, before routing the **first** trigger command of a session:
+
+- Windows: `powershell -File {{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.ps1`
+- Mac/Linux: `bash {{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.sh`
+
+If it prints `{"systemMessage": "..."}`, show that message to the user before proceeding with the routed workflow. If it prints nothing, proceed silently — most exit paths (missing `devkit_version.txt`, no `**Devkit source:**` match in `{{ROOT_FILE}}`, network failure, already up to date) are silent by design, not an error. Do not repeat this check later in the same session.
 <!-- SHARED-END -->
