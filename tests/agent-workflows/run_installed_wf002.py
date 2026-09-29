@@ -11,6 +11,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tarfile
@@ -34,6 +35,12 @@ REQUIRED_INSTALLED = (
 ROLES = ("developer", "technical_lead", "qa", "product_owner", "business_analyst",
          "ui_ux_designer")
 CLI_TOOLS = "Read,Glob,Grep,Bash,PowerShell,Edit,Write,Agent"
+CLI_TIMEOUT_SECONDS = 600
+BLOCKED_RESULT = re.compile(
+    r"\b(?:I stopped|I did not (?:proceed|finish)|only partly done|"
+    r"partly done|cannot (?:proceed|continue)|can't (?:proceed|continue))\b",
+    re.IGNORECASE,
+)
 
 
 def command(args: list[str], cwd: Path, *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -88,6 +95,15 @@ def verify_install(target: Path) -> dict[str, str]:
     root = (target / "CLAUDE.md").read_text(encoding="utf-8")
     if "**Mode:** strict" not in root or "{{" in root:
         raise ValueError("Installed CLAUDE.md is not fully adapted to strict mode")
+    adaptive = (
+        ".claude/agents/context/Project_Priming.md",
+        ".claude/agents/context/Document_Index.md",
+        *(f".claude/agents/{role}_instructions.md" for role in ROLES),
+    )
+    unresolved = [name for name in adaptive if not (target / name).is_file() or
+                  "{project-name}" in (target / name).read_text(encoding="utf-8")]
+    if unresolved:
+        raise ValueError(f"Installed adaptive files are incomplete: {', '.join(unresolved)}")
     if command(["git", "remote"], target).stdout.strip():
         raise ValueError("Installed target acquired a remote")
     return {name: hashlib.sha256((target / name).read_bytes()).hexdigest()
@@ -101,7 +117,9 @@ def add_story(target: Path) -> None:
         raise ValueError("Installed target already contains benchmark story")
     header = (f"# {STORY_ID} — WF-002 shipping threshold\n\n"
               "**Status:** ready\n**Sprint:** sprint-1\n"
-              "**Project Base Branch:** main\n\n")
+              "**Assigned:** Developer\n**Feature:** none\n**Phase:** none\n"
+              "**Project Base Branch:** main\n\n"
+              "## Technical Scope\n\n- `pricing.py` shipping threshold comparison.\n\n")
     path.write_text(header + story + "\n## Comments\n\n", encoding="utf-8")
 
 
@@ -119,18 +137,43 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
     started = time.monotonic()
     env = os.environ.copy()
     env["PYTHONDONTWRITEBYTECODE"] = "1"
+    timed_out = False
     with stream.open("w", encoding="utf-8") as output:
-        finished = subprocess.run(argv, cwd=cwd, env=env, text=True, encoding="utf-8",
-                                  errors="replace", stdout=output, stderr=subprocess.PIPE)
+        try:
+            finished = subprocess.run(argv, cwd=cwd, env=env, text=True, encoding="utf-8",
+                                      errors="replace", stdout=output, stderr=subprocess.PIPE,
+                                      timeout=CLI_TIMEOUT_SECONDS)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            finished = subprocess.CompletedProcess(argv, 124, "", "")
     result = None
+    assistant_events = 0
+    model_ids: set[str] = set()
     for line in stream.read_text(encoding="utf-8").splitlines():
         if line.strip():
             event = json.loads(line)
             if event.get("type") == "result":
                 result = event
+            elif event.get("type") == "assistant":
+                assistant_events += 1
+                model = event.get("message", {}).get("model")
+                if isinstance(model, str):
+                    model_ids.add(model)
+    blocked = bool(result and BLOCKED_RESULT.search(str(result.get("result", ""))))
     return {"exit_code": finished.returncode, "duration_ms": round((time.monotonic() - started) * 1000),
             "result_present": result is not None, "is_error": result.get("is_error") if result else None,
-            "stderr_present": bool(finished.stderr.strip()), "stream_file": stream.name}
+            "blocked_signal": blocked, "timed_out": timed_out,
+            "partial_assistant_events": assistant_events, "partial_model_ids": sorted(model_ids),
+            "total_cost_usd": result.get("total_cost_usd") if result else None,
+            "stderr_present": bool(finished.stderr.strip()),
+            "stream_file": stream.name}
+
+
+def session_completed(session: dict[str, object]) -> bool:
+    """A CLI result event is transport success, not a completed workflow."""
+    return (session["exit_code"] == 0 and session["result_present"] is True
+            and session["is_error"] is False and session["blocked_signal"] is False
+            and session["timed_out"] is False)
 
 
 def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, object]:
@@ -147,8 +190,8 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     result: dict[str, object] = {"label": label, "source_sha": ref, "init": init,
                                  "installed": False, "story_started": False,
                                  "gate_g2": "unassessed"}
-    if init["exit_code"] or init["is_error"] or not init["result_present"]:
-        result["blocked_reason"] = "Actual init project CLI session failed"
+    if not session_completed(init):
+        result["blocked_reason"] = "Init project session failed or reported a blocked outcome"
         return result
     try:
         result["installed_file_sha256"] = verify_install(target)
@@ -159,11 +202,15 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     add_story(target)
     start = run_cli(target, side / "start-story.jsonl", f"start story {STORY_ID}", budget)
     result["start_story"] = start
-    result["story_started"] = (start["exit_code"] == 0 and start["result_present"]
-                               and not start["is_error"])
+    result["story_started"] = session_completed(start)
     result["story_status"] = command(["git", "status", "--porcelain", "--untracked-files=all"], target).stdout.splitlines()
     result["active_branch"] = command(["git", "branch", "--show-current"], target).stdout.strip()
     result["remote"] = command(["git", "remote"], target).stdout.strip() or None
+    if result["active_branch"] == "main":
+        result["story_started"] = False
+        result["blocked_reason"] = "Start story remained on main; no story branch was created"
+    elif not result["story_started"]:
+        result["blocked_reason"] = "Start story session failed or reported a blocked outcome"
     return result
 
 
@@ -187,6 +234,7 @@ def main() -> int:
     config = {"refs": refs, "cli_version": cli_version, "model_alias": "sonnet",
               "effort": "medium", "tools": CLI_TOOLS.split(","),
               "max_budget_usd_per_session": args.max_budget_usd,
+              "timeout_seconds_per_session": CLI_TIMEOUT_SECONDS,
               "repetitions_per_arm": args.repetitions,
               "surface": "Claude Code installed strict workflow", "gate_g2": "unassessed"}
     if not args.execute:
