@@ -46,7 +46,7 @@
       ".claude/agents/templates/instructions/qa_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
       ".claude/agents/templates/instructions/technical_lead_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
       ".claude/agents/templates/instructions/ui_ux_designer_instructions_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording.",
-      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording. [Fix] Runs independent read-only tools in parallel while preserving dependency, mutation, and polling safeguards.",
+      ".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md": "[Fix] Replaces numeric bootstrap mandatory-section ranges with future-proof wording. [Fix] Runs independent read-only tools in parallel while preserving dependency, mutation, and polling safeguards. [Fix] Requires every known independent call before awaiting results.",
       ".claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md": "[Fix] Keeps agent runtime state out of product branch commits and pushes.",
       ".claude/agents/templates/rules/Business_Analyst_Rules_template.md": "[Fix] Replaces memory commit handoff with local runtime-state handling.",
       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[Fix] Requires verified-base preflight before developer branch creation. [Fix] Separates early base inspection from branch creation before story status changes.",

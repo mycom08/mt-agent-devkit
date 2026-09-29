@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "fixture": "scripts/test/fixtures/parallel_tool_execution_cases.json",
+  "guidance": ".antigravity/agents/working/rules/Agent_Common_Bootstrap.md",
+  "cli": "2.1.284 (Claude Code)",
+  "engine": "claude",
+  "model": "sonnet",
+  "results": [
+    {
+      "id": "P01",
+      "outcome": "fail",
+      "assertions": [
+        "1 of 3 reads started before the first result"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 6.3,
+      "trace": [
+        {
+          "event": "item.started",
+          "id": "toolu_01VtNzfQ13Uxv2g5ByjnKSD6",
+          "type": "Read",
+          "command": "{\"file_path\": \"<fixture>\\\\notes\\\\alpha.txt\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01VtNzfQ13Uxv2g5ByjnKSD6",
+          "type": "tool_result",
+          "command": "1\tapples\n2\t",
+          "exit_code": 0
+        },
+        {
+          "event": "item.started",
+          "id": "toolu_01G1qtjkKjzC1k7wTTt74bZw",
+          "type": "Read",
+          "command": "{\"file_path\": \"<fixture>\\\\notes\\\\beta.txt\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01G1qtjkKjzC1k7wTTt74bZw",
+          "type": "tool_result",
+          "command": "1\tbananas\n2\t",
+          "exit_code": 0
+        },
+        {
+          "event": "item.started",
+          "id": "toolu_01BrBJnj6zBJj6KuwxXT4tMc",
+          "type": "Read",
+          "command": "{\"file_path\": \"<fixture>\\\\notes\\\\gamma.txt\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01BrBJnj6zBJj6KuwxXT4tMc",
+          "type": "tool_result",
+          "command": "1\tgrapes\n2\t",
+          "exit_code": 0
+        }
+      ],
+      "final": "- `notes/alpha.txt` contains the word \"apples\".\n- `notes/beta.txt` contains the word \"bananas\".\n- `notes/gamma.txt` contains the word \"grapes\".",
+      "state": {
+        "sentence": "The sky is blue.\n",
+        "deletion_target_exists": true,
+        "new_note": "",
+        "committed": false
+      },
+      "errors": [],
+      "stderr": "",
+      "cost_usd": 0.0437068,
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7958,
+        "cache_read_input_tokens": 35134,
+        "output_tokens": 484,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7958,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 65,
+            "cache_read_input_tokens": 21260,
+            "cache_creation_input_tokens": 572,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 572
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      }
+    },
+    {
+      "id": "P02",
+      "outcome": "needs-review",
+      "assertions": [
+        "check bounded parallel searches"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 6.58,
+      "trace": [
+        {
+          "event": "item.started",
+          "id": "toolu_01616D5FMZuAHwnr9ZECZU2m",
+          "type": "Grep",
+          "command": "{\"pattern\": \"ORBIT\", \"path\": \"<fixture>\\\\data\", \"output_mode\": \"content\", \"head_limit\": \"20\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01616D5FMZuAHwnr9ZECZU2m",
+          "type": "tool_result",
+          "command": "data\\east.txt:1:ORBIT east",
+          "exit_code": 0
+        },
+        {
+          "event": "item.started",
+          "id": "toolu_01HdBQuf1CYzBrdZVLwXG92s",
+          "type": "Grep",
+          "command": "{\"pattern\": \"COMET\", \"path\": \"<fixture>\\\\notes\", \"output_mode\": \"content\", \"head_limit\": \"20\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01HdBQuf1CYzBrdZVLwXG92s",
+          "type": "tool_result",
+          "command": "notes\\west.txt:1:COMET west",
+          "exit_code": 0
+        }
+      ],
+      "final": "I found one match for each term. Each search was capped at 20 lines, and neither reached the cap.\n\n- **ORBIT** in `data/`: `data/east.txt`, line 1: `ORBIT east`\n- **COMET** in `notes/`: `notes/west.txt`, line 1: `COMET west`",
+      "state": {
+        "sentence": "The sky is blue.\n",
+        "deletion_target_exists": true,
+        "new_note": "",
+        "committed": false
+      },
+      "errors": [],
+      "stderr": "",
+      "cost_usd": 0.0364246,
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5953,
+        "cache_read_input_tokens": 37123,
+        "output_tokens": 518,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5953,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 102,
+            "cache_read_input_tokens": 21260,
+            "cache_creation_input_tokens": 556,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 556
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      }
+    }
+  ]
+}
