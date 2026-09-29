@@ -306,6 +306,11 @@ class WorkflowContractTests(unittest.TestCase):
                 self.assertIn("its full tip SHA equals that recorded base SHA", pipeline_text)
                 self.assertIn("`git status --porcelain` is empty", pipeline_text)
 
+        for workflow in ("Start_Story_Workflow_template.md", "Sprint_Workflow_template.md"):
+            strict = (ROOT / ".claude/agents/templates/strict/workflows" / workflow).read_text(encoding="utf-8")
+            self.assertLess(strict.index("check whether that local branch exists"), strict.index("1. "))
+            self.assertIn("Interrupted Stage 1 recovery check", strict)
+
     def test_devkit_working_preflight_scripts_match_distributed_helper(self) -> None:
         source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_bytes()
         for path in (
