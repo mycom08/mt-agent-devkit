@@ -275,6 +275,34 @@ class PreflightTests(unittest.TestCase):
 
 
 class WorkflowContractTests(unittest.TestCase):
+    def test_ready_starts_with_preflight_while_in_progress_resumes(self) -> None:
+        for start, sprint, pipeline in (
+            (
+                ROOT / ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md",
+                ROOT / ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+                ROOT / ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+            ),
+            (
+                ROOT / ".antigravity/agents/working/workflows/Start_Story_Workflow.md",
+                ROOT / ".antigravity/agents/working/workflows/Sprint_Workflow.md",
+                ROOT / ".antigravity/agents/working/workflows/Shared_Pipeline_Stages.md",
+            ),
+            (
+                ROOT / ".claude/agents/working/workflows/Start_Story_Workflow.md",
+                ROOT / ".claude/agents/working/workflows/Sprint_Workflow.md",
+                ROOT / ".claude/agents/working/workflows/Shared_Pipeline_Stages.md",
+            ),
+        ):
+            with self.subTest(start=start):
+                start_text = start.read_text(encoding="utf-8")
+                sprint_text = sprint.read_text(encoding="utf-8")
+                pipeline_text = pipeline.read_text(encoding="utf-8")
+                self.assertIn("| `status:ready` | Story Base Preflight", start_text)
+                self.assertIn("| `status:in-progress` | Resume the recorded story", start_text)
+                self.assertIn("start the next `status:ready` story at Story Base Preflight", sprint_text)
+                self.assertIn("Resumed `status:in-progress` entry", pipeline_text)
+                self.assertIn("do not call `create` again", pipeline_text)
+
     def test_devkit_working_preflight_scripts_match_distributed_helper(self) -> None:
         source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_bytes()
         for path in (

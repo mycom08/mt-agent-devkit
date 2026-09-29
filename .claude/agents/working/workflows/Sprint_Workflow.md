@@ -12,7 +12,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 
 **On pipeline start — always check this file first:**
 - If the file **exists** → read it and resume from the recorded story and stage
-- If the file **does not exist** → start fresh from Stage 0 of the next `status:ready` story
+- If the file **does not exist** → start the next `status:ready` story at Story Base Preflight, then Bug Reproduction Pre-Flight, then Stage 0
 
 **State file format:**
 ```markdown
@@ -25,7 +25,7 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 **Phase:** <phase-number or none>
 **Sprint:** sprint-N
 **Sprint Branch:** n/a
-**Story Branch:** n/a
+**Story Branch:** pending
 **Docs SHA:** <git short SHA captured at Stage 0>
 **Loop Impl→Reviewer:** <count>
 **Loop Impl→QA:** <count>
@@ -39,11 +39,11 @@ The orchestrator maintains `.claude/agents/working/tmp/sprint_pipeline_state.md`
 **Observations:**
 ```
 
-> `Sprint Branch` and `Story Branch` are strict-mode only fields. In GitHub mode write `Sprint Branch: n/a` and `Story Branch: n/a`.
+> `Sprint Branch` is strict-mode only; in GitHub mode write `Sprint Branch: n/a`. Record the actual `Story Branch` in either mode after verified creation. On Stage 0 entry, use `Story Branch: pending` until Stage 1 succeeds.
 
 The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies the per-story base before Stage 0 state writes. Stage 1 `create` must also succeed before story status or product writes.
 
-**Write rules:** Create/overwrite at Stage 0 entry of each new story — carry forward any existing `Observations:` **and `Repro Skipped:`** entries when overwriting. **After every stage transition, update both `Stage` and `Updated` — these are mandatory, not optional.** Update `Sessions` on every agent spawn — **write `impl_session: PENDING` (or the relevant session field) to the state file immediately before making the spawn call**; overwrite with the real agentId as soon as the spawn returns. Never leave a session ID empty after spawning. Update loop counts at each retry cycle start. Set `Type` at Stage 0 based on story classification (see Shared Pipeline Stages §Stage 0). Set `Sprint` at Stage 0 by reading the sprint value from the story (`sprint-N` label in GitHub mode; `**Sprint:**` field in strict mode). Set `Sprint Branch` and `Story Branch` at Stage 0 in strict mode (derived per `Strict_Mode_Story_Guide.md` §Branch Naming); write `n/a` in GitHub mode. Set `Docs SHA` at Stage 0 via `git rev-parse --short HEAD`. Append the story ID to `Repro Skipped:` whenever the Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`) determines a story was not reproduced — this field persists across story transitions within the current run only; it is never carried into a fresh run (a new `continue sprint` after the state file is deleted starts with `Repro Skipped:` empty, so a story a human has since added repro steps to is re-attempted). Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow or an agent reports friction. Delete after workflow review is complete.
+**Write rules:** Create/overwrite at Stage 0 entry of each new story — carry forward any existing `Observations:` **and `Repro Skipped:`** entries when overwriting. **After every stage transition, update both `Stage` and `Updated` — these are mandatory, not optional.** Update `Sessions` on every agent spawn — **write `impl_session: PENDING` (or the relevant session field) to the state file immediately before making the spawn call**; overwrite with the real agentId as soon as the spawn returns. Never leave a session ID empty after spawning. Update loop counts at each retry cycle start. Set `Type` at Stage 0 based on story classification (see Shared Pipeline Stages §Stage 0). Set `Sprint` at Stage 0 by reading the sprint value from the story (`sprint-N` label in GitHub mode; `**Sprint:**` field in strict mode). Set `Sprint Branch` and `Story Branch` at Stage 0 in strict mode (derived per `Strict_Mode_Story_Guide.md` §Branch Naming); write `Sprint Branch: n/a` in GitHub mode and record Story Branch after Stage 1 creation. Set `Docs SHA` at Stage 0 via `git rev-parse --short HEAD`. Append the story ID to `Repro Skipped:` whenever the Bug Reproduction Pre-Flight step (`Shared_Pipeline_Stages.md`) determines a story was not reproduced — this field persists across story transitions within the current run only; it is never carried into a fresh run (a new `continue sprint` after the state file is deleted starts with `Repro Skipped:` empty, so a story a human has since added repro steps to is re-attempted). Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow or an agent reports friction. Delete after workflow review is complete.
 
 ---
 

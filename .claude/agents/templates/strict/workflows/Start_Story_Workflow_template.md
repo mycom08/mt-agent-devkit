@@ -1,6 +1,8 @@
 <!-- Shared logic: templates/shared/workflows/Start_Story_Workflow_Shared_template.md -->
 
-## Strict-Mode Pre-Flight (run before Stage Entry Check — strict mode only)
+## Strict-Mode Pre-Flight (for a new `status:ready` entry only)
+
+Read the story status first. For `status:in-progress`, use the shared Stage Entry Check's resume path and existing state/branch; do not inspect or create a new story branch. For `status:review` or `status:testing`, enter the recorded review or QA stage. Run the following sprint setup only for `status:ready`.
 
 1. Read `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` to get the story's `**Sprint:**` field (e.g., `sprint-1`)
 2. Read the story's immutable `Project Base Branch:` value. If missing, stop for explicit user selection; never infer it from checkout.

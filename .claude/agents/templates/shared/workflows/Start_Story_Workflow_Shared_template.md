@@ -15,7 +15,8 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 | Story label | Entry point |
 |---|---|
-| `status:ready` or `status:in-progress` | Story Base Preflight, Bug Reproduction Pre-Flight, then Stage 0 — Implementer Routing |
+| `status:ready` | Story Base Preflight, Bug Reproduction Pre-Flight, then Stage 0 — Implementer Routing |
+| `status:in-progress` | Resume the recorded story and stage from the pipeline state file; use the existing story branch and session. Do not rerun new-story `inspect` or `create`. If the state file is missing or names another story, stop for state recovery before any write. |
 | `status:review` | Stage 2 — Review |
 | `status:testing` | Stage 3 — QA Validation |
 | `status:blocked` | Stop — story is blocked on external input; notify user to run `resume story ST-XXXXXX` once the required information has been provided |
@@ -24,7 +25,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 **If `Mode: strict`** — read `**Status:**` field from `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` and route using the same table above (status values are identical — see `Strict_Mode_Story_Guide.md` §Status Values).
 
 > If the status is missing or unrecognised, stop and notify the user before proceeding.
-> Bug Reproduction Pre-Flight only runs for the `status:ready`/`status:in-progress` entry point (see `Shared_Pipeline_Stages.md`); a story entering directly at Stage 2 or 3 is already past implementation and skips it. If pre-flight determines **not reproduced**, report the result to the user and stop — do not proceed to Stage 0.
+> Bug Reproduction Pre-Flight runs only for a new `status:ready` entry (see `Shared_Pipeline_Stages.md`). A resumed `status:in-progress` story continues from its recorded stage without repeating preflight or branch creation. If pre-flight determines **not reproduced**, report the result to the user and stop — do not proceed to Stage 0.
 
 ---
 
