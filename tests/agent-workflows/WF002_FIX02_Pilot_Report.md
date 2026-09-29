@@ -18,7 +18,9 @@ devkit orchestrator run. Do not use it to approve or merge FIX-02.
   repositories, and a `$0.75` per-stage budget cap. The launch command was
   `python tests/agent-workflows/run_fix02_benchmark.py --max-budget-usd 0.75`;
   the saved run config omitted the cap, a reproducibility defect to fix before
-  the full benchmark. Only Common Rule Section 3 varied. The runner does not
+  the full benchmark. The runner now freezes that cap in the manifest, checks
+  it before launch, and records it in new run configs; this does not change the
+  historical artifact. Only Common Rule Section 3 varied. The runner does not
   enforce OS-level network isolation.
 - Passing pair run ID: `fix02-benchmark-ylmbshwl`. Its exclusive baseline
   report SHA-256 was verified as

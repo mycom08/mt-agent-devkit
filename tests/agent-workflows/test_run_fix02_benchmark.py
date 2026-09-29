@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import importlib.util
+import contextlib
+import io
 import json
 from pathlib import Path
+import sys
 import unittest
 from unittest import mock
 
@@ -40,6 +43,21 @@ def parse(events: list[dict]) -> dict:
 
 
 class StreamTests(unittest.TestCase):
+    def test_canonical_collector_contract_and_final_usage_are_distinct(self) -> None:
+        events = [
+            assistant("request-1", "tool-1", "git diff", 2),
+            assistant("request-1", "tool-1", "git diff", 7),
+            tool_result("tool-1", "Exit code: 0"),
+            {"type": "result", "result": '{"outcome":"approved"}',
+             "usage": {"input_tokens": 10, "output_tokens": 100,
+                       "cache_creation_input_tokens": 2, "cache_read_input_tokens": 3}},
+        ]
+        measured = parse(events)
+        self.assertEqual(measured["requests"], 1)
+        self.assertEqual(measured["usage"]["output_tokens"], 7)
+        self.assertEqual(measured["result_aggregate_usage"]["output_tokens"], 100)
+        self.assertFalse(measured["result_aggregate_comparison"]["output_tokens"])
+
     def test_duplicate_assistant_events_and_reused_tool_id(self) -> None:
         events = [
             assistant("request-1", "tool-1", "python -m unittest discover -s tests -v", 1),
@@ -106,6 +124,40 @@ class StreamTests(unittest.TestCase):
                       '"evidence":"state has {pending} verdicts","checks_run":[]}\n```'),
                    "usage": {}}]
         self.assertEqual(parse(events)["agent_outcome"], "blocked")
+
+    def test_manifest_checks_exact_cli_version(self) -> None:
+        manifest = json.loads((RUNNER.with_name("benchmark_manifest.json")).read_text(encoding="utf-8"))
+        def fake_command(args, cwd, *, check=True):
+            value = "2.1.2800 (Claude Code)" if args[0] == "claude" else "Python 3.12.10"
+            return mock.Mock(stdout=value)
+        with mock.patch.object(runner, "command", side_effect=fake_command):
+            with self.assertRaisesRegex(ValueError, "Claude CLI version differs"):
+                runner.validate_manifest(manifest, "sonnet", "medium")
+
+    def test_inspect_records_frozen_launch_budget_and_rejects_drift(self) -> None:
+        manifest = json.loads((RUNNER.with_name("benchmark_manifest.json")).read_text(encoding="utf-8"))
+        refs = manifest["comparison"]
+        def fake_command(args, cwd, *, check=True):
+            return mock.Mock(stdout=refs["baseline_harness_commit"] if args[-1] == runner.BASE_REF
+                             else refs["candidate_harness_commit"])
+        def fake_rule(ref):
+            return ("old", "oldhash") if ref == runner.BASE_REF else ("new", "newhash")
+        patches = (mock.patch.object(runner, "validate_manifest", return_value={"cli_version": "frozen"}),
+                   mock.patch.object(runner, "command", side_effect=fake_command),
+                   mock.patch.object(runner, "source_rule", side_effect=fake_rule),
+                   mock.patch.object(runner, "fixture_hash", return_value="fixturehash"))
+        with patches[0], patches[1], patches[2], patches[3]:
+            with mock.patch.object(sys, "argv", [str(RUNNER), "--inspect-only"]):
+                output = io.StringIO()
+                with contextlib.redirect_stdout(output):
+                    self.assertEqual(runner.main(), 0)
+                config = json.loads(output.getvalue())
+                self.assertEqual(config["max_budget_usd_per_stage"], 0.75)
+            with mock.patch.object(sys, "argv", [str(RUNNER), "--inspect-only",
+                                                 "--max-budget-usd", "2"]):
+                with self.assertRaises(SystemExit) as failure:
+                    runner.main()
+                self.assertEqual(failure.exception.code, 2)
 
 
 if __name__ == "__main__":

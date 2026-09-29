@@ -27,6 +27,7 @@
     "variable_under_test": "FIX-02 parallel tool execution guidance",
     "planned_repetitions_per_arm": 3,
     "exploratory_pilot_repetitions_per_arm": 1,
+    "exploratory_pilot_max_budget_usd_per_stage": 0.75,
     "exploratory_pilot_is_full_benchmark": false,
     "same_fixture_model_tools_and_quality_gates_required": true,
     "run_each_arm_in_a_fresh_isolated_copy": true,

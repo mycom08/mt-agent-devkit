@@ -95,10 +95,10 @@ def validate_manifest(manifest: dict[str, Any], model: str, effort: str) -> dict
     if manifest["execution"]["stage_order"] != list(STAGES):
         raise ValueError("Stage order differs from runner")
     cli_version = command(["claude", "--version"], ROOT).stdout.strip()
-    if configured["cli_version"] not in cli_version:
+    if cli_version != f'{configured["cli_version"]} (Claude Code)':
         raise ValueError(f"Claude CLI version differs: {cli_version}")
     python_version = command([sys.executable, "--version"], ROOT).stdout.strip()
-    if configured["python_version"] not in python_version:
+    if python_version != f'Python {configured["python_version"]}':
         raise ValueError(f"Python version differs: {python_version}")
     return {"cli_version": cli_version, "python_version": python_version,
             "expected_resolved_model": configured["expected_resolved_model"]}
@@ -469,8 +469,8 @@ def main() -> int:
     parser.add_argument("--candidate-ref", default=CANDIDATE_REF)
     parser.add_argument("--model", default="sonnet")
     parser.add_argument("--effort", default="medium", choices=("low", "medium", "high"))
-    parser.add_argument("--max-budget-usd", type=float, default=2.0,
-                        help="Per Claude role stage cap (default: 2)")
+    parser.add_argument("--max-budget-usd", type=float, default=0.75,
+                        help="Frozen per-role pilot cap (default: 0.75)")
     parser.add_argument("--artifacts-dir", type=Path,
                         help="Existing directory outside this Git worktree for raw artifacts")
     parser.add_argument("--inspect-only", action="store_true",
@@ -494,6 +494,8 @@ def main() -> int:
         parser.error("The compared common-rule sections are identical")
     if args.max_budget_usd <= 0:
         parser.error("--max-budget-usd must be positive")
+    if args.max_budget_usd != frozen_refs["exploratory_pilot_max_budget_usd_per_stage"]:
+        parser.error("--max-budget-usd differs from the frozen pilot configuration")
     config = {"fixture_sha256": fixture_hash(), "environment": environment,
               "base_ref": args.base_ref,
               "candidate_ref": args.candidate_ref, "base_rule_sha256": base_hash,
