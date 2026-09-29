@@ -302,6 +302,9 @@ class WorkflowContractTests(unittest.TestCase):
                 self.assertIn("start the next `status:ready` story at Story Base Preflight", sprint_text)
                 self.assertIn("Resumed `status:in-progress` entry", pipeline_text)
                 self.assertIn("do not call `create` again", pipeline_text)
+                self.assertIn("Interrupted Stage 1 recovery for a `status:ready` story", pipeline_text)
+                self.assertIn("its full tip SHA equals that recorded base SHA", pipeline_text)
+                self.assertIn("`git status --porcelain` is empty", pipeline_text)
 
     def test_devkit_working_preflight_scripts_match_distributed_helper(self) -> None:
         source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_bytes()
