@@ -9,6 +9,14 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Story Base Preflight (before Bug Reproduction and Stage 0)
+
+For each new Stage 0 entry, verify the story base **before any per-story pipeline-state, retro, issue-comment, status, or product write**. Strict mode first completes its Sprint/Start Story pre-flight without writing per-story state, so `sprint-N-dev` is the checked-out, verified execution base. Read the story's immutable `Base Branch` (GitHub) or use that verified sprint branch (strict); a missing legacy value blocks for explicit user selection. Derive the intended story-branch name using `Story_Standard.md` or `Strict_Mode_Story_Guide.md`, then run `branch_preflight.py inspect --mode <github|strict> --base <base> --story-branch <story-branch>`. Keep the full Base SHA and, in GitHub mode, the full Remote Base SHA in the current invocation until Stage 1. A BLOCKED result stops the workflow without a per-story write or recovery action. Stage 1 uses `create`, which repeats every check before branch creation.
+
+Stories entering directly at Stage 2 or 3 use their existing branch and stage state; this new-branch preflight does not create another branch for them.
+
+---
+
 ## Bug Reproduction Pre-Flight (runs immediately ahead of Stage 0 — bug stories only)
 
 Runs once per story, every time this story would enter Stage 0 — Sprint Workflow's per-story loop, and Start Story Workflow's Stage Entry Check routing `status:ready`/`status:in-progress` to Stage 0. Does **not** run when a story enters directly at Stage 2 or Stage 3 (already past implementation). Not to be confused with the per-mode "Strict-Mode Pre-Flight" sprint/branch setup step in `Sprint_Workflow.md` / `Start_Story_Workflow.md` — this is a separate, per-story check.
@@ -42,6 +50,8 @@ Runs once per story, every time this story would enter Stage 0 — Sprint Workfl
 ---
 
 ## Stage 0 — Implementer Routing
+
+Enter Stage 0 only after Story Base Preflight passed. All pipeline-state writes below use the verified result; no story status or product write occurs until Stage 1 creates and verifies the story branch.
 
 **Read the story body** to get `**Assigned:**` and classify the story:
 
@@ -156,8 +166,8 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 3. **Read the story:**
    - **GitHub mode:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
    - **Strict mode:** Agent reads `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` directly
-4. **Before the first state or product write** → read the story's immutable `Base Branch` value and run `branch_preflight.py inspect`. A missing legacy value blocks for explicit user selection; never infer it from the checked-out branch. Only a PASS may write Base Branch and the full Verified Base SHA to pipeline state. **GitHub mode** completes its matching preflight creation here with those values. **Strict mode** is inspect-only here; its one story-branch create is step 5. A block stops for direction; never stash, reset, rebase, or auto-repair.
-5. **Strict mode — create its one story branch before any state/status/product write:** derive `story/<external-id>-<slug>` (or `story/ST-XXXXXX-<slug>`), ensure `Base Branch` is the already verified `sprint-N-dev`, then run `branch_preflight.py create` using the recorded full sprint SHA. Record Story Branch only after successful full-SHA verification.
+4. **Before the first story status or product write** → run `branch_preflight.py create` for the branch named in Story Base Preflight, passing its full verified Base SHA and, in GitHub mode, its full Remote Base SHA as `--expected-remote-sha`. `create` repeats inspection; a BLOCKED result stops for direction without stash, reset, rebase, or auto-repair. Record the story branch only after successful full-SHA verification.
+5. **Strict mode:** its one story branch is `story/<external-id>-<slug>` (or `story/ST-XXXXXX-<slug>`) from the verified `sprint-N-dev` base. Do not create or switch to a second story branch.
 6. **After successful branch creation** → write `impl_session: <agentId>` to state, then update story status to `in-progress`:
    - **GitHub mode:** update story label to `status:in-progress`
    - **Strict mode:** edit `**Status:** in-progress` in the story MD file

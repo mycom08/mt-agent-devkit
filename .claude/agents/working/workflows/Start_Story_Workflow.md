@@ -12,7 +12,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 | Story label | Entry point |
 |---|---|
-| `status:ready` or `status:in-progress` | Bug Reproduction Pre-Flight, then Stage 0 — Implementer Routing |
+| `status:ready` or `status:in-progress` | Story Base Preflight, Bug Reproduction Pre-Flight, then Stage 0 — Implementer Routing |
 | `status:review` | Stage 2 — Review |
 | `status:testing` | Stage 3 — QA Validation |
 | `status:blocked` | Stop — story is blocked on external input; notify user to run `resume story ST-XXXXXX` once the required information has been provided |

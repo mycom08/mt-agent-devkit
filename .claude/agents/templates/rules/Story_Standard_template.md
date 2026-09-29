@@ -128,15 +128,15 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 ### Status: Ready → In Progress
 **When:** Starting work on the story  
 **Action:**
-1. Remove label `status:ready`, add label `status:in-progress` on the GitHub Issue
-2. Read the full story: User Story, all AC, Technical Scope, and any linked technical docs
-3. **Verify the API spec** (`docs/api/`) for every endpoint the story touches — confirm request/response shape, required fields, enums, and constraints match the story AC. If spec is missing or inconsistent, post a Comment tagging **TL** before writing any code
-4. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers
-5. **Read PO and TL answers** — if an answer is insufficient or raises a new concern, post a push-back follow-up before proceeding; wait until all blocking points are fully resolved
-6. Create dev branch from the feature branch — **never work directly on the feature branch or master**:
+1. Read the full story: User Story, all AC, Technical Scope, the immutable Base Branch, and any linked technical docs.
+2. Create the dev branch from the verified base **before changing story status or product files** — never work directly on the feature branch or master:
    ```
    python {{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
    ```
+3. After successful branch verification, remove label `status:ready` and add `status:in-progress` on the GitHub Issue.
+4. **Verify the API spec** (`docs/api/`) for every endpoint the story touches — confirm request/response shape, required fields, enums, and constraints match the story AC. If spec is missing or inconsistent, post a Comment tagging **TL** before writing any code.
+5. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers.
+6. **Read PO and TL answers** — if an answer is insufficient or raises a new concern, post a push-back follow-up before proceeding; wait until all blocking points are fully resolved.
 
 ### Status: In Progress → Review
 **When:** Work complete, ready for review  

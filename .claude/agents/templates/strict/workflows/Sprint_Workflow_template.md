@@ -11,7 +11,7 @@ Glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, read each file, filter by 
 1. Identify the sprint name from the first `status:ready` story's `**Sprint:**` field (e.g., `sprint-1`)
 2. Read the story's immutable `Project Base Branch:` value. If missing, stop for explicit user selection; never infer it from checkout.
 3. If `sprint-N-dev` is missing, run `branch_preflight.py inspect --mode strict --base <Project Base Branch> --story-branch sprint-N-dev`, then `create` with its full verified SHA. If it already exists, switch to it and run `inspect --mode strict --base sprint-N-dev --story-branch <next-story-branch>`; this verifies resume safety without treating the sprint branch as a new story-branch target.
-4. Only after successful create or resumed verification, store `Sprint Branch: sprint-N-dev` and its full SHA. Set every story's execution `Base Branch: sprint-N-dev` and Verified Base SHA to that result; record no Story Branch until its own successful create/verification.
+4. Keep the verified `Sprint Branch: sprint-N-dev` and full SHA in memory. For each story, run Story Base Preflight `inspect` before storing that story's execution `Base Branch: sprint-N-dev` and Verified Base SHA. Record no Story Branch until Stage 1 `create` succeeds.
 
 ---
 
