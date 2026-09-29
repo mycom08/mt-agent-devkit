@@ -98,5 +98,23 @@ Repeat from fresh target copies for the candidate and all planned repetitions.
 No deterministic installed-project fixture or adaptive-install verification is
 present in this branch, and the local runner injects only Common Rule Section 3
 into hand-prompted role sessions. The shell scaffold also needs Git Bash; in
-this sandbox Git Bash starts only with elevated execution. Therefore there is
-no executable installed G2 baseline harness here yet, and G2 remains unassessed.
+this sandbox Git Bash starts only with elevated execution. At that point no
+executable installed G2 baseline path existed, and G2 remains unassessed.
+
+The new `run_installed_wf002.py` provides that disposable execution path. Its
+default dry run resolves the pinned commits and reports configuration without
+paid calls. `--execute` exports each devkit commit into a separate source
+snapshot, seeds a remote-free WF-002 repository, invokes the real Claude Code
+`init project` workflow, verifies required installed files, then invokes
+`start story` from the installed target. It defaults to three fresh pairs and
+stores raw streams outside the repository. Its summary always reports G2 as
+unassessed; independent quality, stage telemetry, and profile checks still
+need to be added before a G2 verdict.
+
+An attempted `--execute` launch on 2026-09-29 was rejected by automatic approval
+review. The rejected action would have sent private repository and fixture
+content to the authenticated Claude service and incurred paid usage without
+specific user authorization for that payload, destination, and spend. No paid
+session started. The deterministic preparation tests passed with elevated local
+execution; the normal Windows sandbox denied writes even to test temporary
+directories, and Git Bash also requires elevated execution here.
