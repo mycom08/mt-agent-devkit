@@ -9,7 +9,7 @@
 ## Keyword Index
 
 ### Fact 1 — The full devkit automation suite (no runtime, no API)
-Keywords: `python scripts/validate_templates.py`, `bash scripts/test/run.sh`, corpus invariant check, fixture self-test, `docs/Template_Test_Strategy.md`, 6 invariants, risk tiers A/B/C, AC-as-oracle
+Keywords: `python scripts/validate_templates.py`, `bash scripts/test/run.sh`, corpus invariant check, fixture self-test, `docs/Template_Test_Strategy.md`, 7 invariants, risk tiers A/B/C, AC-as-oracle
 
 ### Fact 2 — Always run the Layer-1 gate from a matched `git worktree`, never the primary tree
 Keywords: `git worktree add`, `git worktree remove --force`, differential base-vs-head, gitignored runtime files, `working-record/*.md`, `_resolve_file_ref`, polluted baseline

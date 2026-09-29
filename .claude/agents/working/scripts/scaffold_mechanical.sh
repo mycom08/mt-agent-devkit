@@ -119,9 +119,10 @@ if [[ -n "$(printf '%s' "$og_mode_body" | tr -d '[:space:]')" ]]; then
   printf '%s\n' "$og_trimmed" >> "$og_dst"
 fi
 
-# 4. Version-check scripts (verbatim)
+# 4. Distributed scripts (verbatim)
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
+cp "$TPL/scripts/telemetry.py" "$AGENTS/scripts/telemetry.py"
 
 # 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
 #    .claude/skills/, a sibling of .claude/agents/, not under it, since that is
@@ -188,6 +189,9 @@ if [[ "$MODE" == "github" ]]; then
 
 # Claude Code agent temp files
 .claude/agents/tmp/
+
+# Agent-stage telemetry — runtime measurement only, never product history
+.claude/agents/tmp/token-metrics/
 
 # Workflow output documents
 /result/

@@ -1,0 +1,14 @@
+{
+  "run_id": "fixture-run-001",
+  "story_id": "ST-000161",
+  "role": "QA",
+  "stage": "qa",
+  "session_mode": "same_session_resume",
+  "model": "unknown",
+  "started_at": "2026-09-21T00:01:00Z",
+  "ended_at": "2026-09-21T00:01:04Z",
+  "duration_ms": 4000,
+  "completion_status": "completed",
+  "session_final_tokens": 42000,
+  "notes": "Harness reported a final-context counter only."
+}

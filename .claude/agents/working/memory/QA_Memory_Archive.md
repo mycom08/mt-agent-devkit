@@ -5,7 +5,7 @@
 ## Stored Facts
 
 ### Fact 1
-- **Rule:** The full automation suite for this devkit (no runtime, no API) is `python scripts/validate_templates.py` (corpus invariant check) + `bash scripts/test/run.sh` (fixture self-test). Both must exit 0. `docs/Template_Test_Strategy.md` is the canonical *why/how* — 3-layer model, 6 invariant specs, risk tiers A/B/C, AC-as-oracle pattern.
+- **Rule:** The full automation suite for this devkit (no runtime, no API) is `python scripts/validate_templates.py` (corpus invariant check) + `bash scripts/test/run.sh` (fixture self-test). Both must exit 0. `docs/Template_Test_Strategy.md` is the canonical *why/how* — 3-layer model, 7 invariant specs, risk tiers A/B/C, AC-as-oracle pattern.
 - **Applies when:** validating any template or workflow change.
 - **Evidence:** wired into `QA_Rules §8/§9` and `Project_Priming_Bootstrap.md §8`.
 - **Expires when:** a Layer-2/3 gate lands and changes the required command set.

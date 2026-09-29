@@ -106,6 +106,13 @@ For split candidates, read from `templates/{mode}/workflows/`. For the full depl
 
 Files: all workflow files listed above. Never write `Analyst_Workflow.md` or `Init_Project_Workflow.md` (devkit-internal — never written to target projects).
 
+### Script files — Overwrite
+
+**Source:** `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.claude/agents/templates/scripts/check_devkit_version.sh`, `.claude/agents/templates/scripts/telemetry.py` (local devkit)
+**Target:** `{TARGET_PROJECT}/.claude/agents/scripts/` with the same filenames
+
+Copy all three scripts verbatim. `telemetry.py` writes only to the gitignored `.claude/agents/tmp/token-metrics/` runtime directory.
+
 ### Skill files — Overwrite
 
 **Source:** `.claude/agents/templates/skills/read-section/SKILL_template.md` (local devkit)
@@ -228,6 +235,9 @@ After all updates are applied, scan each managed directory in `TARGET_PROJECT` a
 
 **Expected files — `workflows/`:**
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
+
+**Expected files — `scripts/`:**
+`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/`, `internal/` — these are project-owned, runtime-output, or agent-managed and may contain custom or transient files. `internal/` specifically holds only this workflow's own audit report while a Stage 4 run is in flight (see Stage 4) and is always empty between runs.
 

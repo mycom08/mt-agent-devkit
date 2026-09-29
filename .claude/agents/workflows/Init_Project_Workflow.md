@@ -218,7 +218,7 @@ It creates all required directories (`context/`, `memory/`, `rules/`, `working-r
 - **All 10 workflow files** — the 8 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
 - The **Orchestrator Instructions** — `.claude/agents/orchestrator_instructions.md`, combined from `templates/shared/orchestrator_instructions_shared_template.md` + the mode-specific appendix, same combine mechanism as the split workflow files above. Devkit-merged/protected, same as `rules/` and `workflows/`.
 - The **`read-section` skill** — `.claude/skills/read-section/SKILL.md`, copied verbatim from `templates/skills/read-section/SKILL_template.md` (suffix stripped, no substitution), plus its bundled `.claude/skills/read-section/scripts/read_section.sh` (copied verbatim, made executable). Lives under `.claude/skills/`, a sibling of `.claude/agents/`, since that is where Claude Code discovers project-level skills.
-- Both version-check scripts, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.claude/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
+- Both version-check scripts plus `telemetry.py`, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.claude/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
 - `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` (single-next-version-heading format) at the target project root — a universal devkit convention, any language, written only if not already present (idempotent — a Java skeleton generation pass that ran earlier in `Build_Software_Workflow.md` never creates these itself anymore, so this is always the actual creator). See `.claude/agents/working/skeletons/shared/Version_Release_Conventions.md` for the format.
 
 If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the 12 verbatim rules files are left as literal placeholders — fill them in with a follow-up run once the GitHub repo exists, or leave them (harmless, same convention as workflow files).
@@ -302,12 +302,12 @@ For each missing wiki file, fill every `{{PLACEHOLDER}}` in the template using t
 - `{{PROJECT_NAME}}` → detected project name
 - `{{LANGUAGE}}` → detected primary language (e.g., `Go`, `TypeScript`, `Python`)
 
-#### Version check scripts (2 files)
+#### Distributed scripts (3 files)
 
-**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`
-**Target:** `.claude/agents/scripts/check_devkit_version.ps1`, `.claude/agents/scripts/check_devkit_version.sh`
+**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`, `templates/scripts/telemetry.py`
+**Target:** `.claude/agents/scripts/check_devkit_version.ps1`, `.claude/agents/scripts/check_devkit_version.sh`, `.claude/agents/scripts/telemetry.py`
 
-Copy both scripts verbatim. These power the `SessionStart` hook that notifies users when a new devkit version is available.
+Copy all three scripts verbatim. The version-check pair powers `SessionStart`; `telemetry.py` writes privacy-safe runtime stage metrics.
 
 ---
 
@@ -388,7 +388,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```
    bash .claude/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
-   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, the combined `orchestrator_instructions.md`, the `read-section` skill, both version-check scripts, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
+   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, the combined `orchestrator_instructions.md`, the `read-section` skill, the version-check pair plus `telemetry.py`, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.claude/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 
 2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `CLAUDE.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 13 adaptive rules files, 4 wiki docs.
    - For `CLAUDE.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.

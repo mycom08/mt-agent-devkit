@@ -114,6 +114,50 @@ Use five implementation PRs and one final evidence task:
 WP-04A is an evidence task, not a behavior-changing PR. Store only sanitized benchmark
 results that the project explicitly chooses to version.
 
+### 5.1 Codex model and reasoning allocation
+
+This programme does not use GPT-6 Astra. Use the following Codex models for the
+implementation and review work:
+
+| Work | Primary model | Reasoning effort | Independent review |
+|---|---|---|---|
+| WP-01 telemetry schema, collector, aggregation, and tests | `gpt-5.6-terra` | `high` | `gpt-5.6-sol`, `high` |
+| WP-02 validator logic and instruction-drift fix | `gpt-5.6-terra` | `medium` | `gpt-5.6-sol`, `high` |
+| WP-02 fixtures, searches, and mirror updates | `gpt-5.6-luna` | `medium` | Included in WP-02 review |
+| WP-03 branch preflight and agent-state isolation | `gpt-5.6-terra` | `high` | `gpt-5.6-sol`, `high` |
+| WP-04B parallel-execution guidance | `gpt-5.6-terra` | `medium` | `gpt-5.6-sol`, `high` |
+| WP-05 final benchmark analysis and cross-fix review | `gpt-5.6-sol` | `high` | TL and QA remain independent |
+| Bounded mechanical edits outside the rows above | `gpt-5.6-luna` | `medium` | Owning work package reviewer |
+
+Model rules:
+
+1. Use `gpt-5.6-terra` with `high` reasoning as the default implementation model for
+   FIX-01 and FIX-04 because metric semantics and Git safety require careful reasoning.
+2. Use `gpt-5.6-sol` with `high` reasoning for independent architecture review, final
+   benchmark analysis, and the cross-fix decision. Use the explicit `gpt-5.6-sol` model
+   identifier rather than the `gpt-5.6` alias so the recorded configuration is stable and
+   unambiguous.
+3. Use `gpt-5.6-luna` only for bounded, repetitive work with deterministic verification,
+   such as adding fixtures, running corpus searches, or applying already-approved mirror
+   edits. Luna must not be the sole owner of telemetry semantics or branch safety.
+4. Do not raise reasoning effort above `high` by default. A Sol reviewer may use `xhigh`
+   only after a concrete unresolved architecture or metric ambiguity is recorded.
+5. Record the implementation model and reasoning effort in every work-package report.
+6. This allocation governs the Codex agents implementing the changes. It does not change
+   the models used by the devkit roles inside a controlled benchmark.
+7. Before-and-after benchmark runs must use the same role model and reasoning effort for
+   each corresponding stage. If a required model is unavailable, mark the comparison
+   non-comparable or rerun both sides with the same replacement.
+
+Selection basis, verified against official OpenAI documentation on 2026-09-21:
+
+- `gpt-5.6-sol` is the GPT-5.6 flagship for complex professional work:
+  `https://developers.openai.com/api/docs/models/gpt-5.6-sol`
+- `gpt-5.6-terra` balances intelligence and cost:
+  `https://developers.openai.com/api/docs/models/gpt-5.6-terra`
+- `gpt-5.6-luna` is intended for cost-sensitive, high-volume work:
+  `https://developers.openai.com/api/docs/models/gpt-5.6-luna`
+
 ## 6. Phase 0 — Freeze Scope and Evidence
 
 ### Goal

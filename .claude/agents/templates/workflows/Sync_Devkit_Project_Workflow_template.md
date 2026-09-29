@@ -140,8 +140,10 @@ Fetch and write verbatim (strip the `_template` suffix). This file updates itsel
 
 **Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.ps1`
           `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.sh`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/telemetry.py`
 **Target:** `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.ps1`
           `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.sh`
+          `{{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py`
 
 Fetch and write verbatim. These are identical to the regular-repo versions — no orchestrator-specific behavior.
 

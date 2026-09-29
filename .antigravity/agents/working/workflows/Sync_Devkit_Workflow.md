@@ -176,8 +176,10 @@ Applies to: `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Pro
 
 **Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.ps1`
           `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.sh`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/telemetry.py`
 **Target:** `.antigravity/agents/scripts/check_devkit_version.ps1`
           `.antigravity/agents/scripts/check_devkit_version.sh`
+          `.antigravity/agents/scripts/telemetry.py`
 
 Fetch and write verbatim. Create `.antigravity/agents/scripts/` if it does not exist.
 
@@ -281,7 +283,7 @@ After all updates are applied, scan each managed directory and flag any file not
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 **Expected files — `scripts/`:**
-`check_devkit_version.ps1`, `check_devkit_version.sh`
+`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/` — these are project-owned and may contain custom files.
 

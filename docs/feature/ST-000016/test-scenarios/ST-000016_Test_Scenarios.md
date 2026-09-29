@@ -80,7 +80,7 @@ verification; does not affect PR gate behavior).
 | §1 | Purpose and scope |
 | §2 | Templates as executable specifications |
 | §3 | 3-layer model (static/unit, deployment/integration, behavioral/E2E) |
-| §4 | 6 Layer-1 corpus invariants (#1–#6, each fully described) |
+| §4 | 7 Layer-1 corpus invariants (#1–#7, each fully described) |
 | §5 | Risk tiers A/B/C |
 | §6 | Coverage model |
 | §7 | AC-as-oracle + re-run-refactor-scan for Tier-A changes |
