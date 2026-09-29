@@ -122,6 +122,7 @@ fi
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
 cp "$TPL/scripts/telemetry.py" "$AGENTS/scripts/telemetry.py"
+cp "$TPL/scripts/branch_preflight.py" "$AGENTS/scripts/branch_preflight.py"
 
 # 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
 #    .antigravity/skills/, a sibling of .antigravity/agents/, not under it, since that is
@@ -197,6 +198,9 @@ if [[ "$MODE" == "github" ]]; then
 
 # Agent working records — ephemeral session state, no long-term git value
 .antigravity/agents/working-record/*_Working_Record.md
+
+# Agent memory is runtime state, never product history
+.antigravity/agents/memory/
 
 # Agent retrospective files — for human review only, not part of the committed codebase
 .antigravity/agents/retros/

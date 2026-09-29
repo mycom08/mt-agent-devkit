@@ -8,10 +8,7 @@
 
 Triggered from `Technical_Lead_Rules_Bootstrap.md §5`. Rare — only when the orchestrator assigns TL as the story implementer.
 
-1. Create a dev branch from `main` — **never work directly on `main`**:
-   ```
-   git checkout -b ST-XXXXXX/short-description
-   ```
+1. Before status or product writes, create a dev branch only through `branch_preflight.py inspect` then `branch_preflight.py create`, using the immutable Base Branch and verified full SHA — **never work directly on `main`**.
 2. Push all implementation work to that dev branch
 3. Open a PR from the dev branch → `main`
 4. PR title: `[ST-XXXXXX][DEVKIT] Story title`

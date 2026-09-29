@@ -22,6 +22,7 @@
 ```markdown
 **Phase:** [Phase/Sprint]  **Points:** [1-13]  **Priority:** Must/Should/Nice  
 **Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
+**Base Branch:** <existing branch selected during story creation; immutable>
 
 ## User Story
 > As a **[who]**, I want **[what]**, so that **[why]**.

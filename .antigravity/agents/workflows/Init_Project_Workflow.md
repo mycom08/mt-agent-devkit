@@ -214,7 +214,7 @@ This one script call writes every file (or file family) that needs **zero projec
 It creates all required directories (`context/`, `memory/`, `rules/`, `working-record/`, `workflows/`, `docs/wiki/`, `scripts/`, `retros/` (no `.gitkeep` — gitignored, see below), `tmp/`, and `docs/stories|sprints|reviews/` + `story_counter.txt` for strict mode) and writes:
 - **12 of 25 rules files verbatim** (`{github-org}/{repo-name}` substituted, nothing else): `Agent_Common_Bootstrap`, `Agent_Common_Read_On_Demand`, `Audit_Rules`, `Blocked_Request`, `CICD_Validation_Guide`, `Clean_Code_Rules`, `Product_Owner_Rules_Bootstrap`, `Product_Owner_Rules_Read_On_Demand`, `Retro_Rules`, `Story_Standard_TL`, `Strict_Mode_Story_Guide`, `UI_Prototype_Rules`
 - **All 10 workflow files** — the 8 split ones (shared block + mode-specific appendix, correctly omitting the appendix separator entirely when the mode file is pure internal-notes comments with no real content — most of them are) and the 2 non-split ones, verbatim, no substitution (workflow files intentionally leave `{github-org}/{repo-name}` and other `{{PLACEHOLDER}}` tokens as literal runtime-resolved text — devkit convention, never fill these in at scaffold time)
-- Both version-check scripts plus `telemetry.py`, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores `working-record/*_Working_Record.md` and `retros/` — ephemeral/human-review-only, never committed), and `.antigravity/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
+- Both version-check scripts plus `telemetry.py` and `branch_preflight.py`, `devkit_version.txt`, 6 blank memory files, 6 blank working-record files, `.gitignore` additions (github mode also ignores memory, working records, and retrospectives — runtime-only, never committed), and `.antigravity/settings.json`'s `SessionStart` hook (only when `settings.json` doesn't already exist — if it does, merging into arbitrary existing JSON needs a real parser, do that step separately, same as before)
 - `VERSION` (`0.0.1-SNAPSHOT`) and `CHANGELOG.md` (single-next-version-heading format) at the target project root — a universal devkit convention, any language, written only if not already present (idempotent — a Java skeleton generation pass that ran earlier in `Build_Software_Workflow.md` never creates these itself anymore, so this is always the actual creator). See `.antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md` for the format.
 
 If `github-org/repo-name` is omitted, `{github-org}`/`{repo-name}` tokens in the 12 verbatim rules files are left as literal placeholders — fill them in with a follow-up run once the GitHub repo exists, or leave them (harmless, same convention as workflow files).
@@ -298,12 +298,12 @@ For each missing wiki file, fill every `{{PLACEHOLDER}}` in the template using t
 - `{{PROJECT_NAME}}` → detected project name
 - `{{LANGUAGE}}` → detected primary language (e.g., `Go`, `TypeScript`, `Python`)
 
-#### Distributed scripts (3 files)
+#### Distributed scripts (4 files)
 
-**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`, `templates/scripts/telemetry.py`
-**Target:** `.antigravity/agents/scripts/check_devkit_version.ps1`, `.antigravity/agents/scripts/check_devkit_version.sh`, `.antigravity/agents/scripts/telemetry.py`
+**Source:** `templates/scripts/check_devkit_version.ps1`, `templates/scripts/check_devkit_version.sh`, `templates/scripts/telemetry.py`, `templates/scripts/branch_preflight.py`
+**Target:** `.antigravity/agents/scripts/check_devkit_version.ps1`, `.antigravity/agents/scripts/check_devkit_version.sh`, `.antigravity/agents/scripts/telemetry.py`, `.antigravity/agents/scripts/branch_preflight.py`
 
-Copy all three scripts verbatim. The version-check pair powers the `SessionStart` hook; `telemetry.py` writes and aggregates privacy-safe agent-stage metrics in the gitignored runtime directory.
+Copy all four scripts verbatim. The version-check pair powers the `SessionStart` hook; `telemetry.py` writes privacy-safe metrics and `branch_preflight.py` blocks unsafe branch creation.
 
 ---
 

@@ -56,9 +56,9 @@ run_clean_fixture() {
     fi
 }
 
-echo "=== telemetry.py -- deterministic tests ==="
-if python -m unittest scripts.test.test_telemetry; then
-    echo "[PASS] telemetry collector tests"
+echo "=== branch preflight + telemetry -- deterministic tests ==="
+if python -m unittest scripts.test.test_branch_preflight scripts.test.test_telemetry; then
+    echo "[PASS] branch preflight and telemetry tests"
     pass=$((pass + 1))
 else
     echo "[FAIL] telemetry collector tests"

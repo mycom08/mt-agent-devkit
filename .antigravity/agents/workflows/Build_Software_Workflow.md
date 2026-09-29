@@ -460,7 +460,7 @@ After both agents complete, the orchestrator copies the following files from `/r
 
 10. **Sync Devkit support files (orchestrator-direct, mechanical — no agent).** Without these, `sync devkit` (wired into `CLAUDE.md` in step 7) has nothing to check against. Reuse the exact same content/logic `scaffold_mechanical.sh` already writes for every sub-repo — don't reinvent it:
     - Write `.antigravity/agents/devkit_version.txt` containing the current content of `version.txt` at the devkit root.
-    - Copy `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.sh`, and `telemetry.py` verbatim to `.antigravity/agents/scripts/` in the orchestrator folder.
+    - Copy `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.sh`, `telemetry.py`, and `branch_preflight.py` verbatim to `.antigravity/agents/scripts/` in the orchestrator folder.
     - Inject the `.antigravity/settings.json` `SessionStart` hook (same OS-detection logic as `scaffold_mechanical.sh`'s settings.json step — only if `settings.json` doesn't already exist).
 
 11. Write `.antigravity/agents/docs/build_state.md` inside the project orchestrator folder:

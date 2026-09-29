@@ -123,6 +123,7 @@ fi
 cp "$TPL/scripts/check_devkit_version.ps1" "$AGENTS/scripts/check_devkit_version.ps1"
 cp "$TPL/scripts/check_devkit_version.sh" "$AGENTS/scripts/check_devkit_version.sh"
 cp "$TPL/scripts/telemetry.py" "$AGENTS/scripts/telemetry.py"
+cp "$TPL/scripts/branch_preflight.py" "$AGENTS/scripts/branch_preflight.py"
 
 # 4b. Shared skills — verbatim, no project-specific placeholders. Lives at
 #    .claude/skills/, a sibling of .claude/agents/, not under it, since that is
@@ -195,6 +196,9 @@ if [[ "$MODE" == "github" ]]; then
 
 # Workflow output documents
 /result/
+
+# Agent memory is runtime state, never product history
+.claude/agents/memory/
 
 # Agent working records — ephemeral session state, no long-term git value
 .claude/agents/working-record/*_Working_Record.md

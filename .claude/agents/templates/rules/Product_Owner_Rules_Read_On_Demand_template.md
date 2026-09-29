@@ -157,6 +157,7 @@ Triggered from `Story_Standard_PO.md` §13. Read before your first `gh issue cre
 **Story Points:** [1-13]  
 **Priority:** Must-Have | Should-Have | Nice-to-Have  
 **Assigned:** Developer | Technical Lead | QA | Business Analyst | UI/UX Designer
+**Base Branch:** <existing branch selected during story creation; immutable>
 
 ## User Story
 

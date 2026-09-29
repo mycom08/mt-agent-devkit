@@ -128,15 +128,15 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 ### Status: Ready → In Progress
 **When:** Starting work on the story  
 **Action:**
-1. Remove label `status:ready`, add label `status:in-progress` on the GitHub Issue
-2. Read the full story: User Story, all AC, Technical Scope, and any linked technical docs
-3. **Verify the API spec** (`docs/api/`) for every endpoint the story touches — confirm request/response shape, required fields, enums, and constraints match the story AC. If spec is missing or inconsistent, post a Comment tagging **TL** before writing any code
-4. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers
-5. **Read PO and TL answers** — if an answer is insufficient or raises a new concern, post a push-back follow-up before proceeding; wait until all blocking points are fully resolved
-6. Create dev branch from the feature branch — **never work directly on the feature branch or master**:
+1. Read the full story: User Story, all AC, Technical Scope, the immutable Base Branch, and any linked technical docs.
+2. Create the dev branch from the verified base **before changing story status or product files** — never work directly on the feature branch or master:
    ```
-   git checkout -b ST-XXXXXX/short-description
+   python {{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
    ```
+3. After successful branch verification, remove label `status:ready` and add `status:in-progress` on the GitHub Issue.
+4. **Verify the API spec** (`docs/api/`) for every endpoint the story touches — confirm request/response shape, required fields, enums, and constraints match the story AC. If spec is missing or inconsistent, post a Comment tagging **TL** before writing any code.
+5. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers.
+6. **Read PO and TL answers** — if an answer is insufficient or raises a new concern, post a push-back follow-up before proceeding; wait until all blocking points are fully resolved.
 
 ### Status: In Progress → Review
 **When:** Work complete, ready for review  
@@ -202,7 +202,7 @@ Scripts live in `tests/feature/<feature_name>/scripts/ST-XXXXXX_<description>.sh
 ### Step 2 — Branch
 - Developer creates a fix branch from the **feature branch**:
   ```
-  git checkout -b fix/ST-XXXXXX/short-description
+  python {{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch fix/ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
   ```
 - Developer removes label `status:done`, adds label `status:hotfix` on the issue
 
@@ -453,6 +453,7 @@ When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`  
 **Labels (feature story):** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`  
+**Body field:** `**Base Branch:** <existing branch selected during story creation>` — immutable; required before `status:ready` or execution.
 **Labels (non-feature story):** `status:backlog`, `sprint-N`  
 **GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 

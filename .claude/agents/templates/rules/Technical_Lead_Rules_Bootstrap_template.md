@@ -197,9 +197,9 @@ Rare — only when acting as Implementer per §5. Checklist in `Technical_Lead_R
 
 ---
 
-## 11. Stage-Transition Commit (mandatory before handoff)
+## 11. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
@@ -219,7 +219,7 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 | End of a working session on an unfinished story | `Technical_Lead_Rules_Read_On_Demand.md §2` (Context Anchoring) |
 | TL is acting as Implementer and about to open a PR | `Technical_Lead_Rules_Read_On_Demand.md §3` (Pre-PR Gate) |
 
-> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit and Troubleshooting Protocol are already resolved directly by §11/§12 above.
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Runtime-State Handoff and Troubleshooting Protocol are already resolved directly by §11/§12 above.
 
 ---
 
