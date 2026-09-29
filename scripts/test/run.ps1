@@ -14,6 +14,8 @@ $badCases = @(
     @{ Args = @('scripts/test/fixtures/bad/shared/inv3_bad_shared.md'); ExpectedErrors = 2 },
     @{ Args = @('--test-retired-trigger', 'TEST_RETIRED_TRIGGER_DO_NOT_USE', 'scripts/test/fixtures/bad/inv4_bad_trigger.md'); ExpectedErrors = 2 },
     @{ Args = @('scripts/test/fixtures/bad/inv5_bad_full_read_range.md'); ExpectedErrors = 1 },
+    @{ Args = @('scripts/test/fixtures/bad/inv5_bad_full_read_required.md'); ExpectedErrors = 1 },
+    @{ Args = @('scripts/test/fixtures/bad/inv5_bad_full_read_necessary.md'); ExpectedErrors = 1 },
     # Filename retains its pre-FIX-03 `inv6` name; Markdown well-formedness is now invariant #7.
     @{ Args = @('scripts/test/fixtures/bad/inv6_bad_markdown.md'); ExpectedErrors = 2 }
 )
