@@ -77,3 +77,26 @@ before the fresh pair above.
 The planned benchmark still needs three comparable repetitions per arm through
 the normal installed devkit pipeline, stage telemetry, profile/transition
 checks, and all G2/G6 quality gates. PR #209 should remain draft until then.
+
+## Installed G2 baseline handoff (2026-09-29)
+
+The available Claude Code CLI is `2.1.284`, while this pilot freezes `2.1.280`.
+The CLI is authenticated, but the frozen pilot preflight correctly rejects this
+version. An installed baseline can use a separately recorded configuration; it
+must not rewrite this pilot's manifest or historical evidence.
+
+The installed path is the Claude Code `init project` workflow in a checkout of
+the pinned baseline devkit, targeting a fresh strict-mode copy of `WF-002`.
+That workflow runs `.claude/agents/working/scripts/scaffold_mechanical.sh` and
+then adapts `CLAUDE.md`, the project priming, six role instructions, and thirteen
+rules files. Start `start story ST-XXXXXX` **from the installed target** so its
+`CLAUDE.md` routes through the installed orchestrator, Start Story workflow,
+and Shared Pipeline Stages. Capture file hashes after install, the full stage
+stream, state transitions, role verdicts, product diff, tests, and telemetry.
+Repeat from fresh target copies for the candidate and all planned repetitions.
+
+No deterministic installed-project fixture or adaptive-install verification is
+present in this branch, and the local runner injects only Common Rule Section 3
+into hand-prompted role sessions. The shell scaffold also needs Git Bash; in
+this sandbox Git Bash starts only with elevated execution. Therefore there is
+no executable installed G2 baseline harness here yet, and G2 remains unassessed.
