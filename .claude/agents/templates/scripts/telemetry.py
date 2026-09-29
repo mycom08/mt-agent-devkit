@@ -167,8 +167,9 @@ def validate_metadata(metadata: dict[str, Any]) -> None:
         error("metadata session_final_tokens must be a non-negative integer")
 
 
-def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
+def parse_transcript_events(path: Path) -> tuple[dict[str, list[dict[str, Any]]], dict[str, int] | None]:
     groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    final_usage: dict[str, int] | None = None
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except OSError as exc:
@@ -182,6 +183,19 @@ def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
             error(f"malformed JSON in {path.name} line {number}: {exc.msg}")
         if not isinstance(event, dict):
             error(f"invalid transcript event in {path.name} line {number}: expected object")
+        if event.get("type") == "result":
+            if final_usage is not None:
+                error(f"duplicate final result in {path.name}")
+            usage = event.get("usage")
+            if not isinstance(usage, dict):
+                error(f"invalid final result in {path.name}: missing usage object")
+            final_usage = {}
+            for field in USAGE_FIELDS:
+                value = usage.get(field)
+                if not is_nonnegative_int(value):
+                    error(f"invalid final result usage.{field} in {path.name}")
+                final_usage[field] = value
+            continue
         if event.get("type") != "assistant":
             continue
         message = event.get("message")
@@ -193,7 +207,11 @@ def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
         groups[request_id].append(message)
     if not groups:
         error(f"no assistant requests found in {path.name}")
-    return groups
+    return groups, final_usage
+
+
+def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
+    return parse_transcript_events(path)[0]
 
 
 def numeric_usage(message: dict[str, Any], field: str, request_id: str) -> int:
@@ -229,6 +247,19 @@ def extract_usage(groups: dict[str, list[dict[str, Any]]]) -> dict[str, int]:
                 tool_events.add((request_id, tool_id))
     totals["requests"] = len(groups)
     totals["tool_invocations"] = len(tool_events)
+    return totals
+
+
+def extract_transcript_usage(path: Path) -> dict[str, int]:
+    groups, final_usage = parse_transcript_events(path)
+    totals = extract_usage(groups)
+    if final_usage is not None:
+        for field in USAGE_FIELDS[:-1]:
+            if totals[field] != final_usage[field]:
+                error(f"inconsistent final usage.{field} in {path.name}")
+        if final_usage["output_tokens"] < totals["output_tokens"]:
+            error(f"inconsistent final usage.output_tokens in {path.name}")
+        totals["output_tokens"] = final_usage["output_tokens"]
     return totals
 
 
@@ -449,7 +480,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.command == "extract":
-            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_usage(parse_transcript(args.transcript)))
+            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_transcript_usage(args.transcript))
             write_record(record, args.output, args.append)
         elif args.command == "harness":
             metadata = load_metadata(args.metadata)

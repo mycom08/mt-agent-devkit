@@ -33,6 +33,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Bug Fixes
 
 - [Fix] Replaced numeric mandatory-section ranges in full-read bootstrap instructions and added validator protection against their return.
+- [Enhancement #211] Corrected telemetry output-token totals when streamed events report partial usage.
 
 ---
 

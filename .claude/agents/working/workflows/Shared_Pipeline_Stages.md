@@ -76,7 +76,7 @@ After every completed agent stage (including a non-behavioral fast path), write 
 
 Create metadata containing only `run_id`, `story_id`, `role`, `stage`, `session_mode`, `model`, `started_at`, `ended_at`, `duration_ms`, `completion_status`, and `notes`. Never include transcript paths, prompt content, secrets, issue tokens, tool input, or full tool output.
 
-- With a raw transcript, run `python .claude/agents/working/scripts/telemetry.py extract --transcript <transcript> --metadata <metadata-json> --output .claude/agents/working/tmp/token-metrics/<run-id>.jsonl --append`.
+- With a raw transcript, run `python .claude/agents/working/scripts/telemetry.py extract --transcript <transcript> --metadata <metadata-json> --output .claude/agents/working/tmp/token-metrics/<run-id>.jsonl --append`; use its consistent final-result output total when available.
 - With only a harness final-context counter, include `session_final_tokens` and run `harness`; without either source, omit `session_final_tokens`, put a short factual explanation of the unavailable measurements in `notes`, and run `python .claude/agents/working/scripts/telemetry.py harness --metadata <metadata-json> --output .claude/agents/working/tmp/token-metrics/<run-id>.jsonl --append` so the record uses `usage_source: unavailable` and explicit null fields.
 - `session_final_tokens` is a final-context counter, never cumulative usage or a cost proxy. Aggregate only with `python .claude/agents/working/scripts/telemetry.py aggregate --input .claude/agents/working/tmp/token-metrics/<run-id>.jsonl`; malformed input, duplicate stage identities, and mixed schemas stop the run.
 
