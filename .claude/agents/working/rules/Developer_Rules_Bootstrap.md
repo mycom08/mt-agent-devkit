@@ -45,7 +45,7 @@ After reading, identify anything unclear: scope gaps, ambiguous AC, technical de
 
 Once all blocking questions are resolved:
 
-1. Before any status, state, or product write, read the immutable `Base Branch` and run `branch_preflight.py inspect`; run `branch_preflight.py create` using its verified full SHA. A block stops for direction.
+1. Use the immutable `Base Branch` and full Base/Remote Base SHAs from Story Base Preflight `inspect`; run `branch_preflight.py create` before story status or product writes. Per-story pipeline state may be recorded after `inspect` PASS. A block stops for direction.
 2. **Only after successful create**, record the Story Branch, update story status to `in-progress`, and verify `git branch --show-current` prints the new branch.
 3. Begin implementation.
 

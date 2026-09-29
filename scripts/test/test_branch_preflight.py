@@ -274,5 +274,86 @@ class PreflightTests(unittest.TestCase):
             self.assertLess(rendered.index("branch_preflight.py create"), rendered.index("write `impl_session"))
 
 
+class WorkflowContractTests(unittest.TestCase):
+    def test_ready_starts_with_preflight_while_in_progress_resumes(self) -> None:
+        for start, sprint, pipeline in (
+            (
+                ROOT / ".claude/agents/templates/shared/workflows/Start_Story_Workflow_Shared_template.md",
+                ROOT / ".claude/agents/templates/shared/workflows/Sprint_Workflow_Shared_template.md",
+                ROOT / ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+            ),
+            (
+                ROOT / ".antigravity/agents/working/workflows/Start_Story_Workflow.md",
+                ROOT / ".antigravity/agents/working/workflows/Sprint_Workflow.md",
+                ROOT / ".antigravity/agents/working/workflows/Shared_Pipeline_Stages.md",
+            ),
+            (
+                ROOT / ".claude/agents/working/workflows/Start_Story_Workflow.md",
+                ROOT / ".claude/agents/working/workflows/Sprint_Workflow.md",
+                ROOT / ".claude/agents/working/workflows/Shared_Pipeline_Stages.md",
+            ),
+        ):
+            with self.subTest(start=start):
+                start_text = start.read_text(encoding="utf-8")
+                sprint_text = sprint.read_text(encoding="utf-8")
+                pipeline_text = pipeline.read_text(encoding="utf-8")
+                self.assertIn("| `status:ready` | Story Base Preflight", start_text)
+                self.assertIn("| `status:in-progress` | Resume the recorded story", start_text)
+                self.assertIn("start the next `status:ready` story at Story Base Preflight", sprint_text)
+                self.assertIn("Resumed `status:in-progress` entry", pipeline_text)
+                self.assertIn("do not call `create` again", pipeline_text)
+                self.assertIn("Interrupted Stage 1 recovery for a `status:ready` story", pipeline_text)
+                self.assertIn("its full tip SHA equals that recorded base SHA", pipeline_text)
+                self.assertIn("`git status --porcelain` is empty", pipeline_text)
+
+        for workflow in ("Start_Story_Workflow_template.md", "Sprint_Workflow_template.md"):
+            strict = (ROOT / ".claude/agents/templates/strict/workflows" / workflow).read_text(encoding="utf-8")
+            self.assertLess(strict.index("check whether that local branch exists"), strict.index("1. "))
+            self.assertIn("Interrupted Stage 1 recovery check", strict)
+
+    def test_devkit_working_preflight_scripts_match_distributed_helper(self) -> None:
+        source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_bytes()
+        for path in (
+            ROOT / ".antigravity/agents/working/scripts/branch_preflight.py",
+            ROOT / ".claude/agents/working/scripts/branch_preflight.py",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(source, path.read_bytes())
+
+    def test_story_base_is_inspected_before_reproduction_or_stage_zero(self) -> None:
+        paths = (
+            ROOT / ".claude/agents/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md",
+            ROOT / ".antigravity/agents/working/workflows/Shared_Pipeline_Stages.md",
+            ROOT / ".claude/agents/working/workflows/Shared_Pipeline_Stages.md",
+        )
+        for path in paths:
+            with self.subTest(path=path):
+                text = path.read_text(encoding="utf-8")
+                gate = text.index("## Story Base Preflight")
+                self.assertLess(gate, text.index("## Bug Reproduction Pre-Flight"))
+                self.assertLess(gate, text.index("## Stage 0 — Implementer Routing"))
+                self.assertIn("branch_preflight.py inspect", text[gate:text.index("## Bug Reproduction Pre-Flight")])
+                self.assertIn("--expected-remote-sha", text[text.index("## Stage 1 — Implementation"):])
+
+    def test_story_creation_paths_put_base_in_story_body(self) -> None:
+        po = (ROOT / ".claude/agents/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md").read_text(encoding="utf-8")
+        creation = po.split("## 5. Story Creation Template", 1)[1]
+        issue_body = creation.split("```markdown", 1)[1].split("```", 1)[0]
+        self.assertIn("**Base Branch:**", issue_body)
+        plan = (ROOT / ".claude/agents/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md").read_text(encoding="utf-8")
+        self.assertIn("immutable `**Base Branch:**", plan)
+        self.assertIn("immutable `**Project Base Branch:**", plan)
+
+    def test_implementer_rules_create_branch_before_status(self) -> None:
+        for relative in (
+            ".claude/agents/templates/rules/Story_Standard_Dev_template.md",
+            ".claude/agents/templates/rules/UI_UX_Designer_Rules_template.md",
+        ):
+            with self.subTest(path=relative):
+                text = (ROOT / relative).read_text(encoding="utf-8")
+                stage = text.split("### Status: Ready → In Progress", 1)[1] if "Story_Standard_Dev" in relative else text.split("### Step 3 — Start implementation", 1)[1]
+                self.assertLess(stage.index("branch_preflight.py create"), stage.index("status:in-progress"))
+
+
 if __name__ == "__main__":
     unittest.main()

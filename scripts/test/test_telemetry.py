@@ -26,7 +26,7 @@ class TelemetryTests(unittest.TestCase):
         return telemetry.build_record(
             metadata,
             "raw_transcript",
-            telemetry.extract_usage(telemetry.parse_transcript(FIXTURES / "streamed_duplicate.jsonl")),
+            telemetry.extract_transcript_usage(FIXTURES / "streamed_duplicate.jsonl"),
         )
 
     def test_streamed_messages_deduplicate_and_use_final_output(self) -> None:
@@ -40,6 +40,20 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(record["output_tokens"], 24)
         self.assertEqual(record["usage_source"], "raw_transcript")
         self.assertEqual(record["unavailable_fields"], ["session_final_tokens"])
+
+    def test_final_result_replaces_partial_stream_output(self) -> None:
+        usage = telemetry.extract_transcript_usage(FIXTURES / "streamed_with_result.jsonl")
+        self.assertEqual(usage["requests"], 2)
+        self.assertEqual(usage["tool_invocations"], 3)
+        self.assertEqual(usage["input_tokens"], 30)
+        self.assertEqual(usage["cache_read_input_tokens"], 3000)
+        self.assertEqual(usage["output_tokens"], 240)
+
+    def test_final_result_must_agree_with_request_usage(self) -> None:
+        fixture = FIXTURES / "streamed_with_result.jsonl"
+        with patch.object(Path, "read_text", return_value=fixture.read_text().replace('"input_tokens":30', '"input_tokens":31')):
+            with self.assertRaisesRegex(telemetry.TelemetryError, "inconsistent final usage.input_tokens"):
+                telemetry.extract_transcript_usage(fixture)
 
     def test_harness_only_usage_is_explicitly_unavailable(self) -> None:
         record = telemetry.build_record(

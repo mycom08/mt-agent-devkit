@@ -11,7 +11,7 @@
 | **In Progress** | **UI/UX Designer** | Dev branch created |
 | **Review** | **UI/UX Designer** | After PR opened |
 
-**UI/UX Designer removes `status:ready`, adds `status:in-progress` when starting a story; removes `status:in-progress`, adds `status:review` after opening the PR** — see `UI_UX_Designer_Rules_Bootstrap.md` §5.
+**UI/UX Designer removes `status:ready` and adds `status:in-progress` only after verified story-branch creation; removes `status:in-progress` and adds `status:review` after opening the PR** — see `UI_UX_Designer_Rules_Bootstrap.md` §5.
 
 ---
 

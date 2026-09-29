@@ -113,7 +113,7 @@ Triggered from `Story_Standard_Dev.md` §4/§12. Only when the orchestrator assi
 
 Triggered from `Story_Standard_Dev.md` §6. When a bug is found after a story is `status:done`, **never fix on the feature branch or master**. Create a fix branch off the feature branch, then run the normal review/test cycle:
 
-1. Create `fix/ST-XXXXXX/short-description` from the feature branch; set the issue to `status:hotfix`
+1. Run `branch_preflight.py inspect` and `create` for `fix/ST-XXXXXX/short-description` from the story's immutable Base Branch, using the verified full Base/Remote Base SHAs. Only after successful branch creation, set the issue to `status:hotfix`.
 2. Fix on that branch → open a PR targeting the **feature branch** → request TL review
 3. After TL approval, merge → set `status:testing` → notify QA to re-test the affected AC
 4. QA reports results → PO ticks AC → `status:done`
