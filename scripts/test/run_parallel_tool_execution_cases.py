@@ -78,7 +78,7 @@ TASKS = {
 }
 
 CLAUDE_TOOLS = {
-    "P01": "Read", "P02": "Grep,Read", "P03": "Read,Edit,Write",
+    "P01": "Read,PowerShell,Bash", "P02": "Grep,Read,PowerShell,Bash", "P03": "Read,Edit,Write",
     "P04": "Read,PowerShell,Bash", "P05": "Read,PowerShell,Bash",
     "P06": "Read,Write,PowerShell,Bash", "P07": "Read",
     "P08": "PowerShell,Bash",
@@ -126,6 +126,9 @@ def evaluate(case_id, trace, final, state, stderr):
         missing = [name for name in ("alpha.txt", "beta.txt", "gamma.txt") if name not in combined]
         if missing:
             return "fail", ["missing reads: " + ", ".join(missing)]
+        shell_starts = [item for item in starts if item["type"] in {"Bash", "PowerShell", "command_execution"}]
+        if len(shell_starts) == 1 and len(starts) == 1:
+            return "needs-review", ["check single read-only shell batch is bounded and labelled"]
         first_result = next((index for index, item in enumerate(trace) if item["event"] == "item.completed" and item["type"] == "tool_result"), len(trace))
         starts_before_result = [item for item in trace[:first_result] if item["event"] == "item.started" and item["type"] == "Read"]
         return ("needs-review" if len(starts_before_result) == 3 else "fail",

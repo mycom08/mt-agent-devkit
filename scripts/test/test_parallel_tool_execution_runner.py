@@ -14,7 +14,8 @@ STATE = {"sentence": "The sky is blue.\n", "deletion_target_exists": True,
 class ParallelRunnerOracleTests(unittest.TestCase):
     def test_saved_p02_evidence_matches_current_oracle(self):
         evidence = Path(__file__).resolve().parents[2] / "tests" / "agent-workflows" / "evidence"
-        for name in ("FIX02_G5_P02_P08.json", "FIX02_G5_P01_P02_Clarified.json"):
+        for name in ("FIX02_G5_P02_P08.json", "FIX02_G5_P01_P02_Clarified.json",
+                     "FIX02_G5_P01_P02_Shell_Enabled.json"):
             with self.subTest(name=name):
                 artifact = json.loads((evidence / name).read_text(encoding="utf-8"))
                 case = next(item for item in artifact["results"] if item["id"] == "P02")
@@ -69,6 +70,15 @@ class ParallelRunnerOracleTests(unittest.TestCase):
         for number in range(1, 4):
             trace.append({"event": "item.completed", "id": str(number),
                           "type": "tool_result", "command": "content", "exit_code": 0})
+        outcome, _ = evaluate("P01", trace, "apples bananas grapes", STATE, "")
+        self.assertEqual(outcome, "needs-review")
+
+    def test_single_shell_read_batch_reaches_manual_review(self):
+        trace = [{"event": "item.started", "id": "1", "type": "Bash",
+                  "command": "printf 'alpha'; cat notes/alpha.txt; printf 'beta'; cat notes/beta.txt; printf 'gamma'; cat notes/gamma.txt",
+                  "exit_code": None},
+                 {"event": "item.completed", "id": "1", "type": "tool_result",
+                  "command": "apples bananas grapes", "exit_code": 0}]
         outcome, _ = evaluate("P01", trace, "apples bananas grapes", STATE, "")
         self.assertEqual(outcome, "needs-review")
 

@@ -26,7 +26,8 @@ parallelism, and bounded commands; it is not a pass. A run containing only
   when tool results are absent. `needs-review` is never treated as a pass
   without manual trace inspection.
 - Reviewable traces: `FIX02_G5_P01_Initial.json`, `FIX02_G5_P02_P08.json`,
-  and `FIX02_G5_P01_P02_Clarified.json` in this directory.
+  `FIX02_G5_P01_P02_Clarified.json`, and
+  `FIX02_G5_P01_P02_Shell_Enabled.json` in this directory.
   The two P02 records retain their original runner classification in
   `captured_outcome`; `outcome` and `assertions` reflect replay through the
   corrected oracle. Both classify the sequential searches as failures.
@@ -50,6 +51,13 @@ P02–P03 attempt lost its artifact when Windows denied fixture cleanup; actual
 total spend may be higher. A separate default-sandbox P01 connection failure
 reported **$0**, no tool events, and `ECONNREFUSED`; it is not behavioral
 evidence. Every successful invocation stayed below its individual cap.
+
+An additional P01/P02 run exposed Bash and PowerShell to the agent so the
+fixture's documented bounded-batch fallback was available. The existing
+guidance was unchanged. Both still failed: P01 made three sequential Read
+calls; P02 made two sequential Grep calls. This run cost **$0.1333754**
+($0.097269 + $0.0361064), bringing recorded successful-invocation cost to
+**$0.4618250**. Its trace is in `FIX02_G5_P01_P02_Shell_Enabled.json`.
 
 The existing pre-authorization P01 scratch trace also showed only two reads
 before the first result, then the third afterward. It is not counted as a
