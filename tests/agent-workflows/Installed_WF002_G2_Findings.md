@@ -82,3 +82,12 @@ write. This is an inference from the workflow's required writes, not a measured
 story-only failure. A supported permission handler for those disposable paths
 must be established and tested before paying for three full repetitions; the
 runner must not silently substitute shell writes for denied file-tool writes.
+
+**Auto-mode probe (2026-09-30):** A separate disposable fixture invoked Claude
+Code with the installed runner's `--restricted`/headless settings, changing
+only `--permission-mode` from `acceptEdits` to `auto`. It asked `Write` to create
+`.claude/agents/tmp/probe.txt` and explicitly prohibited shell alternatives.
+The `Write` tool was denied as requiring approval; the file was not created.
+The probe cost $0.0205456. Thus auto mode alone does not resolve this protected
+path under the current `--permission-prompts none` configuration. The raw
+probe stream remains local in an ignored disposable directory.
