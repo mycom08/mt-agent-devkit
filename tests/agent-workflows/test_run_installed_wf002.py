@@ -18,6 +18,12 @@ spec.loader.exec_module(runner)
 
 
 class InstalledPreparationTests(unittest.TestCase):
+    def test_complete_capture_still_requires_g2_quality_review(self) -> None:
+        completed = [{"story_started": True}, {"story_started": True}]
+        self.assertEqual(runner.run_exit_code(completed, 2), 2)
+        self.assertEqual(runner.run_exit_code(completed[:1], 2), 1)
+        self.assertEqual(runner.run_exit_code([completed[0], {"story_started": False}], 2), 1)
+
     def test_export_pinned_baseline_and_seed_remote_free_target(self) -> None:
         with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
             root = Path(directory)

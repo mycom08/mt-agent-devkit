@@ -214,6 +214,11 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     return result
 
 
+def run_exit_code(sides: list[dict[str, object]], expected_count: int) -> int:
+    """A complete capture still requires independent G2 quality assessment."""
+    return 2 if len(sides) == expected_count and all(side["story_started"] for side in sides) else 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline-ref", default="a30460a87c6d439b1193c45b77cc638a8f237fdb")
@@ -259,8 +264,10 @@ def main() -> int:
     finally:
         (artifacts / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
         print(f"Sanitized summary: {artifacts / 'summary.json'}")
-    return 0 if len(summary["sides"]) == args.repetitions * len(refs) and all(
-        side["story_started"] for side in summary["sides"]) else 1
+    outcome = run_exit_code(summary["sides"], args.repetitions * len(refs))
+    if outcome == 2:
+        print("Installed sessions were recorded; G2 quality remains unassessed.")
+    return outcome
 
 
 if __name__ == "__main__":

@@ -29,6 +29,9 @@ runs as comparable. The
 runner now rejects a blocked final result, unresolved core adaptive files,
 and a start-story session that remains on `main`; each CLI session has a
 600-second wall-clock timeout with partial event count and model IDs recorded.
+A complete set of recorded sessions exits 2 until tests, product diff, TL/QA
+verdicts, closure, and telemetry are independently assessed; CLI completion is
+not a G2 pass.
 
 ## Requirements for a preinstalled frozen fixture
 
