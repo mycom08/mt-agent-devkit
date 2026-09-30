@@ -101,6 +101,7 @@ class InstalledPreparationTests(unittest.TestCase):
 
             def timeout(*args: object, **kwargs: object) -> None:
                 kwargs["stdout"].write('{"type":"assistant","message":{"model":"claude-sonnet-5-5"}}\n')
+                kwargs["stdout"].write('{"type":"assistant","message":')
                 raise subprocess.TimeoutExpired(args[0], runner.CLI_TIMEOUT_SECONDS)
 
             with patch.object(runner.subprocess, "run", side_effect=timeout):
@@ -108,6 +109,7 @@ class InstalledPreparationTests(unittest.TestCase):
             self.assertTrue(outcome["timed_out"])
             self.assertEqual(outcome["partial_assistant_events"], 1)
             self.assertEqual(outcome["partial_model_ids"], ["claude-sonnet-5-5"])
+            self.assertEqual(outcome["truncated_events"], 1)
             self.assertFalse(runner.session_completed(outcome))
 
     def test_run_side_rejects_blocked_init_with_zero_cli_exit(self) -> None:

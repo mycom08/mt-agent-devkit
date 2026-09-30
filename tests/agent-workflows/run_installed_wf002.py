@@ -149,9 +149,14 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
     result = None
     assistant_events = 0
     model_ids: set[str] = set()
+    truncated_events = 0
     for line in stream.read_text(encoding="utf-8").splitlines():
         if line.strip():
-            event = json.loads(line)
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                truncated_events += 1
+                continue
             if event.get("type") == "result":
                 result = event
             elif event.get("type") == "assistant":
@@ -164,6 +169,7 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
             "result_present": result is not None, "is_error": result.get("is_error") if result else None,
             "blocked_signal": blocked, "timed_out": timed_out,
             "partial_assistant_events": assistant_events, "partial_model_ids": sorted(model_ids),
+            "truncated_events": truncated_events,
             "total_cost_usd": result.get("total_cost_usd") if result else None,
             "stderr_present": bool(finished.stderr.strip()),
             "stream_file": stream.name}
@@ -173,7 +179,7 @@ def session_completed(session: dict[str, object]) -> bool:
     """A CLI result event is transport success, not a completed workflow."""
     return (session["exit_code"] == 0 and session["result_present"] is True
             and session["is_error"] is False and session["blocked_signal"] is False
-            and session["timed_out"] is False)
+            and session["timed_out"] is False and session.get("truncated_events", 0) == 0)
 
 
 def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, object]:
