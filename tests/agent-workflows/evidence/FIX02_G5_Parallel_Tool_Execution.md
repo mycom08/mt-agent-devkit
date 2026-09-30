@@ -27,6 +27,9 @@ parallelism, and bounded commands; it is not a pass. A run containing only
   without manual trace inspection.
 - Reviewable traces: `FIX02_G5_P01_Initial.json`, `FIX02_G5_P02_P08.json`,
   and `FIX02_G5_P01_P02_Clarified.json` in this directory.
+  The two P02 records retain their original runner classification in
+  `captured_outcome`; `outcome` and `assertions` reflect replay through the
+  corrected oracle. Both classify the sequential searches as failures.
 
 ## Observed cases
 

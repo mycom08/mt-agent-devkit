@@ -1,6 +1,8 @@
 """Local oracle checks; these do not substitute for P01-P08 agent runs."""
 
+import json
 import unittest
+from pathlib import Path
 
 from scripts.test.run_parallel_tool_execution_cases import evaluate
 
@@ -10,6 +12,17 @@ STATE = {"sentence": "The sky is blue.\n", "deletion_target_exists": True,
 
 
 class ParallelRunnerOracleTests(unittest.TestCase):
+    def test_saved_p02_evidence_matches_current_oracle(self):
+        evidence = Path(__file__).resolve().parents[2] / "tests" / "agent-workflows" / "evidence"
+        for name in ("FIX02_G5_P02_P08.json", "FIX02_G5_P01_P02_Clarified.json"):
+            with self.subTest(name=name):
+                artifact = json.loads((evidence / name).read_text(encoding="utf-8"))
+                case = next(item for item in artifact["results"] if item["id"] == "P02")
+                outcome, assertions = evaluate("P02", case["trace"], case["final"],
+                                               case["state"], case["stderr"])
+                self.assertEqual(case["outcome"], outcome)
+                self.assertEqual(case["assertions"], assertions)
+
     def test_policy_denial_is_incomplete(self):
         trace = [{"event": "item.completed", "id": "1", "type": "agent_message",
                   "command": "", "exit_code": None}]

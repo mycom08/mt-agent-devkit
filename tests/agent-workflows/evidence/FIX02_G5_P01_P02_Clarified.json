@@ -104,9 +104,10 @@
     },
     {
       "id": "P02",
-      "outcome": "needs-review",
+      "outcome": "fail",
+      "captured_outcome": "needs-review",
       "assertions": [
-        "check bounded parallel searches"
+        "second independent search started after first result"
       ],
       "exit_code": 0,
       "duration_seconds": 6.58,
