@@ -99,3 +99,15 @@ directs temporary helpers to that ordinary staging folder, while requiring
 normal file-tool writes for final `.claude/agents/` content. This confirms a
 safe staging location for helper code; it does not yet show that Claude can
 complete every protected final write in the installed workflow.
+
+**Baseline-only init retry (2026-09-30):** With the helper staged outside
+`.claude/` and final agent files required to use normal file tools, a fresh
+baseline init used Claude Code 2.1.285, resolved model `claude-sonnet-5-5`,
+and a $1.50 session cap. It spent $0.4350228. The mechanical scaffold and
+root `CLAUDE.md`/README adaptation succeeded. Direct `Write` attempts for
+`.claude/agents/context/Project_Priming.md` and `Document_Index.md` then
+required approval and were denied in the headless session. `verify_install`
+found the six role instruction files and `Story_Standard.md` still missing.
+The candidate arm was not launched. This confirms that moving the temporary
+helper solves its own path denial but does not solve final adaptive-file writes.
+G2 remains failed; no baseline measurement resulted.
