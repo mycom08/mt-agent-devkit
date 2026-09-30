@@ -71,3 +71,14 @@ must be labelled as such. It must not be combined with the failed init costs.
    is intended to include `init project` cost or behavior, a preinstalled
    snapshot does not satisfy that objective; the init blocker needs a supported
    tool permission path and a fresh comparable run.
+
+**Permission limit for the proposed snapshot route:** Preinstalling the files
+does not by itself make a strict story run executable. The installed workflow
+must write story status, review records, retro records, and telemetry under
+`.claude/agents/`. The failed init run already showed Claude's file tool
+refusing writes under that path. It is therefore likely that a story-only run
+with the same headless permission configuration would stop on its first state
+write. This is an inference from the workflow's required writes, not a measured
+story-only failure. A supported permission handler for those disposable paths
+must be established and tested before paying for three full repetitions; the
+runner must not silently substitute shell writes for denied file-tool writes.
