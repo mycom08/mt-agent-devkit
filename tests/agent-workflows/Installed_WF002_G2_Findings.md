@@ -1,5 +1,14 @@
 # WF-002 installed G2 attempt — 2026-09-29
 
+## G5 disposition for subsequent benchmark work
+
+On 2026-09-30 the user directed the team to continue independent benchmark
+work with FIX-02's G5 failure documented for later resolution. GitHub issue
+#214 tracks that gap. P01/P02 still ran independent operations sequentially;
+PR #209 remains draft. Any G2/G6 measurements taken before #214 is resolved
+are diagnostic and cannot establish that FIX-02's parallel behavior passed or
+that the optimization is release-ready.
+
 One fresh baseline/candidate pair used `run_installed_wf002.py`, Claude Code
 2.1.284, resolved model `claude-sonnet-5-5`, medium effort, and a $2 cap per CLI
 session. The source refs were `a30460a87c6d439b1193c45b77cc638a8f237fdb`
