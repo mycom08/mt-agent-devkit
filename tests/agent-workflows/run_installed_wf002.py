@@ -190,7 +190,12 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     seed_target(target)
     init_prompt = (f"init project {target} in strict mode. This is a disposable WF-002 "
                    "Python repository with no GitHub remote. Complete the normal installed "
-                   "devkit init workflow, including adaptive files. Do not use GitHub or "
+                   "devkit init workflow, including adaptive files. Put any temporary "
+                   "helper scripts under target/.wf002-tmp/, outside .claude/. Helpers "
+                   "may prepare content there; use the normal file tools for final "
+                   ".claude/agents/ edits. If a final write needs approval, stop and "
+                   "report it rather than routing that write through a helper or shell. "
+                   "Remove temporary helpers before completion. Do not use GitHub or "
                    "external services. Do not edit the devkit source checkout.")
     init = run_cli(source, side / "init.jsonl", init_prompt, budget, add_dir=target)
     result: dict[str, object] = {"label": label, "source_sha": ref, "init": init,

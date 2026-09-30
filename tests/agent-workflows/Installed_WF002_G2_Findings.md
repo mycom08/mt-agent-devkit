@@ -91,3 +91,11 @@ The `Write` tool was denied as requiring approval; the file was not created.
 The probe cost $0.0205456. Thus auto mode alone does not resolve this protected
 path under the current `--permission-prompts none` configuration. The raw
 probe stream remains local in an ignored disposable directory.
+
+A separate `acceptEdits` probe used the original restricted/headless settings
+and asked `Write` to create `.wf002-tmp/probe.py` in a disposable target.
+It succeeded without a prompt and cost $0.0064888. The installed runner now
+directs temporary helpers to that ordinary staging folder, while requiring
+normal file-tool writes for final `.claude/agents/` content. This confirms a
+safe staging location for helper code; it does not yet show that Claude can
+complete every protected final write in the installed workflow.
