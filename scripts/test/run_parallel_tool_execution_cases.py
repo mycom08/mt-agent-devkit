@@ -110,11 +110,16 @@ def evaluate(case_id, trace, final, state, stderr):
         return "incomplete", ["agent tool execution blocked by policy"]
     if not commands:
         return "incomplete", ["no tool calls in trace"]
-    started_ids = {item["id"] for item in trace if item["event"] == "item.started" and item["type"] in {"Read", "PowerShell", "Bash", "Write", "Edit"}}
-    result_ids = {item["id"] for item in trace if item["type"] == "tool_result"}
-    if started_ids and not started_ids <= result_ids:
+    non_tool_types = {"agent_message", "reasoning"}
+    starts = [item for item in trace if item["event"] == "item.started"
+              and item["type"] not in non_tool_types]
+    started_ids = {item["id"] for item in starts}
+    result_ids = {item["id"] for item in trace if item["event"] == "item.completed"
+                  and item["type"] not in non_tool_types}
+    if any(item["id"] is None for item in starts) or not started_ids <= result_ids:
         return "incomplete", ["one or more tool calls have no observed result"]
-    if any(item["type"] == "tool_result" and item["exit_code"] for item in trace):
+    if any(item["event"] == "item.completed" and item["type"] not in non_tool_types
+           and item["exit_code"] for item in trace):
         return "incomplete", ["tool result reported an error"]
     combined = "\n".join(command for _, command in commands)
     if case_id == "P01":
@@ -273,7 +278,10 @@ def main():
         args.output.write_text(json.dumps(artifact, indent=2) + "\n", encoding="utf-8")
     for result in results:
         print(f"{result['id']}: {result['outcome']} ({len(result.get('trace', []))} events)")
-    return 0 if all(result["outcome"] == "needs-review" for result in results) else 1
+    if all(result["outcome"] == "needs-review" for result in results):
+        print("All cases need manual trace review; no G5 pass is implied.")
+        return 2
+    return 1
 
 
 if __name__ == "__main__":

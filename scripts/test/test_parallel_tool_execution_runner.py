@@ -22,6 +22,32 @@ class ParallelRunnerOracleTests(unittest.TestCase):
         outcome, _ = evaluate("P01", trace, "", STATE, "")
         self.assertEqual(outcome, "incomplete")
 
+    def test_unobserved_grep_result_is_incomplete(self):
+        trace = [
+            {"event": "item.started", "id": "1", "type": "Grep",
+             "command": '{"pattern":"ORBIT"}', "exit_code": None},
+            {"event": "item.started", "id": "2", "type": "Grep",
+             "command": '{"pattern":"COMET"}', "exit_code": None},
+            {"event": "item.completed", "id": "1", "type": "tool_result",
+             "command": "ORBIT east", "exit_code": 0},
+        ]
+        outcome, _ = evaluate("P02", trace, "both found", STATE, "")
+        self.assertEqual(outcome, "incomplete")
+
+    def test_unobserved_command_result_is_incomplete(self):
+        trace = [{"event": "item.started", "id": "1", "type": "command_execution",
+                  "command": "git status", "exit_code": None}]
+        outcome, _ = evaluate("P05", trace, "", STATE, "")
+        self.assertEqual(outcome, "incomplete")
+
+    def test_failed_command_result_is_incomplete(self):
+        trace = [{"event": "item.started", "id": "1", "type": "command_execution",
+                  "command": "git status", "exit_code": None},
+                 {"event": "item.completed", "id": "1", "type": "command_execution",
+                  "command": "git status", "exit_code": 1}]
+        outcome, _ = evaluate("P05", trace, "", STATE, "")
+        self.assertEqual(outcome, "incomplete")
+
     def test_three_observed_reads_reach_manual_parallel_review(self):
         trace = []
         for number, name in enumerate(("alpha", "beta", "gamma"), start=1):

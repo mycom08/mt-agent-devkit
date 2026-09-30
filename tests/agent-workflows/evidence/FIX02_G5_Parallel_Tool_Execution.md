@@ -1,7 +1,7 @@
 # FIX-02 G5 — P01–P08 agent tool execution
 
 **Verdict: FAIL.** P01 and P02 ran independent tools sequentially. P03–P08
-met their behavioral expectations. Static template validation and five local
+met their behavioral expectations. Static template validation and eight local
 runner oracle checks passed. G5 cannot advance on the current agent behavior.
 
 The case definitions are in `scripts/test/fixtures/parallel_tool_execution_cases.json`.
@@ -9,7 +9,8 @@ The case definitions are in `scripts/test/fixtures/parallel_tool_execution_cases
 fixture per case, launches an agent CLI with the candidate §3 guidance, captures
 tool start/result events and fixture state, and fails closed when tool results
 are missing. The outcome `needs-review` requires human inspection of ordering,
-parallelism, and bounded commands; it is not a pass.
+parallelism, and bounded commands; it is not a pass. A run containing only
+`needs-review` outcomes exits 2 to make that pending review visible to callers.
 
 ## Setup
 
