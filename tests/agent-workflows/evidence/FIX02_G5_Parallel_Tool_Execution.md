@@ -63,6 +63,26 @@ The existing pre-authorization P01 scratch trace also showed only two reads
 before the first result, then the third afterward. It is not counted as a
 passing case. The later authorized P01 trace showed fully sequential reads.
 
+## Resumable-session diagnosis
+
+A later P01/P02 retry on Claude Code 2.1.285 used persistent sessions. The
+runner records each confirmed `session_id` in a local `.g5/` artifact and can
+retain the disposable fixture for a follow-up. Both cases failed again. The
+persisted Claude conversation JSONL independently confirms separate assistant
+tool-use messages interleaved with their results: P01 has three Read/result
+pairs, and P02 has two Grep/result pairs.
+
+When resumed and asked about its choice, Claude first asserted that it had
+issued parallel calls. That account conflicts with the persisted transcript.
+After receiving the exact event sequence, it corrected itself and said it
+could identify no dependency, permission denial, or instruction conflict, but
+could not determine why it had waited for each result. The follow-up is not
+evidence that the calls were parallel or a definitive account of internal
+decision-making. The behavioral verdict remains **FAIL**. The retry and two
+follow-up questions per case cost **$0.3991208** in total. Session IDs and raw
+follow-up streams remain in the local ignored `.g5/` directory rather than
+the public evidence set.
+
 ## Diagnosis and remaining work
 
 Claude Code can emit multiple tool calls in one turn: the earlier P01 trace

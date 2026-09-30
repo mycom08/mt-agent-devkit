@@ -1,7 +1,8 @@
 """Run FIX-02 P01-P08 with a real agent in disposable repositories.
 
-The JSONL trace and the fixture are kept only in the temporary directory. The
-saved result contains normalized tool events and assertions, never home paths.
+The saved result contains normalized tool events, assertions, and confirmed
+Claude session IDs, never home paths. --retain-fixtures keeps disposable input
+for resumed-session diagnosis; local .g5/ artifacts are ignored by Git.
 """
 
 import argparse
@@ -26,19 +27,20 @@ def command(args, cwd, *, timeout=30, input_text=None):
 
 
 @contextmanager
-def fixture_directory(parent, case_id):
+def fixture_directory(parent, case_id, *, retain=False):
     """Create a disposable directory without tempfile's restrictive Windows ACL."""
     directory = parent / f"parallel-case-{case_id}-{uuid4().hex}"
     directory.mkdir()
     try:
         yield directory
     finally:
-        try:
-            shutil.rmtree(directory)
-        except PermissionError:
-            # Windows can deny deletion of files created by the agent's Git subprocess.
-            # Keep the fixture for explicit cleanup after the result is saved.
-            pass
+        if not retain:
+            try:
+                shutil.rmtree(directory)
+            except PermissionError:
+                # Windows can deny deletion of files created by the agent's Git subprocess.
+                # Keep the fixture for explicit cleanup after the result is saved.
+                pass
 
 
 def setup(case_id, directory):
@@ -169,15 +171,17 @@ def run_case(case, args):
     case_id = case["id"]
     fixture_parent = ROOT / ".g5"
     fixture_parent.mkdir(exist_ok=True)
-    with fixture_directory(fixture_parent, case_id) as directory:
+    with fixture_directory(fixture_parent, case_id, retain=args.retain_fixtures) as directory:
         setup(case_id, directory)
         before = command(["git", "rev-parse", "HEAD"], directory).stdout.strip() if case_id == "P06" else ""
         prompt = ("Follow this candidate agent tool-use guidance:\n" + guidance_text() +
                   "\nOperate only in the current disposable fixture. Do not access the network. "
                   "Make tool use visible and finish with a concise answer.\nTask: " + TASKS[case_id])
         if args.engine == "claude":
+            requested_session_id = str(uuid4())
             invocation = [args.claude, "-p", "--verbose", "--output-format", "stream-json",
-                          "--safe-mode", "--permission-mode", "dontAsk", "--no-session-persistence",
+                          "--safe-mode", "--permission-mode", "dontAsk",
+                          "--session-id", requested_session_id,
                           "--max-budget-usd", str(args.budget_usd), "--effort", "medium",
                           "--model", args.model or "sonnet", "--allowedTools", CLAUDE_TOOLS[case_id],
                           "--append-system-prompt", guidance_text(), prompt]
@@ -204,6 +208,9 @@ def run_case(case, args):
             if isinstance(event, dict):
                 events.append(event)
         if args.engine == "claude":
+            observed_session_ids = {event["session_id"] for event in events
+                                    if isinstance(event.get("session_id"), str)}
+            session_id = requested_session_id if requested_session_id in observed_session_ids else None
             trace = []
             final_parts = []
             for event in events:
@@ -239,7 +246,12 @@ def run_case(case, args):
         outcome, assertions = evaluate(case_id, trace, final, state, result.stderr)
         if result.returncode or errors:
             outcome = "incomplete"
+        if args.engine == "claude" and session_id is None:
+            outcome = "incomplete"
+            assertions.append("Claude stream did not confirm the requested session ID")
         return {"id": case_id, "outcome": outcome, "assertions": assertions,
+                "session_id": session_id if args.engine == "claude" else None,
+                "fixture_path": directory.relative_to(ROOT).as_posix() if args.retain_fixtures else None,
                 "exit_code": result.returncode, "duration_seconds": round(time.monotonic() - started, 2),
                 "trace": trace, "final": normalize(final, directory), "state": state,
                 "errors": errors, "stderr": normalize(result.stderr[-2000:], directory),
@@ -260,6 +272,8 @@ def main():
     parser.add_argument("--budget-usd", type=float, default=0.75)
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--retain-fixtures", action="store_true",
+                        help="Keep disposable fixtures for resumed-session diagnostics")
     args = parser.parse_args()
     if bool(args.case) == args.all:
         parser.error("specify at least one --case or --all, but not both")
