@@ -52,8 +52,8 @@ total spend may be higher. A separate default-sandbox P01 connection failure
 reported **$0**, no tool events, and `ECONNREFUSED`; it is not behavioral
 evidence. Every successful invocation stayed below its individual cap.
 
-An additional P01/P02 run exposed Bash and PowerShell to the agent so the
-fixture's documented bounded-batch fallback was available. The existing
+An additional P01/P02 run on Claude Code 2.1.285 exposed Bash and PowerShell
+to the agent so the fixture's documented bounded-batch fallback was available. The existing
 guidance was unchanged. Both still failed: P01 made three sequential Read
 calls; P02 made two sequential Grep calls. This run cost **$0.1333754**
 ($0.097269 + $0.0361064), bringing recorded successful-invocation cost to
