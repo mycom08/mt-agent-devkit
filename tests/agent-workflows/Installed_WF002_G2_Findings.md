@@ -141,18 +141,65 @@ This is **diagnostic, not a G2 pass or efficiency baseline**:
   workflow. The contract and workflow need a consistent scope rule before a
   comparable run.
 - All four stage telemetry rows explicitly report unavailable token and request
-  fields. Their start/end timestamps are approximate placeholders, so duration
-  and cost cannot be compared with the headless candidate arm.
+  fields. Their start/end timestamps are approximate placeholders; the saved
+  subagent transcripts permit a separate extraction of real stage durations
+  and usage, but the written rows are not valid measurement evidence.
 - The installed workflow stopped after Stage 5 to ask for a retro decision.
   The user answered `none`; Claude applied no proposed rules or workflow edits,
   wrote the sprint summary, and removed the retro and pipeline state files.
 - Interactive user approval time and the lack of a `--max-budget-usd` cap make
-  this run different from the frozen headless configuration. No candidate arm
-  or repeated baseline/candidate pairs have been run with this permission path.
+  this run different from the frozen headless configuration. No repeated
+  baseline/candidate pairs have been run with this permission path.
 
 The saved Claude subagent transcripts are present for Developer, TL, QA, and PO.
 An independent read-only pass through the installed telemetry parser recovered
 8, 11, 6, and 6 API requests respectively, plus usage and tool counts. This
 shows that the four `unavailable` stage rows are an extraction gap, not absent
 raw evidence. The recorded stage start/end timestamps remain inaccurate and
-must not be used for a duration comparison.
+must not be used for a duration comparison. The transcript event ranges and
+`duration_ms` values agree for each stage; they exclude orchestration and user
+approval time.
+
+## Interactive candidate diagnostic (2026-10-01)
+
+The candidate devkit was exported from
+`e2e700aa2e1014011c07c789458d13501a92f661` into a fresh remote-free
+target. The same installed-file verifier passed, the non-ignored scaffold was
+committed on `main` as `09d7933`, and the same ST-000211 story was seeded.
+Claude Code 2.1.286 ran interactively with the same top-level model, effort,
+tool list, and restricted permission mode. The user approved protected writes.
+
+The candidate `start story` run changed the same threshold comparison, with
+Developer commit `096a64d`, TL approval at that SHA, an independent QA verdict,
+and PO closure. It merged into `sprint-1-dev` as `aeb7c6c`; `main` and remote
+state were untouched. An independent local run of the six unit tests passed.
+The committed diff again contains `CHANGELOG.md` as well as `pricing.py`.
+The retro review received `none`; Claude wrote the sprint summary and deleted
+the per-story retro and pipeline state files.
+
+The PO accepted all five AC and set the story to `done`, but left the seeded
+numbered AC list as numbered items. In the baseline, PO converted those same
+items to checked boxes. The installed workflow expects checkboxes for PO
+closure, so this is a fixture ambiguity and a behavioral difference. Formal
+repetitions should seed valid unchecked boxes and keep the AC wording fixed.
+
+Both runs wrote four telemetry rows with usage fields marked unavailable.
+Their saved subagent transcripts were parsed afterward with the installed
+`telemetry.py` logic, yielding these **diagnostic stage totals** (excluding
+the orchestrator and human approval time):
+
+| Arm | Requests | Tool calls | Cache create tokens | Cache read tokens | Output tokens | Sum of stage durations |
+|---|---:|---:|---:|---:|---:|---:|
+| Baseline | 31 | 73 | 189,133 | 1,021,626 | 21,392 | 215.8 s |
+| Candidate | 43 | 57 | 155,951 | 1,501,415 | 23,788 | 294.5 s |
+
+This single pair does not establish a FIX-02 efficiency benefit. Candidate
+requests, cache reads, output tokens, and summed stage duration were higher;
+tool calls and cache creation tokens were lower. The TL and PO stages account
+for much of the increase. The original frozen manifest pins Claude Code
+2.1.280, a different resolved model, and a narrower tool set, so this
+interactive installed pair needs its own exact configuration manifest before
+it can contribute to a formal G2 comparison. Repair the installed fixture's
+AC format, define whether the workflow-required CHANGELOG entry is in the
+allowed diff, and extract real transcript telemetry during the run before
+starting repeated pairs.
