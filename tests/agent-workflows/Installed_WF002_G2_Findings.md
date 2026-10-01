@@ -111,3 +111,48 @@ found the six role instruction files and `Story_Standard.md` still missing.
 The candidate arm was not launched. This confirms that moving the temporary
 helper solves its own path denial but does not solve final adaptive-file writes.
 G2 remains failed; no baseline measurement resulted.
+
+## Interactive baseline diagnostic (2026-10-01)
+
+The user confirmed that a person can approve a direct Claude Code `Write` under
+the protected `.claude/agents/` path. A fresh disposable target was then seeded
+from the frozen WF-002 fixture, and the baseline devkit was exported from
+`a30460a87c6d439b1193c45b77cc638a8f237fdb`. The target had no remote.
+Claude Code 2.1.286 ran interactively with `--restricted`, `acceptEdits`, the
+installed runner's tool set, resolved model `claude-sonnet-5-5`, and medium
+effort. The user approved
+protected writes during init. The installed-file verifier passed all required
+files, the non-ignored scaffold was committed on `main` as `59fa570`, and the
+fixed story was seeded with a clean working tree. Raw session transcripts and
+the disposable target remain outside tracked Git content.
+
+The baseline `start story ST-000211` run reached PO closure. The Developer's
+`bc324c9` commit changed `pricing.py` from `>` to `>=`; the TL review approved
+that SHA, QA recorded an independent AC-by-AC verdict, the PO marked all five
+AC complete and set the story to `done`, and the story was merged into
+`sprint-1-dev` as `2e24dcf`. A separate local verification ran all six unit
+tests successfully on the merged branch. `main` was untouched and no remote
+was added.
+
+This is **diagnostic, not a G2 pass or efficiency baseline**:
+
+- The quality contract's `changed_paths_exactly` value is `pricing.py`, but the
+  committed diff also contains a `CHANGELOG.md` entry required by the installed
+  workflow. The contract and workflow need a consistent scope rule before a
+  comparable run.
+- All four stage telemetry rows explicitly report unavailable token and request
+  fields. Their start/end timestamps are approximate placeholders, so duration
+  and cost cannot be compared with the headless candidate arm.
+- The installed workflow stopped after Stage 5 to ask for a retro decision.
+  The user answered `none`; Claude applied no proposed rules or workflow edits,
+  wrote the sprint summary, and removed the retro and pipeline state files.
+- Interactive user approval time and the lack of a `--max-budget-usd` cap make
+  this run different from the frozen headless configuration. No candidate arm
+  or repeated baseline/candidate pairs have been run with this permission path.
+
+The saved Claude subagent transcripts are present for Developer, TL, QA, and PO.
+An independent read-only pass through the installed telemetry parser recovered
+8, 11, 6, and 6 API requests respectively, plus usage and tool counts. This
+shows that the four `unavailable` stage rows are an extraction gap, not absent
+raw evidence. The recorded stage start/end timestamps remain inaccurate and
+must not be used for a duration comparison.
