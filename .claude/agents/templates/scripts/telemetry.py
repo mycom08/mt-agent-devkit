@@ -3,6 +3,7 @@
 
 Usage examples:
   python telemetry.py extract --transcript stage.jsonl --metadata stage.json --output record.json
+  python telemetry.py extract --agent-id a0123456789abcdef --metadata stage.json --output run.jsonl --append
   python telemetry.py harness --metadata stage.json --output record.json
   python telemetry.py aggregate --input run.jsonl
 
@@ -14,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from collections import defaultdict
@@ -146,6 +148,28 @@ def load_metadata(path: Path) -> dict[str, Any]:
         error(f"metadata missing required field(s): {', '.join(missing)}")
     validate_metadata(metadata)
     return metadata
+
+
+def find_claude_agent_transcript(agent_id: str, project_root: Path,
+                                 config_dir: Path | None = None) -> Path:
+    """Resolve one Claude Code subagent transcript without exposing its contents."""
+    if not re.fullmatch(r"[A-Za-z0-9_-]{4,80}", agent_id):
+        error("agent ID must be a bounded filename-safe identifier")
+    root = project_root.resolve()
+    if not root.is_dir():
+        error("project root is not a directory")
+    settings = config_dir or Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+    project_key = re.sub(r"[^A-Za-z0-9-]", "-", str(root))
+    project_dir = settings / "projects" / project_key
+    matches = sorted(project_dir.glob(f"*/subagents/agent-{agent_id}.jsonl"))
+    if not matches:
+        error("Claude subagent transcript was not found for this agent ID and project")
+    if len(matches) != 1:
+        error("Claude subagent transcript is ambiguous for this agent ID and project")
+    transcript = matches[0]
+    if not transcript.is_file() or transcript.is_symlink():
+        error("Claude subagent transcript is not a regular file")
+    return transcript
 
 
 def validate_metadata(metadata: dict[str, Any]) -> None:
@@ -471,7 +495,11 @@ def main() -> int:
         command.add_argument("--output", required=True, type=Path)
         command.add_argument("--append", action="store_true", help="append one JSON Lines record instead of replacing output")
         if name == "extract":
-            command.add_argument("--transcript", required=True, type=Path)
+            source = command.add_mutually_exclusive_group(required=True)
+            source.add_argument("--transcript", type=Path)
+            source.add_argument("--agent-id", help="find a Claude Code subagent transcript for this project")
+            command.add_argument("--project-root", type=Path, default=Path.cwd(),
+                                 help="project directory used for Claude Code transcript lookup")
     aggregate = commands.add_parser("aggregate")
     aggregate.add_argument("--input", required=True, type=Path)
     evidence = commands.add_parser("reconstruct-evidence")
@@ -480,7 +508,9 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.command == "extract":
-            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_transcript_usage(args.transcript))
+            transcript = (args.transcript if args.transcript is not None else
+                          find_claude_agent_transcript(args.agent_id, args.project_root))
+            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_transcript_usage(transcript))
             write_record(record, args.output, args.append)
         elif args.command == "harness":
             metadata = load_metadata(args.metadata)
