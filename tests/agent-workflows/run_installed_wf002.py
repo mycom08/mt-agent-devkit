@@ -112,6 +112,19 @@ def verify_install(target: Path) -> dict[str, str]:
 
 def add_story(target: Path) -> None:
     story = FIXTURE.joinpath("story.md").read_text(encoding="utf-8")
+    opening = "## Acceptance criteria\n\n"
+    closing = "\n## Decisions and scope"
+    before, marker, remainder = story.partition(opening)
+    ac_text, end_marker, after = remainder.partition(closing)
+    if not marker or not end_marker:
+        raise ValueError("WF-002 fixture has no bounded acceptance-criteria section")
+    ac_lines = ac_text.strip().splitlines()
+    matched = [re.fullmatch(r"(\d+)\. (.+)", line) for line in ac_lines]
+    if len(matched) != 5 or any(match is None or int(match.group(1)) != index
+                                for index, match in enumerate(matched, start=1)):
+        raise ValueError("WF-002 fixture acceptance criteria changed unexpectedly")
+    checklist = "\n".join(f"- [ ] {match.group(2)}" for match in matched if match)
+    story = before + "## Acceptance Criteria\n\n" + checklist + "\n" + closing + after
     path = target / ".claude/agents/docs/stories" / f"{STORY_ID}.md"
     if path.exists():
         raise ValueError("Installed target already contains benchmark story")
@@ -121,6 +134,24 @@ def add_story(target: Path) -> None:
               "**Project Base Branch:** main\n\n"
               "## Technical Scope\n\n- `pricing.py` shipping threshold comparison.\n\n")
     path.write_text(header + story + "\n## Comments\n\n", encoding="utf-8")
+
+
+def commit_install_scaffold(target: Path) -> str:
+    """Make the installed strict-mode root files a clean, local main base."""
+    paths = ("README.md", ".claude/settings.json", ".claude/skills", ".gitignore",
+             "CHANGELOG.md", "CLAUDE.md", "VERSION", "docs/wiki")
+    command(["git", "add", *paths], target)
+    command(["git", "-c", "user.name=Benchmark", "-c",
+             "user.email=benchmark@example.invalid", "commit", "-qm",
+             "Install strict-mode devkit for WF-002 benchmark"], target)
+    status = command(["git", "status", "--porcelain", "--untracked-files=all"], target).stdout
+    if status.strip():
+        raise ValueError("Installed target is not clean before story execution")
+    if command(["git", "branch", "--show-current"], target).stdout.strip() != "main":
+        raise ValueError("Installed target is not on main before story execution")
+    if command(["git", "remote"], target).stdout.strip():
+        raise ValueError("Installed target acquired a remote")
+    return command(["git", "rev-parse", "HEAD"], target).stdout.strip()
 
 
 def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
@@ -210,6 +241,11 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
         result["blocked_reason"] = str(exc)
         return result
     result["installed"] = True
+    try:
+        result["installed_base_sha"] = commit_install_scaffold(target)
+    except (subprocess.CalledProcessError, ValueError) as exc:
+        result["blocked_reason"] = f"Installed scaffold commit failed: {exc}"
+        return result
     add_story(target)
     start = run_cli(target, side / "start-story.jsonl", f"start story {STORY_ID}", budget)
     result["start_story"] = start

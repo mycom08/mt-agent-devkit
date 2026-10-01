@@ -203,3 +203,12 @@ it can contribute to a formal G2 comparison. Repair the installed fixture's
 AC format, define whether the workflow-required CHANGELOG entry is in the
 allowed diff, and extract real transcript telemetry during the run before
 starting repeated pairs.
+
+The installed runner now converts the frozen story's five numbered AC into
+unchecked boxes when seeding an installed target, preserving their wording and
+order. It also commits the non-ignored init scaffold on local `main` and
+requires a clean tree before starting the story. Nine deterministic runner
+tests pass. These fixture repairs have not received a new paid agent run;
+the interactive pair above remains diagnostic. The installed diff contract,
+in-run transcript extraction, and a repeatable approved permission path remain
+open before formal G2 repetitions.

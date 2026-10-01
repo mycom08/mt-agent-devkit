@@ -82,8 +82,25 @@ class InstalledPreparationTests(unittest.TestCase):
             self.assertIn("**Phase:** none", story)
             self.assertIn("## Technical Scope", story)
             self.assertIn("exactly 5,000 cents", story)
+            self.assertEqual(story.count("- [ ] "), 5)
+            self.assertNotIn("1. Standard shipping", story)
             with self.assertRaisesRegex(ValueError, "already contains"):
                 runner.add_story(target)
+
+    def test_installed_scaffold_commit_creates_clean_main_base(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
+            target = Path(directory) / "target"
+            runner.seed_target(target)
+            for name in (".claude/settings.json", ".claude/skills/read-section/SKILL.md",
+                         ".gitignore", "CHANGELOG.md", "CLAUDE.md", "VERSION",
+                         "docs/wiki/Testing_Guidelines.md"):
+                path = target / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("installed\n", encoding="utf-8")
+            sha = runner.commit_install_scaffold(target)
+            self.assertEqual(len(sha), 40)
+            self.assertEqual(runner.command(["git", "status", "--porcelain"], target).stdout, "")
+            self.assertEqual(runner.command(["git", "branch", "--show-current"], target).stdout.strip(), "main")
 
     def test_successful_cli_exit_does_not_complete_blocked_workflow(self) -> None:
         session = {"exit_code": 0, "result_present": True, "is_error": False,
@@ -132,6 +149,7 @@ class InstalledPreparationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
             with (patch.object(runner, "export_source"), patch.object(runner, "seed_target"),
                   patch.object(runner, "verify_install", return_value={}),
+                  patch.object(runner, "commit_install_scaffold", return_value="a" * 40),
                   patch.object(runner, "add_story"),
                   patch.object(runner, "run_cli", side_effect=[success, blocked]),
                   patch.object(runner, "command", side_effect=[
