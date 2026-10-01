@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -102,6 +103,60 @@ class InstalledPreparationTests(unittest.TestCase):
             self.assertEqual(runner.command(["git", "status", "--porcelain"], target).stdout, "")
             self.assertEqual(runner.command(["git", "branch", "--show-current"], target).stdout.strip(), "main")
 
+    def test_installed_diff_allows_required_changelog_but_checks_exact_product_change(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
+            target = Path(directory) / "target"
+            runner.seed_target(target)
+            (target / "CHANGELOG.md").write_text("# Changelog\n", encoding="utf-8")
+            runner.command(["git", "add", "CHANGELOG.md"], target)
+            runner.command(["git", "-c", "user.name=Benchmark", "-c",
+                            "user.email=benchmark@example.invalid", "commit", "-qm", "Install changelog"], target)
+            base_sha = runner.command(["git", "rev-parse", "HEAD"], target).stdout.strip()
+            pricing = target / "pricing.py"
+            pricing.write_text(pricing.read_text(encoding="utf-8").replace(
+                "if subtotal_cents > FREE_STANDARD_SHIPPING_THRESHOLD_CENTS:",
+                "if subtotal_cents >= FREE_STANDARD_SHIPPING_THRESHOLD_CENTS:"), encoding="utf-8")
+            (target / "CHANGELOG.md").write_text("# Changelog\n- Fix shipping threshold.\n",
+                                                   encoding="utf-8")
+            runner.command(["git", "add", "pricing.py", "CHANGELOG.md"], target)
+            runner.command(["git", "-c", "user.name=Benchmark", "-c",
+                            "user.email=benchmark@example.invalid", "commit", "-qm", "Fix shipping"], target)
+            report = runner.inspect_product_diff(target, base_sha)
+            self.assertTrue(report["product_paths_match"])
+            self.assertTrue(report["pricing_change_exact"])
+            self.assertTrue(report["changelog_entry_present"])
+            self.assertEqual(report["unexpected_paths"], [])
+            (target / "README.md").write_text("Unrelated change\n", encoding="utf-8")
+            runner.command(["git", "add", "README.md"], target)
+            runner.command(["git", "-c", "user.name=Benchmark", "-c",
+                            "user.email=benchmark@example.invalid", "commit", "-qm", "Unrelated"], target)
+            report = runner.inspect_product_diff(target, base_sha)
+            self.assertFalse(report["product_paths_match"])
+            self.assertEqual(report["unexpected_paths"], ["README.md"])
+
+    def test_stage_telemetry_requires_four_distinct_measured_roles(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
+            target = Path(directory)
+            self.assertFalse(runner.inspect_stage_telemetry(target)["required_stages_present_once"])
+            folder = target / ".claude/agents/tmp/token-metrics"
+            folder.mkdir(parents=True)
+            stages = ("developer_implementation", "technical_lead_review", "qa_verification",
+                      "product_owner_closure")
+            rows = [{"stage": stage, "usage_source": "raw_transcript", "requests": 2,
+                     "cache_read_input_tokens": 100} for stage in stages]
+            path = folder / "run.jsonl"
+            path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
+            report = runner.inspect_stage_telemetry(target)
+            self.assertTrue(report["required_stages_present_once"])
+            self.assertTrue(report["measured_usage_for_every_stage"])
+            rows[3]["usage_source"] = "unavailable"
+            rows[3]["requests"] = None
+            path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
+            self.assertFalse(runner.inspect_stage_telemetry(target)["measured_usage_for_every_stage"])
+            rows[3]["stage"] = stages[2]
+            path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
+            self.assertFalse(runner.inspect_stage_telemetry(target)["required_stages_present_once"])
+
     def test_successful_cli_exit_does_not_complete_blocked_workflow(self) -> None:
         session = {"exit_code": 0, "result_present": True, "is_error": False,
                    "blocked_signal": True, "timed_out": False}
@@ -151,6 +206,8 @@ class InstalledPreparationTests(unittest.TestCase):
                   patch.object(runner, "verify_install", return_value={}),
                   patch.object(runner, "commit_install_scaffold", return_value="a" * 40),
                   patch.object(runner, "add_story"),
+                  patch.object(runner, "inspect_product_diff", return_value={}),
+                  patch.object(runner, "inspect_stage_telemetry", return_value={}),
                   patch.object(runner, "run_cli", side_effect=[success, blocked]),
                   patch.object(runner, "command", side_effect=[
                       Mock(stdout=""), Mock(stdout="story-branch\n"), Mock(stdout="")])):

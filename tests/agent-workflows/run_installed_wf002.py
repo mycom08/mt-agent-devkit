@@ -213,6 +213,66 @@ def session_completed(session: dict[str, object]) -> bool:
             and session["timed_out"] is False and session.get("truncated_events", 0) == 0)
 
 
+def inspect_product_diff(target: Path, base_sha: str) -> dict[str, object]:
+    """Keep the frozen product oracle separate from required workflow bookkeeping."""
+    expected = json.loads(FIXTURE.joinpath("expected.json").read_text(encoding="utf-8"))
+    product = expected["expected_diff"]
+    changed = command(["git", "diff", "--name-only", f"{base_sha}..HEAD"], target).stdout.splitlines()
+    product_paths = sorted(path for path in changed if path != "CHANGELOG.md")
+    pricing_diff = command(["git", "diff", "--unified=0", f"{base_sha}..HEAD", "--",
+                            "pricing.py"], target).stdout
+    removed = [line[1:] for line in pricing_diff.splitlines()
+               if line.startswith("-") and not line.startswith("---")]
+    added = [line[1:] for line in pricing_diff.splitlines()
+             if line.startswith("+") and not line.startswith("+++")]
+    changelog_changed = "CHANGELOG.md" in changed
+    changelog_diff = (command(["git", "diff", "--unified=0", f"{base_sha}..HEAD", "--",
+                                "CHANGELOG.md"], target).stdout if changelog_changed else "")
+    changelog_added = [line[1:] for line in changelog_diff.splitlines()
+                       if line.startswith("+") and not line.startswith("+++")]
+    return {
+        "changed_paths": changed,
+        "product_paths_match": product_paths == sorted(product["changed_paths_exactly"]),
+        "pricing_change_exact": removed == [product["removed_line"]]
+        and added == [product["added_line"]],
+        "changelog_entry_present": changelog_changed and any(line.strip() for line in changelog_added),
+        "unexpected_paths": sorted(set(changed) - set(product["changed_paths_exactly"]) - {"CHANGELOG.md"}),
+    }
+
+
+def inspect_stage_telemetry(target: Path) -> dict[str, object]:
+    """Report whether the installed workflow produced usable per-stage measurements."""
+    folder = target / ".claude/agents/tmp/token-metrics"
+    rows: list[dict[str, object]] = []
+    errors: list[str] = []
+    for path in sorted(folder.glob("*.jsonl")):
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                errors.append(f"{path.name}:{number}: invalid JSON")
+                continue
+            if not isinstance(row, dict):
+                errors.append(f"{path.name}:{number}: expected object")
+                continue
+            rows.append(row)
+    expected = ("developer_implementation", "technical_lead_review", "qa_verification",
+                "product_owner_closure")
+    stages = [row.get("stage") for row in rows]
+    measured = all(row.get("usage_source") != "unavailable" and
+                   isinstance(row.get("requests"), int) and
+                   isinstance(row.get("cache_read_input_tokens"), int)
+                   for row in rows)
+    return {"row_count": len(rows), "stages": stages,
+            "required_stages_present_once": len(rows) == len(expected)
+            and all(isinstance(stage, str) for stage in stages)
+            and sorted(stages) == sorted(expected),
+            "measured_usage_for_every_stage": measured and len(rows) == len(expected),
+            "errors": errors}
+
+
 def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, object]:
     side = artifacts / label
     side.mkdir()
@@ -253,6 +313,8 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     result["story_status"] = command(["git", "status", "--porcelain", "--untracked-files=all"], target).stdout.splitlines()
     result["active_branch"] = command(["git", "branch", "--show-current"], target).stdout.strip()
     result["remote"] = command(["git", "remote"], target).stdout.strip() or None
+    result["product_diff"] = inspect_product_diff(target, str(result["installed_base_sha"]))
+    result["stage_telemetry"] = inspect_stage_telemetry(target)
     if result["active_branch"] == "main":
         result["story_started"] = False
         result["blocked_reason"] = "Start story remained on main; no story branch was created"

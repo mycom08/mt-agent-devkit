@@ -212,3 +212,15 @@ tests pass. These fixture repairs have not received a new paid agent run;
 the interactive pair above remains diagnostic. The installed diff contract,
 in-run transcript extraction, and a repeatable approved permission path remain
 open before formal G2 repetitions.
+
+## G2 preparation follow-up (2026-10-01)
+
+The runner now evaluates the installed product diff against the frozen
+`pricing.py` oracle while treating the workflow-required `CHANGELOG.md` entry
+as separate bookkeeping. It reports unrelated changed paths and rejects a
+missing or non-exact threshold edit. It also checks for one telemetry row per
+Developer, TL, QA, and PO stage, and distinguishes recorded rows from measured
+request/cache usage. Eleven deterministic preparation tests pass. These checks
+make the earlier diagnostic gaps visible in each run summary; they do not
+convert the diagnostic pair into G2 evidence or resolve the protected-write
+permission path. A new installed run remains necessary.
