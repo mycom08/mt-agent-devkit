@@ -273,6 +273,38 @@ def inspect_stage_telemetry(target: Path) -> dict[str, object]:
             "errors": errors}
 
 
+def inspect_story_quality(target: Path) -> dict[str, object]:
+    """Independently check the frozen AC and unit suite after installed closure."""
+    expected = json.loads(FIXTURE.joinpath("expected.json").read_text(encoding="utf-8"))
+    story_path = target / ".claude/agents/docs/stories" / f"{STORY_ID}.md"
+    if story_path.is_file():
+        story = story_path.read_text(encoding="utf-8")
+        status_match = re.search(r"^\*\*Status:\*\*\s*(\S+)", story, re.MULTILINE)
+        status = status_match.group(1).lower() if status_match else None
+        section_match = re.search(r"^## Acceptance Criteria\s*\n(.*?)(?=^## |\Z)", story,
+                                  re.MULTILINE | re.DOTALL)
+        ac_lines = re.findall(r"^- \[([ xX])\] (.+)$", section_match.group(1),
+                              re.MULTILINE) if section_match else []
+        source = FIXTURE.joinpath("story.md").read_text(encoding="utf-8")
+        source_ac = source.partition("## Acceptance criteria\n\n")[2].partition(
+            "\n## Decisions and scope")[0]
+        expected_ac = [match.group(1) for line in source_ac.strip().splitlines()
+                       if (match := re.fullmatch(r"\d+\. (.+)", line))]
+        ac_complete = ([text for _, text in ac_lines] == expected_ac
+                       and all(mark.lower() == "x" for mark, _ in ac_lines))
+    else:
+        status, ac_complete = None, False
+    verification = expected["required_verification"]
+    tests = command(verification["command"].split(), target, check=False)
+    test_output = tests.stdout + tests.stderr
+    count = re.search(r"Ran (\d+) tests?", test_output)
+    return {"story_status": status, "acceptance_criteria_complete": ac_complete,
+            "test_exit_code": tests.returncode,
+            "tests_run": int(count.group(1)) if count else None,
+            "tests_pass": tests.returncode == 0 and count is not None
+            and int(count.group(1)) == verification["expected_tests"]}
+
+
 def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, object]:
     side = artifacts / label
     side.mkdir()
@@ -315,6 +347,7 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     result["remote"] = command(["git", "remote"], target).stdout.strip() or None
     result["product_diff"] = inspect_product_diff(target, str(result["installed_base_sha"]))
     result["stage_telemetry"] = inspect_stage_telemetry(target)
+    result["story_quality"] = inspect_story_quality(target)
     if result["active_branch"] == "main":
         result["story_started"] = False
         result["blocked_reason"] = "Start story remained on main; no story branch was created"

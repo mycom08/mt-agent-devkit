@@ -157,6 +157,33 @@ class InstalledPreparationTests(unittest.TestCase):
             path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
             self.assertFalse(runner.inspect_stage_telemetry(target)["required_stages_present_once"])
 
+    def test_story_quality_requires_unchanged_checked_ac_and_six_passing_tests(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
+            target = Path(directory) / "target"
+            runner.seed_target(target)
+            story_dir = target / ".claude/agents/docs/stories"
+            story_dir.mkdir(parents=True)
+            runner.add_story(target)
+            report = runner.inspect_story_quality(target)
+            self.assertEqual(report["tests_run"], 6)
+            self.assertFalse(report["tests_pass"])
+            self.assertFalse(report["acceptance_criteria_complete"])
+            pricing = target / "pricing.py"
+            pricing.write_text(pricing.read_text(encoding="utf-8").replace(
+                "if subtotal_cents > FREE_STANDARD_SHIPPING_THRESHOLD_CENTS:",
+                "if subtotal_cents >= FREE_STANDARD_SHIPPING_THRESHOLD_CENTS:"), encoding="utf-8")
+            story_path = story_dir / f"{runner.STORY_ID}.md"
+            story = story_path.read_text(encoding="utf-8").replace(
+                "**Status:** ready", "**Status:** done").replace("- [ ] ", "- [x] ")
+            story_path.write_text(story, encoding="utf-8")
+            report = runner.inspect_story_quality(target)
+            self.assertEqual(report["story_status"], "done")
+            self.assertTrue(report["acceptance_criteria_complete"])
+            self.assertTrue(report["tests_pass"])
+            story_path.write_text(story.replace("Standard shipping costs 500 cents",
+                                                "Standard shipping costs 400 cents"), encoding="utf-8")
+            self.assertFalse(runner.inspect_story_quality(target)["acceptance_criteria_complete"])
+
     def test_successful_cli_exit_does_not_complete_blocked_workflow(self) -> None:
         session = {"exit_code": 0, "result_present": True, "is_error": False,
                    "blocked_signal": True, "timed_out": False}
@@ -208,6 +235,7 @@ class InstalledPreparationTests(unittest.TestCase):
                   patch.object(runner, "add_story"),
                   patch.object(runner, "inspect_product_diff", return_value={}),
                   patch.object(runner, "inspect_stage_telemetry", return_value={}),
+                  patch.object(runner, "inspect_story_quality", return_value={}),
                   patch.object(runner, "run_cli", side_effect=[success, blocked]),
                   patch.object(runner, "command", side_effect=[
                       Mock(stdout=""), Mock(stdout="story-branch\n"), Mock(stdout="")])):

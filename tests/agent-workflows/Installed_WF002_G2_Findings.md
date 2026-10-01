@@ -220,7 +220,9 @@ The runner now evaluates the installed product diff against the frozen
 as separate bookkeeping. It reports unrelated changed paths and rejects a
 missing or non-exact threshold edit. It also checks for one telemetry row per
 Developer, TL, QA, and PO stage, and distinguishes recorded rows from measured
-request/cache usage. Eleven deterministic preparation tests pass. These checks
+request/cache usage. An independent target check requires the five unchanged
+AC to be checked and all six unit tests to pass. Twelve deterministic
+preparation tests pass. These checks
 make the earlier diagnostic gaps visible in each run summary; they do not
 convert the diagnostic pair into G2 evidence or resolve the protected-write
 permission path. A new installed run remains necessary.
