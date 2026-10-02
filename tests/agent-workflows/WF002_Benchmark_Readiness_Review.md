@@ -4,6 +4,8 @@ Date: 2026-10-02. Scope: offline review of PR #210 and its existing five local p
 
 ## Findings
 
+The findings below describe the initial review. The offline follow-up now implements a separate frozen installed manifest, source-delta/configuration checks, canonical telemetry schema and identity checks, clean-worktree/changelog checks and external SHA-bound review evidence. See `Installed_Benchmark_Contracts.md` for commands and remaining provenance/independent-review limits. The historical pilot inputs are preserved. No fresh installed run has been performed.
+
 | Area | Finding | Required action before measurement |
 |---|---|---|
 | Source comparison | Installed-run defaults still point to `a30460a` and `e2e700a`. Both precede the agent-ID telemetry discovery fix in PR #216. Updating the runner checkout does not update the devkit exported from those refs. | Freeze new full SHAs: integration `7d44623` as baseline and conflict-resolved FIX-02 `13e1421` as candidate. Inspect their distributed-template delta; it must contain only the three intended FIX-02 guidance files. |

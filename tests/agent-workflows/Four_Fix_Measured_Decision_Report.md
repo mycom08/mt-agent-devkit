@@ -37,6 +37,8 @@ Permission, cleanup and telemetry publication probes demonstrate preparation cap
 
 ## Next decision
 
+Offline preparation now includes `installed_benchmark_manifest.json` and the checks documented in `Installed_Benchmark_Contracts.md`. They reject configuration drift, malformed/duplicate stage metrics, uncommitted or unrelated product/changelog changes, and absent/stale/shared-session reviewer evidence. This strengthens preparation only; it does not add any comparable run or advance G2/G5/G6.
+
 Use `WF002_Benchmark_Readiness_Review.md` to freeze the installed comparison configuration and supporting-fix parity. Run a fresh pair after Claude availability returns, resolve G5 under #214, then collect repeated comparable evidence and final regression. Accept an optimization only with equivalent quality/safety and independent TL/QA review; revise or revert FIX-02 if it cannot meet those gates. No projection or savings claim is made here.
 
 This draft has not received independent TL/QA review and does not complete any acceptance criterion that requires measurement, merge or release.

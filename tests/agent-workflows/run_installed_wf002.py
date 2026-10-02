@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
+import platform
 import json
 import os
 from pathlib import Path
@@ -37,6 +39,11 @@ ROLES = ("developer", "technical_lead", "qa", "product_owner", "business_analyst
          "ui_ux_designer")
 CLI_TOOLS = "Read,Glob,Grep,Bash,PowerShell,Edit,Write,Agent"
 CLI_TIMEOUT_SECONDS = 600
+EXPECTED_MODEL = "claude-sonnet-5-5"
+CHANGELOG_ENTRY = "- [ST-000211] Fix standard shipping at the 5,000-cent threshold."
+_contract_spec = importlib.util.spec_from_file_location("installed_contracts", Path(__file__).with_name("installed_contracts.py"))
+contracts = importlib.util.module_from_spec(_contract_spec)
+_contract_spec.loader.exec_module(contracts)
 FILE_TOOL_POLICY = (
     "This is an unattended disposable benchmark. A PermissionRequest handler "
     "authorizes Write and Edit inside the disposable target's .claude directory. "
@@ -50,7 +57,8 @@ FILE_TOOL_POLICY = (
     "Run the installed collector with its output in an unprotected temporary "
     "file outside .claude, then publish its unchanged JSONL records with Write "
     "to the required protected token-metrics file, preserving earlier rows. "
-    "Do not estimate usage or omit telemetry. Remove temporary outputs before completion."
+    "Do not estimate usage or omit telemetry. Remove temporary outputs before completion. "
+    "For this frozen story, use exactly this changelog bullet: " + CHANGELOG_ENTRY
 )
 BLOCKED_RESULT = re.compile(
     r"\b(?:I stopped|I did not (?:proceed|finish)|only partly done|"
@@ -90,7 +98,7 @@ def export_source(ref: str, target: Path) -> None:
 
 
 def seed_target(target: Path) -> None:
-    shutil.copytree(FIXTURE / "repo", target)
+    shutil.copytree(FIXTURE / "repo", target, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
     command(["git", "init", "-q", "-b", "main"], target)
     command(["git", "-c", "user.name=Benchmark", "-c", "user.email=benchmark@example.invalid",
              "add", "."], target)
@@ -258,7 +266,8 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
                 if isinstance(model, str):
                     model_ids.add(model)
     blocked = bool(result and BLOCKED_RESULT.search(str(result.get("result", ""))))
-    return {"exit_code": finished.returncode, "duration_ms": round((time.monotonic() - started) * 1000),
+    return {"resolved_model_matches": bool(model_ids) and model_ids == {EXPECTED_MODEL},
+            "exit_code": finished.returncode, "duration_ms": round((time.monotonic() - started) * 1000),
             "result_present": result is not None, "is_error": result.get("is_error") if result else None,
             "blocked_signal": blocked, "timed_out": timed_out,
             "permission_denials": permission_denials,
@@ -274,7 +283,8 @@ def session_completed(session: dict[str, object]) -> bool:
     return (session["exit_code"] == 0 and session["result_present"] is True
             and session["is_error"] is False and session["blocked_signal"] is False
             and session["timed_out"] is False and session.get("truncated_events", 0) == 0
-            and session.get("permission_denials", 0) == 0)
+            and session.get("permission_denials", 0) == 0
+            and session.get("resolved_model_matches", True) is True)
 
 
 def inspect_product_diff(target: Path, base_sha: str) -> dict[str, object]:
@@ -294,7 +304,22 @@ def inspect_product_diff(target: Path, base_sha: str) -> dict[str, object]:
                                 "CHANGELOG.md"], target).stdout if changelog_changed else "")
     changelog_added = [line[1:] for line in changelog_diff.splitlines()
                        if line.startswith("+") and not line.startswith("+++")]
+    changelog_removed = [line for line in changelog_diff.splitlines()
+                         if line.startswith("-") and not line.startswith("---")]
+    entries = [line for line in changelog_added if line.strip() and not line.startswith("#")]
+    changelog_scope = (changelog_changed and not changelog_removed and len(entries) == 1
+                      and entries[0] == CHANGELOG_ENTRY
+                      and all(not line.strip() or line == entries[0]
+                              or line in {"### Bug Fixes", "### Changes"}
+                              or re.fullmatch(r"## \[\d+\.\d+\.\d+\] - Unreleased", line)
+                              for line in changelog_added))
+    status = command(["git", "status", "--porcelain", "--untracked-files=all"], target).stdout.splitlines()
+    implementation = command(["git", "log", "-1", "--format=%H", f"{base_sha}..HEAD", "--", "pricing.py"], target).stdout.strip()
     return {
+        "implementation_sha": implementation or None,
+        "working_tree_clean": not status,
+        "uncommitted_changes": status,
+        "changelog_scope_valid": changelog_scope,
         "changed_paths": changed,
         "product_paths_match": product_paths == sorted(product["changed_paths_exactly"]),
         "pricing_change_exact": removed == [product["removed_line"]]
@@ -305,36 +330,7 @@ def inspect_product_diff(target: Path, base_sha: str) -> dict[str, object]:
 
 
 def inspect_stage_telemetry(target: Path) -> dict[str, object]:
-    """Report whether the installed workflow produced usable per-stage measurements."""
-    folder = target / ".claude/agents/tmp/token-metrics"
-    rows: list[dict[str, object]] = []
-    errors: list[str] = []
-    for path in sorted(folder.glob("*.jsonl")):
-        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-            if not line.strip():
-                continue
-            try:
-                row = json.loads(line)
-            except json.JSONDecodeError:
-                errors.append(f"{path.name}:{number}: invalid JSON")
-                continue
-            if not isinstance(row, dict):
-                errors.append(f"{path.name}:{number}: expected object")
-                continue
-            rows.append(row)
-    expected = ("developer_implementation", "technical_lead_review", "qa_verification",
-                "product_owner_closure")
-    stages = [row.get("stage") for row in rows]
-    measured = all(row.get("usage_source") != "unavailable" and
-                   isinstance(row.get("requests"), int) and
-                   isinstance(row.get("cache_read_input_tokens"), int)
-                   for row in rows)
-    return {"row_count": len(rows), "stages": stages,
-            "required_stages_present_once": len(rows) == len(expected)
-            and all(isinstance(stage, str) for stage in stages)
-            and sorted(stages) == sorted(expected),
-            "measured_usage_for_every_stage": measured and len(rows) == len(expected),
-            "errors": errors}
+    return contracts.inspect_telemetry(target, EXPECTED_MODEL)
 
 
 def inspect_story_quality(target: Path) -> dict[str, object]:
@@ -412,15 +408,56 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     result["story_status"] = command(["git", "status", "--porcelain", "--untracked-files=all"], target).stdout.splitlines()
     result["active_branch"] = command(["git", "branch", "--show-current"], target).stdout.strip()
     result["remote"] = command(["git", "remote"], target).stdout.strip() or None
-    result["product_diff"] = inspect_product_diff(target, str(result["installed_base_sha"]))
-    result["stage_telemetry"] = inspect_stage_telemetry(target)
-    result["story_quality"] = inspect_story_quality(target)
+    result.update(assess_quality(side, str(result["installed_base_sha"])))
     if result["active_branch"] == "main":
         result["story_started"] = False
         result["blocked_reason"] = "Start story remained on main; no story branch was created"
     elif not result["story_started"]:
         result["blocked_reason"] = "Start story session failed or reported a blocked outcome"
     return result
+
+
+def assess_quality(side: Path, base_sha: str) -> dict[str, object]:
+    target = side / "target"
+    result = {"remote": command(["git", "remote"], target).stdout.strip() or None}
+    result["product_diff"] = inspect_product_diff(target, base_sha)
+    result["stage_telemetry"] = inspect_stage_telemetry(target)
+    result["story_quality"] = inspect_story_quality(target)
+    result["review_evidence"] = contracts.inspect_review_evidence(
+        side / "quality-review.json", target, result["product_diff"].get("implementation_sha") or "")
+    result["automated_quality_checks_pass"] = all((
+        result["product_diff"].get("product_paths_match"),
+        result["product_diff"].get("pricing_change_exact"),
+        result["product_diff"].get("working_tree_clean"),
+        result["product_diff"].get("changelog_scope_valid"),
+        result["stage_telemetry"].get("schema_and_identity_valid"),
+        result["stage_telemetry"].get("measured_usage_for_every_stage"),
+        result["story_quality"].get("tests_pass"),
+        result["story_quality"].get("acceptance_criteria_complete"),
+        result["story_quality"].get("story_status") == "done",
+        result["review_evidence"].get("evidence_valid"), not result["remote"]))
+    result["main_unchanged"] = command(["git", "rev-parse", "main"], target).stdout.strip() == base_sha
+    result["automated_quality_checks_pass"] = bool(result["automated_quality_checks_pass"] and result["main_unchanged"])
+    result["gate_g2"] = "unassessed"
+    return result
+
+
+def assess_capture(artifacts: Path) -> int:
+    summary_path = artifacts / "summary.json"
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    frozen = json.loads(contracts.MANIFEST.read_text(encoding="utf-8"))
+    contracts.validate_configuration(summary["config"], frozen)
+    for side in summary["sides"]:
+        label = side["label"]
+        if not re.fullmatch(r"(?:baseline|candidate)-[1-9][0-9]*", label):
+            raise ValueError("Invalid side label")
+        folder = (artifacts / label).resolve()
+        if not folder.is_relative_to(artifacts.resolve()):
+            raise ValueError("Capture side escapes artifact directory")
+        if side.get("installed_base_sha"):
+            side.update(assess_quality(folder, side["installed_base_sha"]))
+    (artifacts / "assessment.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    return 2  # Evidence capture is not independent benchmark acceptance.
 
 
 def run_exit_code(sides: list[dict[str, object]], expected_count: int) -> int:
@@ -430,15 +467,23 @@ def run_exit_code(sides: list[dict[str, object]], expected_count: int) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--baseline-ref", default="a30460a87c6d439b1193c45b77cc638a8f237fdb")
-    parser.add_argument("--candidate-ref", default="e2e700aa2e1014011c07c789458d13501a92f661")
-    parser.add_argument("--max-budget-usd", type=float, default=2.0,
+    parser.add_argument("--baseline-ref", default="7d44623c957c411cd311656457278c9ec5c549df")
+    parser.add_argument("--candidate-ref", default="13e142195a106b727b05588774e4934ec3fa575a")
+    parser.add_argument("--max-budget-usd", type=float, default=4.0,
                         help="Cap for each init or start-story CLI session")
     parser.add_argument("--repetitions", type=int, default=3,
                         help="Fresh baseline/candidate pairs (default: 3)")
     parser.add_argument("--artifacts-dir", type=Path)
+    parser.add_argument("--assess-artifacts", type=Path, help="Recheck an existing capture after external review evidence; never launches Claude")
     parser.add_argument("--execute", action="store_true", help="Launch paid installed workflow sessions")
     args = parser.parse_args()
+    if args.assess_artifacts:
+        if args.execute:
+            parser.error("--assess-artifacts cannot be combined with --execute")
+        artifacts = args.assess_artifacts.resolve()
+        if artifacts == ROOT or ROOT in artifacts.parents:
+            parser.error("Raw artifacts must be outside the devkit repository")
+        return assess_capture(artifacts)
     if args.max_budget_usd <= 0:
         parser.error("--max-budget-usd must be positive")
     if args.repetitions <= 0:
@@ -456,8 +501,14 @@ def main() -> int:
         "Bash only for exact init-state and two-file WF-002 cleanup")
     config["protected_file_tool_policy"] = FILE_TOOL_POLICY
     config["session_persistence"] = True
-    config["permission_handler_sha256"] = hashlib.sha256(
-        Path(__file__).with_name("headless_permissions.py").read_bytes()).hexdigest()
+    config["permission_handler_sha256"] = contracts.source_digest(Path(__file__).with_name("headless_permissions.py"))
+    config["expected_resolved_model"] = EXPECTED_MODEL
+    config["python_version"] = platform.python_version()
+    config["fixture_sha256"] = contracts.fixture_hashes()
+    config["source_sha256"] = {name: contracts.source_digest(Path(__file__).with_name(name)) for name in
+        ("run_installed_wf002.py", "installed_contracts.py", "headless_permissions.py")}
+    contracts.validate_template_delta(command, refs)
+    contracts.validate_configuration(config, json.loads(contracts.MANIFEST.read_text(encoding="utf-8")))
     if not args.execute:
         print(json.dumps(config, indent=2))
         return 0

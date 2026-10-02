@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import importlib.util
+import contextlib
+import io
 import json
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
 import subprocess
+import sys
 
 
 RUNNER = Path(__file__).with_name("run_installed_wf002.py")
@@ -162,7 +165,7 @@ class InstalledPreparationTests(unittest.TestCase):
             pricing.write_text(pricing.read_text(encoding="utf-8").replace(
                 "if subtotal_cents > FREE_STANDARD_SHIPPING_THRESHOLD_CENTS:",
                 "if subtotal_cents >= FREE_STANDARD_SHIPPING_THRESHOLD_CENTS:"), encoding="utf-8")
-            (target / "CHANGELOG.md").write_text("# Changelog\n- Fix shipping threshold.\n",
+            (target / "CHANGELOG.md").write_text("# Changelog\n- [ST-000211] Fix standard shipping at the 5,000-cent threshold.\n",
                                                    encoding="utf-8")
             runner.command(["git", "add", "pricing.py", "CHANGELOG.md"], target)
             runner.command(["git", "-c", "user.name=Benchmark", "-c",
@@ -171,7 +174,21 @@ class InstalledPreparationTests(unittest.TestCase):
             self.assertTrue(report["product_paths_match"])
             self.assertTrue(report["pricing_change_exact"])
             self.assertTrue(report["changelog_entry_present"])
+            self.assertTrue(report["changelog_scope_valid"])
+            self.assertTrue(report["working_tree_clean"])
+            self.assertEqual(len(report["implementation_sha"]), 40)
             self.assertEqual(report["unexpected_paths"], [])
+            untracked = target / "unrelated.txt"
+            untracked.write_text("extra", encoding="utf-8")
+            self.assertFalse(runner.inspect_product_diff(target, base_sha)["working_tree_clean"])
+            untracked.unlink()
+            (target / "CHANGELOG.md").write_text("# Changelog\n" + runner.CHANGELOG_ENTRY
+                + "\n- Unrelated feature.\n", encoding="utf-8")
+            runner.command(["git", "add", "CHANGELOG.md"], target)
+            self.assertFalse(runner.inspect_product_diff(target, base_sha)["working_tree_clean"])
+            runner.command(["git", "-c", "user.name=Benchmark", "-c",
+                            "user.email=benchmark@example.invalid", "commit", "-qm", "Unrelated changelog"], target)
+            self.assertFalse(runner.inspect_product_diff(target, base_sha)["changelog_scope_valid"])
             (target / "README.md").write_text("Unrelated change\n", encoding="utf-8")
             runner.command(["git", "add", "README.md"], target)
             runner.command(["git", "-c", "user.name=Benchmark", "-c",
@@ -179,6 +196,69 @@ class InstalledPreparationTests(unittest.TestCase):
             report = runner.inspect_product_diff(target, base_sha)
             self.assertFalse(report["product_paths_match"])
             self.assertEqual(report["unexpected_paths"], ["README.md"])
+
+    def test_frozen_preflight_and_drift_fail_before_any_agent_run(self):
+        frozen = json.loads(runner.contracts.MANIFEST.read_text(encoding="utf-8"))
+        original = runner.command
+        def fake_command(argv, cwd, **kwargs):
+            if argv == ["claude", "--version"]:
+                return Mock(stdout=frozen["cli_version"])
+            return original(argv, cwd, **kwargs)
+        with patch.object(runner, "command", side_effect=fake_command), patch.object(runner, "run_cli") as paid:
+            with patch.object(sys, "argv", ["runner"]), contextlib.redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(runner.main(), 0)
+            self.assertEqual(json.loads(output.getvalue()), frozen)
+            for argv in (["runner", "--repetitions", "1", "--execute"],
+                         ["runner", "--max-budget-usd", "2", "--execute"]):
+                with patch.object(sys, "argv", argv), self.assertRaisesRegex(ValueError, "drift"):
+                    runner.main()
+            with patch.object(runner.contracts, "source_digest", return_value="changed"), \
+                 patch.object(sys, "argv", ["runner", "--execute"]), self.assertRaisesRegex(ValueError, "drift"):
+                runner.main()
+            paid.assert_not_called()
+
+    def test_resolved_model_drift_blocks_session(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            def fake_run(argv, **kwargs):
+                kwargs["stdout"].write(json.dumps({"type": "assistant", "message": {"model": "other-model"}}) + "\n")
+                kwargs["stdout"].write(json.dumps({"type": "result", "is_error": False, "result": "Done"}) + "\n")
+                return subprocess.CompletedProcess(argv, 0, "", "")
+            with patch.object(runner.subprocess, "run", side_effect=fake_run):
+                result = runner.run_cli(root, root / "stream.jsonl", "test", 4)
+            self.assertFalse(result["resolved_model_matches"])
+            self.assertFalse(runner.session_completed(result))
+
+    def test_assessment_uses_install_base_and_keeps_missing_reviews_pending(self):
+        with tempfile.TemporaryDirectory() as folder:
+            side = Path(folder)
+            target = side / "target"
+            runner.seed_target(target)
+            base = runner.command(["git", "rev-parse", "HEAD"], target).stdout.strip()
+            result = runner.assess_quality(side, base)
+            self.assertTrue(result["main_unchanged"])
+            self.assertFalse(result["automated_quality_checks_pass"])
+            self.assertFalse(result["review_evidence"]["evidence_valid"])
+            self.assertEqual(result["gate_g2"], "unassessed")
+
+    def test_offline_capture_assessment_preserves_original_and_never_launches_agent(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            frozen = json.loads(runner.contracts.MANIFEST.read_text(encoding="utf-8"))
+            summary = {"config": frozen, "sides": [{"label": "baseline-1", "installed_base_sha": "a" * 40}]}
+            path = root / "summary.json"
+            path.write_text(json.dumps(summary), encoding="utf-8")
+            with patch.object(runner, "run_cli") as paid, \
+                 patch.object(runner, "assess_quality", return_value={"gate_g2": "unassessed"}) as assessment:
+                self.assertEqual(runner.assess_capture(root), 2)
+                assessment.assert_called_once_with(root / "baseline-1", "a" * 40)
+                paid.assert_not_called()
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8")), summary)
+            self.assertTrue((root / "assessment.json").is_file())
+            summary["sides"][0]["label"] = "../escape"
+            path.write_text(json.dumps(summary), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "label"):
+                runner.assess_capture(root)
 
     def test_stage_telemetry_requires_four_distinct_measured_roles(self) -> None:
         with tempfile.TemporaryDirectory(prefix="wf002-installed-test-", dir=RUNNER.parent) as directory:
@@ -188,8 +268,15 @@ class InstalledPreparationTests(unittest.TestCase):
             folder.mkdir(parents=True)
             stages = ("developer_implementation", "technical_lead_review", "qa_verification",
                       "product_owner_closure")
-            rows = [{"stage": stage, "usage_source": "raw_transcript", "requests": 2,
-                     "cache_read_input_tokens": 100} for stage in stages]
+            rows = [runner.contracts.telemetry.build_record({
+                "run_id": "wf002-test", "story_id": runner.STORY_ID,
+                "role": runner.contracts.STAGE_ROLES[stage], "stage": stage,
+                "session_mode": "fresh", "model": runner.EXPECTED_MODEL,
+                "started_at": "2026-10-02T00:00:00Z", "ended_at": "2026-10-02T00:00:01Z",
+                "duration_ms": 1000, "completion_status": "completed", "notes": ""},
+                "raw_transcript", {"requests": 2, "tool_invocations": 3,
+                    "input_tokens": 10, "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 100, "output_tokens": 5}) for stage in stages]
             path = folder / "run.jsonl"
             path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
             report = runner.inspect_stage_telemetry(target)
@@ -282,9 +369,10 @@ class InstalledPreparationTests(unittest.TestCase):
                   patch.object(runner, "inspect_product_diff", return_value={}),
                   patch.object(runner, "inspect_stage_telemetry", return_value={}),
                   patch.object(runner, "inspect_story_quality", return_value={}),
+                  patch.object(runner, "assess_quality", return_value={}),
                   patch.object(runner, "run_cli", side_effect=[success, blocked]),
                   patch.object(runner, "command", side_effect=[
-                      Mock(stdout=""), Mock(stdout="story-branch\n"), Mock(stdout="")])):
+                      Mock(stdout=""), Mock(stdout="story-branch\n"), Mock(stdout=""), Mock(stdout="a" * 40)])):
                 side = runner.run_side("baseline-1", "a" * 40, Path(directory), 2.0)
             self.assertTrue(side["installed"])
             self.assertFalse(side["story_started"])

@@ -1,0 +1,43 @@
+{
+  "refs": {
+    "baseline": "7d44623c957c411cd311656457278c9ec5c549df",
+    "candidate": "13e142195a106b727b05588774e4934ec3fa575a"
+  },
+  "cli_version": "2.1.287 (Claude Code)",
+  "model_alias": "sonnet",
+  "effort": "medium",
+  "tools": [
+    "Read",
+    "Glob",
+    "Grep",
+    "Bash",
+    "PowerShell",
+    "Edit",
+    "Write",
+    "Agent"
+  ],
+  "max_budget_usd_per_session": 4.0,
+  "timeout_seconds_per_session": 600,
+  "repetitions_per_arm": 3,
+  "surface": "Claude Code installed strict workflow",
+  "gate_g2": "unassessed",
+  "permission_policy": "PermissionRequest: Write/Edit within disposable target/.claude; Bash only for exact init-state and two-file WF-002 cleanup",
+  "protected_file_tool_policy": "This is an unattended disposable benchmark. A PermissionRequest handler authorizes Write and Edit inside the disposable target's .claude directory. Use Write/Edit for every protected .claude file, including pipeline state, retrospectives, reviews, and agent records. Do not write those files with Bash, PowerShell, heredocs, redirection, or helper scripts. Run Git operations as separate shell commands, never combined with protected file writes. Pass this file-tool requirement to every spawned agent. Follow the installed workflow's mandatory telemetry collection after each completed stage, including explicit unavailable records when required. Run the installed collector with its output in an unprotected temporary file outside .claude, then publish its unchanged JSONL records with Write to the required protected token-metrics file, preserving earlier rows. Do not estimate usage or omit telemetry. Remove temporary outputs before completion. For this frozen story, use exactly this changelog bullet: - [ST-000211] Fix standard shipping at the 5,000-cent threshold.",
+  "session_persistence": true,
+  "permission_handler_sha256": "908fc97a311de92ea0afa126e6497b465182735947eb4343448a476e5b8e478c",
+  "expected_resolved_model": "claude-sonnet-5-5",
+  "python_version": "3.12.10",
+  "fixture_sha256": {
+    "expected.json": "54bc7d39a40a34fa1a55cfe3222278736c6fe33e69b0e2a015f6848eec782dc0",
+    "repo/pricing.py": "e15980c8f6549b700012bbc1c45e8ee44d25a7aa31aa583919e8c125f05aec9d",
+    "repo/README.md": "889357e4c59e1700dc5363134a2d522c552070d5fa446bf1fd7899defefe6205",
+    "repo/tests/test_pricing.py": "2ec426c2cdc2de9e3e7a34a9654debb66d496e0d1574f391c47880951f0dda13",
+    "state.json": "4380f00e6ef978aa406906bee77947883202b491bf06211272869ecca51e2317",
+    "story.md": "1ea57691d65c80138f1a99e08cf8aa1d2cd4bdeb1886104873923082ce6ccede"
+  },
+  "source_sha256": {
+    "run_installed_wf002.py": "6e36a99e9d792a3fff249192a7b45f5924174cbf16ab57c3b49e04f60cec6852",
+    "installed_contracts.py": "65aacd3856db6f75d2e2e566a44632f44bef6149266762ae6d4c5895c0a3b1fa",
+    "headless_permissions.py": "908fc97a311de92ea0afa126e6497b465182735947eb4343448a476e5b8e478c"
+  }
+}
