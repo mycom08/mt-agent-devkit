@@ -80,7 +80,8 @@ class StreamTests(unittest.TestCase):
 
     def test_failed_or_unmatched_command_does_not_count_as_verification(self) -> None:
         first = assistant("request-1", "tool-1", "python -m unittest discover -s tests -v", 8)
-        final = {"type": "result", "result": '{"outcome":"completed"}', "usage": {}}
+        final = {"type": "result", "result": '{"outcome":"completed"}', "usage": {"input_tokens": 10, "cache_creation_input_tokens": 2,
+                              "cache_read_input_tokens": 3, "output_tokens": 8}}
         failed = parse([first, tool_result("tool-1", "Exit code: 1\nRan 6 tests\nFAILED"), final])
         self.assertFalse(failed["test_command_confirmed"])
         self.assertEqual(failed["powershell_results_unverified"], 1)
@@ -92,7 +93,8 @@ class StreamTests(unittest.TestCase):
         events = [
             assistant("request-1", "tool-1", "python -m unittest discover -s tests -v", 2),
             tool_result("tool-1", "Ran 6 tests in 0.001s\n\nOK"),
-            {"type": "result", "result": '{"outcome":"completed"}', "usage": {}},
+            {"type": "result", "result": '{"outcome":"completed"}', "usage": {"input_tokens": 10, "cache_creation_input_tokens": 2,
+                              "cache_read_input_tokens": 3, "output_tokens": 8}},
         ]
         self.assertTrue(parse(events)["test_command_confirmed"])
         state = {
@@ -114,7 +116,8 @@ class StreamTests(unittest.TestCase):
         first = assistant("request-1", "tool-1", "git diff", 1)
         second = assistant("request-1", "tool-1", "git diff", 2, input_tokens=11)
         with self.assertRaisesRegex(ValueError, "inconsistent usage.input_tokens"):
-            parse([first, second, {"type": "result", "result": "done", "usage": {}}])
+            parse([first, second, {"type": "result", "result": "done", "usage": {"input_tokens": 10, "cache_creation_input_tokens": 2,
+                              "cache_read_input_tokens": 3, "output_tokens": 8}}])
 
     def test_fenced_json_outcome_with_braces_in_evidence(self) -> None:
         events = [assistant("request-1", "tool-1", "git diff", 1),
@@ -122,7 +125,8 @@ class StreamTests(unittest.TestCase):
                   {"type": "result", "result": (
                       'Review note.\n```json\n{"outcome":"blocked",'
                       '"evidence":"state has {pending} verdicts","checks_run":[]}\n```'),
-                   "usage": {}}]
+                   "usage": {"input_tokens": 10, "cache_creation_input_tokens": 2,
+                              "cache_read_input_tokens": 3, "output_tokens": 8}}]
         self.assertEqual(parse(events)["agent_outcome"], "blocked")
 
     def test_manifest_checks_exact_cli_version(self) -> None:
