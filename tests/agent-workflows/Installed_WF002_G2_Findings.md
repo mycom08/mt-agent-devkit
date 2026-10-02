@@ -226,3 +226,33 @@ preparation tests pass. These checks
 make the earlier diagnostic gaps visible in each run summary; they do not
 convert the diagnostic pair into G2 evidence or resolve the protected-write
 permission path. A new installed run remains necessary.
+## 2026-10-02: headless protected-write reproduction and scoped fix
+
+Claude Code 2.1.287, resolved model `claude-sonnet-5-5`, medium effort,
+`--restricted --permission-mode acceptEdits --permission-prompts none`, and
+explicit `Read,Edit,Write` tools still deny a normal `Write` to
+`.claude/agents/tmp/probe.txt`. The target file was absent despite CLI exit 0
+and a result event with `is_error: false`.
+
+The installed runner now supplies a trusted `--settings` file outside the
+disposable target containing a `PermissionRequest` command hook. Its handler
+approves only `Write` and `Edit` paths resolving below the disposable target's
+`.claude/` directory. Other tools, source checkout paths, `.git`, traversal,
+and symlink escapes are denied. Restricted mode, tool limits, and
+`--permission-prompts none` remain enabled. This uses Claude Code's documented
+[PermissionRequest decision control](https://code.claude.com/docs/en/hooks#permissionrequest-decision-control).
+
+Live headless verification in a fresh disposable directory:
+
+- Original configuration: protected write denied; no file created.
+- With handler: protected write created `HEADLESS_PROBE_OK`; zero denials.
+- Protected `Edit`: content changed to `HEADLESS_EDIT_OK`.
+- Out-of-workspace write: denied; no file created.
+- Foreground general-purpose subagent: created `SUBAGENT_OK`; zero denials.
+
+The 14 installed preparation tests pass. Two permission boundary tests pass;
+the directory symlink test is skipped on this Windows host because symlink
+creation is unavailable. The runner treats recorded permission denials as
+workflow failure and records the policy description and handler SHA-256 in
+the benchmark configuration. These are permission smoke checks, not completed
+G2/G6 benchmarks. Fresh comparable installed runs are still required.

@@ -14,6 +14,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tarfile
 import tempfile
 import time
@@ -154,8 +155,26 @@ def commit_install_scaffold(target: Path) -> str:
     return command(["git", "rev-parse", "HEAD"], target).stdout.strip()
 
 
+def permission_settings(target: Path, destination: Path) -> Path:
+    """Keep trusted test policy outside the agent-writable target."""
+    target = target.resolve()
+    destination = destination.resolve()
+    if destination.is_relative_to(target):
+        raise ValueError("Permission settings must be outside the disposable target")
+    handler = Path(__file__).with_name("headless_permissions.py").resolve()
+    # Hook commands use shell text; reject shell metacharacters in controlled paths.
+    paths = [Path(sys.executable), handler, target]
+    if any(any(char in str(path) for char in '\"$`%!\r\n') for path in paths):
+        raise ValueError("Unsupported shell characters in permission handler paths")
+    hook_command = " ".join(f'"{path.as_posix()}"' for path in paths)
+    settings = {"hooks": {"PermissionRequest": [{"matcher": "Write|Edit", "hooks": [
+        {"type": "command", "command": hook_command}]}]}}
+    destination.write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
+    return destination
+
+
 def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
-            *, add_dir: Path | None = None) -> dict[str, object]:
+            *, add_dir: Path | None = None, settings: Path | None = None) -> dict[str, object]:
     argv = ["claude", "--print", "--verbose", "--output-format", "stream-json",
             "--restricted", "--strict-mcp-config", "--no-chrome",
             "--no-session-persistence", "--permission-mode", "acceptEdits",
@@ -164,6 +183,8 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
             "--max-budget-usd", str(budget)]
     if add_dir is not None:
         argv += ["--add-dir", str(add_dir)]
+    if settings is not None:
+        argv += ["--settings", str(settings)]
     argv += ["-p", prompt]
     started = time.monotonic()
     env = os.environ.copy()
@@ -181,6 +202,7 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
     assistant_events = 0
     model_ids: set[str] = set()
     truncated_events = 0
+    permission_denials = 0
     for line in stream.read_text(encoding="utf-8").splitlines():
         if line.strip():
             try:
@@ -190,6 +212,9 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
                 continue
             if event.get("type") == "result":
                 result = event
+                permission_denials = max(permission_denials, len(event.get("permission_denials", [])))
+            elif event.get("type") == "system" and event.get("subtype") == "permission_denied":
+                permission_denials += 1
             elif event.get("type") == "assistant":
                 assistant_events += 1
                 model = event.get("message", {}).get("model")
@@ -199,6 +224,7 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
     return {"exit_code": finished.returncode, "duration_ms": round((time.monotonic() - started) * 1000),
             "result_present": result is not None, "is_error": result.get("is_error") if result else None,
             "blocked_signal": blocked, "timed_out": timed_out,
+            "permission_denials": permission_denials,
             "partial_assistant_events": assistant_events, "partial_model_ids": sorted(model_ids),
             "truncated_events": truncated_events,
             "total_cost_usd": result.get("total_cost_usd") if result else None,
@@ -210,7 +236,8 @@ def session_completed(session: dict[str, object]) -> bool:
     """A CLI result event is transport success, not a completed workflow."""
     return (session["exit_code"] == 0 and session["result_present"] is True
             and session["is_error"] is False and session["blocked_signal"] is False
-            and session["timed_out"] is False and session.get("truncated_events", 0) == 0)
+            and session["timed_out"] is False and session.get("truncated_events", 0) == 0
+            and session.get("permission_denials", 0) == 0)
 
 
 def inspect_product_diff(target: Path, base_sha: str) -> dict[str, object]:
@@ -311,6 +338,7 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
     source, target = side / "devkit", side / "target"
     export_source(ref, source)
     seed_target(target)
+    settings = permission_settings(target, side / "permission-settings.json")
     init_prompt = (f"init project {target} in strict mode. This is a disposable WF-002 "
                    "Python repository with no GitHub remote. Complete the normal installed "
                    "devkit init workflow, including adaptive files. Put any temporary "
@@ -320,7 +348,8 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
                    "report it rather than routing that write through a helper or shell. "
                    "Remove temporary helpers before completion. Do not use GitHub or "
                    "external services. Do not edit the devkit source checkout.")
-    init = run_cli(source, side / "init.jsonl", init_prompt, budget, add_dir=target)
+    init = run_cli(source, side / "init.jsonl", init_prompt, budget, add_dir=target,
+                   settings=settings)
     result: dict[str, object] = {"label": label, "source_sha": ref, "init": init,
                                  "installed": False, "story_started": False,
                                  "gate_g2": "unassessed"}
@@ -339,7 +368,8 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
         result["blocked_reason"] = f"Installed scaffold commit failed: {exc}"
         return result
     add_story(target)
-    start = run_cli(target, side / "start-story.jsonl", f"start story {STORY_ID}", budget)
+    start = run_cli(target, side / "start-story.jsonl", f"start story {STORY_ID}", budget,
+                    settings=settings)
     result["start_story"] = start
     result["story_started"] = session_completed(start)
     result["story_status"] = command(["git", "status", "--porcelain", "--untracked-files=all"], target).stdout.splitlines()
@@ -384,6 +414,9 @@ def main() -> int:
               "timeout_seconds_per_session": CLI_TIMEOUT_SECONDS,
               "repetitions_per_arm": args.repetitions,
               "surface": "Claude Code installed strict workflow", "gate_g2": "unassessed"}
+    config["permission_policy"] = "PermissionRequest: Write/Edit within disposable target/.claude only"
+    config["permission_handler_sha256"] = hashlib.sha256(
+        Path(__file__).with_name("headless_permissions.py").read_bytes()).hexdigest()
     if not args.execute:
         print(json.dumps(config, indent=2))
         return 0

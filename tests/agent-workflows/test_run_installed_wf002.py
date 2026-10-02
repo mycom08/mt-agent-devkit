@@ -19,6 +19,24 @@ spec.loader.exec_module(runner)
 
 
 class InstalledPreparationTests(unittest.TestCase):
+    def test_permission_denial_is_not_workflow_success(self) -> None:
+        session = {"exit_code": 0, "result_present": True, "is_error": False,
+                   "blocked_signal": False, "timed_out": False, "permission_denials": 1}
+        self.assertFalse(runner.session_completed(session))
+
+    def test_permission_policy_is_stored_outside_target(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "target"
+            target.mkdir()
+            settings = runner.permission_settings(target, root / "policy.json")
+            data = json.loads(settings.read_text(encoding="utf-8"))
+            hook = data["hooks"]["PermissionRequest"][0]
+            self.assertEqual(hook["matcher"], "Write|Edit")
+            self.assertIn(target.resolve().as_posix(), hook["hooks"][0]["command"])
+            with self.assertRaisesRegex(ValueError, "outside"):
+                runner.permission_settings(target, target / "policy.json")
+
     def test_complete_capture_still_requires_g2_quality_review(self) -> None:
         completed = [{"story_started": True}, {"story_started": True}]
         self.assertEqual(runner.run_exit_code(completed, 2), 2)
