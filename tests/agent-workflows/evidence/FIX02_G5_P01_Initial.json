@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "fixture": "scripts/test/fixtures/parallel_tool_execution_cases.json",
+  "guidance": ".antigravity/agents/working/rules/Agent_Common_Bootstrap.md",
+  "cli": "2.1.284 (Claude Code)",
+  "engine": "claude",
+  "model": "sonnet",
+  "results": [
+    {
+      "id": "P01",
+      "outcome": "fail",
+      "assertions": [
+        "1 of 3 reads started before the first result"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 8.39,
+      "trace": [
+        {
+          "event": "item.started",
+          "id": "toolu_01L8JAF2kN3cWhVX113UozZo",
+          "type": "Read",
+          "command": "{\"file_path\": \"<fixture>\\\\notes\\\\alpha.txt\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01L8JAF2kN3cWhVX113UozZo",
+          "type": "tool_result",
+          "command": "1\tapples\n2\t",
+          "exit_code": 0
+        },
+        {
+          "event": "item.started",
+          "id": "toolu_011tJeHU3CwnUZZ1E14bJPnY",
+          "type": "Read",
+          "command": "{\"file_path\": \"<fixture>\\\\notes\\\\beta.txt\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_011tJeHU3CwnUZZ1E14bJPnY",
+          "type": "tool_result",
+          "command": "1\tbananas\n2\t",
+          "exit_code": 0
+        },
+        {
+          "event": "item.started",
+          "id": "toolu_01BUFK5RwQZr7by7AhtaTQ7N",
+          "type": "Read",
+          "command": "{\"file_path\": \"<fixture>\\\\notes\\\\gamma.txt\"}",
+          "exit_code": null
+        },
+        {
+          "event": "item.completed",
+          "id": "toolu_01BUFK5RwQZr7by7AhtaTQ7N",
+          "type": "tool_result",
+          "command": "1\tgrapes\n2\t",
+          "exit_code": 0
+        }
+      ],
+      "final": "- `notes/alpha.txt` contains the single word \"apples\".\n- `notes/beta.txt` contains the single word \"bananas\".\n- `notes/gamma.txt` contains the single word \"grapes\".",
+      "state": {
+        "sentence": "The sky is blue.\n",
+        "deletion_target_exists": true,
+        "new_note": "",
+        "committed": false
+      },
+      "errors": [],
+      "stderr": "",
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5820,
+        "cache_read_input_tokens": 36879,
+        "output_tokens": 481,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5820,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 68,
+            "cache_read_input_tokens": 21065,
+            "cache_creation_input_tokens": 569,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 569
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      }
+    }
+  ]
+}
