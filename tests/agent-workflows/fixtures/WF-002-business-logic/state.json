@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "fixture_id": "WF-002-business-logic",
+  "mode": "strict",
+  "current_stage": "developer_implementation",
+  "session_mode": "fresh",
+  "story_status": "ready",
+  "product_decisions_pending": [],
+  "technical_lead_verdict": "pending",
+  "qa_verdict": "pending",
+  "product_owner_closure": "pending",
+  "remote_issue": null,
+  "remote_pull_request": null,
+  "credentials_required": []
+}
