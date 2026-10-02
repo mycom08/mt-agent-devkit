@@ -303,3 +303,16 @@ the policy prohibits estimated usage and omitted records. All 16 preparation
 tests and four permission boundary tests pass; one Windows symlink case is
 skipped. Raw smoke artifacts remain outside the repository. These probes do
 not establish G2 or G6; a fresh installed pair is next.
+
+The next fresh baseline completed init with zero denials but attempted to
+Write telemetry metadata into a separate OS temporary directory, outside
+restricted mode's allowed working directories. The attempt was stopped and
+preserved as non-comparable evidence. The runner now specifies the target's
+`.wf002-tmp/` as the only temporary telemetry staging directory and names
+the four fixture stage labels and schema `fresh` session mode explicitly.
+
+A small live check ran the candidate collector against the persisted smoke
+agent, generated a `raw_transcript` record in in-target staging, and published
+the unchanged record using Write to the protected token-metrics directory.
+One record with 2 measured requests was published with zero permission
+denials. All 16 preparation tests pass. Fresh installed runs remain required.

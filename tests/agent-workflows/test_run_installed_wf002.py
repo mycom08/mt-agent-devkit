@@ -38,6 +38,7 @@ class InstalledPreparationTests(unittest.TestCase):
                 self.assertEqual(argv[argv.index("--settings") + 1], str(settings))
                 self.assertEqual(argv.count("--append-system-prompt"), 1)
                 self.assertTrue(argv[argv.index("--append-system-prompt") + 1].startswith(runner.FILE_TOOL_POLICY))
+                self.assertIn((root / '.wf002-tmp').as_posix(), argv[argv.index('--append-system-prompt') + 1])
                 kwargs["stdout"].write(json.dumps({"type": "result", "is_error": False,
                     "result": "Done", "permission_denials": [{"tool_name": "Bash"}]}) + "\n")
                 return subprocess.CompletedProcess(argv, 0, "", "")

@@ -204,6 +204,16 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
     if settings is not None:
         argv += ["--settings", str(settings)]
         target = (add_dir or cwd).resolve()
+        staging = target / '.wf002-tmp'
+        system_policy += (
+            " All temporary telemetry metadata and collector outputs must be inside "
+            + staging.as_posix() + ", never in a separate OS temp directory. "
+            "Create staging directories with a separate shell mkdir command. "
+            "Use schema session_mode fresh for new Agent stages, actual model IDs "
+            "and observed timestamps. Use stage labels developer_implementation, "
+            "technical_lead_review, qa_verification and product_owner_closure for "
+            "the four corresponding completed stages."
+        )
         cleanup = 'rm -- ' + ' '.join('"' + (target / name).as_posix() + '"' for name in (
             '.claude/agents/retros/ST-000211_retro.md', '.claude/agents/tmp/pipeline_state.md'))
         system_policy += (" Final WF-002 cleanup is authorized only as this exact "
