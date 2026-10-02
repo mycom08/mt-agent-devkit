@@ -316,3 +316,19 @@ agent, generated a `raw_transcript` record in in-target staging, and published
 the unchanged record using Write to the protected token-metrics directory.
 One record with 2 measured requests was published with zero permission
 denials. All 16 preparation tests pass. Fresh installed runs remain required.
+
+### Fresh pair blocked by Claude session limit
+
+After commit `b8b7c57`, a fresh pair using the complete verified permission,
+cleanup, persistence and staging policy stopped during baseline init. Claude
+returned `is_error: true`, `terminal_reason: api_error`, and:
+`You've hit your session limit · resets 12:40pm (Asia/Bangkok)`.
+There were zero permission denials. The runner exited 1 and saved its summary;
+the candidate was not run. This is an account/session availability blocker,
+not the configured $4 per-session budget. G2/G6 remain unassessed.
+
+Raw artifacts: `wf002-installed-_2acal7p` under the local temporary directory.
+After the session limit resets, start a fresh pair with the committed runner;
+do not count this failed init or prior diagnostic recoveries as comparable
+evidence. All 16 preparation tests and four permission tests pass; one
+directory symlink case is skipped on this Windows host.
