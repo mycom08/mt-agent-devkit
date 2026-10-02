@@ -27,9 +27,9 @@ When posting comments on GitHub Issues:
 
 ---
 
-## 4. Stage-Transition Commit (mandatory before handoff)
+## 4. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

@@ -1,0 +1,130 @@
+{
+  "tested_source_sha": "e5de45bd65c5c0048b69c7d28472e076addfc1b8",
+  "installed_base_sha": "c87bcb567e10194b6022e02d4d3a174986fb9aaf",
+  "corrective_artifact_sha": "22f98258262bdff720c87643b6e0bf589d6780a1",
+  "corrective_merge_sha": "e61e1a4a7ef908023988fb392d55e3fb0cf2100e",
+  "recovery_session": {
+    "resolved_model_matches": false,
+    "exit_code": 0,
+    "duration_ms": 405922,
+    "result_present": true,
+    "is_error": false,
+    "blocked_signal": false,
+    "timed_out": false,
+    "permission_denials": 0,
+    "partial_assistant_events": 192,
+    "partial_model_ids": [
+      "claude-haiku-4-5-20251001",
+      "claude-opus-5-5",
+      "claude-sonnet-5-5"
+    ],
+    "truncated_events": 0,
+    "total_cost_usd": 3.876857250000001,
+    "stderr_present": false,
+    "stream_file": "recovery.jsonl"
+  },
+  "expected_changed_paths": [
+    "CHANGELOG.md",
+    "docs/feature/ST-000211/test-scenarios/ST-000211_Test_Scenarios.md",
+    "pricing.py",
+    "tests/feature/ST-000211/scripts/test_st_000211_scenarios.py"
+  ],
+  "actual_changed_paths": [
+    "CHANGELOG.md",
+    "docs/feature/ST-000211/test-scenarios/ST-000211_Test_Scenarios.md",
+    "pricing.py",
+    "tests/feature/ST-000211/scripts/test_st_000211_scenarios.py"
+  ],
+  "artifact_paths": {
+    "scenario_document": "docs/feature/ST-000211/test-scenarios/ST-000211_Test_Scenarios.md",
+    "scenario_script": "tests/feature/ST-000211/scripts/test_st_000211_scenarios.py"
+  },
+  "artifact_sha256": {
+    "docs/feature/ST-000211/test-scenarios/ST-000211_Test_Scenarios.md": "3409ea3041c941a41904004f4411a322a29bb0182f6d9e048762dd2ff5c64f8e",
+    "tests/feature/ST-000211/scripts/test_st_000211_scenarios.py": "18116bbdbdf2ada36c38ba0a0b3a79992b651c041bcf45104f2c0fc52db541f7"
+  },
+  "review_copies": {
+    "scenario_document": "ST211_Recovery_Scenario.md",
+    "scenario_script": "ST211_Recovery_Script.py"
+  },
+  "source_helper_parity": {
+    ".claude/agents/scripts/telemetry.py": true,
+    ".claude/agents/scripts/branch_preflight.py": true,
+    ".claude/agents/workflows/Shared_Pipeline_Stages.md": true
+  },
+  "main_unchanged": true,
+  "branch": "sprint-1-dev",
+  "runtime_tracked": [],
+  "tests": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "summary": [
+        "----------------------------------------------------------------------",
+        "Ran 6 tests in 0.000s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "python",
+        "tests/feature/ST-000211/scripts/test_st_000211_scenarios.py"
+      ],
+      "exit_code": 0,
+      "summary": [
+        "----------------------------------------------------------------------",
+        "Ran 7 tests in 0.000s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/feature/ST-000211/scripts",
+        "-v"
+      ],
+      "exit_code": 0,
+      "summary": [
+        "----------------------------------------------------------------------",
+        "Ran 7 tests in 0.000s",
+        "",
+        "OK"
+      ]
+    }
+  ],
+  "post_test_git_status": [],
+  "original_telemetry_unchanged": true,
+  "recovery_stage_rows": 5,
+  "outer_orchestrator_usage": "unavailable; resumed cumulative counters not added to fresh role totals",
+  "gate_g2": "unassessed",
+  "gate_g6": "unassessed",
+  "independent_recovery_assessment": "PASS: GPT QA reconciled all five fresh stage records with their actual transcripts and verified authoritative scan, committed QA artifacts, exact-head TL/QA gates, PO closure and post-run cleanliness",
+  "capture_sha256": {
+    "recovery.jsonl": "59f5bf622844780ec95c734d25617e5c788571617be79e6ebb479f8b45b7dad6",
+    "recovery-session.json": "953f3842e49b9ddcbe1be360920d861a2e14f41b1f74bab611295bbb2971fbb2"
+  },
+  "source_script_byte_parity": {
+    "telemetry.py": true,
+    "branch_preflight.py": true
+  },
+  "parity_hash_normalization": "Initial installed snapshot uses CRLF-to-LF normalization; source export and installed scripts are also byte identical",
+  "raw_bytes_match_initial_normalized_digest": {
+    ".claude/agents/scripts/telemetry.py": false,
+    ".claude/agents/scripts/branch_preflight.py": false,
+    ".claude/agents/workflows/Shared_Pipeline_Stages.md": true
+  }
+}

@@ -1,6 +1,6 @@
 # Sync Devkit Project Workflow
 
-> **Note:** This file is for reference only in the devkit repo. The `sync devkit` command runs in a **project-orchestrator root folder** (injected by `build software`'s Stage 4 Path B), not in the devkit itself. This is the orchestrator-scoped counterpart to the regular-repo `Sync_Devkit_Workflow.md` — much smaller, since this folder owns only 3 devkit-templated files instead of a full Scrum-team scaffold.
+> **Note:** This file is for reference only in the devkit repo. The `sync devkit` command runs in a **project-orchestrator root folder** (injected by `build software`'s Stage 4 Path B), not in the devkit itself. This is the orchestrator-scoped counterpart to the regular-repo `Sync_Devkit_Workflow.md` — much smaller, since this folder owns a small orchestrator file set plus four scripts instead of a full Scrum-team scaffold.
 
 Triggered by: `"sync devkit"` or `"sync devkit --auto"` in this project-orchestrator folder's `{{ROOT_FILE}}`
 
@@ -49,16 +49,20 @@ If either field is missing or contains a placeholder URL, stop and notify the us
 
 ## Stage 1 — Resolve Changed Files
 
-Fetch `{DEVKIT_RAW_BASE}/changes.json` to determine which of this folder's 3 owned files need updating. Use the same version-range resolution as the regular-repo workflow: collect every version between `CURRENT_VERSION` (exclusive) and `LATEST_VERSION` (inclusive), gather each version's listed files, deduplicate. A missing version key still means "trigger full scan," but here a full scan only ever concerns the 3 files this folder owns — never fetch or reason about rules/instructions/memory/wiki files, none of which exist in this folder.
+Fetch `{DEVKIT_RAW_BASE}/changes.json` to determine which of this folder's owned files and four scripts need updating. Use the same version-range resolution as the regular-repo workflow: collect every version between `CURRENT_VERSION` (exclusive) and `LATEST_VERSION` (inclusive), combine each version's `files`, `new`, and `modified` arrays (missing arrays are empty), deduplicate. A missing version key still means "trigger full scan," but here a full scan only ever concerns the owned files and four scripts — never fetch or reason about rules/instructions/memory/wiki files, none of which exist in this folder.
 
 From the resolved file set, keep only the files relevant to this folder (ignore any entry for a regular-repo-only path like `templates/rules/*` or `templates/instructions/*` — those never apply here):
 
 | File | Relevant `changes.json` path |
 |---|---|
-| `{{ROOT_FILE}}` | `{{AGENT_DIR_PREFIX}}/agents/templates/Project_Root_template.md` |
-| `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` | `{{AGENT_DIR_PREFIX}}/agents/templates/context/Project_Root_Priming_template.md` |
-| `{{AGENT_DIR_PREFIX}}/agents/workflows/Build_Software_Project_Workflow.md` | `{{AGENT_DIR_PREFIX}}/agents/templates/workflows/Build_Software_Project_Workflow_template.md` |
-| `{{AGENT_DIR_PREFIX}}/agents/workflows/Sync_Devkit_Project_Workflow.md` (this file) | `{{AGENT_DIR_PREFIX}}/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md` |
+| `{{ROOT_FILE}}` | `.claude/agents/templates/Project_Root_template.md` |
+| `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` | `.claude/agents/templates/context/Project_Root_Priming_template.md` |
+| `{{AGENT_DIR_PREFIX}}/agents/workflows/Build_Software_Project_Workflow.md` | `.claude/agents/templates/workflows/Build_Software_Project_Workflow_template.md` |
+| `{{AGENT_DIR_PREFIX}}/agents/workflows/Sync_Devkit_Project_Workflow.md` (this file) | `.claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md` |
+| `{{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py` | `.claude/agents/templates/scripts/branch_preflight.py` |
+| `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.ps1` | `.claude/agents/templates/scripts/check_devkit_version.ps1` |
+| `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.sh` | `.claude/agents/templates/scripts/check_devkit_version.sh` |
+| `{{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py` | `.claude/agents/templates/scripts/telemetry.py` |
 
 ### Update plan
 
@@ -140,8 +144,12 @@ Fetch and write verbatim (strip the `_template` suffix). This file updates itsel
 
 **Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.ps1`
           `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.sh`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/telemetry.py`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/branch_preflight.py`
 **Target:** `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.ps1`
           `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.sh`
+          `{{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py`
+          `{{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py`
 
 Fetch and write verbatim. These are identical to the regular-repo versions — no orchestrator-specific behavior.
 
@@ -150,6 +158,30 @@ Fetch and write verbatim. These are identical to the regular-repo versions — n
 Check `{{AGENT_DIR_PREFIX}}/settings.json` for the devkit update-check hook:
 - If a `SessionStart` entry whose command references `check_devkit_version` already exists → skip
 - If missing → inject it using the same OS-detection logic as `scaffold_mechanical.sh`'s settings.json step (merge into existing `settings.json`, or create it if absent)
+
+---
+
+### Legacy runtime-state migration
+
+Run this compatibility check after scripts/rules are updated and before reporting readiness for new stories. Append missing ignore entries without replacing existing project patterns:
+
+```gitignore
+{{AGENT_DIR_PREFIX}}/agents/memory/
+{{AGENT_DIR_PREFIX}}/agents/working-record/
+{{AGENT_DIR_PREFIX}}/agents/retros/
+{{AGENT_DIR_PREFIX}}/agents/tmp/
+{{AGENT_DIR_PREFIX}}/agents/internal/
+```
+
+Strict mode's existing blanket `{{AGENT_DIR_PREFIX}}/agents/` ignore already covers these entries; do not untrack its scaffold automatically. In GitHub mode, inspect tracked runtime files with `git ls-files --` for the five directories above. Ignore patterns do not remove already tracked files.
+
+If any runtime files are tracked, report their exact paths and mark migration pending. **--auto does not authorize** index removal, branch creation, committing, pushing, or changing story metadata. Obtain explicit authorization for a separate one-time maintenance migration, with its reviewed base and exact file allowlist. The maintenance migration is an explicit exception for legacy configuration, not automatic recovery from a BLOCKED story preflight. Stop on unrelated dirty files, unpushed commits, or an unsynchronized base; do not stash, reset, rebase, or delete files.
+
+Before switching to that authorized maintenance branch, copy every reviewed runtime file to a user-selected local backup outside the checkout and record its content hash; never commit the backup. On the maintenance branch, remove only reviewed runtime paths from the index using `git rm --cached -- "<reviewed-runtime-file>"` (one exact path per invocation; no wildcard or recursive filesystem deletion). Commit the ignore additions and index removals as an ordinary migration change, review/merge it through the project's required gates, and synchronize the selected base normally. Switching/merging the old base can delete formerly tracked working files despite `--cached`; after base synchronization, restore missing runtime files from the backup and verify every original content hash. Keep the backup local until verification succeeds. Verify local memory files still exist, historical commits still retain their original contents, and runtime files are absent from `git ls-files` on the new base. Do not rewrite published history. Never commit runtime content merely to unblock preflight.
+
+For every legacy ready/in-progress story missing **Base Branch**, ask the user/PO to confirm its intended existing base from the story/sprint decision; do not guess `main`, the current branch, or a default. PO records the confirmed `**Base Branch:**` once in the GitHub issue (strict mode: local story). Treat it as immutable thereafter; record unresolved stories as migration pending. In-progress stories keep their approved branch/SHA and do not create a replacement branch. A project-orchestrator root applies this check only to its own files; each roster repository performs its own migration and story decisions.
+
+After the reviewed migration lands, rerun installed `branch_preflight.py inspect` for the confirmed base before new story creation. A PASS must identify a clean synchronized base and no tracked runtime state. If it remains BLOCKED, report the exact reason and take no automatic recovery action. Include pending migrations or missing Base Branch decisions in the completion report; updated templates alone do not prove story readiness.
 
 ---
 
@@ -176,9 +208,9 @@ Skipped (project-owned):
 - **Every remote read is pinned to the release tag** — `{DEVKIT_RAW_BASE}` resolved in Stage 0, never `/main`. A fetch from `main` would deliver unreleased content under a released version number
 - **Never write before user confirms** in Stage 1 — unless `--auto` flag was passed
 - **Never overwrite** `context/Project_Priming.md` — 100% project-owned
-- **Only 3 files are ever in scope** — `{{ROOT_FILE}}`, `context/Project_Priming.md` (skip), `workflows/Build_Software_Project_Workflow.md`, plus this workflow file itself. Ignore any `changes.json` entry for a regular-repo-only path (rules/instructions/memory/working-record/wiki) — those never apply to this folder.
+- **Only the owned orchestrator files and four scripts are in scope** — `{{ROOT_FILE}}`, `context/Project_Priming.md` (skip), `workflows/Build_Software_Project_Workflow.md`, plus this workflow file itself and the four script files listed in Stage 1. Ignore any `changes.json` entry for a regular-repo-only path (rules/instructions/memory/working-record/wiki) — those never apply to this folder.
 - **Fail safe on network error** — if any fetch fails, log it and skip that file; never write partial content
 - **WebFetch fallback** — if WebFetch returns truncated or summarized content, retry with `curl -sf`; never write content that appears incomplete
-- **Missing version in changes.json = full scan** — scoped to the 3 files above only, never the regular-repo file set
+- **Missing version in changes.json = full scan** — scoped to the owned files and four scripts above only, never the regular-repo file set
 - **Log every file written** — the user must be able to see exactly what changed
 - **This file updates itself** — `Sync_Devkit_Project_Workflow.md` is in the overwrite list; the new version takes effect after this run completes

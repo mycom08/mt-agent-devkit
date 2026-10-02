@@ -80,11 +80,11 @@ Measured on 2026-08-21: both baseline-arm agents, in separate runs, reported tha
 1. Create the paired issues (§4) and confirm both arms' bases (§2).
 2. Snapshot the two untracked directories into the scratchpad:
    `cp -r .claude/agents/working/working-record .claude/agents/working/token-trace_sprint <scratchpad>/bench-snapshot/`
-3. `git checkout -b bench-b/<slug> <baseline>` — spawn Developer on the arm B issue.
+3. With an explicit checked-out benchmark base branch at `<baseline>`, run `branch_preflight.py inspect --mode strict --base <benchmark-base> --story-branch bench-b/<slug>`, then `create` using its verified full SHA — spawn Developer on the arm B issue only after successful verification.
 4. **Paste the trace block verbatim** from `orchestrator_instructions.md § Token-Trace Log`. Without it the agent produces no trace and the run is wasted.
 5. On completion, append the real `subagent_tokens` to the trace file, labelled `session-cumulative` or `per-call` — or `(unlabelled)` if the report does not say. Never write a derived figure as a measurement.
 6. Restore the snapshot from step 2.
-7. `git checkout -b bench-a/<slug> <treatment>` — repeat steps 3–5 for arm A.
+7. With an explicit checked-out benchmark base branch at `<treatment>`, run `branch_preflight.py inspect --mode strict --base <benchmark-base> --story-branch bench-a/<slug>`, then `create` using its verified full SHA — repeat steps 3–5 for arm A only after successful verification.
 8. Compare, then clean up (§7).
 
 ## 6. Reading the result

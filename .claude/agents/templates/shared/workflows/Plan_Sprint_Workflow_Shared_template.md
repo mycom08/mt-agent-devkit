@@ -106,11 +106,11 @@ Before spawning any agent, the orchestrator resolves the sprint context.
    - **Non-feature sprint**:
      - **GitHub mode:** GitHub issue labels are the only artifact — no Sprint Overview file needed
      - **Strict mode:** create `{{AGENT_DIR_PREFIX}}/agents/docs/sprints/sprint_N_overview.md` listing selected story IDs, titles, points, and total capacity used
-4. PO creates stories for any backlog items that do not yet have a story record:
-   - **GitHub mode:** create GitHub Issues following `Story_Standard_PO.md` §13; use `--body-file` pattern per `Agent_Common_Bootstrap.md §6`; create `sprint-N` label first if it does not exist; apply labels:
+4. PO creates stories for any backlog items that do not yet have a story record. Before creating one, obtain the exact existing base branch from the approved sprint plan or ask the user; never infer it from checkout:
+   - **GitHub mode:** create GitHub Issues following `Story_Standard_PO.md` §13 with immutable `**Base Branch:** <selected branch>` inside every issue body; use `--body-file` pattern per `Agent_Common_Bootstrap.md §6`; create `sprint-N` label first if it does not exist; apply labels:
      - **Feature story:** `status:backlog` + `feature:<feature_name>` + `phase-N` + `sprint-N`
      - **Non-feature story:** `status:backlog` + `sprint-N`
-   - **Strict mode:** for each new story, increment `story_counter.txt`, write `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` with `**Status:** backlog`, `**Sprint:** sprint-N`, `**Feature:**` and `**Phase:**` fields set; report file paths to PO
+   - **Strict mode:** for each new story, increment `story_counter.txt`, write `{{AGENT_DIR_PREFIX}}/agents/docs/stories/ST-XXXXXX.md` with `**Status:** backlog`, `**Sprint:** sprint-N`, `**Feature:**`, `**Phase:**`, and immutable `**Project Base Branch:** <selected branch>` fields set; the execution `**Base Branch:** sprint-N-dev` is recorded only after strict pre-flight verifies it; report file paths to PO
    - **Roadmap-sourced stories:** when a story is drafted from a roadmap doc, echo the roadmap's phase number as a separate `**Roadmap Phase:** Phase N — <theme>` line in the body. The roadmap phase is a global, cross-repo thematic sequence; the `sprint-N` label is this repo's own local execution counter (starting at 1) — the two are independent numbering systems and must not be conflated
 5. PO deletes `{{AGENT_DIR_PREFIX}}/agents/tmp/PO_questions.md` if it exists
 6. PO updates Working Record
