@@ -13,6 +13,8 @@ FIXTURE = Path(__file__).with_name("fixtures") / "WF-002-business-logic"
 MANIFEST = Path(__file__).with_name("installed_benchmark_manifest.json")
 STAGE_ROLES = {"developer_implementation": "Developer", "technical_lead_review": "TL",
                "qa_verification": "QA", "product_owner_closure": "PO"}
+STAGE_MODEL_FAMILIES = {"developer_implementation": "sonnet", "technical_lead_review": "opus",
+                        "qa_verification": "sonnet", "product_owner_closure": "haiku"}
 GUIDANCE_FILES = [".claude/agents/templates/rules/Agent_Common_Bootstrap_template.md",
                   ".claude/agents/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md",
                   ".claude/agents/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md"]
@@ -50,7 +52,7 @@ def validate_template_delta(command, refs: dict[str, str]) -> None:
         raise ValueError("Source arms do not isolate the three FIX-02 guidance files")
 
 
-def inspect_telemetry(target: Path, expected_model: str | None = None) -> dict:
+def inspect_telemetry(target: Path, expected_model: str | dict | None = None) -> dict:
     rows, errors = [], []
     for path in sorted((target / ".claude/agents/tmp/token-metrics").glob("*.jsonl")):
         try:
@@ -72,7 +74,10 @@ def inspect_telemetry(target: Path, expected_model: str | None = None) -> dict:
         if (row["story_id"] != "ST-000211" or row["role"] != STAGE_ROLES.get(row["stage"])
                 or row["session_mode"] != "fresh" or row["completion_status"] != "completed"):
             errors.append("Stage identity, role, session or completion mismatch")
-        if expected_model is not None and row["model"] != expected_model:
+        family = expected_model.get(row["stage"]) if isinstance(expected_model, dict) else None
+        if family and not re.fullmatch(r"claude-" + re.escape(family) + r"-[A-Za-z0-9._-]+", row["model"]):
+            errors.append("Stage model differs from workflow model family")
+        if isinstance(expected_model, str) and row["model"] != expected_model:
             errors.append("Stage model differs from frozen configuration")
         start = telemetry.validate_utc_timestamp("started_at", row["started_at"])
         end = telemetry.validate_utc_timestamp("ended_at", row["ended_at"])
@@ -84,7 +89,54 @@ def inspect_telemetry(target: Path, expected_model: str | None = None) -> dict:
             "measured_usage_for_every_stage": present and not errors and all(
                 row["usage_source"] == "raw_transcript" for row in rows),
             "errors": sorted(set(errors)),
+            "observed_stage_models": {row["stage"]: row["model"] for row in rows},
             "provenance_review": "pending independent source-transcript review"}
+
+
+def installed_snapshot(target: Path, source: Path | None = None) -> dict[str, str]:
+    """Fingerprint all initial instruction/context/skill/state inputs, excluding tmp.
+
+    Only the three exact source-derived FIX-02 files are canonicalized between
+    arms. Adaptive files and additional files retain their full content hashes.
+    """
+    paths = [target / "CLAUDE.md"] + sorted((target / ".claude").rglob("*"))
+    result = {}
+    guidance = {".claude/agents/rules/Agent_Common_Bootstrap.md": GUIDANCE_FILES[0],
+        ".claude/agents/workflows/Create_Stories_Workflow.md": GUIDANCE_FILES[1],
+        ".claude/agents/workflows/Refine_Prototype_Workflow.md": GUIDANCE_FILES[2]}
+    for path in paths:
+        name = path.relative_to(target).as_posix()
+        if name.startswith(".claude/agents/tmp/") or "__pycache__" in path.parts:
+            continue
+        if path.is_symlink() or not path.resolve().is_relative_to(target.resolve()):
+            raise ValueError("Installed input redirects outside target")
+        if not path.is_file():
+            continue
+        content = path.read_bytes().replace(b"\r\n", b"\n")
+        if source and name in guidance:
+            template = (source / guidance[name]).read_text(encoding="utf-8-sig")
+            if "/shared/" in guidance[name]:
+                template = template.split("<!-- SHARED-START -->", 1)[1].split("<!-- SHARED-END -->", 1)[0]
+                template = template.removeprefix("\n")
+                workflow = path.stem
+                mode = (source / ".claude/agents/templates/strict/workflows" / (workflow + "_template.md")).read_text(encoding="utf-8-sig")
+                body = "\n".join(line for line in mode.splitlines()[1:]
+                    if not re.fullmatch(r"<!--.*-->\s*", line)).strip("\n")
+                if body.strip():
+                    template += "\n---\n\n" + body + "\n"
+            for key, value in {"{{AGENT_DIR_PREFIX}}": ".claude", "{{ROOT_FILE}}": "CLAUDE.md",
+                               "{{AGENT_CLI_NAME}}": "Claude Code"}.items():
+                template = template.replace(key, value)
+            if content != template.encode("utf-8"):
+                raise ValueError("Installed guidance differs from pinned source: " + name)
+            content = b"verified FIX-02 guidance variation"
+        result[name] = hashlib.sha256(content).hexdigest()
+    return result
+
+
+def validate_installation_parity(actual: dict, reference: dict) -> None:
+    if actual != reference:
+        raise ValueError("Installed benchmark inputs differ outside verified FIX-02 guidance")
 
 
 def inspect_review_evidence(path: Path, target: Path, implementation_sha: str) -> dict:

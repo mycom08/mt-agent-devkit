@@ -33,3 +33,7 @@ The findings below describe the initial review. The offline follow-up now implem
 The distributed-template comparison `git diff 7d44623..13e1421 --name-only -- .claude/agents/templates` contains exactly the common bootstrap, Create Stories shared workflow and Refine Prototype shared workflow guidance files. Supporting telemetry and preflight code are identical between these proposed arms. Their full commit IDs must be recorded in the installed configuration before execution.
 
 This is a preparation review, not an independent TL/QA approval or a benchmark verdict.
+
+## Review fixes — offline follow-up
+
+Three confirmed gaps are corrected: failed candidate arms stop all repetitions; model checks follow Sonnet/Opus/Sonnet/Haiku stage allocation and enforce exact observed-ID parity; full initial installation fingerprints reject role/context/extra-file divergence before subsequent story runs, except the three exact source-verified FIX-02 guidance variants. Negative regressions and a shared-template assembly check were added. No fresh Claude execution or G2/G5/G6 acceptance resulted.

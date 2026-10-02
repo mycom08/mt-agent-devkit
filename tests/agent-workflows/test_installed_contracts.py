@@ -23,6 +23,74 @@ def records():
 
 
 class ContractTests(unittest.TestCase):
+    def test_workflow_models_accept_opus_tl_and_haiku_po_but_reject_wrong_family(self):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder)
+            path = target / ".claude/agents/tmp/token-metrics/run.jsonl"
+            path.parent.mkdir(parents=True)
+            rows = records()
+            for row in rows:
+                row["model"] = "claude-" + c.STAGE_MODEL_FAMILIES[row["stage"]] + "-test"
+            path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+            self.assertTrue(c.inspect_telemetry(target, c.STAGE_MODEL_FAMILIES)["measured_usage_for_every_stage"])
+            rows[1]["model"] = "claude-sonnet-test"
+            path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+            self.assertFalse(c.inspect_telemetry(target, c.STAGE_MODEL_FAMILIES)["schema_and_identity_valid"])
+
+    def test_snapshot_rejects_context_role_and_extra_file_drift(self):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder)
+            (target / "CLAUDE.md").write_text("strict", encoding="utf-8")
+            for name in ("developer_instructions.md", "context/Project_Priming.md", "rules/extra.md"):
+                path = target / ".claude/agents" / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("frozen", encoding="utf-8")
+            reference = c.installed_snapshot(target)
+            for name in ("developer_instructions.md", "context/Project_Priming.md", "rules/extra.md"):
+                path = target / ".claude/agents" / name
+                path.write_text("changed", encoding="utf-8")
+                with self.subTest(name=name), self.assertRaises(ValueError):
+                    c.validate_installation_parity(c.installed_snapshot(target), reference)
+                path.write_text("frozen", encoding="utf-8")
+            (target / ".claude/agents/extra.md").write_text("extra", encoding="utf-8")
+            with self.assertRaises(ValueError):
+                c.validate_installation_parity(c.installed_snapshot(target), reference)
+
+    def test_only_exact_source_guidance_is_canonicalized(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            snapshots = []
+            for arm in ("baseline", "candidate"):
+                target, source = root / arm / "target", root / arm / "source"
+                installed = target / ".claude/agents/rules/Agent_Common_Bootstrap.md"
+                installed.parent.mkdir(parents=True)
+                template = source / c.GUIDANCE_FILES[0]
+                template.parent.mkdir(parents=True)
+                template.write_text("# " + arm + "\n{{AGENT_DIR_PREFIX}}\n", encoding="utf-8")
+                installed.write_text("# " + arm + "\n.claude\n", encoding="utf-8")
+                snapshots.append(c.installed_snapshot(target, source))
+                installed.write_text("unapproved guidance", encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "pinned source"):
+                    c.installed_snapshot(target, source)
+            c.validate_installation_parity(*snapshots)
+
+    def test_shared_guidance_matches_scaffold_combination_and_substitutions(self):
+        with tempfile.TemporaryDirectory() as folder:
+            target, source = Path(folder) / "target", Path(folder) / "source"
+            shared = source / c.GUIDANCE_FILES[1]
+            shared.parent.mkdir(parents=True)
+            shared.write_text("<!-- header -->\n<!-- SHARED-START -->\n# Shared\n{{ROOT_FILE}}\n<!-- SHARED-END -->\n", encoding="utf-8")
+            mode = source / ".claude/agents/templates/strict/workflows/Create_Stories_Workflow_template.md"
+            mode.parent.mkdir(parents=True)
+            mode.write_text("<!-- Shared logic -->\n\n<!-- comment -->\n# Strict\n{{AGENT_DIR_PREFIX}}\n\n", encoding="utf-8")
+            installed = target / ".claude/agents/workflows/Create_Stories_Workflow.md"
+            installed.parent.mkdir(parents=True)
+            installed.write_text("# Shared\nCLAUDE.md\n\n---\n\n# Strict\n.claude\n", encoding="utf-8")
+            c.installed_snapshot(target, source)
+            installed.write_text(installed.read_text(encoding="utf-8") + "extra", encoding="utf-8")
+            with self.assertRaises(ValueError):
+                c.installed_snapshot(target, source)
+
     def test_frozen_configuration_rejects_each_changed_field_and_extra_keys(self):
         frozen = {"cli": "pinned", "refs": {"baseline": "a", "candidate": "b"}, "budget": 4}
         c.validate_configuration(copy.deepcopy(frozen), frozen)

@@ -30,6 +30,8 @@ REQUIRED_INSTALLED = (
     ".claude/agents/orchestrator_instructions.md",
     ".claude/agents/workflows/Start_Story_Workflow.md",
     ".claude/agents/workflows/Shared_Pipeline_Stages.md",
+    ".claude/agents/workflows/Create_Stories_Workflow.md",
+    ".claude/agents/workflows/Refine_Prototype_Workflow.md",
     ".claude/agents/rules/Agent_Common_Bootstrap.md",
     ".claude/agents/rules/Story_Standard.md",
     ".claude/agents/scripts/branch_preflight.py",
@@ -132,8 +134,7 @@ def verify_install(target: Path) -> dict[str, str]:
         raise ValueError(f"Installed adaptive files are incomplete: {', '.join(unresolved)}")
     if command(["git", "remote"], target).stdout.strip():
         raise ValueError("Installed target acquired a remote")
-    return {name: hashlib.sha256((target / name).read_bytes()).hexdigest()
-            for name in REQUIRED_INSTALLED}
+    return contracts.installed_snapshot(target)
 
 
 def add_story(target: Path) -> None:
@@ -330,7 +331,7 @@ def inspect_product_diff(target: Path, base_sha: str) -> dict[str, object]:
 
 
 def inspect_stage_telemetry(target: Path) -> dict[str, object]:
-    return contracts.inspect_telemetry(target, EXPECTED_MODEL)
+    return contracts.inspect_telemetry(target, contracts.STAGE_MODEL_FAMILIES)
 
 
 def inspect_story_quality(target: Path) -> dict[str, object]:
@@ -365,7 +366,8 @@ def inspect_story_quality(target: Path) -> dict[str, object]:
             and int(count.group(1)) == verification["expected_tests"]}
 
 
-def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, object]:
+def run_side(label: str, ref: str, artifacts: Path, budget: float,
+             reference_install: dict | None = None) -> dict[str, object]:
     side = artifacts / label
     side.mkdir()
     source, target = side / "devkit", side / "target"
@@ -391,6 +393,9 @@ def run_side(label: str, ref: str, artifacts: Path, budget: float) -> dict[str, 
         return result
     try:
         result["installed_file_sha256"] = verify_install(target)
+        result["comparison_input_sha256"] = contracts.installed_snapshot(target, source)
+        if reference_install is not None:
+            contracts.validate_installation_parity(result["comparison_input_sha256"], reference_install)
     except ValueError as exc:
         result["blocked_reason"] = str(exc)
         return result
@@ -425,7 +430,7 @@ def assess_quality(side: Path, base_sha: str) -> dict[str, object]:
     result["story_quality"] = inspect_story_quality(target)
     result["review_evidence"] = contracts.inspect_review_evidence(
         side / "quality-review.json", target, result["product_diff"].get("implementation_sha") or "")
-    result["automated_quality_checks_pass"] = all((
+    result["capture_prerequisites_pass"] = all((
         result["product_diff"].get("product_paths_match"),
         result["product_diff"].get("pricing_change_exact"),
         result["product_diff"].get("working_tree_clean"),
@@ -435,9 +440,10 @@ def assess_quality(side: Path, base_sha: str) -> dict[str, object]:
         result["story_quality"].get("tests_pass"),
         result["story_quality"].get("acceptance_criteria_complete"),
         result["story_quality"].get("story_status") == "done",
-        result["review_evidence"].get("evidence_valid"), not result["remote"]))
+        not result["remote"]))
     result["main_unchanged"] = command(["git", "rev-parse", "main"], target).stdout.strip() == base_sha
-    result["automated_quality_checks_pass"] = bool(result["automated_quality_checks_pass"] and result["main_unchanged"])
+    result["capture_prerequisites_pass"] = bool(result["capture_prerequisites_pass"] and result["main_unchanged"])
+    result["automated_quality_checks_pass"] = bool(result["capture_prerequisites_pass"] and result["review_evidence"].get("evidence_valid"))
     result["gate_g2"] = "unassessed"
     return result
 
@@ -503,6 +509,9 @@ def main() -> int:
     config["session_persistence"] = True
     config["permission_handler_sha256"] = contracts.source_digest(Path(__file__).with_name("headless_permissions.py"))
     config["expected_resolved_model"] = EXPECTED_MODEL
+    config["stage_model_families"] = contracts.STAGE_MODEL_FAMILIES
+    config["stage_resolved_id_policy"] = "exactly equal across arms and repetitions; backend revision unavailable"
+    config["installation_parity_policy"] = "full initial CLAUDE.md and .claude file inventory; only source-verified FIX-02 guidance canonicalized; tmp excluded"
     config["python_version"] = platform.python_version()
     config["fixture_sha256"] = contracts.fixture_hashes()
     config["source_sha256"] = {name: contracts.source_digest(Path(__file__).with_name(name)) for name in
@@ -519,14 +528,28 @@ def main() -> int:
     if any(artifacts.iterdir()):
         parser.error("Artifacts directory must be empty")
     summary: dict[str, object] = {"config": config, "sides": [], "gate_g2": "unassessed"}
+    reference_install, reference_models = None, None
+    stopped = False
     try:
         for repetition in range(1, args.repetitions + 1):
             for label, ref in refs.items():
-                side = run_side(f"{label}-{repetition}", ref, artifacts, args.max_budget_usd)
+                side = run_side(f"{label}-{repetition}", ref, artifacts, args.max_budget_usd, reference_install)
                 summary["sides"].append(side)
                 if not side["installed"] or not side["story_started"]:
+                    stopped = True
                     break
-            if len(summary["sides"]) != repetition * len(refs):
+                if reference_install is None:
+                    reference_install = side["comparison_input_sha256"]
+                models = side.get("stage_telemetry", {}).get("observed_stage_models", {})
+                if reference_models is None:
+                    reference_models = models
+                if (not side.get("capture_prerequisites_pass")
+                        or models != reference_models):
+                    side["story_started"] = False
+                    side["blocked_reason"] = "Stage telemetry/model parity failed; stop all remaining arms"
+                    stopped = True
+                    break
+            if stopped:
                 break
     finally:
         (artifacts / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

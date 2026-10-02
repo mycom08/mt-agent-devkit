@@ -26,6 +26,14 @@
   "session_persistence": true,
   "permission_handler_sha256": "908fc97a311de92ea0afa126e6497b465182735947eb4343448a476e5b8e478c",
   "expected_resolved_model": "claude-sonnet-5-5",
+  "stage_model_families": {
+    "developer_implementation": "sonnet",
+    "technical_lead_review": "opus",
+    "qa_verification": "sonnet",
+    "product_owner_closure": "haiku"
+  },
+  "stage_resolved_id_policy": "exactly equal across arms and repetitions; backend revision unavailable",
+  "installation_parity_policy": "full initial CLAUDE.md and .claude file inventory; only source-verified FIX-02 guidance canonicalized; tmp excluded",
   "python_version": "3.12.10",
   "fixture_sha256": {
     "expected.json": "54bc7d39a40a34fa1a55cfe3222278736c6fe33e69b0e2a015f6848eec782dc0",
@@ -36,8 +44,8 @@
     "story.md": "1ea57691d65c80138f1a99e08cf8aa1d2cd4bdeb1886104873923082ce6ccede"
   },
   "source_sha256": {
-    "run_installed_wf002.py": "6e36a99e9d792a3fff249192a7b45f5924174cbf16ab57c3b49e04f60cec6852",
-    "installed_contracts.py": "65aacd3856db6f75d2e2e566a44632f44bef6149266762ae6d4c5895c0a3b1fa",
+    "run_installed_wf002.py": "dad47c742a2fd5631f859d02fcb2199641333faaf03be22b399bf278cf0d7208",
+    "installed_contracts.py": "ea878242dc58728c30ecf326b2dc1a58d0e8b291db42fef9f27cce6aadb5da8a",
     "headless_permissions.py": "908fc97a311de92ea0afa126e6497b465182735947eb4343448a476e5b8e478c"
   }
 }

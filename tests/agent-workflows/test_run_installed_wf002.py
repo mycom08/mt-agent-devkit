@@ -22,6 +22,69 @@ spec.loader.exec_module(runner)
 
 
 class InstalledPreparationTests(unittest.TestCase):
+    def test_installation_mismatch_stops_before_story_execution(self):
+        success = {"exit_code": 0, "result_present": True, "is_error": False,
+                   "blocked_signal": False, "timed_out": False}
+        with tempfile.TemporaryDirectory() as folder, patch.object(runner, "export_source"), \
+             patch.object(runner, "seed_target"), patch.object(runner, "verify_install", return_value={}), \
+             patch.object(runner.contracts, "installed_snapshot", return_value={"context": "changed"}), \
+             patch.object(runner, "run_cli", return_value=success) as agent, \
+             patch.object(runner, "commit_install_scaffold") as commit, \
+             patch.object(runner, "add_story") as story:
+            result = runner.run_side("candidate-1", "a" * 40, Path(folder), 4, {"context": "frozen"})
+        self.assertFalse(result["installed"])
+        self.assertFalse(result["story_started"])
+        self.assertIn("inputs differ", result["blocked_reason"])
+        self.assertEqual(agent.call_count, 1)
+        commit.assert_not_called()
+        story.assert_not_called()
+
+    def test_failed_arm_stops_every_remaining_repetition_and_preserves_summary(self):
+        frozen = json.loads(runner.contracts.MANIFEST.read_text(encoding="utf-8"))
+        original = runner.command
+        def fake_command(argv, cwd, **kwargs):
+            if argv == ["claude", "--version"]:
+                return Mock(stdout=frozen["cli_version"])
+            return original(argv, cwd, **kwargs)
+        for failed_label in ("baseline-1", "candidate-1", "candidate-2", None):
+            calls = []
+            def fake_side(label, ref, artifacts, budget, reference):
+                calls.append(label)
+                return {"label": label, "installed": True, "story_started": label != failed_label,
+                        "comparison_input_sha256": {}, "capture_prerequisites_pass": True,
+                        "stage_telemetry": {"observed_stage_models": {"TL": "opus-pinned"}}}
+            with tempfile.TemporaryDirectory() as folder:
+                with patch.object(runner, "command", side_effect=fake_command), \
+                     patch.object(runner, "run_side", side_effect=fake_side), \
+                     patch.object(sys, "argv", ["runner", "--execute", "--artifacts-dir", folder]), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(runner.main(), 1 if failed_label else 2)
+                if failed_label:
+                    self.assertEqual(calls[-1], failed_label)
+                else:
+                    self.assertEqual(calls, ["baseline-1", "candidate-1", "baseline-2",
+                                             "candidate-2", "baseline-3", "candidate-3"])
+                summary = json.loads((Path(folder) / "summary.json").read_text(encoding="utf-8"))
+                self.assertEqual(len(summary["sides"]), len(calls))
+
+    def test_stage_model_drift_stops_after_candidate_capture(self):
+        frozen = json.loads(runner.contracts.MANIFEST.read_text(encoding="utf-8"))
+        original = runner.command
+        def fake_command(argv, cwd, **kwargs):
+            return Mock(stdout=frozen["cli_version"]) if argv == ["claude", "--version"] else original(argv, cwd, **kwargs)
+        calls = []
+        def fake_side(label, ref, artifacts, budget, reference):
+            calls.append(label)
+            return {"label": label, "installed": True, "story_started": True,
+                    "comparison_input_sha256": {}, "capture_prerequisites_pass": True,
+                    "stage_telemetry": {"observed_stage_models": {"TL": label}}}
+        with tempfile.TemporaryDirectory() as folder, patch.object(runner, "command", side_effect=fake_command), \
+             patch.object(runner, "run_side", side_effect=fake_side), \
+             patch.object(sys, "argv", ["runner", "--execute", "--artifacts-dir", folder]), \
+             contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(runner.main(), 1)
+        self.assertEqual(calls, ["baseline-1", "candidate-1"])
+
     def test_verifier_rejects_unfinished_init_state(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory)
@@ -106,7 +169,14 @@ class InstalledPreparationTests(unittest.TestCase):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("adapted\n", encoding="utf-8")
             hashes = runner.verify_install(target)
-            self.assertEqual(set(hashes), set(runner.REQUIRED_INSTALLED))
+            self.assertTrue(set(runner.REQUIRED_INSTALLED).issubset(hashes))
+            self.assertIn(".claude/agents/developer_instructions.md", hashes)
+            self.assertIn(".claude/agents/context/Project_Priming.md", hashes)
+            (target / ".claude/agents/developer_instructions.md").write_text("Different instructions\n", encoding="utf-8")
+            changed = runner.verify_install(target)
+            self.assertNotEqual(hashes, changed)
+            with self.assertRaisesRegex(ValueError, "inputs differ"):
+                runner.contracts.validate_installation_parity(changed, hashes)
             (target / ".claude/agents/context/Project_Priming.md").write_text(
                 "{project-name}\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "adaptive files are incomplete"):
@@ -271,7 +341,7 @@ class InstalledPreparationTests(unittest.TestCase):
             rows = [runner.contracts.telemetry.build_record({
                 "run_id": "wf002-test", "story_id": runner.STORY_ID,
                 "role": runner.contracts.STAGE_ROLES[stage], "stage": stage,
-                "session_mode": "fresh", "model": runner.EXPECTED_MODEL,
+                "session_mode": "fresh", "model": "claude-" + runner.contracts.STAGE_MODEL_FAMILIES[stage] + "-test",
                 "started_at": "2026-10-02T00:00:00Z", "ended_at": "2026-10-02T00:00:01Z",
                 "duration_ms": 1000, "completion_status": "completed", "notes": ""},
                 "raw_transcript", {"requests": 2, "tool_invocations": 3,
@@ -370,6 +440,7 @@ class InstalledPreparationTests(unittest.TestCase):
                   patch.object(runner, "inspect_stage_telemetry", return_value={}),
                   patch.object(runner, "inspect_story_quality", return_value={}),
                   patch.object(runner, "assess_quality", return_value={}),
+                  patch.object(runner.contracts, "installed_snapshot", return_value={}),
                   patch.object(runner, "run_cli", side_effect=[success, blocked]),
                   patch.object(runner, "command", side_effect=[
                       Mock(stdout=""), Mock(stdout="story-branch\n"), Mock(stdout=""), Mock(stdout="a" * 40)])):
