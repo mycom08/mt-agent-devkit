@@ -1,0 +1,108 @@
+{
+  "source_sha": "e5de45bd65c5c0048b69c7d28472e076addfc1b8",
+  "init": {
+    "resolved_model_matches": true,
+    "exit_code": 0,
+    "duration_ms": 417047,
+    "result_present": true,
+    "is_error": false,
+    "blocked_signal": false,
+    "timed_out": false,
+    "permission_denials": 0,
+    "partial_assistant_events": 68,
+    "partial_model_ids": [
+      "claude-sonnet-5-5"
+    ],
+    "truncated_events": 0,
+    "total_cost_usd": 1.8761872,
+    "stderr_present": false,
+    "stream_file": "init.jsonl"
+  },
+  "start_story": {
+    "resolved_model_matches": false,
+    "exit_code": 0,
+    "duration_ms": 292703,
+    "result_present": true,
+    "is_error": false,
+    "blocked_signal": false,
+    "timed_out": false,
+    "permission_denials": 0,
+    "partial_assistant_events": 187,
+    "partial_model_ids": [
+      "claude-haiku-4-5-20251001",
+      "claude-opus-5-5",
+      "claude-sonnet-5-5"
+    ],
+    "truncated_events": 0,
+    "total_cost_usd": 1.7491956500000005,
+    "stderr_present": false,
+    "stream_file": "start-story.jsonl"
+  },
+  "installed": true,
+  "installed_base_sha": "c87bcb567e10194b6022e02d4d3a174986fb9aaf",
+  "story_started": false,
+  "active_branch": "sprint-1-dev",
+  "remote": null,
+  "product_diff": {
+    "implementation_sha": "9df66d1b365a7bc55cf6d28d90af010560e07382",
+    "working_tree_clean": true,
+    "uncommitted_changes": [],
+    "changelog_scope_valid": true,
+    "changed_paths": [
+      "CHANGELOG.md",
+      "pricing.py"
+    ],
+    "product_paths_match": true,
+    "pricing_change_exact": true,
+    "changelog_entry_present": true,
+    "unexpected_paths": []
+  },
+  "stage_telemetry": {
+    "row_count": 4,
+    "stages": [
+      "developer_implementation",
+      "technical_lead_review",
+      "qa_verification",
+      "product_owner_closure"
+    ],
+    "required_stages_present_once": true,
+    "schema_and_identity_valid": true,
+    "measured_usage_for_every_stage": true,
+    "errors": [],
+    "observed_stage_models": {
+      "developer_implementation": "claude-sonnet-5-5",
+      "technical_lead_review": "claude-opus-5-5",
+      "qa_verification": "claude-sonnet-5-5",
+      "product_owner_closure": "claude-haiku-4-5-20251001"
+    },
+    "provenance_review": "pending independent source-transcript review"
+  },
+  "story_quality": {
+    "story_status": "done",
+    "acceptance_criteria_complete": true,
+    "test_exit_code": 0,
+    "tests_run": 6,
+    "tests_pass": true
+  },
+  "review_evidence": {
+    "evidence_valid": false,
+    "errors": [
+      "Missing independent review evidence"
+    ]
+  },
+  "capture_prerequisites_pass": true,
+  "main_unchanged": true,
+  "automated_quality_checks_pass": false,
+  "blocked_reason": "Start story session failed or reported a blocked outcome",
+  "gate_g2": "unassessed",
+  "capture_sha256": {
+    "summary.json": "360b4fabd37e6e13de8030a20d5630526e731e84c115cb0239ddc65595187475",
+    "init.jsonl": "8945c9f73f9ed952a99f060529829e15df05214b06b8dda4f7cc037243abaeaa",
+    "start-story.jsonl": "11b1f9c9de9f2d327e1717631c2620be225487a65762c64e3b8636b1c19c6d69"
+  },
+  "cli_version": "2.1.287 (Claude Code)",
+  "python_version": "3.12.10",
+  "functional_assessment": "Product and telemetry observations independently reconciled by GPT QA; final installed workflow compliance not verified because mandatory QA scenario/postpass commit and authoritative stub scan were omitted",
+  "runner_tooling_sha": "6ab46c13d390c3141fb41c1aeabea9f3e5a54b54",
+  "cleanliness_timing": "working_tree_clean captured before independent final unittest execution created untracked bytecode"
+}
