@@ -108,10 +108,10 @@ Files: all workflow files listed above. Never write `Analyst_Workflow.md` or `In
 
 ### Script files — Overwrite
 
-**Source:** `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.claude/agents/templates/scripts/check_devkit_version.sh`, `.claude/agents/templates/scripts/telemetry.py` (local devkit)
+**Source:** `.claude/agents/templates/scripts/check_devkit_version.ps1`, `.claude/agents/templates/scripts/check_devkit_version.sh`, `.claude/agents/templates/scripts/telemetry.py`, `.claude/agents/templates/scripts/branch_preflight.py` (local devkit)
 **Target:** `{TARGET_PROJECT}/.claude/agents/scripts/` with the same filenames
 
-Copy all three scripts verbatim. `telemetry.py` writes only to the gitignored `.claude/agents/tmp/token-metrics/` runtime directory.
+Copy all four scripts verbatim. `telemetry.py` writes only gitignored metrics; `branch_preflight.py` verifies bases before branch creation.
 
 ### Skill files — Overwrite
 
@@ -237,7 +237,7 @@ After all updates are applied, scan each managed directory in `TARGET_PROJECT` a
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 **Expected files — `scripts/`:**
-`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`
+`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`, `branch_preflight.py`
 
 Directories never scanned for cleanup: `memory/`, `working-record/`, `docs/`, `tmp/`, `context/`, `internal/` — these are project-owned, runtime-output, or agent-managed and may contain custom or transient files. `internal/` specifically holds only this workflow's own audit report while a Stage 4 run is in flight (see Stage 4) and is always empty between runs.
 
@@ -255,6 +255,30 @@ These files are not part of the devkit structure. Remove them? Reply yes to dele
 - **no** → leave them in place; note them in the completion report
 
 If no unexpected files are found, skip this step silently.
+
+---
+
+### Legacy runtime-state migration
+
+Run this compatibility check after scripts/rules are updated and before reporting readiness for new stories. Append missing ignore entries without replacing existing project patterns:
+
+```gitignore
+.claude/agents/memory/
+.claude/agents/working-record/
+.claude/agents/retros/
+.claude/agents/tmp/
+.claude/agents/internal/
+```
+
+Strict mode's existing blanket `.claude/agents/` ignore already covers these entries; do not untrack its scaffold automatically. In GitHub mode, inspect tracked runtime files with `git ls-files --` for the five directories above. Ignore patterns do not remove already tracked files.
+
+If any runtime files are tracked, report their exact paths and mark migration pending. **--auto does not authorize** index removal, branch creation, committing, pushing, or changing story metadata. Obtain explicit authorization for a separate one-time maintenance migration, with its reviewed base and exact file allowlist. The maintenance migration is an explicit exception for legacy configuration, not automatic recovery from a BLOCKED story preflight. Stop on unrelated dirty files, unpushed commits, or an unsynchronized base; do not stash, reset, rebase, or delete files.
+
+Before switching to that authorized maintenance branch, copy every reviewed runtime file to a user-selected local backup outside the checkout and record its content hash; never commit the backup. On the maintenance branch, remove only reviewed runtime paths from the index using `git rm --cached -- "<reviewed-runtime-file>"` (one exact path per invocation; no wildcard or recursive filesystem deletion). Commit the ignore additions and index removals as an ordinary migration change, review/merge it through the project's required gates, and synchronize the selected base normally. Switching/merging the old base can delete formerly tracked working files despite `--cached`; after base synchronization, restore missing runtime files from the backup and verify every original content hash. Keep the backup local until verification succeeds. Verify local memory files still exist, historical commits still retain their original contents, and runtime files are absent from `git ls-files` on the new base. Do not rewrite published history. Never commit runtime content merely to unblock preflight.
+
+For every legacy ready/in-progress story missing **Base Branch**, ask the user/PO to confirm its intended existing base from the story/sprint decision; do not guess `main`, the current branch, or a default. PO records the confirmed `**Base Branch:**` once in the GitHub issue (strict mode: local story). Treat it as immutable thereafter; record unresolved stories as migration pending. In-progress stories keep their approved branch/SHA and do not create a replacement branch. A project-orchestrator root applies this check only to its own files; each roster repository performs its own migration and story decisions.
+
+After the reviewed migration lands, rerun installed `branch_preflight.py inspect` for the confirmed base before new story creation. A PASS must identify a clean synchronized base and no tracked runtime state. If it remains BLOCKED, report the exact reason and take no automatic recovery action. Include pending migrations or missing Base Branch decisions in the completion report; updated templates alone do not prove story readiness.
 
 ---
 

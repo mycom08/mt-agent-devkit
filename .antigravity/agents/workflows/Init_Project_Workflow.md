@@ -338,6 +338,9 @@ Generate blank working record files:
 # Workflow output documents
 /result/
 
+# Agent memory — local runtime state, never committed
+.antigravity/agents/memory/
+
 # Agent working records — ephemeral session state, no long-term git value
 .antigravity/agents/working-record/*_Working_Record.md
 
@@ -389,7 +392,7 @@ Do not proceed to Stage 4 until the user explicitly confirms.
    ```bash
    bash .antigravity/agents/working/scripts/scaffold_mechanical.sh <devkit_root> <TARGET_PROJECT> <mode> [github-org/repo-name]
    ```
-   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, the version-check pair plus `telemetry.py`, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
+   This handles directory creation (including the strict-mode `docs/stories|sprints|reviews/` + `story_counter.txt`), the 12 verbatim rules files, all 10 workflow files, the version-check pair plus `telemetry.py` and `branch_preflight.py`, `devkit_version.txt`, blank memory/working-record files, `.gitignore` additions, and `.antigravity/settings.json`'s `SessionStart` hook (OS auto-detected from the environment the script runs in — always correct in practice, since `TARGET_PROJECT` is a local path on the same machine). Check its final line — `settings.json: already exists — SessionStart hook NOT merged, do this separately` means step 3 below is still needed.
 
 2. Write the adaptive-tier files generated in Stage 2 to their target paths (with clean names — no `_template` suffix): `AGENTS.md`, `README.md`, `Project_Priming.md`, `Document_Index.md`, 6 instruction files, the 13 adaptive rules files, 4 wiki docs.
    - For `AGENTS.md` and `README.md`, each independently: if appending → add the generated block at the end of the existing file with a `---` separator; if creating → write the full file.

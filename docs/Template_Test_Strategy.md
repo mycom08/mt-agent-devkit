@@ -58,7 +58,7 @@ Unlike source code, templates cannot be compiled or linked. Testing must be:
 | Layer | Analogy | What it catches | Current automation |
 |---|---|---|---|
 | Layer-1 static | Unit test | Broken refs, malformed placeholders, shared-block drift, retired triggers, manifest gaps, Markdown syntax | Automated (`validate_templates.py` + CI gate) |
-| Layer-2 deployment | Integration test | Wrong file count after init/update, placeholder substitution failures, update idempotency, mode bifurcation correctness | Defined here; not yet automated |
+| Layer-2 deployment | Integration test | Wrong file count after init/update, placeholder substitution failures, update idempotency, mode bifurcation correctness | Narrow helper install and authorized legacy-upgrade fixtures automated; full workflow matrix deferred |
 | Layer-3 behavioral | E2E / agent-in-the-loop | Agent misreads AC, follows wrong rule, produces wrong output | Defined here; not yet automated |
 
 ### Layer-2 roadmap (deferred)
@@ -312,8 +312,15 @@ Exit 0 = clean. Exit non-zero = violations printed; fix before opening a PR.
 bash scripts/test/run.sh
 ```
 
-This is also the canonical local telemetry command: it runs every
-`scripts.test.test_telemetry` case before the validator fixtures. On Windows
+This is also the canonical local helper/deployment command: it runs branch
+preflight, telemetry, and `scripts.test.test_upgrade_deployment` before the
+validator fixtures. The deployment tests execute both surface installers in
+both modes, validate helper bytes and runtime ignores, then exercise documented
+upgrade script selection and explicitly authorized index-only migration in
+legacy GitHub fixture repositories. They preserve custom ignore patterns,
+local memory through base synchronization, and historical commits. This is a
+deterministic deployment contract, not a claim that an LLM sync workflow ran.
+On Windows
 hosts where Bash is unavailable, run the equivalent `powershell -File
 scripts/test/run.ps1`; Linux CI continues to use the shell runner.
 

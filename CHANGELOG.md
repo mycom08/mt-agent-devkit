@@ -26,6 +26,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [0.1.50] - Unreleased
 
+- [ST-000211] Install branch preflight consistently across both surfaces and document safe legacy runtime-state and story-base migration without deleting local knowledge or rewriting history.
+
 ### Changes
 
 - [Enhancement #207] Added privacy-safe, versioned agent-stage telemetry collection and aggregation.
