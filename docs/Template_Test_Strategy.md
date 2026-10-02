@@ -175,7 +175,8 @@ contaminating the real constant.
 ### #5 Full-read directives use number-independent wording
 
 A directive that says a file must be read `in full` must not, in the same
-non-fenced paragraph, restrict mandatory content to a numeric section range
+non-fenced paragraph, restrict mandatory, required, or necessary content to a
+numeric section range
 such as `§2–§5`, `§2-§5`, `§2 to §5`, `§2 through §5`, or `Sections 2 through
 5`. The validator reports the range line and requires the canonical wording:
 `Read this file in full. Every section is mandatory.` This prevents later

@@ -21,12 +21,12 @@
 ## 4. Developer Workflow
 
 ### Status: Ready → In Progress
-1. Remove `status:ready`, add `status:in-progress`
-2. Read the full story: User Story, all AC, Technical Scope, and linked technical docs
-3. **Verify the API spec** (`docs/api/`) for every endpoint the story touches — confirm shape, required fields, enums, constraints. If spec is missing or inconsistent, post a Comment tagging **TL** before writing any code
-4. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers
-5. **Read PO and TL answers** — push back in the same thread if insufficient; wait for all blocking points to resolve
-6. Create the dev branch only through `branch_preflight.py create`, using the explicit Base Branch and verified full SHA recorded by the pipeline.
+1. Read the full story: User Story, all AC, Technical Scope, immutable Base Branch, and linked technical docs.
+2. Create the dev branch only through `branch_preflight.py create`, using the Base Branch and full Base/Remote Base SHAs verified by Story Base Preflight.
+3. After successful branch verification, remove `status:ready` and add `status:in-progress`.
+4. **Verify the API spec** (`docs/api/`) for every endpoint the story touches — confirm shape, required fields, enums, constraints. If spec is missing or inconsistent, post a Comment tagging **TL** before writing any code.
+5. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers.
+6. **Read PO and TL answers** — push back in the same thread if insufficient; wait for all blocking points to resolve.
 
 ### Status: In Progress → Review
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)

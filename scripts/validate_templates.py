@@ -679,7 +679,7 @@ def check_retired_triggers(path, lines: list, fenced: list,
 
 
 # ---------------------------------------------------------------------------
-# Invariant #5: full-read directives must not use numeric mandatory ranges
+# Invariant #5: full-read directives must not require numeric section ranges
 # ---------------------------------------------------------------------------
 
 _FULL_READ_CLAUSE = re.compile(r"\bread\b[^.!?;]*?\bin\s+full\b", re.IGNORECASE)
@@ -711,7 +711,7 @@ def _is_affirmative_full_read(text: str, match) -> bool:
 
 def check_full_read_mandatory_ranges(path, lines: list, fenced: list,
                                      findings: list) -> None:
-    """Invariant #5: full-read prose cannot limit mandatory sections by range.
+    """Invariant #5: full-read prose cannot limit required sections by range.
 
     A directive and its numeric mandatory range may wrap across lines, so inspect
     non-fenced prose paragraphs as a unit. Headings and list items start a new
@@ -731,7 +731,7 @@ def check_full_read_mandatory_ranges(path, lines: list, fenced: list,
              if _is_affirmative_full_read(plain, match)),
             None,
         )
-        if not (directive and "mandatory" in plain.lower()
+        if not (directive and re.search(r"\b(?:mandatory|required|necessary)\b", plain, re.IGNORECASE)
                 and _NUMERIC_SECTION_RANGE.search(plain)):
             return
         range_line = next(
@@ -739,7 +739,7 @@ def check_full_read_mandatory_ranges(path, lines: list, fenced: list,
             paragraph[0][0],
         )
         emit(findings, "ERROR", path, range_line,
-             "full-read directive uses a numeric mandatory-section range; use "
+             "full-read directive uses a numeric required-section range; use "
              "'Read this file in full. Every section is mandatory.'")
 
     for i, line in enumerate(lines):

@@ -45,8 +45,8 @@ After reading, identify anything unclear: scope gaps, ambiguous AC, technical de
 
 Once all blocking questions are resolved:
 
-1. Run `branch_preflight.py inspect` and `create` for `ST-XXXXXX/short-description`, using the story's explicit Base Branch; do not create a branch directly. Record state only after PASS.
-2. **Verify the branch switch before any status, state, or product write** — the helper must report the requested branch at the recorded full SHA.
+1. Run `branch_preflight.py create` for `ST-XXXXXX/short-description` with the explicit Base Branch and full Base/Remote Base SHAs from Story Base Preflight `inspect`; do not create a branch directly. Per-story pipeline state may be recorded after `inspect` PASS.
+2. **Verify the branch switch before any story status or product write** — the helper must report the requested branch at the recorded full SHA.
 3. **Update story status** — only now remove `status:ready`, add `status:in-progress`.
 4. Begin implementation
 

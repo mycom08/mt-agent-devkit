@@ -6,9 +6,17 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Story Base Preflight (before Bug Reproduction and Stage 0)
+
+**Interrupted Stage 1 recovery for a `status:ready` story:** Before new-story `inspect`, check whether the intended local story branch already exists. If it does, read the pipeline state without writing. Resume after branch creation only when state names this story at Stage 0 or 1, records a full Verified Base SHA, the checked-out branch is the intended story branch, its full tip SHA equals that recorded base SHA, and `git status --porcelain` is empty. Then record Story Branch, continue Stage 1 after `create`, and update status; do not repeat Bug Reproduction, Stage 0, `inspect`, or `create`. If any check fails or state is missing, stop and report the exact mismatch for explicit state recovery; do not switch, delete, reset, or recreate a branch. A fresh Sprint run with no state uses the same fail-closed rule.
+
+For each new Stage 0 entry, read the story's immutable `Base Branch`, derive its intended story branch per `Story_Standard.md`, and run `branch_preflight.py inspect --mode github --base <Base Branch> --story-branch <story-branch>` **before any pipeline-state, retro, issue-comment, status, or product write**. Keep the full Base SHA and Remote Base SHA in the current invocation for Stage 1. A missing Base Branch or BLOCKED result stops without a write or recovery action. Stage 1 uses `create`, which repeats inspection. Stories entering directly at Stage 2 or 3 use their existing branch and state; do not create another branch.
+
+---
+
 ## Bug Reproduction Pre-Flight (runs immediately ahead of Stage 0 — bug stories only)
 
-Runs once per story, every time this story would enter Stage 0 — Sprint Workflow's per-story loop, and Start Story Workflow's Stage Entry Check routing `status:ready`/`status:in-progress` to Stage 0. Does **not** run when a story enters directly at Stage 2 or Stage 3 (already past implementation).
+Runs once for each new `status:ready` story entering Stage 0 — Sprint Workflow's per-story loop or Start Story Workflow's ready entry. A resumed `status:in-progress` story continues from its recorded stage without rerunning this check. Does **not** run when a story enters directly at Stage 2 or Stage 3 (already past implementation).
 
 **1. Is this story subject to pre-flight?** Read the issue's labels (`gh issue view <number> --json labels`) — subject to pre-flight only if the `bug` label is present.
 - **Not a bug story** → skip this entire section; proceed directly to Stage 0.
@@ -35,6 +43,8 @@ Runs once per story, every time this story would enter Stage 0 — Sprint Workfl
 ---
 
 ## Stage 0 — Implementer Routing
+
+Enter Stage 0 only after Story Base Preflight passed. State writes below use that verified result; story status and product writes wait for Stage 1 branch creation.
 
 **Read the story body** to get `**Assigned:**` and classify the story:
 
@@ -76,9 +86,10 @@ After every completed agent stage (including a non-behavioral fast path), the or
 
 Create a small metadata JSON object containing only: `run_id`, `story_id`, `role`, `stage`, `session_mode`, `model`, `started_at`, `ended_at`, `duration_ms`, `completion_status`, and `notes`. Do not put a transcript path, prompt content, secrets, issue tokens, tool input, or full tool output in metadata or notes.
 
-- When the completed agent's raw transcript is available, run `python .antigravity/agents/working/scripts/telemetry.py extract --transcript <transcript> --metadata <metadata-json> --output .antigravity/agents/working/tmp/token-metrics/<run-id>.jsonl --append`. This deduplicates requests by message ID, uses the maximum streamed output count, and counts raw tool-use events.
+- For a fresh Claude Code `Agent` result with an `agentId`, first run `python .antigravity/agents/working/scripts/telemetry.py extract --agent-id <agentId> --project-root . --metadata <metadata-json> --output .antigravity/agents/working/tmp/token-metrics/<run-id>.jsonl --append` from the project root. The collector finds the saved subagent transcript without loading raw content into orchestrator context; a missing printed transcript path does not mean usage is unavailable. Do not use whole-session agent-ID extraction for a same-session resume, which can count earlier turns twice; use a bounded per-stage transcript if provided, or record only available harness fields.
+- When a completed agent's raw transcript is available by an explicit path, run the same `extract` command with `--transcript <transcript>` instead of `--agent-id`. This deduplicates requests by message ID, uses a consistent final-result output total when available (otherwise the maximum streamed count per request), and counts raw tool-use events.
 - When only a harness final-context counter is available, include it as `session_final_tokens` in metadata and run the same command with `harness` instead of `extract`. The script records the unavailable cumulative fields as `null` and names all of them in `unavailable_fields`; it never estimates them.
-- When neither source is available, omit `session_final_tokens`, put a short factual explanation of the unavailable measurements in `notes`, and run `python .antigravity/agents/working/scripts/telemetry.py harness --metadata <metadata-json> --output .antigravity/agents/working/tmp/token-metrics/<run-id>.jsonl --append`. This writes `usage_source: unavailable` with every optional measurement explicitly `null`.
+- When neither source is available after the applicable agent-ID lookup, omit `session_final_tokens`, put a short factual explanation of the unavailable measurements in `notes`, and run `python .antigravity/agents/working/scripts/telemetry.py harness --metadata <metadata-json> --output .antigravity/agents/working/tmp/token-metrics/<run-id>.jsonl --append`. This writes `usage_source: unavailable` with every optional measurement explicitly `null`.
 - `session_final_tokens` is a final-call/session-context counter, not cumulative usage. Do not label it as total consumption or use it as a cost proxy.
 - Stop and report a clear error if collection rejects malformed input, a duplicate stage identity, or mixed schema versions. Aggregate only with `python .antigravity/agents/working/scripts/telemetry.py aggregate --input .antigravity/agents/working/tmp/token-metrics/<run-id>.jsonl`.
 
@@ -144,8 +155,8 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
    > **Spawn-prompt reminder (mandatory-reading references):** when the spawn prompt points the agent at a Story Standard file, name only the role-scoped variant already gated by that role's own Rules file (e.g. `Story_Standard_Dev.md` for Developer, `Story_Standard_TL.md` for Technical Lead) — never phrase it as "`Story_Standard.md` (or the role-scoped variant if one exists)". Offering both as options causes the agent to read the full cross-role file needlessly; the role's own Rules file gate already resolves which one to read.
 2. Agent reads its own instruction files, memory, and rules
 3. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
-4. **Before the first state or product write** → read the story's immutable `Base Branch` value and run `branch_preflight.py inspect`. A missing legacy value blocks for explicit user selection; never infer it from the checked-out branch. Only a PASS may write Base Branch and the full Verified Base SHA to pipeline state. Run `branch_preflight.py create` with those values before changing status or writing product files; record Story Branch only after successful full-SHA verification. A block stops for direction; never stash, reset, rebase, or auto-repair.
-5. **After successful branch creation** → write `impl_session: <agentId>` to state, then update story status to `in-progress`.
+4. **New `status:ready` entry that has not passed interrupted Stage 1 recovery, before the first story status or product write** → run `branch_preflight.py create` for the branch named in Story Base Preflight, passing its full verified Base SHA and Remote Base SHA (`--expected-remote-sha`). `create` repeats inspection. Record Story Branch only after successful full-SHA verification; a block stops without stash, reset, rebase, or auto-repair. **Resumed `status:in-progress` entry:** use the recorded stage, story branch, and session; do not call `create` again. If the recorded branch or state cannot be verified, stop for state recovery before any write.
+5. **After successful branch creation on a new entry** → write `impl_session: <agentId>` to state, then update story status to `in-progress`.
 6. **CI/CD check:** if the story's Technical Scope includes any file under `.github/workflows/`, the implementer **must** follow `.antigravity/agents/working/rules/CICD_Validation_Guide.md` before opening a PR
 7. **Deletion pre-check** — if the story involves deleting files: before executing any `git rm` or file deletion, post a comment on the GitHub Issue listing every file planned for deletion
 8. Agent implements and updates working record; commits use the format `[ST-XXXXXX][DEVKIT]: <message>`

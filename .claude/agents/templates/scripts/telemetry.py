@@ -3,6 +3,7 @@
 
 Usage examples:
   python telemetry.py extract --transcript stage.jsonl --metadata stage.json --output record.json
+  python telemetry.py extract --agent-id a0123456789abcdef --metadata stage.json --output run.jsonl --append
   python telemetry.py harness --metadata stage.json --output record.json
   python telemetry.py aggregate --input run.jsonl
 
@@ -14,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from collections import defaultdict
@@ -148,6 +150,28 @@ def load_metadata(path: Path) -> dict[str, Any]:
     return metadata
 
 
+def find_claude_agent_transcript(agent_id: str, project_root: Path,
+                                 config_dir: Path | None = None) -> Path:
+    """Resolve one Claude Code subagent transcript without exposing its contents."""
+    if not re.fullmatch(r"[A-Za-z0-9_-]{4,80}", agent_id):
+        error("agent ID must be a bounded filename-safe identifier")
+    root = project_root.resolve()
+    if not root.is_dir():
+        error("project root is not a directory")
+    settings = config_dir or Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+    project_key = re.sub(r"[^A-Za-z0-9-]", "-", str(root))
+    project_dir = settings / "projects" / project_key
+    matches = sorted(project_dir.glob(f"*/subagents/agent-{agent_id}.jsonl"))
+    if not matches:
+        error("Claude subagent transcript was not found for this agent ID and project")
+    if len(matches) != 1:
+        error("Claude subagent transcript is ambiguous for this agent ID and project")
+    transcript = matches[0]
+    if not transcript.is_file() or transcript.is_symlink():
+        error("Claude subagent transcript is not a regular file")
+    return transcript
+
+
 def validate_metadata(metadata: dict[str, Any]) -> None:
     for field in ("run_id", "story_id", "stage", "model"):
         validate_text(field, metadata[field])
@@ -167,8 +191,9 @@ def validate_metadata(metadata: dict[str, Any]) -> None:
         error("metadata session_final_tokens must be a non-negative integer")
 
 
-def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
+def parse_transcript_events(path: Path) -> tuple[dict[str, list[dict[str, Any]]], dict[str, int] | None]:
     groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    final_usage: dict[str, int] | None = None
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except OSError as exc:
@@ -182,6 +207,19 @@ def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
             error(f"malformed JSON in {path.name} line {number}: {exc.msg}")
         if not isinstance(event, dict):
             error(f"invalid transcript event in {path.name} line {number}: expected object")
+        if event.get("type") == "result":
+            if final_usage is not None:
+                error(f"duplicate final result in {path.name}")
+            usage = event.get("usage")
+            if not isinstance(usage, dict):
+                error(f"invalid final result in {path.name}: missing usage object")
+            final_usage = {}
+            for field in USAGE_FIELDS:
+                value = usage.get(field)
+                if not is_nonnegative_int(value):
+                    error(f"invalid final result usage.{field} in {path.name}")
+                final_usage[field] = value
+            continue
         if event.get("type") != "assistant":
             continue
         message = event.get("message")
@@ -193,7 +231,11 @@ def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
         groups[request_id].append(message)
     if not groups:
         error(f"no assistant requests found in {path.name}")
-    return groups
+    return groups, final_usage
+
+
+def parse_transcript(path: Path) -> dict[str, list[dict[str, Any]]]:
+    return parse_transcript_events(path)[0]
 
 
 def numeric_usage(message: dict[str, Any], field: str, request_id: str) -> int:
@@ -229,6 +271,19 @@ def extract_usage(groups: dict[str, list[dict[str, Any]]]) -> dict[str, int]:
                 tool_events.add((request_id, tool_id))
     totals["requests"] = len(groups)
     totals["tool_invocations"] = len(tool_events)
+    return totals
+
+
+def extract_transcript_usage(path: Path) -> dict[str, int]:
+    groups, final_usage = parse_transcript_events(path)
+    totals = extract_usage(groups)
+    if final_usage is not None:
+        for field in USAGE_FIELDS[:-1]:
+            if totals[field] != final_usage[field]:
+                error(f"inconsistent final usage.{field} in {path.name}")
+        if final_usage["output_tokens"] < totals["output_tokens"]:
+            error(f"inconsistent final usage.output_tokens in {path.name}")
+        totals["output_tokens"] = final_usage["output_tokens"]
     return totals
 
 
@@ -440,7 +495,11 @@ def main() -> int:
         command.add_argument("--output", required=True, type=Path)
         command.add_argument("--append", action="store_true", help="append one JSON Lines record instead of replacing output")
         if name == "extract":
-            command.add_argument("--transcript", required=True, type=Path)
+            source = command.add_mutually_exclusive_group(required=True)
+            source.add_argument("--transcript", type=Path)
+            source.add_argument("--agent-id", help="find a Claude Code subagent transcript for this project")
+            command.add_argument("--project-root", type=Path, default=Path.cwd(),
+                                 help="project directory used for Claude Code transcript lookup")
     aggregate = commands.add_parser("aggregate")
     aggregate.add_argument("--input", required=True, type=Path)
     evidence = commands.add_parser("reconstruct-evidence")
@@ -449,7 +508,9 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.command == "extract":
-            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_usage(parse_transcript(args.transcript)))
+            transcript = (args.transcript if args.transcript is not None else
+                          find_claude_agent_transcript(args.agent_id, args.project_root))
+            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_transcript_usage(transcript))
             write_record(record, args.output, args.append)
         elif args.command == "harness":
             metadata = load_metadata(args.metadata)

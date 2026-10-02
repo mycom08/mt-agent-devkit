@@ -98,11 +98,11 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 ### Status: Ready → In Progress
 **When:** Starting work on the story  
 **Action:**
-1. Remove label `status:ready`, add label `status:in-progress`
-2. Read the full story: User Story, all AC, Technical Scope, and any linked technical docs
-3. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers
-4. **Read PO and TL answers** — push back in the same thread if insufficient; wait until all blocking points are fully resolved
-5. Before changing status or writing state/product files, run `branch_preflight.py inspect` then `branch_preflight.py create` from the story's explicit `Base Branch` and verified full SHA; record the Story Branch only after create succeeds.
+1. Read the full story: User Story, all AC, Technical Scope, the immutable Base Branch, and any linked technical docs.
+2. Create the dev branch through `branch_preflight.py create` from the explicit Base Branch, verified full SHA, and Remote Base SHA before changing status or product files; record the Story Branch only after create succeeds.
+3. After successful branch verification, remove label `status:ready` and add `status:in-progress`.
+4. Identify open points — post comments tagging **PO** (scope/AC) or **TL** (technical) for any blockers.
+5. **Read PO and TL answers** — push back in the same thread if insufficient; wait until all blocking points are fully resolved.
 
 ### Status: In Progress → Review
 **When:** Work complete, ready for review  

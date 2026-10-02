@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import mock_open, patch
@@ -26,7 +27,7 @@ class TelemetryTests(unittest.TestCase):
         return telemetry.build_record(
             metadata,
             "raw_transcript",
-            telemetry.extract_usage(telemetry.parse_transcript(FIXTURES / "streamed_duplicate.jsonl")),
+            telemetry.extract_transcript_usage(FIXTURES / "streamed_duplicate.jsonl"),
         )
 
     def test_streamed_messages_deduplicate_and_use_final_output(self) -> None:
@@ -40,6 +41,67 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(record["output_tokens"], 24)
         self.assertEqual(record["usage_source"], "raw_transcript")
         self.assertEqual(record["unavailable_fields"], ["session_final_tokens"])
+
+    def test_final_result_replaces_partial_stream_output(self) -> None:
+        usage = telemetry.extract_transcript_usage(FIXTURES / "streamed_with_result.jsonl")
+        self.assertEqual(usage["requests"], 2)
+        self.assertEqual(usage["tool_invocations"], 3)
+        self.assertEqual(usage["input_tokens"], 30)
+        self.assertEqual(usage["cache_read_input_tokens"], 3000)
+        self.assertEqual(usage["output_tokens"], 240)
+
+    def test_final_result_must_agree_with_request_usage(self) -> None:
+        fixture = FIXTURES / "streamed_with_result.jsonl"
+        with patch.object(Path, "read_text", return_value=fixture.read_text().replace('"input_tokens":30', '"input_tokens":31')):
+            with self.assertRaisesRegex(telemetry.TelemetryError, "inconsistent final usage.input_tokens"):
+                telemetry.extract_transcript_usage(fixture)
+
+    def test_agent_id_lookup_extracts_only_the_matching_project_transcript(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="telemetry-agent-") as directory:
+            root = Path(directory)
+            project = root / "target"
+            project.mkdir()
+            config = root / "claude-config"
+            key = telemetry.re.sub(r"[^A-Za-z0-9-]", "-", str(project.resolve()))
+            folder = config / "projects" / key / "session-1" / "subagents"
+            folder.mkdir(parents=True)
+            transcript = folder / "agent-a0123456789abcdef.jsonl"
+            transcript.write_bytes((FIXTURES / "streamed_with_result.jsonl").read_bytes())
+            found = telemetry.find_claude_agent_transcript("a0123456789abcdef", project, config)
+            self.assertEqual(found, transcript)
+            self.assertEqual(telemetry.extract_transcript_usage(found)["requests"], 2)
+            with self.assertRaisesRegex(telemetry.TelemetryError, "not found"):
+                telemetry.find_claude_agent_transcript("b0123456789abcdef", project, config)
+            with self.assertRaisesRegex(telemetry.TelemetryError, "filename-safe"):
+                telemetry.find_claude_agent_transcript("../escape", project, config)
+            second = config / "projects" / key / "session-2" / "subagents"
+            second.mkdir(parents=True)
+            (second / transcript.name).write_bytes(transcript.read_bytes())
+            with self.assertRaisesRegex(telemetry.TelemetryError, "ambiguous"):
+                telemetry.find_claude_agent_transcript("a0123456789abcdef", project, config)
+
+    def test_extract_command_uses_agent_id_lookup_before_writing_record(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="telemetry-cli-") as directory:
+            root = Path(directory)
+            project = root / "target"
+            project.mkdir()
+            config = root / "claude-config"
+            key = telemetry.re.sub(r"[^A-Za-z0-9-]", "-", str(project.resolve()))
+            folder = config / "projects" / key / "session-1" / "subagents"
+            folder.mkdir(parents=True)
+            (folder / "agent-a0123456789abcdef.jsonl").write_bytes(
+                (FIXTURES / "streamed_with_result.jsonl").read_bytes())
+            output = root / "record.jsonl"
+            argv = ["telemetry.py", "extract", "--agent-id", "a0123456789abcdef",
+                    "--project-root", str(project), "--metadata",
+                    str(FIXTURES / "complete_metadata.json"), "--output", str(output)]
+            with patch.dict(telemetry.os.environ, {"CLAUDE_CONFIG_DIR": str(config)}), \
+                    patch.object(telemetry.sys, "argv", argv):
+                self.assertEqual(telemetry.main(), 0)
+            record = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(record["usage_source"], "raw_transcript")
+            self.assertEqual(record["requests"], 2)
+            self.assertNotIn(str(config), json.dumps(record))
 
     def test_harness_only_usage_is_explicitly_unavailable(self) -> None:
         record = telemetry.build_record(
