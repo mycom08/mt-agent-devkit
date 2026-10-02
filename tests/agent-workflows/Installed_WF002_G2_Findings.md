@@ -256,3 +256,28 @@ creation is unavailable. The runner treats recorded permission denials as
 workflow failure and records the policy description and handler SHA-256 in
 the benchmark configuration. These are permission smoke checks, not completed
 G2/G6 benchmarks. Fresh comparable installed runs are still required.
+
+### Full installed attempts and shell-state follow-up
+
+The first fresh baseline init at the $2 cap ended after 400.843 seconds,
+cost $1.9011942, with zero permission denials, but lacked
+`Story_Standard.md`. A fresh $4-cap retry completed init with zero denials;
+story startup then denied a compound Bash command containing protected state
+writes. Both failed attempts are retained as non-comparable evidence.
+
+The runner now appends the same protected-file policy to both arms: use
+Write/Edit for protected state and pass that requirement to spawned agents;
+keep Git operations separate. Diagnostic recovery reached Developer
+implementation, independent TL review, QA (6/6 tests), local merge and PO
+closure with all five AC checked. Implementation commit `a449c11`, merge
+`2a399af`. It produced no stage telemetry and encountered one final Bash
+cleanup denial, so it is not a passing G2 benchmark.
+
+The handler additionally approves only the exact standalone `rm --` command
+for the fixture's `ST-000211_retro.md` and `pipeline_state.md`, both under the
+disposable target. Extra paths, flags, command chaining, directories and
+redirected paths are denied. A live cleanup probe removed both files with
+zero permission denials. Fifteen preparation tests and three permission
+boundary tests pass; one directory symlink test remains skipped on Windows.
+The settings hook matcher includes Bash for this exact cleanup exception.
+The general Bash/PowerShell protected-write restriction remains in force.

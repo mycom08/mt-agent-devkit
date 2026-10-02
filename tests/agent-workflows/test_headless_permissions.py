@@ -10,6 +10,22 @@ spec.loader.exec_module(permissions)
 
 
 class PermissionTests(unittest.TestCase):
+    def test_cleanup_allows_only_exact_nonrecursive_fixture_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder).resolve()
+            command = permissions.cleanup_command(root)
+            event = {"hook_event_name": "PermissionRequest", "tool_name": "Bash",
+                     "tool_input": {"command": command}}
+            self.assertEqual(permissions.decision(event, root), "allow")
+            for other in (command + ' && git status', command.replace('rm --', 'rm -rf --'),
+                          'rm -- "' + (root / '.claude/settings.json').as_posix() + '"'):
+                event["tool_input"]["command"] = other
+                self.assertEqual(permissions.decision(event, root), "deny")
+            event["tool_input"]["command"] = command
+            directory = root / '.claude/agents/tmp/pipeline_state.md'
+            directory.mkdir(parents=True)
+            self.assertEqual(permissions.decision(event, root), "deny")
+
     def event(self, root, path, tool="Write"):
         return {"hook_event_name": "PermissionRequest", "tool_name": tool,
                 "cwd": str(root), "tool_input": {"file_path": str(path)}}

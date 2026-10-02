@@ -19,6 +19,23 @@ spec.loader.exec_module(runner)
 
 
 class InstalledPreparationTests(unittest.TestCase):
+    def test_cli_passes_trusted_policy_and_detects_success_with_denial(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            settings = root / "settings.json"
+            def fake_run(argv, **kwargs):
+                self.assertIn("--restricted", argv)
+                self.assertEqual(argv[argv.index("--settings") + 1], str(settings))
+                self.assertEqual(argv.count("--append-system-prompt"), 1)
+                self.assertTrue(argv[argv.index("--append-system-prompt") + 1].startswith(runner.FILE_TOOL_POLICY))
+                kwargs["stdout"].write(json.dumps({"type": "result", "is_error": False,
+                    "result": "Done", "permission_denials": [{"tool_name": "Bash"}]}) + "\n")
+                return subprocess.CompletedProcess(argv, 0, "", "")
+            with patch.object(runner.subprocess, "run", side_effect=fake_run):
+                result = runner.run_cli(root, root / "stream.jsonl", "test", 1, settings=settings)
+            self.assertEqual(result["permission_denials"], 1)
+            self.assertFalse(runner.session_completed(result))
+
     def test_permission_denial_is_not_workflow_success(self) -> None:
         session = {"exit_code": 0, "result_present": True, "is_error": False,
                    "blocked_signal": False, "timed_out": False, "permission_denials": 1}
@@ -32,7 +49,7 @@ class InstalledPreparationTests(unittest.TestCase):
             settings = runner.permission_settings(target, root / "policy.json")
             data = json.loads(settings.read_text(encoding="utf-8"))
             hook = data["hooks"]["PermissionRequest"][0]
-            self.assertEqual(hook["matcher"], "Write|Edit")
+            self.assertEqual(hook["matcher"], "Write|Edit|Bash")
             self.assertIn(target.resolve().as_posix(), hook["hooks"][0]["command"])
             with self.assertRaisesRegex(ValueError, "outside"):
                 runner.permission_settings(target, target / "policy.json")

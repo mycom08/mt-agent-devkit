@@ -6,20 +6,32 @@ from pathlib import Path
 import sys
 
 
+def cleanup_command(target: Path) -> str:
+    return 'rm -- ' + ' '.join('"' + (target.resolve() / name).as_posix() + '"' for name in (
+        '.claude/agents/retros/ST-000211_retro.md', '.claude/agents/tmp/pipeline_state.md'))
+
+
 def decision(event: dict, target: Path) -> str:
     if not isinstance(event, dict) or not isinstance(event.get("tool_input", {}), dict):
         return "deny"
     if event.get("hook_event_name") != "PermissionRequest":
         return "deny"
-    if event.get("tool_name") not in ("Write", "Edit"):
-        return "deny"
-    raw = event.get("tool_input", {}).get("file_path")
-    if not isinstance(raw, str) or not raw:
-        return "deny"
     root = target.resolve()
     protected = root / ".claude"
     # A redirected .claude directory must not enlarge the authorized boundary.
     if protected.resolve() != protected:
+        return "deny"
+    if event.get("tool_name") == "Bash":
+        command = event.get("tool_input", {}).get("command")
+        if command != cleanup_command(root):
+            return "deny"
+        paths = [root / name for name in ('.claude/agents/retros/ST-000211_retro.md',
+                                         '.claude/agents/tmp/pipeline_state.md')]
+        return "allow" if all(path.resolve() == path and not path.is_dir() for path in paths) else "deny"
+    if event.get("tool_name") not in ("Write", "Edit"):
+        return "deny"
+    raw = event.get("tool_input", {}).get("file_path")
+    if not isinstance(raw, str) or not raw:
         return "deny"
     path = Path(raw)
     if not path.is_absolute():

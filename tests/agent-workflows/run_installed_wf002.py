@@ -37,6 +37,15 @@ ROLES = ("developer", "technical_lead", "qa", "product_owner", "business_analyst
          "ui_ux_designer")
 CLI_TOOLS = "Read,Glob,Grep,Bash,PowerShell,Edit,Write,Agent"
 CLI_TIMEOUT_SECONDS = 600
+FILE_TOOL_POLICY = (
+    "This is an unattended disposable benchmark. A PermissionRequest handler "
+    "authorizes Write and Edit inside the disposable target's .claude directory. "
+    "Use Write/Edit for every protected .claude file, including pipeline state, "
+    "retrospectives, reviews, and agent records. Do not write those files with "
+    "Bash, PowerShell, heredocs, redirection, or helper scripts. Run Git operations "
+    "as separate shell commands, never combined with protected file writes. "
+    "Pass this file-tool requirement to every spawned agent."
+)
 BLOCKED_RESULT = re.compile(
     r"\b(?:I stopped|I did not (?:proceed|finish)|only partly done|"
     r"partly done|cannot (?:proceed|continue)|can't (?:proceed|continue))\b",
@@ -167,7 +176,7 @@ def permission_settings(target: Path, destination: Path) -> Path:
     if any(any(char in str(path) for char in '\"$`%!\r\n') for path in paths):
         raise ValueError("Unsupported shell characters in permission handler paths")
     hook_command = " ".join(f'"{path.as_posix()}"' for path in paths)
-    settings = {"hooks": {"PermissionRequest": [{"matcher": "Write|Edit", "hooks": [
+    settings = {"hooks": {"PermissionRequest": [{"matcher": "Write|Edit|Bash", "hooks": [
         {"type": "command", "command": hook_command}]}]}}
     destination.write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
     return destination
@@ -181,10 +190,17 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
             "--permission-prompts", "none", "--tools", CLI_TOOLS,
             "--allowedTools", CLI_TOOLS, "--model", "sonnet", "--effort", "medium",
             "--max-budget-usd", str(budget)]
+    system_policy = FILE_TOOL_POLICY
     if add_dir is not None:
         argv += ["--add-dir", str(add_dir)]
     if settings is not None:
         argv += ["--settings", str(settings)]
+        target = (add_dir or cwd).resolve()
+        cleanup = 'rm -- ' + ' '.join('"' + (target / name).as_posix() + '"' for name in (
+            '.claude/agents/retros/ST-000211_retro.md', '.claude/agents/tmp/pipeline_state.md'))
+        system_policy += (" Final WF-002 cleanup is authorized only as this exact "
+                          "standalone Bash command (no cd, chaining, flags, or extra paths): " + cleanup)
+    argv += ["--append-system-prompt", system_policy]
     argv += ["-p", prompt]
     started = time.monotonic()
     env = os.environ.copy()
@@ -414,7 +430,10 @@ def main() -> int:
               "timeout_seconds_per_session": CLI_TIMEOUT_SECONDS,
               "repetitions_per_arm": args.repetitions,
               "surface": "Claude Code installed strict workflow", "gate_g2": "unassessed"}
-    config["permission_policy"] = "PermissionRequest: Write/Edit within disposable target/.claude only"
+    config["permission_policy"] = (
+        "PermissionRequest: Write/Edit within disposable target/.claude; "
+        "Bash only for exact two-file WF-002 cleanup")
+    config["protected_file_tool_policy"] = FILE_TOOL_POLICY
     config["permission_handler_sha256"] = hashlib.sha256(
         Path(__file__).with_name("headless_permissions.py").read_bytes()).hexdigest()
     if not args.execute:
