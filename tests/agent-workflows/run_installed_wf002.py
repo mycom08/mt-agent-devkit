@@ -44,7 +44,13 @@ FILE_TOOL_POLICY = (
     "retrospectives, reviews, and agent records. Do not write those files with "
     "Bash, PowerShell, heredocs, redirection, or helper scripts. Run Git operations "
     "as separate shell commands, never combined with protected file writes. "
-    "Pass this file-tool requirement to every spawned agent."
+    "Pass this file-tool requirement to every spawned agent. "
+    "Follow the installed workflow's mandatory telemetry collection after each "
+    "completed stage, including explicit unavailable records when required. "
+    "Run the installed collector with its output in an unprotected temporary "
+    "file outside .claude, then publish its unchanged JSONL records with Write "
+    "to the required protected token-metrics file, preserving earlier rows. "
+    "Do not estimate usage or omit telemetry. Remove temporary outputs before completion."
 )
 BLOCKED_RESULT = re.compile(
     r"\b(?:I stopped|I did not (?:proceed|finish)|only partly done|"
@@ -95,6 +101,8 @@ def seed_target(target: Path) -> None:
 
 
 def verify_install(target: Path) -> dict[str, str]:
+    if (target / '.claude/agents/tmp/init_project_state.md').exists():
+        raise ValueError("Incomplete init workflow: init_project_state.md remains")
     missing = [name for name in REQUIRED_INSTALLED if not (target / name).is_file()]
     for role in ROLES:
         name = f".claude/agents/{role}_instructions.md"
@@ -186,7 +194,7 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
             *, add_dir: Path | None = None, settings: Path | None = None) -> dict[str, object]:
     argv = ["claude", "--print", "--verbose", "--output-format", "stream-json",
             "--restricted", "--strict-mcp-config", "--no-chrome",
-            "--no-session-persistence", "--permission-mode", "acceptEdits",
+            "--permission-mode", "acceptEdits",
             "--permission-prompts", "none", "--tools", CLI_TOOLS,
             "--allowedTools", CLI_TOOLS, "--model", "sonnet", "--effort", "medium",
             "--max-budget-usd", str(budget)]
@@ -200,6 +208,9 @@ def run_cli(cwd: Path, stream: Path, prompt: str, budget: float,
             '.claude/agents/retros/ST-000211_retro.md', '.claude/agents/tmp/pipeline_state.md'))
         system_policy += (" Final WF-002 cleanup is authorized only as this exact "
                           "standalone Bash command (no cd, chaining, flags, or extra paths): " + cleanup)
+        init_cleanup = 'rm -- "' + (target / '.claude/agents/tmp/init_project_state.md').as_posix() + '"'
+        system_policy += (" Init workflow cleanup is separately authorized as this exact "
+                          "standalone Bash command: " + init_cleanup)
     argv += ["--append-system-prompt", system_policy]
     argv += ["-p", prompt]
     started = time.monotonic()
@@ -432,8 +443,9 @@ def main() -> int:
               "surface": "Claude Code installed strict workflow", "gate_g2": "unassessed"}
     config["permission_policy"] = (
         "PermissionRequest: Write/Edit within disposable target/.claude; "
-        "Bash only for exact two-file WF-002 cleanup")
+        "Bash only for exact init-state and two-file WF-002 cleanup")
     config["protected_file_tool_policy"] = FILE_TOOL_POLICY
+    config["session_persistence"] = True
     config["permission_handler_sha256"] = hashlib.sha256(
         Path(__file__).with_name("headless_permissions.py").read_bytes()).hexdigest()
     if not args.execute:

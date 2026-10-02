@@ -19,12 +19,22 @@ spec.loader.exec_module(runner)
 
 
 class InstalledPreparationTests(unittest.TestCase):
+    def test_verifier_rejects_unfinished_init_state(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            state = target / '.claude/agents/tmp/init_project_state.md'
+            state.parent.mkdir(parents=True)
+            state.write_text('Stage: 4', encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'Incomplete init workflow'):
+                runner.verify_install(target)
+
     def test_cli_passes_trusted_policy_and_detects_success_with_denial(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             settings = root / "settings.json"
             def fake_run(argv, **kwargs):
                 self.assertIn("--restricted", argv)
+                self.assertNotIn("--no-session-persistence", argv)
                 self.assertEqual(argv[argv.index("--settings") + 1], str(settings))
                 self.assertEqual(argv.count("--append-system-prompt"), 1)
                 self.assertTrue(argv[argv.index("--append-system-prompt") + 1].startswith(runner.FILE_TOOL_POLICY))

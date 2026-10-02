@@ -281,3 +281,25 @@ zero permission denials. Fifteen preparation tests and three permission
 boundary tests pass; one directory symlink test remains skipped on Windows.
 The settings hook matcher includes Bash for this exact cleanup exception.
 The general Bash/PowerShell protected-write restriction remains in force.
+
+### Resume: init cleanup and transcript persistence
+
+The interrupted fresh run left `init_project_state.md` after initialization.
+The permission handler now separately approves its exact standalone,
+nonrecursive deletion command. The install verifier rejects leftover init
+state. A live headless probe deleted it with zero permission denials.
+
+The prior runner used `--no-session-persistence`. The preserved diagnostic
+target has zero saved subagent transcripts, so agent-ID lookup cannot extract
+its stage usage. The runner now retains session transcripts for both arms.
+A fresh headless Agent probe produced one saved transcript; the candidate
+collector located it by agent ID and extracted 2 requests, 1 tool invocation,
+and 255 output tokens without loading raw transcript content into this report.
+
+The same appended policy requires each arm to follow its installed telemetry
+procedure. Collector output is first staged outside protected `.claude/`, then
+published unchanged with normal file tools. Missing usage must be explicit;
+the policy prohibits estimated usage and omitted records. All 16 preparation
+tests and four permission boundary tests pass; one Windows symlink case is
+skipped. Raw smoke artifacts remain outside the repository. These probes do
+not establish G2 or G6; a fresh installed pair is next.

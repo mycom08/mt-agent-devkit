@@ -11,6 +11,10 @@ def cleanup_command(target: Path) -> str:
         '.claude/agents/retros/ST-000211_retro.md', '.claude/agents/tmp/pipeline_state.md'))
 
 
+def init_cleanup_command(target: Path) -> str:
+    return 'rm -- "' + (target.resolve() / '.claude/agents/tmp/init_project_state.md').as_posix() + '"'
+
+
 def decision(event: dict, target: Path) -> str:
     if not isinstance(event, dict) or not isinstance(event.get("tool_input", {}), dict):
         return "deny"
@@ -23,10 +27,13 @@ def decision(event: dict, target: Path) -> str:
         return "deny"
     if event.get("tool_name") == "Bash":
         command = event.get("tool_input", {}).get("command")
-        if command != cleanup_command(root):
+        if command == init_cleanup_command(root):
+            paths = [root / '.claude/agents/tmp/init_project_state.md']
+        elif command == cleanup_command(root):
+            paths = [root / name for name in ('.claude/agents/retros/ST-000211_retro.md',
+                                             '.claude/agents/tmp/pipeline_state.md')]
+        else:
             return "deny"
-        paths = [root / name for name in ('.claude/agents/retros/ST-000211_retro.md',
-                                         '.claude/agents/tmp/pipeline_state.md')]
         return "allow" if all(path.resolve() == path and not path.is_dir() for path in paths) else "deny"
     if event.get("tool_name") not in ("Write", "Edit"):
         return "deny"
