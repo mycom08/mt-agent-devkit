@@ -1,4 +1,10 @@
 {
+  "0.1.51-SNAPSHOT": {
+    "new": [],
+    "modified": [],
+    "removed": [],
+    "descriptions": {}
+  },
   "0.1.50": {
     "new": [
       ".claude/agents/templates/scripts/telemetry.py",
