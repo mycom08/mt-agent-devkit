@@ -24,3 +24,6 @@ jobs:
 
       - name: Run validate_templates.py
         run: python scripts/validate_templates.py
+
+      - name: Run telemetry and validator fixture tests
+        run: bash scripts/test/run.sh

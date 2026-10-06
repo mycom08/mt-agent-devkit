@@ -180,9 +180,9 @@ Delete entries older than the 3 most recent story entries before writing a new o
 
 ---
 
-## 12. Stage-Transition Commit (mandatory before handoff)
+## 12. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
@@ -198,7 +198,7 @@ Commit agent memory file changes before signaling stage completion — see `{{AG
 | Authoring or updating a roadmap/planning doc that defines stories ahead of pickup | `Product_Owner_Rules_Read_On_Demand.md §4` (also triggered from §11a above) |
 | Your first `gh issue create`/`gh issue edit --body-file` of the session | `Product_Owner_Rules_Read_On_Demand.md §5` (also triggered from `Story_Standard_PO.md §13`) |
 
-> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Stage-Transition Commit is already resolved directly by §12 above.
+> Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Runtime-State Handoff is already resolved directly by §12 above.
 
 ---
 

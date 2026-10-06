@@ -68,7 +68,7 @@ Two formats are supported. Entries for older versions use a plain array; entries
 }
 ```
 
-When parsing, if the version value is an array → treat as `files` only (no descriptions or checksums). If it is an object → read `files`, `descriptions`, and `checksums` fields.
+When parsing, if the version value is an array → treat as `files` only (no descriptions or checksums). If it is an object → combine `files`, `new`, and `modified` arrays (missing arrays are empty), then read `descriptions` and `checksums`.
 
 ### Resolving the file set
 
@@ -182,8 +182,12 @@ Applies to all 10 files listed above.
 
 **Source:** `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.ps1`
           `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/check_devkit_version.sh`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/telemetry.py`
+          `{DEVKIT_RAW_BASE}/.claude/agents/templates/scripts/branch_preflight.py`
 **Target:** `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.ps1`
           `{{AGENT_DIR_PREFIX}}/agents/scripts/check_devkit_version.sh`
+          `{{AGENT_DIR_PREFIX}}/agents/scripts/telemetry.py`
+          `{{AGENT_DIR_PREFIX}}/agents/scripts/branch_preflight.py`
 
 Fetch and write verbatim. Create `{{AGENT_DIR_PREFIX}}/agents/scripts/` if it does not exist.
 
@@ -311,7 +315,7 @@ After all updates are applied, scan each managed directory and flag any file not
 `Create_Stories_Workflow.md`, `Plan_Sprint_Workflow.md`, `Refine_Prototype_Workflow.md`, `Refine_Sprint_Workflow.md`, `Resume_Story_Workflow.md`, `Shared_Pipeline_Stages.md`, `Sprint_Workflow.md`, `Start_Story_Workflow.md`, `Sync_Devkit_Workflow.md`, `Workflow_Guide.md`
 
 **Expected files — `scripts/`:**
-`check_devkit_version.ps1`, `check_devkit_version.sh`
+`check_devkit_version.ps1`, `check_devkit_version.sh`, `telemetry.py`, `branch_preflight.py`
 
 **Expected files — `{{AGENT_DIR_PREFIX}}/skills/`** (sibling of `{{AGENT_DIR_PREFIX}}/agents/`, not scanned as part of it — check separately):
 `read-section/SKILL.md`, `read-section/scripts/read_section.sh`
@@ -345,6 +349,30 @@ These files are part of the devkit structure but were not found locally. Restore
 - **no** → leave them absent; note them in the completion report
 
 If no expected files are missing, skip this step silently.
+
+---
+
+### Legacy runtime-state migration
+
+Run this compatibility check after scripts/rules are updated and before reporting readiness for new stories. Append missing ignore entries without replacing existing project patterns:
+
+```gitignore
+{{AGENT_DIR_PREFIX}}/agents/memory/
+{{AGENT_DIR_PREFIX}}/agents/working-record/
+{{AGENT_DIR_PREFIX}}/agents/retros/
+{{AGENT_DIR_PREFIX}}/agents/tmp/
+{{AGENT_DIR_PREFIX}}/agents/internal/
+```
+
+Strict mode's existing blanket `{{AGENT_DIR_PREFIX}}/agents/` ignore already covers these entries; do not untrack its scaffold automatically. In GitHub mode, inspect tracked runtime files with `git ls-files --` for the five directories above. Ignore patterns do not remove already tracked files.
+
+If any runtime files are tracked, report their exact paths and mark migration pending. **--auto does not authorize** index removal, branch creation, committing, pushing, or changing story metadata. Obtain explicit authorization for a separate one-time maintenance migration, with its reviewed base and exact file allowlist. The maintenance migration is an explicit exception for legacy configuration, not automatic recovery from a BLOCKED story preflight. Stop on unrelated dirty files, unpushed commits, or an unsynchronized base; do not stash, reset, rebase, or delete files.
+
+Before switching to that authorized maintenance branch, copy every reviewed runtime file to a user-selected local backup outside the checkout and record its content hash; never commit the backup. On the maintenance branch, remove only reviewed runtime paths from the index using `git rm --cached -- "<reviewed-runtime-file>"` (one exact path per invocation; no wildcard or recursive filesystem deletion). Commit the ignore additions and index removals as an ordinary migration change, review/merge it through the project's required gates, and synchronize the selected base normally. Switching/merging the old base can delete formerly tracked working files despite `--cached`; after base synchronization, restore missing runtime files from the backup and verify every original content hash. Keep the backup local until verification succeeds. Verify local memory files still exist, historical commits still retain their original contents, and runtime files are absent from `git ls-files` on the new base. Do not rewrite published history. Never commit runtime content merely to unblock preflight.
+
+For every legacy ready/in-progress story missing **Base Branch**, ask the user/PO to confirm its intended existing base from the story/sprint decision; do not guess `main`, the current branch, or a default. PO records the confirmed `**Base Branch:**` once in the GitHub issue (strict mode: local story). Treat it as immutable thereafter; record unresolved stories as migration pending. In-progress stories keep their approved branch/SHA and do not create a replacement branch. A project-orchestrator root applies this check only to its own files; each roster repository performs its own migration and story decisions.
+
+After the reviewed migration lands, rerun installed `branch_preflight.py inspect` for the confirmed base before new story creation. A PASS must identify a clean synchronized base and no tracked runtime state. If it remains BLOCKED, report the exact reason and take no automatic recovery action. Include pending migrations or missing Base Branch decisions in the completion report; updated templates alone do not prove story readiness.
 
 ---
 

@@ -42,8 +42,8 @@ After reading, identify anything unclear: missing wireframe detail, ambiguous fl
 
 Once all blocking questions are resolved:
 
-1. **Update story status** — Remove label `status:ready` (or `status:backlog`), add label `status:in-progress`
-2. Create your dev branch: `ST-XXXXXX/short-description` (branch off the feature branch or main)
+1. Create `ST-XXXXXX/short-description` only through `branch_preflight.py create` using the story's immutable Base Branch and the full Base/Remote Base SHAs verified by Story Base Preflight; never branch directly from the current checkout.
+2. **Update story status after successful branch verification** — Remove label `status:ready` (or `status:backlog`), add label `status:in-progress`.
 3. Begin building the prototype
 
 **Mid-implementation consultation (when a question surfaces during implementation):**
@@ -170,9 +170,9 @@ Place the prototype source under the project's standard feature-doc/source struc
 
 ---
 
-## 9. Stage-Transition Commit (mandatory before handoff)
+## 9. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

@@ -91,24 +91,13 @@ Before reporting back to the orchestrator, write your retrospective section to t
 
 ---
 
-## 5. Stage-Transition Commit (implementer & reviewer roles)
+## 5. Runtime-State Handoff (implementer & reviewer roles)
 
-Before signaling completion to the orchestrator, commit any **agent memory file** changes made during the session.
-
-**If `Mode: github`:**
-- Commit memory files only — the Working Record is gitignored and must not be committed
-- Never commit any file under `{{AGENT_DIR_PREFIX}}/agents/` other than memory files
-- Commit message: `Agent: <short description>` — under 50 characters (e.g., `Agent: Update QA memory`)
-- Add `[skip ci]` on its own line in the commit message **body** — memory-only pushes must never trigger CI. GitHub Actions skips push-triggered workflows when the **head commit** of the push contains `[skip ci]`, so if unpushed code commits exist on the branch, push those first and push the memory commit separately
-- If no memory files changed, skip the commit — do not create an empty commit
-- Push before reporting stage completion
-
-**If `Mode: strict`:**
-- The entire `{{AGENT_DIR_PREFIX}}/agents/` folder is gitignored — never run `git add` on any file under it
-- Skip this commit step entirely — no commit, no push
-- Report stage completion immediately after completing the work
-
-> **Gate (github mode only):** Do not signal stage completion until the commit is pushed (if applicable).
+Before signaling completion, write any needed Memory, Working Record, retrospective,
+telemetry, or pipeline-state update to its runtime path. These are local runtime state:
+never `git add`, commit, or push them on a product branch in either mode. Report stage
+completion after the local handoff is complete. A project that needs versioned agent
+knowledge requires a separately designed repository and branch policy.
 
 ---
 

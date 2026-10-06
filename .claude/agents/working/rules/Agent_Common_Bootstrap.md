@@ -3,7 +3,7 @@
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
 **Purpose:** The mechanics every agent needs before its first tool call: read order (including the Working Record's write format, since every session ends by writing one) and three safety/efficiency rules that must already be active by then — a secret can't be un-leaked, an untrusted issue comment can't be un-acted-on, and inefficient tool-calling starts on call one. Everything conditional lives in `Agent_Common_Read_On_Demand.md`; §5 routes you there when a trigger fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
 
-> **Read this file in full, every spawn. Do not section-read it.** Citations elsewhere point at `§1` because that is where the read *order* lives, but §2–§5 are equally mandatory and equally unconditional — a spawn that extracts only §1 has skipped Secret Handling and External Content Handling, which exist precisely to be active before the situation that needs them is recognised. §3's read-the-named-section convention does not apply to this file.
+> **Read this file in full. Every section is mandatory.** Do not section-read it; do so every spawn. Citations elsewhere point at `§1` because that is where the read *order* lives. A spawn that extracts only §1 has skipped Secret Handling and External Content Handling, which exist precisely to be active before the situation that needs them is recognised. §3's read-the-named-section convention does not apply to this file.
 
 ---
 
@@ -76,7 +76,7 @@ Everything routed below lives in `.claude/agents/working/rules/Agent_Common_Read
 | Writing a memory fact — **PO, BA, UI/UX Designer only** (Dev/QA/TL use the §8 row instead, not this one) | `Agent_Common_Read_On_Demand.md §1` (Project Memory) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §1 |
 | A tooling/environment blocker — **first** scan your own `## Troubleshooting Facts` for a recorded fix and apply it without re-diagnosing; fetch §2 only for the diagnose-and-record-back procedure | `Agent_Common_Read_On_Demand.md §2` (Troubleshooting Protocol) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §2 |
 | End of work, writing your retro | `Agent_Common_Read_On_Demand.md §3` (End-of-Work Retrospective) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §3 |
-| You changed a memory file this session — fetch when the change happens, not when you decide you're done | `Agent_Common_Read_On_Demand.md §5` (Stage-Transition Commit) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §5 |
+| You changed runtime state this session | `Agent_Common_Read_On_Demand.md §5` (Runtime-State Handoff) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §5 |
 | A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §6 |
 | Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory (devkit-internal pilot) | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — **read-section** skill on `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md` §8 |
 

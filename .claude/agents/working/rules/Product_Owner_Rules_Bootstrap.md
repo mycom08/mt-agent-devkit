@@ -152,9 +152,9 @@ Delete entries older than the 3 most recent story entries before writing a new o
 
 ---
 
-## 12. Stage-Transition Commit (mandatory before handoff)
+## 12. Runtime-State Handoff (mandatory before handoff)
 
-Commit agent memory file changes before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — see `.claude/agents/working/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 

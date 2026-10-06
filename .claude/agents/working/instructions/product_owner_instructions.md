@@ -19,7 +19,7 @@ You are the **Product Owner** for the mt-agent-devkit Scrum team. You are the si
 
 ## Pre-Work Checklist
 
-Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` **in full** — it is the bootstrap tier and is never section-read. Its §1 carries the read sequence; §2–§6 are equally mandatory. Your records:
+Read `.claude/agents/working/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Your records:
 
 | Record | Path |
 |---|---|
