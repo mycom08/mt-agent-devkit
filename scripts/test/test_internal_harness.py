@@ -69,7 +69,9 @@ class ProviderSelectionTests(unittest.TestCase):
 
     def test_runtime_identity_prevents_collision_and_path_escape(self):
         paths = {context.runtime_root(p, r, s) for p in self.manifests for r in ("run1", "run2") for s in ("ST-1", "ST-2")}
-        self.assertEqual(12, len(paths))
+        self.assertEqual(3, len(paths))
+        for provider in self.manifests:
+            self.assertEqual(f".{provider}/agents/working", context.runtime_root(provider, "run1", "ST-1"))
         for parts in (("codex", "../bad", "ST-1"), ("codex", "run1", "../../bad"), ("unknown", "run1", "ST-1")):
             with self.assertRaises(ValueError):
                 context.runtime_root(*parts)
@@ -78,34 +80,36 @@ class ProviderSelectionTests(unittest.TestCase):
 class RuntimeAndSkeletonTests(unittest.TestCase):
     def test_command_state_is_separate_for_two_providers_and_two_runs(self):
         roots = {context.command_root(p, r, c) for p in ("claude", "codex") for r in ("run1", "run2") for c in ("analyst", "audit-agent-files", "build-software")}
-        self.assertEqual(12, len(roots))
+        self.assertEqual(2, len(roots))
+        self.assertEqual(".claude/agents", context.command_root("claude", "run1", "analyst"))
         for command in ("../audit", "/absolute", "audit/other"):
             with self.assertRaises(ValueError):
                 context.command_root("codex", "run1", command)
 
-    def test_two_story_resume_and_retro_keep_each_story_state(self):
-        for provider in ("claude", "codex"):
-            index = context.record_sprint_story(None, provider, "run1", "ST-000001")
-            index = context.record_sprint_story(index, provider, "run1", "ST-000002")
-            expected = [context.runtime_root(provider, "run1", s) for s in ("ST-000001", "ST-000002")]
-            self.assertEqual(expected, context.sprint_story_roots(index, provider, "run1"))
-            self.assertEqual([expected[1]], context.sprint_story_roots(index, provider, "run1", resume=True))
-            self.assertEqual(2, len(context.record_sprint_story(index, provider, "run1", "ST-000002")["stories"]))
-            # Independently recorded story snapshots supply their own retro/loops.
-            state = {expected[0]: {"loops": 1, "retro": "first"}, expected[1]: {"loops": 2, "retro": "second"}}
-            self.assertEqual(["first", "second"], [state[root]["retro"] for root in context.sprint_story_roots(index, provider, "run1")])
-            self.assertEqual(2, state[context.sprint_story_roots(index, provider, "run1", resume=True)[0]]["loops"])
-            self.assertEqual(context.run_root(provider, "run1") + "/retros/sprint_1_summary.md", f".{provider}/agents/runtime/runs/run1/retros/sprint_1_summary.md")
-            for other_provider, other_run in (("antigravity", "run1"), (provider, "run2")):
+    def test_missing_or_foreign_provider_configuration_blocks(self):
+        from unittest.mock import patch
+        for configuration in ({}, {"PROVIDER_ROOT": ".codex", "RUNTIME_ROOT": ".claude/agents/working", "COMMAND_ROOT": ".codex/agents"}):
+            with patch.object(context.json, "loads", return_value=configuration):
                 with self.assertRaises(ValueError):
-                    context.sprint_story_roots(index, other_provider, other_run)
-            foreign = dict(index, stories=[dict(index["stories"][0], runtime_root=".claude/foreign")])
+                    context.state_bindings("codex")
+        with patch.object(context.Path, "read_text", side_effect=FileNotFoundError):
+            with self.assertRaises(FileNotFoundError):
+                context.state_bindings("codex")
+
+    def test_worker_packet_blocks_missing_unresolved_and_foreign_paths(self):
+        expected = context.state_bindings("antigravity")
+        for bindings in (None, {}, dict(expected, RUNTIME_ROOT="{RUNTIME_ROOT}"),
+                         context.state_bindings("codex")):
             with self.assertRaises(ValueError):
-                context.sprint_story_roots(foreign, provider, "run1")
-            for invalid in (dict(index, current_story="ST-000099"), dict(index, current_story=None),
-                            dict(index, stories=index["stories"] * 2)):
-                with self.assertRaises(ValueError):
-                    context.sprint_story_roots(invalid, provider, "run1", resume=True)
+                context.validate_state_bindings("antigravity", bindings)
+        self.assertEqual(expected, context.validate_state_bindings("antigravity", expected))
+
+    def test_selection_supplies_concrete_provider_bindings(self):
+        tools = {"collaboration.spawn_agent", "collaboration.followup_task", "collaboration.send_message", "collaboration.wait_agent"}
+        self.assertEqual(context.state_bindings("codex"), context.select_provider(tools)["bindings"])
+        sprint = (ROOT / ".mt-agent-devkit/workflows/Sprint_Workflow.md").read_text(encoding="utf-8")
+        self.assertIn("{RUNTIME_ROOT}/tmp/sprint_pipeline_state.md", sprint)
+        self.assertNotIn("sprint_story_index", sprint)
 
     def test_rendered_skeleton_ci_matches_each_pinned_legacy_target(self):
         base = "62349287bc9835093a02586d8658993ba8ac685b"

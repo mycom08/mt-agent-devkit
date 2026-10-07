@@ -45,7 +45,7 @@ Native provider discovery requirements determine adapter filenames and entrypoin
 | Telemetry fields and privacy requirements | Runtime transcript discovery and usage extraction |
 | Project context and canonical document locations | Native skill/agent discovery locations |
 
-Runtime memory, working records, retrospectives, telemetry, and pipeline state are separate from reusable harness sources. Preserve existing state during migration. Define ownership and collision prevention explicitly; do not merge provider histories or commit runtime state as product content.
+Runtime memory, working records, retrospectives, telemetry, and pipeline state are separate from reusable harness sources. Preserve existing provider paths and lifecycles: records, memory, retro, reports, tmp and agent progress remain under each provider folder. Provider harness configuration supplies concrete bindings; no normal state migration to per-run storage is in scope. Disposable validation fixtures may remain run-isolated. Define ownership and collision prevention explicitly; do not merge provider histories or commit runtime state as product content.
 
 Shared rules have one editable authoritative copy. Provider wrappers may reference or load that copy; generated discovery artifacts must identify their source and have a regeneration procedure. Do not retain independent editable mirrors.
 

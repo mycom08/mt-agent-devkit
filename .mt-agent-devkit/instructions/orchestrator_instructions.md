@@ -13,6 +13,17 @@ Before doing anything else, read the following files to understand the project c
 
 ---
 
+## Worker State Binding Preflight
+
+Provider selection returns `bindings` from the selected provider's
+`harness/state-paths.json`. Before every spawn/resume, validate the packet with
+`provider_context.validate_state_bindings(provider, bindings)` and include the
+concrete `PROVIDER_ROOT`, `RUNTIME_ROOT`, `COMMAND_ROOT`, and owning role's
+working-record/memory paths. Resolve placeholders before requesting state reads.
+Missing, unresolved or foreign bindings block before spawning. Do not ask workers
+to discover paths or search other provider/run records. Keep existing records and
+memory in place; initialize only missing own files at the bound provider paths.
+
 ## Agent Session Management
 
 Use the selected provider adapter's spawn/resume/message/completion operations.

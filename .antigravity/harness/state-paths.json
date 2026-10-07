@@ -1,0 +1,5 @@
+{
+  "PROVIDER_ROOT": ".antigravity",
+  "RUNTIME_ROOT": ".antigravity/agents/working",
+  "COMMAND_ROOT": ".antigravity/agents"
+}

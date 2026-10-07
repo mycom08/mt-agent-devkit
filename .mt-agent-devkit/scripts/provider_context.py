@@ -36,6 +36,7 @@ def select_provider(available_tools: set[str], declared: str | None = None,
     else:
         raise ValueError("workflow blocked: declare one capable provider; neutral priming remains available")
     return {"provider": chosen, "adapter": f".{chosen}/harness/Provider_Adapter.md",
+            "bindings": state_bindings(chosen),
             "operations": manifests[chosen]["operations"],
             "verification": "tool identity check only; behavioral evidence is separate"}
 
@@ -46,56 +47,43 @@ def run_root(provider: str, run_id: str) -> str:
         raise ValueError("unknown provider")
     if not isinstance(run_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
         raise ValueError("unsafe runtime identity")
-    return f".{provider}/agents/runtime/runs/{run_id}"
+    return state_bindings(provider)["RUNTIME_ROOT"]
+
+
+def state_bindings(provider: str) -> dict:
+    """Load provider-owned state defaults; no state copying or path discovery."""
+    if provider not in ("claude", "antigravity", "codex"):
+        raise ValueError("unknown provider")
+    config = json.loads((ROOT / f".{provider}/harness/state-paths.json").read_text())
+    expected = {"PROVIDER_ROOT": f".{provider}",
+                "RUNTIME_ROOT": f".{provider}/agents/working",
+                "COMMAND_ROOT": f".{provider}/agents"}
+    if config != expected:
+        raise ValueError("missing or foreign provider state binding")
+    return config
+
+
+def validate_state_bindings(provider: str, bindings: dict) -> dict:
+    """Fail closed on incomplete, unresolved or cross-provider worker packets."""
+    expected = state_bindings(provider)
+    if not isinstance(bindings, dict) or any(bindings.get(k) != v for k, v in expected.items()):
+        raise ValueError("worker state bindings are missing or foreign")
+    return expected
 
 
 def runtime_root(provider: str, run_id: str, story_id: str) -> str:
     import re
     if not isinstance(story_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", story_id):
         raise ValueError("unsafe story identity")
-    return f"{run_root(provider, run_id)}/{story_id}"
+    return run_root(provider, run_id)
 
 
 def command_root(provider: str, run_id: str, command: str) -> str:
     import re
     if not isinstance(command, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", command):
         raise ValueError("unsafe command identity")
-    return f"{run_root(provider, run_id)}/commands/{command}"
-
-
-def record_sprint_story(index: dict | None, provider: str, run_id: str, story_id: str) -> dict:
-    """Build a run-level pointer index; per-story pipeline state remains its owner."""
-    root = runtime_root(provider, run_id, story_id)
-    if index is None:
-        index = {"provider": provider, "run_id": run_id, "current_story": None, "stories": []}
-    if not isinstance(index, dict) or index.get("provider") != provider or index.get("run_id") != run_id:
-        raise ValueError("sprint index belongs to another provider/run")
-    if not isinstance(index.get("stories"), list) or not all(isinstance(item, dict) for item in index["stories"]):
-        raise ValueError("sprint story pointers are missing or malformed")
-    stories = [dict(item) for item in index["stories"]]
-    seen = set()
-    for item in stories:
-        expected = runtime_root(provider, run_id, item.get("story_id"))
-        if item.get("runtime_root") != expected:
-            raise ValueError("recorded story root does not match its provider/run identity")
-        if item["story_id"] in seen:
-            raise ValueError("duplicate story pointer makes resume ambiguous")
-        seen.add(item["story_id"])
-    if story_id not in [item["story_id"] for item in stories]:
-        stories.append({"story_id": story_id, "runtime_root": root})
-    return dict(index, current_story=story_id, stories=stories)
-
-
-def sprint_story_roots(index: dict, provider: str, run_id: str, resume: bool = False) -> list[str]:
-    if not isinstance(index, dict) or index.get("provider") != provider or index.get("run_id") != run_id:
-        raise ValueError("sprint index belongs to another provider/run")
-    current = index.get("current_story")
-    if not current or not isinstance(index.get("stories"), list) or not any(isinstance(item, dict) and item.get("story_id") == current for item in index["stories"]):
-        raise ValueError("current story has no recorded state pointer; recovery required")
-    validated = record_sprint_story(index, provider, run_id, current)
-    roots = [item["runtime_root"] for item in validated["stories"]
-             if not resume or item["story_id"] == index["current_story"]]
-    return roots
+    run_root(provider, run_id)
+    return state_bindings(provider)["COMMAND_ROOT"]
 
 
 def main() -> int:

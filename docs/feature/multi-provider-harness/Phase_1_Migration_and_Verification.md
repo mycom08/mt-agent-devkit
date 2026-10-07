@@ -62,32 +62,26 @@ This is an explicit blocked capability, not a simulated portability claim.
 
 ## Runtime preservation and rollback
 
-New state is gitignored at `.<provider>/agents/runtime/`, with individual runs
-under `runs/<run-id>/<story-id>/`. Provider/run/story identifiers prevent shared
-singleton state and history collisions. Bind and pass the exact runtime path on
-each spawn/resume. Legacy provider memory seeds runtime-local copies; histories
-are not merged, deleted or committed. A missing/ambiguous resumed state blocks
-before mutation.
+Normal working state remains under each provider's existing `agents/working/`
+paths, with existing command tmp/reports under `agents/`. Each provider owns a
+`harness/state-paths.json`; selection returns validated concrete bindings for
+every spawn/resume. Missing/foreign bindings block; no cross-provider fallback
+search is allowed. Records, memory, retrospectives, reports, temporary files,
+telemetry and progress are not shared, copied into runs or migrated. Existing
+histories and lifecycles are preserved. Disposable validation evidence may stay
+in isolated provider-local `agents/runtime/runs/` directories.
 
-Commands use `runs/<run-id>/commands/<command>/` for state/reports. Build and
-delegated Analyst retain separate command bindings. Sprint runs preserve an
-ordered run-level story-root index; resume resolves its current story, and batch
-retrospectives read every indexed story's own saved state. The consolidated
-summary lives at the run root, not the last story's directory. Missing, foreign
-or duplicate pointers block recovery rather than inventing a resume target.
-
-Before rollout, retain current interrupted state and record its exact worktree,
-story, branch and provider. Do not resume an old singleton state blindly under a
-new run binding: verify its identity and explicitly carry it into the selected
-run directory, preserving the original. Unknown state remains blocked for
-recovery. No automatic mass state move is performed.
+Sprint execution retains its provider-local singleton state and story-named
+retrospectives. Verify provider/story/branch before resuming interrupted work;
+concurrent or ambiguous ownership blocks. Keep existing state in place during
+rollout and rollback; no state copying, mass move or deletion is performed.
 
 Rollback uses `git revert <migration-commit>` on an isolated clean product branch
 and the normal independent review process. This restores tracked entrypoints
 and legacy instruction bodies; ignored runtime directories remain on disk.
 Keep those directories when reverting. Before resuming an older harness, verify
-provider/story/branch identity and explicitly restore only that run's required
-state to the legacy location without overwriting another run. Never reset the
+provider/story/branch identity. Operational state remains in its original
+provider paths; no restoration from a run directory is needed. Never reset the
 user's current checkout or delete runtime directories as part of rollback.
 
 ## Verification and limits
@@ -113,8 +107,8 @@ trees, including provider/mode helper identity and runtime-ignore contracts.
 Independent review found that mechanical scaffolds did not cover generated
 skeleton CI filters. Shared skeletons now render `LIFECYCLE_ROOT` for the chosen
 legacy target before generation; both-provider fenced artifacts and inline CI
-triggers are compared against the pinned baseline. Commands and sprint routing
-have two-provider/run and two-story resume/retro fixtures. Active reference
+triggers are compared against the pinned baseline. Provider binding tests cover all three providers, missing/foreign configuration
+and preservation of working paths across stories and runs. Active reference
 checks cover explicit legacy reads and registered runtime/lifecycle bindings;
 the missing Analyst instruction is a negative fixture. Internal binding tokens
 are rejected in distributable templates.

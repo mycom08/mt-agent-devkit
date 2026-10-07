@@ -46,43 +46,32 @@ supported command lifecycle; never assume a background command wakes the agent.
 
 ## Path bindings and state ownership
 
-Before a workflow starts, pass an explicit provider, run ID, story ID, feature,
-phase, adapter path and bindings to every spawned worker. Bind `{RUNTIME_ROOT}`
-to `.<provider>/agents/runtime/runs/<run-id>/<story-id>` using validated path
-components (`provider_context.runtime_root`). This directory is gitignored.
-Pipeline state, telemetry, Working Records, and story retrospectives are owned
-by that provider/run/story; do not overwrite another active run. Persist and
-pass the state path when resuming; if unavailable, list only this provider's
-run state candidates and stop on ambiguity. Never create new state over an
-unverified interrupted story.
+Each provider adapter owns `.<provider>/harness/state-paths.json`. The shared
+resolver validates it and returns concrete `PROVIDER_ROOT`, `RUNTIME_ROOT` and
+`COMMAND_ROOT` bindings with provider selection. Normal `RUNTIME_ROOT` is
+`.<provider>/agents/working`; `COMMAND_ROOT` is `.<provider>/agents`, preserving
+existing command tmp/report locations. Run/story IDs identify execution, not a
+new storage layout. Do not copy or migrate records or memory into per-run roots.
 
-Bind `{RUN_ROOT}` with `provider_context.run_root(provider, run_id)`. Commands
-without a story bind `{COMMAND_ROOT}` with `command_root(provider, run_id,
-command)` (`analyst`, `audit-agent-files`, or `build-software`); state/reports
-live inside that command's root. Command role agents bind their `{RUNTIME_ROOT}`
-to this command root for local records/memory/retro state. Nested Build → Analyst delegates with its own
-Analyst command binding and restores the caller's Build binding afterwards.
-Resume receives the exact saved provider/run/command identity, never a Claude
-singleton path. Legacy command state remains untouched for explicit recovery.
+Before every spawn/resume, pass these concrete bindings plus provider, run ID,
+story ID, feature, phase and adapter path. Workers must stop before state access
+when a binding is missing, foreign or unresolved. Never recursively search for
+another provider/run's record as a substitute. Initialize missing own records
+only at the bound provider path; retain existing files and owning-role access.
+Reports, retrospectives, memory, archives, Working Records, telemetry, temporary
+files and progress remain provider-local with their existing lifecycle. No
+histories are merged, moved or deleted. New Codex state starts empty without
+invented history. Do not commit new state or raw transcripts.
 
-Sprint runs keep `{RUN_ROOT}/tmp/sprint_story_index.json`: provider, run ID,
-current story ID and ordered story-ID/root pointers. Use `record_sprint_story`
-to append/validate pointers after Story Base Preflight PASS; the index never
-duplicates per-story stage/session/loop state. On resume use `sprint_story_roots`
-with `resume=True` and load that story's pipeline state. Batch retro processing
-uses each indexed story root (`{STORY_RUNTIME_ROOT}`) and its saved state; the
-run-level sprint summary is `{RUN_ROOT}/retros/sprint_N_summary.md`. Retain each
-story's state until its retro is processed; never use the current story root for
-all earlier stories, and never automatically move/delete legacy singleton state.
-
-Before a fresh role read, copy its existing provider-local memory index/archive
-to this run's `memory/` if no runtime copy exists; preserve legacy files and
-histories byte-for-byte. For durable facts, retain the latest provider-local
-runtime memory in `.<provider>/agents/runtime/memory/`, and seed from that before
-legacy history. Only the owning role updates its memory/record. Copies are
-runtime state, not independent editable harness instructions. Never merge
-Claude and Antigravity histories. New Codex memory starts empty and records no
-invented provider history. Do not commit any new state or raw transcripts.
+Sprint workflows retain the provider-local singleton pipeline state and
+story-named retrospectives. Verify interrupted story/branch/provider identity
+before resuming; ambiguous or concurrent ownership blocks rather than overwrites.
+Commands retain their existing provider-local tmp/internal paths. Nested Build
+and Analyst use distinct command filenames without rebinding role memory.
+`RUN_ROOT` and `STORY_RUNTIME_ROOT`, if used by compatibility callers, resolve to
+the same provider working root, not separate story storage. Disposable native
+validation fixtures/evidence may use isolated `agents/runtime/runs/` directories;
+those test paths are not the default for operational records or durable memory.
 
 `{PROVIDER_ROOT}` resolves to the selected provider's directory. Existing
 template references to `.claude/agents/templates/` describe unchanged Phase 2

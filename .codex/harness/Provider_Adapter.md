@@ -51,3 +51,13 @@ Claude transcript IDs. This adapter has no verified per-stage cumulative usage
 extractor: invoke the shared collector's `harness` command, with a real reported
 final-context counter only when available, otherwise unavailable/null fields.
 Never scrape unrelated local sessions or estimate token savings.
+
+## Provider-owned state paths
+
+Load `.codex/harness/state-paths.json` through `provider_context.py`.
+Pass its concrete `RUNTIME_ROOT`, `COMMAND_ROOT`, and `PROVIDER_ROOT` bindings
+to every worker before any state read/write. Records, memory, retrospectives,
+reports, temporary files and progress stay in this provider's existing paths.
+Missing bindings block; never search other providers or runs for a substitute.
+Run IDs identify telemetry/sessions; they do not relocate normal working state.
+Disposable validation evidence may use separate provider-local run directories.

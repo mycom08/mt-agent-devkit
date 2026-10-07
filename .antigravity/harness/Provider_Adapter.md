@@ -33,3 +33,13 @@ No native cumulative usage extraction or wakeup behavior is verified here. Use
 the shared telemetry collector's `harness` mode with only real reported counters,
 otherwise unavailable/null. State bindings and legacy memory retention follow
 the shared provider contract. Do not launch external runtimes to fabricate a pass.
+
+## Provider-owned state paths
+
+Load `.antigravity/harness/state-paths.json` through `provider_context.py`.
+Pass its concrete `RUNTIME_ROOT`, `COMMAND_ROOT`, and `PROVIDER_ROOT` bindings
+to every worker before any state read/write. Records, memory, retrospectives,
+reports, temporary files and progress stay in this provider's existing paths.
+Missing bindings block; never search other providers or runs for a substitute.
+Run IDs identify telemetry/sessions; they do not relocate normal working state.
+Disposable validation evidence may use separate provider-local run directories.

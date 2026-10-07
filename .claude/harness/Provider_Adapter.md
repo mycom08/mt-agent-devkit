@@ -36,3 +36,13 @@ loading raw content into the orchestrator. For a resume, use a bounded stage
 transcript when available; never extract the entire reused session twice. If no
 supported usage exists, use `harness` and report unavailable/null fields. Runtime
 state and legacy memory retention follow the shared contract.
+
+## Provider-owned state paths
+
+Load `.claude/harness/state-paths.json` through `provider_context.py`.
+Pass its concrete `RUNTIME_ROOT`, `COMMAND_ROOT`, and `PROVIDER_ROOT` bindings
+to every worker before any state read/write. Records, memory, retrospectives,
+reports, temporary files and progress stay in this provider's existing paths.
+Missing bindings block; never search other providers or runs for a substitute.
+Run IDs identify telemetry/sessions; they do not relocate normal working state.
+Disposable validation evidence may use separate provider-local run directories.

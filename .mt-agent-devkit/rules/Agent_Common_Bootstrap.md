@@ -9,6 +9,10 @@
 
 ## 1. Pre-Work Sequence
 
+Before state access, require the concrete provider bindings supplied by the
+orchestrator. Missing or unresolved `{RUNTIME_ROOT}` blocks; never search another
+provider or run for records.
+
 Your instruction file lists the exact paths for your Project Priming, Working Record, Rules, and Memory. Read them in this order:
 
 **Fresh start (newly spawned):**
