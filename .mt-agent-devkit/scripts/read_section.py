@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 import re
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -31,6 +32,9 @@ def extract(path: Path, marker: str, target: str) -> str:
 
 
 def main() -> int:
+    # Markdown rules contain Unicode even when a Windows pipe defaults to cp1252.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("file", type=Path)
     parser.add_argument("marker")

@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import os
+import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -69,6 +72,16 @@ class ProviderSelectionTests(unittest.TestCase):
 
 
 class SectionAndWrapperTests(unittest.TestCase):
+    def test_cli_emits_unicode_through_ascii_windows_pipe(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "scripts/test") as tmp:
+            path = Path(tmp) / "unicode.md"
+            path.write_text("## 1. Unicode\n≤ — résumé\n## 2. Next\n", encoding="utf-8")
+            env = dict(os.environ, PYTHONIOENCODING="ascii")
+            result = subprocess.run((sys.executable, str(ROOT / ".mt-agent-devkit/scripts/read_section.py"), str(path), r"^## [0-9]+\.", r"^## 1\."), capture_output=True, env=env)
+            self.assertEqual(0, result.returncode, result.stderr)
+            self.assertIn("≤ — résumé", result.stdout.decode("utf-8"))
+            self.assertNotIn("## 2.", result.stdout.decode("utf-8"))
+
     def test_real_canonical_and_legacy_wrapper_extract_only_triggered_section(self):
         canonical = ROOT / ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md"
         legacy = ROOT / ".antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md"
