@@ -12,9 +12,16 @@ The text after the trigger keyword is the user's **idea**. If no text is provide
 
 ---
 
+
+## Internal Runtime and Skeleton Bindings
+
+Bind command state to the selected execution provider/run via `command_root(provider, run_id, 'build-software')`; use that as `{COMMAND_ROOT}`. Nested Analyst work receives its own analyst command root; restore the Build binding when it returns. Existing legacy singleton state is preserved for explicit recovery, never auto-moved.
+
+Before any Java or CI skeleton generation, render every shared skeleton instruction with `python .mt-agent-devkit/scripts/render_skeleton.py <source> --lifecycle-root .antigravity`. Pass the rendered instructions and explicit lifecycle target to each generation agent. Never emit `{LIFECYCLE_ROOT}` or the execution provider's paths into target output. Codex execution still uses the user's selected legacy lifecycle target, not a Codex target installer.
+
 ## Pipeline State
 
-The orchestrator maintains `.antigravity/agents/tmp/build_software_state.md` to support resumption after unexpected termination.
+The orchestrator maintains `{COMMAND_ROOT}/tmp/build_software_state.md` to support resumption after unexpected termination.
 
 **On pipeline start — always check this file first:**
 - If the file **exists** → read it and resume from the stage **after** the recorded `Stage` value
@@ -68,7 +75,7 @@ The orchestrator maintains `.antigravity/agents/tmp/build_software_state.md` to 
 
 ### Entry
 
-1. Check for state file `.antigravity/agents/tmp/build_software_state.md`:
+1. Check for state file `{COMMAND_ROOT}/tmp/build_software_state.md`:
    - If it **does not exist** → create it now with `Stage: 0`, `Idea: <user's idea>`, `Confirmed: false`, `Repo Count: 0`, all sessions empty
    - If it **exists** and `Stage` is `1` or higher → apply resume rules above before continuing
 
@@ -711,7 +718,7 @@ For each repo in the list:
 
 ### State File Cleanup
 
-After all doc copies complete successfully, delete `.antigravity/agents/tmp/build_software_state.md`.
+After all doc copies complete successfully, delete `{COMMAND_ROOT}/tmp/build_software_state.md`.
 
 ### Handoff Message
 
@@ -741,7 +748,7 @@ Next step:
 
 ## Pipeline Rules
 
-- **State file first** — always check `.antigravity/agents/tmp/build_software_state.md` before doing any work; never skip the resume check
+- **State file first** — always check `{COMMAND_ROOT}/tmp/build_software_state.md` before doing any work; never skip the resume check
 - **Same trigger, auto-resume** — `build software` (with or without an idea) activates resume if the state file exists; no separate resume command
 - **Confirmation gates are mandatory** — never proceed from Stage 1 to 2 or Stage 2 to 3 without explicit user confirmation. Stage 1's gate accepts either an open feedback round (looped until resolved, see Stage 1's Confirmation Gate) or a plain confirmation that there's nothing further — it does not require a literal "yes". Stage 2's gate still requires the user to confirm the repo structure explicitly.
 - **Adjustment loop** — if the user requests changes to `repo_structure.md` at the Stage 2 gate, apply and re-present before asking for confirmation again

@@ -11,6 +11,56 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SHARED = ROOT / ".mt-agent-devkit"
 
+FILE_REF = re.compile(r"(?:\.(?:mt-agent-devkit|claude|antigravity|codex)|\{[A-Z_]+\})/[A-Za-z0-9_./*{}<>-]+\.(?:md|py|sh|ps1|json)")
+RUNTIME_BINDINGS = {"RUNTIME_ROOT", "STORY_RUNTIME_ROOT", "COMMAND_ROOT", "RUN_ROOT"}
+RUNTIME_DIRECTORIES = {"tmp", "internal", "memory", "retros", "working-record", "token-trace_sprint"}
+
+
+def reference_errors(text: str, source: str, root=ROOT, target_lifecycle: bool = False) -> list[str]:
+    """Check shared/legacy reads and registered runtime/lifecycle bindings.
+
+Only explicit target-output statements are exempt for legacy paths; a shared
+instruction read cannot escape resolution through a broad provider allow-list.
+"""
+    errors = []
+    for line in text.splitlines():
+        for match in FILE_REF.finditer(line):
+            ref = match.group()
+            if ref.startswith("{"):
+                binding, suffix = ref.split("}/", 1)
+                binding = binding[1:]
+                if target_lifecycle and binding in ("TARGET_PROJECT", "DEVKIT_RAW_BASE"):
+                    continue  # Explicit target-output and release-pinned remote-fetch contracts (Phase 2).
+                if binding in RUNTIME_BINDINGS:
+                    if suffix.split("/", 1)[0] not in RUNTIME_DIRECTORIES or ".." in suffix.split("/"):
+                        errors.append(f"invalid runtime-bound reference: {source} -> {ref}")
+                elif binding in ("LIFECYCLE_ROOT", "PROVIDER_ROOT"):
+                    # Legacy lifecycle operations exist for both Phase 1 target surfaces.
+                    if "agents/workflows/" in suffix or "agents/working/workflows/" in suffix:
+                        if any(not (root / f".{p}" / suffix).is_file() for p in ("claude", "antigravity")):
+                            errors.append(f"dangling lifecycle reference: {source} -> {ref}")
+                    else:
+                        # Emitted skeleton target paths are data, not internal reads.
+                        if "/skeletons/" not in source:
+                            errors.append(f"unregistered lifecycle reference: {source} -> {ref}")
+                else:
+                    errors.append(f"unregistered path binding: {source} -> {ref}")
+                continue
+            if any(token in ref for token in ("<", ">", "*", "{", "ST-XXXXXX")):
+                continue  # Clearly marked examples/globs, never a concrete file read.
+            if ref.startswith(".mt-agent-devkit/"):
+                if not (root / ref).is_file():
+                    errors.append(f"dangling shared reference: {source} -> {ref}")
+            elif not (root / ref).is_file():
+                # Retained lifecycle bodies describe files emitted into target
+                # projects. Their template/shared/working/skill reads are repo
+                # inputs, while agents/{context,docs,...} are explicit outputs.
+                target_output = target_lifecycle and re.match(
+                    r"\.(?:claude|antigravity)/(?:settings\.json$|agents/(?:orchestrator_instructions\.md$|(?:context|docs|instructions|memory|rules|scripts|retros|tmp|workflows|working-record|internal)/))", ref)
+                if not target_output:
+                    errors.append(f"dangling executable legacy reference: {source} -> {ref}")
+    return errors
+
 
 def module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -55,14 +105,18 @@ def validate(root=ROOT) -> list[str]:
             errors.append(f"Phase 2/release boundary violated: {path}")
     for path in shared.rglob("*.md"):
         text = path.read_text(encoding="utf-8")
-        for ref in re.findall(r"\.mt-agent-devkit/[A-Za-z0-9_./-]+\.(?:md|py|json)", text):
-            if not (root / ref).is_file():
-                errors.append(f"dangling shared reference: {path.relative_to(root)} -> {ref}")
+        errors.extend(reference_errors(text, path.relative_to(root).as_posix(), root))
         if path.parent.name in ("rules", "instructions") or path.parent.name == "commands":
             if re.search(r"Bash\(gh|\bSendMessage\b|\bagentId\b|^model(?: policy)?:", text, re.M):
                 errors.append(f"provider mechanics left in shared source: {path.relative_to(root)}")
             if re.search(r"\.(?:claude|antigravity|codex)/harness/Provider_Adapter", text):
                 errors.append(f"shared procedure imports a fixed provider adapter: {path.relative_to(root)}")
+    # Target-layout descriptions are explicitly excluded; executable repository
+    # reads and runtime bindings in retained lifecycle sources are still checked.
+    for entry in entries:
+        if entry["ownership"] == "phase2-exclusion" and entry["source"].endswith(".md"):
+            path = root / entry["source"]
+            errors.extend(reference_errors(path.read_text(encoding="utf-8"), entry["source"], root, target_lifecycle=True))
     for entrypoint in ("AGENTS.md", "CLAUDE.md"):
         text = (root / entrypoint).read_text(encoding="utf-8")
         for required in ("Provider_Contract.md", "only the selected adapter", ".mt-agent-devkit/context/Project_Priming_Bootstrap.md"):

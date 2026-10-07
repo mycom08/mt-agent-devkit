@@ -297,7 +297,7 @@ Trigger: user says **"init project"** or **"init project [path]"**
 
 The optional `[path]` argument is the absolute path to the target project. If omitted, the workflow asks the user.
 
-Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/CLAUDE_template.md` and all supporting agent files.
+Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/Project_Root_template.md` and all supporting agent files.
 
 Read `{LIFECYCLE_ROOT}/agents/workflows/Init_Project_Workflow.md` for the complete pipeline before executing.
 
@@ -328,7 +328,7 @@ End-to-end workflow that takes a software idea from raw description through to i
 - **Stage 3** — Parallel agents split `implementation_roadmap.md` and `architecture.md` per repo; full summary docs copied to all repos
 - **Stages 4–5** — Repo initialisation and Scrum team wiring (implemented in ST-000003)
 
-Pipeline state is stored in `.claude/agents/tmp/build_software_state.md`. Running `build software` when the state file exists automatically resumes from the last completed stage.
+Pipeline state is stored in `{COMMAND_ROOT}/tmp/build_software_state.md`. Running `build software` when the state file exists automatically resumes from the last completed stage.
 
 Read `{LIFECYCLE_ROOT}/agents/workflows/Build_Software_Workflow.md` for the complete pipeline before executing.
 

@@ -69,6 +69,13 @@ each spawn/resume. Legacy provider memory seeds runtime-local copies; histories
 are not merged, deleted or committed. A missing/ambiguous resumed state blocks
 before mutation.
 
+Commands use `runs/<run-id>/commands/<command>/` for state/reports. Build and
+delegated Analyst retain separate command bindings. Sprint runs preserve an
+ordered run-level story-root index; resume resolves its current story, and batch
+retrospectives read every indexed story's own saved state. The consolidated
+summary lives at the run root, not the last story's directory. Missing, foreign
+or duplicate pointers block recovery rather than inventing a resume target.
+
 Before rollout, retain current interrupted state and record its exact worktree,
 story, branch and provider. Do not resume an old singleton state blindly under a
 new run binding: verify its identity and explicitly carry it into the selected
@@ -102,6 +109,15 @@ compare the recorded source revision. The preservation validator checks baseline
 history hashes and unchanged templates, scaffold functional code, VERSION,
 version.txt and changes.json. Existing deployment tests exercise legacy emitted
 trees, including provider/mode helper identity and runtime-ignore contracts.
+
+Independent review found that mechanical scaffolds did not cover generated
+skeleton CI filters. Shared skeletons now render `LIFECYCLE_ROOT` for the chosen
+legacy target before generation; both-provider fenced artifacts and inline CI
+triggers are compared against the pinned baseline. Commands and sprint routing
+have two-provider/run and two-story resume/retro fixtures. Active reference
+checks cover explicit legacy reads and registered runtime/lifecycle bindings;
+the missing Analyst instruction is a negative fixture. Internal binding tokens
+are rejected in distributable templates.
 
 | Evidence class | Candidate status |
 |---|---|

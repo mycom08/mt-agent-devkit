@@ -1,7 +1,7 @@
 # Audit Rules — Tier A Detection Spec
 
 **Applies to:** the `audit agent files` workflow's scan subagent (`.mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md`).
-**Scope:** devkit-internal corpus audit only — `.claude/agents/templates/**`, `.claude/agents/workflows/**`, `.mt-agent-devkit/**` (excluding this file's own findings-output directory, `.claude/agents/internal/`).
+**Scope:** devkit-internal corpus audit only — `.claude/agents/templates/**`, `.claude/agents/workflows/**`, `.mt-agent-devkit/**` (excluding this file's own findings-output directory, `{COMMAND_ROOT}/internal/`).
 
 This file defines **what counts as a finding**. It does not define report mechanics, approval flow, apply/revert, or crash handling — those live in `Audit_Agent_Files_Workflow.md`.
 

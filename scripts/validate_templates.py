@@ -506,6 +506,9 @@ def check_section_refs(path, lines: list, fenced: list,
 def check_placeholders(path, lines: list, fenced: list,
                         findings: list) -> None:
     """Invariant #2: {{PLACEHOLDER}} and uppercase single-brace {TOKEN} checks."""
+    # Internal runtime bindings are not distributable template placeholders.
+    internal = rel(path).startswith((".mt-agent-devkit/", ".claude/agents/workflows/", ".antigravity/agents/workflows/"))
+    internal_bindings = {"COMMAND_ROOT", "RUN_ROOT", "RUNTIME_ROOT", "STORY_RUNTIME_ROOT", "LIFECYCLE_ROOT", "PROVIDER_ROOT"} if internal else set()
     for i, line in enumerate(lines):
         if fenced[i]:
             continue
@@ -544,7 +547,7 @@ def check_placeholders(path, lines: list, fenced: list,
         stripped = re.sub(r"\{\{[^}]*\}\}", "", line)
         for sb_match in re.finditer(r"\{([A-Z][A-Z0-9_]+)\}", stripped):
             token = sb_match.group(1)
-            if token not in KNOWN_SINGLE_BRACE_TOKENS:
+            if token not in KNOWN_SINGLE_BRACE_TOKENS and token not in internal_bindings:
                 emit(findings, "ERROR", path, i + 1,
                      f"possibly-malformed all-caps single-brace placeholder '{{{token}}}' "
                      f"(add to KNOWN_SINGLE_BRACE_TOKENS if legitimate)")

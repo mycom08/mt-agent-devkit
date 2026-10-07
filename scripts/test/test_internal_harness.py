@@ -22,6 +22,10 @@ def load(name):
 context = load("provider_context")
 sections = load("read_section")
 wrappers = load("generate_wrappers")
+skeletons = load("render_skeleton")
+validator_spec = importlib.util.spec_from_file_location("validate_internal", ROOT / "scripts/validate_internal_harness.py")
+validator = importlib.util.module_from_spec(validator_spec)
+validator_spec.loader.exec_module(validator)
 
 
 class ProviderSelectionTests(unittest.TestCase):
@@ -69,6 +73,88 @@ class ProviderSelectionTests(unittest.TestCase):
         for parts in (("codex", "../bad", "ST-1"), ("codex", "run1", "../../bad"), ("unknown", "run1", "ST-1")):
             with self.assertRaises(ValueError):
                 context.runtime_root(*parts)
+
+
+class RuntimeAndSkeletonTests(unittest.TestCase):
+    def test_command_state_is_separate_for_two_providers_and_two_runs(self):
+        roots = {context.command_root(p, r, c) for p in ("claude", "codex") for r in ("run1", "run2") for c in ("analyst", "audit-agent-files", "build-software")}
+        self.assertEqual(12, len(roots))
+        for command in ("../audit", "/absolute", "audit/other"):
+            with self.assertRaises(ValueError):
+                context.command_root("codex", "run1", command)
+
+    def test_two_story_resume_and_retro_keep_each_story_state(self):
+        for provider in ("claude", "codex"):
+            index = context.record_sprint_story(None, provider, "run1", "ST-000001")
+            index = context.record_sprint_story(index, provider, "run1", "ST-000002")
+            expected = [context.runtime_root(provider, "run1", s) for s in ("ST-000001", "ST-000002")]
+            self.assertEqual(expected, context.sprint_story_roots(index, provider, "run1"))
+            self.assertEqual([expected[1]], context.sprint_story_roots(index, provider, "run1", resume=True))
+            self.assertEqual(2, len(context.record_sprint_story(index, provider, "run1", "ST-000002")["stories"]))
+            # Independently recorded story snapshots supply their own retro/loops.
+            state = {expected[0]: {"loops": 1, "retro": "first"}, expected[1]: {"loops": 2, "retro": "second"}}
+            self.assertEqual(["first", "second"], [state[root]["retro"] for root in context.sprint_story_roots(index, provider, "run1")])
+            self.assertEqual(2, state[context.sprint_story_roots(index, provider, "run1", resume=True)[0]]["loops"])
+            self.assertEqual(context.run_root(provider, "run1") + "/retros/sprint_1_summary.md", f".{provider}/agents/runtime/runs/run1/retros/sprint_1_summary.md")
+            for other_provider, other_run in (("antigravity", "run1"), (provider, "run2")):
+                with self.assertRaises(ValueError):
+                    context.sprint_story_roots(index, other_provider, other_run)
+            foreign = dict(index, stories=[dict(index["stories"][0], runtime_root=".claude/foreign")])
+            with self.assertRaises(ValueError):
+                context.sprint_story_roots(foreign, provider, "run1")
+            for invalid in (dict(index, current_story="ST-000099"), dict(index, current_story=None),
+                            dict(index, stories=index["stories"] * 2)):
+                with self.assertRaises(ValueError):
+                    context.sprint_story_roots(invalid, provider, "run1", resume=True)
+
+    def test_rendered_skeleton_ci_matches_each_pinned_legacy_target(self):
+        base = "62349287bc9835093a02586d8658993ba8ac685b"
+        files = ("shared/CI_Bootstrap_Conventions.md", "java/Java_Skeleton_REST_Service.md", "java/Java_Skeleton_Library.md", "java/Java_Skeleton_Conventions.md")
+        import re
+        def generation_fragments(text):
+            # Compare every fenced emitted artifact and inline CI trigger, not scaffold helpers.
+            fences = re.findall(r"```[^\n]*\n(.*?)```", text, re.S)
+            inline = [line for line in text.splitlines() if "paths-ignore:" in line]
+            return fences, inline
+        for provider in ("claude", "antigravity"):
+            for relative in files:
+                before = subprocess.run(("git", "show", f"{base}:.{provider}/agents/working/skeletons/{relative}"), cwd=ROOT, capture_output=True, check=True).stdout.decode("utf-8")
+                source = (ROOT / ".mt-agent-devkit/skeletons" / relative).read_text(encoding="utf-8")
+                rendered = skeletons.render(source, f".{provider}")
+                with self.subTest(provider=provider, source=relative):
+                    self.assertEqual(generation_fragments(before), generation_fragments(rendered))
+                    self.assertNotIn("{LIFECYCLE_ROOT}", rendered)
+        with self.assertRaises(ValueError):
+            skeletons.render("paths-ignore: ['{LIFECYCLE_ROOT}/**']", ".codex")
+
+    def test_missing_legacy_instruction_and_invalid_runtime_binding_fail(self):
+        fixture = ROOT / "scripts/test/fixtures/bad/internal_missing_instruction.md"
+        errors = validator.reference_errors(fixture.read_text(encoding="utf-8"), fixture.name)
+        self.assertTrue(any("dangling executable legacy reference" in e for e in errors))
+        for text in ("Read `{UNKNOWN_ROOT}/tmp/state.md`", "Read `{COMMAND_ROOT}/instructions/missing.md`", "Read `{RUN_ROOT}/tmp/../../other.md`"):
+            self.assertTrue(validator.reference_errors(text, "fixture.md"))
+        self.assertFalse(validator.reference_errors("Write `{COMMAND_ROOT}/tmp/analyst_workflow_state.md`", "fixture.md"))
+        self.assertTrue(validator.reference_errors("Read `.claude/agents/working/instructions/missing.md`", "lifecycle.md", target_lifecycle=True))
+        self.assertFalse(validator.reference_errors("Write `{TARGET_PROJECT}/.claude/settings.json`", "lifecycle.md", target_lifecycle=True))
+
+    def test_internal_bindings_are_rejected_in_distributed_templates(self):
+        spec = importlib.util.spec_from_file_location("template_validator", ROOT / "scripts/validate_templates.py")
+        template_validator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(template_validator)
+        for source, expected in ((".claude/agents/workflows/Build_Software_Workflow.md", 0),
+                                 (".claude/agents/templates/workflows/Fixture_template.md", 1)):
+            findings = []
+            template_validator.check_placeholders(ROOT / source, ["Write `{COMMAND_ROOT}/tmp/state.md`"], [False], findings)
+            self.assertEqual(expected, len(findings))
+
+    def test_real_active_command_sources_use_registered_roots_and_canonical_role(self):
+        analyst = (ROOT / ".mt-agent-devkit/workflows/commands/Analyst_Workflow.md").read_text(encoding="utf-8")
+        audit = (ROOT / ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md").read_text(encoding="utf-8")
+        self.assertIn("{COMMAND_ROOT}/tmp/analyst_workflow_state.md", analyst)
+        self.assertIn(".mt-agent-devkit/instructions/business_analyst_instructions.md", analyst)
+        self.assertNotIn(".claude/agents/tmp/", analyst)
+        self.assertIn("{COMMAND_ROOT}/internal/audit_report_", audit)
+        self.assertNotIn(".claude/agents/internal/", audit)
 
 
 class SectionAndWrapperTests(unittest.TestCase):

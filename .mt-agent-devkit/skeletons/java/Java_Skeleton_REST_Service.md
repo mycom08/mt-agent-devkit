@@ -237,15 +237,15 @@ The Dockerfile's `HEALTHCHECK` instruction (see above) still applies unchanged i
 
 ## GitHub Actions CI — `.github/workflows/ci.yml`
 
-**Triggers — always path-filtered.** Agent memory commits (`.claude/agents/memory/`), README/docs edits, and other non-code changes must not burn CI runs:
+**Triggers — always path-filtered.** Agent memory commits (`{LIFECYCLE_ROOT}/agents/memory/`), README/docs edits, and other non-code changes must not burn CI runs:
 
 ```yaml
 on:
   push:
     branches: [main]
-    paths-ignore: ['.claude/**', '**.md', 'docs/**']
+    paths-ignore: ['{LIFECYCLE_ROOT}/**', '**.md', 'docs/**']
   pull_request:
-    paths-ignore: ['.claude/**', '**.md', 'docs/**']
+    paths-ignore: ['{LIFECYCLE_ROOT}/**', '**.md', 'docs/**']
 ```
 
 > **Required-checks caveat (note it in the completion report):** if the project later marks any of these jobs as a *required* status check, docs-only PRs will wait forever on checks that never start. Either keep the jobs non-required, or add a trivially-passing fallback workflow with the same job names triggered on the inverse `paths:` filter.

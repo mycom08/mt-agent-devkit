@@ -44,7 +44,7 @@ If the user does not supply a reference project (answer is "default"), generate 
 
 ## .gitignore additions (every shape)
 
-The mechanical scaffold step already writes devkit-generic entries (`.claude/agents/tmp/`, `/result/`, working-record/retros ignores) to the repo's `.gitignore` before skeleton generation runs. Append the following Java-specific block during skeleton generation — don't replace what's already there:
+The mechanical scaffold step already writes devkit-generic entries (`{LIFECYCLE_ROOT}/agents/tmp/`, `/result/`, working-record/retros ignores) to the repo's `.gitignore` before skeleton generation runs. Append the following Java-specific block during skeleton generation — don't replace what's already there:
 
 ```gitignore
 # Maven build output

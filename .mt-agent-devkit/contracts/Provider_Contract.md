@@ -56,6 +56,25 @@ pass the state path when resuming; if unavailable, list only this provider's
 run state candidates and stop on ambiguity. Never create new state over an
 unverified interrupted story.
 
+Bind `{RUN_ROOT}` with `provider_context.run_root(provider, run_id)`. Commands
+without a story bind `{COMMAND_ROOT}` with `command_root(provider, run_id,
+command)` (`analyst`, `audit-agent-files`, or `build-software`); state/reports
+live inside that command's root. Command role agents bind their `{RUNTIME_ROOT}`
+to this command root for local records/memory/retro state. Nested Build → Analyst delegates with its own
+Analyst command binding and restores the caller's Build binding afterwards.
+Resume receives the exact saved provider/run/command identity, never a Claude
+singleton path. Legacy command state remains untouched for explicit recovery.
+
+Sprint runs keep `{RUN_ROOT}/tmp/sprint_story_index.json`: provider, run ID,
+current story ID and ordered story-ID/root pointers. Use `record_sprint_story`
+to append/validate pointers after Story Base Preflight PASS; the index never
+duplicates per-story stage/session/loop state. On resume use `sprint_story_roots`
+with `resume=True` and load that story's pipeline state. Batch retro processing
+uses each indexed story root (`{STORY_RUNTIME_ROOT}`) and its saved state; the
+run-level sprint summary is `{RUN_ROOT}/retros/sprint_N_summary.md`. Retain each
+story's state until its retro is processed; never use the current story root for
+all earlier stories, and never automatically move/delete legacy singleton state.
+
 Before a fresh role read, copy its existing provider-local memory index/archive
 to this run's `memory/` if no runtime copy exists; preserve legacy files and
 histories byte-for-byte. For durable facts, retain the latest provider-local
@@ -77,6 +96,14 @@ Codex target installation is not: its lifecycle command must require an explicit
 Claude/Antigravity target choice and use that provider's existing lifecycle file.
 Without that choice, block the lifecycle command; do not construct a nonexistent
 `.codex/agents/workflows/` path. This loads lifecycle content, not another adapter.
+
+Before any skeleton generation, render every shared skeleton instruction through
+`python .mt-agent-devkit/scripts/render_skeleton.py <source> --lifecycle-root
+<LIFECYCLE_ROOT>` and pass that rendered content to the generation agent. This
+binds emitted CI filters and target scaffold paths to the chosen legacy target,
+including Codex execution with an explicit target choice. Unrendered lifecycle
+tokens must never reach generated target files. The target templates/scaffold
+functional code are unchanged.
 
 ## Models, permissions, and telemetry
 

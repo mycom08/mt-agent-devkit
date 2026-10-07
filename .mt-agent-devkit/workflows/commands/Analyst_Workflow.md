@@ -12,7 +12,9 @@ The text after the trigger keyword is the user's **initial requirement context**
 
 ## Pipeline State
 
-The orchestrator maintains `.claude/agents/tmp/analyst_workflow_state.md` to support resumption after unexpected termination.
+Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'analyst')`. Resume only the supplied provider/run/command state. Legacy singleton files remain untouched for explicit recovery.
+
+The orchestrator maintains `{COMMAND_ROOT}/tmp/analyst_workflow_state.md` to support resumption after unexpected termination.
 
 **On pipeline start — always check this file first:**
 - If the file **exists** → read it and resume from the recorded stage
@@ -44,7 +46,7 @@ The orchestrator conducts the entire Q&A loop directly using the natural convers
 
 ### How the interaction works
 
-1. Orchestrator reads `.claude/agents/business_analyst_instructions.md` to internalise the BA questioning approach and domain knowledge
+1. Orchestrator reads `.mt-agent-devkit/instructions/business_analyst_instructions.md` to internalise the BA questioning approach and domain knowledge
 2. Orchestrator extracts the initial requirement context from the trigger message
 3. Orchestrator asks the user **exactly one question** — grounded in the initial context, not generic
 4. User answers; orchestrator increments `Question Count` in the state file

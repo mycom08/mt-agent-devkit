@@ -12,7 +12,9 @@ Triggered by: `"audit agent files"` in the devkit's `CLAUDE.md`.
 
 ## Report File
 
-**Path:** `.claude/agents/internal/audit_report_YYYYMMDD_HHMMSS.md` — timestamp, not a run ID, so staleness is self-evident from the filename alone. Only **one** report is ever in flight; `.claude/agents/internal/` is gitignored (never committed).
+Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'audit-agent-files')`. Re-entry checks only this command root's reports; preserve legacy reports for explicit recovery.
+
+**Path:** `{COMMAND_ROOT}/internal/audit_report_YYYYMMDD_HHMMSS.md` — timestamp, not a run ID, so staleness is self-evident from the filename alone. Only **one** report per provider/run/command is in flight; `{COMMAND_ROOT}/internal/` is gitignored (never committed).
 
 **Header block:**
 ```markdown
@@ -43,7 +45,7 @@ Every finding ID (`D-n`/`RP-n`/`C-n`/`X-n`) is stable for the lifetime of the re
 
 ## Stage 0 — Startup Crash Check (always runs first, before anything else)
 
-Before doing anything else, glob `.claude/agents/internal/audit_report_*.md`.
+Before doing anything else, glob `{COMMAND_ROOT}/internal/audit_report_*.md`.
 
 **No file found** → proceed to Stage 1.
 
@@ -72,7 +74,7 @@ This file is the complete and only behavior spec for this scan: the four finding
 Step 2 — scan these paths only:
 - .claude/agents/templates/   (EXCLUDING .claude/agents/templates/github/** and .claude/agents/templates/strict/** entirely — Audit_Rules.md §3 carve-out)
 - .claude/agents/workflows/
-- .mt-agent-devkit/     (EXCLUDING {RUNTIME_ROOT}/tmp/, {RUNTIME_ROOT}/working-record/, {RUNTIME_ROOT}/retros/, .claude/agents/internal/ — these are runtime/output paths, not corpus)
+- .mt-agent-devkit/     (EXCLUDING {RUNTIME_ROOT}/tmp/, {RUNTIME_ROOT}/working-record/, {RUNTIME_ROOT}/retros/, {COMMAND_ROOT}/internal/ — these are runtime/output paths, not corpus)
 
 Step 3 — for each finding class, apply Audit_Rules.md's rules exactly:
 - D-n: byte-identical after whitespace-collapse only, >=15 contiguous lines, N>=2, target file already on the consuming agent's mandatory read list (Agent_Common_Bootstrap.md §1's Project Priming/Rules/Memory sequence plus that role's own Rules file's own "Mandatory Reading" section — not a conditional trigger pointer).
@@ -109,7 +111,7 @@ The subagent's return value is the finding list only — never the corpus text i
 
 ## Stage 2 — Write Report
 
-1. Orchestrator takes the subagent's returned finding block verbatim and writes it into a new report file at `.claude/agents/internal/audit_report_YYYYMMDD_HHMMSS.md` (create `.claude/agents/internal/` if it does not exist), with the header block filled in (`VERSION` contents, scanned file count from the subagent, `**Status:** pending-approval`).
+1. Orchestrator takes the subagent's returned finding block verbatim and writes it into a new report file at `{COMMAND_ROOT}/internal/audit_report_YYYYMMDD_HHMMSS.md` (create `{COMMAND_ROOT}/internal/` if it does not exist), with the header block filled in (`VERSION` contents, scanned file count from the subagent, `**Status:** pending-approval`).
 2. If **all four** sections are `_None found._` → report to the user that the scan found no Tier A findings, delete the report file immediately (nothing to hold state for), and stop — do not proceed to Stage 3.
 
 ---

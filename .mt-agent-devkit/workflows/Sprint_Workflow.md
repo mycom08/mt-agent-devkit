@@ -8,16 +8,26 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 ## Pipeline State
 
-The orchestrator maintains `{RUNTIME_ROOT}/tmp/sprint_pipeline_state.md` to support resumption after unexpected termination.
+The run-level pointer index is `{RUN_ROOT}/tmp/sprint_story_index.json`; each
+indexed story owns `{STORY_RUNTIME_ROOT}/tmp/sprint_pipeline_state.md`.
+Bind `{RUNTIME_ROOT}` to the current indexed story only. Use
+`provider_context.record_sprint_story` after its preflight PASS, preserving the
+ordered prior pointers. The index records provider, run ID and current story;
+stage, sessions and loop counts stay in each story's pipeline state.
 
-**On pipeline start — always check this file first:**
-- If the file **exists** → read it and resume from the recorded story and stage
+**On pipeline start — always check the run index first:**
+- If the index **exists** → validate provider/run identity, resolve its current
+  story with `sprint_story_roots(..., resume=True)`, then read that story's state
+  and resume its recorded stage. Missing/mismatched state blocks before writes.
 - If the file **does not exist** → start the next `status:ready` story at Story Base Preflight, then Bug Reproduction Pre-Flight, then Stage 0
 
 **State file format:**
 ```markdown
 # Sprint Pipeline State
 **Story:** ST-XXXXXX
+**Provider:** <selected provider>
+**Run ID:** <run-id>
+**Runtime Root:** <this indexed story root>
 **Stage:** <0 | 1 | 2 | 3 | 4 | 5>
 **Implementer:** <Developer | Technical Lead | QA | Business Analyst | UI/UX Designer>
 **Type:** <behavioral | non-behavioral>
@@ -60,7 +70,11 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 - **Stage 5 (Retrospective)** — after Stage 4's observation check completes, check the Stage 5 heading in `Shared_Pipeline_Stages.md`: if `[BETA: enabled]`, run Stage 5; if `[BETA: disabled]`, skip and proceed to the next story (Stage 0).
 - **Sprint end** — when no more `status:ready` stories remain:
   1. **Batch Retro Review** — process each story's retro file one by one in story order. For each:
-     a. Read `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
+     a. Iterate the run index in story order. Bind `{STORY_RUNTIME_ROOT}` to
+        that entry's validated root and load its own pipeline state for the
+        story ID, title, Sprint and loop counts. Read
+        `{STORY_RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`; do not reuse the current
+        story's `{RUNTIME_ROOT}` for an earlier story.
      b. Collect all signal-tagged items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) from every section
      c. Present collected items to the user as proposed improvements; for each approved item, apply the change targeting the right artifact:
         - `[context]` → priming docs or agent memory files
@@ -69,7 +83,9 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
         - `[failure]` → rules or guardrail files (`.mt-agent-devkit/rules/`)
 
         **Routing check for `[context]` items:** before applying a `[context]` item as a priming/memory edit, ask explicitly — *does this note describe a missing capability or limitation with no existing backlog story that will ever close it?* If yes, route it to backlog creation instead of, or in addition to, the priming/memory edit.
-     d. Append a story section to the sprint summary file. Read `Sprint` from the state file: `sprint-N` → `{RUNTIME_ROOT}/retros/sprint_N_summary.md`. Create the file if it does not exist:
+     d. Append a story section to the run-level sprint summary file. Read `Sprint`
+        from this story's saved state: `sprint-N` →
+        `{RUN_ROOT}/retros/sprint_N_summary.md`. Create the file if it does not exist:
         ```markdown
         # Sprint N — Retro Summary
         **Sprint:** sprint-N
@@ -93,12 +109,16 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
         - `<file-path>` — <one-line description of change>
         ```
         Source findings and "what worked well" from the retro file. Source loop counts from the state file. List every file changed under "Actions Applied"; write `*(none)*` if no changes were applied. Update `**Last Updated:**` at the top after each story section is appended.
-     e. Delete `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
+     e. Delete only this processed story's `{STORY_RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`.
+        Retain prior story states until all batch sections have been sourced.
      — Complete all stories before moving to step 2.
   2. **Sprint Consolidated Summary** — read the completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
   3. **Devkit Contribution** — optional sharing of sprint retro signals with the devkit team. The sprint pipeline continues regardless of the user's answer.
 
-     a. **Privacy scan** — read `{RUNTIME_ROOT}/retros/sprint_N_summary.md` (resolve N from `Sprint` field in the state file). Extract all lines from every `### Findings` section across all story blocks. For each item, apply the Privacy Rule from `Retro_Rules.md`: remove or generalise any remaining project-specific references — no project names, repository names, domain-specific file paths, business logic terms, or client/user identifiers. Retain only the generalised text.
+     a. **Privacy scan** — read `{RUN_ROOT}/retros/sprint_N_summary.md` (resolve N
+        from the indexed story states). Extract all lines from every `### Findings`
+        section across all story blocks and apply the Privacy Rule from `Retro_Rules.md`.
+        Remove/generalise project, repository, domain path, business, client and user identifiers.
 
      b. **Present and prompt** — show the cleaned signal items to the user, grouped by type (`[context]`, `[instruction]`, `[workflow]`, `[failure]`). Then ask:
         > "Share these improvements with the devkit team? (yes/no) — the sprint pipeline continues either way."
@@ -144,4 +164,8 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 
   4. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `{RUNTIME_ROOT}/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
 
-  5. **Cleanup** — delete the state file, then delete any remaining files in `{RUNTIME_ROOT}/tmp/` with `rm {RUNTIME_ROOT}/tmp/*.md`. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
+  5. **Cleanup** — after all story sections and the consolidated run-level summary
+     are written, delete each indexed story's recorded pipeline state and only
+     that run's pointer index. Use validated indexed roots and the selected
+     adapter's literal-path file operations; preserve legacy state, other runs
+     and persistent runtime memory. Agents clean their own temporary bodies after use.

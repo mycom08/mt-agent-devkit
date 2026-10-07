@@ -36,7 +36,8 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
   1. Read `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
   2. Collect all signal-tagged items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) from every section
   3. Present collected items to the user as proposed improvements; for each approved item, apply the change targeting the right artifact (same routing as the Batch Retro Review in Sprint_Workflow.md)
-  4. Read `Sprint` from the state file; append a story section to `{RUNTIME_ROOT}/retros/sprint_N_summary.md` (see Sprint_Workflow.md for format; create the file if it does not exist)
+  4. Read `Sprint` from this story's state; append its story section to
+     `{RUN_ROOT}/retros/sprint_N_summary.md` (see Sprint_Workflow.md for format).
   5. Delete `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
   6. Delete the state file
 
