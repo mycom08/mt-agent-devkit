@@ -23,6 +23,33 @@ def command(cwd, *args, check=True):
 
 
 class UpgradeDeploymentTests(unittest.TestCase):
+    def test_mechanical_target_trees_match_pinned_phase1_baseline(self):
+        """Relocating internal authority must not change a single scaffolded target byte."""
+        base = "62349287bc9835093a02586d8658993ba8ac685b"
+        bash = str(Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "Git/bin/bash.exe") if os.name == "nt" else shutil.which("bash")
+        with tempfile.TemporaryDirectory(dir=ROOT / "scripts/test") as folder:
+            scratch = Path(folder)
+            for surface in (".claude", ".antigravity"):
+                suffix = ".ps1" if surface == ".antigravity" and os.name == "nt" else ".sh"
+                source = f"{surface}/agents/working/scripts/scaffold_mechanical{suffix}"
+                baseline = scratch / f"baseline-{surface[1:]}{suffix}"
+                before = subprocess.run(("git", "show", f"{base}:{source}"), cwd=ROOT, capture_output=True, check=True).stdout
+                baseline.write_bytes(before.replace(b"\r\n", b"\n"))
+                current = scratch / f"current-{surface[1:]}{suffix}"
+                current.write_bytes((ROOT / source).read_bytes().replace(b"\r\n", b"\n"))
+                for mode in ("github", "strict"):
+                    trees = []
+                    for label, script in (("baseline", baseline), ("current", current)):
+                        target = scratch / f"{surface[1:]}-{mode}-{label}"
+                        target.mkdir()
+                        if suffix == ".ps1":
+                            command(ROOT, "powershell", "-NoProfile", "-File", str(script), "-DevkitRoot", str(ROOT), "-TargetProject", str(target), "-Mode", mode, "-GhSlug", "fixture/project")
+                        else:
+                            command(ROOT, bash, str(script), str(ROOT), str(target), mode, "fixture/project")
+                        trees.append({p.relative_to(target).as_posix(): p.read_bytes() for p in target.rglob("*") if p.is_file()})
+                    with self.subTest(surface=surface, mode=mode):
+                        self.assertEqual(trees[0], trees[1])
+
     def test_both_surface_workflow_inventories_include_preflight(self):
         for surface in (".claude", ".antigravity"):
             for name in ("Init_Project_Workflow.md", "Update_Project_Workflow.md", "Build_Software_Workflow.md"):

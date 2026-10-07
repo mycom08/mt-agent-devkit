@@ -20,6 +20,15 @@ preflight = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = preflight
 SPEC.loader.exec_module(preflight)
 
+SECTION_SPEC = importlib.util.spec_from_file_location("internal_sections", ROOT / ".mt-agent-devkit/scripts/read_section.py")
+internal_sections = importlib.util.module_from_spec(SECTION_SPEC)
+SECTION_SPEC.loader.exec_module(internal_sections)
+
+
+def canonical_text(path: Path) -> str:
+    """Follow the migrated internal owner while keeping deployed templates unchanged."""
+    return internal_sections.resolve_source(path).read_text(encoding="utf-8")
+
 
 def run(cwd: Path, *args: str, check: bool = True) -> str:
     completed = subprocess.run(args, cwd=cwd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -270,7 +279,7 @@ class PreflightTests(unittest.TestCase):
             ROOT / ".claude" / "agents" / "working" / "workflows" / "Shared_Pipeline_Stages.md",
             ROOT / ".antigravity" / "agents" / "working" / "workflows" / "Shared_Pipeline_Stages.md",
         ):
-            rendered = mirror.read_text(encoding="utf-8")
+            rendered = canonical_text(mirror)
             self.assertLess(rendered.index("branch_preflight.py create"), rendered.index("write `impl_session"))
 
 
@@ -294,9 +303,9 @@ class WorkflowContractTests(unittest.TestCase):
             ),
         ):
             with self.subTest(start=start):
-                start_text = start.read_text(encoding="utf-8")
-                sprint_text = sprint.read_text(encoding="utf-8")
-                pipeline_text = pipeline.read_text(encoding="utf-8")
+                start_text = canonical_text(start)
+                sprint_text = canonical_text(sprint)
+                pipeline_text = canonical_text(pipeline)
                 self.assertIn("| `status:ready` | Story Base Preflight", start_text)
                 self.assertIn("| `status:in-progress` | Resume the recorded story", start_text)
                 self.assertIn("start the next `status:ready` story at Story Base Preflight", sprint_text)
@@ -311,14 +320,21 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertLess(strict.index("check whether that local branch exists"), strict.index("1. "))
             self.assertIn("Interrupted Stage 1 recovery check", strict)
 
-    def test_devkit_working_preflight_scripts_match_distributed_helper(self) -> None:
-        source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_bytes()
+    def test_devkit_working_preflight_wrappers_preserve_helper_contract(self) -> None:
+        source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_text(encoding="utf-8")
+        internal = (ROOT / ".mt-agent-devkit/scripts/branch_preflight.py").read_text(encoding="utf-8")
+        for provider in ("claude", "antigravity", "codex"):
+            internal = internal.replace(f'    ".{provider}/agents/runtime/",\n', "")
+        self.assertEqual(source, internal)
         for path in (
             ROOT / ".antigravity/agents/working/scripts/branch_preflight.py",
             ROOT / ".claude/agents/working/scripts/branch_preflight.py",
         ):
             with self.subTest(path=path):
-                self.assertEqual(source, path.read_bytes())
+                result = subprocess.run((sys.executable, str(path), "--help"), capture_output=True, text=True)
+                self.assertEqual(0, result.returncode, result.stderr)
+                self.assertIn("--expected-base-sha", result.stdout)
+                self.assertIn("--expected-remote-sha", result.stdout)
 
     def test_story_base_is_inspected_before_reproduction_or_stage_zero(self) -> None:
         paths = (
@@ -328,7 +344,7 @@ class WorkflowContractTests(unittest.TestCase):
         )
         for path in paths:
             with self.subTest(path=path):
-                text = path.read_text(encoding="utf-8")
+                text = canonical_text(path)
                 gate = text.index("## Story Base Preflight")
                 self.assertLess(gate, text.index("## Bug Reproduction Pre-Flight"))
                 self.assertLess(gate, text.index("## Stage 0 — Implementer Routing"))
