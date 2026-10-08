@@ -144,7 +144,7 @@ Update CHANGELOG under the existing unreleased heading, user migration/rollback 
 | T7 | Validate fresh, legacy, multi-provider, repeat, partial-failure and rollback matrix; representative installed native workflows | Independent TL review and QA; unavailable evidence explicitly unverified |
 | T8 | Documentation, dual legacy/additive change metadata, compatibility limitations and rollback instructions; implementation PR and evidence links | Normal pre-PR/CI/exact-head review gates; explicit PO acceptance of native evidence gaps after QA |
 
-Use the story's branch preflight and approved immutable base before implementation writes. Draft documentation can move into that branch after refinement; refinement does not start implementation. PO keeps one story with staged checkpoints; split only if refinement reveals independently deliverable scope. Each task has a demonstrated output, not merely a prose checklist. ST-000226/ST-000227 remain separate landing dependencies wherever their closure/compliance contradictions or routing affect distributed output; record exact affected consumers and prevent shipping unresolved affected behavior. ST-000228 is required for timing claims; otherwise report unknown unavailable timing boundaries and make no timing claim.
+Use the story's branch preflight and approved immutable base before implementation writes. Draft documentation can move into that branch after refinement; refinement does not start implementation. PO keeps one story with staged checkpoints; split only if refinement reveals independently deliverable scope. Each task has a demonstrated output, not merely a prose checklist. ST-000226/ST-000227 remain separate release dependencies wherever their closure/compliance contradictions or routing affect distributed output; record exact affected consumers and prevent shipping unresolved affected behavior. ST-000228 is required for timing claims; otherwise report unknown unavailable timing boundaries and make no timing claim.
 
 ## 9. AC-linked verification matrix
 
@@ -200,3 +200,8 @@ Decisions are recorded in [TL refinement review](https://github.com/mycom08/mt-a
 - [Agent workflow test strategy](../../Agent_Workflow_Test_Strategy.md)
 - [Template test strategy](../../Template_Test_Strategy.md)
 - [Story ST-000221](https://github.com/mycom08/mt-agent-devkit/issues/221)
+
+
+## User-authorized delivery sequencing
+
+Complete and independently review/QA Phase 2 without publishing a release. Execute #226 and #227 as separate followup stories afterward, then ship one combined release after all release/evidence gates pass. This sequencing does not certify unavailable native support or absorb their compliance changes into ST-000221. PO scope disposition: https://github.com/mycom08/mt-agent-devkit/issues/221#issuecomment-6055775095.

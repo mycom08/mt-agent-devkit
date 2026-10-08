@@ -57,7 +57,7 @@ run_clean_fixture() {
 }
 
 echo "=== branch preflight + telemetry -- deterministic tests ==="
-if python -m unittest scripts.test.test_branch_preflight scripts.test.test_telemetry scripts.test.test_upgrade_deployment; then
+if python -m unittest scripts.test.test_branch_preflight scripts.test.test_telemetry scripts.test.test_upgrade_deployment scripts.test.test_phase2_deployment scripts.test.test_phase2_bundle scripts.test.test_phase2_sync scripts.test.test_phase2_legacy_contracts; then
     echo "[PASS] branch preflight and telemetry tests"
     pass=$((pass + 1))
 else

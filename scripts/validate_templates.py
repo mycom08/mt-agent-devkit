@@ -789,6 +789,34 @@ def check_manifest_integrity(findings: list) -> None:
                  f"version key '{version_key}' is not valid semver "
                  f"(expected N.N.N or N.N.N-SNAPSHOT)")
 
+    # Additive Phase 2 payload stays outside historical client arrays.
+    declared_bridges = {".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md", ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"}
+    for entry in data.values():
+        if not isinstance(entry, dict) or "deployment" not in entry:
+            continue
+        declaration = entry["deployment"]
+        if set(declaration) != {"schema_version", "manifest"} or declaration.get("schema_version") != 1:
+            emit(findings, "ERROR", CHANGES_JSON, 0, "invalid additive deployment declaration")
+            continue
+        if set(entry.get("files", [])) != declared_bridges or set(entry.get("modified", [])) != declared_bridges or entry.get("new", []) or entry.get("removed", []):
+            emit(findings, "ERROR", CHANGES_JSON, 0, "deployment release legacy arrays must contain exactly the two compatible bridges")
+        expected = ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+        if declaration["manifest"] != expected or not (REPO_ROOT / expected).is_file():
+            emit(findings, "ERROR", CHANGES_JSON, 0, "missing isolated deployment manifest")
+        else:
+            import hashlib
+            manifest = json.loads((REPO_ROOT / expected).read_text(encoding="utf-8"))
+            paths = set()
+            for asset in manifest["assets"]:
+                relative = asset["path"]
+                if relative in paths or ".." in Path(relative).parts or Path(relative).is_absolute():
+                    emit(findings, "ERROR", CHANGES_JSON, 0, "unsafe/duplicate deployment asset")
+                    continue
+                paths.add(relative)
+                path = (REPO_ROOT / expected).parent / relative
+                if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != asset["sha256"] or len(path.read_bytes()) != asset["bytes"]:
+                    emit(findings, "ERROR", CHANGES_JSON, 0, "deployment asset hash/byte mismatch: " + relative)
+
     # Collect all paths listed and check existence.
     all_listed: set = set()
     for entry in data.values():

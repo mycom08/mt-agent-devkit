@@ -1,0 +1,6 @@
+{
+  "provider": "antigravity",
+  "evidence": "Native runtime unavailable. Aliases are repository-described candidates, not verified capabilities.",
+  "operations": {"spawn": null, "resume": null, "message": null, "completion": null},
+  "unverified_candidates": {"spawn": "invoke_subagent", "register": "define_subagent", "message": "send_message", "session": "conversationId"}
+}

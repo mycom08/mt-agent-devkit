@@ -1,0 +1,3 @@
+# Target Provider Contract
+
+Read project priming for neutral tasks. Before workflows inspect actual enabled tools and call provider_context.select_provider with target root and explicit tool identities. Load exactly its selected adapter; missing/ambiguous mappings block before state writes or spawning. Pass concrete preserved state bindings to every role. Independent implementer, TL review, QA and PO gates remain mandatory. Provider directories never prove native discovery. Runtime remains provider-local, never merged. One shared mode/version; mixed modes/nonterminal legacy workflows block migration. Follow selected adapter for lifecycle, permissions, CI completion and unavailable telemetry.

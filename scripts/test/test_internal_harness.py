@@ -134,8 +134,9 @@ class RuntimeAndSkeletonTests(unittest.TestCase):
                 with self.subTest(provider=provider, source=relative):
                     self.assertEqual(generation_fragments(before), generation_fragments(rendered))
                     self.assertNotIn("{LIFECYCLE_ROOT}", rendered)
+        self.assertEqual(skeletons.render("paths-ignore: ['{LIFECYCLE_ROOT}/**']", ".codex"), "paths-ignore: ['.codex/**']")
         with self.assertRaises(ValueError):
-            skeletons.render("paths-ignore: ['{LIFECYCLE_ROOT}/**']", ".codex")
+            skeletons.render("{LIFECYCLE_ROOT}", ".unknown")
 
     def test_missing_legacy_instruction_and_invalid_runtime_binding_fail(self):
         fixture = ROOT / "scripts/test/fixtures/bad/internal_missing_instruction.md"

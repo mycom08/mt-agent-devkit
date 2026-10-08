@@ -1,0 +1,10 @@
+{
+  "provider": "claude",
+  "evidence": "Baseline instruction aliases; requires actual enabled tool identity check and separate runtime evidence.",
+  "operations": {
+    "spawn": "Agent",
+    "resume": "SendMessage",
+    "message": "SendMessage",
+    "completion": "Agent"
+  }
+}

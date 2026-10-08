@@ -1,0 +1,25 @@
+# Phase 2 Deployment Operations and Evidence
+
+The deployable source is `.mt-agent-devkit/distribution/phase2/bundle/deployment.json`. Its 149 immutable assets are compiled separately from historical templates. Rebuild with `build_bundle.py --root <devkit-root> --output <bundle>`; `--check` rejects any asset/manifest drift, including unexpected leftover files. Distribution bytes are UTF-8/LF, enforced by `.gitattributes`. Release metadata declares the isolated manifest; the legacy `files`/`modified` arrays contain only the two compatible sync bridges, with unique canonical-source checksums. The release workflow's existing snapshot-key rename preserves this additive metadata; this story does not publish a release.
+
+## Installation and local update
+
+Follow the shared `Target_Project_Deployment_Workflow.md` command route. Review root/context text and custom role/rule merges into an adaptations JSON map. Use `lifecycle.py init|update|build` (or the executable PowerShell/Bash launchers) to print a plan. `project_root` excludes the repository Scrum corpus. For existing content, explicit hash-backed resolutions are required. A reviewed retirement has `after_sha256: null`; its path must be declared in the manifest and its shared successors verified. Project-owned content, unknown extra files and provider runtime histories cannot be retired. Runtime seeds only create missing files.
+
+`migration.py --target <target> --provider <provider>` prints the old inventory and exact proposed text without writing the target. Rewrite references to shared destinations; do not copy historical sync bodies into the new shared sync owner. Surviving managed content that names retired paths is rejected in both plan and serialized-plan validation. Unknown stamped releases receive a safe conflict/inventory path; no unsupported auto-certification.
+
+Apply the saved plan with `deployment.py apply --target <target> --plan <saved-plan.json>`, then `verify`. Immutable released sync uses `sync.py --repo <owner/repository>` and never fetches `/main` payloads. Source identity distinguishes local/snapshot and released-tag provenance. A receipt is the completion certificate. Compatibility stamps run after content/runtime verification, within the same backup journal.
+
+## Interruption and rollback
+
+`inspect` reports runtime hashes, active pipelines, lock and receipt. A mixed mode/version or nonterminal workflow blocks migration without state reset. A rootwide lock records the owning process identity and journal. Do not remove it to proceed. Read the journal's transaction ID and use `deployment.py resume|rollback --target <target> --transaction <transaction-id>`. Recovery rejects a live/ambiguous owner, changed files or changed receipts; exact before-bytes restore created/replaced/retired files. The independent `.recovering` guard prevents simultaneous recovery. A stale guard requires explicit process/journal inspection; this tool does not guess that deleting it is safe.
+
+## Legacy bridge
+
+For supported v0.1.48–50 Claude/Antigravity clients, the first invocation's documented frozen write set installs the compatible ordinary/root sync header while leaving all new assets outside its template namespace. The next invocation checks receipt before legacy version hints and dispatches to a pinned bootstrap. The bootstrap acquires the complete artifact before planning; a saved plan can be applied using `--apply-plan` after reacquiring the same pinned engine/source identity. Reviewed customizations and exact retirement decisions remain mandatory. At most two invocations is demonstrated mechanically against frozen parser contracts and real engine execution; native Markdown interpretation is a separate pending evidence gate.
+
+## Validation and support limits
+
+Mechanical coverage exercises all six provider/mode combinations and both profiles, actual Bash/PowerShell lifecycle commands, pinned release acquisition, source tampering, conflicts, idempotency, multi-provider isolation, active-session blocking, fault injection, receipt ordering and exact recovery. Frozen v0.1.48–50 blob archives are offline/hash checked; their actual scaffold helpers execute in twelve combinations. A 24-case two-pass fixture tests tag/provider/mode with present/missing stamps, customized flat instructions, memory/counter preservation, receipt verification and explicit retirement.
+
+Native provider entrypoint/discovery and independent Dev/TL/QA execution require observed runtime evidence. Codex is available in this session; use separate installed github/strict fixtures and concrete target bindings for independent roles. Claude/Antigravity native clients are unavailable in this session; their native validation remains explicitly unverified, requires documented QA limitations/followups and explicit PO acceptance. Directory generation and mechanical tests do not certify native support. #226 and #227 remain separate followups before the combined release; no ST-000228 timing/usage claims are made.

@@ -1,3 +1,18 @@
+<!-- ST-000221 compatible bridge; legacy body retained below. -->
+## Shared-layout bridge — invocation entry
+
+At the start of a NEW invocation, inspect `.mt-agent-devkit/install-receipt.json` BEFORE old version comparisons. A missing/invalid shared receipt means migration pending even when the legacy stamp equals the latest tag. If this bridge was just fetched by a running legacy sync, finish that legacy-safe pass; the new entry logic takes effect on the next invocation. At most two documented sync invocations are supported; never claim shared migration from a legacy stamp.
+
+Resolve the devkit source from the existing entrypoint and preserve it. Resolve the newest semver release to one immutable commit; fetch that commit's `changes.json` and its release-object `deployment.manifest`. If absent, continue the preserved legacy body. If present, acquire and hash-verify the declared complete asset bundle in selected provider-local temporary storage, preflight Python 3.10+, and load its deployment/sync/migration helpers. Do not fetch `/main`, overwrite the existing provider folders, reset histories, or migrate a nonterminal workflow.
+
+The executable bootstrap is `.mt-agent-devkit/distribution/phase2/bootstrap.py` at that same immutable commit. Download it to selected provider-local temporary storage and invoke it with `--repo <owner/repository> --tag <resolved-tag> --commit <resolved-commit> --target . --mode <installed-mode> --profile <repo-or-project_root> --bindings <concrete-bindings.json> --adaptations <reviewed-content.json> --resolutions <reviewed-conflicts.json> --output <provider-local-plan.json>`. It verifies the entire declared bundle before planning. After review, apply the saved plan using the declared pinned deployment engine; no legacy stamp certifies migration.
+
+Inspect legacy mode and installed content, including flat instructions/missing stamps. Review project adaptations and custom conflicts into exact local adaptation/resolution files; --auto never resolves divergent content. Use the pinned shared engine to produce the full plan, print it, then apply only after task-authorized review. Use profile project_root. The shared receipt is the sole completion certificate; recovery/rollback uses the same transaction/source. After this branch handles a shared artifact, do not continue the old body.
+
+The additive release payload is outside the frozen template namespace. Existing rules/context/helpers retain legacy-compatible contents during the first pass. The compatible bridge is the only broad-template update in this Phase 2 story. Available native interpretation evidence is required separately from mechanical fixture tests; unavailable combinations remain unverified.
+
+---
+
 # Sync Devkit Project Workflow
 
 > **Note:** This file is for reference only in the devkit repo. The `sync devkit` command runs in a **project-orchestrator root folder** (injected by `build software`'s Stage 4 Path B), not in the devkit itself. This is the orchestrator-scoped counterpart to the regular-repo `Sync_Devkit_Workflow.md` — much smaller, since this folder owns a small orchestrator file set plus four scripts instead of a full Scrum-team scaffold.

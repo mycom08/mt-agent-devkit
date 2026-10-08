@@ -1,7 +1,7 @@
 # Internal Provider Contract
 
 This contract applies to this devkit only. Target templates and installation
-output retain their existing contract until Phase 2.
+output use the Phase 2 shared distribution and selected provider adapters.
 
 ## Selection and discovery
 
@@ -73,26 +73,26 @@ the same provider working root, not separate story storage. Disposable native
 validation fixtures/evidence may use isolated `agents/runtime/runs/` directories;
 those test paths are not the default for operational records or durable memory.
 
-`{PROVIDER_ROOT}` resolves to the selected provider's directory. Existing
-template references to `.claude/agents/templates/` describe unchanged Phase 2
-source/output and are not adapter imports. The operational legacy lifecycle
-commands retain their selected provider's output contract and helpers.
+`{PROVIDER_ROOT}` resolves to the selected provider's directory. Historical
+`.claude/agents/templates/` sources are frozen inputs for compatible released
+clients. New target output comes from the isolated shared deployment artifact.
 
-Bind `{LIFECYCLE_ROOT}` to `.claude` or `.antigravity`, selecting the existing
-target-output provider for init/update/build/sync. For those providers it normally
-matches `{PROVIDER_ROOT}`. Codex's internal harness is supported in Phase 1, but
-Codex target installation is not: its lifecycle command must require an explicit
-Claude/Antigravity target choice and use that provider's existing lifecycle file.
-Without that choice, block the lifecycle command; do not construct a nonexistent
-`.codex/agents/workflows/` path. This loads lifecycle content, not another adapter.
+Init/update and the harness stages of build software read
+`.mt-agent-devkit/workflows/commands/Target_Project_Deployment_Workflow.md` and
+invoke its common Python engine with the selected Claude, Antigravity or Codex
+provider. Codex no longer requires a different provider's installation choice.
+Do not construct nonexistent provider-local workflow paths. Existing Claude and
+Antigravity command surfaces route their installation stages to this shared
+workflow while retaining architecture/application generation stages.
 
-Before any skeleton generation, render every shared skeleton instruction through
-`python .mt-agent-devkit/scripts/render_skeleton.py <source> --lifecycle-root
-<LIFECYCLE_ROOT>` and pass that rendered content to the generation agent. This
-binds emitted CI filters and target scaffold paths to the chosen legacy target,
-including Codex execution with an explicit target choice. Unrendered lifecycle
-tokens must never reach generated target files. The target templates/scaffold
-functional code are unchanged.
+`{LIFECYCLE_ROOT}` binds the selected target provider (`.claude`, `.antigravity`
+or `.codex`) for application skeleton CI filters. Render skeleton instructions
+through `python .mt-agent-devkit/scripts/render_skeleton.py <source>
+--lifecycle-root <LIFECYCLE_ROOT>` before generation. Target runtime defaults
+remain `<selected-provider>/agents`; internal provider working-state bindings
+are separate and must never be copied into target receipts. Native discovery
+and execution support remain evidence gated, independently of mechanical
+layout generation. No native certification follows from directory names.
 
 ## Models, permissions, and telemetry
 

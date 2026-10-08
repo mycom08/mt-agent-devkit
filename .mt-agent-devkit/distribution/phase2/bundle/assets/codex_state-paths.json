@@ -1,0 +1,5 @@
+{
+  "PROVIDER_ROOT": ".codex",
+  "RUNTIME_ROOT": ".codex/agents",
+  "COMMAND_ROOT": ".codex/agents"
+}

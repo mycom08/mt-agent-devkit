@@ -1,5 +1,10 @@
 # Update Project Workflow
 
+## Shared deployment routing
+
+Before target harness writes, follow `.mt-agent-devkit/workflows/commands/Target_Project_Deployment_Workflow.md` using the selected provider, mode and target profile. Its executable common engine replaces the legacy direct template-write steps below; keep project analysis/generation and review stages, but do not run both installers. Existing target runtime/customizations are inventoried and explicitly reviewed before migration. `build software` uses a separate root transaction and repository transactions. Legacy target templates remain frozen for released-client compatibility.
+
+
 Triggered by: `"update project [path]"` in the devkit's CLAUDE.md
 
 Applies the current local devkit templates to an already-initialized target project, using the same merge strategy as the `sync devkit` command that runs inside target projects. Uses local template files directly — no GitHub fetch required.
