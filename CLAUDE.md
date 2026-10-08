@@ -1,36 +1,67 @@
-# mt-agent-devkit — Claude Code Instructions
+# mt-agent-devkit — Claude Instructions
+
+This entrypoint declares Claude; verify its enabled capability mapping before
+starting a workflow. The shared provider-selection contract still applies.
+
+## Project Context
+
+At the start of every repository task read
+`.mt-agent-devkit/context/Project_Priming_Bootstrap.md` in full. Fetch only
+triggered sections from the canonical on-demand context. Ordinary repository
+work uses neutral priming and does not start the orchestrator workflow.
+
+## Provider Selection
+
+Before a workflow, read `.mt-agent-devkit/contracts/Provider_Contract.md`.
+Inspect actual enabled tools and validate their mapping with
+`.mt-agent-devkit/scripts/provider_context.py`. Load only the selected adapter:
+
+- Claude: `.claude/harness/Provider_Adapter.md`
+- Antigravity: `.antigravity/harness/Provider_Adapter.md`
+- Codex: `.codex/harness/Provider_Adapter.md`
+
+Unknown, ambiguous, or unsupported capability mappings block workflows before
+state writes or spawning. Neutral repository tasks remain available. Directory
+names do not prove discovery or capabilities. Pass selected provider and runtime
+bindings explicitly to each role; never load every adapter together.
 
 ## Orchestrator Reference
 
-The orchestrator (this top-level session) must read `.claude/agents/working/instructions/orchestrator_instructions.md` before executing any workflow — it carries the Orchestrator Startup sequence, all workflow trigger tables (devkit + sprint), session management, working-record rules, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
-
----
+Only the top-level orchestrator reads
+`.mt-agent-devkit/instructions/orchestrator_instructions.md` when the user asks
+to start or resume a workflow/story. Normal checks, questions, and ordinary edits
+do not trigger it. Spawned agents receive their own shared role paths directly.
 
 ## Project Overview
 
-A devkit that injects a complete AI Scrum team setup into any project. It provides three workflows of its own: **Analyst** (idea-to-plan analysis), **Init Project** (scaffold the AI Scrum team into a target project), and **Build Software** (end-to-end workflow from idea analysis through repo initialisation). All sprint execution workflows live in the generated `CLAUDE.md` that `init project` places into the target project.
+mt-agent-devkit scaffolds an AI Scrum team into target projects. Internal harness
+sources live under `.mt-agent-devkit/`; target templates remain unchanged under
+`.claude/agents/templates/` until Phase 2. Existing init/update/build commands and
+provider-local scaffold helpers remain operational with the same target output.
 
 **Devkit source:** https://github.com/mycom08/mt-agent-devkit
 
----
+## Agent Harness Efficiency Work
+
+Read `docs/reviews/Stage_Specific_Read_Profiles_Proposal.md`, then
+`docs/Agent_Workflow_Test_Strategy.md` for harness efficiency/routing/testing work.
+Read the token-efficiency analysis only for baseline evidence, and
+`docs/Template_Test_Strategy.md` for test-infrastructure changes.
 
 ## Agent Roster
 
-Each specialized agent must read its instruction file before starting any work.
+Every specialized agent reads its shared role instruction before work.
 
 | Agent | Instruction File |
 |---|---|
-| Technical Lead | `.claude/agents/working/instructions/technical_lead_instructions.md` |
-| Developer | `.claude/agents/working/instructions/developer_instructions.md` |
-| QA | `.claude/agents/working/instructions/qa_instructions.md` |
-| Product Owner | `.claude/agents/working/instructions/product_owner_instructions.md` |
-| Business Analyst | `.claude/agents/working/instructions/business_analyst_instructions.md` |
-| UI/UX Designer | `.claude/agents/working/instructions/ui_ux_designer_instructions.md` |
-
-Agent memory, rules, working records, and context live under `.claude/agents/working/`.
-
----
+| Technical Lead | `.mt-agent-devkit/instructions/technical_lead_instructions.md` |
+| Developer | `.mt-agent-devkit/instructions/developer_instructions.md` |
+| QA | `.mt-agent-devkit/instructions/qa_instructions.md` |
+| Product Owner | `.mt-agent-devkit/instructions/product_owner_instructions.md` |
+| Business Analyst | `.mt-agent-devkit/instructions/business_analyst_instructions.md` |
+| UI/UX Designer | `.mt-agent-devkit/instructions/ui_ux_designer_instructions.md` |
 
 ## PR Approval Rule
 
-GitHub blocks self-approval. Always use `gh pr comment <number>` to post review verdicts — never `gh pr review --approve`.
+GitHub blocks self-approval. Post verdicts through `gh pr comment`; never
+`gh pr review --approve`. Independent review/QA gates remain mandatory.

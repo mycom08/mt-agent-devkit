@@ -1,0 +1,2814 @@
+{
+  "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+  "files": [
+    {
+      "source": ".antigravity/agents/workflows/Analyst_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "20c2846f93a0e55c696e6c8b853c5afe3142c610a3695619bf8ef76395161033",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/commands/Analyst_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude baseline; execution is supplied by selected provider adapter.",
+      "consumer_contract": [
+        "root commands and internal orchestrator"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/workflows/Apply_Retros_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b3d9349e7e3407074d2ad4bbeff7ecf17113f1dfc533100c42542eb5c09a024f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude baseline; execution is supplied by selected provider adapter.",
+      "consumer_contract": [
+        "root commands and internal orchestrator"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/workflows/Audit_Agent_Files_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9bcb3b946a325ab30f90b500633991502b5879fbb09c831dc153746386ae61b1",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/rules/Audit_Rules.md"
+      ],
+      "reason": "Claude baseline; execution is supplied by selected provider adapter.",
+      "consumer_contract": [
+        "root commands and internal orchestrator"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/workflows/Build_Software_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "1e344d01a3c02e1b3cf77d22e5cd6cdd0bac4cbefc9be1ef0083e1cfd4afec04",
+      "ownership": "phase2-exclusion",
+      "destination": ".antigravity/agents/workflows/Build_Software_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Operational target lifecycle retained at legacy path, with only internal harness routing allowed to change.",
+      "consumer_contract": [
+        "root command entrypoints and provider devkit skill"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/workflows/Init_Project_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6aa5bfc2480a25e913218910def08dbb42c954878223634ad88810520114d532",
+      "ownership": "phase2-exclusion",
+      "destination": ".antigravity/agents/workflows/Init_Project_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Operational target lifecycle retained at legacy path, with only internal harness routing allowed to change.",
+      "consumer_contract": [
+        "root command entrypoints and provider devkit skill"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/workflows/Update_Project_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9be026ad9a637df7e21b41bd2394955592de9bb51a9a93a03fbe283cd39e2739",
+      "ownership": "phase2-exclusion",
+      "destination": ".antigravity/agents/workflows/Update_Project_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Operational target lifecycle retained at legacy path, with only internal harness routing allowed to change.",
+      "consumer_contract": [
+        "root command entrypoints and provider devkit skill"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/context/Document_Index.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a3bd2511f85bdd4829c3770527cbb3acdbd3ecd241441fab20aaeed9b91313fb",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/context/Document_Index.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/context/Project_Priming_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e07a06149c540ee7625daca8859a955234870faadd8d991ed37c8d64b0088957",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/context/Project_Priming_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/instructions/qa_instructions.md",
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        ".mt-agent-devkit/workflows/Workflow_Guide.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/context/Project_Priming_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2da23bd5be7b6c292ad156928b051355b03356253b329074e4619dc04de42018",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/context/Project_Priming_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/docs/plan/Product_Backlog.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ddb25b1a7982ad1eda46841f4f59180fd24ca645fd83b05d9ac477392da3e460",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/docs/plan/Product_Backlog.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/docs/sprints/Sprint_1_Overview.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "027496ef81ac0250309365340b9a9b7d651b7ad5a2d4155dc6a7ebdd5aee186e",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/docs/sprints/Sprint_1_Overview.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/business_analyst_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "31d2ad51fac9155e9cb4a1ad2d603b80de4fc70b4c0dccf94fe0b4951ea11fec",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/developer_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "fd9203e3b48a006f904a9532101900bc23952a74deb5b9e89deaddc741ba5ea4",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/developer_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/orchestrator_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6e1889148075dcd5fe11854be9570d6b72bd4ff46b7f7b54ca5cea5e4401b48f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/Workflow_Guide.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/product_owner_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d27700ffa2406d18190eec64b9a2f14c8ea271bfcac7629a5e1338d159d4cd2f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/product_owner_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+        ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/qa_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "4e0def07634a8570848298fa33b7019bb1203d65b62fb1a1e24bebd8113957be",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/qa_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/technical_lead_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e2295d52b5a86ff2d1357f2147f443e6eb52438a30d88c73f1fa98847b2306dd",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/instructions/ui_ux_designer_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ff36bfc72e942982129192ae52202174f503fc755a9f53b7aed54d99612b1719",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/memory/Business_Analyst_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "dabdb9f9db6f9fe5796a2f4d3cf8eead2d77cf626ebe575472198322a70d1bc4",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/memory/Business_Analyst_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/memory/Developer_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "8c8e24eba4fc4ab955cedf471007a2c8c8aa5ac7b469ea3ecf10624f59e79888",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/memory/Developer_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/memory/Product_Owner_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "50279db7f2c89dba79d1f19d2f9515835a4a374ba3cc40c046583ccdf45764df",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/memory/Product_Owner_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/memory/QA_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d178a05deb1fd76967a068a8c1166eb8e61de078962905cbc048ed86e2c2c3ff",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/memory/QA_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/memory/Technical_Lead_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "7b48eaf6b17fbd37a3fc00ef5aa4453537b17ebfb305d262ff30d0d32a4c6e44",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/memory/Technical_Lead_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/memory/UI_UX_Designer_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "84b45c454d05b79f01c72ea43d04c0d7ccf56c909771abbc05d0a2246b27f2db",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/memory/UI_UX_Designer_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/.gitkeep",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/.gitkeep",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_1_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2bb473ba624be01a80eaa564f52983ea3705ab086ecb99723bd9d5b706121d07",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_1_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_2_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "362a6166ca2a09b24dba243320f0ea20075d9d18d09da574ae8574c5438b791e",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_2_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_3_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6e64f0b16accb1a45e704b913ca948506f94cb1d9e7312fd20c6ca2db6dc3824",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_3_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_4_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "42f0b74adf62fcc6db01578d96835acb166329b3cf7a664be0ba82e69ca7f1c7",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_4_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_5_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "919525784ee320da3c85b3e94f6d09497eadc4ec69a0c78ee17edab012c66cd8",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_5_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_6_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "eeb4c47a8fdede3bf0aa70b063bbdacef7aaa6899dff0bf452662e8aebc378f6",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_6_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/retros/sprint_none_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b74ee89f360e36754c0385aa8fc30c13666afdf99d071ed5aa2bf740ba79a24f",
+      "ownership": "preserved-history",
+      "destination": ".antigravity/agents/working/retros/sprint_none_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Agent_Common_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "f211a999fb61f2a4c58ac849efd41429dfbf510fecc7fc6d9bb18d538962cb2b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/instructions/qa_instructions.md",
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Agent_Common_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "fb21c00f9615f2b7b80c817a10a3d7e143099a5820fa19d501b6501b1307f911",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/instructions/qa_instructions.md",
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Audit_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "3b338e1057d614abbc339c5a3917bde925ba73f697da87663f6f37bf236ef93e",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Audit_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Blocked_Request.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "dba8dbdfd5ff068c7611af46772015c45957f5b0721e4c40208d0bdabe28c521",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Blocked_Request.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/Resume_Story_Workflow.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Business_Analyst_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d913641bb447638cc0c8b0583443667fe4df1dcde26f14064886b0d98267e2e5",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Business_Analyst_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "34b186895e38d6b9a064a76c69b6c4ceb772f27f64c2b001688e3a180d7906a5",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/CICD_Validation_Guide.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "479d473fbda2802314907dc86da93193a283a2d7c7e463cfaec383c1b2ed5c80",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/CICD_Validation_Guide.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md",
+        ".mt-agent-devkit/workflows/Workflow_Guide.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Clean_Code_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "efbabc75cb1d5bf94bb3431aa4bb091ad92b3374a54a68247c8cd634e3cee00a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Developer_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e94f22cf0508a68ee85212540f397bc2ac5941cff3ef40fba795d402a32bfb9a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Developer_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "898be3ddca5f0d6c4654b3cb83d9a06c2333b9e350dfd311ee26894dfac46385",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Product_Owner_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ae3687286e58b9402b1d28cdb55c95c8d23c4dd37b544f82e13c09f49fb05908",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ee6e183cd52cee9dd06b45b5c34a62e1a0cc19a8ba7ed50e30e7919d768d9b8e",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/QA_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "5b073dc883c55249816189769788b2b9dd5c7fa231a40e0c5a08762bc7de7fe8",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/qa_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/QA_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "91e71013735c8ab3862eca073f94e422b8d5e470fbcb959f53fe0e47a48a00cc",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/qa_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Retro_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "7868e3df6780ac7d094bf320b45830894b5d63b2f8511698ff7d7cc07c85db8d",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Retro_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9d27cdf2c3eebc7030887b0c78e24ab4fb0e2cc6a9a78b5cf7e9191942470f05",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard.md",
+      "consumers": [
+        ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Story_Standard_Dev.md",
+        ".mt-agent-devkit/rules/Story_Standard_PO.md",
+        ".mt-agent-devkit/rules/Story_Standard_QA.md",
+        ".mt-agent-devkit/rules/Story_Standard_TL.md",
+        ".mt-agent-devkit/rules/Story_Standard_UIUX.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_Dev.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "dc2ec69f75530b2fdc3d1fe9a2bfb172864365acb87cb600158fc1547f8c7ac0",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_PO.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "935a2443cf15764e1e7e693c1ae5639f837dcd3e4e250693b0d00f5e1155494f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_QA.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "eefd813cbe475a91b45dd65216207309e1153bdd2b444f36029ce5024a658b1b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_QA.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_TL.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b333140901e7fae0aeeb3f204328b484c1de36292bb5204987db5cf98ecc1625",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_TL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_UIUX.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0b0960c483d28d2992163df10b00456253e98002db571b0a4370a5ae654a2c34",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_UIUX.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Technical_Lead_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "fd3fd29ee0a696eb629cd9ab9fe22df63bf78c6050a4091bb664517b150c453a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "7bf871f0fbfa80af447b1c519a66f87411506c6a2f0645ca4d44730f5f4a181d",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/UI_Prototype_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d6cb50836dd4f7387cb8e6f35505d6b99a0bac9f0f6bfdf6945158375d63f82b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/UI_Prototype_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/UI_UX_Designer_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "061a1c728804b20778d22822f4fd3e22050218274c1af9928b04fc4f94bd63bc",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e80d9c808693ea00dea8673c0c6544b8ea4d4965a94f0d6028365d9c4d479238",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/scripts/branch_preflight.py",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "c168b3e930fe8c7374a071a8b8480c25cc6bc1b87da5a2d2a5f542e0304ad0b8",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/scripts/branch_preflight.py",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/scripts/scaffold_mechanical.ps1",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "25fcbcfb761837e02ae9e48a42c3a9df3866915b217a3f9e41a8e00d44f4d804",
+      "ownership": "phase2-exclusion",
+      "destination": ".antigravity/agents/working/scripts/scaffold_mechanical.ps1",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Target-tree lifecycle helper unchanged in Phase 1.",
+      "consumer_contract": [
+        "legacy init/update/build"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/scripts/scaffold_mechanical.sh",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "fe6a40bd4787f0264a1f7f0a38a3faf8a15028b020712b6ec207ca47f9b5626b",
+      "ownership": "phase2-exclusion",
+      "destination": ".antigravity/agents/working/scripts/scaffold_mechanical.sh",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Target-tree lifecycle helper unchanged in Phase 1.",
+      "consumer_contract": [
+        "legacy init/update/build"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/scripts/telemetry.py",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "64437f14eb50b32e58c5db00e6fce03d350f6119040285fc1a39eaf2a1b0282e",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/scripts/telemetry.py",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/docker/Docker_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "5b379613507e6a335feabc4f899b390fbf8b9134584e203ac1d5e1a5eb58638d",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/docker/Docker_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/java/Java_Skeleton_API_Spec.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "3bfefa3e6ecfa23332a1654cef3712d7544a0e53cb0d6384e01dc359a10aed54",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_API_Spec.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/java/Java_Skeleton_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0eef5ceba89cd6612e83cc4a24d465a5eba9e8aa4532204efa7548d870fbdaab",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/java/Java_Skeleton_Library.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "accaf9610549fadad16279a80f513bc4ba39aa2b2889b0089cef66b7e5590089",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_Library.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/java/Java_Skeleton_REST_Service.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "23b125053847b1ef11a32cb932ba2737d8beec412d4d3f071d82ef62c7044fd6",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_REST_Service.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/shared/CI_Bootstrap_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "20af8ca4690ea77c11fab476f304fc8750d5d3f60b40f26326ea940daee15823",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/shared/CI_Bootstrap_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/skeletons/shared/Version_Release_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "44b2ba8ff19ccb078feef8264b202fd35bc0ca03eb8453f27a83005c00ba9f6c",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/shared/Version_Release_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_API_Spec.md",
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_Conventions.md",
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_Library.md",
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_REST_Service.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/tokentrace/README.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "5af3b6796d64781bef9c6951543c70ab3d1423f032dc804c195f11ec674eada5",
+      "ownership": "provider-specific",
+      "destination": ".antigravity/agents/working/tokentrace/README.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Legacy provider usage tooling retained; not universal telemetry.",
+      "consumer_contract": [
+        "legacy provider observability"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/tokentrace/token_cost.sh",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "833e792247a7a28625ca20706c2b0927814c30ee82815134dd5379b3a028a078",
+      "ownership": "provider-specific",
+      "destination": ".antigravity/agents/working/tokentrace/token_cost.sh",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Legacy provider usage tooling retained; not universal telemetry.",
+      "consumer_contract": [
+        "legacy provider observability"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Create_Stories_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "be603c990eee141d692fbddc1187a12a829494b56a55cc90f7ee106e0e61d218",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Plan_Sprint_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "11e341925fc15f1951a62cab904f444977c4e42943ab93affdf6a206849f3a09",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Refine_Sprint_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a816478610abfee57420a8def4708055cce7ea4870ba35d11afd0dedc47f24c4",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Refine_Sprint_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Resume_Story_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ef28096a08d665567a961e3aa4836e0a6eca9c48d27ab799ea44ca72da38ab61",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Resume_Story_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Shared_Pipeline_Stages.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "165edf9416e1f2567c25bba3fe7e70dd953ab26b615906d6553eed334510034f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Sprint_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "4afc68af93ab60b7b75f3629d34807a76f38a0da428095ee4f9082ff086aac3a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Sprint_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Start_Story_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "f3616708a2b796fa497f158522430e4ba495042646dd3b0f1df0e3f90dfa2943",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Start_Story_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Sync_Devkit_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "695ac431bddcfedaf5233daca8566b93c0e99e1ebe83913efbe23387e2adfa0e",
+      "ownership": "phase2-exclusion",
+      "destination": ".antigravity/agents/working/workflows/Sync_Devkit_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Target-project release fetch, merge and global substitutions remain provider-specific until Phase 2.",
+      "consumer_contract": [
+        "selected-provider lifecycle delegation"
+      ]
+    },
+    {
+      "source": ".antigravity/agents/working/workflows/Workflow_Guide.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "256ba33fba5b051ef39a09d40259c48e9a8c9c2219756ca8f53f065c72d89669",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Workflow_Guide.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/devkit/SKILL.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9c78e3c7b299454046ff8ea326618961ec279d15b6f42a6beeac246622c242cf",
+      "ownership": "provider-entrypoint",
+      "destination": ".antigravity/skills/devkit/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/read-section/SKILL.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b920f6e2358697059507901a2dd4589d4c0ed16010eb58b6bbdd063778056773",
+      "ownership": "provider-entrypoint",
+      "destination": ".antigravity/skills/read-section/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/read-section/scripts/read_section.sh",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b9e463ec971f43ffcc36e0beb6586f00a83441cfd6771433c8bd52a72f2f9952",
+      "ownership": "provider-entrypoint",
+      "destination": ".antigravity/skills/read-section/scripts/read_section.sh",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/agents/workflows/Analyst_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6a22785954f3913cba6b0f8c3016d5218c7487a8c5ecaa6e10f194ec159cad35",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/commands/Analyst_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude baseline; execution is supplied by selected provider adapter.",
+      "consumer_contract": [
+        "root commands and internal orchestrator"
+      ]
+    },
+    {
+      "source": ".claude/agents/workflows/Apply_Retros_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "8e7fb81fe32c82a647dac3b7547c05d565267218a48b342d4f850c01c50b6ea6",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude baseline; execution is supplied by selected provider adapter.",
+      "consumer_contract": [
+        "root commands and internal orchestrator"
+      ]
+    },
+    {
+      "source": ".claude/agents/workflows/Audit_Agent_Files_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "8a592ad650fc6d31cc999faa5cb6cd5266058a7d2ccddffc07a117dbf3b03614",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/rules/Audit_Rules.md"
+      ],
+      "reason": "Claude baseline; execution is supplied by selected provider adapter.",
+      "consumer_contract": [
+        "root commands and internal orchestrator"
+      ]
+    },
+    {
+      "source": ".claude/agents/workflows/Build_Software_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "97b1c510189e43714879e5cf01e3f8ae7fabf8e91f2ec47162e31627167ed0c5",
+      "ownership": "phase2-exclusion",
+      "destination": ".claude/agents/workflows/Build_Software_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Operational target lifecycle retained at legacy path, with only internal harness routing allowed to change.",
+      "consumer_contract": [
+        "root command entrypoints and provider devkit skill"
+      ]
+    },
+    {
+      "source": ".claude/agents/workflows/Init_Project_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "29e0028eb074f3ae4850072949bd500e3f5a20be0cfb796cb1ebd7d82b2b8f4f",
+      "ownership": "phase2-exclusion",
+      "destination": ".claude/agents/workflows/Init_Project_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Operational target lifecycle retained at legacy path, with only internal harness routing allowed to change.",
+      "consumer_contract": [
+        "root command entrypoints and provider devkit skill"
+      ]
+    },
+    {
+      "source": ".claude/agents/workflows/Update_Project_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "8d76b03886976359c3e0199b2b0f0e0570aa41fb758f22b9e07ef9fea92fadd2",
+      "ownership": "phase2-exclusion",
+      "destination": ".claude/agents/workflows/Update_Project_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Operational target lifecycle retained at legacy path, with only internal harness routing allowed to change.",
+      "consumer_contract": [
+        "root command entrypoints and provider devkit skill"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/context/Document_Index.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "105029fba9c4da6190deaf7cb72fa57cbef4e396fb00b30d545c5486e731077b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/context/Document_Index.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/context/Project_Priming_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "f20052887f819718e18fdd31286dbac2c003b2628995f33c0b9fc0691f60840e",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/context/Project_Priming_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/instructions/qa_instructions.md",
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        ".mt-agent-devkit/workflows/Workflow_Guide.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/context/Project_Priming_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "84f54710b980ce28c2ad1b9ae81348bcbfe3f6724cc1e5c058ca936bda88230e",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/context/Project_Priming_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/docs/plan/Product_Backlog.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ddb25b1a7982ad1eda46841f4f59180fd24ca645fd83b05d9ac477392da3e460",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/docs/plan/Product_Backlog.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/docs/sprints/Sprint_1_Overview.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "352cdf55d0fc526ba7b10c474488df82a7ec6166dbb0f769b1be40a7dfe222d4",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/docs/sprints/Sprint_1_Overview.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/enhancement/Agent_Common_Split_Findings.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d77a3a76b1278407ad04bfb609de112de8af3fd6352bad04798af6bf3e80b501",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/enhancement/Agent_Common_Split_Findings.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/enhancement/Bench4_2026-08-24_Findings.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a962d8c0cdf7deda31c76ef60ff572f4cb36343cae4f676e83ce40ab83627a31",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/enhancement/Bench4_2026-08-24_Findings.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/enhancement/Bench5_2026-08-24_Findings.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "12c2b1cefa9e3da52e8f98d01cdd8bce05f2f38aae56cf4fe4d8bddcff17ba43",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/enhancement/Bench5_2026-08-24_Findings.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/enhancement/Bench_2026-08-21_Findings.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "836d0f7edfc954dd799b5e6a52b59b25232ffe2b0a6c306419ddeb079515aaeb",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/enhancement/Bench_2026-08-21_Findings.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/enhancement/Bootstrap_OnDemand_Split_Notes.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ddf98da86927b0a95b00d4489f6aedb52f0fdd3e86074d8fec2d09a64c976a0a",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/enhancement/Bootstrap_OnDemand_Split_Notes.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/enhancement/Harness_Benchmark_Guide.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6375ccd1364f5c9d58dc237d6fc0365d7ddfb96617689cf7ca7c3dbb81390cd2",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/enhancement/Harness_Benchmark_Guide.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/business_analyst_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "f9f1e5a5d6441510575185a43d183b94ba42865b047d9e39c1d4dd0380e60c86",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "discovery_frontmatter": "---\nname: Business Analyst\ndescription: Evaluates feature business requirements, use cases, scope boundaries, and cost-benefit trade-offs\n---\n\n",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/developer_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0cf5e31b8b08ad546f53ae35cfab6663820914c89e9485fb635baf6823acb723",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/developer_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "discovery_frontmatter": "---\nname: Developer\ndescription: Implements approved stories, follows technical guidance, and updates delivery-facing documentation for the feature\nmodel: sonnet\neffort: high\n---\n\n",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/orchestrator_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "17b678f413f20dcdfe069d6a31c2c43bb004263bf3536bff1184d893c82d5791",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/Workflow_Guide.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/product_owner_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ba9449e6fb98093f30d2606f9dee7b305352b2792f808eb1070f2080a2df4f91",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/product_owner_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+        ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "discovery_frontmatter": "---\nname: Product Owner\ndescription: Acts as Scrum PO \u2014 owns the backlog, validates acceptance criteria, prioritizes stories, and gates scope\n---\n\n",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/qa_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b90f63644c409d8e6a30e299e4e21c2a7e3943e8a51a579e688b50201dfe3f9f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/qa_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "discovery_frontmatter": "---\nname: QA\ndescription: Validates story acceptance, test coverage, and release readiness, and maintains QA-facing feature documentation\n---\n\n",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/technical_lead_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "22aaf2958bf2dc82e0ce388f19ea6849986e8a60e7ab8243c26fe88e374d65e2",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "discovery_frontmatter": "---\nname: Technical Lead\ndescription: Designs architecture, API specs, database schemas, and implementation roadmaps\n---\n\n",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/instructions/ui_ux_designer_instructions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "3933c7b7be79496ddeb3d01cf8789107328e670d81d426e2c028640ff6efc5e8",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "discovery_frontmatter": "---\nname: UI/UX Designer\ndescription: Turns a wireframe or backlog story into a runnable prototype \u2014 real routes/components wired to a local mock backend, not a static mockup\n---\n\n",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/Business_Analyst_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "dabdb9f9db6f9fe5796a2f4d3cf8eead2d77cf626ebe575472198322a70d1bc4",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/Business_Analyst_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/Developer_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e2f75a8a1266190590a484f7d5c83a74c130b82a380b05e12306256d9b5e6aa6",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/Developer_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/Developer_Memory_Archive.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0b9a3d4605e683be7f4282fafee9eafed5a67d76415201ad15ff20f0dd44ca74",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/Developer_Memory_Archive.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/Product_Owner_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "3e34827d814e333bc41d1641c882cfa75497cdbe7ead326ba6f65f41cf6b5f0a",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/Product_Owner_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/QA_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "02f6a81ec2c3ad73dc9f4997f17ac928befd80145aad6255a9e1a0447c9b8609",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/QA_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/QA_Memory_Archive.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2ca5e9f11bf877ce0968b910308a81fb3a418741d044db8d4378636bf177047d",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/QA_Memory_Archive.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/Technical_Lead_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2cbe9bfb8a7948c91796d21b0d1c542b87088a78dfd57b86b4e01f8dd269ae1b",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/Technical_Lead_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/Technical_Lead_Memory_Archive.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d8a0527e4b361d3d98bd3d463a3a764495371d676c4ae71df50595b8d06466cf",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/Technical_Lead_Memory_Archive.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/memory/UI_UX_Designer_Memory.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "84b45c454d05b79f01c72ea43d04c0d7ccf56c909771abbc05d0a2246b27f2db",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/memory/UI_UX_Designer_Memory.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/.gitkeep",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/.gitkeep",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000043_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "66b6667162110a7e967f71dfa6132435997755036468f0c307dcefcfb867306c",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000043_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000044_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "16afa469140573edea9e665a64f38323f9b854d51495d070bf5d4fd67f7adaa7",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000044_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000124_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6cad0cc4d1ec5bba7a19c297cc97ee9e4ceb87944db0545b39d7d9920c7586ba",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000124_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000133_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "298a30742bd4a0c2c1a2527a4df9e59dbf51dc4cdaf35351ab5783da3edba618",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000133_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000134_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "01ca4ddd481906c1c99e522168a60cfb017a8d4f2dd674566a0c9936aac3ae10",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000134_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000135_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "92d60f32e0b0988edb83059f746b3713e041414a23d4a09cd01a710c58c57855",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000135_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000136_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "20c911f4b622c954fb6640ff90e44ec545033c6bf97e3415467c259668708c42",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000136_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000137_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "16e979dc3e820449325f7c3fff4a2de9357a71eb9f0c39ba59f0f0dd91a3cf5d",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000137_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000138_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a3846ae54f2bded1e4806e1dc40418655bafd036acbfe9a146f3bc39f7675150",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000138_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000139_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a504deca95a8f38c7bafa64587ee064abedda1eb3c8b40601ba2d117bf013962",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000139_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000143_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "f0a685f6d7cd1a06a9501d2104d5148776185c584d154e9d12ad3dba6b27a579",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000143_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000144_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d906b482ad62999f8c1dfeddd620d916ee8b64b1f2bc0e9becfbf826cb8dc6b5",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000144_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000145_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9d48fa7905841a3cc92f1b9001711824651bd9c5c50d5624a4458815f56faa62",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000145_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/ST-000148_retro.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "85dc3d9ebf69d83765f82c59f964aea6e848706d4d3ff575555d8f86d42a408e",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/ST-000148_retro.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_1_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "fa12041b10cfcc9b54c7489c804553afc4f6446a52369aa2882cb5b63c490137",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_1_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_2_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "f449014168e119af1618b2115ec3b7a0ae85afc83f093bec2516441580775656",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_2_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_3_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b6288c60718bd674469f289c878755f6bba7ebc57f22481d72c8ccabaf005ccd",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_3_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_4_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "69bf0beb0c629559d55e369c8b47a0d874624ee8b20bdc35bc6320249b5a7343",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_4_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_5_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "919525784ee320da3c85b3e94f6d09497eadc4ec69a0c78ee17edab012c66cd8",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_5_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_6_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "77e9e75f33d238e5011c1bd2732c03df43953ebb805d2d6192295ac5294c82af",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_6_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/retros/sprint_none_summary.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "4e04cf9d24b206721127b658eff6e374de3d21af6ec2e1ce29c51d144a8fec67",
+      "ownership": "preserved-history",
+      "destination": ".claude/agents/working/retros/sprint_none_summary.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Existing tracked histories stay at original path and byte-identical; not reusable harness sources.",
+      "consumer_contract": [
+        "provider-local runtime history"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Agent_Common_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0718b53979c33588732cc1e0b3c8f62cd9b33fe6b4be080939c9c5a07e6c2a9a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/instructions/qa_instructions.md",
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Agent_Common_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e1243264ba3b9c68ab4273aad9630db97a29979070ff6a3f9b96adc24e907dc9",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/instructions/qa_instructions.md",
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md",
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Audit_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9ecad0285bc41f33fc24a1c0e36fbbf5d85a4f66292cc74abb192e8bc498f03c",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Audit_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Blocked_Request.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "fbd98bec316f7fa60c7cb93ddb7b76b2e3b291340dabf1e36cd45d4c877542b7",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Blocked_Request.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/Resume_Story_Workflow.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Business_Analyst_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "49cd192eaaf7f67c7685a5bdefa6ecf46f08c1a60dd9987b7be1ff22c2a774af",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Business_Analyst_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a3f8dc24f8693594db2459f693ec80a2b4f3b9917adcdccdda3b8e3c4d9686e4",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/business_analyst_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/CICD_Validation_Guide.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "479d473fbda2802314907dc86da93193a283a2d7c7e463cfaec383c1b2ed5c80",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/CICD_Validation_Guide.md",
+      "consumers": [
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md",
+        ".mt-agent-devkit/workflows/Workflow_Guide.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Clean_Code_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "efbabc75cb1d5bf94bb3431aa4bb091ad92b3374a54a68247c8cd634e3cee00a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Developer_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b87a3e012fffa868eddb668e8eb9f69f757a443ea194c12c14679b3125f9ab84",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Developer_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "91a1bb27a154a3e790061ad0c0dd7408999feeb9b279a5e9c57ae2b7a9c0d572",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "318c0a48e8e86f1cb1456ae1fb7c254905f7930d377a7a854e3c84443a962eb7",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e086677fd0dc28ba7a68487d535b9589ca0514f3ba974d0da46c7f19cfd76d98",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/QA_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "028df3c7ca5e7eaaebbfa32bd9e543bd52222c601e3c5dc5c26693ce57eecec4",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/qa_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/QA_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0be37cd6a8d18fb1b0ec99aedd5f2402cbf81e9ff9f0b376bd7007790399f53a",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/qa_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Retro_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d14b83b21a9f8fc494d4a1c1c281fd27f8772298151815a87e47f2f7ef17077c",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Retro_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2178462bae12a61e6b4e0155d772afb060245e59c934ceccda6a9e86f41c99c3",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard.md",
+      "consumers": [
+        ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Story_Standard_Dev.md",
+        ".mt-agent-devkit/rules/Story_Standard_PO.md",
+        ".mt-agent-devkit/rules/Story_Standard_QA.md",
+        ".mt-agent-devkit/rules/Story_Standard_TL.md",
+        ".mt-agent-devkit/rules/Story_Standard_UIUX.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_Dev.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "48c7fe7190e048c9bcf125708b9086f92ffb8ac1689139a501ebb13db6b82c47",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_PO.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9c59a34543e383cb9036ed2529f7759054a6ced80c8da2b0022939aa6d62edad",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_QA.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "6435e60609004a88f7570f88adb3441d934fb981780a5c6bce4a19e38fde0049",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_QA.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_TL.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "15de6aa814c7d9069f83317a06dcbc2601d8082c40574ebe1e94a7a73247adfd",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_TL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_UIUX.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2c7280095f0d190ed044bfe3fae99b7725f45436e87edcfff03881b719ce75df",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Story_Standard_UIUX.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Technical_Lead_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0135acae3a18f51ba9679322364f6ca6831a5150ca3b78cbefb3e33300587c3f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e7f7abd8f8b2ca87adbb59579f9ce95a9f8ff86fa379b1597e6336ef36bf81f4",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/technical_lead_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/UI_Prototype_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d6cb50836dd4f7387cb8e6f35505d6b99a0bac9f0f6bfdf6945158375d63f82b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/UI_Prototype_Rules.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/UI_UX_Designer_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "80a3896f1096d8b2950077ea2d1b9c26f18b4f14fcad299cfae27e61993abc8b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a3cd5e4c4dcb9bbe6854228d83ca2755b5f7ea694ed6c894ee0166638a02b17b",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/scripts/branch_preflight.py",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "c168b3e930fe8c7374a071a8b8480c25cc6bc1b87da5a2d2a5f542e0304ad0b8",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/scripts/branch_preflight.py",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/scripts/scaffold_mechanical.sh",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "026691110c06cbac473873d671c0256035595a4e6f74a9c5d2972039ee3b5052",
+      "ownership": "phase2-exclusion",
+      "destination": ".claude/agents/working/scripts/scaffold_mechanical.sh",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Target-tree lifecycle helper unchanged in Phase 1.",
+      "consumer_contract": [
+        "legacy init/update/build"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/scripts/telemetry.py",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "efd0ca70c79f10b58bbbfaf1aa21e648900308db4577f6874f517817ad86fbe3",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/scripts/telemetry.py",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md",
+        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/docker/Docker_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "5b379613507e6a335feabc4f899b390fbf8b9134584e203ac1d5e1a5eb58638d",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/docker/Docker_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/java/Java_Skeleton_API_Spec.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "395d174aec2cbb4bebe72de5a2b719de74c0626ec09b99553fad02646e8c069f",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_API_Spec.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/java/Java_Skeleton_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "3eab0ae3799158f22be5640bce4a1d70a957cf97b1a71c97bc692522dd9f29b3",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/java/Java_Skeleton_Library.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "db24e8a7e6cc2186c080e28bda9f3f9eb662d3de97dd3a2e7c8ba428e9be8593",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_Library.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/java/Java_Skeleton_REST_Service.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "2286f279a354f1d18b857ec1d0ea600b742e0a163e8efc530eb3981ae4978c16",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/java/Java_Skeleton_REST_Service.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/shared/CI_Bootstrap_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0a909cb788fbcbfa657afb616fd66306828be28b354c9de934baad7ed30c0bc7",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/shared/CI_Bootstrap_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/skeletons/shared/Version_Release_Conventions.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "44b2ba8ff19ccb078feef8264b202fd35bc0ca03eb8453f27a83005c00ba9f6c",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/skeletons/shared/Version_Release_Conventions.md",
+      "consumers": [
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_API_Spec.md",
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_Conventions.md",
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_Library.md",
+        ".mt-agent-devkit/skeletons/java/Java_Skeleton_REST_Service.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/tokentrace/README.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "7cb837fbf95f6906f2e1f15273d0eff6a17cac60ccaaaeae73ffa3d58dcbfdfe",
+      "ownership": "provider-specific",
+      "destination": ".claude/agents/working/tokentrace/README.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Legacy provider usage tooling retained; not universal telemetry.",
+      "consumer_contract": [
+        "legacy provider observability"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/tokentrace/token_cost.sh",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "a3fb3f19e829f10edb0733a2f00e2bbdb616eccc38dc793a5c1a1ca6adfce41b",
+      "ownership": "provider-specific",
+      "destination": ".claude/agents/working/tokentrace/token_cost.sh",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Legacy provider usage tooling retained; not universal telemetry.",
+      "consumer_contract": [
+        "legacy provider observability"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Create_Stories_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "adcd4e49bbd8f7a920d0d3ec3ea0a476dbaa68b7120855e0b8672ff9076d83a4",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Plan_Sprint_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "d68b064c42e797bb8b87bb665d83bbef0fe15f831db6eb47d249587a0d4af87e",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Refine_Sprint_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "400f7a32073411def22b81281a9eeef66907e39164fba2ac2d8268ac654a54e3",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Refine_Sprint_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Resume_Story_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "7f829a7f20d83fa7ed4a162d553123039c353d91a1bd9af435779520402d4928",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Resume_Story_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Shared_Pipeline_Stages.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9360455d5f812fd57fa08bf672a4aa43fadb19c69862514f59eccd9d3b346fd7",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Sprint_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ace06e07b2ea0b0136930dcc32141e18492b4fa621afeda0f5abfb4d3feb8e8c",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Sprint_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Start_Story_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "1da61a3d2a89fa9f50e08f6a7368a7cbe246ff690733c39bb72d2da384a1b493",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Start_Story_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Sync_Devkit_Workflow.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "15b6e7b8a23e896ab4309fcf985c87ac41aa30b3d90ba34c0638d8be93116b98",
+      "ownership": "phase2-exclusion",
+      "destination": ".claude/agents/working/workflows/Sync_Devkit_Workflow.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"
+      ],
+      "reason": "Target-project release fetch, merge and global substitutions remain provider-specific until Phase 2.",
+      "consumer_contract": [
+        "selected-provider lifecycle delegation"
+      ]
+    },
+    {
+      "source": ".claude/agents/working/workflows/Workflow_Guide.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b65b3acaf269c94a2fcaf792e0fa9b32b6facb6907221516783adfe39d2a98e2",
+      "ownership": "generated-wrapper",
+      "destination": ".mt-agent-devkit/workflows/Workflow_Guide.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
+      "consumer_contract": [
+        "role pre-work, section routing, story pipeline and internal commands"
+      ]
+    },
+    {
+      "source": ".claude/skills/read-section/SKILL.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "0cea95d292d870aa1dd9c5f8b20a6e57c9f24bf8cc3570024c09c351aaebc1d8",
+      "ownership": "provider-entrypoint",
+      "destination": ".claude/skills/read-section/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/read-section/scripts/read_section.sh",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b9e463ec971f43ffcc36e0beb6586f00a83441cfd6771433c8bd52a72f2f9952",
+      "ownership": "provider-entrypoint",
+      "destination": ".claude/skills/read-section/scripts/read_section.sh",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": "AGENTS.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "05d14f54c3a3e2195b108f9160d85e533731de42852795aee780c77c98c894a9",
+      "ownership": "provider-entrypoint",
+      "destination": "AGENTS.md",
+      "consumers": [
+        ".mt-agent-devkit/contracts/Provider_Contract.md",
+        ".antigravity/harness/Provider_Adapter.md",
+        ".codex/harness/Provider_Adapter.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": "CLAUDE.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "8016b7a2dde23bc0e525669b184b5bb21f2be35baf57d17dc6d821392021acf8",
+      "ownership": "provider-entrypoint",
+      "destination": "CLAUDE.md",
+      "consumers": [
+        ".mt-agent-devkit/context/Project_Priming_Bootstrap.md",
+        ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+        ".mt-agent-devkit/contracts/Provider_Contract.md",
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+        ".mt-agent-devkit/rules/Audit_Rules.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/workflows/Workflow_Guide.md",
+        ".mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md",
+        ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md",
+        ".claude/harness/Provider_Adapter.md"
+      ],
+      "reason": "Native discovery remains provider-local; routes to selected adapter and shared source.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    }
+  ]
+}

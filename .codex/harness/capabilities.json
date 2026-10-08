@@ -1,0 +1,10 @@
+{
+  "provider": "codex",
+  "evidence": "Tools exposed in the implementation session; live behavior still needs separate scenario evidence.",
+  "operations": {
+    "spawn": "collaboration.spawn_agent",
+    "resume": "collaboration.followup_task",
+    "message": "collaboration.send_message",
+    "completion": "collaboration.wait_agent"
+  }
+}

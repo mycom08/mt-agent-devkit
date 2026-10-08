@@ -1,0 +1,5 @@
+{
+  "PROVIDER_ROOT": ".claude",
+  "RUNTIME_ROOT": ".claude/agents/working",
+  "COMMAND_ROOT": ".claude/agents"
+}

@@ -8,6 +8,16 @@ on:
     paths:
       - ".claude/agents/templates/**"
       - ".claude/agents/workflows/**"
+      - ".mt-agent-devkit/**"
+      - ".claude/harness/**"
+      - ".antigravity/harness/**"
+      - ".codex/harness/**"
+      - ".claude/agents/working/**"
+      - ".antigravity/agents/working/**"
+      - ".claude/skills/**"
+      - ".antigravity/skills/**"
+      - "AGENTS.md"
+      - "CLAUDE.md"
       # The gate script and this workflow must trigger their own gate. Without
       # these, a PR editing only validate_templates.py runs no check at all, and
       # `gh pr checks` reporting nothing satisfies the merge gate by default.
@@ -21,9 +31,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Inventory coverage reads the recorded source revision; live files are not frozen.
 
       - name: Run validate_templates.py
         run: python scripts/validate_templates.py
+
+      - name: Validate internal shared harness and provider routing
+        run: |
+          python scripts/validate_internal_harness.py
+          python -m unittest scripts.test.test_internal_harness
 
       - name: Run telemetry and validator fixture tests
         run: bash scripts/test/run.sh

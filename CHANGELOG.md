@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000220] Consolidated internal agent rules and workflows under one shared owner with explicit Claude, Antigravity and Codex adapters.
+
 ### Bug Fixes
 
 ---
