@@ -381,24 +381,30 @@ def apply(target, value, fail_at=None):
     provider = sorted(value["providers"])[0]
     transaction = uuid.uuid4().hex
     journal_path = safe(target, value["providers"][provider]["RUNTIME_ROOT"] + "/tmp/devkit-migrations/" + transaction + "/journal.json")
-    lock.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        with lock.open("xb") as stream:
-            stream.write(canonical({"schema_version": 1, "transaction_id": transaction, "plan_id": value["plan_id"], "pid": os.getpid(), "process_identity": process_identity(os.getpid()), "journal": journal_path.relative_to(target).as_posix()}))
-    except FileExistsError:
-        raise Conflict("target migration locked") from None
-    journal = {"schema_version": 1, "transaction_id": transaction, "plan": value, "state": "planned", "operations": [], "receipt_before": safe(target, RECEIPT).read_bytes().hex() if safe(target, RECEIPT).exists() else None}
+    # Prepare complete recovery data before atomically publishing ownership.
+    journal = {"schema_version": 1, "transaction_id": transaction, "plan": value, "state": "backed_up", "operations": [], "receipt_before": safe(target, RECEIPT).read_bytes().hex() if safe(target, RECEIPT).exists() else None}
+    unchanged(target, value["preservation_hashes"])
+    for op in value["operations"]:
+        path = safe(target, op["path"])
+        if filehash(path) != op["before_sha256"]:
+            raise Conflict("target changed after plan: " + op["path"])
+        journal["operations"].append({"operation": op, "backup_hex": path.read_bytes().hex() if path.exists() else None, "status": "backed_up"})
     jsonwrite(journal_path, journal)
+    checkpoint("journal_prepared", fail_at)
+    prepared = lock.with_name(lock.name + "." + transaction + ".prepared")
     try:
+        jsonwrite(prepared, {"schema_version": 1, "transaction_id": transaction, "plan_id": value["plan_id"], "pid": os.getpid(), "process_identity": process_identity(os.getpid()), "journal": journal_path.relative_to(target).as_posix()})
+        try:
+            os.link(prepared, lock)  # Exclusive publication of an already complete file.
+        except FileExistsError:
+            raise Conflict("target migration locked") from None
+    finally:
+        prepared.unlink(missing_ok=True)
+    try:
+        checkpoint("locked", fail_at)
         unchanged(target, value["preservation_hashes"])
-        for number, op in enumerate(value["operations"]):
-            path = safe(target, op["path"])
-            if filehash(path) != op["before_sha256"]:
-                raise Conflict("target changed after plan: " + op["path"])
-            backup = path.read_bytes().hex() if path.exists() else None
-            journal["operations"].append({"operation": op, "backup_hex": backup, "status": "backed_up"})
-        journal["state"] = "backed_up"
-        jsonwrite(journal_path, journal)
+        unchanged(target, {op["path"]: op["before_sha256"] for op in value["operations"]})
+        receipt_unchanged(target, journal)
         checkpoint("backed_up", fail_at)
         return finish(target, journal_path, journal, fail_at)
     except Exception:
@@ -407,9 +413,19 @@ def apply(target, value, fail_at=None):
         raise
 
 
+def receipt_unchanged(target, journal):
+    before = bytes.fromhex(journal["receipt_before"]) if journal["receipt_before"] is not None else None
+    allowed = {digest(before) if before is not None else None}
+    if journal.get("receipt_after_sha256") is not None:
+        allowed.add(journal["receipt_after_sha256"])
+    if filehash(safe(target, RECEIPT)) not in allowed:
+        raise Conflict("intervening receipt edit")
+
+
 def finish(target, journal_path, journal, fail_at=None):
     value = journal["plan"]
     validate_plan(value, target)
+    receipt_unchanged(target, journal)
     for number, entry in enumerate(journal["operations"]):
         op = entry["operation"]
         path = safe(target, op["path"])
@@ -440,6 +456,7 @@ def finish(target, journal_path, journal, fail_at=None):
     receipt = {"schema_version": 1, "layout_version": 2, "source": value["source"], "mode": value["mode"], "profile": value["profile"], "providers": value["providers"], "status": "verified", "managed_files": [{"id": op["operation_id"], "path": op["path"], "rendered_sha256": op["after_sha256"], "ownership": op["ownership"]} for op in value["operations"] if op["ownership"] != "runtime_seed" and op["action"] != "retire"]}
     journal["receipt_after_sha256"] = digest(canonical(receipt) + b"\n")
     jsonwrite(journal_path, journal)
+    receipt_unchanged(target, journal)
     jsonwrite(safe(target, RECEIPT), receipt)
     checkpoint("receipt", fail_at)
     journal["state"] = "completed"
@@ -478,6 +495,7 @@ def _recover(target, transaction, rollback=False):
     if journal["transaction_id"] != transaction or journal["plan"]["plan_id"] != lock["plan_id"]:
         raise Conflict("journal identity mismatch")
     validate_plan(journal["plan"], target)
+    receipt_unchanged(target, journal)
     lock["pid"] = os.getpid()
     lock["process_identity"] = process_identity(os.getpid())
     jsonwrite(safe(target, LOCK), lock)
@@ -491,9 +509,7 @@ def _recover(target, transaction, rollback=False):
             raise Conflict("rollback would overwrite intervening edit")
         if entry["backup_hex"] is not None and digest(bytes.fromhex(entry["backup_hex"])) != op["before_sha256"]:
             raise Conflict("corrupt backup")
-    receipt_before = bytes.fromhex(journal["receipt_before"]) if journal["receipt_before"] is not None else None
-    if filehash(safe(target, RECEIPT)) not in (digest(receipt_before) if receipt_before is not None else None, journal.get("receipt_after_sha256")):
-        raise Conflict("rollback would overwrite intervening receipt edit")
+    receipt_unchanged(target, journal)
     for entry in reversed(journal["operations"]):
         op = entry["operation"]
         destination = safe(target, op["path"])
@@ -503,6 +519,7 @@ def _recover(target, transaction, rollback=False):
             write(destination, bytes.fromhex(entry["backup_hex"]))
         entry["status"] = "restored"
         jsonwrite(path, journal)
+    receipt_unchanged(target, journal)
     receipt = safe(target, RECEIPT)
     if journal["receipt_before"] is None:
         receipt.unlink(missing_ok=True)

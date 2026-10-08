@@ -941,8 +941,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "20dea6dadf52b13571fa100317b2ae3e49ceecc0c1c5657499dcd0e788a95613",
-      "bytes": 31190,
+      "sha256": "31618e21947d6a66692d0a290a2357580f884d6d76ba3674dd214d55a2011bdc",
+      "bytes": 31813,
       "kind": "script"
     },
     {

@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 ENGINE = ROOT / ".mt-agent-devkit/distribution/phase2/deployment.py"
@@ -152,6 +153,83 @@ class DeploymentTests(unittest.TestCase):
         state.parent.mkdir(parents=True, exist_ok=True)
         state.write_text("**Stage:** 1\n")
         with self.assertRaisesRegex(d.Conflict, "nonterminal"): self.plan()
+
+    def test_initial_journal_write_failure_never_publishes_lock(self):
+        value = self.plan()
+        with patch.object(d, "jsonwrite", side_effect=OSError("journal disk failure")):
+            with self.assertRaisesRegex(OSError, "journal disk failure"):
+                d.apply(self.target, value)
+        self.assertFalse((self.target/d.LOCK).exists())
+        self.assertFalse((self.target/".mt-agent-devkit/rules/Rule.md").exists())
+        d.apply(self.target, self.plan())
+        d.verify(self.target)
+
+    def test_lock_publication_failure_cleans_prepared_file_and_keeps_target_unlocked(self):
+        with patch.object(d.os,"link",side_effect=OSError("hard links unavailable")):
+            with self.assertRaisesRegex(OSError,"hard links unavailable"):
+                d.apply(self.target,self.plan())
+        self.assertFalse((self.target/d.LOCK).exists())
+        self.assertFalse(list(self.target.glob(d.LOCK+".*.prepared")))
+        self.assertFalse((self.target/".mt-agent-devkit/rules/Rule.md").exists())
+        d.apply(self.target,self.plan()); d.verify(self.target)
+
+    def test_real_process_interruption_at_initial_publication_boundaries(self):
+        for boundary in ("journal_prepared", "locked"):
+            for rollback in (False, True):
+                with self.subTest(boundary=boundary, rollback=rollback):
+                    self.target = self.root/(boundary+str(rollback)); self.target.mkdir()
+                    value = self.plan(); plan_path = self.root/"child-plan.json"
+                    plan_path.write_text(json.dumps(value),encoding="utf-8")
+                    code = "import importlib.util,json,os; s=importlib.util.spec_from_file_location('d',"+repr(str(ENGINE))+");d=importlib.util.module_from_spec(s);s.loader.exec_module(d);d.checkpoint=lambda name,fail_at=None: os._exit(73) if name=="+repr(boundary)+" else None;d.apply("+repr(str(self.target))+",json.load(open("+repr(str(plan_path))+")))"
+                    child=subprocess.run([sys.executable,"-c",code],capture_output=True)
+                    self.assertEqual(child.returncode,73)
+                    if boundary == "journal_prepared":
+                        self.assertFalse((self.target/d.LOCK).exists())
+                        d.apply(self.target,self.plan()); d.verify(self.target)
+                    else:
+                        lock=d.load(self.target/d.LOCK)
+                        self.assertTrue((self.target/lock["journal"]).is_file())
+                        d.recover(self.target,lock["transaction_id"],rollback=rollback)
+                        if rollback: self.assertFalse((self.target/d.RECEIPT).exists())
+                        else: d.verify(self.target)
+                    self.assertFalse((self.target/d.LOCK).exists())
+
+    def test_receipt_edit_blocks_both_recovery_paths_without_losing_recoverability(self):
+        for rollback in (False,True):
+            with self.subTest(rollback=rollback):
+                self.target=self.root/("receipt-edit"+str(rollback));self.target.mkdir()
+                with self.assertRaises(OSError):d.apply(self.target,self.plan(),"receipt")
+                receipt=self.target/d.RECEIPT; expected=receipt.read_bytes()
+                lock=d.load(self.target/d.LOCK); journal=self.target/lock["journal"]
+                lock_before=(self.target/d.LOCK).read_bytes(); journal_before=journal.read_bytes()
+                receipt.write_bytes(b"human receipt decisions\n")
+                with self.assertRaisesRegex(d.Conflict,"receipt edit"):
+                    d.recover(self.target,lock["transaction_id"],rollback=rollback)
+                self.assertEqual(receipt.read_bytes(),b"human receipt decisions\n")
+                self.assertEqual(journal.read_bytes(),journal_before)
+                self.assertEqual((self.target/d.LOCK).read_bytes(),lock_before)
+                receipt.write_bytes(expected)  # Explicit restoration by the operator.
+                d.recover(self.target,lock["transaction_id"],rollback=rollback)
+                if rollback:self.assertFalse(receipt.exists())
+                else:d.verify(self.target)
+
+    def test_receipt_edit_before_initial_publication_is_preserved(self):
+        real_write=d.jsonwrite; changed=False
+        def write_with_human_edit(path,value):
+            nonlocal changed
+            real_write(path,value)
+            if not changed and isinstance(value,dict) and "receipt_after_sha256" in value:
+                changed=True
+                receipt=self.target/d.RECEIPT;receipt.parent.mkdir(parents=True,exist_ok=True)
+                receipt.write_bytes(b"human receipt created during transaction\n")
+        with patch.object(d,"jsonwrite",side_effect=write_with_human_edit):
+            with self.assertRaisesRegex(d.Conflict,"receipt edit"):
+                d.apply(self.target,self.plan())
+        self.assertEqual((self.target/d.RECEIPT).read_bytes(),b"human receipt created during transaction\n")
+        lock=d.load(self.target/d.LOCK)
+        (self.target/d.RECEIPT).unlink()  # Explicit operator restores recorded absence.
+        d.recover(self.target,lock["transaction_id"])
+        d.verify(self.target)
 
     def test_cli_dead_owner_recovery(self):
         plan = self.plan()
