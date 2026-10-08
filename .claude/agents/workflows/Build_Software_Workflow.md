@@ -15,7 +15,7 @@ The text after the trigger keyword is the user's **idea**. If no text is provide
 
 ## Internal Runtime and Skeleton Bindings
 
-Bind command state to the selected execution provider/run via `command_root(provider, run_id, 'build-software')`; use that as `{COMMAND_ROOT}`. Nested Analyst work receives its own analyst command root; restore the Build binding when it returns. Existing legacy singleton state is preserved for explicit recovery, never auto-moved.
+Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'build-software')`. Run IDs identify execution, not separate storage. The existing provider-local Build state is the live singleton; there is no separate legacy copy. Inspect saved state before any write, verify project/topic, provider and owning session, and resume matching interrupted work even under a new run ID. Active or ambiguous ownership blocks a new Build; never overwrite interrupted state. Nested Analyst uses its distinct state filename and the same ownership check.
 
 Before any Java or CI skeleton generation, render every shared skeleton instruction with `python .mt-agent-devkit/scripts/render_skeleton.py <source> --lifecycle-root .claude`. Pass the rendered instructions and explicit lifecycle target to each generation agent. Never emit `{LIFECYCLE_ROOT}` or the execution provider's paths into target output. Codex execution still uses the user's selected legacy lifecycle target, not a Codex target installer.
 

@@ -24,8 +24,8 @@ concurrency limits govern scheduling; do not create unsupported parallelism.
 
 Use inherited runtime model/effort by default. When the user authorizes explicit
 selection, choose an available model appropriate to implementation/design/review
-complexity. For this migration the available Codex workhorse with high reasoning
-is appropriate; do not translate Claude model names literally. Follow the spawn
+complexity and the current task requirements; do not translate Claude model names
+literally. Follow the spawn
 tool's fork/override restrictions; never assert an override that was rejected.
 
 ## Shell, permissions, and CI

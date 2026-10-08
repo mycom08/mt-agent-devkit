@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Internal migration assertions compare the recorded source revision.
+          fetch-depth: 0  # Inventory coverage reads the recorded source revision; live files are not frozen.
 
       - name: Run validate_templates.py
         run: python scripts/validate_templates.py

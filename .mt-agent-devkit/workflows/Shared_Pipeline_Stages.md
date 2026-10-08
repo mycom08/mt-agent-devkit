@@ -65,8 +65,9 @@ Store `Implementer` in the pipeline state file. This determines which agent runs
 **Feature context detection:**
 
 An explicit Feature/Phase passed by the user or orchestrator is authoritative.
-For this feature pass `Feature: multi-provider-harness` and `Phase: 1`; do not
-require a `feature:` prefix on the user-selected plain kebab-case label. If an
+Use the current story's explicit Feature/Phase; never supply a fixed feature or
+phase from a previous story. Do not require a `feature:` prefix on a user-selected
+plain kebab-case label. If an
 explicit feature and tracker metadata conflict, stop for clarification.
 
 
@@ -329,7 +330,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 1. **Spawn** Product Owner agent (**model policy: closure**); save its `session_handle` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
 2. PO reads for closure only — **skip Project_Priming and Working Record**:
-   - `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
+   - `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (shell rules and selected adapter)
    - `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md`
    - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:

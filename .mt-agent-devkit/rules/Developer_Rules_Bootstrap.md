@@ -104,6 +104,8 @@ If your story touches a file another still-unreleased-version story already desc
 
 ## 5. Pre-PR Gate
 
+For changes to `.mt-agent-devkit/**`, any provider's `harness/**`, internal working wrappers/skills, or root entrypoints, run `python scripts/validate_internal_harness.py`, `python .mt-agent-devkit/scripts/generate_wrappers.py --check`, and `python -m unittest scripts.test.test_internal_harness`, all exit 0. Run `python scripts/validate_templates.py` and `bash scripts/test/run.sh` for the existing template/deployment regressions. The optional `--migration-preservation` audit is for this migration only; never require it for later releases or ordinary maintenance.
+
 **Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
 
 **All applicable checks must pass before opening a PR — no exceptions:**
@@ -113,7 +115,7 @@ If your story touches a file another still-unreleased-version story already desc
 | Shell script syntax | `.sh` files changed | `bash -n <each changed .sh file>` | Zero errors |
 | PowerShell syntax | `.ps1` files changed | `powershell -Command "& { $null = [System.Management.Automation.Language.Parser]::ParseFile('<script>', [ref]$null, [ref]$null) }"` | Zero parse errors |
 | CI workflow syntax | `.github/workflows/` changed | Validate YAML structure manually | Correct YAML |
-| Docs/markdown only | Docs only changed | N/A | Exempt |
+| Docs/markdown only | Only docs outside all CI/harness paths changed | N/A | Exempt; shared harness Markdown still requires the gates above |
 
 Include a one-line check result note in the PR description (e.g., "bash -n check — PASS on all .sh files").
 
@@ -167,8 +169,8 @@ Tag **TL** in the comment to request review.
 - Footer: always include `Story: ST-XXXXXX`
 - **Subject-line length is a non-blocking style nit.** The ≤ 50-character limit covers the **entire** header line (`<type>(<scope>): <subject>`). A reviewer notes a violation in a PR comment but must **not** request changes or trigger a fix-loop over length alone; the rest of the convention remains blocking.
 - **`[skip ci]` is decided by the CI path filter, not by file extension.** Before adding it, read the `paths:` list of every workflow in `.github/workflows/`. If **any** file in the push matches **any** of those paths, the push must **not** carry `[skip ci]` — regardless of file type.
-  - **In this repo that means:** a push touching `.claude/agents/templates/**` or `.claude/agents/workflows/**` never carries `[skip ci]`, even though every file in it is Markdown. `validate-templates.yml` filters on exactly those two paths, and this is the repo's most common change class.
-  - **Safe to skip:** everything else non-code — `docs/**`, retros, working records, memory files, `.mt-agent-devkit/**`, and any other `*.md` outside a CI path filter.
+  - **In this repo that means:** a push touching `.claude/agents/templates/**` or `.claude/agents/workflows/**` never carries `[skip ci]`, even though every file in it is Markdown. The CI filters also cover `.mt-agent-devkit/**`, provider `harness/**`, internal working wrappers/skills, root entrypoints, `scripts/**` and the validation workflow itself. Never use `[skip ci]` for any of those changes; Markdown shared-harness changes need the internal validator and routing tests too.
+  - **Safe to skip:** only non-code changes outside every active CI path filter, such as `docs/**`. Tracked retros, working records and memory under CI-filtered working directories also require CI.
   - **Why this is not a style nit:** `[skip ci]` suppresses the run entirely, so the PR is left with an **empty** check rollup — not a failing one. The mandatory merge gate reads "no checks failed" and the suppression is invisible unless someone compares the diff against the workflow's path filter by hand. A skipped required check and a repo with no CI configured are indistinguishable at the gate.
   - **A `[skip ci]` head commit cannot be undone by an empty commit.** Path-filtered `pull_request` triggers evaluate the files a push changes; an empty commit changes none, so it matches no filter and fires nothing. Recovering a suppressed run needs a real change to a file under one of the filtered paths.
   - Never use `[skip ci]` on any push that contains code, config, or build-file changes.

@@ -349,7 +349,8 @@ When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit
 
 ## 15. Shell Command Rules — Permissions and Tool Choice
 
-Follow the selected provider adapter for native shell and permission mechanics.
+Read and follow the selected provider adapter supplied in the worker packet
+before issuing shell commands; it owns native shell and permission mechanics.
 Write multiline or backtick-containing issue/PR bodies to a temporary file and
 use `--body-file`; clean it after use. Do not assume another provider's Bash
 allow-list is available.

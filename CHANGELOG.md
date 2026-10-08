@@ -30,6 +30,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000220] Scoped frozen preservation checks to migration audits and corrected provider shell routing, feature context, CI guidance and singleton command recovery.
+
 ---
 
 ## [0.1.50] - 2026-10-06

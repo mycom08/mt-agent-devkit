@@ -12,6 +12,7 @@ Triggered from `QA_Rules_Bootstrap.md §9`. When QA is the story Implementer, ru
 |---|---|
 | `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
 | `.ps1` files changed | PowerShell syntax check — zero parse errors |
+| Internal shared harness, provider adapters, working wrappers/skills or root entrypoints changed | `python scripts/validate_internal_harness.py` + wrapper `--check` + `python -m unittest scripts.test.test_internal_harness` + template validator + `bash scripts/test/run.sh`, all exit 0; frozen migration preservation is not an ongoing gate |
 | `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
 | `.claude/agents/templates/**` or `.claude/agents/workflows/**` changed | `python scripts/validate_templates.py` + `bash scripts/test/run.sh` — both exit 0 (see `docs/Template_Test_Strategy.md`) |
 | Docs only (no templates, workflows, or scripts) | Exempt |

@@ -1,5 +1,6 @@
-"""Static internal harness migration contract (independent from target templates)."""
+"""Live internal harness validation with an optional frozen migration audit."""
 from __future__ import annotations
+import argparse
 import hashlib
 import importlib.util
 import json
@@ -69,7 +70,8 @@ def module(name, path):
     return value
 
 
-def validate(root=ROOT) -> list[str]:
+def validate(root=ROOT, migration_preservation=False) -> list[str]:
+    """Validate live structure; frozen byte checks are an opt-in migration audit."""
     errors = []
     shared = root / ".mt-agent-devkit"
     inventory = json.loads((shared / "contracts/migration-inventory.json").read_text(encoding="utf-8"))
@@ -93,13 +95,13 @@ def validate(root=ROOT) -> list[str]:
                 errors.append(f"generated wrapper drift: {entry['source']}")
             if not entry["destination"].startswith(".mt-agent-devkit/"):
                 errors.append(f"wrapper outside canonical owner: {entry['source']}")
-        if entry["ownership"] == "preserved-history" or "scaffold_mechanical" in entry["source"]:
+        if migration_preservation and (entry["ownership"] == "preserved-history" or "scaffold_mechanical" in entry["source"]):
             # Normalize checkout newlines to Git bytes; no other content changes allowed.
             actual = source.read_bytes().replace(b"\r\n", b"\n")
             if hashlib.sha256(actual).hexdigest() != entry["baseline_sha256"]:
                 errors.append(f"preserved history/helper changed: {entry['source']}")
     protected = [p for p in listed if p.startswith(".claude/agents/templates/") or p in ("VERSION", "version.txt", "changes.json")]
-    for path in protected:
+    for path in protected if migration_preservation else []:
         before = subprocess.check_output(["git", "show", f"{baseline}:{path}"], cwd=root)
         if (root / path).read_bytes().replace(b"\r\n", b"\n") != before:
             errors.append(f"Phase 2/release boundary violated: {path}")
@@ -130,9 +132,13 @@ def validate(root=ROOT) -> list[str]:
 
 
 if __name__ == "__main__":
-    findings = validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--migration-preservation", action="store_true",
+                        help="One-shot migration audit: compare histories/templates/release files to the pinned source revision; do not use for ongoing CI.")
+    args = parser.parse_args()
+    findings = validate(migration_preservation=args.migration_preservation)
     for finding in findings:
         print(f"[ERROR] {finding}")
     if not findings:
-        print("Internal harness inventory, wrappers, references and preservation checks passed.")
+        print("Internal harness inventory, wrappers and references passed (including preservation audit when requested).")
     raise SystemExit(bool(findings))

@@ -88,8 +88,10 @@ Everything routed below lives in `.mt-agent-devkit/rules/Agent_Common_Read_On_De
 
 ## 6. Shell Command Rules — Permissions and Tool Choice
 
-Use the selected provider adapter for shell choice, configured permissions and
-command completion. Never carry another provider's allow-list into this runtime.
+Before your first command, read the selected provider adapter supplied in your
+worker packet, including its shell, permission and completion rules. If the
+adapter path is missing, stop and request it. Follow that adapter for shell choice,
+configured permissions and command completion. Never carry another provider's allow-list into this runtime.
 Keep multiline GitHub bodies in a temporary file; preserve literal Markdown and
 remove temporary bodies after the command. Shared secret and external-content
 rules apply regardless of shell.

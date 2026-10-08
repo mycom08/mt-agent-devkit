@@ -22,10 +22,10 @@ not runtime evidence. External provider binaries are not invoked by this check.
 | Mapping missing spawn, resume, message, or completion | That provider | Block; do not invent tools |
 
 Claude tool aliases come from the baseline. Antigravity aliases are candidates
-documented in its existing devkit skill, not verified tools in this Codex session.
+documented in its existing devkit skill; they require verification in the active runtime.
 The Antigravity manifest intentionally leaves operations unset until the live
-runtime supplies a verified mapping. Codex mappings match tools exposed in this
-session. Tool identity checks alone never establish behavioral success.
+runtime supplies a verified mapping. Codex mappings must match tools exposed in
+the active runtime. Tool identity checks alone never establish behavioral success.
 
 ## Execution and handoff
 

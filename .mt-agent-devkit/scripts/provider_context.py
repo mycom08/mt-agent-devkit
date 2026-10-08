@@ -42,6 +42,7 @@ def select_provider(available_tools: set[str], declared: str | None = None,
 
 
 def run_root(provider: str, run_id: str) -> str:
+    """Validate execution identity; run IDs do not partition working state."""
     import re
     if provider not in ("claude", "antigravity", "codex"):
         raise ValueError("unknown provider")
@@ -79,6 +80,7 @@ def runtime_root(provider: str, run_id: str, story_id: str) -> str:
 
 
 def command_root(provider: str, run_id: str, command: str) -> str:
+    """Existing command files share a provider root; callers guard ownership."""
     import re
     if not isinstance(command, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", command):
         raise ValueError("unsafe command identity")

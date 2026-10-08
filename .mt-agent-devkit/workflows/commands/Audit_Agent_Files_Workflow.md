@@ -12,9 +12,9 @@ Triggered by: `"audit agent files"` in the devkit's `CLAUDE.md`.
 
 ## Report File
 
-Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'audit-agent-files')`. Re-entry checks only this command root's reports; preserve legacy reports for explicit recovery.
+Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'audit-agent-files')`. Run IDs do not create separate storage. Re-entry checks the existing provider-local reports; they are the live reports, not separate legacy copies. Before applying or creating another report, inspect unfinished reports and verify provider, audit scope and owning session. Resume the matching interrupted audit; active or ambiguous ownership blocks a new audit without overwriting reports.
 
-**Path:** `{COMMAND_ROOT}/internal/audit_report_YYYYMMDD_HHMMSS.md` — timestamp, not a run ID, so staleness is self-evident from the filename alone. Only **one** report per provider/run/command is in flight; `{COMMAND_ROOT}/internal/` is gitignored (never committed).
+**Path:** `{COMMAND_ROOT}/internal/audit_report_YYYYMMDD_HHMMSS.md` — timestamp, not a run ID, so staleness is self-evident from the filename alone. Only **one** audit report per provider is in flight; `{COMMAND_ROOT}/internal/` is gitignored (never committed).
 
 **Header block:**
 ```markdown

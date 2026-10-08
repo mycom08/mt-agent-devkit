@@ -21,8 +21,13 @@ adapter's discovery check.
 
 ## Tools, permissions, and CI waiting
 
-Use Bash for `gh` where Claude's configured Bash allow-list applies. Multiline or
-backtick-containing bodies go through temporary files, cleaned after the call.
+Always use Bash for all `gh` CLI calls. Never prepend `cd /path` to a command;
+use the tool's working-directory setting. Claude's configured `Bash(gh issue *)`
+and `Bash(gh pr *)` allow-list is provider-specific; check active permissions.
+PowerShell treats backticks as escapes and can silently corrupt Markdown, while
+.NET file methods can trigger permission prompts despite shell allow-lists.
+Write multiline or backtick-containing bodies to temporary files through the
+file-writing tool, pass `--body-file`, and clean the file after the call.
 Never assume these permissions exist in another provider. Use the active command
 tool's documented session/completion support for long CI commands. Check finished,
 successful CI at the current PR head; pending or failure never advances the gate.

@@ -12,12 +12,12 @@ The text after the trigger keyword is the user's **initial requirement context**
 
 ## Pipeline State
 
-Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'analyst')`. Resume only the supplied provider/run/command state. Legacy singleton files remain untouched for explicit recovery.
+Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'analyst')`. Run IDs identify execution, not separate storage. This command uses the existing provider-local singleton state, including interrupted runs; there is no separate legacy state file.
 
 The orchestrator maintains `{COMMAND_ROOT}/tmp/analyst_workflow_state.md` to support resumption after unexpected termination.
 
 **On pipeline start — always check this file first:**
-- If the file **exists** → read it and resume from the recorded stage
+- If the file **exists** → read it before writing. Verify the topic, provider and owning session. Resume the interrupted command from its recorded stage even when the new invocation has a different run ID. If another session is active, or ownership/topic is ambiguous, stop for clarification; never overwrite the state to start another run.
 - If the file **does not exist** → start fresh from Stage 1
 
 **State file format:**

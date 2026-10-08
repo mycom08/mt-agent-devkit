@@ -2,7 +2,7 @@
 
 Root `AGENTS.md` selects this adapter only after the active runtime's explicit
 operation mapping passes the shared capability check. Runtime behavior is
-**NOT VERIFIED** in this Codex session. The default capability mapping is unset,
+must be verified in the active runtime. The default capability mapping is unset,
 so workflow execution fails closed until the runtime provides verified mappings.
 
 ## Capability mapping and lifecycle

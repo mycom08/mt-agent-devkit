@@ -7,7 +7,7 @@
 ## 1. Story Closure Task (Stage 4)
 
 Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, read only:
-- `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
+- `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (shell rules and selected adapter)
 - `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md`
 - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
 

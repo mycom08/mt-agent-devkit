@@ -67,9 +67,12 @@ class ProviderSelectionTests(unittest.TestCase):
         tools = {"collaboration.spawn_agent", "collaboration.followup_task", "collaboration.send_message", "collaboration.wait_agent"}
         self.assertEqual("codex", context.select_provider(tools)["provider"])
 
-    def test_runtime_identity_prevents_collision_and_path_escape(self):
+    def test_runtime_roots_are_provider_local_and_reject_unsafe_identities(self):
         paths = {context.runtime_root(p, r, s) for p in self.manifests for r in ("run1", "run2") for s in ("ST-1", "ST-2")}
         self.assertEqual(3, len(paths))
+        for provider in self.manifests:
+            self.assertEqual(context.runtime_root(provider, "run1", "ST-1"),
+                             context.runtime_root(provider, "run2", "ST-2"))
         for provider in self.manifests:
             self.assertEqual(f".{provider}/agents/working", context.runtime_root(provider, "run1", "ST-1"))
         for parts in (("codex", "../bad", "ST-1"), ("codex", "run1", "../../bad"), ("unknown", "run1", "ST-1")):
@@ -78,9 +81,12 @@ class ProviderSelectionTests(unittest.TestCase):
 
 
 class RuntimeAndSkeletonTests(unittest.TestCase):
-    def test_command_state_is_separate_for_two_providers_and_two_runs(self):
+    def test_command_roots_preserve_provider_singletons_across_runs(self):
         roots = {context.command_root(p, r, c) for p in ("claude", "codex") for r in ("run1", "run2") for c in ("analyst", "audit-agent-files", "build-software")}
         self.assertEqual(2, len(roots))
+        for provider in ("claude", "codex"):
+            self.assertEqual(context.command_root(provider, "run1", "analyst"),
+                             context.command_root(provider, "run2", "analyst"))
         self.assertEqual(".claude/agents", context.command_root("claude", "run1", "analyst"))
         for command in ("../audit", "/absolute", "audit/other"):
             with self.assertRaises(ValueError):
@@ -210,6 +216,36 @@ class SectionAndWrapperTests(unittest.TestCase):
             if entry["ownership"] == "generated-wrapper":
                 with self.subTest(source=entry["source"]):
                     self.assertEqual(wrappers.render(entry), (ROOT / entry["source"]).read_text(encoding="utf-8"))
+
+
+class MigrationPreservationTests(unittest.TestCase):
+    def test_future_release_template_and_history_edits_are_not_frozen_by_ci(self):
+        from unittest.mock import patch
+        inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())
+        history = next(e["source"] for e in inventory["files"] if e["ownership"] == "preserved-history")
+        template = next(p.relative_to(ROOT).as_posix() for p in (ROOT / ".claude/agents/templates").rglob("*.md"))
+        changed = {"VERSION", template, history}
+        original = Path.read_bytes
+        def changed_bytes(path):
+            data = original(path)
+            return data + b"\nfuture legitimate update\n" if path.relative_to(ROOT).as_posix() in changed else data
+        with patch.object(Path, "read_bytes", changed_bytes):
+            self.assertEqual([], validator.validate())
+            findings = validator.validate(migration_preservation=True)
+        self.assertIn("Phase 2/release boundary violated: VERSION", findings)
+        self.assertIn(f"Phase 2/release boundary violated: {template}", findings)
+        self.assertIn(f"preserved history/helper changed: {history}", findings)
+
+    def test_live_reference_checks_remain_enabled_without_frozen_audit(self):
+        from unittest.mock import patch
+        original = Path.read_text
+        def broken_reference(path, *args, **kwargs):
+            text = original(path, *args, **kwargs)
+            if path == ROOT / ".mt-agent-devkit/contracts/Provider_Contract.md":
+                text += "\nRead `.mt-agent-devkit/rules/missing_review_fixture.md`\n"
+            return text
+        with patch.object(Path, "read_text", broken_reference):
+            self.assertTrue(any("missing_review_fixture" in e for e in validator.validate()))
 
 
 if __name__ == "__main__":
