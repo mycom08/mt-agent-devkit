@@ -69,4 +69,4 @@ Quick lookup for all project documents and external references. Update this file
 
 - Design: `docs/feature/multi-provider-harness/Shared_Harness_Provider_Architecture.md`
 - Migration: `docs/feature/multi-provider-harness/Phase_1_Migration_and_Verification.md`
-- QA acceptance scenarios: `docs/feature/multi-provider-harness/test-scenarios/Phase_1_Harness_Acceptance_Scenarios.md` — native behavioral evidence remains unverified.
+- QA acceptance scenarios: `docs/feature/multi-provider-harness/test-scenarios/Phase_1_Harness_Acceptance_Scenarios.md` — native evidence limits and accepted deviations are recorded in the document; full harness compliance is not certified.
