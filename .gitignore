@@ -36,19 +36,19 @@ docker/sandbox/.env
 # Workflow output documents
 /result/
 
-# Agent working files â€” not tracked (session state, working records)
+# Agent working files — not tracked (session state, working records)
 .claude/agents/working/working-record/
 .claude/agents/working/tmp/
 .antigravity/agents/working/working-record/
 .antigravity/agents/working/tmp/
 
-# Agent-stage telemetry â€” runtime measurement only, never product history
+# Agent-stage telemetry — runtime measurement only, never product history
 .antigravity/agents/tmp/token-metrics/
 
-# Audit workflow reports â€” runtime output, never committed
+# Audit workflow reports — runtime output, never committed
 .claude/agents/internal/
 
-# Token-trace step logs â€” per-story runtime observability output, never committed.
+# Token-trace step logs — per-story runtime observability output, never committed.
 # Accumulates over a sprint, cleared at sprint end. NOT the tooling: the
 # `tokentrace/` directory (no hyphen, no suffix) holds token_cost.sh + README
 # and IS committed. The _sprint suffix keeps the two apart.

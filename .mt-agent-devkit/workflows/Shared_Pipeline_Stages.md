@@ -159,7 +159,7 @@ input, duplicate stage identities and mixed schemas stop the run.
 
 Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
 
-1. **Spawn** the agent matching the `Implementer` role — **Developer → `model policy: design-review`, reasoning effort medium**; any other implementer role → **model policy: standard**
+1. **Spawn** the agent matching the `Implementer` role — **Developer → `model policy: implementation`, reasoning effort medium**; any other implementer role → **model policy: standard**
    > **Spawn-prompt reminder (mandatory-reading references):** when the spawn prompt points the agent at a Story Standard file, name only the role-scoped variant already gated by that role's own Rules file (e.g. `Story_Standard_Dev.md` for Developer, `Story_Standard_TL.md` for Technical Lead) — never phrase it as "`Story_Standard.md` (or the role-scoped variant if one exists)". Offering both as options causes the agent to read the full cross-role file needlessly; the role's own Rules file gate already resolves which one to read.
 2. Agent reads its own instruction files, memory, and rules
 3. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)
@@ -240,8 +240,8 @@ After the implementer reports completion, append a bullet to `Observations:` for
 
 1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `session_handle` as `reviewer_session`
    - Default: **Technical Lead** reviews (**model policy: design-review**)
-   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model policy: implementation**)
-   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model policy: standard** instead of design-review — Technical Lead reviewer only; a Developer peer reviewer stays on implementation policy.
+   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model policy: design-review**)
+   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model policy: standard** instead of design-review — Technical Lead reviewer only; a Developer peer reviewer stays on design-review policy.
    - When the reviewer is Technical Lead, the spawn prompt names `Technical_Lead_Rules_Read_On_Demand.md §5` (Code Review & PR Approval) as the section to fetch per its own §15 routing table.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`); an approval comment cites the current head SHA as `**Approved-SHA:** <sha>` (`gh pr view <PR-number> --json headRefOid --jq '.headRefOid'`) — the Merge Procedure's Approval-scope gate reads this back later

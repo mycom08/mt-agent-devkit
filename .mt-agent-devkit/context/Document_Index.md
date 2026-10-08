@@ -1,4 +1,4 @@
-# Document Index â€” mt-agent-devkit
+# Document Index — mt-agent-devkit
 
 Quick lookup for all project documents and external references. Update this file whenever a document is added, moved, or removed.
 
@@ -25,8 +25,8 @@ Quick lookup for all project documents and external references. Update this file
 
 | Document | Path |
 |---|---|
-| Top Four Agent Harness Fixes â€” Implementation Guide | `docs/reviews/fix_guidline/Top_Four_Agent_Harness_Fix_Guide.md` |
-| Four Agent Harness Fixes â€” Execution and Test Plan | `docs/reviews/fix_guidline/Four_Fix_Execution_and_Test_Plan.md` |
+| Top Four Agent Harness Fixes — Implementation Guide | `docs/reviews/fix_guidline/Top_Four_Agent_Harness_Fix_Guide.md` |
+| Four Agent Harness Fixes — Execution and Test Plan | `docs/reviews/fix_guidline/Four_Fix_Execution_and_Test_Plan.md` |
 
 ### Sprint Docs
 
@@ -41,13 +41,13 @@ Quick lookup for all project documents and external references. Update this file
 | Resource | URL / Location |
 |---|---|
 | GitHub repo | https://github.com/mycom08/mt-agent-devkit |
-| Raw content base | Derived at use time, pinned to a release tag: `https://raw.githubusercontent.com/mycom08/mt-agent-devkit/v<version>` â€” never `/main`, which carries unreleased work |
+| Raw content base | Derived at use time, pinned to a release tag: `https://raw.githubusercontent.com/mycom08/mt-agent-devkit/v<version>` — never `/main`, which carries unreleased work |
 
 ---
 
 ## Agent Working Files
 
-<!-- GitHub mode: stories are GitHub Issues â€” no local story MD files. -->
+<!-- GitHub mode: stories are GitHub Issues — no local story MD files. -->
 
 | What | Path |
 |---|---|
@@ -57,7 +57,8 @@ Quick lookup for all project documents and external references. Update this file
 | Agent Memory | `{RUNTIME_ROOT}/memory/` |
 | Agent Working Records | `{RUNTIME_ROOT}/working-record/` |
 | Devkit Templates | `.claude/agents/templates/` |
-| Devkit Workflows | `.mt-agent-devkit/workflows/commands/` |
+| Internal Command Workflows | `.mt-agent-devkit/workflows/commands/` |
+| Target Lifecycle Workflows (init/update/build/sync) | `{LIFECYCLE_ROOT}/agents/workflows/` (`.claude` or `.antigravity`) |
 | Sprint Workflows | `.mt-agent-devkit/workflows/` |
 
 ---

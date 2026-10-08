@@ -12,9 +12,10 @@ feedback, respawning with the full fresh-start packet if missing or expired.
 Confirm actual completion, rather than treating a delivered message as a verdict.
 The worker ends its turn after a bounded final report.
 
-Claude baseline model policy: Developer implementation and Developer peer review
-use opus with medium reasoning; TL design/review uses opus; standard role work
-uses sonnet; PO closure uses haiku. The Developer discovery default remains
+Claude policy mappings: `implementation` uses opus with medium reasoning for
+Developer implementation; `design-review` uses opus for TL architecture/review
+and Developer peer review (medium reasoning for the Developer). `standard` uses
+sonnet; `closure` uses haiku for PO closure. The Developer discovery default remains
 sonnet/high, while an explicit workflow assignment takes precedence. Only choose
 models the active runtime actually exposes; no paid runtime is launched by this
 adapter's discovery check.
@@ -41,6 +42,15 @@ loading raw content into the orchestrator. For a resume, use a bounded stage
 transcript when available; never extract the entire reused session twice. If no
 supported usage exists, use `harness` and report unavailable/null fields. Runtime
 state and legacy memory retention follow the shared contract.
+
+For a fresh stage, after writing sanitized metadata, run:
+
+```bash
+python .mt-agent-devkit/scripts/telemetry.py extract --agent-id <agentId> --project-root <project-root> --metadata <stage-metadata.json> --output <RUNTIME_ROOT>/tmp/token-metrics/<run-id>.jsonl --append
+```
+
+Substitute the supplied concrete paths. `--append` retains earlier stage records;
+never run fresh-session extraction again for the same resumed stage.
 
 ## Provider-owned state paths
 

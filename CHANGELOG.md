@@ -28,9 +28,9 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
-### Bug Fixes
+- [ST-000220] Consolidated internal agent rules and workflows under one shared owner with explicit Claude, Antigravity and Codex adapters.
 
-- [ST-000220] Scoped frozen preservation checks to migration audits and corrected provider shell routing, feature context, CI guidance and singleton command recovery.
+### Bug Fixes
 
 ---
 
