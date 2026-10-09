@@ -1,8 +1,10 @@
 # mt-agent-devkit
 
-> **AI provider support:** This devkit supports both [Claude Code](https://claude.ai/code) and **Antigravity**. It natively implements isolated, side-by-side agent infrastructure for both AI providers (`.claude/` for Claude Code and `.antigravity/` for Antigravity), allowing you to seamlessly run multi-agent agile workflows using either CLI.
+A multi-provider agent devkit that installs shared AI Scrum instructions and sprint workflows into software projects. Its default team has six roles: Technical Lead, Developer, QA, Product Owner, Business Analyst, and UI/UX Designer.
 
-A Claude Code agent devkit that installs multi-agent sprint workflows into any software project. It provides a team of five specialized AI agents — Technical Lead, Developer, QA, Product Owner, and Business Analyst — that collaborate to plan, implement, review, test, and close stories end-to-end.
+**Provider layouts:** Claude Code, Antigravity, and Codex share instructions, rules, context, and workflows under `.mt-agent-devkit/`. Each provider keeps its adapter and runtime state under `.claude/`, `.antigravity/`, or `.codex/`. Claude uses `CLAUDE.md`; Antigravity and Codex use `AGENTS.md`.
+
+**Support scope in v0.1.51:** Deployment is mechanically tested across all three providers in GitHub and strict modes. Workflows require verified live provider capabilities. Automatic installed discovery, some native provider/mode runs, native legacy migration interpretation, and native macOS behavior remain unverified; see [ST-000232](https://github.com/mycom08/mt-agent-devkit/issues/232). Antigravity's default capability mapping is unset and must be supplied from its actual runtime. The native Claude read-routing audit validates internal role stages; it does not certify every installed workflow.
 
 ---
 
@@ -25,15 +27,15 @@ A Claude Code agent devkit that installs multi-agent sprint workflows into any s
 | Mode | When to use |
 |---|---|
 | **github** (default) | Project has GitHub Issues, PRs, and Actions. Full integration. |
-| **strict** | No GitHub or MCP required. Local repo only. Stories stored locally under `.claude/agents/` (gitignored). You control all merges — agents never push to remote. |
+| **strict** | No GitHub or MCP required. Local repo only. Stories stored under the selected provider's runtime `agents/docs/` (gitignored). You control all merges — agents never push to remote. |
 
-`init project` asks which mode you want before writing any files.
+`init project` establishes the selected provider and asks which mode you want before writing. All providers installed in one target share the same mode and source version.
 
 ---
 
 ## Quick start — adding agents to your project
 
-Run this inside mt-agent-devkit to scaffold agent files into another project:
+Enter this in your selected provider's chat inside mt-agent-devkit to scaffold agent files into another project:
 
 ```
 init project /absolute/path/to/your-project
@@ -46,14 +48,15 @@ init project
 ```
 
 The workflow will:
-1. Ask whether you want **github** or **strict** mode
-2. Scan your project (language, framework, key directories, existing CI/CD, test tooling)
-3. Generate customized agent files adapted to your tech stack
-4. Show you every file it will create or modify
-5. Ask for your confirmation before writing anything
-6. Write all files and display next steps
 
-**After init completes**, open Claude Code in your project and type:
+1. Validate the selected provider and choose **github** or **strict** mode
+2. Scan your project (language, framework, key directories, existing CI/CD, test tooling)
+3. Prepare reviewed project context, entrypoint text, and role customizations
+4. Show the deployment plan, including writes, preserved content, and any migration conflicts
+5. Ask for confirmation before applying the reviewed plan
+6. Apply and verify the installation, then record its source and managed files in an installation receipt
+
+**After init completes**, open your selected provider in the project and type:
 
 ```
 workflow help
@@ -65,7 +68,7 @@ This shows all available commands and the recommended order to use them.
 
 ## Devkit workflows
 
-Type any of the following in the Claude Code chat **inside mt-agent-devkit**. These two workflows exist in the devkit itself — not in your target project.
+Type these commands in your selected provider's chat **inside mt-agent-devkit**. `init project` and `update project` use the shared [target deployment workflow](.mt-agent-devkit/workflows/commands/Target_Project_Deployment_Workflow.md).
 
 ### Workflow Help
 ```
@@ -94,99 +97,85 @@ Elicits, analyses, and plans a requirement from scratch. Produces a `/result/ana
 ```
 init project [path]
 ```
-Scaffolds all agent files into a target project. Prompts for mode (github / strict). Safe by default — asks for confirmation before writing.
+Installs the shared harness and selected provider adapter into a target project. Prompts for mode (github / strict), reviews project-specific adaptations, and asks for confirmation before applying the deployment plan.
 
 ### Update Project
 ```
 update project [path]
 ```
-Applies the current local devkit templates to an already-initialized target project. Uses `changes.json` to resolve only the files that changed since the project's installed version, with automatic full-scan fallback if a version entry is missing. Reads from local files — no GitHub fetch required, works offline.
+Builds the current local shared distribution and plans an update or legacy migration for an initialized project. Uses the installation receipt and exact file hashes to detect changes and conflicts. Project customizations require explicit review. Local deployment needs no release download and records local commit/snapshot provenance.
 
 ---
 
 ## Keeping projects up to date
 
-There are two ways to sync devkit improvements into an already-initialized project.
+### From the target project — `sync devkit`
 
-### From inside the target project — `sync devkit`
-
-```
+```text
 sync devkit
 ```
 
-Fetches the latest templates directly from the devkit GitHub repository. Resolves the latest release from the highest `vX.Y.Z` tag on GitHub and compares it against `**Devkit version:**` in `CLAUDE.md`. If an update is available, resolves which files changed via `changes.json`, shows a preview, and asks for confirmation before writing anything.
+Resolves the latest released `vX.Y.Z` tag, pins its immutable commit, and validates the complete shared deployment artifact before planning an update. The installation receipt at `.mt-agent-devkit/install-receipt.json` records source identity and managed-file hashes. The workflow previews the plan and asks for confirmation before applying it.
 
-Best for: project teams who don't have the devkit locally.
+For supported legacy v0.1.48–v0.1.50 Claude/Antigravity installations, compatible sync bridges lead into reviewed migration to the shared layout. The bridge path is mechanically tested within two invocations; native interpretation remains unverified. Missing or unknown version stamps require inspection rather than an assumed successful upgrade.
 
-### From inside the devkit — `update project [path]`
+### From the devkit — `update project [path]`
 
-```
+```text
 update project /path/to/your-project
 ```
 
-Same logic but uses local devkit template files instead of fetching from GitHub. Useful for applying changes before pushing a new devkit version, or when working offline.
+Uses the local shared distribution through the same deployment engine. This is useful for offline updates and reviewing unreleased changes; a local snapshot install is recorded separately from a released-tag install.
 
-Best for: devkit maintainers updating projects on their own machine.
+### What both workflows preserve and verify
 
-### What both workflows do
+- Review project-specific instructions and entrypoint sections; upstream changes to customized managed files require an explicit resolution.
+- Preserve project-owned context, unknown extra files, and provider-local memory, records, counters, and other runtime data. Runtime seeds create missing files only.
+- Retire legacy files only through exact reviewed paths with verified shared successors; unexpected files are preserved.
+- Block conflicting file edits, mixed modes, and active legacy workflows before migration.
+- Verify managed content before finalizing the receipt and compatibility version stamp. The receipt is authoritative; an entrypoint version hint or provider-local `devkit_version.txt` alone does not certify installation.
 
-- **Overwrite** `rules/` and `workflows/` — pure devkit logic, no project content
-- **Merge** `instructions/` and `CLAUDE.md` — preserve project-specific sections, update role-logic sections
-- **Skip** `Project_Priming.md`, `memory/`, `working-record/`, `docs/` — project-owned, never touched
-- **Clean up** stale files in `rules/` and `workflows/` — reports unexpected files and asks before deleting
-
-After a successful update, `**Devkit version:**` in `CLAUDE.md` and `.claude/agents/devkit_version.txt` are updated to the new version.
+Interrupted deployment has a recorded journal and supported `resume`/`rollback` operations. See the [deployment and migration guide](docs/feature/multi-provider-harness/Phase_2_Deployment_Operations.md) for review and recovery steps.
 
 ---
 
 ## Devkit versioning (for maintainers)
 
-When you change template files, record what changed so target projects know exactly what to update. The version number itself is never edited by hand — the `release` workflow owns it.
-
-### Files to maintain
+The release workflow owns `VERSION`, release tags, changelog dates, and the next snapshot. Add change descriptions under the current `- Unreleased` heading; do not bump versions manually.
 
 | File | Purpose |
 |---|---|
-| `VERSION` | Current in-progress version (`x.y.z-SNAPSHOT`) — owned by `.github/workflows/release.yml`, never edited by hand |
-| `CHANGELOG.md` | One bullet per merged change under the current `- Unreleased` heading |
-| `changes.json` | Maps each version to the list of template files that changed in that release |
+| `VERSION` | Current in-progress `x.y.z-SNAPSHOT` |
+| `CHANGELOG.md` | Per-release descriptions of merged changes |
+| `changes.json` | Per-version compatibility metadata and shared deployment manifest declaration |
+| `.mt-agent-devkit/distribution/phase2/bundle/deployment.json` | Shared asset hashes, target mappings, provider/mode selections, and legacy retirement rules |
 
-### `changes.json` format
+The current `changes.json` version object declares the shared artifact:
 
 ```json
 {
-  "0.0.1": [],
-  "0.0.2": [
-    ".claude/agents/templates/CLAUDE_TEMPLATE.md"
-  ],
-  "0.0.3": [
-    ".claude/agents/templates/workflows/Update_Agents_Workflow_template.md"
-  ]
+  "deployment": {
+    "schema_version": 1,
+    "manifest": ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+  }
 }
 ```
 
-- Empty array `[]` — no template files changed in this version (devkit-internal changes only)
-- File list — only template files that get deployed to target projects; devkit-internal files (`Update_Project_Workflow.md`, `changes.json`, `Init_Project_Workflow.md`, etc.) are never listed
-- Missing version key — `sync devkit` falls back to a full scan automatically; this is safe but less efficient
+Legacy `files`/`new`/`modified` lists, descriptions, and checksums remain for compatible clients. The two sync bridges stay in the legacy namespace; the new shared payload is declared separately. Older version entries retain their historical formats. Keep deployment metadata inside version objects.
 
 ### Release checklist
 
-```
-1. Make your changes to template files under .claude/agents/templates/
-2. Fold the changed template paths into the current -SNAPSHOT entry in changes.json
-   (the key named by VERSION — never add a new version key)
-3. Add a CHANGELOG.md bullet under the current "- Unreleased" heading
-4. Commit and push
-5. To cut a release, run the "Release" workflow from the Actions tab. It strips
-   -SNAPSHOT from VERSION, stamps the CHANGELOG heading and changes.json key,
-   tags vX.Y.Z, and opens the next snapshot. VERSION is never edited by hand.
-```
+1. Edit internal harness sources under `.mt-agent-devkit/` and, for target behavior, the active templates under `.mt-agent-devkit/distribution/phase2/templates/` plus the relevant provider adapter.
+2. Rebuild the shared artifact with `python .mt-agent-devkit/distribution/phase2/build_bundle.py --root . --output .mt-agent-devkit/distribution/phase2/bundle` and verify with the same command plus `--check`. Historical `.claude/agents/templates/` sources remain frozen compatibility inputs except for reviewed bridges.
+3. Maintain the current snapshot's deployment declaration and any changed legacy bridge metadata/checksums in `changes.json`; add a changelog entry.
+4. Complete the applicable checks, independent review/QA, and merge gates. Publish support limits with the release.
+5. Run the **Release** workflow from the Actions tab on `main`. It stamps the version and changelog, renames the snapshot manifest key, creates `vX.Y.Z`, and opens the next snapshot while carrying deployment/bridge metadata forward.
 
 ---
 
 ## Sprint workflows (available after `init project`)
 
-These commands are injected into your target project's `CLAUDE.md` by `init project`. Run them from inside your project. Type `workflow help` in your project to see this guide at any time.
+The selected provider's root entrypoint routes to the shared orchestrator and workflows. Run these commands inside an initialized repository; type `workflow help` for the guide. A `project_root` installation supplies build/sync workflows, while sprint workflows run in its repositories.
 
 ### Recommended order
 
@@ -205,7 +194,7 @@ Repeat steps 3–4 each sprint. Use `start story` to run a single story outside 
 ```
 create stories
 ```
-Claude acts as PO — drafts stories from your description, you confirm, then stories are saved to the backlog. In GitHub mode they become GitHub Issues; in strict mode they are written as local MD files under `.claude/agents/docs/stories/`.
+The selected provider acts as PO — drafts stories from your description, you confirm, then stories are saved to the backlog. In GitHub mode they become GitHub Issues; in strict mode they are written as local MD files under `<provider-root>/agents/docs/stories/`.
 
 #### Plan Next Sprint
 ```
@@ -248,6 +237,7 @@ Unblocks a story after you have provided the missing information. Validates all 
 | **QA** | Acceptance criteria validation, test scenarios, regression suite |
 | **Product Owner** | Backlog ownership, scope gating, story closure, AC sign-off |
 | **Business Analyst** | Requirements elicitation, use-case analysis, cost-benefit assessment |
+| **UI/UX Designer** | Feature designs and UI/UX review |
 
 ---
 
@@ -266,81 +256,82 @@ In GitHub mode, status is tracked via `status:*` issue labels. In strict mode, s
 
 ## Folder structure (after `init project`)
 
-### GitHub mode
+A repository-profile installation shares its harness across selected providers:
 
-```
+```text
 your-project/
-├── CLAUDE.md                              ← Mode: github + orchestrator instructions
-├── .gitignore                             ← .claude/agents/tmp/ added
-└── .claude/agents/
-    ├── context/Project_Priming.md         ← project cheat sheet for all agents
-    ├── instructions/                      ← one instruction file per agent role (5 files)
-    ├── rules/                             ← story standards + per-role rules
-    ├── memory/                            ← agent memory files (5 files)
-    ├── working-record/                    ← agent working records (5 files)
-    ├── workflows/                         ← all sprint workflow definitions
-    └── templates/CLAUDE_TEMPLATE.md
+├── CLAUDE.md or AGENTS.md                 # selected provider entrypoint
+├── .gitignore                            # managed runtime/migration ignores
+├── .mt-agent-devkit/
+│   ├── context/                          # project-owned priming and document index
+│   ├── instructions/                     # shared roles and orchestrator
+│   ├── rules/                            # shared standards and rules
+│   ├── workflows/                        # shared, mode-specific workflows
+│   ├── contracts/                        # provider selection and section reads
+│   ├── scripts/                          # deployment, sync, and shared helpers
+│   └── install-receipt.json               # verified source and managed hashes
+└── .claude/, .antigravity/, or .codex/    # selected provider roots
+    ├── harness/                          # adapter, capabilities, state bindings
+    └── agents/                           # provider-local runtime
+        ├── memory/
+        ├── working-record/
+        ├── retros/
+        ├── tmp/
+        └── docs/                         # strict stories, sprints, reviews, counter
 ```
 
-### Strict mode
+Claude also installs role discovery wrappers under `.claude/agents/`, its read-section skill, and merged settings. Provider directories alone do not prove automatic native discovery.
 
-```
-your-project/
-├── CLAUDE.md                              ← Mode: strict + orchestrator instructions
-├── .gitignore                             ← .claude/agents/ (entire folder) added
-└── .claude/agents/                        ← entirely gitignored — never committed
-    ├── context/Project_Priming.md
-    ├── instructions/                      ← one instruction file per agent role (5 files)
-    ├── rules/                             ← story standards + per-role rules
-    ├── memory/                            ← agent memory files (5 files)
-    ├── working-record/                    ← agent working records (5 files)
-    ├── workflows/                         ← all sprint workflow definitions
-    ├── templates/CLAUDE_TEMPLATE.md
-    └── docs/                             ← all agent-generated data (gitignored)
-        ├── stories/                      ← ST-XXXXXX.md files
-        ├── sprints/                      ← sprint overview files
-        ├── reviews/                      ← local review records (replaces PRs)
-        └── story_counter.txt             ← auto-increment ID counter
-```
+In **GitHub mode**, shared harness content can be committed; provider-local runtime data and migration locks are ignored. In **strict mode**, `.mt-agent-devkit/` and selected provider roots are ignored, so local stories and runtime records stay out of commits. Entrypoint/project files remain outside those ignored directories.
+
+Installed targets use `<provider-root>/agents` for runtime state. The devkit's own internal team uses `<provider-root>/agents/working`; these are different bindings.
 
 ---
 
 ## Prerequisites
 
 ### Both modes
-- [Claude Code](https://claude.ai/code) CLI or desktop app
 
-### GitHub mode only
-- [GitHub CLI](https://cli.github.com/) (`gh`) — authenticated and pointing at your project's repo
-- A GitHub repository with Issues enabled
-- `build software` also requires `gh` CLI authenticated — it creates GitHub repositories and projects during Stage 4
+- A selected AI provider runtime with verified agent lifecycle capabilities; missing or ambiguous mappings block workflows.
+- Python **3.10+** for shared deployment, sync, and helper scripts.
+- Git and a local repository.
+- Bash or PowerShell for the corresponding shell launchers and project tooling.
+
+### GitHub mode
+
+- Authenticated [GitHub CLI](https://cli.github.com/) (`gh`) and a repository with Issues enabled.
+- Project-specific CI and test tools required by the story.
 
 ### Strict mode
-- No additional tools required — works with a local git repo only
+
+Story execution uses local records without GitHub mutations. `sync devkit` still needs access to published release artifacts; `update project` can use a local devkit checkout offline. See the [deployment guide](docs/feature/multi-provider-harness/Phase_2_Deployment_Operations.md) for provider capability and platform limits.
 
 ---
 
 ## Devkit structure
 
-```
+```text
 mt-agent-devkit/
-├── CLAUDE.md                          ← orchestrator triggers and pipeline rules
+├── CLAUDE.md / AGENTS.md                 # provider entrypoints
 ├── README.md
-├── VERSION                            ← current in-progress version (x.y.z-SNAPSHOT)
-├── CHANGELOG.md                       ← per-version change log
-├── changes.json                       ← per-version list of changed template files
-└── .claude/
-    └── agents/
-        ├── workflows/                 ← devkit-internal workflow definitions
-        │   ├── Analyst_Workflow.md
-        │   ├── Init_Project_Workflow.md
-        │   └── Update_Project_Workflow.md
-        └── templates/                 ← source templates for target projects
-            ├── CLAUDE_TEMPLATE.md
-            ├── context/               ← Project_Priming + Document_Index templates
-            ├── instructions/          ← per-role instruction templates (5 files)
-            ├── rules/                 ← all rule templates (16 files)
-            └── workflows/             ← sprint workflow templates (9 files)
+├── VERSION / CHANGELOG.md / changes.json
+├── .mt-agent-devkit/
+│   ├── context/                         # internal priming
+│   ├── instructions/                    # internal shared roles and orchestrator
+│   ├── rules/                           # internal shared rules
+│   ├── workflows/                       # internal story/sprint workflows
+│   │   └── commands/                    # analyst and target deployment workflows
+│   ├── contracts/                       # shared provider contracts
+│   ├── scripts/                         # provider resolver, section reader, telemetry
+│   └── distribution/phase2/
+│       ├── templates/                   # active target sources
+│       ├── bundle/                      # generated manifest and hashed assets
+│       └── lifecycle.py / deployment.py / sync.py
+├── .claude/ / .antigravity/ / .codex/
+│   ├── harness/                         # provider adapters and mappings
+│   └── agents/working/                  # devkit-internal runtime
+├── .claude/agents/templates/             # frozen legacy sources and sync bridges
+└── scripts/test/                        # automated regression coverage
 ```
 
-When you run `init project`, all files under `templates/` are adapted to the target project's tech stack and written with clean names (no `_template` suffix). Devkit-internal workflows (`Analyst_Workflow.md`, `Init_Project_Workflow.md`, `Update_Project_Workflow.md`) are never copied to target projects.
+Target installs use the compiled shared distribution and selected provider mappings, with reviewed adaptations to the project's stack. Internal devkit workflow bodies are kept separate from target sources. For ownership, migration, and native evidence boundaries, see the [deployment guide](docs/feature/multi-provider-harness/Phase_2_Deployment_Operations.md).
