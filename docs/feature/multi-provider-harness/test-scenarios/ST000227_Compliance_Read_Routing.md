@@ -2,7 +2,7 @@
 
 ## Current verdict
 
-AC1–AC3 have mechanical implementation evidence. **AC4: NOT VERIFIED.** The implementation runtime exposes Codex collaboration tools only; no native Claude workers or Claude `Read` transcripts were produced. Static checks, Codex runs and this audit plan cannot satisfy AC4. Keep the PR draft and the story open until independent QA accepts measured native Claude evidence on the candidate SHA.
+AC1–AC3 have mechanical implementation evidence. **AC4: NOT VERIFIED.** The implementation runtime exposes Codex collaboration tools only; no native Claude workers or Claude `Read` transcripts were produced. The user has confirmed a native Claude environment is available for the pending operator run. Static checks, Codex runs and this audit plan cannot satisfy AC4. Keep the PR draft and the story open until independent QA accepts measured native Claude evidence on the candidate SHA.
 
 ## Routing and deployment contract
 
@@ -10,27 +10,120 @@ Developer, Technical Lead and QA instruction Pre-Work tables explicitly require 
 
 The active Phase 2 templates intentionally retain installer prefixes and target-project wording; bundle compilation resolves shared paths. Historical `.claude/agents/templates/` are frozen. The current `changes.json` deployment declaration already points to the rebuilt bundle manifest, which contains the new asset hashes; legacy bridge lists and checksums stay unchanged.
 
-## Frozen native audit case
+## Audit scope and isolation
 
-Use only a runtime with actual enabled native Claude spawn, resume, messaging and completion capabilities, validated through the Provider Contract. Installation or a CLI binary alone is insufficient. Do not invoke a paid external runtime without separate authorization. Record the candidate full Git SHA, native model/version, enabled tool identities, adapter path, resolved bindings, mode and run identity before the audit. Use an isolated copy at that SHA with fresh Claude role state, without importing operational records. Do not modify GitHub issues or production branches.
+This is a **native internal role-stage read audit**, not a strict-mode run or a full GitHub pipeline execution. The internal Shared Pipeline has mandatory GitHub preflight, issue, PR and comment operations; it has no strict/local substitute. The audit deliberately replaces those external operations with frozen local inputs and prohibits them. Record that limitation in the result. This fixture proves only the candidate internal Pre-Work and stage-end read routing for fresh Developer, TL and QA workers. It does not certify GitHub orchestration, merge gates, a complete story lifecycle or all native provider behavior.
 
-Freeze the following local story verbatim before any worker starts:
+Use the unmodified candidate `.mt-agent-devkit/instructions/`, rules and `.claude/harness/Provider_Adapter.md` from the exact PR240 head. No installed harness is used as a substitute: the original defect concerned internal workers. The active Phase 2 templates and compiled assets receive the same role-standard/adapter rows and stage-end routing, verified mechanically by bundle checks; this is source/deployment equivalence evidence, not a native installed-runtime claim.
 
-```markdown
-# ST-900227 — Update a documentation heading
-**Assigned:** Developer
-**Base Branch:** main
-## User Story
-As a maintainer, I want the fixture heading corrected so readers see its current name.
-## Acceptance Criteria
-- The first heading of docs/Fixture.md changes from Old Heading to Current Heading.
-- The sentence and trailing newline remain unchanged.
-- No unrelated product file changes.
-## Deliverables
-A reviewed local change and a QA verdict.
+The user has a Claude environment available. Use only that live runtime's verified native capabilities; do not launch a paid external CLI from Codex. First validate actual enabled Claude tool identities through the Provider Contract. A CLI binary or directory alone is insufficient. Pin model/version and record real timing before each spawn; missing usage remains null.
+
+## Exact disposable setup
+
+In the native Claude session, open the devkit checkout, fetch the PR branch and resolve its full SHA. Verify it equals the approved PR240 head supplied by the reviewer. Run the following **Bash** setup there; it creates a separate temporary clone, leaves the operational checkout unchanged and requires no GitHub mutations. `git fetch origin ST-000227/compliance-read-routing` is a read-only prerequisite; use `git rev-parse origin/ST-000227/compliance-read-routing` to obtain the candidate SHA.
+
+```bash
+export AUDIT_SHA="$(git rev-parse origin/ST-000227/compliance-read-routing)"
+python - <<'PY'
+import hashlib, json, os, subprocess, tempfile
+from pathlib import Path
+source = Path.cwd()
+sha = os.environ['AUDIT_SHA']
+root = Path(tempfile.mkdtemp(prefix='st227-native-')) / 'repo'
+def git(*args):
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+subprocess.run(['git', 'clone', '--no-hardlinks', '--no-checkout', str(source), str(root)], check=True)
+git('config', 'core.autocrlf', 'false')
+git('checkout', '--detach', sha)
+assert git('rev-parse', 'HEAD') == sha
+runtime = root / '.claude/agents/working'
+fixture = root / '.native-audit'
+(fixture / 'bin').mkdir(parents=True)
+(root / '.git/info/exclude').open('a').write('\n.native-audit/\n.claude/agents/working/\n')
+(root / 'docs/Fixture.md').write_text('# Old Heading\n\nKeep this sentence.\n', encoding='utf-8', newline='\n')
+story = '# ST-900227 — Update a documentation heading\n**Assigned:** Developer\n**Base Branch:** fixture-base\n## User Story\nAs a maintainer, I want the fixture heading corrected so readers see its current name.\n## Acceptance Criteria\n- The first heading of docs/Fixture.md changes from Old Heading to Current Heading.\n- The sentence and trailing newline remain unchanged.\n- No unrelated product file changes.\n## Deliverables\nA local candidate diff, independent review and a QA verdict.\n'
+(fixture / 'story.md').write_text(story, encoding='utf-8', newline='\n')
+for directory in ('working-record', 'memory', 'retros', 'tmp'):
+    (runtime / directory).mkdir(parents=True, exist_ok=True)
+for role in ('Developer', 'Technical_Lead', 'QA'):
+    (runtime / f'working-record/{role}_Working_Record.md').write_text(f'# {role} Working Record\n\nNo previous stories.\n', encoding='utf-8')
+    (runtime / f'memory/{role}_Memory.md').write_text(f'# {role} Memory\n\n## Standing Checks\nNone.\n## Keyword Index\nNone.\n## Troubleshooting Facts\nNone.\n', encoding='utf-8')
+    (runtime / f'memory/{role}_Memory_Archive.md').write_text('# Fact Archive\nNo facts.\n', encoding='utf-8')
+retro = '# Retrospective — ST-900227\n'
+for role in ('Implementer — Developer', 'Reviewer — Technical Lead', 'QA'):
+    retro += f'\n## {role}\n### Impediments & Unclear Points\n*(pending)*\n### Process Suggestions\n*(pending)*\n### What Worked Well\n*(pending)*\n'
+(runtime / 'retros/ST-900227_retro.md').write_text(retro, encoding='utf-8')
+# Fail-closed gh recorder: no operation can reach GitHub through this shim.
+shim = '#!/usr/bin/env python\nimport json,sys\nfrom pathlib import Path\np=Path(__file__).resolve().parents[1]/"gh-attempts.jsonl"\nwith p.open("a",encoding="utf-8") as out: out.write(json.dumps({"operation":sys.argv[1:3],"outcome":"blocked"})+"\\n")\nprint("AUDIT: GitHub operation blocked; use supplied local input",file=sys.stderr)\nsys.exit(97)\n'
+(fixture / 'bin/gh').write_text(shim, encoding='utf-8', newline='\n')
+(fixture / 'bin/gh').chmod(0o755)
+# Only the local fixture is committed; candidate harness bytes remain at sha.
+git('add', 'docs/Fixture.md')
+git('-c', 'user.name=Native Audit', '-c', 'user.email=native-audit@example.invalid', 'commit', '-m', 'test: seed native read fixture')
+git('branch', 'fixture-base')
+git('checkout', '-b', 'ST-900227/native-read-audit')
+paths = ['.mt-agent-devkit/instructions/'+r+'_instructions.md' for r in ('developer','technical_lead','qa')]
+paths += ['.mt-agent-devkit/workflows/Shared_Pipeline_Stages.md', '.claude/harness/Provider_Adapter.md']
+paths += ['.mt-agent-devkit/rules/Story_Standard_'+r+'.md' for r in ('Dev','TL','QA')]
+paths += ['.mt-agent-devkit/rules/Retro_Rules.md']
+hashes = {p: hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}
+(fixture/'setup.json').write_text(json.dumps({'candidate_sha':sha,'fixture_base_sha':git('rev-parse','fixture-base'),'source_hashes':hashes,'seed_sha256':hashlib.sha256((root/'docs/Fixture.md').read_bytes()).hexdigest(),'seed_state_paths':git('diff','--name-only').splitlines()}, indent=2), encoding='utf-8')
+print(root)
+PY
 ```
 
-Seed `docs/Fixture.md` with exactly `# Old Heading\n\nKeep this sentence.\n` (interpret the displayed escapes as newlines). Create a fresh strict-mode state snapshot at implementation start; use candidate shared harness sources and selected Claude bindings. Capture seed hashes before the run. Run the normal shared pipeline with Developer implementation, independent TL review, and independent QA validation. Allow required role reads, bounded story context and owning-role local state; prohibit unrelated role standards, another provider adapter, recursive startup discovery, story rewrites and GitHub mutations. Do not add a checklist telling workers to open the three files: the candidate routing must cause those reads. Pass only the ordinary role/stage packets, selected adapter and bindings; retain stage-end retro instructions from the shared pipeline.
+Use the printed audit root as every worker's working directory. Report `setup.json` candidate_sha as the audited harness SHA; fixture_base_sha/worker HEAD includes the separate local seed commit and must not be mislabeled as the candidate SHA. Prepend `<audit-root>/.native-audit/bin` to every worker Bash environment's `PATH`; verify `command -v gh` names that shim before spawning. Fresh role-memory seeds may appear as tracked diffs in this historical internal checkout; `setup.json` records those baseline state paths. Treat them as isolated runtime-state seeds, exclude them from the product diff, and never commit/push them. No shell/network tool may invoke real `gh`, an absolute-path GitHub executable or GitHub API calls. The shim records blocked attempts rather than simulating successful GitHub evidence; any attempt is an audit deviation. Do not put operational credentials, memories or records into this clone. Preserve raw native transcripts outside committed files; do not commit or push the audit clone.
+
+## Ordinary role packets and local substitutions
+
+The runner validates Claude using an enabled-tools JSON file through `provider_context.py --provider claude --tools <file>`. Pass the returned adapter and bindings anchored at the audit root: `PROVIDER_ROOT=.claude`, `RUNTIME_ROOT=.claude/agents/working`, `COMMAND_ROOT=.claude/agents`; run `native-read-227`, story `ST-900227`, Feature `multi-provider-harness`, Phase `follow-up`. Save native worker IDs and real start/end timestamps. No operational pipeline state is resumed or overwritten.
+
+For **every fresh worker**, send this common packet, followed by its role-specific packet:
+
+```text
+Work only in the supplied disposable audit root. Provider Claude; adapter
+.claude/harness/Provider_Adapter.md; PROVIDER_ROOT=.claude;
+RUNTIME_ROOT=.claude/agents/working; COMMAND_ROOT=.claude/agents.
+Run native-read-227; story ST-900227; Feature multi-provider-harness;
+Phase follow-up. Follow your canonical role instruction's normal mandatory
+Pre-Work. Frozen issue body is .native-audit/story.md; there are no comments.
+This user-authorized internal role-stage audit substitutes that local body
+for GitHub reads, local diff/verdicts for PR/check/comment evidence, and the
+already-created branch for branch creation/preflight. Do not invoke GitHub,
+change status/AC, create a PR, commit, push, merge or release. These explicit
+isolation substitutions override those external operations only; mandatory
+internal instruction/rule reads and owning-role state remain unchanged.
+Use the fail-closed gh shim supplied by the runner. Report deviations.
+```
+
+| Worker | Fresh role-specific packet | Stage-end instruction from candidate pipeline |
+|---|---|---|
+| Developer | Load `.mt-agent-devkit/instructions/developer_instructions.md`. Stage 1 implementation: change only the fixture heading to Current Heading; verify the frozen AC and return the local diff and final SHA. | Append the exact Stage 1 step 10 text from the pinned Shared Pipeline, substituting story ST-900227 and bound runtime. |
+| TL | Load `.mt-agent-devkit/instructions/technical_lead_instructions.md`. Stage 2 reviewer: independently review the frozen local story and Developer diff; use the normal review-trigger section routed by your role rules. Return a local approval or findings with the inspected SHA; no GitHub approval/check claim. | Append the exact Stage 2 step 5 text from the pinned Shared Pipeline, substituting story and runtime. |
+| QA | Load `.mt-agent-devkit/instructions/qa_instructions.md`. Stage 3 validator: independently inspect the frozen story, local diff and TL verdict, and validate the three AC. Treat status:testing and linked local candidate as supplied stage context. Write any scenario/evidence only under bound runtime/tmp; return local results without AC ticks. | Append the exact Stage 3 automation-pass retrospective sentence from the pinned Shared Pipeline, substituting story and runtime; no merge clause. |
+
+Run the three fresh workers sequentially. After Developer completes, save `git diff -- docs/Fixture.md` and changed-path list under `.native-audit/`; give TL those files and the fixture base/head SHAs. Give QA the same candidate evidence and TL's verdict. Required lifecycle verification and GitHub CI gates are **out of scope**, explicitly replaced by local candidate evidence; do not claim a full Stage 1–3 pipeline PASS. The runner must extract stage-end text from the pinned source; it must not add a checklist enumerating desired compliance files or pre-read them into worker context. This tests whether the ordinary canonical role routing causes the workers' own native `Read` calls.
+
+## Pasteable native Claude kickoff
+
+```text
+Run the native internal role-stage audit defined in
+ docs/feature/multi-provider-harness/test-scenarios/ST000227_Compliance_Read_Routing.md
+for the reviewer-approved PR240 head. Read the audit scope/setup/packets first.
+Verify actual enabled native Claude capabilities via the Provider Contract;
+stop if unavailable. Fetch the story branch read-only and pin the full SHA,
+then execute the documented disposable setup. Do not start the production
+workflow or use strict mode. Use the isolated fail-closed gh recorder and
+explicit local substitutions; no GitHub mutations, commits/pushes by workers,
+merge, release or acceptance-checkbox edits. Spawn fresh Developer, TL and QA
+workers sequentially using only the documented ordinary packets and candidate
+stage-end instructions. Capture each worker's actual native Read requests and
+returned coverage, native IDs, timings and available usage. Audit positive and
+negative read assertions and fixture outcomes. Preserve raw evidence locally;
+return a sanitized evidence table for the exact candidate SHA, deviations and
+paths to local transcripts. Do not mark ST-000227 AC4 passed yourself; independent
+QA must inspect those transcripts and decide acceptance.
+```
 
 ## Native execution and transcript audit
 

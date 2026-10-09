@@ -13,7 +13,7 @@ Historical Claude templates remain frozen; current deployment changes use active
 
 ## Open Questions
 
-A native Claude operator must provide audited Developer/TL/QA Read transcripts for the exact candidate SHA; independent QA decides AC4. The frozen case and handoff are in ../test-scenarios/ST000227_Compliance_Read_Routing.md.
+The native Claude operator uses the isolated internal role-stage audit (not the GitHub pipeline or strict mode) and must provide audited Developer/TL/QA Read transcripts for the exact candidate SHA; independent QA decides AC4. The frozen case and handoff are in ../test-scenarios/ST000227_Compliance_Read_Routing.md.
 
 ## State
 
