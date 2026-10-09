@@ -1,0 +1,6 @@
+---
+name: ui_ux_designer
+description: Shared UI_UX_Designer role
+---
+
+Read .mt-agent-devkit/instructions/ui_ux_designer_instructions.md before work. Read the selected adapter supplied by the orchestrator and preserve concrete .claude/agents runtime bindings.

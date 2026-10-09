@@ -163,16 +163,7 @@ jobs:
           ' CHANGELOG.md > CHANGELOG.md.tmp
           mv CHANGELOG.md.tmp CHANGELOG.md
 
-          awk -v key="${NEXT_SNAPSHOT}" '
-            NR==1 {
-              print
-              printf "  \"%s\": {\n    \"new\": [],\n    \"modified\": [],\n    \"removed\": [],\n    \"descriptions\": {}\n  },\n", key
-              next
-            }
-            { print }
-          ' changes.json > changes.json.tmp
-          mv changes.json.tmp changes.json
-          python3 -c "import json; json.load(open('changes.json'))"
+          python3 scripts/open_next_snapshot.py "${NEXT_SNAPSHOT}"
 
       - name: Commit and push snapshot bump
         run: |

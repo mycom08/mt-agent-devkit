@@ -1,0 +1,6 @@
+---
+name: qa
+description: Shared QA role
+---
+
+Read .mt-agent-devkit/instructions/qa_instructions.md before work. Read the selected adapter supplied by the orchestrator and preserve concrete .claude/agents runtime bindings.

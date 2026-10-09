@@ -1,0 +1,19 @@
+## Shared Agent Harness
+
+**Mode:** {{MODE}}
+
+Canonical project context: `.mt-agent-devkit/context/Project_Priming.md`. Read it at session start.
+
+Before workflow state writes or spawning, read `.mt-agent-devkit/contracts/Provider_Contract.md`. Run `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json>` with actual enabled tool identities and an explicit provider declaration when needed. Load exactly the returned adapter (`<selected-provider>/harness/Provider_Adapter.md`) and pass provider, adapter, concrete PROVIDER_ROOT/RUNTIME_ROOT/COMMAND_ROOT, run/story identity and stage context to every worker. Missing/ambiguous capabilities block workflows; neutral priming remains available.
+
+Shared instructions, rules and workflows belong to `.mt-agent-devkit/`; provider-local memory and records remain at the selected RUNTIME_ROOT. Preserve project sections and role roster customizations outside this managed block.
+
+## Agent File Integrity
+
+Shared instructions, rules, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.
+
+Independent implementation, TL review, QA and PO gates remain mandatory. In GitHub mode post verdicts with `gh pr comment`, never self-approve with `gh pr review --approve`. In strict mode use local story/review records and avoid GitHub mutations.
+
+Before a requested workflow, the top-level orchestrator reads `.mt-agent-devkit/instructions/orchestrator_instructions.md`. Workers read their named `.mt-agent-devkit/instructions/<role>_instructions.md` and selected adapter.
+
+Use the project's explicit Agent Roster; when none is provided, the default roles are Technical Lead, Developer, QA, Product Owner, Business Analyst and UI/UX Designer, with corresponding lowercase underscore role instruction filenames under `.mt-agent-devkit/instructions/`. Project roster customizations take precedence over this default.

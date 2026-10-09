@@ -26,11 +26,17 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [0.1.51] - Unreleased
 
+### Added
+- [ST-000221] Shared target harness distribution with selected provider adapters, explicit customization review, immutable release acquisition, transactional deployment receipts and recoverable migration journals. Legacy sync bridges isolate the new payload; release remains gated on separate provider compliance followups.
+
 ### Changes
 
 - [ST-000220] Consolidated internal agent rules and workflows under one shared owner with explicit Claude, Antigravity and Codex adapters.
 
 ### Bug Fixes
+
+- [ST-000221] Preserve reviewed customizations across updates, enforce bridge review and provider routing, support POSIX locks without procfs, and retain deployment metadata across releases.
+- [ST-000221] Preserve Antigravity legacy version-hook targets during migration, validate the authoritative shared template corpus, and document future adaptation review requirements.
 
 ---
 

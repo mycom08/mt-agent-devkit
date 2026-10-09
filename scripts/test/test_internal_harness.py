@@ -134,8 +134,9 @@ class RuntimeAndSkeletonTests(unittest.TestCase):
                 with self.subTest(provider=provider, source=relative):
                     self.assertEqual(generation_fragments(before), generation_fragments(rendered))
                     self.assertNotIn("{LIFECYCLE_ROOT}", rendered)
+        self.assertEqual(skeletons.render("paths-ignore: ['{LIFECYCLE_ROOT}/**']", ".codex"), "paths-ignore: ['.codex/**']")
         with self.assertRaises(ValueError):
-            skeletons.render("paths-ignore: ['{LIFECYCLE_ROOT}/**']", ".codex")
+            skeletons.render("{LIFECYCLE_ROOT}", ".unknown")
 
     def test_missing_legacy_instruction_and_invalid_runtime_binding_fail(self):
         fixture = ROOT / "scripts/test/fixtures/bad/internal_missing_instruction.md"
@@ -146,6 +147,9 @@ class RuntimeAndSkeletonTests(unittest.TestCase):
         self.assertFalse(validator.reference_errors("Write `{COMMAND_ROOT}/tmp/analyst_workflow_state.md`", "fixture.md"))
         self.assertTrue(validator.reference_errors("Read `.claude/agents/working/instructions/missing.md`", "lifecycle.md", target_lifecycle=True))
         self.assertFalse(validator.reference_errors("Write `{TARGET_PROJECT}/.claude/settings.json`", "lifecycle.md", target_lifecycle=True))
+        for marker in ("target paths", "Released target"):
+            self.assertTrue(validator.reference_errors(marker + " `.mt-agent-devkit/scripts/nonexistent.py`", "lifecycle.md", target_lifecycle=True))
+        self.assertFalse(validator.reference_errors("Released target `.mt-agent-devkit/scripts/sync.py`", "lifecycle.md", target_lifecycle=True))
 
     def test_internal_bindings_are_rejected_in_distributed_templates(self):
         spec = importlib.util.spec_from_file_location("template_validator", ROOT / "scripts/validate_templates.py")

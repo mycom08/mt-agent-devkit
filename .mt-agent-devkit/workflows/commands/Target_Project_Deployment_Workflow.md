@@ -1,0 +1,18 @@
+# Target Project Deployment Workflow
+
+Use this workflow for `init project`, `update project`, and the agent-harness stages of `build software`. Existing architecture/project generation stages still run normally. Before any target write, read the selected adapter and carry explicit provider and runtime bindings. One target uses one mode/version across providers.
+
+1. Inventory the target and scan its actual stack/project documents. Prepare a UTF-8 JSON object mapping target paths to reviewed project text: native entrypoint (`CLAUDE.md` for Claude, `AGENTS.md` for Antigravity/Codex), `.mt-agent-devkit/context/Project_Priming.md`, and, for repository profile only, `.mt-agent-devkit/context/Document_Index.md`. Merge project customizations into shared roles/rules using the compiled source as the migration baseline. Keep provider runtime memory, records, retrospectives and strict counters outside adaptations.
+2. For an existing legacy installation, call the common engine's `inspect` and `migration.review_candidates`; review each proposed transfer, rewrite references to shared destinations and select explicit retirements only from the manifest's declared list. Unknown versions, mixed modes and nonterminal sessions block migration. Supply exact before/after hashes and a review reason for every existing replacement or retirement in a separate resolutions JSON object. A retired path must have a verified shared successor and switched entrypoint. Unknown extra content remains preserved.
+3. Run the thin launcher below using the actual devkit checkout path. The Python 3.10 preflight runs before target mutation. Omit `--apply` to produce the exact plan. Review its selected providers, profile, source provenance, writes, preservation hashes and retirements. The CLI does not generate project-specific decisions.
+
+```text
+python <devkit-root>/.mt-agent-devkit/distribution/phase2/lifecycle.py <init|update|build> --target <target> --devkit-root <devkit-root> --provider <selected-provider> --mode <github|strict> --profile <repo|project_root> --adaptations <reviewed-adaptations.json> --resolutions <reviewed-resolutions.json>
+```
+
+The equivalent executable launchers are `lifecycle.ps1` and `lifecycle.sh` in the same directory. Save the emitted JSON plan outside target managed files. Apply the reviewed plan with `deployment.py apply --target <target> --plan <saved-plan.json>`; do not silently regenerate it between review and apply. Skip the resolutions flag for a fresh target. Existing unchanged files and runtime seeds are preserved.
+
+4. Verify using `deployment.py verify --target <target>`. The shared receipt certifies installation; the legacy version stamp is only a compatibility hint written after content verification. On interruption inspect the root lock/journal and use `resume` or `rollback` with the recorded journal path. Recovery checks process identity and rejects intervening edits. Never reset a pipeline, delete directories or use Git reset to recover deployment.
+5. For build software, run a separate transaction for the project root using `project_root`, and one for each generated repository using `repo`. The root profile installs its entrypoint/priming, project build/sync workflow and required engine/helper contracts, without the repository Scrum corpus. Preserve all scaffolded application content.
+
+Released target `sync devkit` uses `.mt-agent-devkit/scripts/sync.py`, which pins an immutable tagged commit and validates the complete artifact before applying the same engine. Local lifecycle output records local/snapshot provenance and never claims released certification. Native provider discovery/support requires observed evidence, separately from mechanical deployment success.

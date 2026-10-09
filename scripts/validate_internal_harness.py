@@ -50,6 +50,13 @@ instruction read cannot escape resolution through a broad provider allow-list.
             if any(token in ref for token in ("<", ">", "*", "{", "ST-XXXXXX")):
                 continue  # Clearly marked examples/globs, never a concrete file read.
             if ref.startswith(".mt-agent-devkit/"):
+                if target_lifecycle:
+                    manifest_path = root / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+                    if manifest_path.is_file():
+                        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                        destinations = {item["destination"] for item in manifest["files"] if item["phase"] != "retirement"}
+                        if ref in destinations:
+                            continue  # Exact declared target destination, not a prose exemption.
                 if not (root / ref).is_file():
                     errors.append(f"dangling shared reference: {source} -> {ref}")
             elif not (root / ref).is_file():
@@ -106,8 +113,10 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
         if (root / path).read_bytes().replace(b"\r\n", b"\n") != before:
             errors.append(f"Phase 2/release boundary violated: {path}")
     for path in shared.rglob("*.md"):
+        if "distribution" in path.relative_to(shared).parts:
+            continue  # Target distribution is verified against rendered target trees by test_phase2_bundle.
         text = path.read_text(encoding="utf-8")
-        errors.extend(reference_errors(text, path.relative_to(root).as_posix(), root))
+        errors.extend(reference_errors(text, path.relative_to(root).as_posix(), root, target_lifecycle=path.name == "Target_Project_Deployment_Workflow.md"))
         if path.parent.name in ("rules", "instructions") or path.parent.name == "commands":
             if re.search(r"Bash\(gh|\bSendMessage\b|\bagentId\b|^model(?: policy)?:", text, re.M):
                 errors.append(f"provider mechanics left in shared source: {path.relative_to(root)}")

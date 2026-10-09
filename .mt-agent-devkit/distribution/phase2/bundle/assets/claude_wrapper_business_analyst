@@ -1,0 +1,6 @@
+---
+name: business_analyst
+description: Shared Business_Analyst role
+---
+
+Read .mt-agent-devkit/instructions/business_analyst_instructions.md before work. Read the selected adapter supplied by the orchestrator and preserve concrete .claude/agents runtime bindings.

@@ -1,7 +1,6 @@
 """Render lifecycle-target bindings in shared skeleton instructions before generation.
 
-Only legacy Claude/Antigravity target output is supported in Phase 1. The Codex
-runtime must explicitly choose one of those targets; it is not the output target.
+Selected Claude, Antigravity and Codex targets use their own provider bindings.
 """
 from __future__ import annotations
 import argparse
@@ -10,8 +9,8 @@ import sys
 
 
 def render(text: str, lifecycle_root: str) -> str:
-    if lifecycle_root not in (".claude", ".antigravity"):
-        raise ValueError("Phase 1 requires an explicit supported lifecycle target")
+    if lifecycle_root not in (".claude", ".antigravity", ".codex"):
+        raise ValueError("An explicit supported target provider is required")
     return text.replace("{LIFECYCLE_ROOT}", lifecycle_root)
 
 
@@ -20,7 +19,7 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
-    parser.add_argument("--lifecycle-root", required=True, choices=(".claude", ".antigravity"))
+    parser.add_argument("--lifecycle-root", required=True, choices=(".claude", ".antigravity", ".codex"))
     args = parser.parse_args()
     print(render(args.source.read_text(encoding="utf-8"), args.lifecycle_root), end="")
     return 0

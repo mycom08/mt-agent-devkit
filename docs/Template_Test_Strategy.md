@@ -82,7 +82,7 @@ Requires a test harness with observable outputs.
 
 ## 4. Layer-1 Corpus Invariants
 
-**Scan scope:** `.claude/agents/templates/**/*.md` and `.claude/agents/workflows/**/*.md`.
+**Scan scope:** `.claude/agents/templates/**/*.md`, `.claude/agents/workflows/**/*.md`, and the authoritative `.mt-agent-devkit/distribution/phase2/templates/**/*.md`. Historical assembly pointers and section aliases within the isolated corpus resolve to that same corpus, so frozen legacy sources cannot mask broken new shared references. Historical `changes.json` coverage remains scoped to its legacy paths; the distribution manifest and deterministic bundle checker cover Phase 2 assets.
 
 **Output contract:** one `[ERROR] file:line -- <issue>` line per hard violation.
 Known-issue notes print as `[KNOWN_ISSUE]` and do not affect exit code.
