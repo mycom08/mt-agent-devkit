@@ -2,7 +2,7 @@
 
 ## Current verdict
 
-AC1–AC3 retain mechanical implementation evidence. **AC4: NOT VERIFIED for the revised candidate.** Independent QA failed the native run on `44ec4af65e1dc5b2eaaef4e6688ba08151cae047`: required files were exposed through Bash, the sole QA `Read` targeted persisted shell output, and every adapter followed the first shell. See [QA verdict](https://github.com/mycom08/mt-agent-devkit/issues/227#issuecomment-6077397139). The revised ordinary entry contract requires the direct native reader before shell-based discovery/loading. Static checks and this plan cannot satisfy AC4; keep PR240 draft until independent review, a fresh native run and QA acceptance on the revised SHA.
+**Independent QA: AC1–AC4 PASS** for audited code candidate `b05ba9174732547538a9311c695d1a2096753a0d`, within the bounded native internal role-stage scope below. The required QA regression and documentation handoff are recorded in the evidence section. The initial run on `44ec4af65e1dc5b2eaaef4e6688ba08151cae047` **failed AC4**: required files were Bash-read, QA read persisted shell output, and adapters followed first shell. [Initial QA verdict](https://github.com/mycom08/mt-agent-devkit/issues/227#issuecomment-6077397139). The revised ordinary entry contract resolved this observed routing failure in a fresh native run; the failed evidence remains retained. Merge still requires independent review of this QA documentation delta and exact-head CI.
 
 ## Routing and deployment contract
 
@@ -16,7 +16,7 @@ This is a **native internal role-stage read audit**, not a strict-mode run or a 
 
 Use the unmodified candidate `.mt-agent-devkit/instructions/`, rules and `.claude/harness/Provider_Adapter.md` from the exact PR240 head. No installed harness is used as a substitute: the original defect concerned internal workers. The active Phase 2 templates and compiled assets receive the same role-standard/adapter rows and stage-end routing, verified mechanically by bundle checks; this is source/deployment equivalence evidence, not a native installed-runtime claim.
 
-The user has a Claude environment available. Use only that live runtime's verified native capabilities; do not launch a paid external CLI from Codex. First validate actual enabled Claude tool identities through the Provider Contract. A CLI binary or directory alone is insufficient. Pin model/version and record real timing before each spawn; missing usage remains null.
+The user explicitly authorized headless Claude auto-mode execution from Codex for these audits. Use only that live runtime's verified native capabilities; preserve its configured permissions. First validate actual enabled Claude tool identities through the Provider Contract. A CLI binary or directory alone is insufficient. Pin model/version and record real timing before each spawn; missing usage remains null.
 
 ## Exact disposable setup
 
@@ -164,3 +164,25 @@ QA must inspect those transcripts and decide acceptance.
 | QA | Story_Standard_QA.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | Pending fresh rerun; previous SHA failed |
 
 The previous failed run remains immutable evidence; do not reuse its worker sessions. The native operator supplies the revised pinned setup, all eleven source hashes, exact entry-contract equality result, successful `Read` coverage/events, timing/usage availability, final product diff, verdicts and deviations. Independent QA records PASS or explicit failures per row and decides AC4. No acceptance checkbox is changed by the implementer.
+
+## Independent QA evidence — 2026-10-09
+
+Audited code SHA: `b05ba9174732547538a9311c695d1a2096753a0d`. Fixture seed HEAD: `e19828fc98284a6b0916b2ac189462ea4399fbc5`, not the audited code SHA. Native Claude Code 2.1.295, auto permission mode, fresh session `13624a00-5ae9-4041-962b-8568189dc5f8`; Developer/TL opus, QA sonnet. No permission bypass.
+
+Independent QA parsed the three owned raw worker transcripts, matched successful returned numbered lines against original fixture source, and verified all 11 recorded source hashes against candidate Git blobs and fixture bytes. The ordinary Worker Entry Read Contract matches the pinned pipeline and guide verbatim. No harness file was preloaded or special desired-files checklist added.
+
+| Worker | Adapter: full lines / event | Own Standard: full lines / event | Retro: full lines / event |
+|---|---|---|---|
+| Developer `a14dbbe046f4c528c` | 1–65 / `toolu_01LEQqsCeFDoivjbQWAAaarS` | 1–106 / `toolu_01VeKXyq2QghsTzR3SHdadzy` | 1–126 / `toolu_01Cn8PvEkMBQ453Ydmpm8iAY` |
+| TL `a12f9a83664da36c5` | 1–65 / `toolu_01NtZwbsGfgqV1C4wBcvStnb` | 1–70 / `toolu_01S9RVcrNSAsM56yMo5Anohg` | 1–126 / `toolu_01XCXHj8msbbnHSbxRgsNfBe` |
+| QA `a886655172b95c7ec` | 1–65 / `toolu_012q8sHHXMsSge55hxmF43h7` | 1–79 / `toolu_01X221kVx6dR82ZtQKBDMuvn` | 1–126 / `toolu_01FNzcrct9Qsem2boRr2gQZB` |
+
+Every adapter is the worker's first tool event, before first shell. Each Retro Read precedes stage final report and retro edit; TL's claim that Retro preceded every shell is inaccurate and is not used as evidence. No required Read was truncated, errored, offset or limited. No other-provider adapter or cross-role Standard reads occurred. Only the fixture heading changed; no worker GitHub/network mutations, commits or pushes occurred.
+
+AC1 PASS: all three role pre-work tables list own Standard. AC2 PASS: every pipeline Retro citation is fully pathed. AC3 PASS: TL/QA selected-adapter paths reachable. AC4 PASS: direct full native returned coverage and ordering above; static checks alone were not treated as acceptance.
+
+Deviations retained: runner shell preceded its own adapter Read (worker gate still passed); read-only fetch omitted because exact approved SHA was locally verified; absolute fixture root and shim PATH instructions appended; TL read-section skill definition used same-SHA source checkout and its first shell used read-only cd; bounded native QA skipped validators for the heading fixture. Independent Codex QA performs the actual product regression gate separately. Shim enforcement depends on worker PATH compliance; all worker shells prefixed it and no gh calls occurred.
+
+Scope: this certifies the bounded candidate internal fresh-role read routing only. It does not certify installed runtime, full GitHub orchestration, strict-mode pipeline, merge/PO stages or all providers. Raw transcripts/private pointer files stay local and uncommitted. Sanitized independent evidence: provider-local `tmp/QA_ST227_Rerun_Independent.json`; recorder summary: `runtime/runs/ST000227-headless-rerun/AUDIT_SUMMARY.md`. Billing usage is not inferred from character coverage.
+
+QA regression: internal validator, generated-wrapper check, template validator and 23 internal unit tests PASS. Independent aggregate 94 tests in 445.499 seconds plus 10 validator fixture groups PASS, exit0 (`tmp/QA_ST227_Rerun_Aggregate.log`). This was one aggregate run; no retries.
