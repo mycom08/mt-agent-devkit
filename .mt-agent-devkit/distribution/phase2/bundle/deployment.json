@@ -10,8 +10,8 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "6f76d2c2c721931d978af19cc6d3905fdf8d9c53ad952302852047cec937e782",
-      "bytes": 9936,
+      "sha256": "3d3928bf62e1b7feceaa16a8cae552fd44b4b8bc71f3bf8c38890c8ca9ce60b9",
+      "bytes": 10020,
       "kind": "template"
     },
     {
@@ -87,8 +87,8 @@
     {
       "id": "rules/Product_Owner_Rules_Read_On_Demand.md",
       "path": "assets/rules_Product_Owner_Rules_Read_On_Demand.md",
-      "sha256": "31549ecad253e2871568bb15aa05de8d9accad6b682a1c5e0cde52314804d071",
-      "bytes": 16313,
+      "sha256": "726aa65652d80447330673fe35605313c96c54daf58095dca9da68e79a45d7a2",
+      "bytes": 16357,
       "kind": "template"
     },
     {
@@ -206,8 +206,8 @@
     {
       "id": "instructions/product_owner_instructions.md",
       "path": "assets/instructions_product_owner_instructions.md",
-      "sha256": "88bccb6359753596a37d96f6780cd80855b2a9814cd1d5c3d45dd893e829ca35",
-      "bytes": 2819,
+      "sha256": "e01b197a2683ed1ff901d915cf263f2b6b8c142aa28057da543f745db5411127",
+      "bytes": 3136,
       "kind": "template"
     },
     {
@@ -339,8 +339,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "9ac0a07170387c905c97c8e93401dcc81d0043e53174eac1231eace8fadcda3d",
-      "bytes": 39537,
+      "sha256": "ac62151c74d87bcd5617e9a111e65b8e824a2ab9d9d722b8eb4617f55bc5fe8e",
+      "bytes": 39570,
       "kind": "template"
     },
     {

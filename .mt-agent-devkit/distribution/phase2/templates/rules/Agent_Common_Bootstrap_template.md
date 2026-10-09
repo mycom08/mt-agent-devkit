@@ -40,7 +40,7 @@ Your instruction file lists the exact paths for your Project Priming, Working Re
 1. Skip Project Priming — already in context
 2. Skip your Working Record too — no other agent can write it, so a resumed agent is only re-reading its own words from earlier in the same session; nothing has changed since the last turn
 
-> Lightweight tasks (e.g., PO story closure) override this sequence — see your role instructions for the reduced read set.
+> Lightweight tasks (e.g., PO story closure) override the state-read/write sequence — see your role instructions for the reduced read set. They never override the mandatory full read of this bootstrap file.
 
 ---
 

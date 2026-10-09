@@ -6,8 +6,8 @@
 
 ## 1. Story Closure Task (Stage 4)
 
-Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, this is a **lightweight task** — do not read Project_Priming or your Working Record. Read only:
-- `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
+Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, this is a **lightweight task** — skip Project_Priming and skip reading and writing your Working Record. Read only:
+- `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md` (full file, every section mandatory)
 - `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md`
 - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
 
@@ -26,7 +26,7 @@ Then execute:
 
 Then (both modes):
 - Write your retrospective section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` — read `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
-- Update your Working Record only if there is a durable fact worth recording — skip the update entirely if there is nothing new
+- Do not write your Working Record for Stage 4 closure. Record any durable fact in your Project Memory per Agent_Common_Read_On_Demand.md §1
 
 ---
 
