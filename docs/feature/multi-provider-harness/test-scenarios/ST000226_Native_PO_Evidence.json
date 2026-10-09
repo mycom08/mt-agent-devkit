@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "story": "ST-900226",
+  "real_story": "ST-000226",
+  "provider": "codex",
+  "run": "start-226-native-po-20261009",
+  "outcome": "fixture closure complete",
+  "fixture_state": "CLOSED",
+  "fixture_labels": [
+    "status:done"
+  ],
+  "all_ac_checked": true,
+  "qa_authority": "OWNER",
+  "qa_verdict": "PASS",
+  "verified_head_sha": "1111111111111111111111111111111111111111",
+  "merged_sha": "2222222222222222222222222222222222222222",
+  "working_record": {
+    "read": false,
+    "written": false,
+    "verification": "Parent independently compared seeded record before/after SHA256 and audited zero record-read events.",
+    "before_sha256": "8c316695d8e5c57b2e1437d5bbc86e8421dd94b378c7e94a831f3ca44c2c6b15",
+    "after_sha256": "8c316695d8e5c57b2e1437d5bbc86e8421dd94b378c7e94a831f3ca44c2c6b15"
+  },
+  "memory_written": false,
+  "retro_written": true,
+  "reads": [
+    {
+      "path": ".mt-agent-devkit/instructions/product_owner_instructions.md",
+      "bytes": 2815,
+      "sha256": "127b7061f7331f6f8feac09186f4b404391b6a74fc28977c2e92ac1b1e8ba48b",
+      "mode": "full",
+      "at": "2026-10-09T04:09:14.699240+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+      "bytes": 11082,
+      "sha256": "bb670aa1cce9201ecbcbb139fb9c0abfde8f9121265c397402aabb68ebdfc98e",
+      "mode": "full",
+      "at": "2026-10-09T04:09:33.828444+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/context/Project_Priming_Bootstrap.md",
+      "bytes": 7458,
+      "sha256": "43fa84028594444a8761f123b532cd92cb224e6f92e143dacbd86d6aa99663e1",
+      "mode": "full",
+      "at": "2026-10-09T04:09:33.953395+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+      "bytes": 9747,
+      "sha256": "1c5a1bff36272afedcf880a58ba585c519546fa54cb451dc3cff8b95375d6909",
+      "mode": "full",
+      "at": "2026-10-09T04:09:34.091264+00:00"
+    },
+    {
+      "path": ".codex/harness/Provider_Adapter.md",
+      "bytes": 3604,
+      "sha256": "ebd1e602f9311798c0e164331bfb3e54057d53e26af0446bccf10d9f7d18dd2f",
+      "mode": "full",
+      "at": "2026-10-09T04:09:34.240286+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/contracts/Provider_Contract.md",
+      "bytes": 7020,
+      "sha256": "99d533d878640641ad11e2cacfd4267b241c4159c3b3c2d37e25b3394e857c54",
+      "mode": "full",
+      "at": "2026-10-09T04:09:34.384182+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md",
+      "mode": "bounded",
+      "target": "^## Stage 4",
+      "bytes": 3364,
+      "sha256": "4eb0fe6c1084e56c948ef289bcef1c8a19ecc3ae7458ae686d0d1ac0f207d77e"
+    },
+    {
+      "path": ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md",
+      "mode": "bounded",
+      "target": "^## Stage 4",
+      "bytes": 3364,
+      "sha256": "4eb0fe6c1084e56c948ef289bcef1c8a19ecc3ae7458ae686d0d1ac0f207d77e"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "mode": "bounded",
+      "target": "^## 1\\.",
+      "bytes": 1256,
+      "sha256": "46833b306f07d27ef53dc154d92f04e8dfed6bf5e3a940dc3b6c808278202220"
+    },
+    {
+      "path": "fixture/agents/working/memory/Product_Owner_Memory.md",
+      "bytes": 48,
+      "sha256": "dc534225d042010d669d7483c37a4a6b360200c8311cfbe3a613ea23ff1c052e",
+      "mode": "full",
+      "at": "2026-10-09T04:10:24.666686+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+      "mode": "bounded",
+      "target": "^## 14\\.",
+      "bytes": 449,
+      "sha256": "12801fad2e26c871fbedf379d89049344710dd0a94b817c76c58b9b9720f173c"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+      "mode": "bounded",
+      "target": "^## 3\\.",
+      "bytes": 465,
+      "sha256": "ac2f363769c244970d30ff1380d3f486c2499c73ed74d93b20d0657e8a3858d0"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Retro_Rules.md",
+      "bytes": 7095,
+      "sha256": "8e1dfafb349d1df874095d7758f9f2b2ef93e53ccd5e49dc9dfb8e1e546bea8d",
+      "mode": "full",
+      "at": "2026-10-09T04:10:34.129659+00:00"
+    },
+    {
+      "path": "fixture/agents/working/retros/ST-900226_retro.md",
+      "bytes": 163,
+      "sha256": "f44bcfa6e04030df4c4422c3b746650f08340c8cf6692c64f7152296c916665e",
+      "mode": "full",
+      "at": "2026-10-09T04:10:34.218619+00:00"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+      "mode": "bounded",
+      "target": "^## 5\\.",
+      "bytes": 276,
+      "sha256": "942f6addabc61f793bd0eacf8b00d9b77ca57aef0c230e1fd473ada34740a2e3"
+    },
+    {
+      "path": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+      "bytes": 11082,
+      "sha256": "bb670aa1cce9201ecbcbb139fb9c0abfde8f9121265c397402aabb68ebdfc98e",
+      "mode": "full",
+      "at": "2026-10-09T04:12:08.067031+00:00"
+    }
+  ],
+  "gh_events": [
+    {
+      "at": "2026-10-09T04:10:25.473806+00:00",
+      "operation": "issue view"
+    },
+    {
+      "at": "2026-10-09T04:10:25.584613+00:00",
+      "operation": "pr view"
+    },
+    {
+      "at": "2026-10-09T04:10:52.233509+00:00",
+      "operation": "issue edit"
+    },
+    {
+      "at": "2026-10-09T04:10:52.338800+00:00",
+      "operation": "issue edit"
+    },
+    {
+      "at": "2026-10-09T04:10:52.450425+00:00",
+      "operation": "issue view"
+    },
+    {
+      "at": "2026-10-09T04:11:08.656778+00:00",
+      "operation": "issue close"
+    }
+  ],
+  "usage": {
+    "tokens": null,
+    "cost": null,
+    "timing": null,
+    "availability": "unavailable"
+  },
+  "limitations": [
+    "Worker unnecessarily read Project_Priming_Bootstrap: generic Pre-Work checklist was applied before closure-specific routing. Candidate explicitly states skip; this is a worker sequencing mistake, not observed missing candidate instruction.",
+    "Provider validation ran later than first audited state write. No foreign state accessed; audit writes required escalation.",
+    "Read_Section contract and fixture helper source inspected with shell rather than full-file audited helper; bootstrap batch tool wrapper truncated output presentation.",
+    "Fixture gh adapter is synthetic acceptance/merge evidence; no real GitHub closure, telemetry counters, or native other-provider execution claimed."
+  ],
+  "bootstrap_delivery_correction": {
+    "mode": "same-session follow-up",
+    "original": "Full-file I/O audited in batch; tool result presentation was truncated.",
+    "confirmed": "Standalone audited full-file bootstrap read delivered all six sections visibly; same-session follow-up.",
+    "historical_events_preserved": true
+  },
+  "fixture_evidence": "Synthetic frozen issue/QA PASS/merged PR; command recording adapter, no external mutations.",
+  "fixture_input_sha256": "9d982a6a4ade4ddb67c3808dc5b29b1b2c803358a2e0e588aacd9e91731aa452"
+}

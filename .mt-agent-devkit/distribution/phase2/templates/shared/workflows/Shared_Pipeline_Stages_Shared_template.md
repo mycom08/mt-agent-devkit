@@ -390,8 +390,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Behavioral path (`Type: behavioral`)
 
 1. **Spawn** Product Owner agent (**model: haiku**); save its `agentId` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
-2. PO reads for closure only — **skip Project_Priming and Working Record**:
-   - `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (PowerShell safety)
+2. PO reads for closure only — **skip Project_Priming and reading/writing the Working Record**:
+   - `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md` (full file, every section mandatory)
    - `{{AGENT_DIR_PREFIX}}/agents/rules/Product_Owner_Rules_Bootstrap.md`
    - `{{AGENT_DIR_PREFIX}}/agents/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:

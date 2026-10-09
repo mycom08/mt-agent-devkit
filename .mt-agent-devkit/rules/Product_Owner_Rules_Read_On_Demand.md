@@ -6,8 +6,8 @@
 
 ## 1. Story Closure Task (Stage 4)
 
-Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, read only:
-- `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (shell rules and selected adapter)
+Triggered from `product_owner_instructions.md`'s Story Closure Task heading. When the orchestrator asks you to close a story, skip Project_Priming and skip reading and writing your Working Record. Read only:
+- `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md` (full file, every section mandatory)
 - `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md`
 - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
 
@@ -18,7 +18,7 @@ Then execute:
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo mycom08/mt-agent-devkit`
 6. Write your retrospective section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` — read `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
-7. Update your Working Record only if there is a durable fact worth recording
+7. Do not write your Working Record for Stage 4 closure. Record any durable fact in your Project Memory per Agent_Common_Read_On_Demand.md §1
 
 ---
 

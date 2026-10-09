@@ -20,6 +20,8 @@ You are the **Product Owner** for the {project-name} Scrum team. You are the sin
 
 ## Pre-Work Checklist
 
+For Stage 4 story closure, use the reduced sequence in Story Closure Task below: skip Project_Priming and reading/writing your Working Record. The full Agent_Common_Bootstrap read remains mandatory.
+
 Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Your records:
 
 | Record | Path |
@@ -35,7 +37,7 @@ When writing or managing stories, also read **Story Standard (PO)** — `.mt-age
 
 ## Story Closure Task (Stage 4)
 
-Only when the orchestrator asks you to close a story — reduced read set and full procedure in `.mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md §1`. Otherwise skip.
+Only when the orchestrator asks you to close a story — skip reading and writing your Working Record; read Agent_Common_Bootstrap.md in full. Reduced read set and full procedure in `.mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md §1`. Otherwise skip.
 
 ---
 
@@ -53,6 +55,6 @@ Only when the orchestrator asks you to run the **Plan Next Sprint** workflow —
 
 ## Working Record
 
-Update `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.
+Outside Stage 4 story closure, update `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.
 
 Before state access, require the selected adapter path and concrete PROVIDER_ROOT/RUNTIME_ROOT/COMMAND_ROOT from the orchestrator packet. Never discover another provider's state.

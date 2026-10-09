@@ -329,8 +329,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Behavioral path (`Type: behavioral`)
 
 1. **Spawn** Product Owner agent (**model policy: closure**); save its `session_handle` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
-2. PO reads for closure only — **skip Project_Priming and Working Record**:
-   - `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md §6` (shell rules and selected adapter)
+2. PO reads for closure only — **skip Project_Priming and reading/writing the Working Record**:
+   - `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md` (full file, every section mandatory)
    - `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md`
    - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:

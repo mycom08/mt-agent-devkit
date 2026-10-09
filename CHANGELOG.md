@@ -26,6 +26,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [0.1.51] - Unreleased
 
+- [ST-000226] Align PO closure: read the common bootstrap in full and skip Working Record reads/writes in shared and distributed instructions.
+
 ### Added
 - [ST-000221] Shared target harness distribution with selected provider adapters, explicit customization review, immutable release acquisition, transactional deployment receipts and recoverable migration journals. Legacy sync bridges isolate the new payload; release remains gated on separate provider compliance followups.
 
