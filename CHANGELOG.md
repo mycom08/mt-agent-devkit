@@ -24,7 +24,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.51] - Unreleased
+## [0.1.51] - 2026-10-09
 
 - [ST-000226] Align PO closure: read the common bootstrap in full and skip Working Record reads/writes in shared and distributed instructions.
 
