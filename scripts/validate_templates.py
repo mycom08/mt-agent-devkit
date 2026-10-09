@@ -2,7 +2,7 @@
 """
 validate_templates.py -- Layer-1 corpus invariant checker for mt-agent-devkit.
 
-Scans .claude/agents/templates/**/*.md and .claude/agents/workflows/**/*.md
+Scans historical templates/workflows and the authoritative Phase 2 templates
 and enforces 7 deterministic invariants. Exits non-zero on any hard violation.
 
 Output contract: one line per finding
@@ -25,11 +25,22 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+PHASE2_TEMPLATES = REPO_ROOT / ".mt-agent-devkit/distribution/phase2/templates"
 
 SCAN_DIRS = [
     REPO_ROOT / ".claude/agents/templates",
     REPO_ROOT / ".claude/agents/workflows",
+    PHASE2_TEMPLATES,
 ]
+
+
+def corpus_reference(path, reference):
+    """Resolve historical assembly references inside their own source corpus."""
+    if Path(path).absolute().is_relative_to(PHASE2_TEMPLATES):
+        prefix = ".claude/agents/templates/"
+        if reference.startswith(prefix):
+            return PHASE2_TEMPLATES / reference.removeprefix(prefix)
+    return REPO_ROOT / reference
 
 CHANGES_JSON = REPO_ROOT / "changes.json"
 
@@ -351,11 +362,16 @@ def _exists_cs(path: Path) -> bool:
     return True
 
 
-def _resolve_file_ref(cand: str) -> bool:
+def _resolve_file_ref(cand: str, source_path=None) -> bool:
     """True if the candidate path resolves under any of the 3 resolution roots.
 
     Every root compares case-sensitively; see _exists_cs for why.
     """
+    if source_path is not None and Path(source_path).absolute().is_relative_to(PHASE2_TEMPLATES):
+        if cand.startswith(".claude/agents/templates/"):
+            return _exists_cs(corpus_reference(source_path, cand))
+        template_name = Path(cand).stem + "_template.md"
+        return any(p.name == template_name for p in PHASE2_TEMPLATES.rglob("*_template.md"))
     # Root 1: verbatim from repo root.
     if _exists_cs(REPO_ROOT / cand):
         return True
@@ -393,7 +409,7 @@ def check_reference_integrity(path, lines: list, fenced: list,
                 emit(findings, "KNOWN_ISSUE", path, i + 1,
                      f"unresolved reference (known typo, tracked for refactor-templates): '{cand}'")
                 continue
-            if not _resolve_file_ref(cand):
+            if not _resolve_file_ref(cand, path):
                 emit(findings, "ERROR", path, i + 1,
                      f"unresolved reference '{cand}'")
 
@@ -487,6 +503,7 @@ def check_section_refs(path, lines: list, fenced: list,
                 continue  # Not in alias table -- skip (prevents false positives).
 
             alias_path = SECTION_REF_ALIAS[stem]
+            alias_path = str(corpus_reference(path, alias_path))
             if alias_path not in alias_headings_cache:
                 alias_headings_cache[alias_path] = _get_file_headings(alias_path)
             headings = alias_headings_cache[alias_path]
@@ -604,7 +621,7 @@ def check_shared_integrity(path, lines: list, fenced: list,
             m = _SHARED_LOGIC.search(line)
             if m:
                 pointer = m.group(1).strip()
-                target = REPO_ROOT / ".claude/agents" / pointer
+                target = corpus_reference(path, ".claude/agents/" + pointer)
                 if not target.exists():
                     emit(findings, "ERROR", path, i + 1,
                          f"Shared logic pointer '{pointer}' does not exist")
@@ -621,7 +638,7 @@ def check_shared_integrity(path, lines: list, fenced: list,
                         included_by.append(entry)
 
         for ref_path in included_by:
-            target = REPO_ROOT / ".claude/agents" / ref_path
+            target = corpus_reference(path, ".claude/agents/" + ref_path)
             if not target.exists():
                 emit(findings, "ERROR", path, 1,
                      f"Included-by/Shared-logic mismatch: listed file '{ref_path}' does not exist")
@@ -630,6 +647,8 @@ def check_shared_integrity(path, lines: list, fenced: list,
             # The pointer in the thin file references the shared file relative to
             # .claude/agents/ -- compute that relative path.
             shared_rel = rel(path)
+            if path.absolute().is_relative_to(PHASE2_TEMPLATES):
+                shared_rel = "templates/" + path.absolute().relative_to(PHASE2_TEMPLATES).as_posix()
             if shared_rel.startswith(".claude/agents/"):
                 shared_rel = shared_rel[len(".claude/agents/"):]
             if shared_rel not in target_text:
@@ -643,11 +662,13 @@ def check_shared_integrity(path, lines: list, fenced: list,
             m = _SHARED_LOGIC.search(line)
             if m:
                 pointer = m.group(1).strip()
-                shared_path = REPO_ROOT / ".claude/agents" / pointer
+                shared_path = corpus_reference(path, ".claude/agents/" + pointer)
                 if not shared_path.exists():
                     continue  # Already flagged in 3b.
                 shared_text = shared_path.read_text(encoding="utf-8", errors="replace")
                 thin_rel = rel(path)
+                if path.absolute().is_relative_to(PHASE2_TEMPLATES):
+                    thin_rel = "templates/" + path.absolute().relative_to(PHASE2_TEMPLATES).as_posix()
                 if thin_rel.startswith(".claude/agents/"):
                     thin_rel = thin_rel[len(".claude/agents/"):]
                 if thin_rel not in shared_text:

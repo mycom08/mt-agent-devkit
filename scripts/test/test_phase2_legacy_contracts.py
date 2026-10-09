@@ -111,6 +111,15 @@ class LegacyContracts(unittest.TestCase):
                                 (agents / "orchestrator_instructions.md").write_text("# Legacy orchestrator\n", encoding="utf-8")
                                 (agents / "scripts").mkdir()
                                 (agents / "scripts/check_devkit_version.sh").write_text("legacy version notice\n", encoding="utf-8")
+                                (agents / "scripts/check_devkit_version.ps1").write_text("# legacy PowerShell version notice\n", encoding="utf-8")
+                                settings_path = target / ("." + provider) / "settings.json"
+                                settings = {"hooks": {"SessionStart": [{"hooks": [
+                                    {"type": "command", "command": "bash ." + provider + "/agents/scripts/check_devkit_version.sh"},
+                                    {"type": "command", "command": "powershell -File ." + provider + "/agents/scripts/check_devkit_version.ps1"},
+                                ]}]}, "custom_setting": "preserve"}
+                                settings_path.write_text(json.dumps(settings), encoding="utf-8")
+                                retained_native = {p: p.read_bytes() for p in (
+                                    settings_path, agents / "scripts/check_devkit_version.sh", agents / "scripts/check_devkit_version.ps1")}
                                 memory = agents / "memory/Developer_Memory.md"
                                 memory.parent.mkdir(); memory.write_bytes(b"durable personalized memory\n")
                                 counter = agents / "docs/story_counter.txt"
@@ -138,6 +147,11 @@ class LegacyContracts(unittest.TestCase):
                                 root_asset = next(a for a in manifest["assets"] if a["id"] == "root_repo")
                                 rendered_root = deployment.managed_sections(adaptations[native], deployment.substituted((bundle / root_asset["path"]).read_text(), {"MODE": mode}))
                                 resolutions = {native: {"before_sha256": deployment.digest((target/native).read_bytes()), "after_sha256": deployment.digest(rendered_root.encode()), "reason": "Reviewed entrypoint switch"}}
+                                if provider == "claude":
+                                    settings_asset = next(a for a in manifest["assets"] if a["id"] == "claude/settings")
+                                    required = deployment.substituted((bundle/settings_asset["path"]).read_text(), {"PYTHON_COMMAND": "python" if os.name == "nt" else "python3"})
+                                    merged = deployment.provider_settings(settings_path.read_text(), required)
+                                    resolutions[settings_path.relative_to(target).as_posix()] = {"before_sha256": deployment.digest(settings_path.read_bytes()), "after_sha256": deployment.digest(merged.encode()), "reason": "Reviewed hook transfer"}
                                 if not missing_stamp:
                                     resolutions[(agents/"devkit_version.txt").relative_to(target).as_posix()] = {"before_sha256": deployment.digest((agents/"devkit_version.txt").read_bytes()), "after_sha256": deployment.digest(b"0.1.51\n"), "reason": "Receipt-backed final compatibility stamp"}
                                 for record in manifest["legacy_support"]["retirements"]:
@@ -147,8 +161,18 @@ class LegacyContracts(unittest.TestCase):
                                 self.assertEqual(result["status"], "verified")
                                 self.assertEqual(deployment.verify(target)["source"]["commit"], commit)
                                 self.assertFalse(destination.exists())
-                                for obsolete in ("developer_instructions.md", "instructions/developer_instructions.md", "orchestrator_instructions.md", "context/Project_Priming.md", "scripts/check_devkit_version.sh"):
+                                for obsolete in ("developer_instructions.md", "instructions/developer_instructions.md", "orchestrator_instructions.md", "context/Project_Priming.md"):
                                     self.assertFalse((agents/obsolete).exists(), obsolete)
+                                for suffix in ("sh", "ps1"):
+                                    self.assertEqual((agents/("scripts/check_devkit_version." + suffix)).exists(), provider == "antigravity")
+                                if provider == "antigravity":
+                                    for p, content in retained_native.items(): self.assertEqual(p.read_bytes(), content)
+                                    # A repeat update must keep the settings and both hook
+                                    # targets byte-for-byte, rather than merely skipping
+                                    # their retirement during the first migration.
+                                    repeat = sync.release(target, "fixture/devkit", provider, mode, "repo", {}, {}, True, acquire, commit+" refs/tags/v0.1.51\n")
+                                    self.assertEqual(repeat["status"], "verified")
+                                    for p, content in retained_native.items(): self.assertEqual(p.read_bytes(), content)
                                 self.assertIn("Preserve project decisions", (target/".mt-agent-devkit/instructions/developer_instructions.md").read_text())
                                 for p, content in before_runtime.items(): self.assertEqual(p.read_bytes(), content)
                                 self.assertEqual((agents/"devkit_version.txt").read_text(), "0.1.51\n")

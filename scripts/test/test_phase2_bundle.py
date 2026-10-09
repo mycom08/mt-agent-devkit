@@ -8,6 +8,7 @@ import unittest
 import os
 import shutil
 import subprocess
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -23,6 +24,24 @@ d, builder, resolver = module("deployment"), module("build_bundle"), module("pro
 
 
 class BundleTests(unittest.TestCase):
+    def test_authoritative_corpus_checks_do_not_fall_back_to_frozen_templates(self):
+        from scripts import validate_templates as validator
+        self.assertIn(validator.PHASE2_TEMPLATES, validator.SCAN_DIRS)
+        with tempfile.TemporaryDirectory() as folder:
+            corpus = Path(folder)
+            source = corpus / "github/workflows/Example_template.md"
+            source.parent.mkdir(parents=True)
+            source.write_text("# Example\n<!-- Shared logic: templates/shared/workflows/Start_Story_Workflow_Shared_template.md -->\nStory_Standard §4\n", encoding="utf-8")
+            # Both references resolve in frozen sources, but must fail here:
+            # missing Phase 2 counterparts cannot inherit frozen validity.
+            with patch.object(validator, "PHASE2_TEMPLATES", corpus):
+                findings = []
+                validator.scan_file(source, findings)
+                self.assertTrue(any("does not exist" in f[3] for f in findings))
+                self.assertTrue(any("file not found or unreadable" in f[3] for f in findings))
+                self.assertFalse(validator._resolve_file_ref(
+                    ".claude/agents/templates/rules/Story_Standard_template.md", source))
+
     def test_real_bundle_six_layouts_and_minimal_root_profile(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

@@ -1011,8 +1011,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "79017ef912ba35f987c934a6302370f08cc801513f7229c1b034fe3ef0b8250f",
-      "bytes": 22909,
+      "sha256": "8b53772293d1bf9f5a8b07bd5a49d4eac14689ee39769b5efb5b1737ac703da2",
+      "bytes": 23375,
       "kind": "script"
     },
     {
@@ -8717,86 +8717,6 @@
       "required": false
     },
     {
-      "id": "retire/antigravity/repo/github/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.ps1",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.ps1",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/project_root/github/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.ps1",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/project_root/strict/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.ps1",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
       "id": "retire/claude/repo/github/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
       "sources": [],
       "destination": ".claude/agents/scripts/check_devkit_version.sh",
@@ -8870,86 +8790,6 @@
       ],
       "providers": [
         "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.sh",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.sh",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/project_root/github/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.sh",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/project_root/strict/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/check_devkit_version.sh",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
       ],
       "renderer": "copy",
       "legacy_paths": [],
@@ -12957,38 +12797,6 @@
         ]
       },
       {
-        "logical_id": "retire/antigravity/repo/github/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-        "path": ".antigravity/agents/scripts/check_devkit_version.ps1",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.ps1",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-        "path": ".antigravity/agents/scripts/check_devkit_version.ps1",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.ps1",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/project_root/github/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-        "path": ".antigravity/agents/scripts/check_devkit_version.ps1",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.ps1",
-          "root_project_root/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/project_root/strict/scripts/check_devkit_version.ps1/scripts/check_devkit_version.ps1",
-        "path": ".antigravity/agents/scripts/check_devkit_version.ps1",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.ps1",
-          "root_project_root/AGENTS.md"
-        ]
-      },
-      {
         "logical_id": "retire/claude/repo/github/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
         "path": ".claude/agents/scripts/check_devkit_version.sh",
         "after_verified_ids": [
@@ -13018,38 +12826,6 @@
         "after_verified_ids": [
           "scripts/check_devkit_version.sh",
           "root_project_root/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-        "path": ".antigravity/agents/scripts/check_devkit_version.sh",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.sh",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-        "path": ".antigravity/agents/scripts/check_devkit_version.sh",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.sh",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/project_root/github/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-        "path": ".antigravity/agents/scripts/check_devkit_version.sh",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.sh",
-          "root_project_root/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/project_root/strict/scripts/check_devkit_version.sh/scripts/check_devkit_version.sh",
-        "path": ".antigravity/agents/scripts/check_devkit_version.sh",
-        "after_verified_ids": [
-          "scripts/check_devkit_version.sh",
-          "root_project_root/AGENTS.md"
         ]
       },
       {

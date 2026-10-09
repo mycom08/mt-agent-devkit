@@ -177,6 +177,14 @@ def build(root, destination):
         if not target.startswith(tuple(".mt-agent-devkit/" + folder + "/" for folder in ("rules", "workflows", "instructions", "context", "scripts"))):
             continue
         for provider in ("claude", "antigravity"):
+            # Antigravity native settings are preserved until their integration
+            # is verified. Keep both legacy hook targets with those settings;
+            # the shared successor alone does not transfer a native hook.
+            if provider == "antigravity" and target in (
+                ".mt-agent-devkit/scripts/check_devkit_version.sh",
+                ".mt-agent-devkit/scripts/check_devkit_version.ps1",
+            ):
+                continue
             for profile in existing["profiles"]:
                 if profile not in ("repo", "project_root"): continue
                 for mode in existing["modes"]:
