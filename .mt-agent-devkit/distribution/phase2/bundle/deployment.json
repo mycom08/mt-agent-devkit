@@ -10,15 +10,15 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "3d3928bf62e1b7feceaa16a8cae552fd44b4b8bc71f3bf8c38890c8ca9ce60b9",
-      "bytes": 10020,
+      "sha256": "1a834b689ff321b72f3798c2d61ebe81e125b61fcd07e43e9a1ae2c1f0cb70ed",
+      "bytes": 10900,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "path": "assets/rules_Agent_Common_Read_On_Demand.md",
-      "sha256": "4e1e24cec7899f0892126be799b562986201751c594b6d2983627c1420a46dad",
-      "bytes": 10635,
+      "sha256": "1b38102c921088eccaacd5125f177d815d3e863cbf896970ab5cd8823c3450ea",
+      "bytes": 10847,
       "kind": "template"
     },
     {
@@ -199,8 +199,8 @@
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "c96fcbe71216d5c02ccae509c0fbeaeca3480c738eba560cb2258e366d54ad05",
-      "bytes": 2720,
+      "sha256": "20d176703c60015bf98446798046d5a742837c47e58f884067de60a2ad959401",
+      "bytes": 3242,
       "kind": "template"
     },
     {
@@ -213,15 +213,15 @@
     {
       "id": "instructions/qa_instructions.md",
       "path": "assets/instructions_qa_instructions.md",
-      "sha256": "424ec48d4e441a31eafe40c23604305a4c3005c9de53966d25e701b3524a8be3",
-      "bytes": 3039,
+      "sha256": "5748fb2a1308e9118ab0266ceee65cc1a5693319f87874cd95d8815f64c2ab51",
+      "bytes": 3561,
       "kind": "template"
     },
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "303481aba77a246b67ae9f4c4c047b3d2cfe22f5ad125763635425a7a6cf6f56",
-      "bytes": 3179,
+      "sha256": "e92c59748f946810ceb179febf6ffcec41d7842aceb02a48364cd920e2760208",
+      "bytes": 3701,
       "kind": "template"
     },
     {
@@ -339,8 +339,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "cfaf04b3d14976a32b056c46fed3cef58f8cd2af84c11e40be9d4cc410e50fd1",
-      "bytes": 39738,
+      "sha256": "92cf13e1b447eaa6f26de18e8df5f49cf85b227ed37cc2fbaa97575c9957898a",
+      "bytes": 41296,
       "kind": "template"
     },
     {
@@ -514,8 +514,8 @@
     {
       "id": "claude/Provider_Adapter.md",
       "path": "assets/claude_Provider_Adapter.md",
-      "sha256": "689aa34d930d9582b29dfbc07a518c86c07bbcb1fa25a06a5734b9055a848153",
-      "bytes": 3909,
+      "sha256": "8ebff4224bc1caba21624049a40ac0362218bb3c34db6c25a677a44438a849c2",
+      "bytes": 4416,
       "kind": "adapter"
     },
     {
@@ -1011,8 +1011,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "8b53772293d1bf9f5a8b07bd5a49d4eac14689ee39769b5efb5b1737ac703da2",
-      "bytes": 23375,
+      "sha256": "8b64777c32401f907ff0c02de6c0f86fe04519d85614cf149d02742feb6e84ad",
+      "bytes": 23684,
       "kind": "script"
     },
     {

@@ -11,6 +11,8 @@
 
 Before state access require concrete selected PROVIDER_ROOT, RUNTIME_ROOT and COMMAND_ROOT plus adapter path. Missing or foreign bindings block; never search another provider's records.
 
+Mandatory full-file reads use the runtime's native file-reading tool when available (Claude: `Read`), directly on the original file path. Complete successful returned coverage; follow up any truncation with that same tool. Shell `cat`/`sed`/Python batches, persisted command-output files and preloaded summaries do not satisfy this gate when a native reader exists. On-demand section extraction remains bounded per its existing contract after the adapter read gate. Without a native file reader, use the selected provider's sanctioned mechanism, never an invented tool.
+
 Your instruction file lists the exact paths for your Project Priming, Working Record, Rules, and Memory. Read them in this order:
 
 **Fresh start (newly spawned):**
@@ -94,7 +96,7 @@ Everything routed below lives in `.mt-agent-devkit/rules/Agent_Common_Read_On_De
 
 ## 6. Shell Command Rules — Permissions and Tool Choice
 
-Before the first command, read the selected provider adapter from the worker packet. Follow its actual shell/tool/permission/completion procedure; another provider's allow-list never applies. Use temporary body files for multiline GitHub text and remove them after completion. Missing adapter/bindings block state access.
+Before the first command, read the selected provider adapter from the worker packet in full with the native file-reading tool when available (Claude: `Read`), directly on its original path. Shell batches and persisted output do not substitute. Without a native file reader, the adapter read itself is the only preparatory shell exception; follow its sanctioned mechanism before other commands. Follow its actual shell/tool/permission/completion procedure; another provider's allow-list never applies. Use temporary body files for multiline GitHub text and remove them after completion. Missing adapter/bindings block state access.
 
 ---
 

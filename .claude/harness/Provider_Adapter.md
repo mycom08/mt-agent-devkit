@@ -22,6 +22,8 @@ adapter's discovery check.
 
 ## Tools, permissions, and CI waiting
 
+Use native `Read` directly on original paths for mandatory full-file instruction/rule reads. Read this selected adapter in full before any `Bash` command, including context loading or discovery. Shell `cat`/`sed`/Python batches and a `Read` of their persisted output do not satisfy those file-read gates. Follow up truncated `Read` responses until successful full coverage is returned. Auto permission mode does not change this read order or substitute tools; keep its configured permission checks intact.
+
 Always use Bash for all `gh` CLI calls. Never prepend `cd /path` to a command;
 use the tool's working-directory setting. Claude's configured `Bash(gh issue *)`
 and `Bash(gh pr *)` allow-list is provider-specific; check active permissions.

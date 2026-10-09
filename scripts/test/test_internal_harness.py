@@ -219,6 +219,20 @@ class SectionAndWrapperTests(unittest.TestCase):
         text = wrappers.render(entry)
         self.assertIn("Reading this\nwrapper alone does not satisfy", text)
         self.assertIn("Read the canonical bootstrap in full", text)
+        pipeline = (ROOT / ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md").read_text(encoding="utf-8")
+        self.assertIn("## Worker Entry Read Contract", pipeline)
+        self.assertIn("include this contract verbatim", pipeline)
+        self.assertIn("only preparatory shell exception", pipeline)
+        self.assertIn("persisted", pipeline)
+        for role in ("developer", "technical_lead", "qa"):
+            instruction = (ROOT / f".mt-agent-devkit/instructions/{role}_instructions.md").read_text(encoding="utf-8")
+            self.assertIn("before any shell command", instruction)
+            self.assertIn("Claude: `Read`", instruction)
+            self.assertIn("mandatory full role-scoped read", instruction)
+        bootstrap = (ROOT / ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md").read_text(encoding="utf-8")
+        self.assertIn("On-demand section extraction remains bounded", bootstrap)
+        self.assertIn("preloaded summaries do not satisfy", bootstrap)
+
 
     def test_on_demand_wrapper_never_full_loads(self):
         entry = {"source": ".claude/agents/working/rules/Agent_Common_Read_On_Demand.md", "destination": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md"}

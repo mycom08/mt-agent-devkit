@@ -9,6 +9,29 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Worker Entry Read Contract
+
+For every fresh worker spawn or expired-session restart, include this contract verbatim in the ordinary role packet, together with the selected adapter, concrete bindings and canonical role instruction path. It applies before discovery commands or shell-based context loading; a rule inside an unread role file cannot enforce that boundary by itself. A valid same-session resume retains its prior reads and receives only the new task/evidence delta.
+
+```text
+Before any shell command, use the runtime's native file-reading tool when
+available (Claude: Read) to read the supplied selected provider adapter first,
+then the canonical role instruction, directly from their original paths and
+in full. Complete successful returned coverage before proceeding; follow up
+truncated reads with that same tool. Shell cat/sed/Python output, persisted
+tool-output files and preloaded summaries do not substitute for these reads.
+Use the same direct native tool for subsequent mandatory full-file reads
+routed by the role. This read gate precedes command batching and discovery.
+If no native file-reading tool exists, use the selected provider's supported
+file-reading mechanism: a shell read of the supplied adapter itself is the
+only preparatory shell exception; read it before any other shell command,
+then follow its sanctioned mechanism. Do not invent a Read tool or transfer
+another provider's procedure. Missing adapter/bindings or unavailable required
+file-reading capability blocks before other commands or state access.
+```
+
+---
+
 ## Story Base Preflight (before Bug Reproduction and Stage 0)
 
 **Interrupted Stage 1 recovery for a `status:ready` story:** Before new-story `inspect`, check whether the intended local story branch already exists. If it does, read the pipeline state without writing. Resume after branch creation only when state names this story at Stage 0 or 1, records a full Verified Base SHA, the checked-out branch is the intended story branch, its full tip SHA equals that recorded base SHA, and `git status --porcelain` is empty. Then record Story Branch, continue Stage 1 after `create`, and update status; do not repeat Bug Reproduction, Stage 0, `inspect`, or `create`. If any check fails or state is missing, stop and report the exact mismatch for explicit state recovery; do not switch, delete, reset, or recreate a branch. A fresh Sprint run with no state uses the same fail-closed rule.

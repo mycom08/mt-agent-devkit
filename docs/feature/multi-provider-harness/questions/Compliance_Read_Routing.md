@@ -17,4 +17,6 @@ The native Claude operator uses the isolated internal role-stage audit (not the 
 
 ## State
 
+Independent QA failed native AC4 at 44ec4af: shell exposure did not satisfy direct Read coverage and adapters followed first shell. The fix moves a generic reading-tool contract to the ordinary worker packet boundary; updated role/Common routing preserves native direct full reads and adapter-first order. A new candidate needs independent approval and a fresh native audit.
+
 ST-000227 is in review with draft PR240. Mechanical implementation is complete; static validators, wrappers/bundle, 23 internal tests, 94 aggregate tests and all 10 fixture groups pass. Independent Developer review and QA remain required; no AC is ticked and no merge/release is authorized by this handoff.

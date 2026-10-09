@@ -18,13 +18,15 @@ You are the **Developer** for the {project-name} Scrum team. Your focus is on:
 
 ## Pre-Work Checklist
 
+First read the selected provider adapter from the worker packet in full, before any shell command, using the native file-reading tool when available (Claude: `Read`). Then use that tool directly on the mandatory files below; successful full coverage is required. Shell batches or persisted command output do not replace native reads. If no native file reader exists, follow the Worker Entry Read Contract's sanctioned adapter-read exception and the selected provider's mechanism. Missing adapter or bindings blocks.
+
 Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Required pre-work reads:
 
 | Record | Path |
 |---|---|
 | Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
 | Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/Developer_Working_Record.md` |
-| Story Standard (Dev) — mandatory role-scoped read | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_Dev.md` |
+| Story Standard (Dev) — mandatory full role-scoped read | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_Dev.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `{{AGENT_DIR_PREFIX}}/agents/rules/Developer_Rules_Bootstrap.md` |
 | Memory — live index | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory.md` |
 | Memory — fact archive: **never** read at spawn and never read in full; open one section only when an index line's keywords match the task (mechanics: `Agent_Common_Read_On_Demand.md §8`) | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory_Archive.md` |

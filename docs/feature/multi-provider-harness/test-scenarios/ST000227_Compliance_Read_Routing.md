@@ -2,7 +2,7 @@
 
 ## Current verdict
 
-AC1–AC3 have mechanical implementation evidence. **AC4: NOT VERIFIED.** The implementation runtime exposes Codex collaboration tools only; no native Claude workers or Claude `Read` transcripts were produced. The user has confirmed a native Claude environment is available for the pending operator run. Static checks, Codex runs and this audit plan cannot satisfy AC4. Keep the PR draft and the story open until independent QA accepts measured native Claude evidence on the candidate SHA.
+AC1–AC3 retain mechanical implementation evidence. **AC4: NOT VERIFIED for the revised candidate.** Independent QA failed the native run on `44ec4af65e1dc5b2eaaef4e6688ba08151cae047`: required files were exposed through Bash, the sole QA `Read` targeted persisted shell output, and every adapter followed the first shell. See [QA verdict](https://github.com/mycom08/mt-agent-devkit/issues/227#issuecomment-6077397139). The revised ordinary entry contract requires the direct native reader before shell-based discovery/loading. Static checks and this plan cannot satisfy AC4; keep PR240 draft until independent review, a fresh native run and QA acceptance on the revised SHA.
 
 ## Routing and deployment contract
 
@@ -65,7 +65,7 @@ git('checkout', '-b', 'ST-900227/native-read-audit')
 paths = ['.mt-agent-devkit/instructions/'+r+'_instructions.md' for r in ('developer','technical_lead','qa')]
 paths += ['.mt-agent-devkit/workflows/Shared_Pipeline_Stages.md', '.claude/harness/Provider_Adapter.md']
 paths += ['.mt-agent-devkit/rules/Story_Standard_'+r+'.md' for r in ('Dev','TL','QA')]
-paths += ['.mt-agent-devkit/rules/Retro_Rules.md']
+paths += ['.mt-agent-devkit/rules/Retro_Rules.md', '.mt-agent-devkit/rules/Agent_Common_Bootstrap.md', '.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md']
 hashes = {p: hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}
 (fixture/'setup.json').write_text(json.dumps({'candidate_sha':sha,'fixture_base_sha':git('rev-parse','fixture-base'),'source_hashes':hashes,'seed_sha256':hashlib.sha256((root/'docs/Fixture.md').read_bytes()).hexdigest(),'seed_state_paths':git('diff','--name-only').splitlines()}, indent=2), encoding='utf-8')
 print(root)
@@ -78,7 +78,28 @@ Use the printed audit root as every worker's working directory. Report `setup.js
 
 The runner validates Claude using an enabled-tools JSON file through `provider_context.py --provider claude --tools <file>`. Pass the returned adapter and bindings anchored at the audit root: `PROVIDER_ROOT=.claude`, `RUNTIME_ROOT=.claude/agents/working`, `COMMAND_ROOT=.claude/agents`; run `native-read-227`, story `ST-900227`, Feature `multi-provider-harness`, Phase `follow-up`. Save native worker IDs and real start/end timestamps. No operational pipeline state is resumed or overwritten.
 
-For **every fresh worker**, send this common packet, followed by its role-specific packet:
+For **every fresh worker**, prepend the candidate-owned Worker Entry Read Contract below to the common and role-specific packets. It is the normal Shared Pipeline fresh-worker contract, not a test-only required-files checklist. Extract it verbatim from the pinned `.mt-agent-devkit/workflows/Shared_Pipeline_Stages.md` before spawning and verify equality with the quoted copy; if they differ, stop for guide refresh. This reaches the worker before its first shell, even when the discovered wrapper merely points at an unread canonical role file.
+
+<!-- WORKER-ENTRY-CONTRACT-START -->
+```text
+Before any shell command, use the runtime's native file-reading tool when
+available (Claude: Read) to read the supplied selected provider adapter first,
+then the canonical role instruction, directly from their original paths and
+in full. Complete successful returned coverage before proceeding; follow up
+truncated reads with that same tool. Shell cat/sed/Python output, persisted
+tool-output files and preloaded summaries do not substitute for these reads.
+Use the same direct native tool for subsequent mandatory full-file reads
+routed by the role. This read gate precedes command batching and discovery.
+If no native file-reading tool exists, use the selected provider's supported
+file-reading mechanism: a shell read of the supplied adapter itself is the
+only preparatory shell exception; read it before any other shell command,
+then follow its sanctioned mechanism. Do not invent a Read tool or transfer
+another provider's procedure. Missing adapter/bindings or unavailable required
+file-reading capability blocks before other commands or state access.
+```
+<!-- WORKER-ENTRY-CONTRACT-END -->
+
+Then send this common packet, followed by its role-specific packet:
 
 ```text
 Work only in the supplied disposable audit root. Provider Claude; adapter
@@ -116,7 +137,8 @@ then execute the documented disposable setup. Do not start the production
 workflow or use strict mode. Use the isolated fail-closed gh recorder and
 explicit local substitutions; no GitHub mutations, commits/pushes by workers,
 merge, release or acceptance-checkbox edits. Spawn fresh Developer, TL and QA
-workers sequentially using only the documented ordinary packets and candidate
+workers sequentially using the candidate-owned Worker Entry Read Contract
+verbatim plus the documented ordinary packets and candidate
 stage-end instructions. Capture each worker's actual native Read requests and
 returned coverage, native IDs, timings and available usage. Audit positive and
 negative read assertions and fixture outcomes. Preserve raw evidence locally;
@@ -137,8 +159,8 @@ QA must inspect those transcripts and decide acceptance.
 
 | Worker | Role Standard | Adapter | Full Retro Rules | Current evidence |
 |---|---|---|---|---|
-| Developer | Story_Standard_Dev.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | NOT RUN |
-| Technical Lead | Story_Standard_TL.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | NOT RUN |
-| QA | Story_Standard_QA.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | NOT RUN |
+| Developer | Story_Standard_Dev.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | Pending fresh rerun; previous SHA failed |
+| Technical Lead | Story_Standard_TL.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | Pending fresh rerun; previous SHA failed |
+| QA | Story_Standard_QA.md | .claude/harness/Provider_Adapter.md | .mt-agent-devkit/rules/Retro_Rules.md | Pending fresh rerun; previous SHA failed |
 
-The native operator supplies the pinned setup, fixture hashes, successful `Read` coverage/events, timing/usage availability, final product diff, verdicts and deviations. Independent QA records PASS or explicit failures per row and decides AC4. No acceptance checkbox is changed by the implementer.
+The previous failed run remains immutable evidence; do not reuse its worker sessions. The native operator supplies the revised pinned setup, all eleven source hashes, exact entry-contract equality result, successful `Read` coverage/events, timing/usage availability, final product diff, verdicts and deviations. Independent QA records PASS or explicit failures per row and decides AC4. No acceptance checkbox is changed by the implementer.
