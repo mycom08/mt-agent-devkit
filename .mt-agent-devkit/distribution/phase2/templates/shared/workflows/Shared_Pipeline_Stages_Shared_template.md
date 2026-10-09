@@ -184,7 +184,7 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 10. **After implementation is ready for review** → update story status to `review`:
     - **GitHub mode:** open PR; update story label to `status:review`
     - **Strict mode:** create `{{AGENT_DIR_PREFIX}}/agents/docs/reviews/ST-XXXXXX_review.md` (see `Strict_Mode_Story_Guide.md` §Local Review Record); edit `**Status:** review` in the story MD; append comment entry to `## Comments` noting branch is ready for review
-11. Agent writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+11. Agent writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` after reading `{{AGENT_DIR_PREFIX}}/agents/rules/Retro_Rules.md` in full, before reporting back
 12. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 13. On completion → proceed to Stage 2
 
@@ -283,7 +283,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD, recording `**Approved-SHA:** <sha>` (`git rev-parse HEAD` on the story branch) on approval; appends summary comment entry to story MD `## Comments`
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers/trivial-return patterns in AC-functional methods. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Bootstrap.md §2` for the full review checklist, including the CI-execution/SHA/red-diagnosis and dependency-pin checks).
 4. **If changes requested** → resume Implementer via `SendMessage` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
-5. Reviewer writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+5. Reviewer writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` after reading `{{AGENT_DIR_PREFIX}}/agents/rules/Retro_Rules.md` in full, before reporting back
 6. **If approved:**
    - **GitHub mode:** update the story label to `status:testing` — do this immediately, before proceeding to Stage 3. QA tests on the dev branch before merge; the label signals QA to begin
    - **Do NOT execute the Merge Procedure here** — it fires only after QA automation passes (Stage 3 behavioral path step 9). TL approval is not a merge signal
@@ -330,7 +330,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
      - **GitHub mode:** as a story comment
      - **Strict mode:** append to story MD `## Comments`
      → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
-   - **If automation passes** → QA writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back; orchestrator executes the **Merge Procedure** below
+   - **If automation passes** → QA writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` after reading `{{AGENT_DIR_PREFIX}}/agents/rules/Retro_Rules.md` in full, before reporting back; orchestrator executes the **Merge Procedure** below
 10. On merge confirmed → proceed to Stage 4
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
@@ -399,7 +399,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal is the reviewer's final approval plus a confirmed merge — not a separate validator-confirms event.
    - **GitHub mode:** tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` in the story MD; edit `**Status:** done`; append PO closure comment entry to story MD `## Comments`
-4. PO writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+4. PO writes retro section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` after reading `{{AGENT_DIR_PREFIX}}/agents/rules/Retro_Rules.md` in full, before reporting back
 5. **Start Story Workflow:** pipeline ends here
 
 ### Orchestrator Observation Check — Stage 4

@@ -145,6 +145,19 @@ class RuntimeAndSkeletonTests(unittest.TestCase):
         for text in ("Read `{UNKNOWN_ROOT}/tmp/state.md`", "Read `{COMMAND_ROOT}/instructions/missing.md`", "Read `{RUN_ROOT}/tmp/../../other.md`"):
             self.assertTrue(validator.reference_errors(text, "fixture.md"))
         self.assertFalse(validator.reference_errors("Write `{COMMAND_ROOT}/tmp/analyst_workflow_state.md`", "fixture.md"))
+        adapter = "Read `{PROVIDER_ROOT}/harness/Provider_Adapter.md`"
+        self.assertFalse(validator.reference_errors(adapter, "fixture.md"))
+        with tempfile.TemporaryDirectory() as tmp:
+            fake_root = Path(tmp)
+            for provider in ("claude", "antigravity", "codex"):
+                path = fake_root / f".{provider}/harness/Provider_Adapter.md"
+                path.parent.mkdir(parents=True)
+                path.write_text("adapter", encoding="utf-8")
+            self.assertFalse(validator.reference_errors(adapter, "fixture.md", root=fake_root))
+            path.unlink()
+            self.assertTrue(validator.reference_errors(adapter, "fixture.md", root=fake_root))
+        for reference in ("{PROVIDER_ROOT}/harness/Missing.md", "{LIFECYCLE_ROOT}/harness/Provider_Adapter.md"):
+            self.assertTrue(validator.reference_errors(reference, "fixture.md"))
         self.assertTrue(validator.reference_errors("Read `.claude/agents/working/instructions/missing.md`", "lifecycle.md", target_lifecycle=True))
         self.assertFalse(validator.reference_errors("Write `{TARGET_PROJECT}/.claude/settings.json`", "lifecycle.md", target_lifecycle=True))
         for marker in ("target paths", "Released target"):

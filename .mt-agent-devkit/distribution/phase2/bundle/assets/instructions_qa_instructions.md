@@ -17,14 +17,16 @@ You are the **QA** representative for the {project-name} team. Your focus is on:
 
 ## Pre-Work Checklist
 
-Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Your records:
+Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Required pre-work reads:
 
 | Record | Path |
 |---|---|
 | Project Priming | `.mt-agent-devkit/context/Project_Priming.md` |
 | Working Record | `{RUNTIME_ROOT}/working-record/QA_Working_Record.md` |
+| Story Standard (QA) — mandatory role-scoped read | `.mt-agent-devkit/rules/Story_Standard_QA.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `.mt-agent-devkit/rules/QA_Rules_Bootstrap.md` |
 | Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `{RUNTIME_ROOT}/memory/QA_Memory.md` |
+| Provider adapter — read the selected path supplied in the worker packet before the first command; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
 
 ---
 

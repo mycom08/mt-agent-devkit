@@ -199,8 +199,8 @@
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "f084f86a428e76b5267bee5f5b8d853331d127daab6a26fce3e0303227a2c62d",
-      "bytes": 2432,
+      "sha256": "c96fcbe71216d5c02ccae509c0fbeaeca3480c738eba560cb2258e366d54ad05",
+      "bytes": 2720,
       "kind": "template"
     },
     {
@@ -213,15 +213,15 @@
     {
       "id": "instructions/qa_instructions.md",
       "path": "assets/instructions_qa_instructions.md",
-      "sha256": "bb7ef970e96e535e4198171e7d3b3f25c4bc9087f16d4526ac6b17894bd8e56e",
-      "bytes": 2753,
+      "sha256": "424ec48d4e441a31eafe40c23604305a4c3005c9de53966d25e701b3524a8be3",
+      "bytes": 3039,
       "kind": "template"
     },
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "b5e16ff4ec51e5ed12d283f8d812583bbed4a71ca88295717612179cfe75b769",
-      "bytes": 2893,
+      "sha256": "303481aba77a246b67ae9f4c4c047b3d2cfe22f5ad125763635425a7a6cf6f56",
+      "bytes": 3179,
       "kind": "template"
     },
     {
@@ -339,8 +339,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "ac62151c74d87bcd5617e9a111e65b8e824a2ab9d9d722b8eb4617f55bc5fe8e",
-      "bytes": 39570,
+      "sha256": "cfaf04b3d14976a32b056c46fed3cef58f8cd2af84c11e40be9d4cc410e50fd1",
+      "bytes": 39738,
       "kind": "template"
     },
     {
