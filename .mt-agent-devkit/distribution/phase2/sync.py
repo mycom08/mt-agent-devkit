@@ -10,7 +10,7 @@ from urllib.request import urlopen
 
 import deployment
 import migration
-from lifecycle import ignores
+from lifecycle import prepare
 
 
 def resolve(refs):
@@ -71,14 +71,7 @@ def release(target, repo, provider, mode, profile, adaptations, resolutions=None
         previous = deployment.inspect(target)["receipt"]
         bound = dict(previous["providers"]) if previous else {}
         bound.setdefault(provider, {"PROVIDER_ROOT": "." + provider, "RUNTIME_ROOT": "." + provider + "/agents", "COMMAND_ROOT": "." + provider + "/agents"})
-        adaptations, resolutions = ignores(target, bound, mode, adaptations, resolutions)
-        if not previous:
-            old, candidates = migration.review_candidates(target, [p for p in deployment.PROVIDERS if (target / ("." + p) / "agents").exists()])
-            if old["mode"] and old["mode"] != mode:
-                raise deployment.Conflict("legacy mode switching excluded")
-            missing = set(candidates) - set(adaptations)
-            if missing:
-                raise deployment.Conflict("review legacy candidates: " + ", ".join(sorted(missing)))
+        adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions)
         source = {"kind": "release", "tag": tag, "commit": commit, "snapshot_version": None, "manifest_sha256": deployment.digest(manifest_bytes)}
         value = deployment.plan(target, manifest_path, source, mode, profile, bound, adaptations, resolutions)
         return deployment.apply(target, value) if apply else value

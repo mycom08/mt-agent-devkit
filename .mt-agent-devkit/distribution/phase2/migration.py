@@ -28,17 +28,23 @@ def inventory(target, providers):
         if version:
             versions.add(version)
         content = {}
+        def register(logical, item):
+            relative = item.relative_to(target).as_posix()
+            checked = deployment.safe(target, relative)
+            if logical in content and deployment.safe(target, content[logical]).read_bytes() != checked.read_bytes():
+                raise deployment.Conflict("divergent legacy aliases require review: " + logical)
+            content[logical] = relative
         for folder in ("rules", "workflows", "instructions", "context", "scripts"):
             directory = root / folder
             if directory.exists():
                 for item in directory.iterdir():
                     checked = deployment.safe(target, item.relative_to(target).as_posix())
-                    if checked.is_file(): content[folder + "/" + item.name] = checked.relative_to(target).as_posix()
+                    if checked.is_file(): register(folder + "/" + item.name, checked)
         for item in root.glob("*_instructions.md"):
             deployment.safe(target, item.relative_to(target).as_posix())
-            content["instructions/" + item.name] = item.relative_to(target).as_posix()
+            register("instructions/" + item.name, item)
         for name in ("orchestrator_instructions.md", "Orchestrator_Guide.md"):
-            if (root / name).exists(): content["instructions/orchestrator_instructions.md"] = (root / name).relative_to(target).as_posix()
+            if (root / name).exists(): register("instructions/orchestrator_instructions.md", root / name)
         found[provider] = {"version": version, "stamp_missing": not stamp.exists(), "files": content}
     if len(modes) > 1:
         raise deployment.Conflict("mixed legacy modes")

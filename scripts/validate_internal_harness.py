@@ -50,8 +50,13 @@ instruction read cannot escape resolution through a broad provider allow-list.
             if any(token in ref for token in ("<", ">", "*", "{", "ST-XXXXXX")):
                 continue  # Clearly marked examples/globs, never a concrete file read.
             if ref.startswith(".mt-agent-devkit/"):
-                if target_lifecycle and any(marker in line for marker in ("target paths", "Released target")):
-                    continue  # Explicit installed-target output; rendered targets checked separately.
+                if target_lifecycle:
+                    manifest_path = root / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+                    if manifest_path.is_file():
+                        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                        destinations = {item["destination"] for item in manifest["files"] if item["phase"] != "retirement"}
+                        if ref in destinations:
+                            continue  # Exact declared target destination, not a prose exemption.
                 if not (root / ref).is_file():
                     errors.append(f"dangling shared reference: {source} -> {ref}")
             elif not (root / ref).is_file():

@@ -104,6 +104,13 @@ class LegacyContracts(unittest.TestCase):
                                 destination = agents / "workflows/Sync_Devkit_Workflow.md"
                                 destination.write_bytes(old_sync.read_bytes())
                                 (agents / "developer_instructions.md").write_text("# Customized developer\nPreserve project decisions.\n", encoding="utf-8")
+                                (agents / "instructions").mkdir()
+                                (agents / "instructions/developer_instructions.md").write_bytes((agents / "developer_instructions.md").read_bytes())
+                                (agents / "context").mkdir()
+                                (agents / "context/Project_Priming.md").write_text("# Reviewed context\n", encoding="utf-8")
+                                (agents / "orchestrator_instructions.md").write_text("# Legacy orchestrator\n", encoding="utf-8")
+                                (agents / "scripts").mkdir()
+                                (agents / "scripts/check_devkit_version.sh").write_text("legacy version notice\n", encoding="utf-8")
                                 memory = agents / "memory/Developer_Memory.md"
                                 memory.parent.mkdir(); memory.write_bytes(b"durable personalized memory\n")
                                 counter = agents / "docs/story_counter.txt"
@@ -122,9 +129,15 @@ class LegacyContracts(unittest.TestCase):
                                 _, candidates = migration.review_candidates(target, [provider])
                                 adaptations = {p: value["bytes"].decode("utf-8-sig") for p, value in candidates.items()}
                                 adaptations[".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"] = (ROOT/".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md").read_text(encoding="utf-8")
+                                adaptations.pop(".mt-agent-devkit/instructions/orchestrator_instructions.md")
+                                # Review retains the canonical shared orchestrator instead
+                                # of reviving obsolete routing in a legacy customization.
+                                adaptations[".mt-agent-devkit/instructions/orchestrator_instructions.md"] = deployment.substituted((bundle/"assets/orchestrator_shared").read_text(), {})
                                 adaptations.update({native: "# Reviewed project\n**Mode:** " + mode + "\n", ".mt-agent-devkit/context/Project_Priming.md": "# Reviewed context\n", ".mt-agent-devkit/context/Document_Index.md": "# Reviewed index\n"})
                                 bound = {provider: {"PROVIDER_ROOT": "."+provider, "RUNTIME_ROOT": "."+provider+"/agents", "COMMAND_ROOT": "."+provider+"/agents"}}
-                                resolutions = {native: {"before_sha256": deployment.digest((target/native).read_bytes()), "after_sha256": deployment.digest(adaptations[native].encode()), "reason": "Reviewed entrypoint switch"}}
+                                root_asset = next(a for a in manifest["assets"] if a["id"] == "root_repo")
+                                rendered_root = deployment.managed_sections(adaptations[native], deployment.substituted((bundle / root_asset["path"]).read_text(), {"MODE": mode}))
+                                resolutions = {native: {"before_sha256": deployment.digest((target/native).read_bytes()), "after_sha256": deployment.digest(rendered_root.encode()), "reason": "Reviewed entrypoint switch"}}
                                 if not missing_stamp:
                                     resolutions[(agents/"devkit_version.txt").relative_to(target).as_posix()] = {"before_sha256": deployment.digest((agents/"devkit_version.txt").read_bytes()), "after_sha256": deployment.digest(b"0.1.51\n"), "reason": "Receipt-backed final compatibility stamp"}
                                 for record in manifest["legacy_support"]["retirements"]:
@@ -134,6 +147,8 @@ class LegacyContracts(unittest.TestCase):
                                 self.assertEqual(result["status"], "verified")
                                 self.assertEqual(deployment.verify(target)["source"]["commit"], commit)
                                 self.assertFalse(destination.exists())
+                                for obsolete in ("developer_instructions.md", "instructions/developer_instructions.md", "orchestrator_instructions.md", "context/Project_Priming.md", "scripts/check_devkit_version.sh"):
+                                    self.assertFalse((agents/obsolete).exists(), obsolete)
                                 self.assertIn("Preserve project decisions", (target/".mt-agent-devkit/instructions/developer_instructions.md").read_text())
                                 for p, content in before_runtime.items(): self.assertEqual(p.read_bytes(), content)
                                 self.assertEqual((agents/"devkit_version.txt").read_text(), "0.1.51\n")

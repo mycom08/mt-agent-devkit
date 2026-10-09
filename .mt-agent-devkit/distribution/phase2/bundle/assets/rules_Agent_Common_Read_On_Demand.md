@@ -118,7 +118,7 @@ Each role's `## Stored Facts` splits across two files:
 - **`<Role>_Memory.md`** (live, read every spawn): **Standing Checks** — unconditional always-do actions, no recall needed (leave `*(none yet)*` if none qualify) — plus a **Keyword Index**: one line per fact, `### Fact N — <short title>` + a `Keywords:` line, no fact body. `## Troubleshooting Facts` stays here too, unchanged §1 shape.
 - **`<Role>_Memory_Archive.md`** (conditional — open only on a keyword match): full four-field bodies, unchanged §1 shape.
 
-**Retrieval:** bounded read only, never a full-file read of the archive — use the `read-section` skill (`{PROVIDER_ROOT}/skills/read-section/`, heading marker `^### Fact `).
+**Retrieval:** bounded read only, never a full-file read of the archive — use the `read-section` skill (`.mt-agent-devkit/contracts/Read_Section.md`, heading marker `^### Fact `).
 
 **Writing a fact:** append the body to the archive under the next number, then the matching index line — both files change together; an entry in one without the other is a defect. Numbers are never reused — retire gaps rather than renumbering.
 

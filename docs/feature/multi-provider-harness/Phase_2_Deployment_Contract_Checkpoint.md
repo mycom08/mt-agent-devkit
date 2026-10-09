@@ -81,6 +81,8 @@ No retirement of `project_owned`, `runtime_seed` or unknown content. Shared cust
 
 ## 4. Versioned schema proposal
 
+October 9 correction: operation and receipt file records additionally carry `stock_sha256` and `adapted`, separating upstream rendered bytes from reviewed installed customizations. Older saved plans/receipts remain readable; an older receipt cannot authorize a changed rendered baseline without an exact reviewed resolution. Root discovery uses a canonical managed section rendered from its asset, rather than trusting arbitrary adaptive root text to carry provider selection. Bootstrap, released sync and local lifecycle share one candidate-review preparation gate.
+
 All schemas use `schema_version: 1`, reject unsupported versions before writes and reject unknown fields in safety-sensitive operation/configuration objects. Paths use normalized relative POSIX syntax, with validated on-disk containment and no redirected path components. JSON hashes are SHA-256 of exact bytes except explicit comparison normalization specified by the rendering contract. Persisted schemas require deterministic serialization for plan identity.
 
 ### Release deployment manifest

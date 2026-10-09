@@ -19,7 +19,10 @@ def acquire_bundle(repo, tag, commit, directory, acquire=None):
             with urlopen(url, timeout=30) as response: return response.read()
     base = "https://raw.githubusercontent.com/" + repo + "/" + commit + "/"
     metadata = json.loads(acquire(base + "changes.json"))
-    manifest_relative = metadata[tag[1:]]["deployment"]["manifest"]
+    declaration = metadata.get(tag[1:], {}).get("deployment")
+    if not isinstance(declaration, dict) or declaration.get("schema_version") != 1:
+        raise ValueError("release lacks shared migration artifact; legacy-safe update only")
+    manifest_relative = declaration["manifest"]
     if not manifest_relative.startswith(".mt-agent-devkit/distribution/phase2/") or ".." in PurePosixPath(manifest_relative).parts or "\\" in manifest_relative:
         raise ValueError("unsafe deployment manifest")
     content = acquire(base + manifest_relative)
@@ -64,7 +67,12 @@ def main():
             value = json.loads(Path(args.apply_plan).read_text(encoding="utf-8"))
             if value["source"] != identity: parser.error("saved plan differs from pinned release identity")
             return subprocess.run([sys.executable, str(engine), "apply", "--target", args.target, "--plan", args.apply_plan]).returncode
-        command = [sys.executable, str(engine), "plan", "--target", args.target, "--manifest", str(directory / "deployment.json"), "--source", str(directory / "source.json"), "--mode", args.mode, "--profile", args.profile, "--bindings", args.bindings, "--adaptations", args.adaptations, "--output", args.output]
+        # Acquired lifecycle uses the same candidate-review and ignore merge
+        # gates as local installation; raw engine planning is not a bridge.
+        lifecycle = directory / "assets/lifecycle.py"
+        if not lifecycle.is_file(): parser.error("bundle lacks lifecycle review helper")
+        providers = json.loads(Path(args.bindings).read_text(encoding="utf-8-sig"))
+        command = [sys.executable, str(lifecycle), "bundle", "--provider", sorted(providers)[0], "--target", args.target, "--manifest", str(directory / "deployment.json"), "--source", str(directory / "source.json"), "--mode", args.mode, "--profile", args.profile, "--bindings", args.bindings, "--adaptations", args.adaptations, "--output", args.output]
         if args.resolutions: command += ["--resolutions", args.resolutions]
         result = subprocess.run(command)
         if result.returncode: return result.returncode

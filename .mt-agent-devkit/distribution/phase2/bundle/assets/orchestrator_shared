@@ -3,6 +3,8 @@
 <!-- SHARED-START -->
 # Orchestrator Instructions
 
+Before workflow state writes or spawning, read `.mt-agent-devkit/contracts/Provider_Contract.md`. Run `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json>` with actual enabled tool identities and an explicit provider declaration when needed. Load exactly the returned adapter (`<selected-provider>/harness/Provider_Adapter.md`) and pass provider, adapter, concrete PROVIDER_ROOT/RUNTIME_ROOT/COMMAND_ROOT, run/story identity and stage context to every worker. Missing/ambiguous capabilities block workflows; neutral priming remains available.
+
 > Read by the orchestrator only — workflow routing, session management, and completion-report format for running this project's AI Scrum team. No spawned subagent needs this file: each spawn receives its own instruction/rules/memory paths directly in its prompt. Content every role needs (Mode, Agent File Integrity, PR Approval Rule) lives in `{ENTRYPOINT}`. **Agent Roster also stays in `{ENTRYPOINT}`, not here** — it is project-mutable (per-project instruction paths, lean prototype rosters) and must survive `sync devkit`/`update project`, unlike everything in this file, which is always devkit-verbatim.
 
 ---
@@ -14,8 +16,8 @@ The orchestrator tracks the `session_handle` returned by every spawned agent. On
 | Situation | Action |
 |---|---|
 | Loop-back to a stage whose agent is still active | **Resume** — the selected adapter's resume operation to the saved `session_handle` with the new feedback |
-| Loop-back but session has expired or ID is unavailable | **Spawn** — new `Agent` call with a fully self-contained prompt |
-| First entry to any stage | **Spawn** — new `Agent` call |
+| Loop-back but session has expired or ID is unavailable | **Spawn** — the selected adapter's spawn operation with a fully self-contained prompt |
+| First entry to any stage | **Spawn** — the selected adapter's spawn operation |
 
 Resuming keeps the agent's full prior context so it can act on feedback immediately without re-reading everything from scratch.
 

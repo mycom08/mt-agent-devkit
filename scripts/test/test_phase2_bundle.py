@@ -50,10 +50,14 @@ class BundleTests(unittest.TestCase):
                                     for reference in re.findall(r"\.mt-agent-devkit/[A-Za-z0-9_./-]+\.(?:md|py|ps1|sh)", line):
                                         self.assertTrue((target/reference).is_file(), str(document.relative_to(target))+" -> "+reference)
                             self.assertTrue((target / entrypoint).exists())
+                            self.assertIn("provider_context.py", (target / entrypoint).read_text())
+                            self.assertIn("Provider_Contract.md", (target / entrypoint).read_text())
+                            self.assertIn("Provider_Adapter.md", (target / entrypoint).read_text())
                             self.assertFalse((target / ("AGENTS.md" if provider == "claude" else "CLAUDE.md")).exists())
                             if profile == "repo":
                                 self.assertTrue((target / ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md").exists())
                                 self.assertTrue((target / ".mt-agent-devkit/workflows/Start_Story_Workflow.md").exists())
+                                self.assertNotIn("new `Agent` call", (target / ".mt-agent-devkit/instructions/orchestrator_instructions.md").read_text())
                             else:
                                 self.assertFalse((target / ".mt-agent-devkit/rules").exists())
                                 self.assertFalse((target / ".mt-agent-devkit/instructions").exists())
@@ -62,11 +66,46 @@ class BundleTests(unittest.TestCase):
                                 tools = {"collaboration.spawn_agent", "collaboration.followup_task", "collaboration.send_message", "collaboration.wait_agent"}
                                 selected = resolver.select_provider(target, tools, "codex")
                                 self.assertEqual(selected["bindings"]["RUNTIME_ROOT"], ".codex/agents")
+                            if provider == "claude":
+                                settings = json.loads((target / ".claude/settings.json").read_text())
+                                self.assertIn("Bash(gh pr *)", settings["permissions"]["allow"])
+                                self.assertIn("version_notice.py", settings["hooks"]["SessionStart"][0]["hooks"][0]["command"])
+                                self.assertTrue((target / ".claude/skills/read-section/SKILL.md").is_file())
+                            adapter = (target / ("." + provider) / "harness/Provider_Adapter.md").read_text()
+                            self.assertNotIn("Internal Harness Adapter", adapter)
+                            tools_file = root / "tools.json"
+                            tools_file.write_text(json.dumps(["collaboration.spawn_agent", "collaboration.followup_task", "collaboration.send_message", "collaboration.wait_agent"]))
+                            if provider == "codex":
+                                result = subprocess.run([__import__("sys").executable, str(target/".mt-agent-devkit/scripts/provider_context.py"), "--target", str(target), "--tools", str(tools_file), "--provider", provider], capture_output=True, text=True)
+                                self.assertEqual(result.returncode, 0, result.stderr)
+                                self.assertEqual(json.loads(result.stdout)["adapter"], ".codex/harness/Provider_Adapter.md")
+                            if provider == "antigravity":
+                                with self.assertRaises(ValueError): resolver.select_provider(target, set(), provider)
+                                mapping = {"operations": {op: "observed." + op for op in resolver.OPERATIONS}}
+                                capabilities_file = root / "verified-runtime.json"
+                                capabilities_file.write_text(json.dumps({provider: mapping}))
+                                tools_file.write_text(json.dumps(list(mapping["operations"].values())))
+                                result = subprocess.run([__import__("sys").executable, str(target/".mt-agent-devkit/scripts/provider_context.py"), "--target", str(target), "--tools", str(tools_file), "--provider", provider, "--capabilities", str(capabilities_file)], capture_output=True, text=True)
+                                self.assertEqual(result.returncode, 0, result.stderr)
+                                self.assertEqual(json.loads(result.stdout)["adapter"], ".antigravity/harness/Provider_Adapter.md")
 
     def test_ambiguous_or_missing_provider_blocks(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             with self.assertRaises(ValueError): resolver.select_provider(root, set())
+
+    def test_lifecycle_preserves_adapted_instructions_and_rules_without_resupplying(self):
+        import sys
+        sys.path.insert(0, str(ROOT / ".mt-agent-devkit/distribution/phase2"))
+        import lifecycle
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "target"
+            target.mkdir()
+            inputs = {"AGENTS.md": "# Project\n", ".mt-agent-devkit/context/Project_Priming.md": "# Context\n", ".mt-agent-devkit/context/Document_Index.md": "# Index\n"}
+            custom = {".mt-agent-devkit/instructions/developer_instructions.md": "# Customized developer\nKeep project choices.\n", ".mt-agent-devkit/rules/Clean_Code_Rules.md": "# Customized rules\nKeep project style.\n"}
+            lifecycle.local(target, ROOT, "codex", "github", "repo", {**inputs, **custom}, apply=True)
+            lifecycle.local(target, ROOT, "codex", "github", "repo", inputs, apply=True)
+            for path, content in custom.items(): self.assertEqual((target/path).read_text(), content)
 
     def test_actual_shell_lifecycle_commands_and_idempotent_update(self):
         with tempfile.TemporaryDirectory() as folder:

@@ -99,6 +99,50 @@ class DeploymentTests(unittest.TestCase):
         with self.assertRaisesRegex(d.Conflict, "unknown baseline"): self.plan()
         self.assertEqual(path.read_bytes(), b"custom rule")
 
+    def test_approved_customization_survives_repeat_and_upstream_change_conflicts(self):
+        original = self.plan()
+        path = ".mt-agent-devkit/rules/Rule.md"
+        adapted = d.plan(self.target, self.path, original["source"], "github", "repo", original["providers"], {path: "custom rule\n"})
+        d.apply(self.target, adapted)
+        self.assertTrue(d.verify(self.target)["managed_files"][0]["adapted"])
+        d.apply(self.target, self.plan())
+        self.assertEqual((self.target / path).read_bytes(), b"custom rule\n")
+        (self.target / path).write_bytes(b"unreviewed local edit\n")
+        with self.assertRaisesRegex(d.Conflict, "divergent adapted baseline"):
+            self.plan()
+        (self.target / path).write_bytes(b"custom rule\n")
+        content = b"new stock rule\n"
+        (self.bundle / "rule.md").write_bytes(content)
+        self.manifest["assets"][0].update(sha256=d.digest(content), bytes=len(content))
+        self.flush()
+        with self.assertRaisesRegex(d.Conflict, "review adapted content"):
+            self.plan()
+        self.assertEqual((self.target / path).read_bytes(), b"custom rule\n")
+
+    def test_posix_without_proc_applies_and_recovers(self):
+        import os
+        from types import SimpleNamespace
+        original_is_dir = Path.is_dir
+        def no_proc(path):
+            return False if str(path) == "/proc" else original_is_dir(path)
+        with patch.object(Path, "is_dir", no_proc), patch("subprocess.run", return_value=SimpleNamespace(returncode=0, stdout="Fri Oct  9 01:02:03 2026\n", stderr="")):
+            self.assertEqual(d.posix_process_identity(os.getpid()), "ps:Fri Oct  9 01:02:03 2026")
+        # Exercise the actual apply and same-owner recovery paths using the
+        # non-/proc identity backend without changing pathlib's host flavour.
+        with patch.object(d, "process_identity", return_value="ps:Fri Oct  9 01:02:03 2026"):
+            with self.assertRaises(OSError): d.apply(self.target, self.plan(), "locked")
+            lock = d.load(self.target / d.LOCK)
+            d.recover(self.target, lock["transaction_id"])
+            d.verify(self.target)
+
+    def test_settings_merge_preserves_custom_permissions_hooks_and_is_idempotent(self):
+        before = {"permissions": {"allow": ["Read"], "deny": ["Bash(rm *)"]}, "hooks": {"SessionStart": [{"hooks": [{"type": "command", "command": "custom hook"}]}]}, "custom": True}
+        required = {"permissions": {"allow": ["Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"hooks": [{"type": "command", "command": "python version_notice.py"}]}]}}
+        merged = d.provider_settings(json.dumps(before), json.dumps(required))
+        self.assertEqual(json.loads(merged)["permissions"]["deny"], before["permissions"]["deny"])
+        self.assertTrue(json.loads(merged)["custom"])
+        self.assertEqual(d.provider_settings(merged, json.dumps(required)), merged)
+
     def test_runtime_change_after_plan_blocks(self):
         memory = self.target / ".codex/agents/memory/Developer_Memory.md"
         memory.parent.mkdir(parents=True)

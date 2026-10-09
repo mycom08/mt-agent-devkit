@@ -1,81 +1,19 @@
-<!-- Included by: templates/github/Repo_Root_template.md, templates/strict/Repo_Root_template.md -->
-
-<!-- SHARED-START -->
-# {PROJECT_NAME} — selected provider Instructions
-
-## Project Overview
-
-{PROJECT_DESCRIPTION}
-Canonical project context: `.mt-agent-devkit/context/Project_Priming.md`
+## Shared Agent Harness
 
 **Mode:** {{MODE}}
-**Devkit source:** {DEVKIT_SOURCE_URL}
-**Devkit version:** {DEVKIT_VERSION}
 
-> Agents must read `**Mode:**` at the start of every workflow. When `Mode: strict`, follow strict-mode paths throughout (local MD files, local branches — no GitHub/MCP calls). See `.mt-agent-devkit/rules/Strict_Mode_Story_Guide.md` for the full operation substitution reference.
+Canonical project context: `.mt-agent-devkit/context/Project_Priming.md`. Read it at session start.
 
----
+Before workflow state writes or spawning, read `.mt-agent-devkit/contracts/Provider_Contract.md`. Run `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json>` with actual enabled tool identities and an explicit provider declaration when needed. Load exactly the returned adapter (`<selected-provider>/harness/Provider_Adapter.md`) and pass provider, adapter, concrete PROVIDER_ROOT/RUNTIME_ROOT/COMMAND_ROOT, run/story identity and stage context to every worker. Missing/ambiguous capabilities block workflows; neutral priming remains available.
 
-## Agent Roster
-
-Each specialized agent must read its instruction file before starting any work.
-
-| Agent | Instruction File |
-|---|---|
-| Technical Lead | `.mt-agent-devkit/instructions/technical_lead_instructions.md` |
-| Developer | `.mt-agent-devkit/instructions/developer_instructions.md` |
-| QA | `.mt-agent-devkit/instructions/qa_instructions.md` |
-| Product Owner | `.mt-agent-devkit/instructions/product_owner_instructions.md` |
-| Business Analyst | `.mt-agent-devkit/instructions/business_analyst_instructions.md` |
-| UI/UX Designer | `.mt-agent-devkit/instructions/ui_ux_designer_instructions.md` |
-
-Agent memory, rules, working records, and context live under `{RUNTIME_ROOT}/`.
-
-> **Project-mutable — never blindly overwritten on sync/update.** This table's paths and role set are edited locally per project: a `-ui-prototype` companion repo trims it to 3 roles, and a project migrated from the old flat instruction-file layout has its paths rewritten in place (`Update_Project_Workflow.md`'s "Path structure detection" step). It stays in `{ENTRYPOINT}` rather than `orchestrator_instructions.md` for exactly that reason — `orchestrator_instructions.md` is devkit-verbatim, always overwritten in full, with no per-project preservation.
-
----
-
-## Orchestrator Reference
-
-The orchestrator (this top-level session) must read `.mt-agent-devkit/instructions/orchestrator_instructions.md` before executing any workflow — it carries the workflow trigger table, session management, and completion-report format. No spawned subagent needs to read it; each spawn receives its own instruction/rules/memory paths directly in its prompt.
-
----
+Shared instructions, rules and workflows belong to `.mt-agent-devkit/`; provider-local memory and records remain at the selected RUNTIME_ROOT. Preserve project sections and role roster customizations outside this managed block.
 
 ## Agent File Integrity
 
-**Agents and the orchestrator must never create, modify, or delete agent infrastructure files during sprint work or any other workflow.**
+Shared instructions, rules, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.
 
-Protected paths — read-only for all agents and the orchestrator at all times:
+Independent implementation, TL review, QA and PO gates remain mandatory. In GitHub mode post verdicts with `gh pr comment`, never self-approve with `gh pr review --approve`. In strict mode use local story/review records and avoid GitHub mutations.
 
-| Path | Contents |
-|---|---|
-| `{RUNTIME_ROOT}/*_instructions.md` | Role instruction files |
-| `.mt-agent-devkit/rules/` | All rules files |
-| `.mt-agent-devkit/workflows/` | All workflow files |
-| `.mt-agent-devkit/context/` | Project priming and document index |
-| `{RUNTIME_ROOT}/devkit_version.txt` | Installed devkit version stamp |
-| `.mt-agent-devkit/instructions/orchestrator_instructions.md` | Orchestrator-only routing, session-management, and completion-report reference |
+Before a requested workflow, the top-level orchestrator reads `.mt-agent-devkit/instructions/orchestrator_instructions.md`. Workers read their named `.mt-agent-devkit/instructions/<role>_instructions.md` and selected adapter.
 
-Writable paths during normal work:
-
-| Path | Who writes | What |
-|---|---|---|
-| `{RUNTIME_ROOT}/memory/` | Each agent | Their own memory file only |
-| `{RUNTIME_ROOT}/working-record/` | Each agent | Their own working record only |
-| `{RUNTIME_ROOT}/tmp/` | Orchestrator | Pipeline state files |
-| `{RUNTIME_ROOT}/docs/` | All agents | Stories, sprints, reviews (strict mode only) |
-
-**The only operation that may update protected paths is `sync devkit`**, which is triggered explicitly by the user and handled exclusively by `Sync_Devkit_Workflow.md`. No agent, no workflow, and no orchestrator logic may modify these files for any other reason — including fixes, improvements, or adjustments discovered during sprint work.
-
-If an agent identifies an error or improvement needed in a rules or workflow file, it must report it to the user as an observation — never self-correct by editing the file.
-
-**Audit carve-out.** `sync devkit` and `update project` (the devkit-side command that applies local templates to this project) may each run a scoped, detect-only audit pass as their own final stage — this is a **workflow step, not an agent role or a third writer of protected paths**. The audit pass never writes to `rules/`, `instructions/`, or `{ENTRYPOINT}` itself; it only reads the files that same run just wrote and, if it finds mode-adaptation drift, files a report Issue on the devkit repository — the fix, if any, lands upstream in `templates/`, never as a local edit here. No other workflow may invoke this audit pass.
-
----
-
-## PR Approval Rule
-
-**If `Mode: github`:** GitHub blocks self-approval. Always use `gh pr comment <number>` to post review verdicts — never `gh pr review --approve`.
-
-**If `Mode: strict`:** No PRs. The reviewer writes their verdict to the local review-record file at `{RUNTIME_ROOT}/docs/reviews/ST-XXXXXX_review.md` and appends a summary comment to the story MD `## Comments` section. See `Strict_Mode_Story_Guide.md` for the review-record format.
-<!-- SHARED-END -->
+Use the project's explicit Agent Roster; when none is provided, the default roles are Technical Lead, Developer, QA, Product Owner, Business Analyst and UI/UX Designer, with corresponding lowercase underscore role instruction filenames under `.mt-agent-devkit/instructions/`. Project roster customizations take precedence over this default.

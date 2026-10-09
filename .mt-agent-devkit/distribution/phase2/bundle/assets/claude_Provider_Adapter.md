@@ -1,4 +1,4 @@
-# Claude Internal Harness Adapter
+# Claude Target Harness Adapter
 
 `CLAUDE.md` routes here after checking actual enabled capabilities. Role discovery
 wrappers retain Claude frontmatter; load the canonical role body they name before
@@ -61,3 +61,5 @@ reports, temporary files and progress stay in this provider's existing paths.
 Missing bindings block; never search other providers or runs for a substitute.
 Run IDs identify telemetry/sessions; they do not relocate normal working state.
 Disposable validation evidence may use separate provider-local run directories.
+
+Target selection command: `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json> --provider claude` (add `--capabilities <verified-runtime-manifests.json>` only for observed mappings). Target defaults use `.claude/agents`; preserve installed receipt bindings. Never use devkit `agents/working` paths for target state.

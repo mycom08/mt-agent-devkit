@@ -201,7 +201,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 ## 12. On-Demand Rules — Routing Table
 
-§1–§6 above are loaded at spawn. Nothing in `Developer_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill (`{PROVIDER_ROOT}/skills/read-section/`) — not the whole file.
+§1–§6 above are loaded at spawn. Nothing in `Developer_Rules_Read_On_Demand.md` is. When a trigger below fires, fetch **only** the named section with the `read-section` skill (`.mt-agent-devkit/contracts/Read_Section.md`) — not the whole file.
 
 | Trigger | Fetch |
 |---|---|

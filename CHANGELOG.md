@@ -35,6 +35,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000221] Preserve reviewed customizations across updates, enforce bridge review and provider routing, support POSIX locks without procfs, and retain deployment metadata across releases.
+
 ---
 
 ## [0.1.50] - 2026-10-06

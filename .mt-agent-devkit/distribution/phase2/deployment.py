@@ -82,14 +82,14 @@ def shape(value, required, optional=()):
         raise Conflict("invalid object fields")
 
 
-def bindings(provider, value):
+def bindings(provider, value, target):
     shape(value, ("PROVIDER_ROOT", "RUNTIME_ROOT", "COMMAND_ROOT"))
     if provider not in PROVIDERS or value["PROVIDER_ROOT"] != "." + provider:
         raise Conflict("foreign provider binding")
     for field in ("RUNTIME_ROOT", "COMMAND_ROOT"):
         if not value[field].startswith("." + provider + "/"):
             raise Conflict("foreign runtime binding")
-        safe(Path.cwd(), value[field])
+        safe(target, value[field])
     return value
 
 
@@ -99,6 +99,33 @@ def substituted(text, values):
     if re.search(r"\{\{[A-Z][A-Z0-9_]*\}\}", text):
         raise Conflict("unresolved deployment token")
     return text
+
+
+def managed_sections(project, template):
+    """Preserve project prose while publishing the canonical routing block."""
+    start, end = "<!-- MT-AGENT-DEVKIT-START -->", "<!-- MT-AGENT-DEVKIT-END -->"
+    if project.count(start) != project.count(end) or project.count(start) > 1:
+        raise Conflict("invalid managed entrypoint markers")
+    project = re.sub(re.escape(start) + r".*?" + re.escape(end), "", project, flags=re.S).rstrip()
+    return project + ("\n\n" if project else "") + start + "\n" + template.strip() + "\n" + end + "\n"
+
+
+def provider_settings(existing, required):
+    """Merge known Claude surfaces; retain unrelated settings and deny rules."""
+    result = json.loads(existing) if existing else {}
+    required = json.loads(required)
+    permissions = result.setdefault("permissions", {})
+    allow = permissions.setdefault("allow", [])
+    for permission in required["permissions"]["allow"]:
+        if permission not in allow: allow.append(permission)
+    sessions = result.setdefault("hooks", {}).setdefault("SessionStart", [])
+    legacy_scripts = ".claude" + "/agents/scripts/"
+    commands = {"powershell -File " + legacy_scripts + "check_devkit_version.ps1", "bash " + legacy_scripts + "check_devkit_version.sh"}
+    for session in sessions:
+        session["hooks"] = [hook for hook in session.get("hooks", []) if hook.get("command") not in commands]
+    wanted = required["hooks"]["SessionStart"][0]
+    if not any(wanted == session for session in sessions): sessions.append(wanted)
+    return json.dumps(result, indent=2) + "\n"
 
 
 def inspect(target):
@@ -145,7 +172,7 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
         raise Conflict("manifest identity mismatch")
     if mode not in ("github", "strict") or profile not in manifest["profiles"] or not provider_bindings:
         raise Conflict("unsupported mode/profile/providers")
-    bound = {p: bindings(p, b) for p, b in provider_bindings.items()}
+    bound = {p: bindings(p, b, target) for p, b in provider_bindings.items()}
     report = inspect(target)
     if report["locked"] or report["nonterminal"]:
         raise Conflict("pending transaction or nonterminal workflow")
@@ -164,6 +191,7 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
     if previous and not set(previous["providers"]).issubset(bound):
         raise Conflict("cannot remove an installed provider")
     known = {f["path"]: f["rendered_sha256"] for f in previous.get("managed_files", [])} if previous else {}
+    baselines = {f["path"]: f for f in previous.get("managed_files", [])} if previous else {}
     assets = {}
     names = set()
     for asset in manifest["assets"]:
@@ -193,7 +221,7 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
         if item["owner"] not in ("shared", "project", "selected_provider"):
             raise Conflict("invalid owner")
         for provider in contexts:
-            values = {"MODE": mode, "DEVKIT_VERSION": source["tag"][1:] if source["kind"] == "release" else source["snapshot_version"], **(bound[provider] if provider else {})}
+            values = {"MODE": mode, "PYTHON_COMMAND": "python" if os.name == "nt" else "python3", "DEVKIT_VERSION": source["tag"][1:] if source["kind"] == "release" else source["snapshot_version"], **(bound[provider] if provider else {})}
             destination = substituted(item["destination"], values)
             safe(target, destination)
             if destination.casefold() in destinations:
@@ -214,7 +242,17 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
                 content = substituted(text, values).encode()
             if renderer == "tokens":
                 content = substituted(content.decode("utf-8"), values).encode()
-            elif renderer in ("approved_adaptation", "managed_sections"):
+            elif renderer == "provider_settings":
+                existing = safe(target, destination)
+                project_settings = adaptations.get(destination, existing.read_text(encoding="utf-8-sig") if existing.exists() else None)
+                content = provider_settings(project_settings, substituted(content.decode("utf-8-sig"), values)).encode()
+            elif renderer == "managed_sections":
+                existing = safe(target, destination)
+                project = adaptations.get(destination, existing.read_text(encoding="utf-8-sig") if existing.exists() else "")
+                if any(declared != mode for declared in re.findall(r"\*\*Mode:\*\*\s*(github|strict)\b", project)):
+                    raise Conflict("entrypoint mode differs from deployment mode")
+                content = managed_sections(project, substituted(content.decode("utf-8-sig"), values)).encode()
+            elif renderer == "approved_adaptation":
                 existing = safe(target, destination)
                 if item["ownership"] == "project_owned" and existing.exists():
                     content = existing.read_bytes()
@@ -224,8 +262,16 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
                     content = substituted(adaptations[destination], values).encode()
             elif renderer not in ("copy", "create_if_absent", "shared_mode"):
                 raise Conflict("renderer not implemented: " + renderer)
-            if destination in adaptations and item["ownership"] in ("managed", "project_adapted", "provider_config"):
+            stock_hash = digest(content)
+            if renderer not in ("managed_sections", "provider_settings") and destination in adaptations and item["ownership"] in ("managed", "project_adapted", "provider_config"):
                 content = substituted(adaptations[destination], values).encode()
+            baseline = baselines.get(destination, {})
+            if baseline.get("adapted") and destination not in adaptations and renderer not in ("managed_sections", "approved_adaptation", "provider_settings"):
+                if baseline.get("stock_sha256") != stock_hash:
+                    raise Conflict("review adapted content against changed source: " + destination)
+                if filehash(safe(target, destination)) != baseline["rendered_sha256"]:
+                    raise Conflict("divergent adapted baseline: " + destination)
+                content = safe(target, destination).read_bytes()
             path = safe(target, destination)
             protected_runtime = any(destination.startswith(value["RUNTIME_ROOT"] + "/" + folder + "/") for value in bound.values() for folder in ("memory", "working-record", "retros", "tmp", "internal", "docs"))
             if protected_runtime and item["phase"] != "retirement" and item["ownership"] != "runtime_seed":
@@ -252,7 +298,9 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
                 action, content, after = "preserve", path.read_bytes(), before
             elif before == after:
                 action = "preserve"
-            elif before is not None and known.get(destination) != before:
+            elif renderer == "provider_settings":
+                action = "replace" if before else "create"
+            elif before is not None and (known.get(destination) != before or (baseline and "stock_sha256" not in baseline)):
                 resolution = resolutions.get(destination)
                 if not resolution:
                     raise Conflict("divergent or unknown baseline: " + destination)
@@ -262,7 +310,7 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
                 action = "replace"
             else:
                 action = "replace" if before else "create"
-            operations.append({"operation_id": item["id"] + (":" + provider if provider else ""), "path": destination, "action": action, "before_sha256": before, "after_sha256": after, "content_hex": content.hex(), "ownership": ownership, "phase": item["phase"], "dependencies": approved["after_verified_ids"] if item["phase"] == "retirement" else []})
+            operations.append({"operation_id": item["id"] + (":" + provider if provider else ""), "path": destination, "action": action, "before_sha256": before, "after_sha256": after, "content_hex": content.hex(), "ownership": ownership, "phase": item["phase"], "dependencies": approved["after_verified_ids"] if item["phase"] == "retirement" else [], "stock_sha256": stock_hash, "adapted": after != stock_hash or bool(baseline.get("adapted") and destination not in adaptations)})
     operation_ids = {op["operation_id"] for op in operations if op["action"] != "retire"}
     if any(not set(op["dependencies"]).issubset(operation_ids) for op in operations):
         raise Conflict("retirement dependency missing")
@@ -287,7 +335,7 @@ def validate_plan(value, target):
         raise Conflict("plan identity mismatch")
     seen = set()
     for op in value["operations"]:
-        shape(op, ("operation_id", "path", "action", "before_sha256", "after_sha256", "content_hex", "ownership", "phase", "dependencies"))
+        shape(op, ("operation_id", "path", "action", "before_sha256", "after_sha256", "content_hex", "ownership", "phase", "dependencies"), ("stock_sha256", "adapted"))
         safe(target, op["path"])
         protected_runtime = any(op["path"].startswith(bound["RUNTIME_ROOT"] + "/" + folder + "/") for bound in value["providers"].values() for folder in ("memory", "working-record", "retros", "tmp", "internal", "docs"))
         if protected_runtime and op["action"] != "retire" and (op["ownership"] != "runtime_seed" or op["action"] not in ("create", "preserve")):
@@ -311,7 +359,7 @@ def validate_plan(value, target):
         if op["action"] != "retire" and op["ownership"] != "runtime_seed" and any(path in bytes.fromhex(op["content_hex"]).decode("utf-8", errors="replace") for path in retired):
             raise Conflict("planned surviving content references retired path")
     for provider, values in value["providers"].items():
-        bindings(provider, values)
+        bindings(provider, values, target)
 
 
 def unchanged(target, hashes):
@@ -355,6 +403,22 @@ def process_identity(pid):
             return str((times[0].dwHighDateTime << 32) | times[0].dwLowDateTime)
         finally:
             api.CloseHandle(handle)
+    return posix_process_identity(pid)
+
+
+def posix_process_identity(pid):
+    if not Path("/proc").is_dir():
+        import subprocess
+        try:
+            result = subprocess.run(["ps", "-p", str(pid), "-o", "lstart="], capture_output=True, text=True, timeout=10, env={**os.environ, "LC_ALL": "C"})
+        except (OSError, subprocess.TimeoutExpired):
+            raise Conflict("lock owner creation identity unavailable") from None
+        identity = result.stdout.strip()
+        if result.returncode == 0 and identity:
+            return "ps:" + identity
+        if result.returncode == 1 and not identity and not result.stderr.strip():
+            return None
+        raise Conflict("lock owner liveness unavailable")
     proc = Path("/proc") / str(pid) / "stat"
     try:
         # Process name may contain spaces and parentheses.
@@ -453,7 +517,7 @@ def finish(target, journal_path, journal, fail_at=None):
         if filehash(safe(target, op["path"])) != op["after_sha256"]:
             raise Conflict("installed verification failed")
     checkpoint("verified", fail_at)
-    receipt = {"schema_version": 1, "layout_version": 2, "source": value["source"], "mode": value["mode"], "profile": value["profile"], "providers": value["providers"], "status": "verified", "managed_files": [{"id": op["operation_id"], "path": op["path"], "rendered_sha256": op["after_sha256"], "ownership": op["ownership"]} for op in value["operations"] if op["ownership"] != "runtime_seed" and op["action"] != "retire"]}
+    receipt = {"schema_version": 1, "layout_version": 2, "source": value["source"], "mode": value["mode"], "profile": value["profile"], "providers": value["providers"], "status": "verified", "managed_files": [{"id": op["operation_id"], "path": op["path"], "rendered_sha256": op["after_sha256"], "ownership": op["ownership"], "stock_sha256": op.get("stock_sha256"), "adapted": op.get("adapted", False)} for op in value["operations"] if op["ownership"] != "runtime_seed" and op["action"] != "retire"]}
     journal["receipt_after_sha256"] = digest(canonical(receipt) + b"\n")
     jsonwrite(journal_path, journal)
     receipt_unchanged(target, journal)
@@ -472,13 +536,13 @@ def verify(target):
         raise Conflict("invalid receipt")
     seen = set()
     for entry in receipt["managed_files"]:
-        shape(entry, ("id", "path", "rendered_sha256", "ownership"))
+        shape(entry, ("id", "path", "rendered_sha256", "ownership"), ("stock_sha256", "adapted"))
         if entry["path"].casefold() in seen:
             raise Conflict("duplicate receipt path")
         seen.add(entry["path"].casefold())
     unchanged(target, {f["path"]: f["rendered_sha256"] for f in receipt["managed_files"]})
     for provider, values in receipt["providers"].items():
-        bindings(provider, values)
+        bindings(provider, values, target)
     return receipt
 
 

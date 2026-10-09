@@ -69,7 +69,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
      b. Collect all signal-tagged items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) from every section
      c. Present collected items to the user as proposed improvements; for each approved item, apply the change targeting the right artifact:
         - `[context]` → priming docs or agent memory files
-        - `[instruction]` → agent instruction files (`{RUNTIME_ROOT}/*_instructions.md`)
+        - `[instruction]` → agent instruction files (`.mt-agent-devkit/instructions/`)
         - `[workflow]` → workflow files (`.mt-agent-devkit/workflows/`)
         - `[failure]` → rules or guardrail files (`.mt-agent-devkit/rules/`)
 

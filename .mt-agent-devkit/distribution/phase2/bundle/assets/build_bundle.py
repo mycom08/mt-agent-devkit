@@ -21,11 +21,15 @@ def neutral(text):
     text = text.replace("{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md", ".mt-agent-devkit/instructions/orchestrator_instructions.md")
     text = text.replace("{{AGENT_DIR_PREFIX}}/agents/", "{RUNTIME_ROOT}/")
     text = text.replace("{{AGENT_DIR_PREFIX}}", "{PROVIDER_ROOT}")
+    text = text.replace("{PROVIDER_ROOT}/skills/read-section/", ".mt-agent-devkit/contracts/Read_Section.md").replace(".claude/skills/read-section/", ".mt-agent-devkit/contracts/Read_Section.md")
     text = text.replace("{{ROOT_FILE}}", "{ENTRYPOINT}").replace("{{AGENT_CLI_NAME}}", "selected provider")
     # Generation examples contain project inputs resolved by their own workflow,
     # rather than installation tokens. Keep them explicit as runtime inputs.
     text = re.sub(r"\{\{(PROJECT_NAME|PROJECT_DESCRIPTION|DEVKIT_SOURCE_URL|DEVKIT_VERSION)\}\}", r"{\1}", text)
     text = text.replace("`SendMessage`", "the selected adapter's resume operation").replace("SendMessage", "the selected adapter's resume operation").replace("agentId", "session_handle")
+    text = text.replace("new `Agent` call", "the selected adapter's spawn operation")
+    text = text.replace("Agent memory, rules, working records, and context live under `{RUNTIME_ROOT}/`.", "Shared rules, instructions and context live under `.mt-agent-devkit/`; memory and working records remain under `{RUNTIME_ROOT}/`.")
+    text = text.replace("`{RUNTIME_ROOT}/*_instructions.md`", "`.mt-agent-devkit/instructions/`")
     text = re.sub(r"## 6\. Shell Command Rules.*?(?=\n## Version)", "## 6. Shell Command Rules — Permissions and Tool Choice\n\nBefore the first command, read the selected provider adapter from the worker packet. Follow its actual shell/tool/permission/completion procedure; another provider's allow-list never applies. Use temporary body files for multiline GitHub text and remove them after completion. Missing adapter/bindings block state access.\n\n---\n", text, flags=re.S)
     text = re.sub(r"\*\*model: (sonnet|opus|haiku)\*\*", lambda m: "**policy: " + {"sonnet": "standard", "opus": "design-review", "haiku": "closure"}[m[1]] + "**", text)
     lines = []
@@ -55,7 +59,7 @@ def build(root, destination):
     def entry(identifier, source_ids, target, profiles=("repo",), owner="shared", ownership="managed", renderer="copy", modes=("github", "strict"), providers=("claude", "antigravity", "codex"), phase="content"):
         files.append({"id": identifier, "sources": source_ids, "destination": target, "owner": owner, "ownership": ownership, "profiles": list(profiles), "modes": list(modes), "providers": list(providers), "renderer": renderer, "legacy_paths": [], "phase": phase, "required": True})
 
-    templates = root / ".claude/agents/templates"
+    templates = implementation / "templates"
     for folder in ("rules", "instructions"):
         for source in sorted((templates / folder).glob("*_template.md")):
             name = source.name.replace("_template", "")
@@ -74,7 +78,9 @@ def build(root, destination):
             variant = templates / mode / "workflows" / name.replace(".md", "_template.md")
             aid = asset("workflow_" + mode + "/" + name, neutral(variant.read_text(encoding="utf-8-sig")).encode())
             entry("workflow_" + mode + "/" + name, [common, aid], ".mt-agent-devkit/workflows/" + name, modes=(mode,), renderer="shared_mode")
-    common = asset("orchestrator_shared", neutral((templates / "shared/orchestrator_instructions_shared_template.md").read_text(encoding="utf-8-sig")).encode())
+    # Provider selection is mandatory even when the entrypoint is hand-adapted.
+    selection = "Before workflow state writes or spawning, read `.mt-agent-devkit/contracts/Provider_Contract.md`. Run `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json>` with actual enabled tool identities and an explicit provider declaration when needed. Load exactly the returned adapter (`<selected-provider>/harness/Provider_Adapter.md`) and pass provider, adapter, concrete PROVIDER_ROOT/RUNTIME_ROOT/COMMAND_ROOT, run/story identity and stage context to every worker. Missing/ambiguous capabilities block workflows; neutral priming remains available."
+    common = asset("orchestrator_shared", (neutral((templates / "shared/orchestrator_instructions_shared_template.md").read_text(encoding="utf-8-sig")).replace("# Orchestrator Instructions", "# Orchestrator Instructions\n\n" + selection)).encode())
     for mode in ("github", "strict"):
         aid = asset("orchestrator_" + mode, neutral((templates / mode / "orchestrator_instructions_template.md").read_text(encoding="utf-8-sig")).encode())
         entry("orchestrator_" + mode, [common, aid], ".mt-agent-devkit/instructions/orchestrator_instructions.md", renderer="shared_mode", modes=(mode,))
@@ -101,14 +107,30 @@ def build(root, destination):
         aid = asset(name, neutral(source.read_text(encoding="utf-8-sig")).encode())
         entry(name, [aid], ".mt-agent-devkit/workflows/" + name + ".md", profiles=("project_root",))
     for profile in ("repo", "project_root"):
-        source = templates / ("shared/Repo_Root_Shared_template.md" if profile == "repo" else "Project_Root_template.md")
-        aid = asset("root_" + profile, neutral(source.read_text(encoding="utf-8-sig")).encode())
+        content = "## Shared Agent Harness\n\n**Mode:** {{MODE}}\n\nCanonical project context: `.mt-agent-devkit/context/Project_Priming.md`. Read it at session start.\n\n" + selection + "\n\nShared instructions, rules and workflows belong to `.mt-agent-devkit/`; provider-local memory and records remain at the selected RUNTIME_ROOT. Preserve project sections and role roster customizations outside this managed block.\n\n## Agent File Integrity\n\nShared instructions, rules, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.\n\nIndependent implementation, TL review, QA and PO gates remain mandatory. In GitHub mode post verdicts with `gh pr comment`, never self-approve with `gh pr review --approve`. In strict mode use local story/review records and avoid GitHub mutations.\n"
+        if profile == "repo":
+            content += "\nBefore a requested workflow, the top-level orchestrator reads `.mt-agent-devkit/instructions/orchestrator_instructions.md`. Workers read their named `.mt-agent-devkit/instructions/<role>_instructions.md` and selected adapter.\n"
+            content += "\nUse the project's explicit Agent Roster; when none is provided, the default roles are Technical Lead, Developer, QA, Product Owner, Business Analyst and UI/UX Designer, with corresponding lowercase underscore role instruction filenames under `.mt-agent-devkit/instructions/`. Project roster customizations take precedence over this default.\n"
+        else:
+            content += "\nProject-root workflows: `.mt-agent-devkit/workflows/Build_Software_Project_Workflow.md` and `.mt-agent-devkit/workflows/Sync_Devkit_Project_Workflow.md`. Sprint workflows run in each repository.\n"
+        aid = asset("root_" + profile, content.encode())
         for entrypoint, providers in (("CLAUDE.md", ("claude",)), ("AGENTS.md", ("antigravity", "codex"))):
             # One AGENTS owner even when both consumers are selected; provider list is descriptive.
             entry("root_" + profile + "/" + entrypoint, [aid], entrypoint, profiles=(profile,), owner="project", ownership="project_adapted", renderer="managed_sections", providers=providers, phase="discovery")
     for provider in ("claude", "antigravity", "codex"):
+        if provider == "claude":
+            settings = {"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "{{PYTHON_COMMAND}} .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}]}}
+            aid = asset("claude/settings", (json.dumps(settings) + "\n").encode(), "adapter")
+            entry("claude/settings", [aid], ".claude/settings.json", profiles=("repo", "project_root"), owner="selected_provider", ownership="provider_config", renderer="provider_settings", providers=(provider,), phase="discovery")
+            skill = (root / ".mt-agent-devkit/contracts/Read_Section.md").read_bytes()
+            aid = asset("claude/read-section", skill, "adapter")
+            entry("claude/read-section", [aid], ".claude/skills/read-section/SKILL.md", profiles=("repo", "project_root"), owner="selected_provider", providers=(provider,), phase="discovery")
         for name in ("Provider_Adapter.md", "capabilities.json"):
-            aid = asset(provider + "/" + name, (root / ("." + provider) / "harness" / name).read_bytes(), "adapter")
+            content = (root / ("." + provider) / "harness" / name).read_text(encoding="utf-8-sig")
+            if name == "Provider_Adapter.md":
+                content = content.replace("Internal Harness Adapter", "Target Harness Adapter").replace("internal harness", "target harness")
+                content += "\nTarget selection command: `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json> --provider " + provider + "` (add `--capabilities <verified-runtime-manifests.json>` only for observed mappings). Target defaults use `." + provider + "/agents`; preserve installed receipt bindings. Never use devkit `agents/working` paths for target state.\n"
+            aid = asset(provider + "/" + name, content.encode(), "adapter")
             entry(provider + "/" + name, [aid], "." + provider + "/harness/" + name, profiles=("repo", "project_root"), owner="selected_provider", providers=(provider,))
         bound = {"PROVIDER_ROOT": "." + provider, "RUNTIME_ROOT": "." + provider + "/agents", "COMMAND_ROOT": "." + provider + "/agents"}
         aid = asset(provider + "/state-paths.json", (json.dumps(bound, indent=2) + "\n").encode(), "contract")
@@ -152,18 +174,23 @@ def build(root, destination):
     retirements = []
     for existing in list(files):
         target = existing["destination"]
-        if not target.startswith((".mt-agent-devkit/rules/", ".mt-agent-devkit/workflows/")):
+        if not target.startswith(tuple(".mt-agent-devkit/" + folder + "/" for folder in ("rules", "workflows", "instructions", "context", "scripts"))):
             continue
         for provider in ("claude", "antigravity"):
             for profile in existing["profiles"]:
                 if profile not in ("repo", "project_root"): continue
                 for mode in existing["modes"]:
-                    legacy = "." + provider + "/agents/" + target.removeprefix(".mt-agent-devkit/")
-                    identifier = "retire/" + provider + "/" + profile + "/" + mode + "/" + existing["id"]
-                    root_id = "root_" + profile + "/" + ("CLAUDE.md" if provider == "claude" else "AGENTS.md")
-                    entry(identifier, [], legacy, profiles=(profile,), owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement")
-                    files[-1]["required"] = False
-                    retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": [existing["id"], root_id]})
+                    relative = target.removeprefix(".mt-agent-devkit/")
+                    variants = [relative]
+                    if relative.startswith("instructions/"): variants.append(relative.removeprefix("instructions/"))
+                    if relative == "instructions/orchestrator_instructions.md": variants.append("Orchestrator_Guide.md")
+                    for variant in variants:
+                        legacy = "." + provider + "/agents/" + variant
+                        identifier = "retire/" + provider + "/" + profile + "/" + mode + "/" + existing["id"] + "/" + variant
+                        root_id = "root_" + profile + "/" + ("CLAUDE.md" if provider == "claude" else "AGENTS.md")
+                        entry(identifier, [], legacy, profiles=(profile,), owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement")
+                        files[-1]["required"] = False
+                        retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": [existing["id"], root_id]})
     manifest = {"schema_version": 1, "layout_version": 2, "minimum_python": "3.10", "profiles": ["repo", "project_root"], "assets": assets, "files": files, "legacy_support": {"versions": ["0.1.48", "0.1.49", "0.1.50"], "providers": ["claude", "antigravity"], "modes": ["github", "strict"], "retirements": retirements}}
     (destination / "deployment.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest
