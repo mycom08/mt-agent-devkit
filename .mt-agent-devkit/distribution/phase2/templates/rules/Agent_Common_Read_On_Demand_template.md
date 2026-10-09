@@ -84,7 +84,7 @@ Applies on any tooling/environment blocker: tests fail to run · sandbox fails t
 
 Before reporting back to the orchestrator, write your retrospective section to the story retro file:
 
-1. Read `{{AGENT_DIR_PREFIX}}/agents/rules/Retro_Rules.md` for the three questions and format
+1. Read `{{AGENT_DIR_PREFIX}}/agents/rules/Retro_Rules.md` in full with the native file-reading tool when available (Claude: `Read`), directly on that original path; otherwise use the selected provider's sanctioned mechanism. Complete successful returned coverage before writing your retro or final report
 2. Open `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` (story ID is in your spawn prompt)
 3. Overwrite the `*(pending)*` placeholders in **your own section only** — see the section name in your role instructions
 4. Then report back

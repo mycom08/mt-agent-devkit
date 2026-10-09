@@ -145,6 +145,19 @@ class RuntimeAndSkeletonTests(unittest.TestCase):
         for text in ("Read `{UNKNOWN_ROOT}/tmp/state.md`", "Read `{COMMAND_ROOT}/instructions/missing.md`", "Read `{RUN_ROOT}/tmp/../../other.md`"):
             self.assertTrue(validator.reference_errors(text, "fixture.md"))
         self.assertFalse(validator.reference_errors("Write `{COMMAND_ROOT}/tmp/analyst_workflow_state.md`", "fixture.md"))
+        adapter = "Read `{PROVIDER_ROOT}/harness/Provider_Adapter.md`"
+        self.assertFalse(validator.reference_errors(adapter, "fixture.md"))
+        with tempfile.TemporaryDirectory() as tmp:
+            fake_root = Path(tmp)
+            for provider in ("claude", "antigravity", "codex"):
+                path = fake_root / f".{provider}/harness/Provider_Adapter.md"
+                path.parent.mkdir(parents=True)
+                path.write_text("adapter", encoding="utf-8")
+            self.assertFalse(validator.reference_errors(adapter, "fixture.md", root=fake_root))
+            path.unlink()
+            self.assertTrue(validator.reference_errors(adapter, "fixture.md", root=fake_root))
+        for reference in ("{PROVIDER_ROOT}/harness/Missing.md", "{LIFECYCLE_ROOT}/harness/Provider_Adapter.md"):
+            self.assertTrue(validator.reference_errors(reference, "fixture.md"))
         self.assertTrue(validator.reference_errors("Read `.claude/agents/working/instructions/missing.md`", "lifecycle.md", target_lifecycle=True))
         self.assertFalse(validator.reference_errors("Write `{TARGET_PROJECT}/.claude/settings.json`", "lifecycle.md", target_lifecycle=True))
         for marker in ("target paths", "Released target"):
@@ -206,6 +219,20 @@ class SectionAndWrapperTests(unittest.TestCase):
         text = wrappers.render(entry)
         self.assertIn("Reading this\nwrapper alone does not satisfy", text)
         self.assertIn("Read the canonical bootstrap in full", text)
+        pipeline = (ROOT / ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md").read_text(encoding="utf-8")
+        self.assertIn("## Worker Entry Read Contract", pipeline)
+        self.assertIn("include this contract verbatim", pipeline)
+        self.assertIn("only preparatory shell exception", pipeline)
+        self.assertIn("persisted", pipeline)
+        for role in ("developer", "technical_lead", "qa"):
+            instruction = (ROOT / f".mt-agent-devkit/instructions/{role}_instructions.md").read_text(encoding="utf-8")
+            self.assertIn("before any shell command", instruction)
+            self.assertIn("Claude: `Read`", instruction)
+            self.assertIn("mandatory full role-scoped read", instruction)
+        bootstrap = (ROOT / ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md").read_text(encoding="utf-8")
+        self.assertIn("On-demand section extraction remains bounded", bootstrap)
+        self.assertIn("preloaded summaries do not satisfy", bootstrap)
+
 
     def test_on_demand_wrapper_never_full_loads(self):
         entry = {"source": ".claude/agents/working/rules/Agent_Common_Read_On_Demand.md", "destination": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md"}

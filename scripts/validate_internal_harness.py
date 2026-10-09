@@ -36,8 +36,12 @@ instruction read cannot escape resolution through a broad provider allow-list.
                     if suffix.split("/", 1)[0] not in RUNTIME_DIRECTORIES or ".." in suffix.split("/"):
                         errors.append(f"invalid runtime-bound reference: {source} -> {ref}")
                 elif binding in ("LIFECYCLE_ROOT", "PROVIDER_ROOT"):
+                    # The selected adapter is an exact registered provider-bound read.
+                    if binding == "PROVIDER_ROOT" and suffix == "harness/Provider_Adapter.md":
+                        if any(not (root / f".{p}" / suffix).is_file() for p in ("claude", "antigravity", "codex")):
+                            errors.append(f"dangling provider adapter reference: {source} -> {ref}")
                     # Legacy lifecycle operations exist for both Phase 1 target surfaces.
-                    if "agents/workflows/" in suffix or "agents/working/workflows/" in suffix:
+                    elif "agents/workflows/" in suffix or "agents/working/workflows/" in suffix:
                         if any(not (root / f".{p}" / suffix).is_file() for p in ("claude", "antigravity")):
                             errors.append(f"dangling lifecycle reference: {source} -> {ref}")
                     else:

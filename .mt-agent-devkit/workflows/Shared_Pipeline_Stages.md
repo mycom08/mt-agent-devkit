@@ -6,6 +6,29 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Worker Entry Read Contract
+
+For every fresh worker spawn or expired-session restart, include this contract verbatim in the ordinary role packet, together with the selected adapter, concrete bindings and canonical role instruction path. It applies before discovery commands or shell-based context loading; a rule inside an unread role file cannot enforce that boundary by itself. A valid same-session resume retains its prior reads and receives only the new task/evidence delta.
+
+```text
+Before any shell command, use the runtime's native file-reading tool when
+available (Claude: Read) to read the supplied selected provider adapter first,
+then the canonical role instruction, directly from their original paths and
+in full. Complete successful returned coverage before proceeding; follow up
+truncated reads with that same tool. Shell cat/sed/Python output, persisted
+tool-output files and preloaded summaries do not substitute for these reads.
+Use the same direct native tool for subsequent mandatory full-file reads
+routed by the role. This read gate precedes command batching and discovery.
+If no native file-reading tool exists, use the selected provider's supported
+file-reading mechanism: a shell read of the supplied adapter itself is the
+only preparatory shell exception; read it before any other shell command,
+then follow its sanctioned mechanism. Do not invent a Read tool or transfer
+another provider's procedure. Missing adapter/bindings or unavailable required
+file-reading capability blocks before other commands or state access.
+```
+
+---
+
 ## Story Base Preflight (before Bug Reproduction and Stage 0)
 
 **Interrupted Stage 1 recovery for a `status:ready` story:** Before new-story `inspect`, check whether the intended local story branch already exists. If it does, read the pipeline state without writing. Resume after branch creation only when state names this story at Stage 0 or 1, records a full Verified Base SHA, the checked-out branch is the intended story branch, its full tip SHA equals that recorded base SHA, and `git status --porcelain` is empty. Then record Story Branch, continue Stage 1 after `create`, and update status; do not repeat Bug Reproduction, Stage 0, `inspect`, or `create`. If any check fails or state is missing, stop and report the exact mismatch for explicit state recovery; do not switch, delete, reset, or recreate a branch. A fresh Sprint run with no state uses the same fail-closed rule.
@@ -169,7 +192,7 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 7. **Deletion pre-check** — if the story involves deleting files: before executing any `git rm` or file deletion, post a comment on the GitHub Issue listing every file planned for deletion
 8. Agent implements and updates working record; commits use the format `[ST-XXXXXX][DEVKIT]: <message>`
 9. **After implementation is ready for review** → open PR; update story label to `status:review`
-10. Agent writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+10. Agent writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
 11. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 12. On completion → proceed to Stage 2
 
@@ -247,7 +270,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`); an approval comment cites the current head SHA as `**Approved-SHA:** <sha>` (`gh pr view <PR-number> --json headRefOid --jq '.headRefOid'`) — the Merge Procedure's Approval-scope gate reads this back later
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers in AC-functional content. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Read_On_Demand.md §5` for the full checklist).
 4. **If changes requested** → resume Implementer via `the selected adapter's resume operation` to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
-5. Reviewer writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+5. Reviewer writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
 6. **If approved** → proceed to Stage 3
 
 ### Orchestrator Observation Check — Stage 2
@@ -283,7 +306,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 8. **If story AC issues found** → resume Implementer via `the selected adapter's resume operation` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `the selected adapter's resume operation` to `qa_session`** to revalidate (spawn new if expired)
 9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (see QA Rules §8–§9)
    - **If automation fails** → QA reports regression failures as a story comment → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
-   - **If automation passes** → QA writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back; orchestrator executes the **Merge Procedure** below
+   - **If automation passes** → QA writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back; orchestrator executes the **Merge Procedure** below
 10. On merge confirmed → proceed to Stage 4
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
@@ -337,7 +360,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.
    - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal is the reviewer's final approval plus a confirmed merge — not a separate validator-confirms event.
    - Tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
-4. PO writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` per `Retro_Rules.md` before reporting back
+4. PO writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
 5. **Start Story Workflow:** pipeline ends here
 
 ### Orchestrator Observation Check — Stage 4
