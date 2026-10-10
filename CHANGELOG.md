@@ -26,13 +26,11 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ## [0.1.52] - Unreleased
 
-### Bug Fixes
-
-- [ST-000242] Repair bridge-stamped legacy migration, provider variant review and relative targets.
-
 ### Changes
 
 ### Bug Fixes
+
+- [ST-000242] Repair bridge-stamped legacy migration, provider variant review and relative targets.
 
 ---
 
