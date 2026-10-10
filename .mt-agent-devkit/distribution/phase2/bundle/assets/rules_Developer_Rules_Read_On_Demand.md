@@ -111,6 +111,8 @@ Triggered by the peer-review assignment route in `Developer_Rules_Bootstrap.md �
 
 ## 13. Hotfix (post-Done bug)
 
+Full procedure with red flags: `Story_Standard.md §6`.
+
 Triggered by the post-Done bug route in `Developer_Rules_Bootstrap.md §12`. When a bug is found after a story is `status:done`, **never fix on the feature branch or master**. Create a fix branch off the feature branch, then run the normal review/test cycle:
 
 1. Run `branch_preflight.py inspect` and `create` for `fix/ST-XXXXXX/short-description` from the story's immutable Base Branch, using the verified full Base/Remote Base SHAs. Only after successful branch creation, set the issue to `status:hotfix`.
