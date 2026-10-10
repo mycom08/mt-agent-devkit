@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000184] Deduplicate Developer mandatory reads and route conditional story guidance.
+
 ### Bug Fixes
 
 ---

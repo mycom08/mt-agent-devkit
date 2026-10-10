@@ -228,7 +228,12 @@ class SectionAndWrapperTests(unittest.TestCase):
             instruction = (ROOT / f".mt-agent-devkit/instructions/{role}_instructions.md").read_text(encoding="utf-8")
             self.assertIn("before any shell command", instruction)
             self.assertIn("Claude: `Read`", instruction)
-            self.assertIn("mandatory full role-scoped read", instruction)
+            if role == "developer":
+                self.assertNotIn("| Story Standard (Dev)", instruction)
+                self.assertIn("Developer_Rules_Bootstrap.md", instruction)
+                self.assertIn("Standing Checks", instruction)
+            else:
+                self.assertIn("mandatory full role-scoped read", instruction)
         bootstrap = (ROOT / ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md").read_text(encoding="utf-8")
         self.assertIn("On-demand section extraction remains bounded", bootstrap)
         self.assertIn("preloaded summaries do not satisfy", bootstrap)

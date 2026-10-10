@@ -26,9 +26,8 @@ Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` in full. Ever
 |---|---|
 | Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
 | Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/Developer_Working_Record.md` |
-| Story Standard (Dev) — mandatory full role-scoped read | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_Dev.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `{{AGENT_DIR_PREFIX}}/agents/rules/Developer_Rules_Bootstrap.md` |
-| Memory — live index | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory.md` |
+| Memory — live index (unconditional: inspect Standing Checks and keyword matches; empty/nonmatching indexes trigger no archive read) | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory.md` |
 | Memory — fact archive: **never** read at spawn and never read in full; open one section only when an index line's keywords match the task (mechanics: `Agent_Common_Read_On_Demand.md §8`) | `{{AGENT_DIR_PREFIX}}/agents/memory/Developer_Memory_Archive.md` |
 | Provider adapter — read the selected path supplied in the worker packet before the first command; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
 
