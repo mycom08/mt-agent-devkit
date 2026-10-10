@@ -131,11 +131,19 @@ class LegacyContracts(unittest.TestCase):
                                 paths = list(dict.fromkeys(p for field in fields for p in metadata["0.1.51"].get(field, [])))
                                 self.assertEqual(set(paths), BRIDGES)
                                 source = ROOT / ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
-                                destination.write_bytes(source.read_bytes())
+                                bridge = source.read_text(encoding="utf-8-sig")
+                                for token, value in (("AGENT_DIR_PREFIX", "."+provider), ("ROOT_FILE", native), ("AGENT_CLI_NAME", "Claude Code" if provider == "claude" else "Antigravity")):
+                                    bridge = bridge.replace("{{"+token+"}}", value)
+                                destination.write_text(bridge, encoding="utf-8")
+                                # Actual frozen Stage 3 finalizes the first pass at
+                                # the newest release, even though layout is legacy.
+                                (agents / "devkit_version.txt").write_text("0.1.51", encoding="utf-8")
+                                with (target/native).open("a", encoding="utf-8") as entry:
+                                    entry.write("**Devkit version:** 0.1.51\n")
                                 self.assertIn(b"bootstrap.py", destination.read_bytes())
                                 self.assertFalse((target / deployment.RECEIPT).exists())
                                 # Second invocation reviewed transfer is explicit, not guessed by engine.
-                                _, candidates = migration.review_candidates(target, [provider])
+                                _, candidates = migration.review_candidates(target, [provider], bundle/"deployment.json")
                                 adaptations = {p: value["bytes"].decode("utf-8-sig") for p, value in candidates.items()}
                                 adaptations[".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"] = (ROOT/".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md").read_text(encoding="utf-8")
                                 adaptations.pop(".mt-agent-devkit/instructions/orchestrator_instructions.md")
@@ -152,8 +160,7 @@ class LegacyContracts(unittest.TestCase):
                                     required = deployment.substituted((bundle/settings_asset["path"]).read_text(), {"PYTHON_COMMAND": "python" if os.name == "nt" else "python3"})
                                     merged = deployment.provider_settings(settings_path.read_text(), required)
                                     resolutions[settings_path.relative_to(target).as_posix()] = {"before_sha256": deployment.digest(settings_path.read_bytes()), "after_sha256": deployment.digest(merged.encode()), "reason": "Reviewed hook transfer"}
-                                if not missing_stamp:
-                                    resolutions[(agents/"devkit_version.txt").relative_to(target).as_posix()] = {"before_sha256": deployment.digest((agents/"devkit_version.txt").read_bytes()), "after_sha256": deployment.digest(b"0.1.51\n"), "reason": "Receipt-backed final compatibility stamp"}
+                                resolutions[(agents/"devkit_version.txt").relative_to(target).as_posix()] = {"before_sha256": deployment.digest((agents/"devkit_version.txt").read_bytes()), "after_sha256": deployment.digest(b"0.1.51\n"), "reason": "Receipt-backed final compatibility stamp"}
                                 for record in manifest["legacy_support"]["retirements"]:
                                     legacy = target / record["path"]
                                     if legacy.is_file(): resolutions[record["path"]] = {"before_sha256": deployment.digest(legacy.read_bytes()), "after_sha256": None, "reason": "Reviewed shared transfer and exact obsolete managed workflow retirement"}

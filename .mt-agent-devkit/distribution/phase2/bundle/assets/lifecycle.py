@@ -31,11 +31,11 @@ def ignores(target, bound, mode, adaptations, resolutions):
     return adaptations, resolutions
 
 
-def prepare(target, bound, mode, adaptations, resolutions=None):
+def prepare(target, bound, mode, adaptations, resolutions=None, manifest_path=None):
     previous = deployment.inspect(target)["receipt"]
     adaptations, resolutions = ignores(target, bound, mode, adaptations, resolutions)
     if not previous:
-        legacy, candidates = migration.review_candidates(target, deployment.PROVIDERS)
+        legacy, candidates = migration.review_candidates(target, sorted(deployment.PROVIDERS), manifest_path)
         if set(legacy["providers"]) - set(bound):
             raise deployment.Conflict("bind every existing legacy provider before shared migration")
         if legacy["mode"] and legacy["mode"] != mode:
@@ -52,11 +52,11 @@ def local(target, devkit_root, provider, mode, profile, adaptations, resolutions
     previous = deployment.inspect(target)["receipt"]
     bound = dict(previous["providers"]) if previous else {}
     bound.setdefault(provider, {"PROVIDER_ROOT": "." + provider, "RUNTIME_ROOT": "." + provider + "/agents", "COMMAND_ROOT": "." + provider + "/agents"})
-    adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions)
     with tempfile.TemporaryDirectory() as folder:
         bundle = Path(folder)
         build_bundle.build(devkit_root, bundle)
         manifest = bundle / "deployment.json"
+        adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions, manifest)
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=devkit_root).decode().strip()
         version = (devkit_root / "VERSION").read_text().strip()
         source = {"kind": "local", "tag": None, "commit": commit, "snapshot_version": version, "manifest_sha256": deployment.digest(manifest.read_bytes())}
@@ -86,7 +86,7 @@ def main():
         if args.operation == "bundle":
             if not all((args.manifest, args.source, args.bindings)): parser.error("bundle requires manifest, source and bindings")
             bound = deployment.load(args.bindings)
-            adaptations, resolutions = prepare(args.target, bound, args.mode, adaptations, resolutions)
+            adaptations, resolutions = prepare(args.target, bound, args.mode, adaptations, resolutions, args.manifest)
             result = deployment.plan(args.target, args.manifest, deployment.load(args.source), args.mode, args.profile, bound, adaptations, resolutions)
             if args.apply: result = deployment.apply(args.target, result)
         else:

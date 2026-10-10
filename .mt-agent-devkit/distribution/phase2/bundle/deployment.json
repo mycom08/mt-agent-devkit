@@ -8,6 +8,13 @@
   ],
   "assets": [
     {
+      "id": "bridge_provenance.json",
+      "path": "assets/bridge_provenance.json",
+      "sha256": "91617fcc5aca71dafc1cc24bc394154741f182433a0c910f64d40a1f17f0a1b6",
+      "bytes": 651,
+      "kind": "contract"
+    },
+    {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
       "sha256": "1a834b689ff321b72f3798c2d61ebe81e125b61fcd07e43e9a1ae2c1f0cb70ed",
@@ -479,8 +486,8 @@
     {
       "id": "Sync_Devkit_Project_Workflow",
       "path": "assets/Sync_Devkit_Project_Workflow",
-      "sha256": "f6a9beed85dc80f3c5afd327fce7b59bc65f67bad255f73c954a97a70822f324",
-      "bytes": 2127,
+      "sha256": "56c26c609cbbb6c22a9d5acb7e1b7d32657981fc8fdbc6b0e101015a7122561d",
+      "bytes": 2628,
       "kind": "template"
     },
     {
@@ -955,8 +962,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "7e944988e5f9292e7ca66886a54c13deff1f55d1c0176906913b3fb923d43979",
-      "bytes": 36304,
+      "sha256": "f42d58afd3cd4207030e5447009f10f5f267b9cbdfb631e327f6541106e07532",
+      "bytes": 36326,
       "kind": "script"
     },
     {
@@ -976,22 +983,22 @@
     {
       "id": "migration.py",
       "path": "assets/migration.py",
-      "sha256": "f90b3bab7edb1291281dbb0d3aa30449716383e26124a6a92e0b5da52c972e44",
-      "bytes": 4534,
+      "sha256": "66b1314ef130ff0f9872909183f78b6ad717fd06ee60116bdcf5dcba674a7df0",
+      "bytes": 8635,
       "kind": "script"
     },
     {
       "id": "sync.py",
       "path": "assets/sync.py",
-      "sha256": "d437fc32c2ecc38f3cc25859732efa7bf5d6963d0c031c802290149c090ab9cd",
-      "bytes": 4831,
+      "sha256": "c71fc13f919cf1b1e85d17023962013a539ea7dc86407ab34994bd51081abace",
+      "bytes": 4846,
       "kind": "script"
     },
     {
       "id": "lifecycle.py",
       "path": "assets/lifecycle.py",
-      "sha256": "d8497d7a4d39175ab4eb6b97e83110dc52d5ee6a8bf9a828cee7a5f5d2bf8de1",
-      "bytes": 5740,
+      "sha256": "a305591b8a2adfc208bee4a4929da9a26889f71abd31ed36528dd78bed512d55",
+      "bytes": 5812,
       "kind": "script"
     },
     {
@@ -1011,15 +1018,15 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "8b64777c32401f907ff0c02de6c0f86fe04519d85614cf149d02742feb6e84ad",
-      "bytes": 23684,
+      "sha256": "7333127c1ccae6cb0dff3f3c7ae39af431db3210c2323b8b04dad51f8ee388ca",
+      "bytes": 25026,
       "kind": "script"
     },
     {
       "id": "Sync_Devkit_Workflow",
       "path": "assets/Sync_Devkit_Workflow",
-      "sha256": "f6a9beed85dc80f3c5afd327fce7b59bc65f67bad255f73c954a97a70822f324",
-      "bytes": 2127,
+      "sha256": "56c26c609cbbb6c22a9d5acb7e1b7d32657981fc8fdbc6b0e101015a7122561d",
+      "bytes": 2628,
       "kind": "template"
     },
     {
@@ -1053,8 +1060,8 @@
     {
       "id": "Provider_Contract.md",
       "path": "assets/Provider_Contract.md",
-      "sha256": "ecd821428f6ade229ff3627f7c7cb601d937efc62f6de8915ea1e0c767c95cc7",
-      "bytes": 701,
+      "sha256": "cbff9e9dd040729cbd64a3d494c64ad859b7834dcd04600faf79e3cb86000e66",
+      "bytes": 782,
       "kind": "contract"
     },
     {
