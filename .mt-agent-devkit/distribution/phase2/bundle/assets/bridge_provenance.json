@@ -1,0 +1,24 @@
+{
+  "versions": [
+    "0.1.51",
+    "0.1.52"
+  ],
+  "bridges": {
+    "claude": {
+      "workflows/Sync_Devkit_Workflow.md": [
+        "0ab334a39740a4d97b22da472fa57a469844dc5e2ca07e6f27b1ef84b3d767e5"
+      ],
+      "workflows/Sync_Devkit_Project_Workflow.md": [
+        "2676e707a506a84bda157d1fee497a9ac8988663e6e07933bb27b81eed60e4cc"
+      ]
+    },
+    "antigravity": {
+      "workflows/Sync_Devkit_Workflow.md": [
+        "052c13b86ebd1bda4087e6f68413615ce0c39842d70ffa1a429153ebc2dc70c1"
+      ],
+      "workflows/Sync_Devkit_Project_Workflow.md": [
+        "7c575b6b2bdd1ca448e7642dc71391b2798d953558506a2de2667b27c7061735"
+      ]
+    }
+  }
+}

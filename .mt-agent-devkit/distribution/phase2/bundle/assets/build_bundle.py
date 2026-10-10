@@ -60,6 +60,20 @@ def build(root, destination):
         files.append({"id": identifier, "sources": source_ids, "destination": target, "owner": owner, "ownership": ownership, "profiles": list(profiles), "modes": list(modes), "providers": list(providers), "renderer": renderer, "legacy_paths": [], "phase": phase, "required": True})
 
     templates = implementation / "templates"
+    # Bridge stamps reflect the newest release, not the surviving legacy layout.
+    # Exact rendered bridge identities are part of the hash-authenticated bundle.
+    metadata = json.loads((root / "changes.json").read_text(encoding="utf-8-sig"))
+    bridge_versions = sorted({key.removesuffix("-SNAPSHOT") for key, value in metadata.items() if isinstance(value, dict) and "deployment" in value})
+    bridges = {}
+    for provider, cli, entrypoint in (("claude", "Claude Code", "CLAUDE.md"), ("antigravity", "Antigravity", "AGENTS.md")):
+        bridges[provider] = {}
+        for name in ("Sync_Devkit_Workflow", "Sync_Devkit_Project_Workflow"):
+            source = root / ".claude/agents/templates/workflows" / (name + "_template.md")
+            content = source.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+            for token, value in (("AGENT_DIR_PREFIX", "." + provider), ("ROOT_FILE", entrypoint), ("AGENT_CLI_NAME", cli)):
+                content = content.replace("{{" + token + "}}", value)
+            bridges[provider]["workflows/" + name + ".md"] = [hashlib.sha256(content.encode()).hexdigest()]
+    asset("bridge_provenance.json", (json.dumps({"versions": bridge_versions, "bridges": bridges}, indent=2) + "\n").encode(), "contract")
     for folder in ("rules", "instructions"):
         for source in sorted((templates / folder).glob("*_template.md")):
             name = source.name.replace("_template", "")
@@ -166,7 +180,7 @@ def build(root, destination):
         entry(name, [aid], ".mt-agent-devkit/scripts/" + name, profiles=("repo", "project_root"))
     aid = asset("Read_Section.md", (root / ".mt-agent-devkit/contracts/Read_Section.md").read_bytes(), "contract")
     entry("Read_Section", [aid], ".mt-agent-devkit/contracts/Read_Section.md", profiles=("repo", "project_root"))
-    contract = b"# Target Provider Contract\n\nRead project priming for neutral tasks. Before workflows inspect actual enabled tools and call provider_context.select_provider with target root and explicit tool identities. Load exactly its selected adapter; missing/ambiguous mappings block before state writes or spawning. Pass concrete preserved state bindings to every role. Independent implementer, TL review, QA and PO gates remain mandatory. Provider directories never prove native discovery. Runtime remains provider-local, never merged. One shared mode/version; mixed modes/nonterminal legacy workflows block migration. Follow selected adapter for lifecycle, permissions, CI completion and unavailable telemetry.\n"
+    contract = b"# Target Provider Contract\n\nRead project priming for neutral tasks. Before workflows inspect actual enabled tools and call provider_context.select_provider with target root and explicit tool identities. Load exactly its selected adapter; missing/ambiguous mappings block before state writes or spawning. Pass concrete preserved state bindings to every role. Independent implementer, TL review, QA and PO gates remain mandatory. Provider directories never prove native discovery. Runtime remains provider-local, never merged. One certified shared mode/version; supported mixed legacy versions require explicit content review, while mixed modes/nonterminal legacy workflows block migration. Follow selected adapter for lifecycle, permissions, CI completion and unavailable telemetry.\n"
     aid = asset("Provider_Contract.md", contract, "contract")
     entry("Provider_Contract", [aid], ".mt-agent-devkit/contracts/Provider_Contract.md", profiles=("repo", "project_root"))
     aid = asset("Compatibility_Version", b"{{DEVKIT_VERSION}}\n")

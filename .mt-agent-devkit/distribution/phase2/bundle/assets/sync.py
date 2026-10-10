@@ -71,7 +71,7 @@ def release(target, repo, provider, mode, profile, adaptations, resolutions=None
         previous = deployment.inspect(target)["receipt"]
         bound = dict(previous["providers"]) if previous else {}
         bound.setdefault(provider, {"PROVIDER_ROOT": "." + provider, "RUNTIME_ROOT": "." + provider + "/agents", "COMMAND_ROOT": "." + provider + "/agents"})
-        adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions)
+        adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions, manifest_path)
         source = {"kind": "release", "tag": tag, "commit": commit, "snapshot_version": None, "manifest_sha256": deployment.digest(manifest_bytes)}
         value = deployment.plan(target, manifest_path, source, mode, profile, bound, adaptations, resolutions)
         return deployment.apply(target, value) if apply else value

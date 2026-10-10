@@ -129,7 +129,7 @@ def provider_settings(existing, required):
 
 
 def inspect(target):
-    target = Path(target)
+    target = Path(target).absolute()
     providers = {}
     runtime = {}
     active = []
@@ -440,7 +440,7 @@ def apply(target, value, fail_at=None):
         unchanged(target, value["preservation_hashes"])
         verify(target)
         return {"status": "verified", "written": [], "no_op": True}
-    target = Path(target)
+    target = Path(target).absolute()
     lock = safe(target, LOCK)
     provider = sorted(value["providers"])[0]
     transaction = uuid.uuid4().hex
