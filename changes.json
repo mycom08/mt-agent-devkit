@@ -1,4 +1,28 @@
 {
+  "0.1.53-SNAPSHOT": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
+    ],
+    "removed": [],
+    "descriptions": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately."
+    },
+    "deployment": {
+      "schema_version": 1,
+      "manifest": ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+    },
+    "files": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
+    ],
+    "checksums": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "09bf8a1124b9595fdf162b6b934e5886b7c52d73eddd66102d2441b3bd5f61b4",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "e3e2f094ebff7c01dc6d865500d77e850f68f6c099ad1f39f9446c2d5069937a"
+    }
+  },
   "0.1.52": {
     "new": [],
     "modified": [
