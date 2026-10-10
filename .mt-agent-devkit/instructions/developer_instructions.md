@@ -26,9 +26,8 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 |---|---|
 | Project Priming | `.mt-agent-devkit/context/Project_Priming_Bootstrap.md` |
 | Working Record | `{RUNTIME_ROOT}/working-record/Developer_Working_Record.md` |
-| Story Standard (Dev) — mandatory full role-scoped read | `.mt-agent-devkit/rules/Story_Standard_Dev.md` |
 | Rules (bootstrap tier — the only rules file read at spawn) | `.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md` |
-| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `{RUNTIME_ROOT}/memory/Developer_Memory.md` |
+| Memory (unconditional: Standing Checks apply without a match; empty/nonmatching indexes trigger no archive read; live index — the archive is **not** read at spawn; see Project Memory below) | `{RUNTIME_ROOT}/memory/Developer_Memory.md` |
 | Provider adapter — read the selected path supplied in the worker packet before the first command; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
 
 ---

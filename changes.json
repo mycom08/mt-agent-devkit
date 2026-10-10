@@ -8,7 +8,12 @@
     "removed": [],
     "descriptions": {
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately."
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/developer_instructions_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_Dev_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance."
     },
     "deployment": {
       "schema_version": 1,

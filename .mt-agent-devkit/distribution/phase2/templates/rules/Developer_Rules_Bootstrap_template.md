@@ -6,17 +6,11 @@
 
 ---
 
-## 1. Mandatory Reading Before Any Implementation
+## 1. Implementation Read Contract
 
-Before writing a single line of code on any story, Dev **must** read:
+This Bootstrap is the authoritative Developer implementation read. `Story_Standard_Dev.md` is a compatibility index, not a mandatory read. Fetch only the section named by an observable trigger in the routing table before that action.
 
-| Document | Path |
-|---|---|
-| Story Standard (Dev) | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_Dev.md` |
-
-The key Development Standards rules are already embedded in §4–§6 of this document (naming, testing, git workflow). Only read `docs/wiki/Development_Standards.md` if you encounter a specific convention question not covered here.
-
-> **Gate:** Do not begin implementation until `Story_Standard_Dev.md` has been read in the current session.
+The key Development Standards rules are embedded in sections 4–6. Read `docs/wiki/Development_Standards.md` when a specific convention question is not covered here.
 
 ---
 
@@ -29,6 +23,8 @@ Before writing any code, regardless of story status, Dev **must** read:
 1. User Story, all Acceptance Criteria, Technical Scope, and any linked technical docs
 2. All existing comments on the GitHub Issue — PO and TL may have already added context
 3. **If the story modifies or appends to an existing file:** read that file now. While reading, note any stale placeholders, forward references, or superseded instructions that the new implementation will make incorrect — fix them as part of your implementation, not as a separate task.
+
+**Touched endpoints:** fetch `Developer_Rules_Read_On_Demand.md §17` before writing code.
 
 ### Step 2 — Identify and raise questions
 
@@ -90,11 +86,16 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 - Cannot merge without: TL approval + QA sign-off on dev branch + local tests passing.
 - **Do NOT tick Acceptance Criteria** — AC checkboxes are ticked by **PO at story closure (Stage 4)**, not by Dev. Ticking AC yourself is a role violation.
 
+
+**Role boundaries:** Implement, write PRs, ask for guidance and self-check AC. Do not tick AC or answer scope questions owned by PO. Review code only when explicitly assigned peer reviewer. Backlog/Ready/Done belong to PO; Developer moves In Progress/Review/Hotfix; TL owns Testing.
+
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ---
 
 ## 4. Code Quality & Naming
+
+**Development Standard compliance:** Code must follow the project Development Standard; resolve uncovered convention questions per section 1.
 
 **Source files:** Use descriptive names. Do NOT use generic names:
 - `utils`, `helpers`, `types`, `errors`, `interface`
@@ -120,6 +121,8 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 ## 5. Testing & Verification
 
 **Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
+
+**Behavioral changes or an existing story integration script:** fetch `Developer_Rules_Read_On_Demand.md §18` before PR. For affected endpoints, confirm the section 17 spec-matching gate before merge.
 
 **All applicable checks must pass before opening a PR — no exceptions:**
 
@@ -180,6 +183,9 @@ After creating the PR, post a short comment on the GitHub Issue to notify the te
 
 Tag **TL** in the comment to request review.
 
+
+**Story delivery transitions:** After creating the PR, remove `status:in-progress`, add `status:review` and request TL review in the issue comment. On TL feedback, address it in the dev branch, push and re-request review. After TL approval, add PR/commit links to issue Deliverables and notify QA; TL owns the Testing transition. Do not bypass the independent QA sign-off required before merge. Self-check every AC before review without ticking it.
+
 **Post-QA Merge Sync (mandatory after QA passes):**
 
 After QA sign-off, when merging the dev branch PR into the feature branch (or master):
@@ -205,6 +211,10 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 | Trigger | Fetch |
 |---|---|
+| Before posting a story/PR comment or editing the issue body | `Developer_Rules_Read_On_Demand.md §15` (Comment Standard and Commenter gate) |
+| A technical document is observed inaccurate, contradictory or ambiguous | `Developer_Rules_Read_On_Demand.md §16` (Technical Doc Divergence) |
+| Story touches an endpoint | `Developer_Rules_Read_On_Demand.md §17` before code and before merge |
+| Behavioral source/SQL/config/Docker/environment/CI change, or an existing story integration script | `Developer_Rules_Read_On_Demand.md §18` before PR |
 | Blocked on a story and reporting it | `Developer_Rules_Read_On_Demand.md §7` (Reporting & Blockers) |
 | Creating or updating a project document | `Developer_Rules_Read_On_Demand.md §8` (Document Placement) |
 | Orchestrator assigns you as peer reviewer for a TL-implemented story | `Developer_Rules_Read_On_Demand.md §9` (checklist) and `§12` (full reviewer procedure) |

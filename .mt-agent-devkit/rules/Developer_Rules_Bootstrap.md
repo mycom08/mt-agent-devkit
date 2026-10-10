@@ -8,15 +8,9 @@
 
 ---
 
-## 1. Mandatory Reading Before Any Implementation
+## 1. Implementation Read Contract
 
-Before writing a single file on any story, Dev **must** read:
-
-| Document | Path |
-|---|---|
-| Story Standard (Dev) | `.mt-agent-devkit/rules/Story_Standard_Dev.md` |
-
-> **Gate:** Do not begin implementation until `Story_Standard_Dev.md` has been read in the current session.
+This Bootstrap is the authoritative Developer implementation read. `Story_Standard_Dev.md` is a compatibility index, not a mandatory read. Fetch only the section named by an observable trigger in the routing table before that action.
 
 ---
 
@@ -37,7 +31,7 @@ After reading, identify anything unclear: scope gaps, ambiguous AC, technical de
 - **If questions exist:** Post a comment on the GitHub Issue and **explicitly tag** the right person:
   - Scope or AC questions → tag **PO** (Product Owner)
   - Technical or design questions → tag **TL** (Technical Lead)
-- **Do not assume or invent answers** — wait for a response before proceeding
+- **Do not assume or invent answers** — read PO/TL answers; if insufficient, reply in the same thread and wait for all blocking points to resolve before proceeding
 
 > **Gate:** Do not begin implementation until all blocking questions have a confirmed answer from PO or TL.
 
@@ -68,6 +62,9 @@ Story status: `Backlog → Ready → In Progress → Review → Testing → Done
 - Update story status by changing the GitHub Issue label at each stage.
 - Cannot merge without: TL approval + QA sign-off + local checks passing.
 - **Do NOT tick Acceptance Criteria** — AC is owned by QA. Ticking AC yourself is a role violation.
+
+
+**Role boundaries:** Implement, write PRs, ask for guidance and self-check AC. Do not tick AC or answer scope questions owned by PO. Review code only when explicitly assigned peer reviewer. Backlog/Ready/Done belong to PO; Developer moves In Progress/Review/Hotfix; QA owns Testing.
 
 See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
@@ -158,6 +155,9 @@ After creating the PR, post a short comment on the GitHub Issue:
 > "PR #XX opened for review — [brief one-line summary of what was implemented]."
 Tag **TL** in the comment to request review.
 
+
+**Story delivery transitions:** After creating the PR, remove `status:in-progress`, add `status:review` and request TL review in the issue comment. On TL feedback, address it in the dev branch, push and re-request review. After TL approval, add PR/commit links to issue Deliverables and notify QA; perform the mechanical review-to-testing label handoff while QA owns Testing work and verdict. Do not bypass the independent QA sign-off required before merge. Self-check every AC before review without ticking it.
+
 **Post-QA Merge Sync (mandatory after QA passes):**
 1. Merge the PR: `gh pr merge <number> --merge`
 2. Pull to sync: `git checkout main && git pull origin main`
@@ -183,6 +183,7 @@ Tag **TL** in the comment to request review.
 
 | Trigger | Fetch |
 |---|---|
+| Before posting a story/PR comment or editing the issue body | `Developer_Rules_Read_On_Demand.md §20` (Comment Standard and Commenter gate) |
 | Creating or updating a project document | `Developer_Rules_Read_On_Demand.md §8` (Document Placement) |
 | Blocked on a story and reporting it | `Developer_Rules_Read_On_Demand.md §7` (Reporting & Blockers) |
 | A question surfaces mid-implementation, or a live user instruction contradicts the issue thread | `Developer_Rules_Read_On_Demand.md §12–§13` |

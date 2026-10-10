@@ -10,8 +10,8 @@
     {
       "id": "bridge_provenance.json",
       "path": "assets/bridge_provenance.json",
-      "sha256": "91617fcc5aca71dafc1cc24bc394154741f182433a0c910f64d40a1f17f0a1b6",
-      "bytes": 651,
+      "sha256": "8954845db16ef21fa6fd78dde9ed1de9b2fbfbc220a093208ed4c273d9b03c2b",
+      "bytes": 665,
       "kind": "contract"
     },
     {
@@ -66,15 +66,15 @@
     {
       "id": "rules/Developer_Rules_Bootstrap.md",
       "path": "assets/rules_Developer_Rules_Bootstrap.md",
-      "sha256": "07f212704fc573817cf278da3ba44d711d8a1fe93a37e654791f79ff6afeb633",
-      "bytes": 16287,
+      "sha256": "9a7d57b008764de6c9e12cc2031bdc4782fbe787000051f14fc63d8ce4c01712",
+      "bytes": 17879,
       "kind": "template"
     },
     {
       "id": "rules/Developer_Rules_Read_On_Demand.md",
       "path": "assets/rules_Developer_Rules_Read_On_Demand.md",
-      "sha256": "19a34736cf4b9c2b599aaf86dc0c6c347d4109cb3e1ceee83f47489112192aa2",
-      "bytes": 10723,
+      "sha256": "34fe8fdb34e6c407dbf2d27a6b3201ba87e438f5cda971cd8876385702522d25",
+      "bytes": 14501,
       "kind": "template"
     },
     {
@@ -122,8 +122,8 @@
     {
       "id": "rules/Story_Standard_Dev.md",
       "path": "assets/rules_Story_Standard_Dev.md",
-      "sha256": "065554f37b0cd20681017f3a5598024a44afc6e5e05ee1fe39f20112cd459671",
-      "bytes": 7303,
+      "sha256": "ee3e10e94bf1a5ab594f87704ee6b65f8f58a3a05b8bf945610e21184893514e",
+      "bytes": 1302,
       "kind": "template"
     },
     {
@@ -206,8 +206,8 @@
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "20d176703c60015bf98446798046d5a742837c47e58f884067de60a2ad959401",
-      "bytes": 3242,
+      "sha256": "7235dc83ea157115725e0d53e936d304189c0322cd66bad5ede97b2dc202d95d",
+      "bytes": 3244,
       "kind": "template"
     },
     {
@@ -304,8 +304,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "ba5f07e5c2d148f1efd9fc1674905fbb9befb936e2ba9b5d36c5a8bc28edbdc4",
-      "bytes": 12101,
+      "sha256": "e0bcc7557762fe5524df3869c0e3d0e9cc2a70797120ca5f6efd8fbd0bb07e57",
+      "bytes": 12114,
       "kind": "template"
     },
     {

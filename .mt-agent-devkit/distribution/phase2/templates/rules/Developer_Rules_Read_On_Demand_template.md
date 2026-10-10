@@ -23,7 +23,7 @@
 
 ## 9. Peer Review (when Dev acts as reviewer for a TL-implemented story)
 
-When the orchestrator assigns Dev as peer reviewer, follow `Story_Standard_Dev.md` §12 Reviewer Gate, then apply this checklist:
+When the orchestrator assigns Dev as peer reviewer, follow `Developer_Rules_Read_On_Demand.md` §12 Reviewer Gate, then apply this checklist:
 
 **Review checklist:**
 - Verify the PR follows naming conventions, commit message format, and test coverage rules from `Developer_Rules_Bootstrap.md` §4 and §5 — except commit subject-line **length**, which is a non-blocking nit per `Developer_Rules_Bootstrap.md` §6: note it in a comment, never request changes over it alone
@@ -83,7 +83,7 @@ Do not silently follow the old decision, and do not block awaiting re-confirmati
 
 ## 12. Developer as Reviewer (when TL is implementer)
 
-Triggered from `Story_Standard_Dev.md` §4/§12. Only when the orchestrator assigns Developer the Stage 2 peer review role for a TL-implemented story:
+Triggered by the peer-review assignment route in `Developer_Rules_Bootstrap.md §12`. Only when the orchestrator assigns Developer the Stage 2 peer review role for a TL-implemented story:
 
 1. Review the PR diff via `gh pr diff <number> --repo {github-org}/{repo-name}`
 2. Post inline PR comments for specific line-level feedback
@@ -111,7 +111,7 @@ Triggered from `Story_Standard_Dev.md` §4/§12. Only when the orchestrator assi
 
 ## 13. Hotfix (post-Done bug)
 
-Triggered from `Story_Standard_Dev.md` §6. When a bug is found after a story is `status:done`, **never fix on the feature branch or master**. Create a fix branch off the feature branch, then run the normal review/test cycle:
+Triggered by the post-Done bug route in `Developer_Rules_Bootstrap.md §12`. When a bug is found after a story is `status:done`, **never fix on the feature branch or master**. Create a fix branch off the feature branch, then run the normal review/test cycle:
 
 1. Run `branch_preflight.py inspect` and `create` for `fix/ST-XXXXXX/short-description` from the story's immutable Base Branch, using the verified full Base/Remote Base SHAs. Only after successful branch creation, set the issue to `status:hotfix`.
 2. Fix on that branch → open a PR targeting the **feature branch** → request TL review
@@ -142,7 +142,7 @@ For each story ask:
 If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
 
 ### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Story_Standard_Dev.md` §9 comment format:
+For each story with open points, post **one GitHub issue comment** following `Developer_Rules_Read_On_Demand.md` §15 comment format:
 - Group technical questions under a `**TL**` heading
 - Group scope/AC questions under a `**PO**` heading
 - Set `**Thread Status:** Open`
@@ -156,6 +156,61 @@ After the orchestrator notifies you that TL and PO have answered:
    > Set `**Thread Status:** Resolved`
 3. If an answer is insufficient or raises a new question → post a follow-up in the **same thread** (do not open a new comment); report back to orchestrator to trigger another TL/PO answer cycle
 4. Update your Working Record
+
+---
+
+## 15. Comment Standard
+
+```markdown
+## [Comment title]
+**Thread Status:** Open | In Progress | Resolved
+**Area:** [Endpoint / AC / Section / File]
+
+**Developer - YYYY-MM-DD**
+Question or concern.
+
+**TL - YYYY-MM-DD**
+Response and decision.
+
+**Decision:** [What we decided and why]
+**Next:** [Owner or "None"]
+```
+
+- **One topic per comment** — answer the questions asked and nothing else; a finding that surfaces while answering posts as its own comment with its own thread status. Batching replies to questions asked together is fine; smuggling an unasked finding into an answer is not.
+- Reply in the same thread for the same topic
+- When a comment resolves a scope/AC question, update the issue body to match
+- **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`). An `@` prefix triggers a GitHub mention to a real user account.
+- **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text. A bare `#` creates a GitHub cross-reference to an unrelated issue or PR.
+- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; **never paste command output or check transcripts** — verdict in one line, logs in your working record; carve-out: paste the literal `gh pr checks <PR-number>` output when peer-reviewing (`Developer_Rules_Read_On_Demand.md §12` requires it in the approval comment) — nothing else gets pasted; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+
+---
+
+## 16. Technical Doc Divergence Rule
+
+If a technical document is inaccurate, contradictory, or ambiguous during implementation:
+
+1. **Do NOT silently deviate** — post immediately in the story Comment, tag TL
+2. **TL decides:** fix now (blocking) or after story (non-blocking)
+
+| Severity | Action |
+|----------|--------|
+| Blocks implementation | [BLOCKING] Stop. Post comment. Wait for TL fix. |
+| Non-blocking | [NON-BLOCKING] Post comment. Continue. TL fixes after story. |
+| Ambiguous | [NON-BLOCKING] Post comment. Ask TL to clarify before implementing. |
+
+---
+
+## 17. Touched-Endpoint Verification
+
+When the story touches an endpoint, before writing code verify its API spec (`docs/api/`): shape, required fields, enums and constraints. If missing or inconsistent, post a comment to TL and wait for the blocking decision. Before merge confirm implementation matches the spec for every affected endpoint. This verification is distinct from the spec-first update/codegen procedure in `Developer_Rules_Bootstrap.md §5`.
+
+---
+
+## 18. Behavioral Sandbox and Integration Verification
+
+Before opening a PR, behavioral changes (source code, SQL migrations, config files, Docker files, environment variables or CI pipeline logic) require starting the local docker service with `docker compose` and running requests against the sandbox stack to verify expected behavior end-to-end. An integration test script must exist and pass via Git Bash for behavioral changes.
+
+For any story with an existing integration script, run `bash tests/feature/.../ST-XXXXXX_*.sh`; see `docs/wiki/Testing_Guidelines.md`. This existing-script execution duty also applies to nonbehavioral stories. Docs, README and API-spec names/descriptions with no request/response-shape impact need no local service test. All applicable Bootstrap verification gates still apply.
 
 ---
 
