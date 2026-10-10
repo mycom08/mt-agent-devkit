@@ -1,5 +1,5 @@
 {
-  "0.1.52-SNAPSHOT": {
+  "0.1.52": {
     "new": [],
     "modified": [
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
