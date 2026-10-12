@@ -25,7 +25,7 @@ Then execute:
 4. Append a closure entry to the story MD `## Comments` section: `"Story accepted — all AC verified. Closed."`
 
 Then (both modes):
-- Write your retrospective section to `{{AGENT_DIR_PREFIX}}/agents/retros/ST-XXXXXX_retro.md` — read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
+- Evaluate `Agent_Common_Bootstrap.md §7`; only a required trigger loads section 3 of Agent_Common_Read_On_Demand and writes the PO contribution. Clean closure records completion metadata without retro reads/files.
 - Do not write your Working Record for Stage 4 closure. Record any durable fact in your Project Memory per Agent_Common_Read_On_Demand.md §1
 
 ---

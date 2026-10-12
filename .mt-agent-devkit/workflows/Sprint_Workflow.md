@@ -32,6 +32,8 @@ The orchestrator maintains `{RUNTIME_ROOT}/tmp/sprint_pipeline_state.md` to supp
 **Docs SHA:** <git short SHA captured at Stage 0>
 **Loop Impl→Reviewer:** <count>
 **Loop Impl→QA:** <count>
+**Retro Contract:** exception-v1
+**Retro Expected:** <confined runtime JSON path of actual stage identities>
 **Repro Skipped:** <comma-separated story IDs not reproduced this run, or empty>
 **Sessions:**
 - impl_session: <session_handle or empty>
@@ -63,7 +65,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 - **Stage 5 (Retrospective)** — after Stage 4's observation check completes, check the Stage 5 heading in `Shared_Pipeline_Stages.md`: if `[BETA: enabled]`, run Stage 5; if `[BETA: disabled]`, skip and proceed to the next story (Stage 0).
 - **Sprint end** — when no more `status:ready` stories remain:
   1. **Batch Retro Review** — process each story's retro file one by one in story order. For each:
-     a. Read `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
+     a. Validate explicit expected identities with the bound completion helper under `Agent_Common_Bootstrap.md §7`. Missing/unknown evaluation or required-incomplete contribution blocks. Clean-only stories skip retrospective reads/entries; mixed stories read only returned required source paths. Preserve explicit legacy-started histories.
      b. Collect all signal-tagged items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) from every section
      c. Present collected items to the user as proposed improvements; for each approved item, apply the change targeting the right artifact:
         - `[context]` → priming docs or agent memory files
@@ -96,12 +98,12 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
         - `<file-path>` — <one-line description of change>
         ```
         Source findings and "what worked well" from the retro file. Source loop counts from the state file. List every file changed under "Actions Applied"; write `*(none)*` if no changes were applied. Update `**Last Updated:**` at the top after each story section is appended.
-     e. Delete `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
+     e. Preserve story retro and completion evidence; record reviewed source identities to avoid duplicate summary findings on resume.
      — Complete all stories before moving to step 2.
-  2. **Sprint Consolidated Summary** — read the completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
+  2. **Sprint Consolidated Summary** — validate all expected completion identities first. With zero required retros, report “No triggered retrospectives” without opening/creating a retro summary or inventing findings; continue remaining independent sprint-end steps, including memory pruning. For mixed retros, read the actual completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
   3. **Devkit Contribution** — optional sharing of sprint retro signals with the devkit team. The sprint pipeline continues regardless of the user's answer.
 
-     a. **Privacy scan** — read `{RUNTIME_ROOT}/retros/sprint_N_summary.md` (resolve N from `Sprint` field in the state file). Extract all lines from every `### Findings` section across all story blocks. For each item, apply the Privacy Rule from `Retro_Rules.md`: remove or generalise any remaining project-specific references — no project names, repository names, domain-specific file paths, business logic terms, or client/user identifiers. Retain only the generalised text.
+     a. **Privacy scan** — if no triggered findings exist, skip contribution export/prompt and continue memory pruning. Otherwise read `{RUNTIME_ROOT}/retros/sprint_N_summary.md` (resolve N from `Sprint` field in the state file). Extract all lines from every `### Findings` section across all story blocks. For each item, apply the Privacy Rule from `Retro_Rules.md`: remove or generalise any remaining project-specific references — no project names, repository names, domain-specific file paths, business logic terms, or client/user identifiers. Retain only the generalised text.
 
      b. **Present and prompt** — show the cleaned signal items to the user, grouped by type (`[context]`, `[instruction]`, `[workflow]`, `[failure]`). Then ask:
         > "Share these improvements with the devkit team? (yes/no) — the sprint pipeline continues either way."
@@ -145,6 +147,6 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 
      d. **If no:** skip to step 4 (Memory Pruning).
 
-  4. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Follow `Retro_Rules.md`'s "Sprint-End Memory Pruning" section: glob `{RUNTIME_ROOT}/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
+  4. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Read only `Retro_Rules.md`'s "Sprint-End Memory Pruning" heading-delimited section even when no retro exists: glob `{RUNTIME_ROOT}/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
 
   5. **Cleanup** — delete the verified pipeline state and this workflow's temporary files only, using the selected adapter's literal-path file operations. Preserve other active workflows and all records/memory. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).

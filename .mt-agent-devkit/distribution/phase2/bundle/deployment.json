@@ -17,15 +17,15 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "1a834b689ff321b72f3798c2d61ebe81e125b61fcd07e43e9a1ae2c1f0cb70ed",
-      "bytes": 10900,
+      "sha256": "5c1d762ecc7fabeb9708c68f2e057e9396a8a205e5ecae798bf6f646209749c2",
+      "bytes": 16218,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "path": "assets/rules_Agent_Common_Read_On_Demand.md",
-      "sha256": "7e1c54c2a7810334f6f12e63effab45e3f9b04b6f49f4a22d2e91e580a0822f9",
-      "bytes": 11069,
+      "sha256": "9a86a80c5b8fdbac4f95005abcb72222fe57c9d5303d63db3680d826fe02669a",
+      "bytes": 11627,
       "kind": "template"
     },
     {
@@ -94,8 +94,8 @@
     {
       "id": "rules/Product_Owner_Rules_Read_On_Demand.md",
       "path": "assets/rules_Product_Owner_Rules_Read_On_Demand.md",
-      "sha256": "3a5c492de15e41424d43fd87d07d53679304725b7797248a41503b5d113723f6",
-      "bytes": 16691,
+      "sha256": "6605244e52bbfcefaf3b1ef519177cf0c8acc2e137138a876703ea2cdf69f514",
+      "bytes": 16699,
       "kind": "template"
     },
     {
@@ -115,8 +115,8 @@
     {
       "id": "rules/Retro_Rules.md",
       "path": "assets/rules_Retro_Rules.md",
-      "sha256": "68b4d1c5435f6acf00aab28bed4aaa0d567833ddc4f2b45bcaa111fa2b998ec6",
-      "bytes": 6359,
+      "sha256": "89ed012d90aab29cebf6c0ffa57d06e2155368bac7a2d35a8f6c2730239a4e8b",
+      "bytes": 6696,
       "kind": "template"
     },
     {
@@ -199,15 +199,15 @@
     {
       "id": "instructions/business_analyst_instructions.md",
       "path": "assets/instructions_business_analyst_instructions.md",
-      "sha256": "881e9501405a401ae9ccde38b6b22b81b968b42eed76046d8d4c5bf4a41a7fc3",
-      "bytes": 3125,
+      "sha256": "faa00d48150269955501f0809727a409bb646b979c76d1d62163e4f721936fce",
+      "bytes": 3195,
       "kind": "template"
     },
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "7235dc83ea157115725e0d53e936d304189c0322cd66bad5ede97b2dc202d95d",
-      "bytes": 3244,
+      "sha256": "a3d66e18bf14f52bb88137a4f6ae04ce728e534987269cbe5a4f13e0686bf7fc",
+      "bytes": 3317,
       "kind": "template"
     },
     {
@@ -220,22 +220,22 @@
     {
       "id": "instructions/qa_instructions.md",
       "path": "assets/instructions_qa_instructions.md",
-      "sha256": "5748fb2a1308e9118ab0266ceee65cc1a5693319f87874cd95d8815f64c2ab51",
-      "bytes": 3561,
+      "sha256": "2a40aef24e119945dc681b9d31b2475d5930b170c40b477cb88c16f6451cee7d",
+      "bytes": 3657,
       "kind": "template"
     },
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "e92c59748f946810ceb179febf6ffcec41d7842aceb02a48364cd920e2760208",
-      "bytes": 3701,
+      "sha256": "4bc21536e94fc15b67246afcdc7949f43fcfc5f29353b952aebf404b2245e456",
+      "bytes": 3772,
       "kind": "template"
     },
     {
       "id": "instructions/ui_ux_designer_instructions.md",
       "path": "assets/instructions_ui_ux_designer_instructions.md",
-      "sha256": "2a222d96c0592211bbd34eb749703ca5e7b3a875e759dd90eba72096bc50126a",
-      "bytes": 3214,
+      "sha256": "220942cce03d28e07bf5de821273446ef730884c3181eb45fbf7ba8a97d9c0df",
+      "bytes": 3282,
       "kind": "template"
     },
     {
@@ -346,8 +346,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "503379c58ff54b5073fa644b475e0bbfb473fd3d0d5007d8b1384ca5f968087c",
-      "bytes": 43508,
+      "sha256": "b7c667fdff6c3c774b16cdc5518ffc40c497e82e54e7f2617c3ea580cb00107a",
+      "bytes": 43298,
       "kind": "template"
     },
     {
@@ -367,8 +367,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "9ab01143b75597ae6661dbbfcf822dee032265eda852255e916696f9948dd9b2",
-      "bytes": 13519,
+      "sha256": "c00db2024adc3642d865390d88a214551c31e099cb35f9f2f49d30985a38005a",
+      "bytes": 14424,
       "kind": "template"
     },
     {
@@ -388,8 +388,8 @@
     {
       "id": "workflow_shared/Start_Story_Workflow.md",
       "path": "assets/workflow_shared_Start_Story_Workflow.md",
-      "sha256": "90c141adc2491cd1c601ab011d5cb6a7b4829e73b3027de87da9846070ad0c0f",
-      "bytes": 3590,
+      "sha256": "aef4ae1844e6fd47f972cf86e262dca1bf940a6c0f0763881fc42082f58f733b",
+      "bytes": 3947,
       "kind": "template"
     },
     {
@@ -446,6 +446,13 @@
       "path": "assets/scripts_check_devkit_version.sh",
       "sha256": "03e37f2005c3abb8c082e61da56d85e6a069f5b3da79d23f4eedcfe5137988c8",
       "bytes": 67,
+      "kind": "script"
+    },
+    {
+      "id": "scripts/retro_completion.py",
+      "path": "assets/scripts_retro_completion.py",
+      "sha256": "e64363e1ae00b640f73bd25c17502956535cf291b76beb4c95d976bf4a2c210b",
+      "bytes": 9607,
       "kind": "script"
     },
     {
@@ -1018,8 +1025,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "7333127c1ccae6cb0dff3f3c7ae39af431db3210c2323b8b04dad51f8ee388ca",
-      "bytes": 25026,
+      "sha256": "f78cef27dac8cb391425c6e06ec18ca3bc69ff58529b0d8bb6f4e48ac5caebfa",
+      "bytes": 25045,
       "kind": "script"
     },
     {
@@ -2381,6 +2388,32 @@
         "scripts/check_devkit_version.sh"
       ],
       "destination": ".mt-agent-devkit/scripts/check_devkit_version.sh",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "scripts/retro_completion.py",
+      "sources": [
+        "scripts/retro_completion.py"
+      ],
+      "destination": ".mt-agent-devkit/scripts/retro_completion.py",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -8804,6 +8837,166 @@
       "required": false
     },
     {
+      "id": "retire/claude/repo/github/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/retro_completion.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
       "id": "retire/claude/repo/github/scripts/telemetry.py/scripts/telemetry.py",
       "sources": [],
       "destination": ".claude/agents/scripts/telemetry.py",
@@ -12833,6 +13026,70 @@
         "after_verified_ids": [
           "scripts/check_devkit_version.sh",
           "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".claude/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".claude/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".claude/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".claude/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".antigravity/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".antigravity/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".antigravity/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/scripts/retro_completion.py/scripts/retro_completion.py",
+        "path": ".antigravity/agents/scripts/retro_completion.py",
+        "after_verified_ids": [
+          "scripts/retro_completion.py",
+          "root_project_root/AGENTS.md"
         ]
       },
       {

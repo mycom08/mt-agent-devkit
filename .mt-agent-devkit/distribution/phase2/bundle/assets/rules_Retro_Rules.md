@@ -6,7 +6,7 @@
 
 ## When to Write
 
-At the end of your stage work, **before reporting back to the orchestrator**, write your retrospective section to the story retro file. The orchestrator creates this file at Stage 1 with `*(pending)*` placeholders — overwrite only your own section.
+Only a required trigger under `Agent_Common_Bootstrap.md §7` loads this file and requires a contribution before handoff. Create a missing story retro on demand with only your populated role section; never pre-create clean-role placeholders. Preserve existing sections/history and complete the bound contribution metadata. An explicitly grandfathered already-started legacy run retains its earlier skeleton/owned placeholders. The trigger policy is authoritative in the always-loaded Bootstrap, not duplicated here.
 
 **File path:** `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` (the story ID is passed in your spawn prompt)
 
@@ -102,7 +102,7 @@ This step does not enforce the configured memory-file cap itself — that is Sta
 
 ## Format
 
-Overwrite the `*(pending)*` placeholders in your section only. Do not touch other agents' sections.
+Write/update only your triggered role section; preserve other agents’ sections and earlier lessons. Legacy-started runs overwrite only their existing owned placeholders.
 
 Example of a completed section:
 

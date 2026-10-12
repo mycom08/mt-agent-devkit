@@ -7,9 +7,18 @@
     ],
     "removed": [],
     "descriptions": {
+      ".mt-agent-devkit/distribution/phase2/templates/scripts/retro_completion.py": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Start_Story_Workflow_Shared_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Retro_Rules_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/ui_ux_designer_instructions_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/technical_lead_instructions_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/qa_instructions_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/business_analyst_instructions_template.md": "[ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".mt-agent-devkit/distribution/phase2/templates/instructions/developer_instructions_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/developer_instructions_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_Dev_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
@@ -18,9 +27,9 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_PO_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement."
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion."
     },
     "deployment": {
       "schema_version": 1,

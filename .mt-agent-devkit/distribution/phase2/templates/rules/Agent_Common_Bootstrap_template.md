@@ -85,7 +85,7 @@ Everything routed below lives in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common
 |---|---|
 | Writing a memory fact — **PO, BA, UI/UX Designer only** (Dev/QA/TL use the §8 row instead, not this one) | `Agent_Common_Read_On_Demand.md §1` (Project Memory) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §1 |
 | A tooling/environment blocker — **first** scan your own `## Troubleshooting Facts` for a recorded fix and apply it without re-diagnosing; fetch §2 only for the diagnose-and-record-back procedure | `Agent_Common_Read_On_Demand.md §2` (Troubleshooting Protocol) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §2 |
-| End of work, writing your retro | `Agent_Common_Read_On_Demand.md §3` (End-of-Work Retrospective) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §3 |
+| A retrospective trigger in section 7 requires a contribution | `Agent_Common_Read_On_Demand.md §3` (End-of-Work Retrospective) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §3 |
 | You changed runtime state this session | `Agent_Common_Read_On_Demand.md §5` (Runtime-State Handoff) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §5 |
 | A story's verification needs a runtime secret you don't have | `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §6 |
 | Developer/QA/Technical Lead: retrieving **or writing** a fact in your two-tier memory | `Agent_Common_Read_On_Demand.md §8` (Two-Tier Memory) — **read-section** skill on `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md` §8 |
@@ -104,6 +104,34 @@ gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comme
 ```
 
 Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `{{AGENT_DIR_PREFIX}}/agents/tmp/`.
+
+---
+
+## 7. Retrospective Trigger and Completion Contract
+
+This is the single authoritative detection policy; evaluate it during work and before each stage handoff, before loading retrospective-only guidance. Completion reports, verification evidence, telemetry, memory pruning, and runtime handoffs remain required independently.
+
+| Observable event | Trigger kind | Example |
+|---|---|---|
+| Tooling/environment failure or external blocker | `tooling_failure` / `external_blocker` | Runner cannot connect, unavailable credential, external owner blocks verification |
+| Requirement ambiguity requiring a decision | `decision_ambiguity` | Conflicting AC needs PO/TL resolution |
+| Second or later review/QA fix round | `repeated_fix` | A second correction cycle, across review/QA combined |
+| New reusable lesson | `reusable_lesson` | A newly discovered verification gap with future action |
+| Explicit user request for story or sprint retrospective | `explicit_request` | Record the requested scope; do not invent failures |
+
+Ordinary successful verification, a first routine correction alone, and expected seeded negative tests do not trigger a retro. Independent exceptions override the first-fix exemption: a runner failure during the first fix still triggers. A passing routine check with no lesson is clean; an intentionally failing negative fixture that proves a guard works is also clean. Repeated fix rounds trigger even when each correction is routine.
+
+For every completed stage, report evaluated state `clean`, `required`, or `unknown` under the concrete selected provider/run/story/stage/role identity. Missing or uncertain evaluation is unknown, never clean. A triggered role loads `Agent_Common_Read_On_Demand.md §3` before writing only its contribution. A clean role does not load that section or Retro_Rules, create a retro skeleton/section, or write a no-op retro entry. Required remains sticky across clean/unknown resumes; late triggers update the same identity and preserve/deduplicate earlier lessons.
+
+Use `.mt-agent-devkit/scripts/retro_completion.py` for bounded provider-local metadata; it never writes retros. Before first governed work, the orchestrator records the exact expected stage identities in a runtime JSON list (maximum 128), carrying completed identities across story/sprint transitions. Include the actual actor for fast paths (Orchestrator) and independent PO validation when QA implements; never add an unspawned QA or skipped worker. Distinct stages/actual actors have separate identities; resumed/fix work updates its identity. Every identity has `provider`, `run`, `story`, `stage`, `role`; role uses underscores (`Technical_Lead`, `Product_Owner`, etc.).
+
+At handoff run `record --provider <selected-provider> --runtime-root <concrete-runtime-root> --run <run-id> --story ST-XXXXXX --stage <stage-id> --role <role> --state clean` for a evaluated clean stage; use `unknown` when evaluation is uncertain. A required stage uses `--state required --trigger <kind>` for each applicable kind, then supplies `--contribution 'retros/ST-XXXXXX_retro.md#<exact role heading>' --evidence 'tmp/<relative-evidence-file>'` after writing its actual populated role contribution. Record the trigger before loading writing guidance; the missing contribution intentionally blocks completion until submitted. Evidence is a confined existing provider-local file, not a secret or sensitive prompt. Full command prefix: `python .mt-agent-devkit/scripts/retro_completion.py`.
+
+Before accepting a stage/story/sprint completion, run `check --provider <selected-provider> --runtime-root <concrete-runtime-root> --expected 'tmp/<expected-identities.json>'` on its explicit expected identities. Missing/unknown records, identity conflicts, foreign/escaping pointers and missing/unpopulated required role contributions block completion. Existing story files alone prove nothing. Clean-only results have no retrospective files to read; mixed results return only required source paths. Retros and evidence remain runtime-local/uncommitted. This bookkeeping never bypasses independent TL/QA or the acceptance contract.
+
+An explicit sprint-retro request records an actual Orchestrator `sprint_retro` stage under the last real story/run in the selected sprint, adds that identity to the expected list, and triggers `explicit_request`. The contribution states the requested sprint scope and evidence; reuse existing lessons by pointer. Do not invent a story or require previously clean workers to fabricate observations. Empty/mixed sprint reports remain supported; a user-requested analysis may identify that no additional lesson was found, while still recording the actual requested analysis/evidence.
+
+Transition: a run demonstrably started under the prior contract may be explicitly marked `Retro Contract: legacy-started` in its existing pipeline state. Preserve its skeleton/history and complete its existing role-owned sections without applying new expected-record requirements retroactively. Only already-started runs qualify; a new run uses `exception-v1` and may not infer cleanliness from a legacy file. Preserve source history after review/aggregation rather than deleting it. Memory pruning may read only its named section in Retro_Rules even when no retro exists.
 
 ---
 
