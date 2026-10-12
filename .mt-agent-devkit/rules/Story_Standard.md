@@ -163,6 +163,8 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 - TL reviews and approves
 
 ### Step 4 — Re-Test
+**Before any hotfix merge:** affected AC must be exercised on the fix branch and current independent verification must satisfy the acceptance contract in section 14. FAIL or NOT VERIFIED stops merge; post-merge rechecks do not replace this pre-merge gate.
+
 - Developer merges fix branch to main
 - Developer removes label `status:hotfix`, adds label `status:testing`
 - Developer notifies QA in Comment
@@ -287,7 +289,7 @@ Applies to every role, on every issue comment.
 ### Merge Gate
 
 - [ ] TL has reviewed and approved PR ✓
-- [ ] QA has signed off on all AC ✓
+- [ ] Applicable independent QA evidence confirms PASS for every current AC under `Story_Standard.md §14`; no FAIL, NOT VERIFIED, absent verdict, or stale-scope sign-off ✓
 
 **Only then:** Merge dev branch to main
 
@@ -334,16 +336,49 @@ When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit
 
 ---
 
-## 14. AC Checkbox Rules
+## 14. AC Verdicts and Acceptance Disposition
 
-- `- [ ]` = Not yet signed off
-- `- [x]` = Signed off by **PO** after QA confirms the criterion passes
+This is the authoritative acceptance contract in GitHub and strict modes, including fast paths and skipped-validator routes. Role views and pipeline consumers must apply it before sign-off, merge advancement, checkbox acceptance, or done status.
 
-**Who ticks:** Only the **PO** edits checkboxes in the GitHub Issue body.
+### Per-AC verdict and evidence
 
-**QA:** Test each AC criterion and report pass/fail results in a Comment. Do **not** tick checkboxes. Notify PO when all AC have passed.
+Report every current AC separately: criterion identity, verdict, evidence pointer, tested scope/revision, and any reason or missing evidence. Use the current canonical story body; a prior report for different scope is not sign-off for revised scope.
 
-**PO:** After receiving QA confirmation, tick each AC checkbox `[x]` in the issue body.
+| Verdict | Meaning | Required report |
+|---|---|---|
+| PASS | The criterion was exercised using its required method and sufficient evidence confirms the expected result | What was exercised and its evidence |
+| FAIL | An executed check contradicts the required result | Observed failure and evidence |
+| NOT VERIFIED | The criterion was not exercised or available evidence is insufficient | Reason, missing evidence, and dependency/owner needed to verify |
+
+An unperformed check is NOT VERIFIED, not FAIL. If infrastructure/setup fails before the required behavior can be exercised, report the tooling failure separately and mark the AC NOT VERIFIED. When the behavior is exercised and its observed result contradicts the criterion, its verdict is FAIL even when the cause is environmental. Documentation of a dependency, a waiver to continue other work, or passing unrelated tests never makes an unexercised criterion PASS.
+
+Examples:
+- A required hostname request succeeds against the deployed hostname: PASS with request/result evidence. An executed request fails its expected response: FAIL. The hostname/go-live check is deferred or awaits DNS ownership: NOT VERIFIED; documenting the deferral is not PASS.
+- A credential-gated flow has not run because its credential is unavailable: NOT VERIFIED, naming the missing credential by variable/name only. A stub, dummy credential, or different flow does not verify it.
+- A guidance-only AC can PASS after the required inspection exercises the instruction against its specified scenarios. That inspection does not verify a separately required external or native-runtime behavior.
+
+### Sign-off and closure gates
+
+Testing-pass requires PASS with sufficient evidence for every remaining current AC and all applicable verification gates. Any FAIL, NOT VERIFIED, absent verdict, or insufficient evidence blocks testing-pass and merge advancement, even if an overall summary says PASS or CI is green. Retain the testing/open state and report the blocker; apply the existing blocked-story procedure when external input is required. No new verdict status label is needed.
+
+The applicable independent QA sign-off must identify the scope/revision and per-AC evidence. Existing fast-path and skipped-validator routes still require their documented independent validation evidence for every AC; a skipped stage or reviewer approval alone cannot stand in for unperformed verification. Do not fabricate a QA-agent report when no QA agent ran.
+
+- `- [ ]` = not accepted, including FAIL or NOT VERIFIED.
+- `- [x]` = accepted by PO only after the applicable independent verification confirms PASS.
+
+PO must locate that verification report, compare it with the current AC, and confirm merge before ticking checkboxes, closing, or setting done. Developer/TL assurances alone are not QA sign-off. A merged PR, auto-closed issue, or pre-ticked checkbox is not acceptance evidence. If auto-closure occurred with missing verification, reopen the story and retain/report its unresolved state; never mark it done.
+
+### Explicit tracked scope split
+
+An unverified requirement may leave the original scope only through this sequence:
+1. Record an explicit PO/user scope decision; never silently delete or weaken the requirement.
+2. Create a named tracked follow-up preserving the requirement, dependency, and missing verification evidence (a story MD in strict mode).
+3. Update the canonical original body to link the follow-up and define the remaining scope; link the original from the follow-up. Preserve the earlier NOT VERIFIED report as history, not a converted PASS.
+4. Obtain renewed independent QA confirmation of every remaining original AC against that revised scope before testing-pass or merge advancement. Recheck any changed artifact under the existing review/SHA gates.
+5. Only after applicable verification passes and merge is confirmed may PO accept the remaining original AC and close it. The follow-up remains open and unaccepted until its own verification succeeds.
+
+A decision alone, an untracked deferral, or a follow-up link without an updated original scope cannot satisfy this sequence. Any remaining NOT VERIFIED AC still blocks advancement.
+
 
 ---
 

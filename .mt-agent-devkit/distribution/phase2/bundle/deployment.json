@@ -24,8 +24,8 @@
     {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "path": "assets/rules_Agent_Common_Read_On_Demand.md",
-      "sha256": "1b38102c921088eccaacd5125f177d815d3e863cbf896970ab5cd8823c3450ea",
-      "bytes": 10847,
+      "sha256": "7e1c54c2a7810334f6f12e63effab45e3f9b04b6f49f4a22d2e91e580a0822f9",
+      "bytes": 11069,
       "kind": "template"
     },
     {
@@ -94,15 +94,15 @@
     {
       "id": "rules/Product_Owner_Rules_Read_On_Demand.md",
       "path": "assets/rules_Product_Owner_Rules_Read_On_Demand.md",
-      "sha256": "726aa65652d80447330673fe35605313c96c54daf58095dca9da68e79a45d7a2",
-      "bytes": 16357,
+      "sha256": "3a5c492de15e41424d43fd87d07d53679304725b7797248a41503b5d113723f6",
+      "bytes": 16691,
       "kind": "template"
     },
     {
       "id": "rules/QA_Rules_Bootstrap.md",
       "path": "assets/rules_QA_Rules_Bootstrap.md",
-      "sha256": "a9ebf7a7aadbbb9d2460a570ad1facb7fd4754e90c3a5ee038db991a717f3c10",
-      "bytes": 16659,
+      "sha256": "aa3d196db2c3fea64ab732651677d44099f7109f556a3312a9162e832401385d",
+      "bytes": 17124,
       "kind": "template"
     },
     {
@@ -129,22 +129,22 @@
     {
       "id": "rules/Story_Standard_PO.md",
       "path": "assets/rules_Story_Standard_PO.md",
-      "sha256": "3bfa6d3db5b8392b1a14d8f42a90f1ec02472e0db9f63f4bd8a9f7c5693d8a79",
-      "bytes": 6589,
+      "sha256": "53463e59937e852565ca04f78e8081c8abea55d135bbeda3f6259d44df09330e",
+      "bytes": 6980,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard_QA.md",
       "path": "assets/rules_Story_Standard_QA.md",
-      "sha256": "8e808f3941d95876f3ed99a49a5a3f32f631a06c268b5a4ee3fb0a47d8959f2e",
-      "bytes": 3835,
+      "sha256": "eff798f1bd0de194a7272750b531b761c63178a85cdcf94e6f3831054eb64d13",
+      "bytes": 4468,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "962606bc3402014014e4dfa12e50148f435eaa2c989c290c7bb03b4dfbe2125f",
-      "bytes": 31785,
+      "sha256": "8af9775de5b8d2ab0e73b95fdc89832ba7440e8af86a39f3b707ec3100e75384",
+      "bytes": 36135,
       "kind": "template"
     },
     {
@@ -346,8 +346,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "92cf13e1b447eaa6f26de18e8df5f49cf85b227ed37cc2fbaa97575c9957898a",
-      "bytes": 41296,
+      "sha256": "503379c58ff54b5073fa644b475e0bbfb473fd3d0d5007d8b1384ca5f968087c",
+      "bytes": 43508,
       "kind": "template"
     },
     {

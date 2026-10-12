@@ -13,7 +13,7 @@ Triggered from `product_owner_instructions.md`'s Story Closure Task heading. Whe
 
 Then execute:
 1. Read the full story issue body — review all AC checkboxes
-2. Read the QA/TL comment threads to confirm all AC have been verified and passing
+2. Read `Story_Standard.md §14` and the applicable independent verification report for the current story scope. Confirm PASS with sufficient evidence for every remaining AC; FAIL, NOT VERIFIED, absent verdicts, or stale-scope sign-off stop closure before any checkbox/status write. Apply the approved tracked-split sequence and renewed QA before advancement; a merged or auto-closed issue alone is not verification.
 3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (`Agent_Common_Bootstrap.md §6`)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo mycom08/mt-agent-devkit`

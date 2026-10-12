@@ -284,9 +284,11 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ## Stage 3 — QA Validation
 
+**Acceptance gate — every route:** Before recording testing-pass or invoking Merge Procedure, read and apply `Story_Standard.md §14` to the current canonical scope. Require the applicable independent validation report with a verdict/evidence for every remaining AC. Any FAIL, NOT VERIFIED, absent verdict, or insufficient evidence stops advancement; neither green automation, reviewer approval, skipped validation nor a non-behavioral fast path overrides this gate. Record the reason and missing evidence, retain the unresolved testing/open state, and use the existing external-blocker procedure when needed. Scope splits must be approved, tracked and linked in revised story bodies before renewed QA sign-off; never reinterpret prior NOT VERIFIED as PASS.
+
 > **Merge gate — behavioral stories:** The Merge Procedure fires only at behavioral path step 9 — after QA confirms automation passes. Do NOT execute it at Stage 3 entry or immediately after Stage 2 approval.
 
-1. **If `Implementer` is `QA`** → skip QA validation; orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
+1. **If `Implementer` is `QA`** → skip a separate QA agent; PO validates each AC independently and records the applicable report under the acceptance gate before the orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
@@ -310,6 +312,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 10. On merge confirmed → proceed to Stage 4
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
+
+**Acceptance evidence pre-check (both modes, before any merge command):** Re-read the current story scope and the applicable independent per-AC validation report under `Story_Standard.md §14`. Confirm every remaining AC is PASS with sufficient evidence against the artifact being merged. A missing report, stale scope, FAIL, or NOT VERIFIED aborts merge even if CI/review passed. For an approved split, verify the tracked follow-up/body links and renewed QA confirmation after the scope update. Existing CI and approval-SHA gates remain independent and required where applicable.
 
 0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo mycom08/mt-agent-devkit`. Three distinct states at head — resolve each on its own terms, and never treat "no checks reported" as equivalent to "checks passed":
    - **State 1 — checks reported, all `completed`, none `fail`:** gate satisfied against the head SHA.
@@ -341,6 +345,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ## Stage 4 — PO Story Closure
 
+**Acceptance pre-check — both paths and modes:** Before any checkbox, done-status or closure write, apply `Story_Standard.md §14`: confirm merge and current independent PASS evidence for every remaining AC. FAIL, NOT VERIFIED, missing verdicts or insufficient evidence stop closure; a previous testing-pass summary is insufficient when its scope/evidence is stale. An auto-closed issue is not acceptance evidence; reopen it if unresolved verification remains. An approved tracked split requires updated linked bodies and renewed QA of the remaining scope before advancement. Fast-path and skipped-validator exceptions do not waive per-AC verification.
+
 > **GitHub mode closure-comment ordering (mandatory pre-check, not a memory item):** before posting any closure comment, run `gh issue view <number> --json state --jq '.state'`. **`CLOSED`** → the merged PR's `Closes #N`-style keyword already auto-closed the issue before Stage 4 ran; post the closure comment via a **separate** `gh issue comment` call — never combine it with `gh issue close --comment`, since `gh issue close` on an already-closed issue errors out and silently drops the comment along with it. **`OPEN`** → the combined `gh issue close --comment` call is safe to use as-is. Checking state first turns this from a rule to remember into a branch to execute — the prose warning alone was insufficient in practice (recurred in ST-000032 after already being documented from ST-000026).
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
@@ -358,7 +364,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
 3. PO verifies acceptance and closes the story:
    - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.
-   - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal is the reviewer's final approval plus a confirmed merge — not a separate validator-confirms event.
+   - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal includes the applicable independent per-AC validation report required by the acceptance gate plus a confirmed merge; reviewer approval alone cannot verify an unexercised AC.
    - Tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
 4. PO writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
 5. **Start Story Workflow:** pipeline ends here

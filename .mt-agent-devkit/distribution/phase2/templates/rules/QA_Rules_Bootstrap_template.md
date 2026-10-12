@@ -31,6 +31,8 @@ Before testing any story:
 
 ## 3. Story Status & Acceptance Criteria
 
+Before validation/sign-off, read `Story_Standard.md §14`, the authoritative PASS/FAIL/NOT VERIFIED and acceptance-disposition contract. Report current scope/revision and evidence for every AC; unperformed or insufficiently evidenced checks are NOT VERIFIED with the reason and missing evidence. No overall testing-pass, merge sign-off, or done notification while any remaining AC is FAIL or NOT VERIFIED. Authorized skips do not certify the unexercised behavior.
+
 Story status: `Backlog → Ready → In Progress → Review → Testing → Done`
 
 - **QA validates Acceptance Criteria and records sign-off via a Comment on the GitHub Issue (or story MD in strict mode) before merge** — QA sign-off is the merge gate. AC checkboxes themselves are ticked by **PO at story closure (Stage 4)**, not by QA.

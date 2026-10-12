@@ -92,6 +92,8 @@ Full template (title/label conventions, body skeleton, bug-repro block, AC-writi
 
 ## 14. AC Checkbox Rules
 
+Read `Story_Standard.md §14` before acceptance. Locate the applicable independent per-AC verification for the current scope; FAIL, NOT VERIFIED, missing verdicts, or insufficient evidence forbid checkbox ticking, closure, and done status. A tracked split must follow its approval/create/link/update/renewed-QA sequence before advancement; historical unverified verdicts never become PASS.
+
 - `- [ ]` = Not yet signed off
 - `- [x]` = Signed off by **PO** after QA confirms
 
