@@ -26,6 +26,8 @@
 6. If AC fails: Comment describing the issue; request Dev fix
 
 ### Status: Testing → Done
+**Acceptance prerequisite:** Apply `Story_Standard.md §14` before notifying PO or changing status. Any FAIL, NOT VERIFIED, missing verdict, or insufficient evidence keeps the story unresolved; all remaining AC require current independent PASS evidence.
+
 1. Confirm dev branch is merged to feature branch; if not, notify Dev and wait
 2. All AC verification results reported in Comment
 3. Notify PO that all AC have passed — PO ticks the checkboxes
@@ -75,7 +77,9 @@ Test results and findings per AC.
 
 ## 14. AC Checkbox Rules
 
+Before reporting results, read `Story_Standard.md §14` for verdict definitions, examples, evidence requirements, and tracked-split ordering. Report each AC as PASS, FAIL, or NOT VERIFIED with evidence; NOT VERIFIED includes its reason and missing evidence. No testing-pass or done notification while any current AC remains unverified. Only PO accepts checkboxes.
+
 - `- [ ]` = Not yet signed off
 - `- [x]` = Signed off by **PO** after QA confirms
 
-**QA:** Test each AC criterion and report pass/fail in a Comment. Do **not** tick checkboxes. Notify PO when all AC have passed.
+**QA:** Test each AC criterion and report PASS/FAIL/NOT VERIFIED in a Comment. Do **not** tick checkboxes. Notify PO when all AC have passed.

@@ -13,7 +13,14 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_Dev_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance."
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000184] Deduplicate startup reads and route conditional Developer guidance.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_PO_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement."
     },
     "deployment": {
       "schema_version": 1,
