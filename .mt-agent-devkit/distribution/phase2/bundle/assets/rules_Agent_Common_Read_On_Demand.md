@@ -80,14 +80,15 @@ Applies on any tooling/environment blocker: tests fail to run · sandbox fails t
 
 ---
 
-## 3. End-of-Work Retrospective
+## 3. Triggered Retrospective Contribution
 
-Before reporting back to the orchestrator, write your retrospective section to the story retro file:
+Load this section only when `Agent_Common_Bootstrap.md §7` records a required contribution. Clean stages skip it entirely.
 
-1. Read `.mt-agent-devkit/rules/Retro_Rules.md` in full with the native file-reading tool when available (Claude: `Read`), directly on that original path; otherwise use the selected provider's sanctioned mechanism. Complete successful returned coverage before writing your retro or final report
-2. Open `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` (story ID is in your spawn prompt)
-3. Overwrite the `*(pending)*` placeholders in **your own section only** — see the section name in your role instructions
-4. Then report back
+1. Read Retro_Rules in full using the selected provider's supported mechanism before writing; preserve lesson-first, privacy, shared deduplication and role ownership.
+2. Create the bound story retro only if missing, with its story/date header and your triggered role section. Do not create other roles or pending placeholders. If it exists, preserve all prior history and other sections.
+3. Write only your actual role contribution and new observations. A late/resumed trigger updates existing lessons or records the new delta; do not duplicate earlier findings. Populate required observations, not a no-op “None” section.
+4. Update the same completion identity with its confined exact role contribution and evidence pointers; run the helper check for the expected stage identity before handoff. Unknown or missing required contributions block completion.
+5. For an explicitly grandfathered already-started legacy run, retain its existing skeleton and write your owned section under that prior contract; do not erase other placeholders/history.
 
 ---
 

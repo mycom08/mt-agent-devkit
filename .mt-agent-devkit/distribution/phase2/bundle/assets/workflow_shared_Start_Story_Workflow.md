@@ -38,11 +38,11 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 - **Pipeline stops after Stage 4 completes for the targeted story**
 - **Stage 5 (Retrospective)** — after Stage 4's observation check completes, check the Stage 5 heading in `Shared_Pipeline_Stages.md`: if `[BETA: enabled]`, run Stage 5; if `[BETA: disabled]`, skip and go directly to Retro Review.
 - **Retro Review** — after Stage 5 (or immediately after Stage 4 if Stage 5 is disabled):
-  1. Read `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
+  1. Run the bound completion helper check under `Agent_Common_Bootstrap.md §7` for all expected identities. Unknown/missing/required-incomplete results block. Evaluated-clean results skip retro reads/summary entries; otherwise read only returned source paths. Explicit legacy-started runs preserve/review their existing history.
   2. Collect all signal-tagged items (`[context]`, `[instruction]`, `[workflow]`, `[failure]`) from every section
   3. Present collected items to the user as proposed improvements; for each approved item, apply the change targeting the right artifact (same routing as the Batch Retro Review in Sprint_Workflow.md)
   4. Read `Sprint` from the state file; append a story section to `{RUNTIME_ROOT}/retros/sprint_N_summary.md` (see Sprint_Workflow.md for format; create the file if it does not exist)
-  5. Delete `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`
+  5. Preserve the source retro and completion evidence; record reviewed sources so resumed reviews do not duplicate summary findings.
   6. Delete the state file
 
 > The pipeline state file format and write rules are defined in [Sprint_Workflow.md](Sprint_Workflow.md) — the same file is shared between Sprint and Start Story workflows.

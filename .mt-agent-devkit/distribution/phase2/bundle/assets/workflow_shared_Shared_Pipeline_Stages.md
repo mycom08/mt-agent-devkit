@@ -133,59 +133,7 @@ Create a small metadata JSON object containing only: `run_id`, `story_id`, `role
 
 ## Stage 1 — Implementation
 
-**Orchestrator pre-spawn: create the retro file skeleton** before spawning the implementer. Use the story ID and title from Stage 0. Write `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`:
-
-```markdown
-# Retrospective — ST-XXXXXX
-**Date:** YYYY-MM-DD
-**Story:** <story title>
-
-## Implementer — <role>
-### Impediments & Unclear Points
-*(pending)*
-
-### Process Suggestions
-*(pending)*
-
-### What Worked Well
-*(pending)*
-
-## Reviewer — <role>
-### Impediments & Unclear Points
-*(pending)*
-
-### Process Suggestions
-*(pending)*
-
-### What Worked Well
-*(pending)*
-
-## QA
-### Impediments & Unclear Points
-*(pending)*
-
-### Process Suggestions
-*(pending)*
-
-### What Worked Well
-*(pending)*
-
-## Product Owner
-### Impediments & Unclear Points
-*(pending)*
-
-### Process Suggestions
-*(pending)*
-
-### What Worked Well
-*(pending)*
-
-## Orchestrator
-### Observations
-*(pending)*
-```
-
-Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for this story (e.g., QA is the implementer so no separate QA validation), replace the section body with `*(stage skipped)*`.
+**Orchestrator pre-spawn:** initialize `Retro Contract: exception-v1` and carry an explicit expected completion identity list at the bound runtime path before each actual stage/actor executes. Follow `Agent_Common_Bootstrap.md §7`; do not create a retro skeleton. Observe trigger events throughout work. Already-started legacy runs explicitly keep their prior contract and existing history.
 
 1. **Spawn** the agent matching the `Implementer` role (**policy: standard**)
 2. Agent reads its own instruction files, memory, and rules
@@ -207,7 +155,7 @@ Fill in `<role>` from the routing table in Stage 0. If a stage is skipped for th
 10. **After implementation is ready for review** → update story status to `review`:
     - **GitHub mode:** open PR; update story label to `status:review`
     - **Strict mode:** create `{RUNTIME_ROOT}/docs/reviews/ST-XXXXXX_review.md` (see `Strict_Mode_Story_Guide.md` §Local Review Record); edit `**Status:** review` in the story MD; append comment entry to `## Comments` noting branch is ready for review
-11. Agent writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
+11. Agent evaluates/completes its bound metadata under `Agent_Common_Bootstrap.md §7`; only required triggers load/write its contribution before handoff.
 12. **If blocked on external input** → agent follows the **Blocked Story Procedure** below; orchestrator stops the pipeline and notifies the user
 13. On completion → proceed to Stage 2
 
@@ -306,7 +254,7 @@ After the implementer reports completion, append a bullet to `Observations:` for
    - **Strict mode:** reviewer reads review-record MD + runs `git diff sprint-N-dev...story/<branch>` + reads changed files; writes notes and verdict to review-record MD, recording `**Approved-SHA:** <sha>` (`git rev-parse HEAD` on the story branch) on approval; appends summary comment entry to story MD `## Comments`
    - **Stub/TODO re-check:** confirm the implementer's Stage 1 scan was actually done — spot-check for stub markers/trivial-return patterns in AC-functional methods. A hit with no owning backlog story blocks approval (see `Technical_Lead_Rules_Bootstrap.md §2` for the full review checklist, including the CI-execution/SHA/red-diagnosis and dependency-pin checks).
 4. **If changes requested** → resume Implementer via the selected adapter's resume operation to `impl_session` with reviewer feedback (spawn new if expired); on Implementer completion **resume Reviewer via `reviewer_session` to re-review** (spawn new if expired)
-5. Reviewer writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
+5. Reviewer evaluates/completes its own metadata under `Agent_Common_Bootstrap.md §7`; only required triggers load/write its contribution before handoff.
 6. **If approved:**
    - **GitHub mode:** update the story label to `status:testing` — do this immediately, before proceeding to Stage 3. QA tests on the dev branch before merge; the label signals QA to begin
    - **Do NOT execute the Merge Procedure here** — it fires only after QA automation passes (Stage 3 behavioral path step 9). TL approval is not a merge signal
@@ -355,7 +303,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
      - **GitHub mode:** as a story comment
      - **Strict mode:** append to story MD `## Comments`
      → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
-   - **If automation passes** → QA writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back; orchestrator executes the **Merge Procedure** below
+   - **If automation passes** → QA evaluates/completes its bound metadata under `Agent_Common_Bootstrap.md §7`, loading/writing only triggered contributions; orchestrator executes the **Merge Procedure** below
 10. On merge confirmed → proceed to Stage 4
 
 ### Merge Procedure (orchestrator executes directly — no agent spawn)
@@ -428,7 +376,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
    - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal includes the applicable independent per-AC validation report required by the acceptance gate plus a confirmed merge; reviewer approval alone cannot verify an unexercised AC.
    - **GitHub mode:** tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
    - **Strict mode:** edit AC checkboxes to `[x]` in the story MD; edit `**Status:** done`; append PO closure comment entry to story MD `## Comments`
-4. PO writes retro section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` after reading `.mt-agent-devkit/rules/Retro_Rules.md` in full, before reporting back
+4. PO evaluates/completes its own metadata under `Agent_Common_Bootstrap.md §7`; only required triggers load/write its contribution before handoff.
 5. **Start Story Workflow:** pipeline ends here
 
 ### Orchestrator Observation Check — Stage 4
@@ -447,28 +395,23 @@ After completing this check → **proceed to Stage 5**.
 
 > **Beta toggle:** If this heading reads `[BETA: disabled]`, skip this stage entirely — for `continue sprint` proceed to next story (Stage 0); for `start story` proceed to Retro Review.
 
-Each agent wrote their retro section inline at the end of their stage work. Stage 5 is a bookkeeping step only — no agent spawning.
+Stage 5 validates completion evidence, not placeholder completeness; it never invents lessons or spawns clean roles for retros.
 
-### 5.1 — Write orchestrator observations
+### 5.1 — Evaluate orchestrator observations
 
-Read `Observations:` from the state file:
-- **Not empty** → overwrite the `*(pending)*` in the `## Orchestrator / ### Observations` section of the retro file with the bullet list.
-- **Empty** → replace `*(pending)*` with `*(none)*`.
+Evaluate the authoritative trigger policy in `Agent_Common_Bootstrap.md §7` against actual observations, not the mere presence of a bookkeeping list. Record the actual Orchestrator identity; write its contribution only when triggered. Independent review/QA fix counts share the policy's repeated-round threshold. Late triggers update the same role identity and preserve earlier lessons.
 
-### 5.2 — Verify retro file
+### 5.2 — Validate expected contributions
 
-Read `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md`. Check that all expected sections are populated (no remaining `*(pending)*` placeholders).
-
-- **Section still shows `*(pending)*`** → replace with `*(not submitted)*` — do not spawn agents to collect it.
-- **Section shows `*(stage skipped)*`** → correct; leave as-is.
+Run the bound retro-completion helper `check` against the explicit completed stage/actor identity list. Missing/unknown evaluations or required role contributions block story completion; do not convert placeholders to “not submitted” and continue. A clean-only result completes without reading or creating a story retro. A mixed result reads only the helper's required source paths. Preserve all source history for later review and aggregation. Explicit legacy-started state follows its prior owned-section completion path; new-contract runs never infer evaluation from old retro files.
 
 ### Orchestrator Observation Check — Stage 5
 
 Append a bullet to `Observations:` for each item that did **not** happen:
 
-- `[skipped-step]` Retro file skeleton created at Stage 1 before spawning implementer?
-- `[skipped-step]` Orchestrator observations written to `## Orchestrator` section?
-- `[skipped-step]` Retro file verified — no remaining `*(pending)*` placeholders?
+- `[skipped-step]` Exact expected completion identities recorded before actual stages, with no clean retro skeleton?
+- `[skipped-step]` Orchestrator trigger evaluation recorded, with populated contribution only if required?
+- `[skipped-step]` All expected evaluations known and required contributions/evidence verified before completion?
 - `[skipped-step]` Ran `wc -c {RUNTIME_ROOT}/working-record/*_Working_Record.md`; append one bullet per file over the `**Working record cap:**` value in `{ENTRYPOINT}` (default 4,000 if absent), naming the file and its size.
 - `[skipped-step]` Ran `wc -c {RUNTIME_ROOT}/memory/*_Memory.md`; append one bullet per file over the `**Memory file cap:**` value in `{ENTRYPOINT}` (default 10,000 if absent), naming the file and its size.
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after this transition?

@@ -17,7 +17,7 @@ Then execute:
 3. Tick all AC checkboxes `[x]` in the issue body using `--body-file` (`Agent_Common_Bootstrap.md §6`)
 4. Remove the current status label, add `status:done`
 5. Close the issue: `gh issue close <number> --repo mycom08/mt-agent-devkit`
-6. Write your retrospective section to `{RUNTIME_ROOT}/retros/ST-XXXXXX_retro.md` — read `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §3` for format; overwrite the `## Product Owner` section only
+- Evaluate `Agent_Common_Bootstrap.md §7`; only a required trigger loads section 3 of Agent_Common_Read_On_Demand and writes the PO contribution. Clean closure records completion metadata without retro reads/files.
 7. Do not write your Working Record for Stage 4 closure. Record any durable fact in your Project Memory per Agent_Common_Read_On_Demand.md §1
 
 ---

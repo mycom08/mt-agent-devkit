@@ -27,6 +27,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ## [0.1.53] - Unreleased
 
 
+- [ST-000253] Create retrospectives only for observed exceptions or reusable lessons; validate role completion metadata and preserve history through zero/mixed sprint aggregation.
 - [ST-000215] Require per-AC PASS/FAIL/NOT VERIFIED evidence before merge or acceptance; approved tracked splits require renewed QA on revised scope.
 ### Changes
 

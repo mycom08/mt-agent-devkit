@@ -63,7 +63,7 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Write your retro per `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §3`. Overwrite the `*(pending)*` placeholders in the `## Reviewer — Technical Lead` section only.
+Evaluate `Agent_Common_Bootstrap.md §7` at completion. Only a triggered role loads `Agent_Common_Read_On_Demand.md §3` and writes its owned populated contribution; clean roles record completion metadata without retrospective-only reads or files.
 
 ---
 
