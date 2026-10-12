@@ -62,6 +62,24 @@ class CompletionTests(unittest.TestCase):
         self.assertEqual((self.root / 'retros/ST-000253_retro.md').read_bytes(), before)
         self.assertEqual(r.check(self.root, 'codex', [self.identity])['required'], 1)
 
+    def test_canonical_populated_contributions_for_every_supported_role(self):
+        roles = {'Developer': 'Developer', 'Technical_Lead': 'Technical Lead',
+                 'QA': 'QA', 'Product_Owner': 'Product Owner',
+                 'Business_Analyst': 'Business Analyst',
+                 'UI_UX_Designer': 'UI/UX Designer', 'Orchestrator': 'Orchestrator'}
+        self.assertEqual(set(roles), r.ROLES)
+        for role, display in roles.items():
+            for index, heading in enumerate([display, 'Implementer — ' + display]):
+                with self.subTest(role=role, heading=heading):
+                    value = {**self.identity, 'role': role, 'stage': role + str(index)}
+                    pointers, evidence = self.contribution(value, heading=heading)
+                    r.write_record(self.root, value, 'required', ['reusable_lesson'], pointers, evidence)
+                    self.assertEqual(r.check(self.root, 'codex', [value])['required'], 1)
+                    foreign = 'QA' if role != 'QA' else 'Developer'
+                    with self.assertRaisesRegex(ValueError, 'another role'):
+                        r.write_record(self.root, value, 'required', ['reusable_lesson'],
+                                       ['retros/ST-000253_retro.md#' + foreign], evidence)
+
     def test_repeat_submission_deduplicates_pointers_and_preserves_history(self):
         pointers, evidence = self.contribution()
         for _ in range(3):

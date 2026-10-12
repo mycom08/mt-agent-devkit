@@ -8,7 +8,16 @@ import os
 import tempfile
 
 PROVIDERS = {"claude", "antigravity", "codex"}
-ROLES = {"Developer", "Technical_Lead", "QA", "Product_Owner", "Business_Analyst", "UI_UX_Designer", "Orchestrator"}
+ROLE_HEADINGS = {
+    "Developer": "Developer",
+    "Technical_Lead": "Technical Lead",
+    "QA": "QA",
+    "Product_Owner": "Product Owner",
+    "Business_Analyst": "Business Analyst",
+    "UI_UX_Designer": "UI/UX Designer",
+    "Orchestrator": "Orchestrator",
+}
+ROLES = set(ROLE_HEADINGS)
 TRIGGERS = {"tooling_failure", "external_blocker", "decision_ambiguity", "repeated_fix", "reusable_lesson", "explicit_request"}
 FIELDS = {"provider", "run", "story", "stage", "role"}
 MAX_RECORDS = 128
@@ -106,7 +115,7 @@ def write_record(root, expected, state, triggers=(), contributions=(), evidence=
 
 
 def validate_pointers(root, record, require_present):
-    role = record["role"].replace("_", " ")
+    role = ROLE_HEADINGS[record["role"]]
     for pointer in record["contributions"]:
         path_text, separator, heading = pointer.partition("#")
         if not separator or path_text != f"retros/{record['story']}_retro.md":

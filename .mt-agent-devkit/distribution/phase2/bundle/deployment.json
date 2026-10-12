@@ -451,8 +451,8 @@
     {
       "id": "scripts/retro_completion.py",
       "path": "assets/scripts_retro_completion.py",
-      "sha256": "e64363e1ae00b640f73bd25c17502956535cf291b76beb4c95d976bf4a2c210b",
-      "bytes": 9607,
+      "sha256": "1fe1da4c70efe1233c83b80168c72722edc873a978a967dcd6365ca6e23c7edd",
+      "bytes": 9778,
       "kind": "script"
     },
     {
