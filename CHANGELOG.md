@@ -24,7 +24,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.53] - Unreleased
+## [0.1.53] - 2026-10-13
 
 
 - [ST-000253] Create retrospectives only for observed exceptions or reusable lessons; validate role completion metadata and preserve history through zero/mixed sprint aggregation.
