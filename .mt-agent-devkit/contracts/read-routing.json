@@ -1,0 +1,1434 @@
+{
+  "schema_version": 1,
+  "revision": "read-routing-v1",
+  "entry": [
+    {
+      "id": "adapter",
+      "source": "{PROVIDER_ROOT}/harness/Provider_Adapter.md",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "Selected provider gate before commands",
+      "after": []
+    },
+    {
+      "id": "role",
+      "source": ".mt-agent-devkit/instructions/{slug}_instructions.md",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "role",
+      "after": [
+        "adapter"
+      ]
+    },
+    {
+      "id": "common",
+      "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "common",
+      "after": [
+        "role"
+      ]
+    }
+  ],
+  "ordinary": [
+    {
+      "id": "priming",
+      "source": "{priming}",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "priming",
+      "after": [
+        "common"
+      ]
+    },
+    {
+      "id": "record",
+      "source": "{RUNTIME_ROOT}/working-record/{role}_Working_Record.md",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "record",
+      "after": [
+        "priming"
+      ]
+    },
+    {
+      "id": "bootstrap",
+      "source": "{bootstrap}",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "bootstrap",
+      "after": [
+        "record"
+      ]
+    },
+    {
+      "id": "memory",
+      "source": "{RUNTIME_ROOT}/memory/{role}_Memory.md",
+      "coverage": {
+        "kind": "full"
+      },
+      "reason": "memory",
+      "after": [
+        "bootstrap"
+      ]
+    },
+    {
+      "id": "story_workflow",
+      "source": ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+      "coverage": {
+        "kind": "section",
+        "section": "3"
+      },
+      "reason": "Existing authoritative story workflow requirement",
+      "after": [
+        "memory"
+      ],
+      "layouts": {
+        "target": {
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "roles": {
+    "Developer": [],
+    "Technical_Lead": [
+      {
+        "id": "standard",
+        "source": ".mt-agent-devkit/rules/Story_Standard_TL.md",
+        "coverage": {
+          "kind": "full"
+        },
+        "reason": "standard",
+        "after": [
+          "record"
+        ]
+      }
+    ],
+    "QA": [
+      {
+        "id": "standard",
+        "source": ".mt-agent-devkit/rules/Story_Standard_QA.md",
+        "coverage": {
+          "kind": "full"
+        },
+        "reason": "standard",
+        "after": [
+          "record"
+        ]
+      }
+    ],
+    "Product_Owner": [],
+    "Business_Analyst": [],
+    "UI_UX_Designer": []
+  },
+  "tasks": {
+    "implementation": {
+      "roles": [
+        "Developer",
+        "Technical_Lead",
+        "QA",
+        "Product_Owner",
+        "Business_Analyst",
+        "UI_UX_Designer"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "decisions"
+      ],
+      "reads": [
+        {
+          "id": "tl_implementation_1",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "Existing authoritative tl implementation 1 requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ]
+        },
+        {
+          "id": "tl_implementation_3",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "3"
+          },
+          "reason": "Existing authoritative tl implementation 3 requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "id": "tl_implementation_4",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "4"
+          },
+          "reason": "Existing authoritative tl implementation 4 requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ]
+        },
+        {
+          "id": "qa_implementation",
+          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "Existing authoritative qa implementation requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "QA"
+          ]
+        },
+        {
+          "id": "ba_implementation",
+          "source": ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "Existing authoritative ba implementation requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Business_Analyst"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "id": "qa_implementation_conflict",
+          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "2"
+          },
+          "reason": "qa implementation conflict",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "QA"
+          ]
+        },
+        {
+          "id": "ui_standard",
+          "source": ".mt-agent-devkit/rules/Story_Standard_UIUX.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "ui standard",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "UI_UX_Designer"
+          ]
+        },
+        {
+          "id": "po_standard",
+          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "po standard",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Product_Owner"
+          ]
+        }
+      ]
+    },
+    "fix": {
+      "roles": [
+        "Developer",
+        "Technical_Lead",
+        "QA",
+        "Product_Owner",
+        "Business_Analyst",
+        "UI_UX_Designer"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "decisions",
+        "findings",
+        "diff"
+      ],
+      "reads": [
+        {
+          "id": "tl_implementation_1",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "Existing authoritative tl implementation 1 requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ]
+        },
+        {
+          "id": "tl_implementation_3",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "3"
+          },
+          "reason": "Existing authoritative tl implementation 3 requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "id": "tl_implementation_4",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "4"
+          },
+          "reason": "Existing authoritative tl implementation 4 requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ]
+        },
+        {
+          "id": "qa_implementation",
+          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "Existing authoritative qa implementation requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "QA"
+          ]
+        },
+        {
+          "id": "ba_implementation",
+          "source": ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "Existing authoritative ba implementation requirement",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Business_Analyst"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "id": "qa_implementation_conflict",
+          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "2"
+          },
+          "reason": "qa implementation conflict",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "QA"
+          ]
+        },
+        {
+          "id": "ui_standard",
+          "source": ".mt-agent-devkit/rules/Story_Standard_UIUX.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "ui standard",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "UI_UX_Designer"
+          ]
+        },
+        {
+          "id": "po_standard",
+          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "po standard",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Product_Owner"
+          ]
+        }
+      ]
+    },
+    "review": {
+      "roles": [
+        "Technical_Lead"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "decisions",
+        "artifact",
+        "verification"
+      ],
+      "reads": [
+        {
+          "id": "review",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "5"
+          },
+          "reason": "review",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+              "coverage": {
+                "kind": "section",
+                "section": "2"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "peer_review": {
+      "roles": [
+        "Developer"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "decisions",
+        "artifact",
+        "verification"
+      ],
+      "reads": [
+        {
+          "id": "review_checklist",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "14"
+          },
+          "reason": "review checklist",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "coverage": {
+                "kind": "section",
+                "section": "9"
+              }
+            }
+          }
+        },
+        {
+          "id": "review",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "16"
+          },
+          "reason": "review",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "coverage": {
+                "kind": "section",
+                "section": "12"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "qa": {
+      "roles": [
+        "QA"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "decisions",
+        "artifact",
+        "verification"
+      ],
+      "reads": [
+        {
+          "id": "acceptance_contract",
+          "source": ".mt-agent-devkit/rules/Story_Standard.md",
+          "coverage": {
+            "kind": "section",
+            "section": "14"
+          },
+          "reason": "acceptance contract",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "closure": {
+      "roles": [
+        "Product_Owner"
+      ],
+      "context": [
+        "story",
+        "verification",
+        "merge"
+      ],
+      "reads": [
+        {
+          "id": "bootstrap",
+          "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "bootstrap",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "memory",
+          "source": "{RUNTIME_ROOT}/memory/Product_Owner_Memory.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "memory",
+          "after": [
+            "bootstrap"
+          ]
+        },
+        {
+          "id": "acceptance",
+          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "coverage": {
+            "kind": "section",
+            "section": "14"
+          },
+          "reason": "acceptance",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "closure",
+          "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "closure",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "acceptance_contract",
+          "source": ".mt-agent-devkit/rules/Story_Standard.md",
+          "coverage": {
+            "kind": "section",
+            "section": "14"
+          },
+          "reason": "acceptance contract",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "question": {
+      "roles": [
+        "Technical_Lead"
+      ],
+      "context": [
+        "story",
+        "question",
+        "pause"
+      ],
+      "reads": [
+        {
+          "id": "question_rules",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "6"
+          },
+          "reason": "question rules",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "comment",
+          "source": ".mt-agent-devkit/rules/Story_Standard_TL.md",
+          "coverage": {
+            "kind": "section",
+            "section": "9"
+          },
+          "reason": "comment",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "memory",
+          "source": "{RUNTIME_ROOT}/memory/Technical_Lead_Memory.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "memory",
+          "after": [
+            "common"
+          ]
+        }
+      ]
+    },
+    "scope_question": {
+      "roles": [
+        "Product_Owner"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "question",
+        "pause"
+      ],
+      "reads": [
+        {
+          "id": "standard",
+          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "standard",
+          "after": [
+            "common"
+          ]
+        }
+      ]
+    },
+    "specialist_question": {
+      "roles": [
+        "Business_Analyst",
+        "UI_UX_Designer"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "question",
+        "pause"
+      ],
+      "reads": []
+    }
+  },
+  "triggers": {
+    "tooling_failure": {
+      "reads": [
+        {
+          "id": "trigger_tooling_failure",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "2"
+          },
+          "reason": "trigger tooling failure",
+          "after": [
+            "common"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    "credential_gate": {
+      "reads": [
+        {
+          "id": "trigger_credential_gate",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "6"
+          },
+          "reason": "trigger credential gate",
+          "after": [
+            "common"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    "memory_fact": {
+      "reads": [
+        {
+          "id": "trigger_memory_fact",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "8"
+          },
+          "reason": "trigger memory fact",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "trigger_memory_shape",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "trigger memory shape",
+          "after": [
+            "memory"
+          ]
+        }
+      ],
+      "roles": [
+        "Developer",
+        "Technical_Lead",
+        "QA"
+      ]
+    },
+    "retro_required": {
+      "reads": [
+        {
+          "id": "trigger_retro_required",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "3"
+          },
+          "reason": "trigger retro required",
+          "after": [
+            "common"
+          ]
+        },
+        {
+          "id": "trigger_retro_rules",
+          "source": ".mt-agent-devkit/rules/Retro_Rules.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "Existing authoritative trigger retro rules requirement",
+          "after": [
+            "trigger_retro_required"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    "runtime_handoff": {
+      "reads": [
+        {
+          "id": "trigger_runtime_handoff",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "5"
+          },
+          "reason": "trigger runtime handoff",
+          "after": [
+            "common"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    "ci_pending": {
+      "reads": [
+        {
+          "id": "trigger_ci_pending",
+          "source": ".mt-agent-devkit/contracts/Wait_Work.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "trigger ci pending",
+          "after": [
+            "common"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    "local_verify": {
+      "reads": [
+        {
+          "id": "trigger_local_verify",
+          "source": ".mt-agent-devkit/contracts/Local_Verify.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "trigger local verify",
+          "after": [
+            "common"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    "simple_memory_fact": {
+      "roles": [
+        "Product_Owner",
+        "Business_Analyst",
+        "UI_UX_Designer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_simple_memory_fact",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "trigger simple memory fact",
+          "after": [
+            "common"
+          ]
+        }
+      ]
+    },
+    "completion": {
+      "reads": [
+        {
+          "id": "trigger_completion",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "trigger completion",
+          "after": [
+            "common"
+          ]
+        }
+      ]
+    },
+    "telemetry": {
+      "reads": [
+        {
+          "id": "trigger_telemetry",
+          "source": ".mt-agent-devkit/contracts/Read_Manifest.md",
+          "coverage": {
+            "kind": "section",
+            "section": "4"
+          },
+          "reason": "trigger telemetry",
+          "after": [
+            "common"
+          ]
+        }
+      ]
+    },
+    "story_comment": {
+      "roles": [
+        "Developer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_story_comment",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "20"
+          },
+          "reason": "trigger story comment",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "coverage": {
+                "kind": "section",
+                "section": "15"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "document_update": {
+      "roles": [],
+      "reads": [
+        {
+          "id": "trigger_document_update",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "8"
+          },
+          "reason": "trigger document update",
+          "after": [
+            "common"
+          ],
+          "roles": [
+            "Developer"
+          ]
+        },
+        {
+          "id": "trigger_document_paths",
+          "source": ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "6"
+          },
+          "reason": "trigger document paths",
+          "after": [
+            "memory"
+          ],
+          "layouts": {
+            "target": {
+              "source": "{priming}",
+              "coverage": {
+                "kind": "full"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "consultation": {
+      "roles": [
+        "Developer",
+        "UI_UX_Designer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_consultation",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "12"
+          },
+          "reason": "trigger consultation",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "coverage": {
+                "kind": "section",
+                "section": "10"
+              }
+            }
+          },
+          "roles": [
+            "Developer"
+          ]
+        },
+        {
+          "id": "trigger_ui_consultation",
+          "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "1"
+          },
+          "reason": "trigger ui consultation",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "UI_UX_Designer"
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules.md",
+              "coverage": {
+                "kind": "section",
+                "section": "2"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "live_conflict": {
+      "roles": [
+        "Developer",
+        "UI_UX_Designer",
+        "QA"
+      ],
+      "reads": [
+        {
+          "id": "trigger_live_conflict",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "13"
+          },
+          "reason": "trigger live conflict",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "coverage": {
+                "kind": "section",
+                "section": "11"
+              }
+            }
+          },
+          "roles": [
+            "Developer"
+          ]
+        },
+        {
+          "id": "trigger_ui_live_conflict",
+          "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "2"
+          },
+          "reason": "trigger ui live conflict",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "UI_UX_Designer"
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules.md",
+              "coverage": {
+                "kind": "section",
+                "section": "2"
+              }
+            }
+          }
+        },
+        {
+          "id": "trigger_qa_conflict",
+          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "2"
+          },
+          "reason": "trigger qa conflict",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "QA"
+          ]
+        }
+      ]
+    },
+    "pre_pr": {
+      "roles": [
+        "Developer",
+        "Technical_Lead"
+      ],
+      "reads": [
+        {
+          "id": "trigger_pre_pr",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "trigger pre pr",
+          "after": [
+            "common"
+          ],
+          "roles": [
+            "Developer"
+          ]
+        },
+        {
+          "id": "trigger_tl_pre_pr",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "3"
+          },
+          "reason": "TL implementer preparing PR",
+          "after": [
+            "memory"
+          ],
+          "roles": [
+            "Technical_Lead"
+          ]
+        }
+      ]
+    },
+    "acceptance_validation": {
+      "roles": [
+        "QA",
+        "Product_Owner"
+      ],
+      "reads": [
+        {
+          "id": "trigger_acceptance",
+          "source": ".mt-agent-devkit/rules/Story_Standard.md",
+          "coverage": {
+            "kind": "section",
+            "section": "14"
+          },
+          "reason": "trigger acceptance",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "source_review": {
+      "roles": [
+        "Technical_Lead",
+        "Developer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_clean_code",
+          "source": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "trigger clean code",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "context_anchoring": {
+      "roles": [
+        "Technical_Lead"
+      ],
+      "reads": [
+        {
+          "id": "trigger_anchoring",
+          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "2"
+          },
+          "reason": "trigger anchoring",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "commenter": {
+      "roles": [],
+      "reads": [
+        {
+          "id": "trigger_commenter",
+          "source": ".mt-agent-devkit/rules/Story_Standard.md",
+          "coverage": {
+            "kind": "section",
+            "section": "12"
+          },
+          "reason": "trigger commenter",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "body_amendment": {
+      "roles": [
+        "Product_Owner",
+        "Technical_Lead"
+      ],
+      "reads": [
+        {
+          "id": "trigger_body_amendment",
+          "source": ".mt-agent-devkit/rules/Story_Standard.md",
+          "coverage": {
+            "kind": "section",
+            "section": "3"
+          },
+          "reason": "trigger body amendment",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "design_first": {
+      "roles": [],
+      "reads": [
+        {
+          "id": "trigger_design_first",
+          "source": ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "4"
+          },
+          "reason": "trigger design first",
+          "after": [
+            "memory"
+          ],
+          "layouts": {
+            "target": {
+              "source": "{priming}",
+              "coverage": {
+                "kind": "full"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "report_blocker": {
+      "roles": [
+        "Developer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_report_blocker",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "7"
+          },
+          "reason": "trigger report blocker",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "technical_doc_divergence": {
+      "roles": [
+        "Developer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_technical_doc_divergence",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "16"
+          },
+          "reason": "trigger technical doc divergence",
+          "after": [
+            "memory"
+          ]
+        }
+      ],
+      "layouts": [
+        "target"
+      ]
+    },
+    "endpoint_change": {
+      "roles": [
+        "Developer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_endpoint_change",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "17"
+          },
+          "reason": "trigger endpoint change",
+          "after": [
+            "memory"
+          ]
+        }
+      ],
+      "layouts": [
+        "target"
+      ]
+    },
+    "behavioral_verification": {
+      "roles": [
+        "Developer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_behavioral_verification",
+          "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "18"
+          },
+          "reason": "trigger behavioral verification",
+          "after": [
+            "memory"
+          ]
+        }
+      ],
+      "layouts": [
+        "target"
+      ]
+    },
+    "story_body_write": {
+      "roles": [
+        "Product_Owner"
+      ],
+      "reads": [
+        {
+          "id": "trigger_story_body_write",
+          "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "5"
+          },
+          "reason": "trigger story body write",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "ui_prototype": {
+      "roles": [
+        "Developer",
+        "Technical_Lead",
+        "QA",
+        "UI_UX_Designer"
+      ],
+      "reads": [
+        {
+          "id": "trigger_ui_prototype",
+          "source": ".mt-agent-devkit/rules/UI_Prototype_Rules.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "trigger ui prototype",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "memory_recall": {
+      "roles": [
+        "Developer",
+        "Technical_Lead",
+        "QA"
+      ],
+      "reads": [
+        {
+          "id": "trigger_memory_recall",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+          "coverage": {
+            "kind": "section",
+            "section": "8"
+          },
+          "reason": "trigger memory recall",
+          "after": [
+            "memory"
+          ]
+        }
+      ],
+      "context": [
+        "memory_match"
+      ]
+    },
+    "clean_code_change": {
+      "roles": [
+        "Developer"
+      ],
+      "layouts": [
+        "target"
+      ],
+      "reads": [
+        {
+          "id": "trigger_clean_code_change",
+          "source": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "Clean Code or refactor story before edits",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    },
+    "development_convention": {
+      "roles": [
+        "Developer"
+      ],
+      "layouts": [
+        "target"
+      ],
+      "reads": [
+        {
+          "id": "trigger_development_convention",
+          "source": "docs/wiki/Development_Standards.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "Convention question not covered by Developer Bootstrap",
+          "after": [
+            "memory"
+          ]
+        }
+      ]
+    }
+  }
+}

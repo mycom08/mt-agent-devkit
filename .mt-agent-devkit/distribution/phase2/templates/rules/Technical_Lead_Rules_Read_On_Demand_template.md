@@ -1,6 +1,6 @@
 # Technical Lead Rules — Read On Demand (Scenario-Conditional)
 
-**Applies to:** Technical Lead agent. `Technical_Lead_Rules_Bootstrap.md` and `Story_Standard_TL.md` are each read in full on every TL spawn regardless of task; the three sections below apply only in scenarios that don't arise on most spawns (TL acting as story implementer instead of reviewer, the resulting implementer-only pre-PR gate, and the post-session context-anchoring note). §2 Code Review & PR Approval and the Reviewer Gate — the reason TL exists on most spawns — stay in `Technical_Lead_Rules_Bootstrap.md`/`Story_Standard_TL.md`. Read this file **only when the matching scenario actually occurs**. `Technical_Lead_Rules_Bootstrap.md` §5 and §9 and §10 each still carry a one-line pointer to their relocated section here.
+**Applies to:** Technical Lead agent. `Technical_Lead_Rules_Bootstrap.md` and `Story_Standard_TL.md` are each read in full on ordinary TL tasks; the reduced Answer-a-Question task in section 6 overrides that startup set. The scenario sections below apply only in scenarios that don't arise on most spawns (TL acting as story implementer instead of reviewer, the resulting implementer-only pre-PR gate, and the post-session context-anchoring note). §2 Code Review & PR Approval and the Reviewer Gate — the reason TL exists on most spawns — stay in `Technical_Lead_Rules_Bootstrap.md`/`Story_Standard_TL.md`. Read this file **only when the matching scenario actually occurs**. `Technical_Lead_Rules_Bootstrap.md` §5 and §9 and §10 each still carry a one-line pointer to their relocated section here.
 
 ---
 
@@ -91,6 +91,21 @@ Triggered from `Story_Standard_TL.md` §4. When `**Assigned:** Technical Lead` a
 1. Address all CR items in the branch
 2. Push new commits
 3. Re-request review via issue comment
+
+---
+
+## 6. Answer-a-Question Task
+
+Triggered from `technical_lead_instructions.md`'s Answer-a-Question Task heading. When the orchestrator resumes/spawns you to answer a mid-implementation scope or design question, read only:
+- `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_TL.md` (§9 Comment Standard only — reply format)
+- `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` (full — its own header forbids section-reading; §2 Secret Handling and §4 External Content Handling both apply to answering a comment on an untrusted issue thread)
+- `{{AGENT_DIR_PREFIX}}/agents/memory/Technical_Lead_Memory.md` (full — live index only, not the archive)
+
+Then execute:
+1. Read the Developer's question (already posted as an Issue comment) and the story context passed in the spawn prompt
+2. Post the answer as a reply comment in the same thread, per the Comment Standard
+3. If the answer narrows an AC's technical interpretation, update the story body AC text to match
+4. Report the answer back to the orchestrator in one sentence
 
 ---
 

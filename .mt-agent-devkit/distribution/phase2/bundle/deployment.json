@@ -17,8 +17,8 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "5c1d762ecc7fabeb9708c68f2e057e9396a8a205e5ecae798bf6f646209749c2",
-      "bytes": 16218,
+      "sha256": "658403aa9bc6b4cfe2c84a8a29c93c80583472a1f193d81bd836fbeb5c0aecaa",
+      "bytes": 16739,
       "kind": "template"
     },
     {
@@ -178,8 +178,8 @@
     {
       "id": "rules/Technical_Lead_Rules_Read_On_Demand.md",
       "path": "assets/rules_Technical_Lead_Rules_Read_On_Demand.md",
-      "sha256": "f74cece84b5708873af150f4df050091c4bac99d769d44e9615de7726e4d5937",
-      "bytes": 5105,
+      "sha256": "b080ecc4d8183a92fd5bd4d91759f1f62415667537e0ccde5ab08a989bf42ab9",
+      "bytes": 6181,
       "kind": "template"
     },
     {
@@ -227,8 +227,8 @@
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "4bc21536e94fc15b67246afcdc7949f43fcfc5f29353b952aebf404b2245e456",
-      "bytes": 3772,
+      "sha256": "195a6c7aa1936e3940a480ad6131b3a2cd6dcc7b5a03fae5e8627f93e0026df7",
+      "bytes": 4033,
       "kind": "template"
     },
     {
@@ -325,8 +325,8 @@
     {
       "id": "workflow_shared/Resume_Story_Workflow.md",
       "path": "assets/workflow_shared_Resume_Story_Workflow.md",
-      "sha256": "866a782ba0b68803fefa6d38caa8cd51d77176130284e793a5c4a898086f919f",
-      "bytes": 2058,
+      "sha256": "79ea2ef85ead109443b9910f255aa129420aa83db4e3f27bceae1f11088a90e0",
+      "bytes": 2298,
       "kind": "template"
     },
     {
@@ -346,8 +346,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "e8184cc3782efb5075a6e67843d33e1929223f272ae22776096335204229b4f3",
-      "bytes": 48730,
+      "sha256": "d0480e0c4697e1521f1842252f5b7245f30fec535eed10128824f6e41ee1e29d",
+      "bytes": 50665,
       "kind": "template"
     },
     {
@@ -367,8 +367,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "c00db2024adc3642d865390d88a214551c31e099cb35f9f2f49d30985a38005a",
-      "bytes": 14424,
+      "sha256": "89e6ff2a857c3c5b9004317a645db26bcec6a4963c88164728dafeb3dd17e58e",
+      "bytes": 14664,
       "kind": "template"
     },
     {
@@ -388,8 +388,8 @@
     {
       "id": "workflow_shared/Start_Story_Workflow.md",
       "path": "assets/workflow_shared_Start_Story_Workflow.md",
-      "sha256": "aef4ae1844e6fd47f972cf86e262dca1bf940a6c0f0763881fc42082f58f733b",
-      "bytes": 3947,
+      "sha256": "9242e735b87be9c1808e519bb4e747ae6332e28f455ae9285ed3964319ee8b00",
+      "bytes": 4187,
       "kind": "template"
     },
     {
@@ -1067,8 +1067,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "ef4e26c2d0050b578c70fc7bfcaf404550e04c92390cd33acedfaa5876e0fcb2",
-      "bytes": 26279,
+      "sha256": "0644906db9f67129ffd3ea0b55a2de823028696acde3d551b7b0870c8095be33",
+      "bytes": 26340,
       "kind": "script"
     },
     {
@@ -1104,6 +1104,13 @@
       "path": "assets/read_section.py",
       "sha256": "c06ddf9f396bd587a37633b52f45c689bf58042d873cd0dcae93fba891d40717",
       "bytes": 1931,
+      "kind": "script"
+    },
+    {
+      "id": "read_manifest.py",
+      "path": "assets/read_manifest.py",
+      "sha256": "70f3870033a59f6780c320d0909c8b654195acad89a711e42847c300c62f5311",
+      "bytes": 14865,
       "kind": "script"
     },
     {
@@ -1146,6 +1153,20 @@
       "path": "assets/Local_Verify.md",
       "sha256": "4f10ad652a4fdef1b65b1d1ebf61ff738621d9022731ae1da73dd099b7d0ff5f",
       "bytes": 3183,
+      "kind": "contract"
+    },
+    {
+      "id": "Read_Manifest.md",
+      "path": "assets/Read_Manifest.md",
+      "sha256": "10ea434d6ae9ded886708b9b32ec621af8c2e3a2f798268c35607dafd16f3926",
+      "bytes": 8976,
+      "kind": "contract"
+    },
+    {
+      "id": "read-routing.json",
+      "path": "assets/read-routing.json",
+      "sha256": "fd900395d6d19364b09007de1c42e7443c34eda59b9c68e5b8478582ecbe051c",
+      "bytes": 33554,
       "kind": "contract"
     },
     {
@@ -4773,6 +4794,32 @@
       "required": true
     },
     {
+      "id": "read_manifest.py",
+      "sources": [
+        "read_manifest.py"
+      ],
+      "destination": ".mt-agent-devkit/scripts/read_manifest.py",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
       "id": "wait_work.py",
       "sources": [
         "wait_work.py"
@@ -4908,6 +4955,58 @@
         "Local_Verify.md"
       ],
       "destination": ".mt-agent-devkit/contracts/Local_Verify.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "Read_Manifest.md",
+      "sources": [
+        "Read_Manifest.md"
+      ],
+      "destination": ".mt-agent-devkit/contracts/Read_Manifest.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "read-routing.json",
+      "sources": [
+        "read-routing.json"
+      ],
+      "destination": ".mt-agent-devkit/contracts/read-routing.json",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -11701,6 +11800,166 @@
       "required": false
     },
     {
+      "id": "retire/claude/repo/github/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/read_manifest.py/scripts/read_manifest.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/read_manifest.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
       "id": "retire/claude/repo/github/wait_work.py/scripts/wait_work.py",
       "sources": [],
       "destination": ".claude/agents/scripts/wait_work.py",
@@ -14881,6 +15140,70 @@
         "path": ".antigravity/agents/scripts/read_section.py",
         "after_verified_ids": [
           "read_section.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/read_manifest.py/scripts/read_manifest.py",
+        "path": ".claude/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/read_manifest.py/scripts/read_manifest.py",
+        "path": ".claude/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/read_manifest.py/scripts/read_manifest.py",
+        "path": ".claude/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/read_manifest.py/scripts/read_manifest.py",
+        "path": ".claude/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/read_manifest.py/scripts/read_manifest.py",
+        "path": ".antigravity/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/read_manifest.py/scripts/read_manifest.py",
+        "path": ".antigravity/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/read_manifest.py/scripts/read_manifest.py",
+        "path": ".antigravity/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/read_manifest.py/scripts/read_manifest.py",
+        "path": ".antigravity/agents/scripts/read_manifest.py",
+        "after_verified_ids": [
+          "read_manifest.py",
           "root_project_root/AGENTS.md"
         ]
       },

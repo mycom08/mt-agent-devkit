@@ -11,6 +11,8 @@
 
 Before state access require concrete selected PROVIDER_ROOT, RUNTIME_ROOT and COMMAND_ROOT plus adapter path. Missing or foreign bindings block; never search another provider's records.
 
+Story-execution workers consume the validated explicit manifest under `.mt-agent-devkit/contracts/Read_Manifest.md`. Follow its prerequisite order, adapter-first/native-reader/full-coverage gates and actual returned-coverage attestations. Same-session skip statements below apply only to proven unchanged reads; unknown provenance restores the complete safe path. Reduced task exceptions remain exact. Add observable triggered guidance before action; the manifest never authorizes mutations or waives independent gates.
+
 Mandatory full-file reads use the runtime's native file-reading tool when available (Claude: `Read`), directly on the original file path. Complete successful returned coverage; follow up any truncation with that same tool. Shell `cat`/`sed`/Python batches, persisted command-output files and preloaded summaries do not satisfy this gate when a native reader exists. On-demand section extraction remains bounded per its existing contract after the adapter read gate. Without a native file reader, use the selected provider's sanctioned mechanism, never an invented tool.
 
 Your instruction file lists the exact paths for your Project Priming, Working Record, Rules, and Memory. Read them in this order:

@@ -31,6 +31,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000215] Require per-AC PASS/FAIL/NOT VERIFIED evidence before merge or acceptance; approved tracked splits require renewed QA on revised scope.
 ### Changes
 
+- [ST-000254] Validate explicit story-worker read manifests with canonical routing, returned-coverage resume provenance and bounded trigger additions.
+
 - [ST-000217] Add provider-aware bounded CI and local verification waits with exact-head evidence and launch-once logs; preserve complete no-run evidence at window expiry.
 
 - [ST-000252] Capture validated telemetry boundaries and measure resumed stages without counting earlier session usage.
