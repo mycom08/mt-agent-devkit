@@ -218,7 +218,12 @@ def ci_wait(directory, repo, pr, sha, required, window, interval, request=gh_jso
         identity = {"scope": scope, "expected_sha": sha}
         claim(directory, identity)
     deadline = clock() + window
+    snapshot = None
     while True:
+        # A completed snapshot remains authoritative when the polling sleep
+        # exhausts the window. Do not begin a new discovery request at expiry.
+        if snapshot is not None and clock() >= deadline:
+            return snapshot
         def bounded(arguments, allowed=(0,)):
             return request(arguments, timeout=min(30, max(.01, deadline - clock())), allowed=allowed)
         try:

@@ -161,6 +161,42 @@ class EvidenceTests(unittest.TestCase):
                 return fixture(args, **kwargs)
             self.assertEqual(w.ci_wait(Path(folder)/"ci", "owner/repo", 1, SHA, [], .1, .01, request)["outcome"], "PASS")
 
+    def test_nonzero_window_preserves_complete_no_run_on_repeated_waits(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder) / "ci"
+            fixture = GitHubFixture(prior=[run(sha=OTHER)])
+            for _ in range(2):
+                now = [0.0]
+                def request(args, **kwargs):
+                    self.assertLess(now[0], 2, "request started after deadline")
+                    return fixture(args, **kwargs)
+                def sleep(seconds):
+                    now[0] += seconds
+                evidence = w.ci_wait(directory, "owner/repo", 1, None, [], 2, 1, request, lambda: now[0], sleep)
+                self.assertEqual(evidence["outcome"], "NO RUN")
+                self.assertEqual(evidence["inspected_sha"], SHA)
+                self.assertEqual(evidence["prior_sha"], OTHER)
+                self.assertEqual(evidence["prior_run_ids"], [1])
+                self.assertEqual(evidence["prior_outcome"], "PASS")
+                self.assertEqual(evidence["changed_files"], ["docs/note.md"])
+                self.assertEqual(evidence["zero_check_gate"], "required")
+                self.assertEqual(json.loads((directory / "evidence.json").read_text()), evidence)
+
+    def test_incomplete_request_timeout_remains_pending(self):
+        with tempfile.TemporaryDirectory() as folder:
+            now = [0.0]
+            fixture = GitHubFixture(prior=[run(sha=OTHER)])
+            def request(args, **kwargs):
+                if now[0] == 1:
+                    now[0] = 2
+                    raise w.WaitError("GitHub request timed out; retry same identity")
+                return fixture(args, **kwargs)
+            def sleep(seconds):
+                now[0] += seconds
+            evidence = w.ci_wait(Path(folder)/"ci", "owner/repo", 1, None, [], 2, 1, request, lambda: now[0], sleep)
+            self.assertEqual(evidence["outcome"], "PENDING")
+            self.assertEqual(evidence["inspected_sha"], SHA)
+
     def test_transport_auth_malformed_and_timeout_are_sanitized(self):
         for code, output, error in ((1, "", "HTTP 401 secret-token"), (1, "", "network secret-token"), (0, "not json", ""), (1, "", "network")):
             response = subprocess.CompletedProcess([], code, output, error)
