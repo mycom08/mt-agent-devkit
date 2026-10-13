@@ -124,6 +124,77 @@ usage or label final-context tokens as cumulative consumption. Aggregate with
 `aggregate --input {RUNTIME_ROOT}/tmp/token-metrics/<run-id>.jsonl`; malformed
 input, duplicate stage identities and mixed schemas stop the run.
 
+### Bounded same-session resume
+
+This is the single boundary handoff procedure for every fix, review re-check,
+QA re-check and consultation resume. ST-000254 read manifests consume these
+handoff fields; they do not define another telemetry policy. The orchestrator
+owns capture and collection; workers receive the ordinary task/evidence delta.
+
+1. Before invoking the selected adapter's resume operation, capture a start
+   boundary for the intended worker while that session is idle. Use its exact
+   Claude worker handle for both `--agent-id` and `--session-id`; discovery is
+   confined to this project and this worker. Save a distinct runtime-local
+   `<stage>-start.boundary.json` for each completed stage identity.
+2. Invoke the adapter's supported resume operation. After its actual completion,
+   capture `<stage>-end.boundary.json` against the same provider/session/source
+   before any further reuse of that session. Preserve start/end filenames in
+   the stage handoff alongside provider, worker handle and completion evidence.
+3. Extract with both snapshots and sanitized metadata using
+   `session_mode: same_session_resume`. Only successful bounded extraction may
+   label that resumed stage `usage_source: raw_transcript`. Never retry it as
+   whole-session extraction. Fresh or expired sessions keep compatible fresh
+   extraction; do not apply a previous worker's boundary to a new session.
+4. Capture/extraction failures, missing discovery, unproven coverage or an
+   interrupted stage cannot prove zero. Report the collector's actionable error,
+   retain the snapshots as local evidence and collect explicit unavailable
+   usage through `harness` with a short factual reason. Preserve the actual
+   lifecycle `session_mode`; omit `session_final_tokens` for wholly unavailable
+   output. A real independently reported final-context counter may instead use
+   the existing `harness_report` fallback. Do not estimate any usage metric.
+
+Supported Claude discovery example (substitute concrete bound runtime paths):
+
+```bash
+python .mt-agent-devkit/scripts/telemetry.py boundary --provider claude --session-id <worker-id> --agent-id <worker-id> --project-root . --output <RUNTIME_ROOT>/tmp/token-metrics/<run-id>/<stage>-start.boundary.json
+# Invoke the selected adapter's resume operation and wait for actual completion.
+python .mt-agent-devkit/scripts/telemetry.py boundary --provider claude --session-id <worker-id> --agent-id <worker-id> --project-root . --output <RUNTIME_ROOT>/tmp/token-metrics/<run-id>/<stage>-end.boundary.json
+python .mt-agent-devkit/scripts/telemetry.py extract --provider claude --session-id <worker-id> --agent-id <worker-id> --project-root . --start-boundary <RUNTIME_ROOT>/tmp/token-metrics/<run-id>/<stage>-start.boundary.json --end-boundary <RUNTIME_ROOT>/tmp/token-metrics/<run-id>/<stage>-end.boundary.json --metadata <stage-metadata.json> --output <RUNTIME_ROOT>/tmp/token-metrics/<run-id>.jsonl --append
+```
+
+For an explicitly supplied transcript, replace `--agent-id <worker-id>
+--project-root .` in all three commands with `--transcript <selected-transcript>`.
+Use the worker handle for a recognized `agent-<worker-id>.jsonl` filename;
+otherwise `--session-id` must match positive consistent native `sessionId` or
+`session_id` evidence. The worker handle and native parent session ID are
+separate identities. Never discover another transcript when ownership fails.
+
+Snapshots contain version 1, provider, hashed session/source identity, stable
+filesystem identity, complete-line byte offset and prefix digest. Both snapshots
+are verified before counting; replacement, truncation, prefix edits, malformed
+records and read races fail. Only the selected interval contributes request IDs
+and request-scoped tool IDs; a request crossing its start fails attribution.
+Exact streaming duplicates within the interval count once; conflicting usage
+or tool evidence fails. An unchanged validated interval proves zero only with
+established session evidence; an empty file or missing discovery remains unknown.
+
+All schema 1 usage fields require complete finalized request evidence or
+comparable endpoint-aligned session checkpoints. Request evidence uses a
+supported terminal `message.stop_reason`, consistent input/cache values and the
+final streamed output for each request. Cumulative checkpoints additionally
+require existing `type: result`, matching native `session_id`,
+`usage_scope: session`, `usage_definition: claude-token-usage-v1`, all four
+nonnegative token counters, complete attributable request/tool evidence and
+monotonic counters throughout the interval. Their input/cache deltas must agree
+with request evidence; bounded output is the validated output delta. Do not add
+markers to a source transcript or infer cumulative semantics from a generic
+result. Without these checkpoint markers, complete finalized requests remain
+the alternative; a whole-session output summary never substitutes for bounded
+output. Any missing metric makes the entire usage unavailable or errors.
+
+Codex and Antigravity retain their explicit `harness` fallback; generated layouts
+and synthetic checkpoint fixtures do not certify native transcript support.
+
 ---
 
 ## Stage 1 — Implementation

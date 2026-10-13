@@ -29,7 +29,9 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion."
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000215] Require truthful AC verdicts and verified acceptance before advancement.; [ST-000253] Trigger retros conditionally and validate bounded contribution completion.; [ST-000252] Capture resume boundaries and collect only attributable stage usage.",
+      ".mt-agent-devkit/distribution/phase2/templates/scripts/telemetry.py": "[ST-000252] Validate transcript boundaries and attribute usage to resumed stages.",
+      ".claude/harness/Provider_Adapter.md": "[ST-000252] Use shared validated boundary handoff before native session resumes."
     },
     "deployment": {
       "schema_version": 1,

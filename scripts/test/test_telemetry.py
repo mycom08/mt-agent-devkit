@@ -8,10 +8,11 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import mock_open, patch
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[2]
-COLLECTOR_PATH = ROOT / ".claude" / "agents" / "templates" / "scripts" / "telemetry.py"
+COLLECTOR_PATH = ROOT / ".mt-agent-devkit" / "distribution" / "phase2" / "templates" / "scripts" / "telemetry.py"
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "telemetry"
 EVIDENCE = ROOT / "docs" / "reviews" / "Harness_Token_Usage_2026-09-18.json"
 
@@ -49,6 +50,16 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(usage["input_tokens"], 30)
         self.assertEqual(usage["cache_read_input_tokens"], 3000)
         self.assertEqual(usage["output_tokens"], 240)
+
+    def test_fresh_extraction_matches_the_frozen_legacy_collector(self) -> None:
+        legacy_path = ROOT / ".claude/agents/templates/scripts/telemetry.py"
+        legacy_spec = importlib.util.spec_from_file_location("legacy_telemetry", legacy_path)
+        legacy = importlib.util.module_from_spec(legacy_spec)
+        legacy_spec.loader.exec_module(legacy)
+        for fixture in ("streamed_duplicate.jsonl", "streamed_with_result.jsonl", "reused_tool_id.jsonl"):
+            with self.subTest(fixture=fixture):
+                self.assertEqual(telemetry.extract_transcript_usage(FIXTURES / fixture),
+                                 legacy.extract_transcript_usage(FIXTURES / fixture))
 
     def test_final_result_must_agree_with_request_usage(self) -> None:
         fixture = FIXTURES / "streamed_with_result.jsonl"
@@ -265,6 +276,292 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(report["tool_invocations"], 374)
         self.assertEqual(report["cache_read_input_tokens"], 49_997_075)
         self.assertNotIn("source", json.dumps(report))
+
+
+class BoundedTelemetryTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory(prefix="telemetry-bounded-")
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.path = self.root / "session.jsonl"
+        self.lines = (FIXTURES / "bounded_session.jsonl").read_bytes().splitlines(keepends=True)
+        self.expected = json.loads((FIXTURES / "bounded_expected.json").read_text())
+        self.session = self.expected["session"]
+        self.path.write_bytes(b"".join(self.lines[:3]))
+
+    def capture(self) -> dict:
+        return telemetry.capture_boundary(self.path, "claude", self.session)
+
+    def interval(self, lines: list[bytes]) -> tuple[dict, dict]:
+        start = self.capture()
+        with self.path.open("ab") as stream:
+            stream.write(b"".join(lines))
+        return start, self.capture()
+
+    def usage(self, start: dict, end: dict) -> dict:
+        return telemetry.extract_bounded_usage(self.path, start, end, "claude", self.session)
+
+    def test_fresh_and_two_resumes_reconcile_known_session_without_prior_usage(self) -> None:
+        measured = [telemetry.extract_transcript_usage(self.path)]
+        for left, right in ((3, 7), (7, 9)):
+            measured.append(self.usage(*self.interval(self.lines[left:right])))
+        self.assertEqual(measured, self.expected["stages"])
+        self.assertEqual({field: sum(row[field] for row in measured) for field in measured[0]}, self.expected["whole"])
+        # Re-extract an earlier bounded interval after another resume appended:
+        first = self.capture()
+        self.assertEqual(self.usage(first, first), {field: 0 for field in self.expected["whole"]})
+
+    def test_finalized_request_evidence_deduplicates_streams_without_summary_substitution(self) -> None:
+        events = [json.loads(line) for line in self.lines[3:7]]
+        for event in events[:-1]:
+            if event["message"]["usage"]["output_tokens"] == 6:
+                event["message"]["stop_reason"] = "tool_use"
+        # Generic session result has no verified cumulative semantics; ignore its totals.
+        events[-1].pop("usage_scope")
+        start, end = self.interval([(json.dumps(event) + "\n").encode() for event in events])
+        usage = self.usage(start, end)
+        self.assertEqual(usage["output_tokens"], 6)
+        self.assertEqual(usage["requests"], 1)
+        self.assertEqual(usage["tool_invocations"], 2)
+
+    def test_equal_validated_bounds_prove_zero_but_empty_or_missing_source_does_not(self) -> None:
+        boundary = self.capture()
+        self.assertEqual(self.usage(boundary, boundary), {field: 0 for field in self.expected["whole"]})
+        self.path.write_bytes(b"")
+        with self.assertRaisesRegex(telemetry.TelemetryError, "unknown evidence"):
+            self.capture()
+        self.path.unlink()
+        with self.assertRaisesRegex(telemetry.TelemetryError, "cannot read boundary transcript"):
+            self.capture()
+
+    def test_empty_discovery_and_wrong_worker_id_never_search_other_agents(self) -> None:
+        project = self.root / "project"
+        project.mkdir()
+        with self.assertRaisesRegex(telemetry.TelemetryError, "not found"):
+            telemetry.find_claude_agent_transcript("missing-agent", project, self.root / "config")
+        with self.assertRaisesRegex(telemetry.TelemetryError, "ownership"):
+            telemetry.capture_boundary(self.path, "claude", "foreign-session")
+        with self.assertRaisesRegex(telemetry.TelemetryError, "only for Claude"):
+            telemetry.capture_boundary(self.path, "codex", self.session)
+
+    def test_worker_filename_and_native_checkpoint_identity_are_separate(self) -> None:
+        worker = self.root / "agent-worker123.jsonl"
+        worker.write_bytes(self.path.read_bytes())
+        boundary = telemetry.capture_boundary(worker, "claude", "worker123")
+        with worker.open("ab") as stream:
+            stream.write(b"".join(self.lines[3:7]))
+        end = telemetry.capture_boundary(worker, "claude", "worker123")
+        self.assertEqual(telemetry.extract_bounded_usage(worker, boundary, end, "claude", "worker123"), self.expected["stages"][1])
+
+    def test_boundary_rejects_invalid_types_offsets_digests_ownership_and_source(self) -> None:
+        boundary = self.capture()
+        variants = [("boundary_version", True), ("offset", True), ("offset", -1),
+                    ("offset", boundary["offset"] + 1), ("sha256", "x"),
+                    ("sha256", "0" * 64), ("session", "0" * 64),
+                    ("provider", "codex"), ("source", "0" * 64), ("inode", 0)]
+        for field, value in variants:
+            with self.subTest(field=field, value=value):
+                with self.assertRaises(telemetry.TelemetryError):
+                    self.usage({**boundary, field: value}, boundary)
+        with self.assertRaisesRegex(telemetry.TelemetryError, "format"):
+            self.usage({**boundary, "raw_path": "forbidden"}, boundary)
+        start, end = self.interval(self.lines[3:7])
+        with self.assertRaisesRegex(telemetry.TelemetryError, "after end"):
+            self.usage(end, start)
+
+    def test_truncated_changed_and_replaced_transcripts_are_rejected(self) -> None:
+        boundary = self.capture()
+        original = self.path.read_bytes()
+        for altered, expected in ((original[:-1], "truncated"), (original.replace(b"synthetic", b"different"), "prefix changed")):
+            self.path.write_bytes(altered)
+            with self.assertRaisesRegex(telemetry.TelemetryError, expected):
+                self.usage(boundary, boundary)
+        replacement = self.root / "replacement.jsonl"
+        replacement.write_bytes(original)
+        replacement.replace(self.path)
+        with self.assertRaisesRegex(telemetry.TelemetryError, "replaced"):
+            self.usage(boundary, boundary)
+
+    def test_capture_rejects_malformed_partial_unicode_and_metric_records(self) -> None:
+        bad_inputs = [b'{"type":"assistant"}\n', b'{"type":\n', b'[]\n', b'\xff\n',
+                      b'{"type":"user","sessionId":"fixture-session"}',
+                      b'{"type":"result","session_id":"fixture-session","usage":{}}\n']
+        for data in bad_inputs:
+            with self.subTest(data=data):
+                self.path.write_bytes(data)
+                with self.assertRaises(telemetry.TelemetryError):
+                    self.capture()
+        malformed = json.loads(self.lines[1])
+        malformed["message"]["stop_reason"] = []
+        self.path.write_bytes((json.dumps(malformed) + "\n").encode())
+        with self.assertRaisesRegex(telemetry.TelemetryError, "completion evidence"):
+            self.capture()
+
+    def test_partial_request_without_comparable_checkpoints_is_unknown(self) -> None:
+        start, end = self.interval(self.lines[3:6])
+        with self.assertRaisesRegex(telemetry.TelemetryError, "finalized requests"):
+            self.usage(start, end)
+
+    def test_nonmonotonic_or_inconsistent_cumulative_metrics_fail_all_usage(self) -> None:
+        original = self.path.read_bytes()
+        for field, value in (("output_tokens", 1), ("input_tokens", 31), ("cache_read_input_tokens", 1)):
+            self.path.write_bytes(original)
+            events = [json.loads(line) for line in self.lines[3:7]]
+            events[-1]["usage"][field] = value
+            start, end = self.interval([(json.dumps(event) + "\n").encode() for event in events])
+            with self.subTest(field=field):
+                with self.assertRaises(telemetry.TelemetryError):
+                    self.usage(start, end)
+
+    def test_conflicting_native_checkpoint_sessions_and_definitions_fail(self) -> None:
+        original = self.path.read_bytes()
+        for field, value in (("session_id", "foreign"), ("usage_definition", "other-definition")):
+            self.path.write_bytes(original)
+            events = [json.loads(line) for line in self.lines[3:7]]
+            events[-1][field] = value
+            if field == "session_id":
+                with self.path.open("ab") as stream:
+                    stream.write(b"".join((json.dumps(event) + "\n").encode() for event in events))
+                with self.assertRaisesRegex(telemetry.TelemetryError, "session identities"):
+                    self.capture()
+            else:
+                start, end = self.interval([(json.dumps(event) + "\n").encode() for event in events])
+                with self.assertRaisesRegex(telemetry.TelemetryError, "finalized requests"):
+                    self.usage(start, end)
+
+    def test_cross_boundary_request_and_conflicting_duplicates_fail(self) -> None:
+        original = self.path.read_bytes()
+        start, end = self.interval([self.lines[1]])
+        with self.assertRaisesRegex(telemetry.TelemetryError, "crosses"):
+            self.usage(start, end)
+        self.path.write_bytes(original)
+        event = json.loads(self.lines[4])
+        changed = json.loads(self.lines[4])
+        changed["message"]["content"][0]["name"] = "conflict"
+        with self.path.open("ab") as stream:
+            stream.write((json.dumps(event) + "\n" + json.dumps(changed) + "\n").encode())
+        with self.assertRaisesRegex(telemetry.TelemetryError, "conflicting duplicate tool"):
+            self.capture()
+
+    def test_unattributed_cumulative_usage_and_nonempty_unknown_stage_do_not_prove_zero(self) -> None:
+        start, end = self.interval([self.lines[6]])
+        with self.assertRaises(telemetry.TelemetryError):
+            self.usage(start, end)
+        self.path.write_bytes(b"".join(self.lines[:3]))
+        start, end = self.interval([b'{"type":"user","sessionId":"fixture-session"}\n'])
+        with self.assertRaisesRegex(telemetry.TelemetryError, "no complete attributable"):
+            self.usage(start, end)
+
+    def test_snapshots_and_sanitized_records_exclude_paths_secrets_and_prompts(self) -> None:
+        original = self.path.read_bytes().replace(b"synthetic fixture", b"secret-value-not-exported")
+        self.path.write_bytes(original)
+        start, end = self.interval(self.lines[3:7])
+        metadata = telemetry.load_metadata(FIXTURES / "complete_metadata.json")
+        metadata["session_mode"] = "same_session_resume"
+        record = telemetry.build_record(metadata, "raw_transcript", self.usage(start, end))
+        rendered = json.dumps([start, end, record])
+        for forbidden in (str(self.root), "secret-value-not-exported", "synthetic fixture", self.session):
+            self.assertNotIn(forbidden, rendered)
+
+    def test_boundary_publish_is_atomic_and_interruption_keeps_previous_artifact(self) -> None:
+        output = self.root / "boundary.json"
+        output.write_text("existing")
+        with patch.object(telemetry.os, "replace", side_effect=OSError("interrupted")):
+            with self.assertRaisesRegex(telemetry.TelemetryError, "cannot publish"):
+                telemetry.write_boundary(self.capture(), output)
+        self.assertEqual(output.read_text(), "existing")
+        self.assertEqual(list(self.root.glob(".boundary-*")), [])
+        telemetry.write_boundary(self.capture(), output)
+        self.assertEqual(json.loads(output.read_text()), self.capture())
+
+    def test_extract_cli_requires_both_bounds_and_rejects_unbounded_resume_and_interruption(self) -> None:
+        metadata = telemetry.load_metadata(FIXTURES / "complete_metadata.json")
+        metadata["session_mode"] = "same_session_resume"
+        meta = self.root / "metadata.json"
+        meta.write_text(json.dumps(metadata))
+        output = self.root / "record.json"
+        base = ["telemetry.py", "extract", "--transcript", str(self.path), "--metadata", str(meta), "--output", str(output)]
+        with patch.object(telemetry.sys, "argv", base):
+            self.assertEqual(telemetry.main(), 1)
+        with patch.object(telemetry.sys, "argv", base + ["--provider", "codex"]):
+            self.assertEqual(telemetry.main(), 1)
+        start, end = self.interval(self.lines[3:7])
+        for name, value in (("start", start), ("end", end)):
+            telemetry.write_boundary(value, self.root / f"{name}.json")
+        bounded = base + ["--provider", "claude", "--session-id", self.session,
+                          "--start-boundary", str(self.root / "start.json"), "--end-boundary", str(self.root / "end.json")]
+        with patch.object(telemetry.sys, "argv", bounded):
+            self.assertEqual(telemetry.main(), 0)
+        self.assertEqual(json.loads(output.read_text())["output_tokens"], 60)
+        output.unlink()
+        with patch.object(telemetry.sys, "argv", bounded[:-2]):
+            self.assertEqual(telemetry.main(), 1)
+        metadata["completion_status"] = "interrupted"
+        meta.write_text(json.dumps(metadata))
+        with patch.object(telemetry.sys, "argv", bounded):
+            self.assertEqual(telemetry.main(), 1)
+        self.assertFalse(output.exists())
+
+    def test_cli_agent_discovery_captures_and_extracts_the_owned_interval(self) -> None:
+        project, config = self.root / "project", self.root / "config"
+        project.mkdir()
+        key = telemetry.re.sub(r"[^A-Za-z0-9-]", "-", str(project.resolve()))
+        folder = config / "projects" / key / "native-parent" / "subagents"
+        folder.mkdir(parents=True)
+        worker = folder / "agent-worker123.jsonl"
+        worker.write_bytes(self.path.read_bytes())
+        original = worker.read_bytes()
+        common = ["--agent-id", "worker123", "--project-root", str(project),
+                  "--provider", "claude", "--session-id", "worker123"]
+        with patch.dict(telemetry.os.environ, {"CLAUDE_CONFIG_DIR": str(config)}):
+            for name in ("start", "end"):
+                if name == "end":
+                    with worker.open("ab") as stream:
+                        stream.write(b"".join(self.lines[3:7]))
+                argv = ["telemetry.py", "boundary", *common, "--output", str(self.root / f"{name}.json")]
+                with patch.object(telemetry.sys, "argv", argv):
+                    self.assertEqual(telemetry.main(), 0)
+            metadata = telemetry.load_metadata(FIXTURES / "complete_metadata.json")
+            metadata["session_mode"] = "same_session_resume"
+            meta = self.root / "metadata.json"
+            meta.write_text(json.dumps(metadata))
+            output = self.root / "record.json"
+            argv = ["telemetry.py", "extract", *common, "--metadata", str(meta), "--output", str(output),
+                    "--start-boundary", str(self.root / "start.json"), "--end-boundary", str(self.root / "end.json")]
+            with patch.object(telemetry.sys, "argv", argv):
+                self.assertEqual(telemetry.main(), 0)
+            self.assertEqual(json.loads(output.read_text())["output_tokens"], 60)
+            self.assertEqual(worker.read_bytes(), original + b"".join(self.lines[3:7]))
+            with patch.object(telemetry.sys, "argv", ["telemetry.py", "boundary", *common, "--output", str(worker)]):
+                self.assertEqual(telemetry.main(), 1)
+            with patch.object(telemetry.sys, "argv", ["telemetry.py", "boundary", *common[:-1], "foreign", "--output", str(output)]):
+                self.assertEqual(telemetry.main(), 1)
+
+    def test_read_race_and_read_interruption_are_actionable_errors(self) -> None:
+        identity = self.path.stat()
+        changed = SimpleNamespace(**{field: getattr(identity, field) for field in ("st_mode", "st_dev", "st_ino", "st_size", "st_mtime_ns")})
+        changed.st_mtime_ns += 1
+        with patch.object(telemetry.os, "fstat", side_effect=[identity, changed]):
+            with self.assertRaisesRegex(telemetry.TelemetryError, "changed during"):
+                self.capture()
+        with patch.object(Path, "open", side_effect=OSError("interrupted secret local-path")):
+            with self.assertRaisesRegex(telemetry.TelemetryError, "cannot read boundary transcript") as context:
+                self.capture()
+        self.assertNotIn("secret", str(context.exception))
+
+    def test_finalized_output_conflict_and_late_unbounded_records_are_rejected_or_excluded(self) -> None:
+        events = [json.loads(line) for line in self.lines[3:6]]
+        for event in events:
+            event["message"]["stop_reason"] = "tool_use"
+        with self.path.open("ab") as stream:
+            stream.write(b"".join((json.dumps(event) + "\n").encode() for event in events))
+        with self.assertRaisesRegex(telemetry.TelemetryError, "conflicting finalized"):
+            self.capture()
+        self.path.write_bytes(b"".join(self.lines[:3]))
+        start, end = self.interval(self.lines[3:7])
+        with self.path.open("ab") as stream:
+            stream.write(b"malformed future stage\n")
+        self.assertEqual(self.usage(start, end), self.expected["stages"][1])
 
 
 if __name__ == "__main__":
