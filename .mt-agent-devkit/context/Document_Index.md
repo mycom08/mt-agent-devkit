@@ -33,6 +33,7 @@ Quick lookup for all project documents and external references. Update this file
 | Document | Path Pattern |
 |---|---|
 | Sprint Overview | `docs/sprints/Sprint_N_Overview.md` |
+| ST-000254 QA Scenarios | `docs/sprints/ST_000254_Read_Manifest_Test_Scenarios.md` |
 
 ---
 
