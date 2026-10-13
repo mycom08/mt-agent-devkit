@@ -346,8 +346,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "b7c667fdff6c3c774b16cdc5518ffc40c497e82e54e7f2617c3ea580cb00107a",
-      "bytes": 43298,
+      "sha256": "fd3d3b87322b1ec9c56f1e33913b76eb31e5cf4b3a75b1ec298c8016c0304edd",
+      "bytes": 47332,
       "kind": "template"
     },
     {
@@ -458,8 +458,8 @@
     {
       "id": "scripts/telemetry.py",
       "path": "assets/scripts_telemetry.py",
-      "sha256": "f73227a82318848ac0d5dcc44d9467b3622466cb2e839ff63153774314141397",
-      "bytes": 24347,
+      "sha256": "bb529bff2572da5f299d85e2403abec24712f8b261240d11c03b2ede3731f63f",
+      "bytes": 38942,
       "kind": "script"
     },
     {
@@ -528,8 +528,8 @@
     {
       "id": "claude/Provider_Adapter.md",
       "path": "assets/claude_Provider_Adapter.md",
-      "sha256": "8ebff4224bc1caba21624049a40ac0362218bb3c34db6c25a677a44438a849c2",
-      "bytes": 4416,
+      "sha256": "217c20c97c192af42a6fd61d5064ddb1a3e602a3bde3c2eaaf195daba21dde85",
+      "bytes": 5340,
       "kind": "adapter"
     },
     {

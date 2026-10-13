@@ -92,6 +92,33 @@ class BundleTests(unittest.TestCase):
                                 self.assertTrue((target / ".claude/skills/read-section/SKILL.md").is_file())
                             adapter = (target / ("." + provider) / "harness/Provider_Adapter.md").read_text()
                             self.assertNotIn("Internal Harness Adapter", adapter)
+                            # Execute the deployed collector contract, not a source-only import.
+                            collector = target / ".mt-agent-devkit/scripts/telemetry.py"
+                            telemetry_spec = importlib.util.spec_from_file_location("installed_telemetry", collector)
+                            telemetry = importlib.util.module_from_spec(telemetry_spec)
+                            telemetry_spec.loader.exec_module(telemetry)
+                            evidence = ROOT / "scripts/test/fixtures/telemetry"
+                            fixture_lines = (evidence / "bounded_session.jsonl").read_bytes().splitlines(keepends=True)
+                            transcript = target / "fixture.jsonl"
+                            transcript.write_bytes(b"".join(fixture_lines[:3]))
+                            if provider == "claude":
+                                start = telemetry.capture_boundary(transcript, provider, "fixture-session")
+                                transcript.write_bytes(b"".join(fixture_lines[:7]))
+                                end = telemetry.capture_boundary(transcript, provider, "fixture-session")
+                                expected = json.loads((evidence / "bounded_expected.json").read_text())["stages"][1]
+                                self.assertEqual(telemetry.extract_bounded_usage(transcript, start, end, provider, "fixture-session"), expected)
+                                self.assertIn("Bounded same-session resume", adapter)
+                            else:
+                                with self.assertRaisesRegex(telemetry.TelemetryError, "only for Claude"):
+                                    telemetry.capture_boundary(transcript, provider, "fixture-session")
+                                metadata = telemetry.load_metadata(evidence / "harness_only.json")
+                                metadata.pop("session_final_tokens")
+                                self.assertEqual(telemetry.build_record(metadata, "unavailable", None)["unavailable_fields"], list(telemetry.OPTIONAL_FIELDS))
+                            if profile == "repo":
+                                guidance = (target / ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md").read_text(encoding="utf-8")
+                                self.assertIn("--start-boundary", guidance)
+                                self.assertIn("--end-boundary", guidance)
+                                self.assertIn("Codex and Antigravity retain", guidance)
                             tools_file = root / "tools.json"
                             tools_file.write_text(json.dumps(["collaboration.spawn_agent", "collaboration.followup_task", "collaboration.send_message", "collaboration.wait_agent"]))
                             if provider == "codex":

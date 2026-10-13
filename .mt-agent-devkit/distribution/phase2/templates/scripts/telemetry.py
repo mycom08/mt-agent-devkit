@@ -14,10 +14,13 @@ prompts, tool input, and any unrecognised metadata are deliberately excluded.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
 import sys
+import stat
+import tempfile
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -287,6 +290,256 @@ def extract_transcript_usage(path: Path) -> dict[str, int]:
     return totals
 
 
+BOUNDARY_FIELDS = {"boundary_version", "provider", "session", "source", "device", "inode", "offset", "sha256"}
+CUMULATIVE_DEFINITION = "claude-token-usage-v1"
+
+
+def digest(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def read_snapshot(path: Path) -> tuple[bytes, os.stat_result]:
+    """Read one explicitly chosen regular file, rejecting replacement/read races."""
+    try:
+        if path.is_symlink():
+            error("boundary transcript must not be a symlink")
+        with path.open("rb") as stream:
+            before = os.fstat(stream.fileno())
+            if not stat.S_ISREG(before.st_mode) or not before.st_ino:
+                error("boundary transcript requires a stable regular-file identity")
+            data = stream.read()
+            after = os.fstat(stream.fileno())
+        current = path.stat()
+    except OSError:
+        error("cannot read boundary transcript; verify the selected source exists and is accessible")
+    identity = lambda item: (item.st_dev, item.st_ino, item.st_size, item.st_mtime_ns)
+    if identity(before) != identity(after) or identity(after) != identity(current) or len(data) != after.st_size:
+        error("transcript changed during extraction; retry only after the session is idle")
+    return data, after
+
+
+def boundary_events(data: bytes) -> list[dict[str, Any]]:
+    """Decode complete JSONL evidence; a partial final record is never a boundary."""
+    if data and not data.endswith(b"\n"):
+        error("boundary is not aligned to a complete transcript line")
+    try:
+        lines = data.decode("utf-8").splitlines()
+    except UnicodeDecodeError:
+        error("boundary transcript is not valid UTF-8")
+    events = []
+    for number, line in enumerate(lines, 1):
+        if not line.strip():
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            error(f"malformed boundary transcript JSON at line {number}")
+        if not isinstance(event, dict) or not isinstance(event.get("type"), str):
+            error(f"invalid boundary transcript event at line {number}")
+        events.append(event)
+    return events
+
+
+def event_groups(events: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for event in events:
+        if event["type"] != "assistant":
+            continue
+        message = event.get("message")
+        if not isinstance(message, dict) or not isinstance(message.get("id"), str) or not message["id"]:
+            error("invalid bounded assistant event: missing message identity")
+        groups[message["id"]].append(message)
+    return groups
+
+
+def native_sessions(events: list[dict[str, Any]]) -> set[str]:
+    sessions = set()
+    for event in events:
+        for field in ("sessionId", "session_id"):
+            if field in event:
+                value = event[field]
+                if not isinstance(value, str) or not value:
+                    error("invalid native transcript session identity")
+                sessions.add(value)
+    if len(sessions) > 1:
+        error("transcript contains conflicting native session identities")
+    return sessions
+
+
+def validate_owner(path: Path, events: list[dict[str, Any]], provider: str, session: str) -> None:
+    if provider != "claude":
+        error("bounded transcript extraction is supported only for Claude; use harness fallback")
+    validate_text("session", session)
+    if not events:
+        error("empty transcript is unknown evidence, not a proven zero stage")
+    sessions = native_sessions(events)
+    # A Claude worker ID and its native parent session ID are distinct domains.
+    filename_matches = path.name == f"agent-{session}.jsonl"
+    if not filename_matches and sessions != {session}:
+        error("transcript ownership does not match the intended session")
+    for event in events:
+        if "agentId" in event and event["agentId"] != session:
+            error("transcript worker identity does not match the intended session")
+    if not event_groups(events) and not sessions:
+        error("transcript has no established session evidence")
+
+
+def capture_boundary(path: Path, provider: str, session: str) -> dict[str, Any]:
+    data, identity = read_snapshot(path)
+    events = boundary_events(data)
+    validate_owner(path, events, provider, session)
+    # Validate metric-bearing events now, including evidence before the boundary.
+    validate_bounded_events(events)
+    return {"boundary_version": 1, "provider": provider, "session": digest(session.encode()),
+            "source": digest(str(path.resolve()).encode()), "device": identity.st_dev,
+            "inode": identity.st_ino, "offset": len(data), "sha256": digest(data)}
+
+
+def validate_boundary(boundary: dict[str, Any], path: Path, provider: str, session: str,
+                      data: bytes, identity: os.stat_result) -> int:
+    if set(boundary) != BOUNDARY_FIELDS or type(boundary.get("boundary_version")) is not int or boundary["boundary_version"] != 1:
+        error("invalid boundary format or unsupported boundary version")
+    for field in ("session", "source", "sha256"):
+        if not isinstance(boundary[field], str) or not re.fullmatch(r"[0-9a-f]{64}", boundary[field]):
+            error(f"invalid boundary {field} digest")
+    for field in ("device", "inode", "offset"):
+        if not is_nonnegative_int(boundary[field]):
+            error(f"invalid boundary {field}")
+    if boundary["provider"] != provider or boundary["session"] != digest(session.encode()):
+        error("boundary belongs to a different provider/session")
+    if boundary["source"] != digest(str(path.resolve()).encode()):
+        error("boundary belongs to a different transcript")
+    if (boundary["device"], boundary["inode"]) != (identity.st_dev, identity.st_ino):
+        error("boundary transcript was replaced")
+    offset = boundary["offset"]
+    if offset > len(data):
+        error("boundary transcript was truncated")
+    if digest(data[:offset]) != boundary["sha256"]:
+        error("boundary transcript prefix changed")
+    boundary_events(data[:offset])
+    return offset
+
+
+def result_usage(event: dict[str, Any]) -> dict[str, int]:
+    usage = event.get("usage")
+    if not isinstance(usage, dict) or any(not is_nonnegative_int(usage.get(field)) for field in USAGE_FIELDS):
+        error("bounded result has incomplete or invalid usage")
+    return {field: usage[field] for field in USAGE_FIELDS}
+
+
+def validate_bounded_events(events: list[dict[str, Any]]) -> dict[str, int]:
+    groups = event_groups(events)
+    totals = extract_usage(groups)
+    for request_id, messages in groups.items():
+        tools = {}
+        finalized = []
+        for message in messages:
+            if message.get("stop_reason") is not None:
+                if not isinstance(message["stop_reason"], str) or message["stop_reason"] not in {"end_turn", "tool_use", "max_tokens", "stop_sequence", "refusal", "pause_turn"}:
+                    error("unsupported request completion evidence")
+                finalized.append(message)
+            for item in message.get("content", []):
+                if isinstance(item, dict) and item.get("type") == "tool_use":
+                    prior = tools.setdefault(item["id"], item)
+                    if prior != item:
+                        error("conflicting duplicate tool evidence")
+        if finalized:
+            outputs = {numeric_usage(message, "output_tokens", request_id) for message in finalized}
+            if len(outputs) != 1 or next(iter(outputs)) != max(numeric_usage(message, "output_tokens", request_id) for message in messages):
+                error("conflicting finalized request usage")
+    for event in events:
+        if event["type"] == "result":
+            result_usage(event)
+    return totals
+
+
+def cumulative_checkpoint(events: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not events:
+        return None
+    event = events[-1]
+    if event["type"] != "result" or event.get("usage_scope") != "session" or event.get("usage_definition") != CUMULATIVE_DEFINITION:
+        return None
+    if not isinstance(event.get("session_id"), str) or not event["session_id"]:
+        error("cumulative checkpoint requires a native session identity")
+    return event
+
+
+def extract_bounded_usage(path: Path, start: dict[str, Any], end: dict[str, Any],
+                          provider: str, session: str) -> dict[str, int]:
+    validate_text("session", session)
+    data, identity = read_snapshot(path)
+    left = validate_boundary(start, path, provider, session, data, identity)
+    right = validate_boundary(end, path, provider, session, data, identity)
+    if left > right:
+        error("start boundary is after end boundary")
+    before, stage = boundary_events(data[:left]), boundary_events(data[left:right])
+    validate_owner(path, before + stage, provider, session)
+    validate_bounded_events(before)
+    totals = validate_bounded_events(stage)
+    prior_groups, groups = event_groups(before), event_groups(stage)
+    if set(prior_groups) & set(groups):
+        error("request crosses the start boundary; stage attribution is unavailable")
+    if left == right:
+        return totals
+    initial, final = cumulative_checkpoint(before), cumulative_checkpoint(before + stage)
+    if initial is not None and final is not None:
+        if initial["session_id"] != final["session_id"]:
+            error("cumulative checkpoints belong to different native sessions")
+        previous = result_usage(initial)
+        for event in stage:
+            if event["type"] != "result":
+                continue
+            if event.get("usage_scope") != "session" or event.get("usage_definition") != CUMULATIVE_DEFINITION or event.get("session_id") != initial["session_id"]:
+                error("cumulative checkpoint definitions are not comparable")
+            current = result_usage(event)
+            if any(current[field] < previous[field] for field in USAGE_FIELDS):
+                error("cumulative checkpoint counters are not monotonic")
+            previous = current
+        deltas = {field: previous[field] - result_usage(initial)[field] for field in USAGE_FIELDS}
+        for field in USAGE_FIELDS[:-1]:
+            if deltas[field] != totals[field]:
+                error(f"cumulative delta disagrees with attributable {field}")
+        if deltas["output_tokens"] < totals["output_tokens"]:
+            error("cumulative output delta is below attributable output")
+        if not groups and any(deltas.values()):
+            error("cumulative usage has no attributable request evidence")
+        totals.update(deltas)
+        return totals
+    if not groups:
+        error("nonempty stage has no complete attributable requests or comparable checkpoints")
+    if any(not any(message.get("stop_reason") is not None for message in messages) for messages in groups.values()):
+        error("bounded output requires finalized requests or comparable cumulative checkpoints")
+    # Session summaries can never replace output in the request-evidence path.
+    return totals
+
+
+def write_boundary(boundary: dict[str, Any], output: Path) -> None:
+    """Publish a complete snapshot atomically; interrupted writes leave no boundary."""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=output.parent,
+                                         prefix=".boundary-", delete=False) as stream:
+            temporary = Path(stream.name)
+            json.dump(boundary, stream, sort_keys=True)
+            stream.write("\n")
+        os.replace(temporary, output)
+    except OSError:
+        error("cannot publish boundary; verify the runtime-local output is writable")
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
+
+
+def protect_transcript_output(transcript: Path, output: Path) -> None:
+    try:
+        aliases = output.exists() and output.samefile(transcript)
+    except OSError:
+        error("cannot validate telemetry output identity")
+    if output.resolve() == transcript.resolve() or aliases:
+        error("telemetry output must not overwrite the transcript")
+
+
 def build_record(metadata: dict[str, Any], usage_source: str, measured: dict[str, int] | None) -> dict[str, Any]:
     metadata = dict(metadata)
     metadata["role"] = normalize_role(metadata["role"])
@@ -489,17 +742,25 @@ def reconstruct_evidence(path: Path, story_id: str) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    for name in ("extract", "harness"):
+    for name in ("extract", "harness", "boundary"):
         command = commands.add_parser(name)
-        command.add_argument("--metadata", required=True, type=Path)
+        if name != "boundary":
+            command.add_argument("--metadata", required=True, type=Path)
         command.add_argument("--output", required=True, type=Path)
-        command.add_argument("--append", action="store_true", help="append one JSON Lines record instead of replacing output")
-        if name == "extract":
+        if name != "boundary":
+            command.add_argument("--append", action="store_true", help="append one JSON Lines record instead of replacing output")
+        if name in {"extract", "boundary"}:
             source = command.add_mutually_exclusive_group(required=True)
             source.add_argument("--transcript", type=Path)
             source.add_argument("--agent-id", help="find a Claude Code subagent transcript for this project")
             command.add_argument("--project-root", type=Path, default=Path.cwd(),
                                  help="project directory used for Claude Code transcript lookup")
+            command.add_argument("--provider", required=name == "boundary")
+            command.add_argument("--session-id", required=name == "boundary",
+                                 help="intended worker handle (agent ID) or explicit transcript native session ID")
+        if name == "extract":
+            command.add_argument("--start-boundary", type=Path)
+            command.add_argument("--end-boundary", type=Path)
     aggregate = commands.add_parser("aggregate")
     aggregate.add_argument("--input", required=True, type=Path)
     evidence = commands.add_parser("reconstruct-evidence")
@@ -507,11 +768,34 @@ def main() -> int:
     evidence.add_argument("--story", required=True)
     args = parser.parse_args()
     try:
-        if args.command == "extract":
+        if args.command in {"extract", "boundary"}:
+            if args.provider is not None and args.provider != "claude":
+                error("transcript extraction is supported only for Claude; use harness fallback")
+            bounded = args.command == "boundary" or args.start_boundary is not None or args.end_boundary is not None
+            if bounded and (not args.provider or not args.session_id):
+                error("bounded extraction requires explicit --provider and --session-id")
+            if bounded and args.agent_id is not None and args.agent_id != args.session_id:
+                error("agent discovery ID must match the intended worker session handle")
             transcript = (args.transcript if args.transcript is not None else
                           find_claude_agent_transcript(args.agent_id, args.project_root))
-            record = build_record(load_metadata(args.metadata), "raw_transcript", extract_transcript_usage(transcript))
-            write_record(record, args.output, args.append)
+            protect_transcript_output(transcript, args.output)
+            if args.command == "boundary":
+                write_boundary(capture_boundary(transcript, args.provider, args.session_id), args.output)
+            else:
+                metadata = load_metadata(args.metadata)
+                if bounded:
+                    if args.start_boundary is None or args.end_boundary is None:
+                        error("bounded extraction requires both start and end boundary files")
+                    if metadata["completion_status"] == "interrupted":
+                        error("interrupted stage cannot establish complete bounded usage; use unavailable fallback")
+                    usage = extract_bounded_usage(transcript, read_json(args.start_boundary),
+                                                  read_json(args.end_boundary), args.provider, args.session_id)
+                else:
+                    if metadata["session_mode"] == "same_session_resume":
+                        error("same-session resume requires validated boundaries; never extract whole-session totals")
+                    usage = extract_transcript_usage(transcript)
+                record = build_record(metadata, "raw_transcript", usage)
+                write_record(record, args.output, args.append)
         elif args.command == "harness":
             metadata = load_metadata(args.metadata)
             source = "harness_report" if metadata.get("session_final_tokens") is not None else "unavailable"

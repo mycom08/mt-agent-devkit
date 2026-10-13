@@ -40,8 +40,15 @@ Do not assume a background wakeup unless the active runtime documents it.
 
 For a fresh `agentId`, use the shared telemetry collector's `extract --agent-id`
 with the project root. It finds the saved Claude subagent transcript without
-loading raw content into the orchestrator. For a resume, use a bounded stage
-transcript when available; never extract the entire reused session twice. If no
+loading raw content into the orchestrator. For every resume, follow
+`Shared_Pipeline_Stages.md` → **Bounded same-session resume**: capture an explicit
+start boundary immediately before the native resume, then an end boundary after
+returned completion and before further reuse. Capture and extract through the
+collector with `--provider claude --session-id <agentId>` and the same
+`--agent-id <agentId> --project-root <project-root>` (or its validated explicit
+transcript input). Pass both `--start-boundary` and `--end-boundary` at collection;
+never extract the entire reused session twice. Keep the worker `agentId` separate
+from native parent `session_id` checkpoint evidence. If no
 supported usage exists, use `harness` and report unavailable/null fields. Runtime
 state and legacy memory retention follow the shared contract.
 
@@ -53,6 +60,12 @@ python .mt-agent-devkit/scripts/telemetry.py extract --agent-id <agentId> --proj
 
 Substitute the supplied concrete paths. `--append` retains earlier stage records;
 never run fresh-session extraction again for the same resumed stage.
+
+Both capture artifacts remain within the concrete provider-local runtime tmp
+directory. Source mutations, incomplete evidence or unknown discovery use the
+shared procedure's explicit unavailable fallback, never unbounded substitution.
+The shared procedure owns command examples and evidence requirements; these
+helpers do not certify native cumulative summaries absent their required markers.
 
 ## Provider-owned state paths
 
