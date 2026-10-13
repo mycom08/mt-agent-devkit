@@ -146,10 +146,20 @@ class EvidenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             directory = Path(folder) / "ci"
             fixture = GitHubFixture([run(status="queued", conclusion=None)])
-            self.assertEqual(w.ci_wait(directory, "owner/repo", 1, SHA, [], .025, .01, fixture)["outcome"], "PENDING")
-            self.assertGreater(sum(c[:2] == ["run", "list"] for c in fixture.calls), 1)
+            # Disk persistence can exceed 25ms on Windows. Drive the polling
+            # deadline explicitly; filesystem latency must not choose poll count.
+            now, sleeps = [0.0], []
+            def sleep(seconds):
+                sleeps.append(seconds)
+                now[0] += seconds
+            self.assertEqual(w.ci_wait(directory, "owner/repo", 1, SHA, [], .025, .01, fixture, lambda: now[0], sleep)["outcome"], "PENDING")
+            self.assertEqual(sum(c[:2] == ["run", "list"] for c in fixture.calls), 3)
+            self.assertEqual(len(sleeps), 3)
+            self.assertAlmostEqual(sum(sleeps), .025)
+            self.assertEqual(json.loads((directory / "identity.json").read_text())["expected_sha"], SHA)
             fixture.runs = [run()]
-            self.assertEqual(w.ci_wait(directory, "owner/repo", 1, SHA, [], 0, .01, fixture)["outcome"], "PASS")
+            self.assertEqual(w.ci_wait(directory, "owner/repo", 1, SHA, [], 0, .01, fixture, lambda: now[0], sleep)["outcome"], "PASS")
+            self.assertEqual(sum(c[:2] == ["run", "list"] for c in fixture.calls), 4)
             self.assertFalse(any("rerun" in c for c in fixture.calls))
 
     def test_delayed_discovery_within_window(self):
@@ -159,7 +169,12 @@ class EvidenceTests(unittest.TestCase):
                 if args[:2] == ["run", "list"] and len(fixture.calls) > 5:
                     fixture.runs = [run()]
                 return fixture(args, **kwargs)
-            self.assertEqual(w.ci_wait(Path(folder)/"ci", "owner/repo", 1, SHA, [], .1, .01, request)["outcome"], "PASS")
+            now = [0.0]
+            def sleep(seconds):
+                now[0] += seconds
+            self.assertEqual(w.ci_wait(Path(folder)/"ci", "owner/repo", 1, SHA, [], .1, .01, request, lambda: now[0], sleep)["outcome"], "PASS")
+            self.assertGreater(sum(c[:2] == ["run", "list"] for c in fixture.calls), 1)
+            self.assertLess(now[0], .1)
 
     def test_nonzero_window_preserves_complete_no_run_on_repeated_waits(self):
         with tempfile.TemporaryDirectory() as folder:
