@@ -43,11 +43,13 @@ def covered(root, source, coverage):
     if not path.is_file(): raise Blocked('missing source: ' + source)
     data = path.read_bytes()
     if coverage == {'kind': 'full'}: return data
-    if not isinstance(coverage, dict) or set(coverage) != {'kind', 'section'} or coverage['kind'] != 'section' or not re.fullmatch(r'[0-9]+[a-z]?', str(coverage['section'])):
+    fact = isinstance(coverage, dict) and set(coverage) == {'kind', 'fact'} and coverage['kind'] == 'fact' and re.fullmatch(r'[1-9][0-9]*', str(coverage['fact']))
+    if not fact and (not isinstance(coverage, dict) or set(coverage) != {'kind', 'section'} or coverage['kind'] != 'section' or not re.fullmatch(r'[0-9]+[a-z]?', str(coverage['section']))):
         raise Blocked('invalid section selector: ' + source)
     lines = data.decode('utf-8-sig').splitlines(keepends=True)
-    heads = [i for i, line in enumerate(lines) if re.search(FAMILY, line)]
-    matches = [i for i in heads if re.match(r'^## ' + re.escape(str(coverage['section'])) + r'\.', lines[i])]
+    heads = [i for i, line in enumerate(lines) if re.search(r'^### Fact ' if fact else FAMILY, line)]
+    selector = r'^### Fact ' + re.escape(str(coverage['fact'])) + r'(?:\s|$)' if fact else r'^## ' + re.escape(str(coverage['section'])) + r'\.'
+    matches = [i for i in heads if re.match(selector, lines[i])]
     if len(matches) != 1: raise Blocked('section selector matched ' + str(len(matches)) + ' headings: ' + source)
     start = matches[0]
     end = next((i for i in heads if i > start), len(lines))
@@ -119,6 +121,7 @@ def routes(root, request, registry):
     session = request.get('session')
     if session is not None and (not isinstance(session, str) or not session.strip() or len(session) > 256): raise Blocked('invalid session identity')
     mapping = {**bound, 'role': role, 'slug': role.lower(), 'priming': '.mt-agent-devkit/context/Project_Priming_Bootstrap.md' if request['layout'] == 'internal' else '.mt-agent-devkit/context/Project_Priming.md'}
+    mapping['bootstrap'] = '.mt-agent-devkit/rules/' + role + ('_Rules.md' if request['layout'] == 'target' and role in ('Business_Analyst', 'UI_UX_Designer') else '_Rules_Bootstrap.md')
     entries = []
     def add(definition):
         item = dict(definition)
@@ -143,8 +146,16 @@ def routes(root, request, registry):
         definition = registry['triggers'].get(trigger)
         if definition is None: raise Blocked('unknown observable trigger: ' + str(trigger))
         if definition.get('roles') and role not in definition['roles']: raise Blocked('unsupported trigger for role: ' + trigger)
+        if definition.get('layouts') and request['layout'] not in definition['layouts']: raise Blocked('unsupported trigger for layout: ' + trigger)
         if trigger == 'ci_pending' and request.get('mode') != 'github': raise Blocked('CI waiting unavailable in strict mode')
         for item in definition['reads']: add(item)
+        if definition.get('context'):
+            additions = context_entries(root, request, {'context': definition['context']})
+            for item in additions:
+                if item['id'] == 'context_delta': continue
+                if trigger == 'memory_recall' and (item['source'] != bound['RUNTIME_ROOT'] + '/memory/' + role + '_Memory_Archive.md' or item['coverage'].get('kind') != 'fact'):
+                    raise Blocked('memory recall requires exact own archive fact coverage')
+                entries.append(item)
     if request.get('mode') not in ('github', 'strict'): raise Blocked('explicit mode required')
     ids = {x['id'] for x in entries}
     if len(ids) != len(entries): raise Blocked('duplicate route entry')

@@ -17,7 +17,8 @@ layout or capability from directory names. The provider capability gate remains
 required independently before dispatch.
 
 Entries contain `id`, canonical project-relative `source`, `coverage` (`full`,
-or `section` with an exact numbered selector), `reason`, ordering prerequisites
+or `section` with an exact numbered selector, or `fact` with an exact positive
+number selecting a `### Fact N` archive heading), `reason`, ordering prerequisites
 `after`, source `content_sha256`, and relevant `routing_revision`. Inspection
 contains paths/selectors/digests, never file bodies. Context names identify
 explicit existing files containing canonical story/decisions, artifact and
@@ -115,3 +116,25 @@ original command/session identity, exact head, true exits, and independent gates
 Deterministic routing and generated provider/mode layout tests do not certify
 native Claude/Antigravity/Codex tool execution. No efficiency savings are claimed;
 comparisons require measured comparable runs, not file-byte estimates.
+
+## 5. Role and Action Routing Inventory
+
+Ordinary internal story tasks include Priming §3; reduced TL question and PO
+closure contracts retain their exceptions. QA validation and PO acceptance include
+Story Standard §14. QA implementer tasks include their §1 and §2 procedures.
+Installed BA/UI rules use their unsplit authoritative sources.
+
+Conditional reads remain conditional: `source_review` adds Clean Code for TL or
+peer review; `context_anchoring` adds TL unfinished-session §2; `pre_pr` adds
+TL implementer §3 (installed startup does not). Installed Developer
+`clean_code_change`, `development_convention`, `technical_doc_divergence`,
+`endpoint_change`, and `behavioral_verification` follow its Bootstrap triggers.
+Commenter, body amendment, document update, consultation/live conflict, acceptance,
+UI prototype, and blocker actions add their existing bounded guidance.
+
+`memory_recall` requires `context.memory_match` at the role's own archive path
+with `{"kind":"fact","fact":"N"}` coverage; a missing match or full-archive
+read blocks. Empty/nonmatching indexes never trigger archive reads.
+Runtime tests assert these obligations against internal source text and actual
+installed sources across all three providers and both modes, rather than deriving
+the complete expected contract from synthetic registry fixtures.

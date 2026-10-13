@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import shutil
 from pathlib import Path
 import tempfile
 import unittest
@@ -35,7 +36,7 @@ class RoutingTests(unittest.TestCase):
         definitions += [x for trigger in REGISTRY['triggers'].values() for x in trigger['reads']]
         for role in REGISTRY['roles']:
             for entry in definitions:
-                self.write(entry['source'].format(**mapping, role=role, slug=role.lower()), '# Fixture\n' + ''.join('## '+str(n)+'. Section\nComplete guidance.\n' for n in range(1,21)))
+                self.write(entry['source'].format(**mapping, role=role, slug=role.lower(), bootstrap='.mt-agent-devkit/rules/'+role+'_Rules_Bootstrap.md'), '# Fixture\n' + ''.join('## '+str(n)+'. Section\nComplete guidance.\n' for n in range(1,21)))
         for name in ('story','decisions','artifact','verification','merge','findings','diff','delta','question','pause'):
             self.write('docs/'+name+'.md', '# '+name+'\nCanonical bounded context.\n')
             self.request['context'][name] = dict(source='docs/'+name+'.md',coverage={'kind':'full'},reason=name)
@@ -61,6 +62,47 @@ class RoutingTests(unittest.TestCase):
             self.assertLessEqual(set(entry['after']),seen)
             seen.add(entry['id'])
         self.assertEqual([x['id'] for x in reads[:3]],['adapter','role','common'])
+
+    def test_authoritative_governed_reads(self):
+        # The oracle is the actual contract, never files synthesized from registry entries.
+        def sections(role, task, source, text, triggers=()):
+            contract=(ROOT/source).read_text(encoding='utf-8')
+            self.assertIn(text,contract)
+            return {(x['source'],x['coverage'].get('section')) for x in self.build(role=role,task=task,triggers=list(triggers))['reads']}
+        master='.mt-agent-devkit/rules/Story_Standard.md'
+        self.assertIn((master,'14'),sections('QA','qa','.mt-agent-devkit/rules/QA_Rules_Bootstrap.md','Before validation/sign-off, read `Story_Standard.md §14`'))
+        self.assertIn((master,'14'),sections('Product_Owner','closure','.mt-agent-devkit/rules/Story_Standard_PO.md','Read `Story_Standard.md §14` before acceptance.'))
+        self.assertIn(('.mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md','2'),sections('QA','implementation','.mt-agent-devkit/instructions/qa_instructions.md','live user instruction conflicts rule in `§2`'))
+        self.assertIn(('.mt-agent-devkit/rules/Clean_Code_Rules.md',None),sections('Technical_Lead','review','.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','**Source code / script changes only**',('source_review',)))
+        self.assertIn(('.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','2'),sections('Technical_Lead','review','.mt-agent-devkit/instructions/technical_lead_instructions.md','After each working session on an unfinished story',('context_anchoring',)))
+
+    def test_conditional_reads_are_not_startup(self):
+        fresh=self.build(role='Technical_Lead',task='review')
+        self.assertFalse(any('Clean_Code_Rules' in x['source'] for x in fresh['reads']))
+        with self.assertRaisesRegex(m.Blocked,'unsupported trigger'): self.build(role='QA',task='qa',triggers=['context_anchoring'])
+
+    def test_all_internal_tasks_and_triggers_resolve_actual_guidance(self):
+        for folder in ('rules','instructions','context','contracts'):
+            shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
+        for task,definition in REGISTRY['tasks'].items():
+            for role in definition['roles']:
+                for trigger,route in REGISTRY['triggers'].items():
+                    if route.get('roles') and role not in route['roles']: continue
+                    if route.get('layouts') and 'internal' not in route['layouts']: continue
+                    with self.subTest(role=role,task=task,trigger=trigger):
+                        context=copy.deepcopy(self.request['context'])
+                        if trigger=='memory_recall':
+                            source=self.bound['RUNTIME_ROOT']+'/memory/'+role+'_Memory_Archive.md'
+                            self.write(source,'### Fact 1 — Matched\nActual selected fact.\n### Fact 2 — Other\nExcluded.\n')
+                            context['memory_match']=dict(source=source,coverage={'kind':'fact','fact':'1'},reason='observed keyword match')
+                        self.build(role=role,task=task,triggers=[trigger],context=context)
+
+    def test_memory_recall_requires_exact_own_bounded_fact(self):
+        with self.assertRaisesRegex(m.Blocked,'memory_match'): self.build(triggers=['memory_recall'])
+        context=copy.deepcopy(self.request['context'])
+        context['memory_match']=dict(source='docs/story.md',coverage={'kind':'full'},reason='match')
+        with self.assertRaisesRegex(m.Blocked,'exact own archive'): self.build(triggers=['memory_recall'],context=context)
+        with self.assertRaisesRegex(m.Blocked,'unsupported trigger for layout'): self.build(triggers=['endpoint_change'])
 
     def test_assigned_role_implementation_requirements(self):
         for role,required in [('Technical_Lead',{'tl_implementation_1','tl_implementation_3','tl_implementation_4'}),('QA',{'qa_implementation'}),('Business_Analyst',{'ba_implementation'})]:
@@ -201,15 +243,57 @@ class InstalledTests(unittest.TestCase):
                         deployment.apply(target,plan); deployment.verify(target)
                         self.assertEqual((target/'.mt-agent-devkit/contracts/read-routing.json').read_bytes(),m.REGISTRY.read_bytes())
                         installed=module('installed_manifest_'+provider+mode,str((target/'.mt-agent-devkit/scripts/read_manifest.py').absolute()))
+                        # Project-owned wiki inputs are supplied by the project, not installed by the harness.
+                        standards=target/'docs/wiki/Development_Standards.md'; standards.parent.mkdir(parents=True,exist_ok=True)
+                        standards.write_text((ROOT/'.mt-agent-devkit/distribution/phase2/templates/wiki/Development_Standards_template.md').read_text(encoding='utf-8'),encoding='utf-8')
                         context={}
                         for name in ('story','decisions','artifact','verification','merge','question','pause'):
                             path=target/'docs'/ (name+'.md'); path.parent.mkdir(exist_ok=True); path.write_text('# '+name+'\n',encoding='utf-8')
                             context[name]=dict(source='docs/'+name+'.md',coverage={'kind':'full'},reason=name)
-                        for role,task in [('Developer','implementation'),('Developer','peer_review'),('Technical_Lead','review'),('QA','qa'),('Product_Owner','closure'),('Technical_Lead','question')]:
+                        cases=[(role,task) for task,definition in REGISTRY['tasks'].items() for role in definition['roles']]
+                        for role,task in cases:
                             request=dict(provider=provider,bindings=bound,layout='target',role=role,task=task,stage=task,story='ST-000254',session_state='fresh',session='fixture',mode=mode,context=context,triggers=[])
+                            for name in ('findings','diff'):
+                                path=target/'docs'/(name+'.md'); path.write_text('# '+name+'\n',encoding='utf-8')
+                                context[name]=dict(source='docs/'+name+'.md',coverage={'kind':'full'},reason=name)
                             built=installed.build(target,request)
                             installed.validate(target,built)
                             self.assertEqual(built['reads'][0]['source'],'.'+provider+'/harness/Provider_Adapter.md')
+                            selected={(x['source'],x['coverage'].get('section')) for x in built['reads']}
+                            if task=='qa':
+                                authority=(target/'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md').read_text(encoding='utf-8')
+                                self.assertIn('read `Story_Standard.md §14`',authority)
+                                self.assertIn(('.mt-agent-devkit/rules/Story_Standard.md','14'),selected)
+                            if role=='QA' and task in ('implementation','fix'):
+                                authority=(target/'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md').read_text(encoding='utf-8')
+                                self.assertIn('`QA_Rules_Read_On_Demand.md §2`',authority)
+                                self.assertIn(('.mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md','2'),selected)
+                            for trigger,route in REGISTRY['triggers'].items():
+                                if route.get('roles') and role not in route['roles']: continue
+                                if route.get('layouts') and 'target' not in route['layouts']: continue
+                                if trigger=='ci_pending' and mode=='strict': continue
+                                if trigger=='memory_recall':
+                                    own=bound['RUNTIME_ROOT']+'/memory/'+role+'_Memory_Archive.md'
+                                    (target/own).write_text('### Fact 1 — Match\nBounded evidence.\n',encoding='utf-8')
+                                    context['memory_match']=dict(source=own,coverage={'kind':'fact','fact':'1'},reason='keyword match')
+                                extended=installed.extend(target,built,[trigger])
+                                installed.validate(target,extended)
+                                if trigger=='pre_pr' and role=='Technical_Lead':
+                                    authority=(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8')
+                                    self.assertIn('about to open a PR',authority)
+                                    self.assertIn(('.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','3'),{(x['source'],x['coverage'].get('section')) for x in extended['reads']})
+                                if trigger=='development_convention':
+                                    authority=(target/'.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md').read_text(encoding='utf-8')
+                                    self.assertIn('Read `docs/wiki/Development_Standards.md`',authority)
+                                    self.assertTrue(any(x['source']=='docs/wiki/Development_Standards.md' for x in extended['reads']))
+                                if trigger=='clean_code_change':
+                                    authority=(target/'.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md').read_text(encoding='utf-8')
+                                    self.assertIn('**For Clean Code or refactor stories**',authority)
+                                    self.assertTrue(any(x['source'].endswith('/Clean_Code_Rules.md') for x in extended['reads']))
+                                if trigger=='source_review':
+                                    authority=(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8')
+                                    self.assertIn('Clean_Code_Rules.md',authority)
+                                    self.assertTrue(any(x['source'].endswith('/Clean_Code_Rules.md') for x in extended['reads']))
 
 
 if __name__ == '__main__': unittest.main()
