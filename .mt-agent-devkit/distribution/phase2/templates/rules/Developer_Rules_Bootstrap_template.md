@@ -120,6 +120,8 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ## 5. Testing & Verification
 
+For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
+
 **Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — stop and report, do not self-approve the skip.
 
 **Behavioral changes or an existing story integration script:** fetch `Developer_Rules_Read_On_Demand.md §18` before PR. For affected endpoints, confirm the section 17 spec-matching gate before merge.

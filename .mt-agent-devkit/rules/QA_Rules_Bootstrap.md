@@ -113,6 +113,8 @@ Once all Acceptance Criteria are validated and QA sign-off is complete, QA **mus
 
 ## 8. Regression Check (mandatory before sign-off)
 
+For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
+
 After all story AC are verified, confirm no regression was introduced:
 
 1. Review the changed files and consider the blast radius

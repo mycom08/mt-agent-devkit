@@ -1,0 +1,51 @@
+---
+name: local-verify
+description: Execute long local verification once with provider-local logs, compact results and resumable bounded waits; retain the project's full required command.
+---
+
+# Local Verification
+
+Resolve the project's required aggregate verification command. Wrap that exact
+command without dropping tests or substituting a shorter suite. Read the selected
+adapter and use its concrete runtime bindings. Python 3.10+ is required.
+
+```text
+python .mt-agent-devkit/scripts/wait_work.py local-run --provider codex --runtime-root .codex/agents --id ST-000217-checks --mode strict -- python -m unittest discover
+python .mt-agent-devkit/scripts/wait_work.py local-wait --provider codex --runtime-root .codex/agents --id ST-000217-checks --mode strict --window 45
+```
+
+The example command must be replaced with the project's actual full command;
+devkit internal Codex binding is `.codex/agents/working`. Use `--root` if the
+tool working directory differs. Bash/PowerShell `wait_work.sh`/`wait_work.ps1`
+forward identical arguments. Commands are argument vectors after `--`, never
+shell strings; for a script, explicitly invoke its shell (e.g. `powershell
+-NoProfile -File scripts/test/run.ps1` or `bash scripts/test/run.sh`). No
+background/detached launch is invented by the helper.
+
+`local-run` owns the foreground command until completion. The native tool may
+yield a supported session ID: retain it and use its documented bounded waits.
+Codex uses `exec_command` then `write_stdin` on the returned `session_id`;
+`functions.wait` applies only to an actual yielded cell ID. Claude uses the
+verified Bash/session API. Antigravity native command/wakeup support is
+unverified here; inspect actual schemas, or report unavailable. An available
+foreground shell provides sequential execution; another worker's turn ending is
+never a generic wakeup contract. Mechanical deployment does not certify these
+native APIs.
+
+`local-wait` only reads that existing run. It waits silently within a 0..540
+second window (default 45), then returns PENDING/124 if completion is absent.
+Repeat that wait, retaining the original runner/session identity. It never starts
+work. Missing IDs return ERROR/3; existing or completed IDs cannot relaunch.
+If a runner is interrupted and never records completion, report blocked/missing
+completion; do not invent success or reuse that ID. Choose a new ID only for an
+explicitly authorized new run after recovering the interrupted command.
+
+Completion JSON contains PASS/FAIL, the true `process_exit_code`, identity and
+bounded totals/failure lines. The tool exits with the command's true exit code;
+if the command itself exits 124, JSON says FAIL (unlike a pending wait).
+Full output stays in `<RUNTIME_ROOT>/tmp/waits/local/<id>/output.log`;
+command arguments are not persisted. Logs are private and known secret environment
+values/URL credentials are redacted; never pass secrets as arguments or intentionally
+print secrets. Unknown private content still needs operator review before sharing.
+On PASS, retain totals only. On failure, inspect bounded relevant log lines.
+Strict mode has no GitHub dependency. Independent TL/QA gates remain unchanged.

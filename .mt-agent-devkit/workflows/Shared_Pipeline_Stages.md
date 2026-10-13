@@ -197,6 +197,17 @@ and synthetic checkpoint fixtures do not certify native transcript support.
 
 ---
 
+
+## Waiting for CI and long verification
+
+In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
+
+For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
+
+These observable triggers route to the shared waiting contracts; ST-000254 registers them in its canonical manifest. Do not create another startup read list. Selected adapters own command lifecycle support; unverified native wakeup remains unavailable.
+
+---
+
 ## Stage 1 — Implementation
 
 **Orchestrator pre-spawn:** initialize `Retro Contract: exception-v1` and carry an explicit expected completion identity list at the bound runtime path before each actual stage/actor executes. Follow `Agent_Common_Bootstrap.md §7`; do not create a retro skeleton. Observe trigger events throughout work. Already-started legacy runs explicitly keep their prior contract and existing history.
@@ -336,10 +347,11 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 0. **CI-check gate (mandatory, independent of reviewer sign-off):** run `gh pr checks <PR-number> --repo mycom08/mt-agent-devkit`. Three distinct states at head — resolve each on its own terms, and never treat "no checks reported" as equivalent to "checks passed":
    - **State 1 — checks reported, all `completed`, none `fail`:** gate satisfied against the head SHA.
-   - **State 2 — any check `fail`, or any check not yet `completed`:** **abort the merge** — report the failing/pending check(s) to the user instead of proceeding. This runs regardless of what the reviewer's approval comment claims.
+   - **State 2 — pending or failed evidence:** both block advancement, but waiting is distinct from failure. Pending/in-progress checks route to ci-watch using a bounded supported wait; window expiry remains PENDING. Failed, cancelled or timed-out checks route to fixes or a truthful blocked report. Re-run the gate at the exact current head after completion; reviewer approval does not override it.
    - **State 3 — zero checks reported:** this is **not** State 1. Determine which of two distinct causes applies before proceeding — they resolve differently:
      - **(a) A CI-suppression token (e.g. `[skip ci]`) sits in the head commit's message.** This suppresses the run for the whole push — `validate-templates.yml`'s `paths:` filter is evaluated against the PR's entire changed-file set on every push, not the individually pushed commit, so a bookkeeping-only commit landing last does not by itself explain an empty rollup when the total diff still touches `.claude/agents/templates/**` or `.claude/agents/workflows/**` (tested and disproven — ST-000148: a retro-only push still produced a fresh green run at the new head; there is no commit-ordering hazard). To resolve: walk the branch's commits backward from head and find the most recent SHA that actually has a recorded check-run (`gh api repos/mycom08/mt-agent-devkit/commits/<SHA>/check-runs`) — that SHA is the last push that wasn't suppressed. If its run is `completed` and passing, the gate is satisfied **against that SHA**, not head; record which SHA was used. If no such run exists, or it failed, treat this the same as State 2 and abort.
      - **(b) No commit's push ever produced a run because no path in the PR's whole changed-file set (`gh pr diff <PR-number> --name-only`) matches `validate-templates.yml`'s `paths:` filter.** Nothing was ever eligible. State this outcome explicitly rather than proceeding silently: the merge decision rests entirely on reviewer sign-off, with the absence of any eligible check recorded as a deliberate, evidenced exception — not as a passed check.
+   - **Prior-run scope:** record the prior evidence SHA, current head and every file changed between them; verify the suppression cause and that the permitted exception covers that scope. Helper prior candidates remain NO RUN until this explicit decision.
    - **Audit requirement (whichever state leads to a merge):** before step 2 below, post a `gh pr comment` recording which state applied (1 / 3a / 3b) and the evidence used.
 0a. **Approval-scope gate (mandatory, independent of the CI gate):** find the most recent `**Approved-SHA:**` the reviewer cited at Stage 2 and diff it against the current head: `git diff <Approved-SHA> <head-SHA> --name-only`.
     - **No post-approval exception for agent runtime state:** memory, working records, retrospectives, telemetry, and pipeline state stay uncommitted. Any tracked change since `Approved-SHA`, including a test-scenario document, requires refreshed review.

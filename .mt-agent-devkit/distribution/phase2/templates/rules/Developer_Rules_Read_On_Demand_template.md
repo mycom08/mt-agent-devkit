@@ -103,6 +103,8 @@ Triggered by the peer-review assignment route in `Developer_Rules_Bootstrap.md �
 4. Use `gh pr comment` for the PR-level verdict (not `gh pr review --approve` — GitHub blocks self-approval)
 
 **Reviewer Gate — before approving:**
+
+In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
 - [ ] All CI checks on the PR have **finished** — do not review while CI is still running
 - [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
 - [ ] Code review criteria pass (per §9)

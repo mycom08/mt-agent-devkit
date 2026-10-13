@@ -26,6 +26,10 @@ Do these **in order** before any design or review work:
 3. If no PR is linked, ask Dev to link it before proceeding — do not review unlinked PRs
 
 **Review checklist:**
+
+In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
+
+For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
 - **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
 - **Confirm the check actually executed, not just its conclusion:** open the job log and confirm the target suite actually ran (non-zero test count) before accepting a green/red conclusion at face value. A run that fails at dependency resolution before any test executes is a different failure mode than a real test failure — call it out as such, don't treat it as proof either way.
 - **Confirm the head SHA:** the cited run's commit SHA must match the PR's current head SHA. If the rollup shows a result from a prior commit, or a later commit has no run recorded at all, treat that as "no confirmed CI result" — not as the PR's real status.

@@ -62,4 +62,8 @@ Missing bindings block; never search other providers or runs for a substitute.
 Run IDs identify telemetry/sessions; they do not relocate normal working state.
 Disposable validation evidence may use separate provider-local run directories.
 
+## Bounded CI and verification waits
+
+When CI is pending in GitHub mode use `.mt-agent-devkit/contracts/Wait_Work.md`; long local checks use `.mt-agent-devkit/contracts/Local_Verify.md`. Invoke the shared wait helper with this provider and its concrete state-path bindings. Retain returned command/session identities and use only the active runtime's documented completion operations. Sequential bounded foreground waits are the fallback; unavailable command support blocks execution. Ending a worker turn is never a generic wakeup. Strict mode uses local verification and never GitHub. Revalidate exact-head evidence and approval scope after CI finishes. Mechanical installation does not certify native lifecycle behavior.
+
 Target selection command: `python .mt-agent-devkit/scripts/provider_context.py --target . --tools <enabled-tools.json> --provider codex` (add `--capabilities <verified-runtime-manifests.json>` only for observed mappings). Target defaults use `.codex/agents`; preserve installed receipt bindings. Never use devkit `agents/working` paths for target state.

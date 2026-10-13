@@ -91,6 +91,40 @@ class BundleTests(unittest.TestCase):
                                 self.assertIn("version_notice.py", settings["hooks"]["SessionStart"][0]["hooks"][0]["command"])
                                 self.assertTrue((target / ".claude/skills/read-section/SKILL.md").is_file())
                             adapter = (target / ("." + provider) / "harness/Provider_Adapter.md").read_text()
+                            for skill in ("ci-watch", "local-verify"):
+                                skill_path = target / ("." + provider) / "skills" / skill / "SKILL.md"
+                                self.assertTrue(skill_path.is_file())
+                                self.assertIn("--provider " + provider, skill_path.read_text(encoding="utf-8"))
+                            helper = target / ".mt-agent-devkit/scripts/wait_work.py"
+                            attributes = target / ".mt-agent-devkit/.gitattributes"
+                            self.assertEqual(attributes.read_bytes(), b"*.sh text eol=lf\n")
+                            shell_helper = target / ".mt-agent-devkit/scripts/wait_work.sh"
+                            self.assertNotIn(b"\r", shell_helper.read_bytes())
+                            subprocess.run(["git", "init", "--quiet", str(target)], check=True, capture_output=True)
+                            attribute = subprocess.run(["git", "check-attr", "eol", "--", ".mt-agent-devkit/scripts/wait_work.sh"], cwd=target, check=True, capture_output=True, text=True)
+                            self.assertIn("eol: lf", attribute.stdout)
+                            wait_spec = importlib.util.spec_from_file_location("installed_wait", helper)
+                            waiting = importlib.util.module_from_spec(wait_spec)
+                            wait_spec.loader.exec_module(waiting)
+                            runtime = "." + provider + "/agents"
+                            directory = waiting.run_directory(target, provider, runtime, "deployed-check", "local")
+                            local = waiting.local_run(directory, [__import__("sys").executable, "-c", "print('Tests 1 passed')"], target)
+                            self.assertEqual(local["process_exit_code"], 0)
+                            self.assertEqual(waiting.local_wait(directory, 0, .01)["outcome"], "PASS")
+                            with self.assertRaises(waiting.WaitError):
+                                waiting.local_run(directory, ["duplicate"], target)
+                            from scripts.test.test_wait_work import GitHubFixture, run, SHA
+                            if mode == "github":
+                                ci_dir = waiting.run_directory(target, provider, runtime, "deployed-ci", "ci")
+                                fixture = GitHubFixture([run(), run("security", status="queued", conclusion=None, identity=2)])
+                                self.assertEqual(waiting.ci_wait(ci_dir, "owner/repo", 1, SHA, [], 0, .01, fixture)["outcome"], "PENDING")
+                                fixture.runs = [run(), run("security", identity=2)]
+                                self.assertEqual(waiting.ci_wait(ci_dir, "owner/repo", 1, SHA, [], 0, .01, fixture)["outcome"], "PASS")
+                            else:
+                                # Even with gh missing, strict local behavior is operational.
+                                blocked = subprocess.run([__import__("sys").executable, str(helper), "ci", "--provider", provider, "--runtime-root", runtime, "--id", "strict-ci", "--mode", "strict", "--root", str(target)], capture_output=True, encoding="utf-8")
+                                self.assertEqual(json.loads(blocked.stdout)["outcome"], "ERROR")
+                                self.assertIn("strict", json.loads(blocked.stdout)["reason"])
                             self.assertNotIn("Internal Harness Adapter", adapter)
                             # Execute the deployed collector contract, not a source-only import.
                             collector = target / ".mt-agent-devkit/scripts/telemetry.py"
@@ -170,10 +204,14 @@ class BundleTests(unittest.TestCase):
                 self.assertEqual(json.loads(result.stdout)["status"], "verified")
                 memory = target / ".codex/agents/memory/Developer_Memory.md"
                 memory.write_bytes(b"durable user fact\n")
+                history = target / ".codex/agents/tmp/waits/local/prior/output.log"
+                history.parent.mkdir(parents=True)
+                history.write_bytes(b"private prior run evidence\n")
                 result = subprocess.run(shell + ["update"] + common, capture_output=True, encoding="utf-8")
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertTrue(json.loads(result.stdout)["no_op"])
                 self.assertEqual(memory.read_bytes(), b"durable user fact\n")
+                self.assertEqual(history.read_bytes(), b"private prior run evidence\n")
 
 
 if __name__ == "__main__": unittest.main()

@@ -1,0 +1,64 @@
+---
+name: ci-watch
+description: Wait for pending GitHub CI evidence on a PR or commit in bounded command windows; interpret all checks and preserve exact-head review gates. GitHub mode only.
+---
+
+# CI Watch
+
+Invoke `.mt-agent-devkit/scripts/wait_work.py ci` with the selected provider,
+concrete runtime binding, unique wait ID, mode, repository and PR or full SHA.
+The ID binds the first inspected head; repeat the same command to resume.
+Use `--required-check <name>` for each additional expected workflow/check not
+declared in branch protection. A commit input has no PR protection context:
+supply all expected check/workflow names and do not use it as a PR merge verdict.
+
+```text
+python .mt-agent-devkit/scripts/wait_work.py ci --provider codex --runtime-root .codex/agents --id ST-000217-review --mode github --repo owner/repo --pr 123 --window 45
+```
+
+Use receipt/state-path bindings; the example is a target layout, while devkit
+internal Codex uses `.codex/agents/working`. Bash and PowerShell launchers
+`wait_work.sh` and `wait_work.ps1` forward the same arguments. Python 3.10+ and
+authenticated `gh` are prerequisites; never install or alter credentials merely
+to make a missing capability appear supported.
+
+| Outcome / exit | Action |
+|---|---|
+| PASS / 0 | All visible runs/checks and declared required names passed. Recheck current head, approval scope, and the canonical review/merge gates. This is evidence, never permission to merge. |
+| FAIL / 1 | Required or conservatively included evidence failed, cancelled or timed out; route to fixes. |
+| PENDING / 124 | Window expired, work/checks still pending or expected names absent. Repeat same wait ID; no gate advances. |
+| NO RUN / 2 | No evidence after discovery window. Apply the existing explicit zero-check gate; never infer success. |
+| ERROR / 3 | Recover missing identity/binding, CLI/authentication/network or unsupported evidence; retry same ID after recovery. |
+| STALE / 4 | Head changed; old evidence cannot approve the new head. Start a new wait ID after renewed scope review. |
+
+JSON includes inspected SHA, run IDs, check count, missing names and identity.
+Prior-run candidates include their SHA, verdict and changed-file comparison, but
+remain NO RUN. Confirm suppression, complete changed-file scope and prior-run
+success under the canonical zero-check exception. Never treat a successful single
+Actions run as all required checks. A required-workflow ruleset that cannot be
+resolved returns ERROR rather than certifying incomplete evidence. Request
+failures remain errors; a request reaching its window deadline remains pending.
+
+The helper rediscovers delayed evidence inside each window; it never starts CI.
+Use windows at most 540 seconds and shorter than the selected command tool's
+supported limit (45 seconds by default). Retain any native command/session ID
+when the tool yields. Continue its supported bounded wait to collect completion,
+then repeat the helper only on PENDING. Avoid separate status commands, timer
+loops, full passing logs, or treating worker turn end as a wakeup.
+
+Read only the selected adapter before invocation. Codex uses `exec_command` and
+the returned `session_id` with `write_stdin`; a yielded functions cell uses
+`functions.wait` after its cell ID. Claude uses its verified Bash/session
+completion API; bounded foreground windows are the sequential fallback.
+Antigravity's command/wakeup API is unverified in this repository: map actual
+enabled command/wait tools before invocation, otherwise report unavailable.
+With an available shell, bounded foreground execution followed by the same
+command is the real sequential fallback; do not assume reference reactive APIs.
+Mechanical installation tests do not certify native discovery or wakeup.
+
+Evidence lives only in the selected runtime's `tmp/waits/ci/<id>`. No raw GitHub
+logs or error output is printed/stored. Inspect only bounded relevant failed
+details separately, applying secret handling. Strict mode never invokes `gh`;
+use local-verify. Waiting changes no acceptance, TL/QA, or approval-SHA contract.
+
+Selected provider invocation: `--provider claude --runtime-root .claude/agents`. Preserve receipt bindings when customized; load only `.claude/harness/Provider_Adapter.md`.
