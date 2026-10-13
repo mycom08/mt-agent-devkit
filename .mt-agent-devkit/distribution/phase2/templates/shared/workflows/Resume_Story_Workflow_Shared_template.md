@@ -5,6 +5,8 @@
 
 Triggered by: `"resume story ST-XXXXXX"` or `"/resume-story ST-XXXXXX"` in {{ROOT_FILE}}
 
+Every worker spawn or resume uses the validated manifest dispatch in Shared Pipeline Stages and `.mt-agent-devkit/contracts/Read_Manifest.md`; routing comes only from the canonical registry, including specialist handoffs and safe resumes.
+
 Use this when a story has `status:blocked` and the required external information has been provided.
 
 ---

@@ -2,6 +2,8 @@
 
 Triggered by: `"start story ST-XXXXXX"` or `"/story ST-XXXXXX"` in the selected provider entrypoint
 
+Every worker spawn or resume uses the validated manifest dispatch in Shared Pipeline Stages and `.mt-agent-devkit/contracts/Read_Manifest.md`; routing comes only from the canonical registry, including specialist handoffs and safe resumes.
+
 The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for the specified story only. **Pipeline stops after Stage 4 — PO does NOT promote the next story.**
 
 ---

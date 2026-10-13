@@ -9,9 +9,19 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Explicit Manifest Dispatch — Every Worker Assignment
+
+Before every story worker spawn or resume, build and validate a manifest with `.mt-agent-devkit/scripts/read_manifest.py` using the single `.mt-agent-devkit/contracts/read-routing.json`; follow `.mt-agent-devkit/contracts/Read_Manifest.md`. This applies to implementation, independent TL/Developer review, QA, PO closure, all fix/recheck resumes, and triggered specialist questions. Supply concrete provider/layout/bindings, role/task/stage/session identity, bounded canonical story/evidence inputs and new delta pointers. Select the registry task; do not maintain another startup list in this workflow. Unsupported or insufficient specialist context blocks rather than broadening startup.
+
+Immediately before the selected adapter dispatch, validate against current sources and routing. BLOCKED stops before spawning. Pass the validated manifest and Worker Entry Read Contract below verbatim with the ordinary assignment. Successful returned-coverage receipts are explicit worker attestations after truncation recovery; a live session, summary, digest, or build PASS never proves a read. Missing identity follows fresh/expired reads; omission requires matching provider/session/source/coverage/relevant-route provenance. Fresh and expired specialist/closure tasks retain their reduced contracts.
+
+During work extend and validate for observable triggers before governed actions. Register accepted completion, telemetry and waiting triggers through the canonical registry only; preserve their existing authoritative policies. No initial manifest suppresses a new safety rule, authorizes a mutation, or removes independent review/QA. Record manifest/receipt pointers in bound runtime handoffs; never commit them. Sequential supported reads remain valid when batching is unavailable.
+
+---
+
 ## Worker Entry Read Contract
 
-For every fresh worker spawn or expired-session restart, include this contract verbatim in the ordinary role packet, together with the selected adapter, concrete bindings and canonical role instruction path. It applies before discovery commands or shell-based context loading; a rule inside an unread role file cannot enforce that boundary by itself. A valid same-session resume retains its prior reads and receives only the new task/evidence delta.
+For every fresh worker spawn or expired-session restart, include this contract verbatim in the ordinary role packet, together with the selected adapter, concrete bindings and canonical role instruction path. It applies before discovery commands or shell-based context loading; a rule inside an unread role file cannot enforce that boundary by itself. A valid same-session resume retains only unchanged reads with successful returned-coverage provenance; the validated manifest supplies new task/evidence deltas and all invalidated or unknown reads.
 
 ```text
 Before any shell command, use the runtime's native file-reading tool when
@@ -133,7 +143,7 @@ input, duplicate stage identities and mixed schemas stop the run.
 ### Bounded same-session resume
 
 This is the single boundary handoff procedure for every fix, review re-check,
-QA re-check and consultation resume. ST-000254 read manifests consume these
+QA re-check and consultation resume. Explicit read manifests consume these
 handoff fields; they do not define another telemetry policy. The orchestrator
 owns capture and collection; workers receive the ordinary task/evidence delta.
 
@@ -210,7 +220,7 @@ In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (
 
 For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
 
-These observable triggers route to the shared waiting contracts; ST-000254 registers them in its canonical manifest. Do not create another startup read list. Selected adapters own command lifecycle support; unverified native wakeup remains unavailable.
+These observable triggers route to the shared waiting contracts; Canonical read routing registers them once. Do not create another startup read list. Selected adapters own command lifecycle support; unverified native wakeup remains unavailable.
 
 ---
 

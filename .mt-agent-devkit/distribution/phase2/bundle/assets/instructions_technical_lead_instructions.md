@@ -34,6 +34,12 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 
 ---
 
+## Answer-a-Question Task
+
+For a specialist question use only the reduced read set and procedure in `Technical_Lead_Rules_Read_On_Demand.md §6`, plus selected adapter and canonical role entry gates. Do not load the full Pre-Work Checklist for this task.
+
+---
+
 ## Feature Context
 
 When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` from the pipeline state.
