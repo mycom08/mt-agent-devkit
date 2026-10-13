@@ -76,7 +76,9 @@ Technical decision or review feedback.
 
 ## 12. Reviewer Gate — before approving a PR
 
+In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
+
 - [ ] All CI checks on the PR have **finished** — do not review while CI is still running
 - [ ] No CI check is in a **failed** state — if any failed, comment on the PR and ask for a fix; do not approve until green
-- [ ] **Zero checks reported is not automatically "CI failing."** First confirm whether the head commit only touched paths excluded by a `paths-ignore`/`paths` filter, or is a docs-only `[skip ci]` commit — if so, that's "nothing runnable changed," not a blocker, note it and proceed. If the head commit did touch CI-relevant paths and still shows zero checks, that's CI genuinely missing — do not approve; require a real run or an explicit human-authorized deviation note first.
+- [ ] **Zero checks reported is not passing evidence.** Apply the existing explicit zero-check exception in `Shared_Pipeline_Stages.md` Merge Procedure: record suppression/path eligibility, prior SHA/current head and complete changed-file scope. A helper prior candidate remains NO RUN until that evidenced decision; no prior success or missing required evidence is silently waived.
 - [ ] Code review criteria pass (per `Technical_Lead_Rules_Bootstrap.md` §2)

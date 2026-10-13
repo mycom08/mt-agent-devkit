@@ -101,6 +101,8 @@ If your story touches a file another still-unreleased-version story already desc
 
 ## 5. Pre-PR Gate
 
+For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
+
 For changes to `.mt-agent-devkit/**`, any provider's `harness/**`, internal working wrappers/skills, or root entrypoints, run `python scripts/validate_internal_harness.py`, `python .mt-agent-devkit/scripts/generate_wrappers.py --check`, and `python -m unittest scripts.test.test_internal_harness`, all exit 0. Run `python scripts/validate_templates.py` and `bash scripts/test/run.sh` for the existing template/deployment regressions. The optional `--migration-preservation` audit is for this migration only; never require it for later releases or ordinary maintenance.
 
 **Missing credential blocks a check — do not substitute a dummy value and call it verified.** If a required secret/credential is unavailable in your environment, follow `Agent_Common_Read_On_Demand.md §6` (Credential-Gated Verification) — stop and report, do not self-approve the skip.

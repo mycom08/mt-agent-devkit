@@ -66,15 +66,15 @@
     {
       "id": "rules/Developer_Rules_Bootstrap.md",
       "path": "assets/rules_Developer_Rules_Bootstrap.md",
-      "sha256": "9a7d57b008764de6c9e12cc2031bdc4782fbe787000051f14fc63d8ce4c01712",
-      "bytes": 17879,
+      "sha256": "593da7007a2523f533baceb4e6d2ea3b3d292a04e46bcd07774690e857be410c",
+      "bytes": 18205,
       "kind": "template"
     },
     {
       "id": "rules/Developer_Rules_Read_On_Demand.md",
       "path": "assets/rules_Developer_Rules_Read_On_Demand.md",
-      "sha256": "8a50f6268f7bba08f3cabb6ba0522460fa2d28fe41ed3934ea9987e70403a256",
-      "bytes": 14558,
+      "sha256": "384a461dbf750f9880c4e25572529f7e9eb544659a110c13424c8f87a68e9fa7",
+      "bytes": 14972,
       "kind": "template"
     },
     {
@@ -101,8 +101,8 @@
     {
       "id": "rules/QA_Rules_Bootstrap.md",
       "path": "assets/rules_QA_Rules_Bootstrap.md",
-      "sha256": "aa3d196db2c3fea64ab732651677d44099f7109f556a3312a9162e832401385d",
-      "bytes": 17124,
+      "sha256": "69e0edd9e3a43c5a4dc3f94198ee88e08a24f077e23b533c3f0fcd07548af675",
+      "bytes": 17450,
       "kind": "template"
     },
     {
@@ -143,15 +143,15 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "8af9775de5b8d2ab0e73b95fdc89832ba7440e8af86a39f3b707ec3100e75384",
-      "bytes": 36135,
+      "sha256": "7fa25c05508abf64e730ccc7aad2ffbe4ac89d0d41a0df1a786fda0b3716c638",
+      "bytes": 36549,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard_TL.md",
       "path": "assets/rules_Story_Standard_TL.md",
-      "sha256": "aef034f62875b6ddb7a3227953929622cba858ad8984a6bbc17191a93dd36539",
-      "bytes": 4864,
+      "sha256": "6fa74de435925cc64437d47a9f79e236a5764b414436b296a0e8243b7bdc9d64",
+      "bytes": 5177,
       "kind": "template"
     },
     {
@@ -171,8 +171,8 @@
     {
       "id": "rules/Technical_Lead_Rules_Bootstrap.md",
       "path": "assets/rules_Technical_Lead_Rules_Bootstrap.md",
-      "sha256": "d61614a89a7c3ec1a9e885032aa9c84931b6eddfe79e8f65c2a3c5da4ad7b6e8",
-      "bytes": 15388,
+      "sha256": "e10a1e2b0c3074524693042c75f6a5db33ed37b79473165821eeb34dff3b6541",
+      "bytes": 16128,
       "kind": "template"
     },
     {
@@ -346,8 +346,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "fd3d3b87322b1ec9c56f1e33913b76eb31e5cf4b3a75b1ec298c8016c0304edd",
-      "bytes": 47332,
+      "sha256": "e8184cc3782efb5075a6e67843d33e1929223f272ae22776096335204229b4f3",
+      "bytes": 48730,
       "kind": "template"
     },
     {
@@ -512,6 +512,20 @@
       "kind": "template"
     },
     {
+      "id": "claude/skill/ci-watch",
+      "path": "assets/claude_skill_ci-watch",
+      "sha256": "7b81bbdd7bc3e0fd625333c02c136b01a6fe0756bc4df3769636c26653aeaaeb",
+      "bytes": 4254,
+      "kind": "adapter"
+    },
+    {
+      "id": "claude/skill/local-verify",
+      "path": "assets/claude_skill_local-verify",
+      "sha256": "ca94733ba1e555151635d80e4e238d527aa7e380910f25ba334725656bd2b539",
+      "bytes": 3357,
+      "kind": "adapter"
+    },
+    {
       "id": "claude/settings",
       "path": "assets/claude_settings",
       "sha256": "fa39cf51385d6a6a02346fa170f60aac1ea63a221330b0efba79a238dea5ba85",
@@ -528,8 +542,8 @@
     {
       "id": "claude/Provider_Adapter.md",
       "path": "assets/claude_Provider_Adapter.md",
-      "sha256": "217c20c97c192af42a6fd61d5064ddb1a3e602a3bde3c2eaaf195daba21dde85",
-      "bytes": 5340,
+      "sha256": "33277431fd3f372ec6820c48067d43fcacf1c0f29ded81930a328b7c89921448",
+      "bytes": 6065,
       "kind": "adapter"
     },
     {
@@ -701,10 +715,24 @@
       "kind": "template"
     },
     {
+      "id": "antigravity/skill/ci-watch",
+      "path": "assets/antigravity_skill_ci-watch",
+      "sha256": "f246c77bde53b0bb8eb898598c35a5d5f90dd5296c4cbfed78c100cd8ba2bfa5",
+      "bytes": 4269,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/local-verify",
+      "path": "assets/antigravity_skill_local-verify",
+      "sha256": "48c73e2d7fafc7445c16e8e26c6224af19da77efc922c957b91a7bd2c0094e1d",
+      "bytes": 3372,
+      "kind": "adapter"
+    },
+    {
       "id": "antigravity/Provider_Adapter.md",
       "path": "assets/antigravity_Provider_Adapter.md",
-      "sha256": "c941b4845625a454e02062801e31dcc1e0c3794b2fe1f9fe176ecc2eb20397d2",
-      "bytes": 2990,
+      "sha256": "79e5b2364410b4cdba8b4163e4f94406862175d35911b588d4ca88682144021f",
+      "bytes": 3715,
       "kind": "adapter"
     },
     {
@@ -834,10 +862,24 @@
       "kind": "template"
     },
     {
+      "id": "codex/skill/ci-watch",
+      "path": "assets/codex_skill_ci-watch",
+      "sha256": "d740933c2b5326931508ec1fb4207c2f30440a982eb5f551ccc8b25b3e404759",
+      "bytes": 4251,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/local-verify",
+      "path": "assets/codex_skill_local-verify",
+      "sha256": "4cdadd4cf0ec00386f1916a3db8717c1271c0dec36ec295ef209a4bce06a06a5",
+      "bytes": 3354,
+      "kind": "adapter"
+    },
+    {
       "id": "codex/Provider_Adapter.md",
       "path": "assets/codex_Provider_Adapter.md",
-      "sha256": "3022dc54aa7f340bce29db968e0cf068cdfe09bfea83cbfab73c7e9a6fcfa968",
-      "bytes": 3894,
+      "sha256": "217af4aafd5299330073c7562801f217626e8c970cd27a1c9f81c80941e85ff8",
+      "bytes": 4619,
       "kind": "adapter"
     },
     {
@@ -1025,8 +1067,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "f78cef27dac8cb391425c6e06ec18ca3bc69ff58529b0d8bb6f4e48ac5caebfa",
-      "bytes": 25045,
+      "sha256": "ef4e26c2d0050b578c70fc7bfcaf404550e04c92390cd33acedfaa5876e0fcb2",
+      "bytes": 26279,
       "kind": "script"
     },
     {
@@ -1051,6 +1093,13 @@
       "kind": "template"
     },
     {
+      "id": "Shell_Attributes",
+      "path": "assets/Shell_Attributes",
+      "sha256": "1d5d71dcc6ccd28ab46a335349ecc74742ca4b81f4fcad212f8d134f70f1f13e",
+      "bytes": 17,
+      "kind": "contract"
+    },
+    {
       "id": "read_section.py",
       "path": "assets/read_section.py",
       "sha256": "c06ddf9f396bd587a37633b52f45c689bf58042d873cd0dcae93fba891d40717",
@@ -1058,10 +1107,45 @@
       "kind": "script"
     },
     {
+      "id": "wait_work.py",
+      "path": "assets/wait_work.py",
+      "sha256": "6a5de32b208ffe290f1795e3393854abc1c3d7efd15adbb95de11b16447dd875",
+      "bytes": 18718,
+      "kind": "script"
+    },
+    {
+      "id": "wait_work.sh",
+      "path": "assets/wait_work.sh",
+      "sha256": "5bc55b5f62013844d37d3c5da3f5df6d5beec7acc617569cb7b732f2786084b8",
+      "bytes": 110,
+      "kind": "script"
+    },
+    {
+      "id": "wait_work.ps1",
+      "path": "assets/wait_work.ps1",
+      "sha256": "377665e25592445d6cd66508b04431d2ae15a0eac79571928569ddafcfbcd3ef",
+      "bytes": 107,
+      "kind": "script"
+    },
+    {
       "id": "Read_Section.md",
       "path": "assets/Read_Section.md",
       "sha256": "33167f08f43742b6683786ae5eb01d450056032474763e49c65eb0b079a26014",
       "bytes": 1261,
+      "kind": "contract"
+    },
+    {
+      "id": "Wait_Work.md",
+      "path": "assets/Wait_Work.md",
+      "sha256": "1ec64315c752c8da56e49c2ef0c2354a564a4e8abe0456be5dc4a65bea904bdf",
+      "bytes": 4080,
+      "kind": "contract"
+    },
+    {
+      "id": "Local_Verify.md",
+      "path": "assets/Local_Verify.md",
+      "sha256": "4f10ad652a4fdef1b65b1d1ebf61ff738621d9022731ae1da73dd099b7d0ff5f",
+      "bytes": 3183,
       "kind": "contract"
     },
     {
@@ -2680,6 +2764,54 @@
       "required": true
     },
     {
+      "id": "claude/skill/ci-watch",
+      "sources": [
+        "claude/skill/ci-watch"
+      ],
+      "destination": ".claude/skills/ci-watch/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "claude/skill/local-verify",
+      "sources": [
+        "claude/skill/local-verify"
+      ],
+      "destination": ".claude/skills/local-verify/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
       "id": "claude/settings",
       "sources": [
         "claude/settings"
@@ -3305,6 +3437,54 @@
       "required": true
     },
     {
+      "id": "antigravity/skill/ci-watch",
+      "sources": [
+        "antigravity/skill/ci-watch"
+      ],
+      "destination": ".antigravity/skills/ci-watch/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/local-verify",
+      "sources": [
+        "antigravity/skill/local-verify"
+      ],
+      "destination": ".antigravity/skills/local-verify/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
       "id": "antigravity/Provider_Adapter.md",
       "sources": [
         "antigravity/Provider_Adapter.md"
@@ -3741,6 +3921,54 @@
       "renderer": "create_if_absent",
       "legacy_paths": [],
       "phase": "content",
+      "required": true
+    },
+    {
+      "id": "codex/skill/ci-watch",
+      "sources": [
+        "codex/skill/ci-watch"
+      ],
+      "destination": ".codex/skills/ci-watch/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/local-verify",
+      "sources": [
+        "codex/skill/local-verify"
+      ],
+      "destination": ".codex/skills/local-verify/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
       "required": true
     },
     {
@@ -4493,6 +4721,32 @@
       "required": true
     },
     {
+      "id": "Shell_Attributes",
+      "sources": [
+        "Shell_Attributes"
+      ],
+      "destination": ".mt-agent-devkit/.gitattributes",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
       "id": "read_section.py",
       "sources": [
         "read_section.py"
@@ -4519,11 +4773,141 @@
       "required": true
     },
     {
+      "id": "wait_work.py",
+      "sources": [
+        "wait_work.py"
+      ],
+      "destination": ".mt-agent-devkit/scripts/wait_work.py",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "wait_work.sh",
+      "sources": [
+        "wait_work.sh"
+      ],
+      "destination": ".mt-agent-devkit/scripts/wait_work.sh",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "wait_work.ps1",
+      "sources": [
+        "wait_work.ps1"
+      ],
+      "destination": ".mt-agent-devkit/scripts/wait_work.ps1",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
       "id": "Read_Section",
       "sources": [
         "Read_Section.md"
       ],
       "destination": ".mt-agent-devkit/contracts/Read_Section.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "Wait_Work.md",
+      "sources": [
+        "Wait_Work.md"
+      ],
+      "destination": ".mt-agent-devkit/contracts/Wait_Work.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "Local_Verify.md",
+      "sources": [
+        "Local_Verify.md"
+      ],
+      "destination": ".mt-agent-devkit/contracts/Local_Verify.md",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -11315,6 +11699,486 @@
       "legacy_paths": [],
       "phase": "retirement",
       "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/wait_work.py/scripts/wait_work.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/wait_work.sh/scripts/wait_work.sh",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.sh",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".claude/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/wait_work.ps1/scripts/wait_work.ps1",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/wait_work.ps1",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
     }
   ],
   "legacy_support": {
@@ -14017,6 +14881,198 @@
         "path": ".antigravity/agents/scripts/read_section.py",
         "after_verified_ids": [
           "read_section.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/wait_work.py/scripts/wait_work.py",
+        "path": ".claude/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/wait_work.py/scripts/wait_work.py",
+        "path": ".claude/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/wait_work.py/scripts/wait_work.py",
+        "path": ".claude/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/wait_work.py/scripts/wait_work.py",
+        "path": ".claude/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/wait_work.py/scripts/wait_work.py",
+        "path": ".antigravity/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/wait_work.py/scripts/wait_work.py",
+        "path": ".antigravity/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/wait_work.py/scripts/wait_work.py",
+        "path": ".antigravity/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/wait_work.py/scripts/wait_work.py",
+        "path": ".antigravity/agents/scripts/wait_work.py",
+        "after_verified_ids": [
+          "wait_work.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/wait_work.sh/scripts/wait_work.sh",
+        "path": ".claude/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/wait_work.sh/scripts/wait_work.sh",
+        "path": ".claude/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/wait_work.sh/scripts/wait_work.sh",
+        "path": ".claude/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/wait_work.sh/scripts/wait_work.sh",
+        "path": ".claude/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/wait_work.sh/scripts/wait_work.sh",
+        "path": ".antigravity/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/wait_work.sh/scripts/wait_work.sh",
+        "path": ".antigravity/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/wait_work.sh/scripts/wait_work.sh",
+        "path": ".antigravity/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/wait_work.sh/scripts/wait_work.sh",
+        "path": ".antigravity/agents/scripts/wait_work.sh",
+        "after_verified_ids": [
+          "wait_work.sh",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".claude/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".claude/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".claude/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".claude/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".antigravity/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".antigravity/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".antigravity/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/wait_work.ps1/scripts/wait_work.ps1",
+        "path": ".antigravity/agents/scripts/wait_work.ps1",
+        "after_verified_ids": [
+          "wait_work.ps1",
           "root_project_root/AGENTS.md"
         ]
       }

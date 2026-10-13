@@ -247,6 +247,8 @@ Response and decision.
 
 ## 12. Gate Checklists
 
+In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
+
 ### Implementer — Before Opening a PR
 
 - [ ] Issue label: `status:review`
