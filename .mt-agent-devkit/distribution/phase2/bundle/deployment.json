@@ -10,8 +10,8 @@
     {
       "id": "bridge_provenance.json",
       "path": "assets/bridge_provenance.json",
-      "sha256": "8954845db16ef21fa6fd78dde9ed1de9b2fbfbc220a093208ed4c273d9b03c2b",
-      "bytes": 665,
+      "sha256": "8dc8cd052a82b982f0f3eb998ad189427a59c56c1ce724c5e3f5a3fe1b06ca94",
+      "bytes": 679,
       "kind": "contract"
     },
     {
@@ -1025,8 +1025,8 @@
     {
       "id": "version_notice.py",
       "path": "assets/version_notice.py",
-      "sha256": "d06980b595050e908270a0e17bd4f36daba73a3252d0e468adb6868924a983ab",
-      "bytes": 1332,
+      "sha256": "00ba22ffaff0641643d58027534df0e70d0e8cee404617a0720c8d89f7b42e95",
+      "bytes": 1364,
       "kind": "script"
     },
     {

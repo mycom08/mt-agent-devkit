@@ -34,6 +34,7 @@ Quick lookup for all project documents and external references. Update this file
 |---|---|
 | Sprint Overview | `docs/sprints/Sprint_N_Overview.md` |
 | ST-000254 QA Scenarios | `docs/sprints/ST_000254_Read_Manifest_Test_Scenarios.md` |
+| ST-000262 QA Scenarios | `docs/sprints/ST_000262_Test_Scenarios.md` |
 
 ---
 

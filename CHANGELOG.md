@@ -30,6 +30,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000262] Read UTF-8 project entrypoints and receipts reliably in Windows version notices.
+
 ---
 
 ## [0.1.53] - 2026-10-13

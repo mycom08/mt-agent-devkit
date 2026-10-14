@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $repoRoot
 
-python -m unittest scripts.test.test_read_manifest scripts.test.test_wait_work scripts.test.test_branch_preflight scripts.test.test_telemetry scripts.test.test_retro_completion scripts.test.test_upgrade_deployment scripts.test.test_phase2_deployment scripts.test.test_phase2_bundle scripts.test.test_phase2_sync scripts.test.test_phase2_legacy_contracts
+python -m unittest scripts.test.test_read_manifest scripts.test.test_wait_work scripts.test.test_branch_preflight scripts.test.test_telemetry scripts.test.test_retro_completion scripts.test.test_upgrade_deployment scripts.test.test_phase2_deployment scripts.test.test_phase2_bundle scripts.test.test_phase2_sync scripts.test.test_phase2_legacy_contracts scripts.test.test_version_notice
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $previousErrorActionPreference = $ErrorActionPreference
