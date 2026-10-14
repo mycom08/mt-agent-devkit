@@ -8,14 +8,14 @@ import subprocess
 def notice(root):
     root = Path(root)
     try:
-        receipt = json.loads((root / ".mt-agent-devkit/install-receipt.json").read_text())
+        receipt = json.loads((root / ".mt-agent-devkit/install-receipt.json").read_text(encoding="utf-8"))
         if receipt["source"]["kind"] != "release":
             return {}
         current = receipt["source"]["tag"]
         sources = []
         for name in ("CLAUDE.md", "AGENTS.md"):
             if (root / name).exists():
-                sources.extend(re.findall(r"\*\*Devkit source:\*\*\s+(https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)", (root / name).read_text()))
+                sources.extend(re.findall(r"\*\*Devkit source:\*\*\s+(https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)", (root / name).read_text(encoding="utf-8")))
         if not sources:
             return {}
         result = subprocess.run(["git", "ls-remote", "--tags", "--refs", sources[0].rstrip("/") + ".git"], capture_output=True, text=True, timeout=10, check=True)
