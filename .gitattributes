@@ -1,3 +1,4 @@
 .mt-agent-devkit/distribution/** text eol=lf
 *.sh text eol=lf
 .mt-agent-devkit/contracts/read-routing.json text eol=lf
+scripts/test/fixtures/common_264/** text eol=lf

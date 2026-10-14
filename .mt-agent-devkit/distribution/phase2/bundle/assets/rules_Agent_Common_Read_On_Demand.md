@@ -1,5 +1,6 @@
 # Agent Common Protocol — Read On Demand
 
+**Compatibility authority:** This complete safe path remains mandatory for providers not enabled by canonical Common capability routing. Registry-selected verified consumers use Agent_Common_Core.md and triggered modules instead. The policies are mutually exclusive authorities; Developer stage procedures remain at existing owners.
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
 **Purpose:** Companion to `Agent_Common_Bootstrap.md`. Nothing here is read automatically — `Agent_Common_Bootstrap.md §5`'s routing table names the one section to fetch when its trigger fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
 

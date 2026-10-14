@@ -184,12 +184,16 @@ def build(root, destination):
     entry("Shell_Attributes", [aid], ".mt-agent-devkit/.gitattributes", profiles=("repo", "project_root"))
     for name in ("read_section.py", "read_manifest.py", "wait_work.py", "wait_work.sh", "wait_work.ps1"):
         aid = asset(name, (root / ".mt-agent-devkit/scripts" / name).read_bytes(), "script")
-        entry(name, [aid], ".mt-agent-devkit/scripts/" + name, profiles=("repo", "project_root"))
+        # Story manifests depend on role rules/records, which belong to each
+        # repository harness. Project roots intentionally install no Scrum rules.
+        profiles = ("repo",) if name == "read_manifest.py" else ("repo", "project_root")
+        entry(name, [aid], ".mt-agent-devkit/scripts/" + name, profiles=profiles)
     aid = asset("Read_Section.md", (root / ".mt-agent-devkit/contracts/Read_Section.md").read_bytes(), "contract")
     entry("Read_Section", [aid], ".mt-agent-devkit/contracts/Read_Section.md", profiles=("repo", "project_root"))
     for name in ("Wait_Work.md", "Local_Verify.md", "Read_Manifest.md", "read-routing.json"):
         aid = asset(name, (root / ".mt-agent-devkit/contracts" / name).read_bytes(), "contract")
-        entry(name, [aid], ".mt-agent-devkit/contracts/" + name, profiles=("repo", "project_root"))
+        profiles = ("repo",) if name in ("Read_Manifest.md", "read-routing.json") else ("repo", "project_root")
+        entry(name, [aid], ".mt-agent-devkit/contracts/" + name, profiles=profiles)
     contract = b"# Target Provider Contract\n\nRead project priming for neutral tasks. Before workflows inspect actual enabled tools and call provider_context.select_provider with target root and explicit tool identities. Load exactly its selected adapter; missing/ambiguous mappings block before state writes or spawning. Pass concrete preserved state bindings to every role. Independent implementer, TL review, QA and PO gates remain mandatory. Provider directories never prove native discovery. Runtime remains provider-local, never merged. One certified shared mode/version; supported mixed legacy versions require explicit content review, while mixed modes/nonterminal legacy workflows block migration. Follow selected adapter for lifecycle, permissions, CI completion and unavailable telemetry.\n"
     aid = asset("Provider_Contract.md", contract, "contract")
     entry("Provider_Contract", [aid], ".mt-agent-devkit/contracts/Provider_Contract.md", profiles=("repo", "project_root"))

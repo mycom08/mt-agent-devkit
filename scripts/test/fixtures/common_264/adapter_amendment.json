@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "story": "ST-000264",
+  "decision": "https://github.com/mycom08/mt-agent-devkit/issues/264#issuecomment-6163521976",
+  "amended_at_utc": "2026-10-14T07:48:22.710364Z",
+  "original_source_revision": "544294585ae762ad3b0937ff1cdab474e2c65c57",
+  "original_archive_sha256": "533b940e7833cdc6d519f8f87dfc23e6a8b9cac2c0eca5500ace7ab7251c4328",
+  "original_sha256": "74910067c462665b0b51dfcc5765d3106ea3e23635d06b53f130847c394ac829",
+  "amended_sha256": "957b6f7850588dcd05fc3b6cfb98d3491b59c458ad1de0ab3d92dedc22ec6510",
+  "exact_diff": "adapter_amendment.diff",
+  "arm_adapter_hashes": {
+    "baseline": "957b6f7850588dcd05fc3b6cfb98d3491b59c458ad1de0ab3d92dedc22ec6510",
+    "candidate": "957b6f7850588dcd05fc3b6cfb98d3491b59c458ad1de0ab3d92dedc22ec6510"
+  },
+  "cases": [
+    "fresh-implementation",
+    "pre-pr",
+    "same-session-fix",
+    "expired-unknown-fix",
+    "clean-common",
+    "triggered-failure-ambiguity"
+  ],
+  "boundary": "Original source/archive/freeze/fixture preserved. Deterministic recording serialization amendment applies identical bytes in both arms before native runs. Capture amended installed/fixture tree hash per arm. No native execution claimed."
+}

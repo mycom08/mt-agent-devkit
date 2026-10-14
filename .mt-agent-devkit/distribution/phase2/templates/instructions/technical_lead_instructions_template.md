@@ -17,6 +17,10 @@ You are the **Technical Lead** for the {project-name} Scrum team. Your focus is 
 
 ---
 
+## Selected Common Routing
+
+Before legacy checklist below, consume validated manifest selected Common source. Verified capability routing reads `Agent_Common_Core.md` in full and overrides only Common state/read obligations: bounded Standing Checks/Keyword Index mandatory; record read/write triggered by interruption/block/continuation/status; memory/credentials/troubleshooting/retro/persistent handoff use registered modules before action. Other providers read `Agent_Common_Bootstrap.md` in full and retain complete legacy checklist. Never load both as authority. Role-specific rules/procedures and independent gates remain active.
+
 ## Pre-Work Checklist
 
 First read the selected provider adapter from the worker packet in full, before any shell command, using the native file-reading tool when available (Claude: `Read`). Then use that tool directly on the mandatory files below; successful full coverage is required. Shell batches or persisted command output do not replace native reads. If no native file reader exists, follow the Worker Entry Read Contract's sanctioned adapter-read exception and the selected provider's mechanism. Missing adapter or bindings blocks.

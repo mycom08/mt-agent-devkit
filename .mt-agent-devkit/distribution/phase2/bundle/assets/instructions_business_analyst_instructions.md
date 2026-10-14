@@ -9,6 +9,10 @@ description: Evaluates feature business requirements, use cases, scope boundarie
 
 ---
 
+## Selected Common Routing
+
+Before legacy checklist below, consume validated manifest selected Common source. Verified capability routing reads `Agent_Common_Core.md` in full and overrides only Common state/read obligations: bounded Standing Checks/Keyword Index mandatory; record read/write triggered by interruption/block/continuation/status; memory/credentials/troubleshooting/retro/persistent handoff use registered modules before action. Other providers read `Agent_Common_Bootstrap.md` in full and retain complete legacy checklist. Never load both as authority. Role-specific rules/procedures and independent gates remain active.
+
 ## Pre-Work Checklist
 
 Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Your records:

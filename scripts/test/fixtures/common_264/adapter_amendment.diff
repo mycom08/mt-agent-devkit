@@ -1,0 +1,15 @@
+--- frozen/gh.py
++++ amendment/gh_normalized.py
+@@ -1,5 +1,8 @@
+-import json,sys
++"""Explicit ST-000264 recording-only serialization amendment; no GitHub calls."""
++import json
++import sys
+ from pathlib import Path
+-p=Path("gh-events.jsonl")
+-with p.open("a",encoding="utf-8") as f:f.write(json.dumps(sys.argv[1:])+"\n")
+-print("{\"state\":\"mocked\"}")
++
++with Path('gh-events.jsonl').open('a', encoding='utf-8', newline='\n') as stream:
++    stream.write(json.dumps(sys.argv[1:]) + '\n')
++print(json.dumps({'state': 'mocked'}))
