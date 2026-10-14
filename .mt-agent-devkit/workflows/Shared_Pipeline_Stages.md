@@ -16,6 +16,32 @@ During work extend and validate for observable triggers before governed actions.
 
 ---
 
+## Task Ownership and Validation Delegation
+
+The orchestrator coordinates the assigned stages and enforces their gates. A TL
+request addressed to Developer remains Developer's responsibility; route it to
+that owner rather than taking over the task. An acceptance criterion or an
+evidence-before-activation requirement does not itself authorize additional
+worker delegation.
+
+The assigned implementer owns implementation self-checks and test fixtures. QA
+owns independent behavioral validation and per-AC evidence at Stage 3, subject
+to this workflow's explicit fast-path and QA-implementer routing exceptions.
+Keep activation disabled when required evidence is pending; hand the reviewable
+candidate and fixtures to the assigned validator. Do not create a separate
+native-test team during implementation merely to satisfy a later validation
+gate or duplicate QA's work.
+
+Spawn additional test workers only when the workflow explicitly assigns that
+delegation or the user explicitly requests it. Before dispatch, identify the
+owning role, current stage, bounded purpose and existing evidence being reused.
+After a failed test attempt, diagnose it with the owning agent before scheduling
+another worker; failure alone is not a reason to spawn replacements. Preserve
+failed evidence and use the existing session where valid. These ownership rules
+do not waive implementer checks, baseline preparation or independent acceptance.
+
+---
+
 ## Worker Entry Read Contract
 
 For every fresh worker spawn or expired-session restart, include this contract verbatim in the ordinary role packet, together with the selected adapter, concrete bindings and canonical role instruction path. It applies before discovery commands or shell-based context loading; a rule inside an unread role file cannot enforce that boundary by itself. A valid same-session resume retains only unchanged reads with successful returned-coverage provenance; the validated manifest supplies new task/evidence deltas and all invalidated or unknown reads.
