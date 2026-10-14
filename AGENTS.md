@@ -62,3 +62,11 @@ Every specialized agent reads its shared role instruction before work.
 
 GitHub blocks self-approval. Post verdicts through `gh pr comment`; never
 `gh pr review --approve`. Independent review/QA gates remain mandatory.
+
+## Codex Project Preference — GitHub Access
+
+For this project, run GitHub network commands outside the sandbox using
+`sandbox_permissions: "require_escalated"` from the outset. The sandbox's
+loopback proxy prevents GitHub access. Use the supported escalation path;
+do not alter proxy settings. This preference does not authorize otherwise
+unrequested GitHub mutations or bypass review and approval gates.
