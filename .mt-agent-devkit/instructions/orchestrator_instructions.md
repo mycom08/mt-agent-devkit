@@ -26,6 +26,10 @@ memory in place; initialize only missing own files at the bound provider paths.
 
 ## Agent Session Management
 
+Follow `Shared_Pipeline_Stages.md`'s Task Ownership and Validation Delegation
+rule: route requests to their named owner and do not infer extra test-worker
+delegation from an evidence gate.
+
 Use the selected provider adapter's spawn/resume/message/completion operations.
 Record the opaque provider-qualified session handle on new spawn only; reuse it
 for valid resumed work. Missing or expired sessions require a fresh canonical

@@ -1,5 +1,6 @@
 # Agent Common Protocol — Bootstrap
 
+**Compatibility authority:** This complete safe path remains mandatory for providers not enabled by canonical Common capability routing. Registry-selected verified consumers use Agent_Common_Core.md and triggered modules instead. The policies are mutually exclusive authorities; Developer stage procedures remain at existing owners.
 **Applies to:** All agents (Developer, Technical Lead, QA, Product Owner, Business Analyst, UI/UX Designer)
 **Purpose:** The mechanics every agent needs before its first tool call: read order (including the Working Record's write format, since every session ends by writing one) and three safety/efficiency rules that must already be active by then — a secret can't be un-leaked, an untrusted issue comment can't be un-acted-on, and inefficient tool-calling starts on call one. Everything conditional lives in `Agent_Common_Read_On_Demand.md`; §5 routes you there when a trigger fires. Where this file and a role-specific rule disagree, the role-specific rule wins.
 

@@ -17,15 +17,71 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "658403aa9bc6b4cfe2c84a8a29c93c80583472a1f193d81bd836fbeb5c0aecaa",
-      "bytes": 16739,
+      "sha256": "48d77bee0425350bd2b6b91cb8a475450d99c51e5643d11f3018b9303ecb0755",
+      "bytes": 17072,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Core.md",
+      "path": "assets/rules_Agent_Common_Core.md",
+      "sha256": "2727d9cd80247d4d4f683182c84829186aa93fd71c3ec38b3f3fc4f94c364cb9",
+      "bytes": 12762,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Credential_Gate.md",
+      "path": "assets/rules_Agent_Common_Credential_Gate.md",
+      "sha256": "5747090303f1c40e243633886e07d8cea052db3cd6a8a1b73603a4fe7b42ad43",
+      "bytes": 1012,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Memory.md",
+      "path": "assets/rules_Agent_Common_Memory.md",
+      "sha256": "77938d82929d68c75d7d3eb8028aba9252e9ed088df39d9d0410c35856d5d77a",
+      "bytes": 5843,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "path": "assets/rules_Agent_Common_Read_On_Demand.md",
-      "sha256": "9a86a80c5b8fdbac4f95005abcb72222fe57c9d5303d63db3680d826fe02669a",
-      "bytes": 11627,
+      "sha256": "0d6548505d53ce904cd63aee032d5fea4bc5db1aa945f4e6eb724bcaaf9abe31",
+      "bytes": 11960,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Retro.md",
+      "path": "assets/rules_Agent_Common_Retro.md",
+      "sha256": "dc8e0a002d023b0e15ee087a3d3b2087fcd9da75eed4bb35bbaddccc59296c3d",
+      "bytes": 1241,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Shell_Safety.md",
+      "path": "assets/rules_Agent_Common_Shell_Safety.md",
+      "sha256": "1f257ec7ecd5e62ef9f368aa5be3283f9c9a3b6bfb33aa41df1a98f2e338f15c",
+      "bytes": 1328,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Stage_Transition.md",
+      "path": "assets/rules_Agent_Common_Stage_Transition.md",
+      "sha256": "a1b012f47fbbbf1f11b4af615e554a41530cc6154c87e385a4b8a97fa8c6875f",
+      "bytes": 515,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Troubleshooting.md",
+      "path": "assets/rules_Agent_Common_Troubleshooting.md",
+      "sha256": "6b302e50ed3c61e9525505d851eabdd4f7cdd45cd5635d3f3d380b26ebaa4805",
+      "bytes": 853,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Agent_Common_Working_Record.md",
+      "path": "assets/rules_Agent_Common_Working_Record.md",
+      "sha256": "1a22f8592cdefb843bc241eb2dcec19a9d567e241daadfe75d4a1ad154a46f6f",
+      "bytes": 2926,
       "kind": "template"
     },
     {
@@ -199,43 +255,43 @@
     {
       "id": "instructions/business_analyst_instructions.md",
       "path": "assets/instructions_business_analyst_instructions.md",
-      "sha256": "faa00d48150269955501f0809727a409bb646b979c76d1d62163e4f721936fce",
-      "bytes": 3195,
+      "sha256": "c429e86e43bd75815498660e91e6da991d47504c212f624922f6a4193c5710a2",
+      "bytes": 3832,
       "kind": "template"
     },
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "a3d66e18bf14f52bb88137a4f6ae04ce728e534987269cbe5a4f13e0686bf7fc",
-      "bytes": 3317,
+      "sha256": "538e85c8c0f397926d2a713a455d1062f1001239b777f7ca0b674118cffd9904",
+      "bytes": 3954,
       "kind": "template"
     },
     {
       "id": "instructions/product_owner_instructions.md",
       "path": "assets/instructions_product_owner_instructions.md",
-      "sha256": "e01b197a2683ed1ff901d915cf263f2b6b8c142aa28057da543f745db5411127",
-      "bytes": 3136,
+      "sha256": "9a7aa3e6ba4bf24ecb077f9bd7a0365ffcca0abeda40c4d62e68355f475354ff",
+      "bytes": 3773,
       "kind": "template"
     },
     {
       "id": "instructions/qa_instructions.md",
       "path": "assets/instructions_qa_instructions.md",
-      "sha256": "2a40aef24e119945dc681b9d31b2475d5930b170c40b477cb88c16f6451cee7d",
-      "bytes": 3657,
+      "sha256": "123cd753d01736167ee25ceb49259ce376960079d5b86549e6090a0d4584b41a",
+      "bytes": 4294,
       "kind": "template"
     },
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "195a6c7aa1936e3940a480ad6131b3a2cd6dcc7b5a03fae5e8627f93e0026df7",
-      "bytes": 4033,
+      "sha256": "01cb9ee28a9eb87ff3041ab7622ca5a2707bcada3f1dad4b1ee092940f3afcfc",
+      "bytes": 4670,
       "kind": "template"
     },
     {
       "id": "instructions/ui_ux_designer_instructions.md",
       "path": "assets/instructions_ui_ux_designer_instructions.md",
-      "sha256": "220942cce03d28e07bf5de821273446ef730884c3181eb45fbf7ba8a97d9c0df",
-      "bytes": 3282,
+      "sha256": "847a942b88f41c4761d122737fcbe0cdb6bb1e5796106614db684afe5dd67606",
+      "bytes": 3919,
       "kind": "template"
     },
     {
@@ -1067,8 +1123,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "0644906db9f67129ffd3ea0b55a2de823028696acde3d551b7b0870c8095be33",
-      "bytes": 26340,
+      "sha256": "1b276ba2db33c9c27e1e1e05c7ef70889a6b2efd3161cf7ac0aa06239da444ac",
+      "bytes": 26668,
       "kind": "script"
     },
     {
@@ -1109,8 +1165,8 @@
     {
       "id": "read_manifest.py",
       "path": "assets/read_manifest.py",
-      "sha256": "70f3870033a59f6780c320d0909c8b654195acad89a711e42847c300c62f5311",
-      "bytes": 14865,
+      "sha256": "c59f0eac8245535e05f8e3c42717c8ab87303e5c579befb1a0e67aa2c84e8ffb",
+      "bytes": 19255,
       "kind": "script"
     },
     {
@@ -1158,15 +1214,15 @@
     {
       "id": "Read_Manifest.md",
       "path": "assets/Read_Manifest.md",
-      "sha256": "10ea434d6ae9ded886708b9b32ec621af8c2e3a2f798268c35607dafd16f3926",
-      "bytes": 8976,
+      "sha256": "54ba5ccc5579ddb2493aa98661e53e2057f8b668dc832d17911aaa510441a4c9",
+      "bytes": 12085,
       "kind": "contract"
     },
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "fd900395d6d19364b09007de1c42e7443c34eda59b9c68e5b8478582ecbe051c",
-      "bytes": 33554,
+      "sha256": "5bfa0aeaa6bdd7f01bc98914d89e2d488cba6611c8cb1d53a3ee06877b727115",
+      "bytes": 34731,
       "kind": "contract"
     },
     {
@@ -1211,11 +1267,211 @@
       "required": true
     },
     {
+      "id": "rules/Agent_Common_Core.md",
+      "sources": [
+        "rules/Agent_Common_Core.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Credential_Gate.md",
+      "sources": [
+        "rules/Agent_Common_Credential_Gate.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Credential_Gate.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Memory.md",
+      "sources": [
+        "rules/Agent_Common_Memory.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Memory.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "sources": [
         "rules/Agent_Common_Read_On_Demand.md"
       ],
       "destination": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Retro.md",
+      "sources": [
+        "rules/Agent_Common_Retro.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Retro.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Shell_Safety.md",
+      "sources": [
+        "rules/Agent_Common_Shell_Safety.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Stage_Transition.md",
+      "sources": [
+        "rules/Agent_Common_Stage_Transition.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Stage_Transition.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Troubleshooting.md",
+      "sources": [
+        "rules/Agent_Common_Troubleshooting.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Troubleshooting.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Agent_Common_Working_Record.md",
+      "sources": [
+        "rules/Agent_Common_Working_Record.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Agent_Common_Working_Record.md",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -4802,8 +5058,7 @@
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
-        "repo",
-        "project_root"
+        "repo"
       ],
       "modes": [
         "github",
@@ -4984,8 +5239,7 @@
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
-        "repo",
-        "project_root"
+        "repo"
       ],
       "modes": [
         "github",
@@ -5010,8 +5264,7 @@
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
-        "repo",
-        "project_root"
+        "repo"
       ],
       "modes": [
         "github",
@@ -5160,6 +5413,246 @@
       "required": false
     },
     {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Core.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Core.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Core.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Core.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Credential_Gate.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Credential_Gate.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Credential_Gate.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Credential_Gate.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Memory.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Memory.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Memory.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Memory.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
       "id": "retire/claude/repo/github/rules/Agent_Common_Read_On_Demand.md/rules/Agent_Common_Read_On_Demand.md",
       "sources": [],
       "destination": ".claude/agents/rules/Agent_Common_Read_On_Demand.md",
@@ -5223,6 +5716,406 @@
       "id": "retire/antigravity/repo/strict/rules/Agent_Common_Read_On_Demand.md/rules/Agent_Common_Read_On_Demand.md",
       "sources": [],
       "destination": ".antigravity/agents/rules/Agent_Common_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Retro.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Retro.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Retro.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Retro.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Shell_Safety.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Shell_Safety.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Shell_Safety.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Shell_Safety.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Stage_Transition.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Stage_Transition.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Stage_Transition.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Stage_Transition.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Troubleshooting.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Troubleshooting.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Troubleshooting.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Troubleshooting.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Working_Record.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Agent_Common_Working_Record.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Working_Record.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Agent_Common_Working_Record.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
@@ -11840,46 +12733,6 @@
       "required": false
     },
     {
-      "id": "retire/claude/project_root/github/read_manifest.py/scripts/read_manifest.py",
-      "sources": [],
-      "destination": ".claude/agents/scripts/read_manifest.py",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/project_root/strict/read_manifest.py/scripts/read_manifest.py",
-      "sources": [],
-      "destination": ".claude/agents/scripts/read_manifest.py",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
       "id": "retire/antigravity/repo/github/read_manifest.py/scripts/read_manifest.py",
       "sources": [],
       "destination": ".antigravity/agents/scripts/read_manifest.py",
@@ -11907,46 +12760,6 @@
       "ownership": "managed",
       "profiles": [
         "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/project_root/github/read_manifest.py/scripts/read_manifest.py",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/read_manifest.py",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/project_root/strict/read_manifest.py/scripts/read_manifest.py",
-      "sources": [],
-      "destination": ".antigravity/agents/scripts/read_manifest.py",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "project_root"
       ],
       "modes": [
         "strict"
@@ -12488,6 +13301,102 @@
         ]
       },
       {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+        "path": ".claude/agents/rules/Agent_Common_Core.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Core.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+        "path": ".claude/agents/rules/Agent_Common_Core.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Core.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Core.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Core.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Core.md/rules/Agent_Common_Core.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Core.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Core.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+        "path": ".claude/agents/rules/Agent_Common_Credential_Gate.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Credential_Gate.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+        "path": ".claude/agents/rules/Agent_Common_Credential_Gate.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Credential_Gate.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Credential_Gate.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Credential_Gate.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Credential_Gate.md/rules/Agent_Common_Credential_Gate.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Credential_Gate.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Credential_Gate.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+        "path": ".claude/agents/rules/Agent_Common_Memory.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Memory.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+        "path": ".claude/agents/rules/Agent_Common_Memory.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Memory.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Memory.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Memory.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Memory.md/rules/Agent_Common_Memory.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Memory.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Memory.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
         "logical_id": "retire/claude/repo/github/rules/Agent_Common_Read_On_Demand.md/rules/Agent_Common_Read_On_Demand.md",
         "path": ".claude/agents/rules/Agent_Common_Read_On_Demand.md",
         "after_verified_ids": [
@@ -12516,6 +13425,166 @@
         "path": ".antigravity/agents/rules/Agent_Common_Read_On_Demand.md",
         "after_verified_ids": [
           "rules/Agent_Common_Read_On_Demand.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+        "path": ".claude/agents/rules/Agent_Common_Retro.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Retro.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+        "path": ".claude/agents/rules/Agent_Common_Retro.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Retro.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Retro.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Retro.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Retro.md/rules/Agent_Common_Retro.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Retro.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Retro.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+        "path": ".claude/agents/rules/Agent_Common_Shell_Safety.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Shell_Safety.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+        "path": ".claude/agents/rules/Agent_Common_Shell_Safety.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Shell_Safety.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Shell_Safety.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Shell_Safety.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Shell_Safety.md/rules/Agent_Common_Shell_Safety.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Shell_Safety.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Shell_Safety.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+        "path": ".claude/agents/rules/Agent_Common_Stage_Transition.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Stage_Transition.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+        "path": ".claude/agents/rules/Agent_Common_Stage_Transition.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Stage_Transition.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Stage_Transition.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Stage_Transition.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Stage_Transition.md/rules/Agent_Common_Stage_Transition.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Stage_Transition.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Stage_Transition.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+        "path": ".claude/agents/rules/Agent_Common_Troubleshooting.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Troubleshooting.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+        "path": ".claude/agents/rules/Agent_Common_Troubleshooting.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Troubleshooting.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Troubleshooting.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Troubleshooting.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Troubleshooting.md/rules/Agent_Common_Troubleshooting.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Troubleshooting.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Troubleshooting.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+        "path": ".claude/agents/rules/Agent_Common_Working_Record.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Working_Record.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+        "path": ".claude/agents/rules/Agent_Common_Working_Record.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Working_Record.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Working_Record.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Working_Record.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Agent_Common_Working_Record.md/rules/Agent_Common_Working_Record.md",
+        "path": ".antigravity/agents/rules/Agent_Common_Working_Record.md",
+        "after_verified_ids": [
+          "rules/Agent_Common_Working_Record.md",
           "root_repo/AGENTS.md"
         ]
       },
@@ -15160,22 +16229,6 @@
         ]
       },
       {
-        "logical_id": "retire/claude/project_root/github/read_manifest.py/scripts/read_manifest.py",
-        "path": ".claude/agents/scripts/read_manifest.py",
-        "after_verified_ids": [
-          "read_manifest.py",
-          "root_project_root/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/project_root/strict/read_manifest.py/scripts/read_manifest.py",
-        "path": ".claude/agents/scripts/read_manifest.py",
-        "after_verified_ids": [
-          "read_manifest.py",
-          "root_project_root/CLAUDE.md"
-        ]
-      },
-      {
         "logical_id": "retire/antigravity/repo/github/read_manifest.py/scripts/read_manifest.py",
         "path": ".antigravity/agents/scripts/read_manifest.py",
         "after_verified_ids": [
@@ -15189,22 +16242,6 @@
         "after_verified_ids": [
           "read_manifest.py",
           "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/project_root/github/read_manifest.py/scripts/read_manifest.py",
-        "path": ".antigravity/agents/scripts/read_manifest.py",
-        "after_verified_ids": [
-          "read_manifest.py",
-          "root_project_root/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/project_root/strict/read_manifest.py/scripts/read_manifest.py",
-        "path": ".antigravity/agents/scripts/read_manifest.py",
-        "after_verified_ids": [
-          "read_manifest.py",
-          "root_project_root/AGENTS.md"
         ]
       },
       {

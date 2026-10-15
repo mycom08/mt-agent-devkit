@@ -75,10 +75,15 @@ class BundleTests(unittest.TestCase):
                             self.assertFalse((target / ("AGENTS.md" if provider == "claude" else "CLAUDE.md")).exists())
                             if profile == "repo":
                                 self.assertTrue((target / ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md").exists())
+                                self.assertTrue((target / ".mt-agent-devkit/contracts/Read_Manifest.md").exists())
+                                self.assertTrue((target / ".mt-agent-devkit/scripts/read_manifest.py").exists())
                                 self.assertTrue((target / ".mt-agent-devkit/workflows/Start_Story_Workflow.md").exists())
                                 self.assertNotIn("new `Agent` call", (target / ".mt-agent-devkit/instructions/orchestrator_instructions.md").read_text())
                             else:
                                 self.assertFalse((target / ".mt-agent-devkit/rules").exists())
+                                self.assertFalse((target / ".mt-agent-devkit/contracts/Read_Manifest.md").exists())
+                                self.assertFalse((target / ".mt-agent-devkit/contracts/read-routing.json").exists())
+                                self.assertFalse((target / ".mt-agent-devkit/scripts/read_manifest.py").exists())
                                 self.assertFalse((target / ".mt-agent-devkit/instructions").exists())
                                 self.assertTrue((target / ".mt-agent-devkit/workflows/Sync_Devkit_Project_Workflow.md").exists())
                             if provider == "codex":

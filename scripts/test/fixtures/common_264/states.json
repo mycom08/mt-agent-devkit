@@ -1,0 +1,163 @@
+{
+  "fresh-implementation": {
+    "task": "implementation",
+    "session_state": "fresh",
+    "triggers": [],
+    "mode": "strict",
+    "repetitions": 3,
+    "fixture_files": [
+      "calculation.py",
+      "decisions.md",
+      "delta.md",
+      "diff.md",
+      "findings.md",
+      "gh.py",
+      "story.md",
+      "test_calculation.py"
+    ],
+    "repository_state": "initial seeded calculation defect",
+    "record": "No entries yet",
+    "memory": {
+      "standing_checks": "None yet",
+      "keyword_index": "None yet",
+      "troubleshooting": "None yet"
+    },
+    "same_session_receipts": "Only attest after actual returned reads in prerequisite session; never fabricate",
+    "ambiguity": null
+  },
+  "pre-pr": {
+    "task": "implementation",
+    "session_state": "same",
+    "triggers": [
+      "pre_pr"
+    ],
+    "mode": "strict",
+    "repetitions": 3,
+    "fixture_files": [
+      "calculation.py",
+      "decisions.md",
+      "delta.md",
+      "diff.md",
+      "findings.md",
+      "gh.py",
+      "story.md",
+      "test_calculation.py"
+    ],
+    "repository_state": "initial seeded calculation defect",
+    "record": "No entries yet",
+    "memory": {
+      "standing_checks": "None yet",
+      "keyword_index": "None yet",
+      "troubleshooting": "None yet"
+    },
+    "same_session_receipts": "Only attest after actual returned reads in prerequisite session; never fabricate",
+    "ambiguity": null
+  },
+  "same-session-fix": {
+    "task": "fix",
+    "session_state": "same",
+    "triggers": [],
+    "mode": "strict",
+    "repetitions": 3,
+    "fixture_files": [
+      "calculation.py",
+      "decisions.md",
+      "delta.md",
+      "diff.md",
+      "findings.md",
+      "gh.py",
+      "story.md",
+      "test_calculation.py"
+    ],
+    "repository_state": "initial seeded calculation defect",
+    "record": "No entries yet",
+    "memory": {
+      "standing_checks": "None yet",
+      "keyword_index": "None yet",
+      "troubleshooting": "None yet"
+    },
+    "same_session_receipts": "Only attest after actual returned reads in prerequisite session; never fabricate",
+    "ambiguity": null
+  },
+  "expired-unknown-fix": {
+    "task": "fix",
+    "session_state": "expired",
+    "triggers": [],
+    "mode": "strict",
+    "repetitions": 3,
+    "fixture_files": [
+      "calculation.py",
+      "decisions.md",
+      "delta.md",
+      "diff.md",
+      "findings.md",
+      "gh.py",
+      "story.md",
+      "test_calculation.py"
+    ],
+    "repository_state": "initial seeded calculation defect",
+    "record": "No entries yet",
+    "memory": {
+      "standing_checks": "None yet",
+      "keyword_index": "None yet",
+      "troubleshooting": "None yet"
+    },
+    "same_session_receipts": "Only attest after actual returned reads in prerequisite session; never fabricate",
+    "ambiguity": null
+  },
+  "clean-common": {
+    "task": "implementation",
+    "session_state": "fresh",
+    "triggers": [],
+    "mode": "strict",
+    "repetitions": 3,
+    "fixture_files": [
+      "calculation.py",
+      "decisions.md",
+      "delta.md",
+      "diff.md",
+      "findings.md",
+      "gh.py",
+      "story.md",
+      "test_calculation.py"
+    ],
+    "repository_state": "initial seeded calculation defect",
+    "record": "No entries yet",
+    "memory": {
+      "standing_checks": "None yet",
+      "keyword_index": "None yet",
+      "troubleshooting": "None yet"
+    },
+    "same_session_receipts": "Only attest after actual returned reads in prerequisite session; never fabricate",
+    "ambiguity": null
+  },
+  "triggered-failure-ambiguity": {
+    "task": "implementation",
+    "session_state": "fresh",
+    "triggers": [
+      "tooling_failure",
+      "consultation"
+    ],
+    "mode": "strict",
+    "repetitions": 3,
+    "fixture_files": [
+      "calculation.py",
+      "decisions.md",
+      "delta.md",
+      "diff.md",
+      "findings.md",
+      "gh.py",
+      "story.md",
+      "test_calculation.py"
+    ],
+    "repository_state": "initial seeded calculation defect",
+    "record": "No entries yet",
+    "memory": {
+      "standing_checks": "None yet",
+      "keyword_index": "None yet",
+      "troubleshooting": "None yet"
+    },
+    "same_session_receipts": "Only attest after actual returned reads in prerequisite session; never fabricate",
+    "ambiguity": "Triggered case requires TL decision before product edits; missing required fixture credential remains NOT VERIFIED"
+  }
+}

@@ -1429,6 +1429,50 @@
           ]
         }
       ]
+    },
+    "shell_safety": {
+      "roles": [],
+      "reads": [
+        {
+          "id": "trigger_shell_safety",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "Observable shell_safety before action",
+          "after": [
+            "common"
+          ]
+        }
+      ]
+    },
+    "working_record": {
+      "roles": [],
+      "reads": [
+        {
+          "id": "trigger_working_record",
+          "source": ".mt-agent-devkit/rules/Agent_Common_Working_Record.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "Observable working_record before action",
+          "after": [
+            "common"
+          ]
+        }
+      ]
     }
+  },
+  "common_capabilities": {
+    "revision": "common-capabilities-v1",
+    "verified_providers": [],
+    "candidate_provider": "codex",
+    "two_tier_roles": [
+      "Developer",
+      "Technical_Lead",
+      "QA"
+    ],
+    "core": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+    "native_evidence": "pending native fresh/expired/triggered smoke; install does not certify native behavior"
   }
 }

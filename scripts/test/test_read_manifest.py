@@ -19,6 +19,12 @@ def module(name, path):
 
 m = module('read_manifest', '.mt-agent-devkit/scripts/read_manifest.py')
 REGISTRY = m.load(m.REGISTRY)
+# These synthetic fixtures preserve the ST-000254 full-safe compatibility
+# oracle. Candidate capability assertions live in test_common_capabilities;
+# InstalledTests below still loads the actual deployed canonical registry.
+REGISTRY = copy.deepcopy(REGISTRY)
+if 'common_capabilities' in REGISTRY:
+    REGISTRY['common_capabilities']['verified_providers'] = []
 
 
 class RoutingTests(unittest.TestCase):

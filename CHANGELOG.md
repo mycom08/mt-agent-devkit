@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000264] Load Common capabilities on observable triggers while preserving safety, coverage and unverified-provider compatibility.
+
 ### Bug Fixes
 
 - [ST-000262] Read UTF-8 project entrypoints and receipts reliably in Windows version notices.

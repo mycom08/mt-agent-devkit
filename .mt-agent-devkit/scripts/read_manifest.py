@@ -43,6 +43,16 @@ def covered(root, source, coverage):
     if not path.is_file(): raise Blocked('missing source: ' + source)
     data = path.read_bytes()
     if coverage == {'kind': 'full'}: return data
+    if isinstance(coverage, dict) and set(coverage) == {'kind', 'heading'} and coverage['kind'] == 'memory_section':
+        if coverage['heading'] not in ('Standing Checks', 'Keyword Index', 'Troubleshooting Facts'):
+            raise Blocked('invalid bounded memory heading')
+        lines = data.decode('utf-8-sig').splitlines(keepends=True)
+        heads = [i for i, line in enumerate(lines) if re.match(r'^## ', line)]
+        matches = [i for i in heads if lines[i].strip() == '## ' + coverage['heading']]
+        if len(matches) != 1: raise Blocked('bounded memory heading requires exactly one match: ' + source)
+        start = matches[0]
+        end = next((i for i in heads if i > start), len(lines))
+        return ''.join(lines[start:end]).encode('utf-8')
     fact = isinstance(coverage, dict) and set(coverage) == {'kind', 'fact'} and coverage['kind'] == 'fact' and re.fullmatch(r'[1-9][0-9]*', str(coverage['fact']))
     if not fact and (not isinstance(coverage, dict) or set(coverage) != {'kind', 'section'} or coverage['kind'] != 'section' or not re.fullmatch(r'[0-9]+[a-z]?', str(coverage['section']))):
         raise Blocked('invalid section selector: ' + source)
@@ -142,6 +152,10 @@ def routes(root, request, registry):
     entries += context_entries(root, request, task)
     triggers = request.get('triggers', [])
     if not isinstance(triggers, list) or len(set(triggers)) != len(triggers): raise Blocked('triggers must be unique names')
+    policy = registry.get('common_capabilities', {})
+    if request['provider'] in policy.get('verified_providers', []) and request['session_state'] == 'expired':
+        # Expired entry is observable multi-session continuation, not clean work.
+        triggers = list(dict.fromkeys(triggers + ['working_record']))
     for trigger in triggers:
         definition = registry['triggers'].get(trigger)
         if definition is None: raise Blocked('unknown observable trigger: ' + str(trigger))
@@ -157,6 +171,9 @@ def routes(root, request, registry):
                     raise Blocked('memory recall requires exact own archive fact coverage')
                 entries.append(item)
     if request.get('mode') not in ('github', 'strict'): raise Blocked('explicit mode required')
+    policy = registry.get('common_capabilities', {})
+    if request['provider'] in policy.get('verified_providers', []):
+        entries = capability_routes(root, request, entries, policy, bound)
     ids = {x['id'] for x in entries}
     if len(ids) != len(entries): raise Blocked('duplicate route entry')
     if 'memory' not in ids: raise Blocked('route missing live memory')
@@ -172,6 +189,47 @@ def routes(root, request, registry):
             item['routing_revision'] = digest({'revision': registry['revision'], 'task': task, 'role': role, 'entry': item, 'layout': request['layout']})
             ordered.append(item)
     return ordered
+
+
+def capability_routes(root, request, entries, policy, bound):
+    """Select one Common authority; preserve all role-specific procedures."""
+    role = request['role']
+    live = bound['RUNTIME_ROOT'] + '/memory/' + role + '_Memory.md'
+    if role in policy['two_tier_roles']:
+        # Inspect format only; this never certifies returned body coverage.
+        headings = re.findall(r'^## (Standing Checks|Keyword Index|Troubleshooting Facts)\s*$',
+                              safe(root, live).read_text(encoding='utf-8-sig'), re.M)
+        if not headings:
+            return entries  # Existing full Bootstrap/record/live-memory authority.
+        if any(headings.count(name) != 1 for name in ('Standing Checks', 'Keyword Index', 'Troubleshooting Facts')):
+            raise Blocked('two-tier memory headings require exactly one of each: ' + live)
+    next(x for x in entries if x['id'] == 'common')['source'] = policy['core']
+    record = 'working_record' in request.get('triggers', []) or request['session_state'] == 'expired'
+    if not record:
+        entries = [x for x in entries if x['id'] != 'record']
+        for item in entries:
+            item['after'] = ['priming' if x == 'record' else x for x in item['after']]
+    else:
+        own = bound['RUNTIME_ROOT'] + '/working-record/' + role + '_Working_Record.md'
+        # A trigger may occur in reduced tasks that never had an ordinary record.
+        if not any(x['id'] == 'record' for x in entries):
+            entries.append(dict(id='record', source=own, coverage={'kind':'full'}, reason='Observed record trigger', after=['trigger_working_record']))
+        next(x for x in entries if x['id'] == 'record')['after'] = ['trigger_working_record']
+    memory = next(x for x in entries if x['id'] == 'memory')
+    if role in policy['two_tier_roles']:
+        memory['coverage'] = {'kind':'memory_section', 'heading':'Keyword Index'}
+        entries.append(dict(id='standing_checks',source=live,coverage={'kind':'memory_section','heading':'Standing Checks'},reason='Unconditional Standing Checks',after=list(memory['after'])))
+        memory['after'] = ['standing_checks']
+    replacements = {'tooling_failure':'Troubleshooting','credential_gate':'Credential_Gate','memory_fact':'Memory','memory_shape':'Memory','simple_memory_fact':'Memory','memory_recall':'Memory','retro_required':'Retro','runtime_handoff':'Stage_Transition','completion':'Core'}
+    for item in entries:
+        name = item['id'].removeprefix('trigger_')
+        if name in replacements:
+            item['source'] = '.mt-agent-devkit/rules/Agent_Common_' + replacements[name] + '.md'
+            if name == 'completion': item['coverage'] = {'kind':'full'}
+    if 'tooling_failure' in request.get('triggers', []) and role in policy['two_tier_roles']:
+        entries.append(dict(id='troubleshooting_facts',source=live,coverage={'kind':'memory_section','heading':'Troubleshooting Facts'},reason='Failure recall before diagnosis',after=['common']))
+        next(x for x in entries if x['id'] == 'trigger_tooling_failure')['after'] = ['troubleshooting_facts']
+    return entries
 
 
 def receipt_matches(receipt, entry, request):

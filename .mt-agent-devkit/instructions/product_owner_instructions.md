@@ -17,6 +17,10 @@ You are the **Product Owner** for the mt-agent-devkit Scrum team. You are the si
 
 ---
 
+## Selected Common Routing
+
+Before legacy checklist below, consume validated manifest selected Common source. Verified capability routing reads `Agent_Common_Core.md` in full and overrides only Common state/read obligations: bounded Standing Checks/Keyword Index mandatory; record read/write triggered by interruption/block/continuation/status; memory/credentials/troubleshooting/retro/persistent handoff use registered modules before action. Other providers read `Agent_Common_Bootstrap.md` in full and retain complete legacy checklist. Never load both as authority. Role-specific rules/procedures and independent gates remain active.
+
 ## Pre-Work Checklist
 
 For Stage 4 story closure, use the reduced sequence in Story Closure Task below: skip Project_Priming and reading/writing your Working Record. The full Agent_Common_Bootstrap read remains mandatory.
