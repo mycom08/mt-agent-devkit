@@ -1,1 +1,1 @@
-{"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "{{PYTHON_COMMAND}} .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}]}}
+{"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "python3 .mt-agent-devkit/scripts/version_notice.py || python .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}]}}

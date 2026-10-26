@@ -143,6 +143,27 @@ class DeploymentTests(unittest.TestCase):
         self.assertTrue(json.loads(merged)["custom"])
         self.assertEqual(d.provider_settings(merged, json.dumps(required)), merged)
 
+    def test_settings_merge_replaces_stale_version_notice_hook(self):
+        wanted = {"hooks": [{"type": "command", "command": "python3 x/version_notice.py || python x/version_notice.py"}]}
+        required = {"permissions": {"allow": []}, "hooks": {"SessionStart": [wanted]}}
+        for stale in ("python .mt-agent-devkit/scripts/version_notice.py", "python3 .mt-agent-devkit/scripts/version_notice.py"):
+            with self.subTest(stale=stale):
+                before = {"hooks": {"SessionStart": [{"matcher": "startup", "hooks": [{"type": "command", "command": stale}, {"type": "command", "command": "custom hook"}]}]}}
+                merged = json.loads(d.provider_settings(json.dumps(before), json.dumps(required)))
+                commands = [hook["command"] for session in merged["hooks"]["SessionStart"] for hook in session["hooks"]]
+                self.assertEqual(commands.count(wanted["hooks"][0]["command"]), 1)
+                self.assertIn("custom hook", commands)
+                self.assertNotIn(stale, commands)
+                again = d.provider_settings(json.dumps(merged), json.dumps(required))
+                self.assertEqual(json.loads(again), merged)
+
+    def test_settings_merge_drops_session_left_empty_by_stale_hook_removal(self):
+        wanted = {"hooks": [{"type": "command", "command": "python3 v/version_notice.py || python v/version_notice.py"}]}
+        required = {"permissions": {"allow": []}, "hooks": {"SessionStart": [wanted]}}
+        before = {"hooks": {"SessionStart": [{"hooks": [{"type": "command", "command": "python v/version_notice.py"}]}]}}
+        merged = json.loads(d.provider_settings(json.dumps(before), json.dumps(required)))
+        self.assertEqual(merged["hooks"]["SessionStart"], [wanted])
+
     def test_runtime_change_after_plan_blocks(self):
         memory = self.target / ".codex/agents/memory/Developer_Memory.md"
         memory.parent.mkdir(parents=True)

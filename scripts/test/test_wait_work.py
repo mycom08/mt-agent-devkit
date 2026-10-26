@@ -2,6 +2,7 @@
 import importlib.util
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -294,6 +295,45 @@ class LocalTests(unittest.TestCase):
         for extra in (["--window", "-1"], ["--window", "541"], ["--interval", "0"]):
             self.assertEqual(w.main(["local-wait", "--provider", "codex", "--runtime-root", ".codex/agents", "--id", "x", "--mode", "strict", *extra]), 3)
         self.assertEqual(w.redactor({})("plain"), "plain")
+
+
+@unittest.skipUnless(shutil.which("bash") and shutil.which("dirname"), "bash and dirname required")
+class ShellWrapperInterpreterTests(unittest.TestCase):
+    """wait_work.sh prefers PYTHON_COMMAND, then python3, then python."""
+
+    SCRIPT = ROOT / ".mt-agent-devkit/scripts/wait_work.sh"
+
+    def invoke(self, shims, **env):
+        with tempfile.TemporaryDirectory() as scratch:
+            bin_dir = Path(scratch)
+            (bin_dir / "dirname").symlink_to(shutil.which("dirname"))
+            for name in shims:
+                shim = bin_dir / name
+                shim.write_text("#!/bin/sh\necho shim:" + name + "\n")
+                shim.chmod(0o755)
+            environment = {"PATH": str(bin_dir), **env}
+            return subprocess.run([shutil.which("bash"), str(self.SCRIPT), "--help"], env=environment, capture_output=True, text=True)
+
+    def test_prefers_python3_over_python(self):
+        result = self.invoke(["python3", "python"])
+        self.assertEqual(result.stdout.strip(), "shim:python3")
+
+    def test_falls_back_to_python(self):
+        result = self.invoke(["python"])
+        self.assertEqual(result.stdout.strip(), "shim:python")
+
+    def test_python_command_overrides_discovery(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            custom = Path(scratch) / "custom-python"
+            custom.write_text("#!/bin/sh\necho shim:custom\n")
+            custom.chmod(0o755)
+            result = self.invoke(["python3", "python"], PYTHON_COMMAND=str(custom))
+        self.assertEqual(result.stdout.strip(), "shim:custom")
+
+    def test_no_interpreter_exits_2_with_message(self):
+        result = self.invoke([])
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Python 3 is required", result.stderr)
 
 
 if __name__ == "__main__": unittest.main()

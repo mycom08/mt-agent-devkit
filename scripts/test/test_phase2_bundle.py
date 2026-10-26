@@ -93,7 +93,9 @@ class BundleTests(unittest.TestCase):
                             if provider == "claude":
                                 settings = json.loads((target / ".claude/settings.json").read_text())
                                 self.assertIn("Bash(gh pr *)", settings["permissions"]["allow"])
-                                self.assertIn("version_notice.py", settings["hooks"]["SessionStart"][0]["hooks"][0]["command"])
+                                hook_command = settings["hooks"]["SessionStart"][0]["hooks"][0]["command"]
+                                self.assertEqual(hook_command, "python3 .mt-agent-devkit/scripts/version_notice.py || python .mt-agent-devkit/scripts/version_notice.py")
+                                self.assertNotIn("{{", hook_command)
                                 self.assertTrue((target / ".claude/skills/read-section/SKILL.md").is_file())
                             adapter = (target / ("." + provider) / "harness/Provider_Adapter.md").read_text()
                             for skill in ("ci-watch", "local-verify"):

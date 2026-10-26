@@ -197,13 +197,6 @@
       "kind": "template"
     },
     {
-      "id": "rules/Story_Standard.md",
-      "path": "assets/rules_Story_Standard.md",
-      "sha256": "7fa25c05508abf64e730ccc7aad2ffbe4ac89d0d41a0df1a786fda0b3716c638",
-      "bytes": 36549,
-      "kind": "template"
-    },
-    {
       "id": "rules/Story_Standard_TL.md",
       "path": "assets/rules_Story_Standard_TL.md",
       "sha256": "6fa74de435925cc64437d47a9f79e236a5764b414436b296a0e8243b7bdc9d64",
@@ -215,6 +208,13 @@
       "path": "assets/rules_Story_Standard_UIUX.md",
       "sha256": "d1e57fa029436779f4041335d72329196118171d5098b574e7c972ecf58a7686",
       "bytes": 3679,
+      "kind": "template"
+    },
+    {
+      "id": "rules/Story_Standard.md",
+      "path": "assets/rules_Story_Standard.md",
+      "sha256": "7fa25c05508abf64e730ccc7aad2ffbe4ac89d0d41a0df1a786fda0b3716c638",
+      "bytes": 36549,
       "kind": "template"
     },
     {
@@ -584,8 +584,8 @@
     {
       "id": "claude/settings",
       "path": "assets/claude_settings",
-      "sha256": "fa39cf51385d6a6a02346fa170f60aac1ea63a221330b0efba79a238dea5ba85",
-      "bytes": 249,
+      "sha256": "37b8dc88c276adc5594a7557f8eac09e4dff849d294f7c9eb1ef30c8eb1abf6c",
+      "bytes": 291,
       "kind": "adapter"
     },
     {
@@ -1067,8 +1067,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "f42d58afd3cd4207030e5447009f10f5f267b9cbdfb631e327f6541106e07532",
-      "bytes": 36326,
+      "sha256": "1f28cee76573c71b75823c682df2d6c921f2a2e42f6d68b9859fd27301aef577",
+      "bytes": 36669,
       "kind": "script"
     },
     {
@@ -1123,8 +1123,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "1b276ba2db33c9c27e1e1e05c7ef70889a6b2efd3161cf7ac0aa06239da444ac",
-      "bytes": 26668,
+      "sha256": "2f22e5861c34044dfb59c6f892d3b24c1922541d32a6fa028dd6db4a98247693",
+      "bytes": 26710,
       "kind": "script"
     },
     {
@@ -1179,8 +1179,8 @@
     {
       "id": "wait_work.sh",
       "path": "assets/wait_work.sh",
-      "sha256": "5bc55b5f62013844d37d3c5da3f5df6d5beec7acc617569cb7b732f2786084b8",
-      "bytes": 110,
+      "sha256": "2d1c8dda5e937caa282a97ad4b9fe13d522421951d83d7c27adf2910cdfd0440",
+      "bytes": 419,
       "kind": "script"
     },
     {
@@ -1892,31 +1892,6 @@
       "required": true
     },
     {
-      "id": "rules/Story_Standard.md",
-      "sources": [
-        "rules/Story_Standard.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Story_Standard.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
       "id": "rules/Story_Standard_TL.md",
       "sources": [
         "rules/Story_Standard_TL.md"
@@ -1947,6 +1922,31 @@
         "rules/Story_Standard_UIUX.md"
       ],
       "destination": ".mt-agent-devkit/rules/Story_Standard_UIUX.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "rules/Story_Standard.md",
+      "sources": [
+        "rules/Story_Standard.md"
+      ],
+      "destination": ".mt-agent-devkit/rules/Story_Standard.md",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -7413,86 +7413,6 @@
       "required": false
     },
     {
-      "id": "retire/claude/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Story_Standard.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Story_Standard.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Story_Standard.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Story_Standard.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
       "id": "retire/claude/repo/github/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
       "sources": [],
       "destination": ".claude/agents/rules/Story_Standard_TL.md",
@@ -7636,6 +7556,86 @@
       "id": "retire/antigravity/repo/strict/rules/Story_Standard_UIUX.md/rules/Story_Standard_UIUX.md",
       "sources": [],
       "destination": ".antigravity/agents/rules/Story_Standard_UIUX.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Story_Standard.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Story_Standard.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Story_Standard.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Story_Standard.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
@@ -14101,38 +14101,6 @@
         ]
       },
       {
-        "logical_id": "retire/claude/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
-        "path": ".claude/agents/rules/Story_Standard.md",
-        "after_verified_ids": [
-          "rules/Story_Standard.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
-        "path": ".claude/agents/rules/Story_Standard.md",
-        "after_verified_ids": [
-          "rules/Story_Standard.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
-        "path": ".antigravity/agents/rules/Story_Standard.md",
-        "after_verified_ids": [
-          "rules/Story_Standard.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
-        "path": ".antigravity/agents/rules/Story_Standard.md",
-        "after_verified_ids": [
-          "rules/Story_Standard.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
         "logical_id": "retire/claude/repo/github/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
         "path": ".claude/agents/rules/Story_Standard_TL.md",
         "after_verified_ids": [
@@ -14193,6 +14161,38 @@
         "path": ".antigravity/agents/rules/Story_Standard_UIUX.md",
         "after_verified_ids": [
           "rules/Story_Standard_UIUX.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
+        "path": ".claude/agents/rules/Story_Standard.md",
+        "after_verified_ids": [
+          "rules/Story_Standard.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
+        "path": ".claude/agents/rules/Story_Standard.md",
+        "after_verified_ids": [
+          "rules/Story_Standard.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/rules/Story_Standard.md/rules/Story_Standard.md",
+        "path": ".antigravity/agents/rules/Story_Standard.md",
+        "after_verified_ids": [
+          "rules/Story_Standard.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/rules/Story_Standard.md/rules/Story_Standard.md",
+        "path": ".antigravity/agents/rules/Story_Standard.md",
+        "after_verified_ids": [
+          "rules/Story_Standard.md",
           "root_repo/AGENTS.md"
         ]
       },

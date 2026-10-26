@@ -138,7 +138,7 @@ def build(root, destination):
             aid = asset(provider + "/skill/" + skill_name, content.encode(), "adapter")
             entry(provider + "/skill/" + skill_name, [aid], "." + provider + "/skills/" + skill_name + "/SKILL.md", profiles=("repo", "project_root"), owner="selected_provider", providers=(provider,), phase="discovery")
         if provider == "claude":
-            settings = {"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "{{PYTHON_COMMAND}} .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}]}}
+            settings = {"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "python3 .mt-agent-devkit/scripts/version_notice.py || python .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}]}}
             aid = asset("claude/settings", (json.dumps(settings) + "\n").encode(), "adapter")
             entry("claude/settings", [aid], ".claude/settings.json", profiles=("repo", "project_root"), owner="selected_provider", ownership="provider_config", renderer="provider_settings", providers=(provider,), phase="discovery")
             skill = (root / ".mt-agent-devkit/contracts/Read_Section.md").read_bytes()

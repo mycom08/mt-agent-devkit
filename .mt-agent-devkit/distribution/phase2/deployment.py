@@ -122,7 +122,10 @@ def provider_settings(existing, required):
     legacy_scripts = ".claude" + "/agents/scripts/"
     commands = {"powershell -File " + legacy_scripts + "check_devkit_version.ps1", "bash " + legacy_scripts + "check_devkit_version.sh"}
     for session in sessions:
-        session["hooks"] = [hook for hook in session.get("hooks", []) if hook.get("command") not in commands]
+        # Also drop earlier renderings of the notice hook (bare `python` or `python3`) so a
+        # project deployed on one OS does not keep a command the other OS cannot run.
+        session["hooks"] = [hook for hook in session.get("hooks", []) if hook.get("command") not in commands and not str(hook.get("command", "")).endswith("version_notice.py")]
+    sessions[:] = [session for session in sessions if session["hooks"] or "hooks" not in session]
     wanted = required["hooks"]["SessionStart"][0]
     if not any(wanted == session for session in sessions): sessions.append(wanted)
     return json.dumps(result, indent=2) + "\n"
