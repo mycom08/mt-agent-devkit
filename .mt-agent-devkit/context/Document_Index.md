@@ -20,6 +20,7 @@ Quick lookup for all project documents and external references. Update this file
 |---|---|
 | Technical Analysis | `docs/technical/Technical_Analysis.md` |
 | Architecture Overview | `docs/technical/Architecture.md` |
+| Codex Internal Orchestration Policy | `.codex/harness/Orchestration_Policy.md` |
 
 ### Reviews and Improvement Guides
 

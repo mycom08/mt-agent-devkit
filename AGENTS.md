@@ -70,3 +70,12 @@ For this project, run GitHub network commands outside the sandbox using
 loopback proxy prevents GitHub access. Use the supported escalation path;
 do not alter proxy settings. This preference does not authorize otherwise
 unrequested GitHub mutations or bypass review and approval gates.
+
+## Codex Internal Orchestration
+
+For a story workflow using the verified Codex mapping, the top-level orchestrator
+reads `.codex/harness/Orchestration_Policy.md` before dispatch or recovery. Fresh role
+workers use explicit `fork_turns: "none"` and a complete bounded assignment;
+valid existing workers resume in their own sessions. This policy applies only
+inside this devkit, supplements the selected adapter and shared gates, and does
+not start a workflow for ordinary repository tasks.

@@ -29,6 +29,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Changes
 
 - [ST-000264] Load Common capabilities on observable triggers while preserving safety, coverage and unverified-provider compatibility.
+- [Enhancement #272] Bound internal Codex worker context and story recovery; persist read receipts through canonical manifest rebuilding.
 
 ### Bug Fixes
 

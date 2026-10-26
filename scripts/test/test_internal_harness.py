@@ -254,6 +254,127 @@ class SectionAndWrapperTests(unittest.TestCase):
                     self.assertEqual(wrappers.render(entry), (ROOT / entry["source"]).read_text(encoding="utf-8"))
 
 
+class CodexReceiptPersistenceTests(unittest.TestCase):
+    def setUp(self):
+        # Reuse the bounded routing fixture, not an operational worker's state.
+        from scripts.test import test_read_manifest as fixtures
+        fixture = fixtures.RoutingTests()
+        fixture.setUp()
+        self.addCleanup(fixture.doCleanups)
+        self.root = fixture.root
+        helper_spec = importlib.util.spec_from_file_location(
+            "codex_receipts", ROOT / ".codex/harness/persist_read_receipts.py")
+        self.helper = importlib.util.module_from_spec(helper_spec)
+        helper_spec.loader.exec_module(self.helper)
+        self.routing = self.helper.routing
+        self.manifest = fixture.build(session_state="same", delta=fixture.delta())
+        self.manifest_source = ".codex/agents/working/tmp/manifest.json"
+        self.receipts_source = ".codex/agents/working/tmp/attestations.json"
+        self.path = self.root / self.manifest_source
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.write(self.manifest_source, self.manifest)
+        self.receipt = self.routing.attest(
+            self.root, self.manifest, "bootstrap",
+            returned_complete=True, truncation_recovered=True)
+        self.write(self.receipts_source, [self.receipt])
+
+    def write(self, source, value):
+        path = self.root / source
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(value), encoding="utf-8")
+
+    def persist(self):
+        return self.helper.persist(self.root, self.manifest_source, self.receipts_source)
+
+    def test_same_session_receipt_rebuilds_omissions_and_keeps_context_reads(self):
+        self.assertEqual("PASS", self.persist()["status"])
+        result = self.routing.validate(self.root, self.routing.load(self.path))
+        self.assertIn("bootstrap", {entry["id"] for entry in result["omitted"]})
+        self.assertNotIn("bootstrap", {entry["id"] for entry in result["reads"]})
+        self.assertTrue({"context_story", "context_decisions", "context_delta"}
+                        <= {entry["id"] for entry in result["reads"]})
+
+    def test_fresh_and_expired_sessions_keep_mandatory_reads(self):
+        for state in ("fresh", "expired"):
+            with self.subTest(state=state):
+                self.manifest["request"]["session_state"] = state
+                fresh = self.routing.build(self.root, self.manifest["request"])
+                self.write(self.manifest_source, fresh)
+                self.persist()
+                result = self.routing.validate(self.root, self.routing.load(self.path))
+                self.assertEqual([], result["omitted"])
+                self.assertIn("bootstrap", {entry["id"] for entry in result["reads"]})
+
+    def test_retry_is_idempotent_without_replacing_manifest_again(self):
+        from unittest.mock import patch
+        self.persist()
+        before = self.path.read_bytes()
+        with patch.object(self.helper.os, "replace") as replace:
+            self.persist()
+        replace.assert_not_called()
+        self.assertEqual(before, self.path.read_bytes())
+        self.assertEqual(1, len(self.routing.load(self.path)["receipts"]))
+
+    def test_invalid_attestations_preserve_original_manifest(self):
+        before = self.path.read_bytes()
+        for field, value in (("session", "another-worker"), ("provider", "claude"),
+                             ("content_sha256", "0" * 64),
+                             ("coverage", {"kind": "section", "section": "1"}),
+                             ("returned_coverage", "partial"),
+                             ("truncation_recovered", False)):
+            with self.subTest(field=field):
+                self.write(self.receipts_source, [{**self.receipt, field: value}])
+                with self.assertRaises(self.routing.Blocked):
+                    self.persist()
+                self.assertEqual(before, self.path.read_bytes())
+        self.write(self.receipts_source, [self.receipt, {**self.receipt, "session": "other"}])
+        with self.assertRaises(self.routing.Blocked):
+            self.persist()
+        self.assertEqual(before, self.path.read_bytes())
+
+    def test_outside_runtime_or_other_layout_is_rejected(self):
+        before = self.path.read_bytes()
+        self.write("docs/receipts.json", [self.receipt])
+        for source in ("docs/receipts.json", "../outside.json"):
+            with self.subTest(source=source), self.assertRaises(self.routing.Blocked):
+                self.helper.persist(self.root, self.manifest_source, source)
+        with self.assertRaises(self.routing.Blocked):
+            self.helper.persist(self.root, self.manifest_source, self.manifest_source)
+        self.assertEqual(before, self.path.read_bytes())
+        for field, value in (("layout", "target"), ("provider", "claude")):
+            candidate = json.loads(json.dumps(self.manifest))
+            candidate["request"][field] = value
+            self.write(self.manifest_source, candidate)
+            original = self.path.read_bytes()
+            with self.assertRaises(self.routing.Blocked):
+                self.persist()
+            self.assertEqual(original, self.path.read_bytes())
+
+    def test_replace_failure_preserves_manifest_and_cleans_temporary_file(self):
+        from unittest.mock import patch
+        before = self.path.read_bytes()
+        with patch.object(self.helper.os, "replace", side_effect=OSError("simulated failure")):
+            with self.assertRaises(OSError):
+                self.persist()
+        self.assertEqual(before, self.path.read_bytes())
+        self.assertEqual([], list(self.path.parent.glob(".receipts-*.tmp")))
+
+    def test_manual_stale_lists_and_changed_sources_block_before_persistence(self):
+        stale = {**self.manifest, "receipts": [self.receipt]}
+        self.write(self.manifest_source, stale)
+        before = self.path.read_bytes()
+        with self.assertRaisesRegex(self.routing.Blocked, "canonical requirement"):
+            self.persist()
+        self.assertEqual(before, self.path.read_bytes())
+        self.write(self.manifest_source, self.manifest)
+        source = self.root / self.receipt["source"]
+        source.write_bytes(source.read_bytes() + b"\nChanged guidance.\n")
+        before = self.path.read_bytes()
+        with self.assertRaises(self.routing.Blocked):
+            self.persist()
+        self.assertEqual(before, self.path.read_bytes())
+
+
 class MigrationPreservationTests(unittest.TestCase):
     def test_future_release_template_and_history_edits_are_not_frozen_by_ci(self):
         from unittest.mock import patch
