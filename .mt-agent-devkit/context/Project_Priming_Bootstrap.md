@@ -113,7 +113,19 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 ## 13. Feature Current State
 
-No active feature sprint — devkit maintenance is handled as individual stories.
+**Active sprint: Sprint 8** (GitHub label `sprint-8`). Scope as of 2026-10-26:
+
+| Issue | Story | State |
+|---|---|---|
+| #245 | Shared doc formats for specs, ADRs with mandatory NFRs, test docs and approval verdicts | ready |
+| #251 | Require isolated pre-fix and post-fix bug regression evidence | ready |
+| #258 | Define concise notices and explicit thread decisions | ready |
+| #262 | Fix Windows UTF-8 version notice decoding | done |
+| #264 | Common core and triggered capabilities | done |
+
+On hold, moved out of Sprint 8 (label `status:on-hold`): #265 Developer stage profiles and manifest routing, and #266 Profile migration behavior and efficiency comparison (depends on #265). Developer rules stay at their current owner until #265 resumes; umbrella #263 stays open and is also `status:on-hold`.
+
+Live state is the issue list: `gh issue list --label sprint-8 --state all`.
 
 ---
 
@@ -123,8 +135,8 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.3 — preamble trimmed to drop the section inventory the routing table already carries; §15a's routing row folded into §15.
-**Previous:** 1.2 — split into bootstrap + read-on-demand tiers 2026-08-21 (devkit's own team only)
-**Last Updated:** 2026-08-21
+**Document Version:** 1.4 — §13 records Sprint 8 as the active sprint.
+**Previous:** 1.3 — preamble trimmed to drop the section inventory the routing table already carries; §15a's routing row folded into §15.
+**Last Updated:** 2026-10-26
 **Audience:** Development team, architects, AI agents
 
