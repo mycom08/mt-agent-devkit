@@ -49,7 +49,7 @@ Each skill is a `SKILL.md` with discovery frontmatter (`name`, `description`). W
 | `po-core` | Rules for **every** PO activity: role boundaries, scope gating, PO records (memory format `## Stored Facts` per `Agent_Common_Read_On_Demand.md §1`; Working Record retention of at most 3 story entries; closure skips the Working Record) | PO Bootstrap §4, §11b; `Story_Standard_PO.md` §7; instructions Working Record section | `agent-security` |
 | `po-comment` | Decisions, feedback and approvals go in issue comments (no standalone files), same thread per topic, comment format and `Thread Status` | PO Bootstrap §2; `Story_Standard_PO.md` §9 | `po-core` |
 | `po-plan-docs` | Plan documents: placement, `Title_Case_With_Underscores` naming, commit and push each plan-file update right away (github mode) | PO Bootstrap §10, §11 | `po-core` |
-| `po-write-story` | Create or edit a story: concise-story rules, Assigned rule, no version-bump AC, title/labels, structure and scope, body template, first-`--body-file` check | PO Bootstrap §1, PO On-Demand §5, `Story_Standard_PO.md` §2, §3, §13 | `po-core` |
+| `po-write-story` | Create or edit a story: concise-story rules, Assigned rule, no version-bump AC, **story ID rule in github mode (`ST-` + zero-padded issue number, set after `gh issue create`; today only the strict-mode guide documents it)**, title/labels, structure and scope, body template, first-`--body-file` check | PO Bootstrap §1, PO On-Demand §5, `Story_Standard_PO.md` §2, §3, §13 | `po-core` |
 | `po-roadmap-drain` | Drain roadmap-defined stories into tracked issues, idempotently | PO Bootstrap §11a, PO On-Demand §4 | `po-write-story`, `po-plan-docs` |
 | `po-plan-sprint` | Plan Next Sprint steps 1–5 including the final Working Record step; questions file; never promote to ready; release-gate sign-off; sprint planning and backlog-refinement ceremonies (break epics into stories ≤ 13 points); backlog finalization is not delegated | PO On-Demand §3 (incl. Step 5.6), PO Bootstrap §3 (planning, refinement), §8 (backlog row), §9 | `po-core`, `po-write-story`, `po-plan-docs`, `po-roadmap-drain` |
 | `po-answer-questions` | Answer scope/AC questions; binding decisions; AC body sync; decide, don't discuss; defer technical calls to TL; flag scope drift to BA; defer-vs-include is not delegated; daily-standup unblocking; scope-change escalation in `orchestrator` mode (§6) | PO On-Demand §2 Role A, PO Bootstrap §3 (standup), §5 (AC sync), §7, §8 (defer row) | `po-core`, `po-comment`, `po-write-story` (when an AC changes) |
@@ -283,6 +283,23 @@ Lists are a minimum. Any other site using the same mechanism is in scope as well
 
 **Total: 58 points**, against sprint capacity of 60. Every story is at most 13.
 
+### 9a. Story Creation Inputs
+
+Everything `Create_Stories_Workflow.md` asks for, recorded so the stories can be created from this doc alone:
+
+| Field | Value |
+|---|---|
+| Story ID | `ST-` plus the GitHub issue number, zero-padded to six digits (issue #290 → `ST-000290`). Create the issue first, then set the title `[ST-<id>][DEVKIT] <title>` with `gh issue edit`, and use the same ID in **Depends on:** lines |
+| Assigned | `Developer`, for all six stories |
+| Priority | `Must-Have`, for all six stories (they ship as one release) |
+| Feature / phase | Feature `role-skills`. Story 0 → `phase-0`; 1a, 1b, 1c → `phase-1`; 2a, 2b → `phase-2` |
+| Sprint | `sprint-9` (`**Phase:** Sprint 9`) |
+| Base branch | `main` |
+| Labels | `status:backlog`, `sprint-9`, `enhancement`, `feature:role-skills`, `phase-N` |
+| Body extras | `**Design:**` link to this doc (§ of the story), `**Depends on:**` per the table above, `**Story Points:**` from the Estimate column |
+| AC source | The story's Scope and Exit criteria above, plus the matching §10 checks |
+| Create order | 0, 1a, 1b, 1c, 2a, 2b, so each **Depends on:** line can cite real IDs |
+
 **Merge order:** 0 → 1a → (1b → 1c) and (2a → 2b), with 1b/1c and 2a/2b able to run in parallel. Each merge leaves `main` consistent: 1b keeps the old templates until 1c retires them.
 
 **Release boundary:** all six stories ship in **one release**. The `release` workflow is dispatched only after all are merged.
@@ -340,6 +357,7 @@ Lists are a minimum. Any other site using the same mechanism is in scope as well
 
 | Rev | Change |
 |---|---|
+| 5 | §9a story creation inputs (ID rule, Assigned, Priority, feature/phase, sprint, base branch, labels); `po-write-story` absorbs the github-mode story ID rule |
 | 4 | TL approval with changes:<br>• **R1:** compare orchestrator-plus-worker totals per story; the orchestrator total only from `harness_report`/`session_final_tokens`, otherwise unmeasured<br>• **R2:** `po_validation` is internal-only until 1b |
 | 3 | TL re-review:<br>• **NB1:** inline telemetry uses `usage_source: unavailable`, with the saving compared through per-story totals; in-session capture dropped<br>• **NB2:** 1a switches PO routing for the internal layout only; targets switch in 1b<br>• **N7:** skill renderer moved to story 0<br>• **N8:** attribution split stated<br>• **N9:** resolution conditions and the legacy manual path<br>• **N10:** any AC body edit after Stage 1 escalates |
 | 2 | TL review on PR #286:<br>• **B1:** shared canonical skills in targets<br>• **B2:** explicit legacy retirements and migration tests<br>• **B3:** bare-citation validator, resolution generation for unmodified files, customised-file conflict<br>• **B4:** generated inline copies in both Common routes; no manifest entry; route-specific shell authority<br>• **B5:** `Story_Standard.md` amendments, scope-change escalation, fast-path rationale<br>• **B6:** telemetry role, inline measurement, `Orchestrator` retro identity<br>• **B7:** six stories with estimates, corrected dependencies<br>• **B8:** `read_manifest.py`, `po_validation` task, extended ripple<br>• **N1–N6:** content map completed, size targets restated, inline judgement checks, setting ownership, measurement, editorial order |
