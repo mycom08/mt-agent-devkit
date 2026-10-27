@@ -1,7 +1,7 @@
 # PO Skills and Orchestrator-as-PO Proposal
 
 **Feature:** `role-skills`
-**Status:** Revision 2. Addresses the TL review on PR #286 (B1–B8, N1–N6); awaiting re-review
+**Status:** Revision 3. Addresses both TL reviews on PR #286 (B1–B8, N1–N6; NB1, NB2, N7–N10); awaiting re-review
 **Date:** 2026-10-27
 **Scope:** Devkit internal harness (`.mt-agent-devkit/`) **and** distributed Phase 2 templates (`.mt-agent-devkit/distribution/phase2/templates/`). The frozen legacy `.claude/agents/templates/` corpus is not touched.
 **Goal:** Token and latency savings. Many PO spawns exist only to re-check evidence the orchestrator already holds, tick AC boxes and flip a label.
@@ -115,7 +115,7 @@ The rest needs new work, all in story 1c (§9):
 | **Survivor IDs (B1).** Provider operation IDs carry `:<provider>`, so a fixed survivor list fails on targets that don't bind every provider | Survivors are the **shared** canonical skill IDs from §3b plus `product_owner_instructions.md`. Those IDs exist in every plan |
 | **Legacy layouts (B2).** `build_bundle.py:202-229` derives legacy retirements from surviving shared entries, so deleting the PO templates drops their legacy retirements | Explicit retirement entries for every legacy variant of the three files (`.claude/agents/rules/...`, `.antigravity/agents/rules/...`, per mode), with the shared skills as survivors. Each legacy fixture (`v0.1.48.zip`, `v0.1.49.zip`, `v0.1.50.zip`) gets a migration test asserting the old PO files are gone and the skills are present |
 | **Stale citations (B3a).** The engine gate matches full paths only, but the corpus cites bare filenames (`` `Story_Standard_PO.md` §14``) | A new validator rejects any bare-filename or `§`-citation of a retired file anywhere in the internal corpus, the Phase 2 templates and the bundle content (§10). The engine's full-path gate stays as a second net |
-| **No resolution source (B3b).** Production code never creates retirement resolutions, so every existing target's first sync stops at `deployment.py:297-298` | Sync generates resolutions **only** for retired files that are unmodified: current hash equals the receipt's `rendered_sha256` and the receipt says `adapted: false`. Reason: `stock retirement in <version>`. The sync review step lists every generated retirement before apply. Every other case stays a conflict |
+| **No resolution source (B3b, N9).** Production code never creates retirement resolutions, so every existing target's first sync stops at `deployment.py:297-298` | Sync generates a resolution **only** when all of these hold:<br>• The path is listed in the new manifest's `legacy_support.retirements`.<br>• The target has a receipt (`deployment.py:523`) whose entry has `adapted: false` and a present `stock_sha256`. A missing `adapted` or `stock_sha256` is unknown, never false (`:306`).<br>• The current hash equals the receipt's `rendered_sha256`.<br><br>The generated resolution has `after_sha256: null` and the reason `stock retirement in <version>`. The sync review step lists every generated retirement before apply. Every other case stays a conflict. Legacy 0.1.48–0.1.50 targets have no receipt (`lifecycle.py:37`), so they keep the manual reviewed-resolution path |
 | **Customised files (B3c).** An `adapted: true` file would be deleted and its customization lost | Sync refuses with a dedicated conflict: "retired file <path> is customised; port the customization into the replacing skill, then resolve". It never auto-resolves. The Sync workflow and the CHANGELOG describe the porting step |
 
 **Mid-sprint sync:** a target that syncs mid-sprint could resume a PO session that loaded the old rules. The CHANGELOG entry says to sync between sprints. A fresh spawn always reads the new files.
@@ -180,7 +180,7 @@ There is **no manifest entry.** Manifests exist only for story tasks (`read_mani
 | Refine Sprint Stage 2 (after TL) | Spawn/resume | Inline: `po-answer-questions`; TL-before-PO ordering kept |
 | Refine Sprint Stage 4 | Resume | Inline: `po-promote-ready` |
 | Pipeline Stage 2: Developer question with owner PO | Spawn/resume | Inline: `po-answer-questions` |
-| **Scope change after Stage 1 starts** (defer, split, AC weakening or removal) | PO decides | **Escalate to the user** through the existing blocked-story procedure. Never decided inline |
+| **Scope change after Stage 1 starts** (defer, split, or **any** AC body edit) | PO decides | **Escalate to the user** through the existing blocked-story procedure. Never decided inline. Every AC body edit counts, not only ones the orchestrator judges a weakening, so the merging actor never decides whether its own edit lowers the bar (N10) |
 | Pipeline Stage 3: QA is the implementer | Spawn | **Spawn (forced)**: `po-validate-ac` |
 | Pipeline Stage 4 non-behavioral | Inline (already) | Inline (unchanged) |
 | Pipeline Stage 4 behavioral | Spawn (`closure` policy) | Inline: `po-verify-close` |
@@ -221,7 +221,8 @@ In `orchestrator` mode, `po_session` records `inline` for inline touchpoints, an
 | Retro identity (B6b) | Recorded as `Orchestrator`, the actual actor, as Core and Bootstrap §7 already require for fast paths (`Agent_Common_Core.md:67`, `Agent_Common_Bootstrap.md:120`). No Common §7 amendment |
 | Telemetry role (B6a) | `PO` (the normalised value for Product Owner; `Product_Owner` is rejected by `telemetry.py:64-69`) |
 | Telemetry session mode | New `session_mode: orchestrator_inline`, an additive enum value in schema v1, in `telemetry.py` and its Phase 2 template |
-| Telemetry usage (B6a, N5) | Claude: boundary capture inside the orchestrator's own transcript. The orchestrator records start and end boundary files around each inline PO activity and runs bounded extraction on its own session. Other providers: `usage_source: unavailable`. One row per inline activity, so the token saving is measurable |
+| Telemetry usage (B6a, N5, NB1) | One row per inline PO activity with `usage_source: unavailable`. In-session boundary capture is **not** used. `telemetry.py boundary` checks session ownership over the whole transcript prefix (`telemetry.py:364-365`, `:476`), so it fails on a continued orchestrator session ("conflicting native session identities"). The orchestrator also has no discovery for its own transcript (`find_claude_agent_transcript`, `:167`, matches subagents only). The saving is measured instead by comparing **per-story totals** across modes: the spawned-PO rows a `subagent` story produces versus the orchestrator session total of an `orchestrator` story. Per-activity inline measurement is a possible later story: slice-only ownership, own-transcript discovery and a multi-session test |
+| Attribution split (N8) | Telemetry records the **role performed** (`PO`, with `session_mode: orchestrator_inline` marking the actor). The retro records the **actual actor** (`Orchestrator`), as Common §7 requires. Both are deliberate |
 | Read manifest | No worker spawn means no manifest, as with existing orchestrator-direct paths. Inline activities record the loaded skill names in the pipeline state |
 | Model policy | Inline work runs on the orchestrator's model. The `closure` and `standard` policies apply only to spawns. The `orchestrator_inline` rows let adopters verify the cost |
 
@@ -273,11 +274,11 @@ Lists are a minimum. Any other site using the same mechanism is in scope as well
 
 | Story | Scope | Estimate | Depends on | Exit criteria |
 |---|---|---|---|---|
-| **0** `agent-security` | Skill, shared canonical file plus wrappers, inline-copy generator and drift check, Core and Bootstrap generated blocks, orchestrator load (skill and Shell Safety) | 8 | — | Drift check green; orchestrator loads the skill at workflow start; Phase 0 ripple done |
-| **1a** PO skills, internal | Ten skills (canonical plus wrappers), skill renderer in `generate_wrappers.py`, slim instructions, delete the three internal PO files and their wrappers, `read_manifest.py` PO mapping, `read-routing.json` incl. `po_validation`, internal ripple | 13 | 0 | All internal gates green; bare-citation validator green for the internal corpus |
-| **1b** PO skills, distribution | Skill templates, shared canonical plus per-provider wrappers in the bundle, slim instructions template, template ripple. The old PO templates **stay** in the bundle, unused, so every merge is consistent | 8 | 1a | Bundle `--check` green; targets receive the skills |
-| **1c** Retirement | Remove the PO templates; shared and legacy retirement entries; resolution generation for unmodified files; customised-file conflict; Sync workflow porting step; legacy migration tests; bare-citation validator over templates and bundle; CHANGELOG | 8 | 1b | Each legacy fixture migrates without leaving PO files; a customised file raises the porting conflict; a stock target syncs with no manual resolution |
-| **2a** Setting and contracts | `project_settings.json` plus bundle entry, state pinning, `Story_Standard.md` and access-control amendments, telemetry enum and inline extraction | 8 | 1a | Absent setting resolves to `subagent`; contract amendments merged; `orchestrator_inline` rows validate |
+| **0** `agent-security` | Skill, shared canonical file plus wrappers, **skill renderer in `generate_wrappers.py`** (N7), inline-copy generator and drift check, Core and Bootstrap generated blocks, orchestrator load (skill and Shell Safety) | 8 | — | Drift check green; orchestrator loads the skill at workflow start; Phase 0 ripple done |
+| **1a** PO skills, internal | Ten skills (canonical plus wrappers), slim instructions, delete the three internal PO files and their wrappers, `po_validation` task, internal ripple. PO routing in `read_manifest.py` and `read-routing.json` switches to `po-core` **for the internal layout only**, through the registry's per-layout mapping (`read_manifest.py:133-141`). `build_bundle.py:185-196` ships both files to targets, which don't have the skills yet (NB2) | 13 | 0 | All internal gates green; bare-citation validator green for the internal corpus; target-layout PO manifests unchanged and valid |
+| **1b** PO skills, distribution | Skill templates, shared canonical plus per-provider wrappers in the bundle, slim instructions template, template ripple, and the **target-layout** PO routing switch to `po-core`. The old PO templates **stay** in the bundle, unused, so every merge is consistent | 8 | 1a | Bundle `--check` green; targets receive the skills; target-layout PO manifests resolve to `po-core` |
+| **1c** Retirement | Remove the PO templates; shared and legacy retirement entries; resolution generation for unmodified receipt-based files; customised-file conflict; Sync workflow porting step; legacy migration tests; bare-citation validator over templates and bundle; CHANGELOG | 8 | 1b | Each legacy fixture migrates without leaving PO files (manual reviewed resolution); a customised file raises the porting conflict; a stock **receipt-based** target syncs with no manual resolution |
+| **2a** Setting and contracts | `project_settings.json` plus bundle entry, state pinning, `Story_Standard.md` and access-control amendments, telemetry enum with `usage_source: unavailable` inline rows | 8 | 1a | Absent setting resolves to `subagent`; contract amendments merged; `orchestrator_inline` rows validate |
 | **2b** Orchestrator mode | The §5 matrix in every workflow, forced spawns, scope-change escalation, observation checks, orchestrator skill loading | 13 | 0, 1a, 2a | Every §5 row implemented and covered by a test or a scenario |
 
 **Total: 58 points**, against sprint capacity of 60. Every story is at most 13.
@@ -304,7 +305,8 @@ Lists are a minimum. Any other site using the same mechanism is in scope as well
   - retirement: a stock file auto-resolves; an `adapted: true` file raises the porting conflict
   - `po_execution` absent → `subagent`; an unrecognised value → `subagent` plus a report
   - Stage 3 with QA as the implementer, and Plan Sprint, spawn in both modes
-  - in `orchestrator` mode, a defer, split or AC weakening after Stage 1 routes to the user
+  - in `orchestrator` mode, a defer, split or any AC body edit after Stage 1 routes to the user
+  - during 1a, target-layout PO manifests still build and validate
   - `orchestrator_inline` telemetry rows validate against the schema
 
 ---
@@ -325,11 +327,11 @@ Lists are a minimum. Any other site using the same mechanism is in scope as well
 |---|---|---|
 | D1 | Where the setting lives | `.mt-agent-devkit/project_settings.json`, `project_owned` + `create_if_absent`, with no entrypoint mirror (§4) |
 | D2 | Retired rule files | Deleted in the same release, internally and in targets, through the retirement phase plus the new resolution and conflict handling (§3c). No stubs |
-| D3 | Telemetry | Role `PO`, additive `session_mode: orchestrator_inline` in schema v1, bounded in-session extraction on Claude, `unavailable` elsewhere (§7) |
+| D3 | Telemetry | Role `PO`, additive `session_mode: orchestrator_inline` in schema v1, inline rows with `usage_source: unavailable`, saving compared through per-story totals across modes (§7) |
 | D4 | Stage 3 with QA as the implementer | Always spawn a PO, in both modes (§6) |
 | D5 | Plan Sprint in `orchestrator` mode | Always spawn a PO. Planning reads the most context, and a spawned PO on the `standard` policy is likely cheaper than the orchestrator's model |
 | D6 | Security rules | Shared `agent-security` skill; generated inline copies in Core and Bootstrap; the orchestrator loads the full skill; no manifest entry (§3d) |
-| D7 | Scope changes after Stage 1 in `orchestrator` mode | Escalate to the user; never decided inline (§5, §6) |
+| D7 | Scope changes after Stage 1 in `orchestrator` mode | Defer, split and **any** AC body edit escalate to the user; never decided inline (§5, §6) |
 | D8 | Retro identity for inline PO work | `Orchestrator`, the actual actor, per Common §7 (§7) |
 
 ---
@@ -338,5 +340,6 @@ Lists are a minimum. Any other site using the same mechanism is in scope as well
 
 | Rev | Change |
 |---|---|
+| 3 | TL re-review:<br>• **NB1:** inline telemetry uses `usage_source: unavailable`, with the saving compared through per-story totals; in-session capture dropped<br>• **NB2:** 1a switches PO routing for the internal layout only; targets switch in 1b<br>• **N7:** skill renderer moved to story 0<br>• **N8:** attribution split stated<br>• **N9:** resolution conditions and the legacy manual path<br>• **N10:** any AC body edit after Stage 1 escalates |
 | 2 | TL review on PR #286:<br>• **B1:** shared canonical skills in targets<br>• **B2:** explicit legacy retirements and migration tests<br>• **B3:** bare-citation validator, resolution generation for unmodified files, customised-file conflict<br>• **B4:** generated inline copies in both Common routes; no manifest entry; route-specific shell authority<br>• **B5:** `Story_Standard.md` amendments, scope-change escalation, fast-path rationale<br>• **B6:** telemetry role, inline measurement, `Orchestrator` retro identity<br>• **B7:** six stories with estimates, corrected dependencies<br>• **B8:** `read_manifest.py`, `po_validation` task, extended ripple<br>• **N1–N6:** content map completed, size targets restated, inline judgement checks, setting ownership, measurement, editorial order |
 | 1 | Initial design (commit `ca0819b`) |
