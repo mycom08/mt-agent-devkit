@@ -34,6 +34,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Bug Fixes
 
 - [ST-000262] Read UTF-8 project entrypoints and receipts reliably in Windows version notices.
+- [Fix] Run the version-notice hook and `wait_work.sh` with `python3` or `python`, so a project deployed on Windows also works on Linux.
 
 ---
 
