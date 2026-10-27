@@ -306,7 +306,10 @@ class ShellWrapperInterpreterTests(unittest.TestCase):
     def invoke(self, shims, **env):
         with tempfile.TemporaryDirectory() as scratch:
             bin_dir = Path(scratch)
-            (bin_dir / "dirname").symlink_to(shutil.which("dirname"))
+            # A forwarding shim, not a symlink: Windows refuses symlinks without elevated rights.
+            forward = bin_dir / "dirname"
+            forward.write_text('#!/bin/sh\nexec "' + Path(shutil.which("dirname")).as_posix() + '" "$@"\n')
+            forward.chmod(0o755)
             for name in shims:
                 shim = bin_dir / name
                 shim.write_text("#!/bin/sh\necho shim:" + name + "\n")
