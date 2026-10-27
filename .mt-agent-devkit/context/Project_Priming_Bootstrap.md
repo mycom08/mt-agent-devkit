@@ -113,17 +113,19 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 ## 13. Feature Current State
 
-**Active sprint: Sprint 8** (GitHub label `sprint-8`). Scope as of 2026-10-26:
+**No active sprint.** Sprint 8 (label `sprint-8`) closed on 2026-10-27 and shipped in release 0.1.54:
 
-| Issue | Story | State |
+| Issue | Story | Outcome |
 |---|---|---|
-| #245 | Shared doc formats for specs, ADRs with mandatory NFRs, test docs and approval verdicts | ready |
-| #251 | Require isolated pre-fix and post-fix bug regression evidence | ready |
-| #258 | Define concise notices and explicit thread decisions | ready |
 | #262 | Fix Windows UTF-8 version notice decoding | done |
 | #264 | Common core and triggered capabilities | done |
+| #245 | Shared doc formats for specs, ADRs with mandatory NFRs, test docs and approval verdicts | returned to backlog |
+| #251 | Require isolated pre-fix and post-fix bug regression evidence | returned to backlog |
+| #258 | Define concise notices and explicit thread decisions | returned to backlog |
 
-On hold, moved out of Sprint 8 (label `status:on-hold`): #265 Developer stage profiles and manifest routing, and #266 Profile migration behavior and efficiency comparison (depends on #265). Developer rules stay at their current owner until #265 resumes; umbrella #263 stays open and is also `status:on-hold`.
+Next planned work: the `role-skills` feature (shared `agent-security` skill, PO skills, `po_execution` setting), design under `docs/feature/role-skills/`.
+
+On hold (label `status:on-hold`): #265 Developer stage profiles and manifest routing, and #266 Profile migration behavior and efficiency comparison (depends on #265). Developer rules stay at their current owner until #265 resumes; umbrella #263 stays open and is also `status:on-hold`.
 
 Live state is the issue list: `gh issue list --label sprint-8 --state all`.
 
@@ -135,8 +137,8 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.4 — §13 records Sprint 8 as the active sprint.
-**Previous:** 1.3 — preamble trimmed to drop the section inventory the routing table already carries; §15a's routing row folded into §15.
-**Last Updated:** 2026-10-26
+**Document Version:** 1.5 — §13 records Sprint 8 as closed; no active sprint.
+**Previous:** 1.4 — §13 records Sprint 8 as the active sprint.
+**Last Updated:** 2026-10-27
 **Audience:** Development team, architects, AI agents
 
