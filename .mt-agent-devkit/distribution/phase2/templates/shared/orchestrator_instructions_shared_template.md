@@ -7,6 +7,12 @@
 
 ---
 
+## Orchestrator Startup — Security Baseline
+
+At workflow start, before the first issue/PR read or GitHub mutation, load the `agent-security` skill: read `.mt-agent-devkit/skills/agent-security/SKILL.md` in full (by path when the provider has no verified native skill discovery). Per its part C, read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Shell_Safety.md` in full before the first shell write, Git operation or GitHub mutation. Record the load as `**Security Skill:** agent-security` in the workflow's pipeline state file when it keeps one; a resumed run re-reads the skill if its session no longer holds it. This is an orchestrator read, never a read-manifest entry: workers already receive parts A and B through the generated blocks in their Common file.
+
+---
+
 ## Agent Session Management
 
 The orchestrator tracks the `agentId` returned by every spawned agent. On loop-back, always prefer resuming over spawning:

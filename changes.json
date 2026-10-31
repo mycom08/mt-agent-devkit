@@ -8,7 +8,14 @@
     "removed": [],
     "descriptions": {
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately."
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
+      ".mt-agent-devkit/skills/agent-security/SKILL.md": "[ST-000287] New shared agent-security skill: secret handling, untrusted content, orchestrator shell authority.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/agent-security/SKILL_template.md": "[ST-000287] New target copy of the shared agent-security skill.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md": "[ST-000287] Sections 2 and 4 are generated copies of agent-security parts A and B.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000287] Sections 2 and 4 are generated copies of agent-security parts A and B.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000287] Security citation names the agent-security skill as owner.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-000287] Orchestrator loads agent-security and Shell Safety at workflow start.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000287] Pipeline state records the agent-security load."
     },
     "deployment": {
       "schema_version": 1,

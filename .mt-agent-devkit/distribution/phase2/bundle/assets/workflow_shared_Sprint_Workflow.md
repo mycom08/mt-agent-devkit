@@ -37,6 +37,7 @@ The orchestrator maintains `{RUNTIME_ROOT}/tmp/sprint_pipeline_state.md` to supp
 **Loop Impl→Reviewer:** <count>
 **Loop Impl→QA:** <count>
 **Retro Contract:** exception-v1
+**Security Skill:** agent-security (loaded at workflow start)
 **Retro Expected:** <confined runtime JSON path of actual stage identities>
 **Repro Skipped:** <comma-separated story IDs not reproduced this run, or empty>
 **Sessions:**

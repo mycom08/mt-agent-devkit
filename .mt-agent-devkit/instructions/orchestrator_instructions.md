@@ -11,6 +11,8 @@ Before doing anything else, read the following files to understand the project c
 1. `.mt-agent-devkit/context/Project_Priming_Bootstrap.md` — project overview, glossary, architecture, and current state
 2. `VERSION` — the current in-progress devkit version (`x.y.z-SNAPSHOT`). Owned by `.github/workflows/release.yml`; never edit it by hand.
 
+**Security baseline (every workflow).** At workflow start, before the first issue/PR read or GitHub mutation, load the `agent-security` skill: read `.mt-agent-devkit/skills/agent-security/SKILL.md` in full (by path when the provider has no verified native skill discovery). Per its part C, read `.mt-agent-devkit/rules/Agent_Common_Shell_Safety.md` in full before the first shell write, Git operation or GitHub mutation. Record the load as `**Security Skill:** agent-security` in the workflow's pipeline state file when it keeps one; a resumed run re-reads the skill if its session no longer holds it. This is an orchestrator read, never a read-manifest entry: workers already receive parts A and B through the generated blocks in their Common file.
+
 ---
 
 ## Worker State Binding Preflight

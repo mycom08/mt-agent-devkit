@@ -405,5 +405,97 @@ class MigrationPreservationTests(unittest.TestCase):
             self.assertTrue(any("missing_review_fixture" in e for e in validator.validate()))
 
 
+class AgentSecuritySkillTests(unittest.TestCase):
+    """ST-000287: shared agent-security skill, generated Common copies, orchestrator load."""
+    blocks = load("generate_security_blocks")
+
+    def skill(self):
+        return (ROOT / self.blocks.SKILL).read_text(encoding="utf-8")
+
+    def test_skill_has_frontmatter_three_parts_and_size_budget(self):
+        text = self.skill()
+        self.assertEqual(wrappers.skill_frontmatter(text)["name"], "agent-security")
+        for heading in ("## A. Secret Handling", "## B. External Content Handling", "## C. Orchestrator Shell Authority"):
+            self.assertIn(heading, text)
+        self.assertIn(".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md", text)
+        self.assertLessEqual(len(text.encode("utf-8")), 2500)
+
+    def test_common_copies_match_parts_a_and_b_and_never_inline_part_c(self):
+        text = self.skill()
+        self.assertEqual([], self.blocks.findings(ROOT))
+        for relative in self.blocks.TARGETS:
+            target = (ROOT / relative).read_text(encoding="utf-8")
+            for part in self.blocks.PARTS:
+                with self.subTest(target=relative, part=part):
+                    self.assertIn(self.blocks.begin(part) + self.blocks.part_body(text, part) + self.blocks.end(part), target)
+            self.assertNotIn("Orchestrator Shell Authority", target)
+            self.assertNotIn("part C", target)
+
+    def fixture(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name)
+        for relative in (self.blocks.SKILL, self.blocks.SKILL_TEMPLATE, *self.blocks.TARGETS):
+            (root / relative).parent.mkdir(parents=True, exist_ok=True)
+            (root / relative).write_bytes((ROOT / relative).read_bytes())
+        return root
+
+    def test_check_fails_on_any_byte_drift_and_write_repairs_it(self):
+        root = self.fixture()
+        target = root / self.blocks.TARGETS[1]
+        target.write_text(target.read_text(encoding="utf-8").replace("security incident", "security  incident"), encoding="utf-8")
+        self.assertEqual([f"{self.blocks.TARGETS[1]}: generated agent-security block drift"], self.blocks.findings(root))
+        self.assertEqual([], self.blocks.findings(root, write=True))
+        self.assertEqual([], self.blocks.findings(root))
+        self.assertEqual(target.read_bytes(), (ROOT / self.blocks.TARGETS[1]).read_bytes())
+
+    def test_check_fails_on_missing_marker_and_template_skill_drift(self):
+        root = self.fixture()
+        target = root / self.blocks.TARGETS[0]
+        target.write_text(target.read_text(encoding="utf-8").replace(self.blocks.end("B"), ""), encoding="utf-8")
+        (root / self.blocks.SKILL_TEMPLATE).write_text(self.skill() + "drift\n", encoding="utf-8")
+        errors = self.blocks.findings(root)
+        self.assertIn(f"{self.blocks.TARGETS[0]}: expected exactly one generated block for part B", errors)
+        self.assertTrue(any(e.startswith(self.blocks.SKILL_TEMPLATE) for e in errors))
+
+    def test_skill_renderer_emits_frontmatter_and_single_pointer(self):
+        entry = {"source": ".codex/skills/agent-security/SKILL.md", "destination": self.blocks.SKILL, "renderer": "skill"}
+        text = wrappers.render(entry)
+        self.assertEqual(wrappers.skill_frontmatter(text), wrappers.skill_frontmatter(self.skill()))
+        self.assertEqual(1, text.count(self.blocks.SKILL))
+        self.assertNotIn("Secret Handling", text)
+        with self.assertRaises(ValueError):
+            wrappers.render({**entry, "source": ".codex/skills/other/SKILL.md"})
+        with self.assertRaises(ValueError):
+            wrappers.skill_frontmatter("---\nname: x\n---\n")
+
+    def test_every_provider_has_internal_and_bundle_wrapper(self):
+        inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())
+        self.assertEqual([], validator.skill_errors(ROOT, inventory["files"], wrappers))
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text())
+        files = {f["destination"]: f for f in manifest["files"]}
+        self.assertEqual((files[self.blocks.SKILL]["owner"], files[self.blocks.SKILL]["ownership"]), ("shared", "managed"))
+        for provider in ("claude", "antigravity", "codex"):
+            wrapper = f".{provider}/skills/agent-security/SKILL.md"
+            self.assertTrue((ROOT / wrapper).is_file())
+            self.assertEqual(files[wrapper]["providers"], [provider])
+        broken = [e for e in inventory["files"] if e["source"] != ".codex/skills/agent-security/SKILL.md"]
+        self.assertIn("missing generated skill wrapper inventory entry: .codex/skills/agent-security/SKILL.md",
+                      validator.skill_errors(ROOT, broken, wrappers))
+
+    def test_orchestrator_loads_skill_before_first_issue_or_pr_read(self):
+        self.assertEqual([], validator.orchestrator_security_errors(ROOT))
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name)
+        for relative in validator.ORCHESTRATOR_SOURCES:
+            text = (ROOT / relative).read_text(encoding="utf-8")
+            (root / relative).parent.mkdir(parents=True, exist_ok=True)
+            (root / relative).write_text("Run `gh issue view 1` first.\n" + text, encoding="utf-8")
+        errors = validator.orchestrator_security_errors(root)
+        self.assertEqual(len(validator.ORCHESTRATOR_SOURCES), len(errors))
+        self.assertTrue(all("before the first issue/PR read" in e for e in errors))
+
+
 if __name__ == "__main__":
     unittest.main()

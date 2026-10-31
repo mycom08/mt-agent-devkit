@@ -81,6 +81,79 @@ def module(name, path):
     return value
 
 
+PROVIDERS = ("claude", "antigravity", "codex")
+SECURITY_SKILL = ".mt-agent-devkit/skills/agent-security/SKILL.md"
+SHELL_SAFETY = "Agent_Common_Shell_Safety.md"
+ORCHESTRATOR_SOURCES = (
+    ".mt-agent-devkit/instructions/orchestrator_instructions.md",
+    ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md",
+)
+
+
+def skill_errors(root, entries, wrappers) -> list[str]:
+    """Every canonical skill has valid frontmatter and a wrapper per provider, internal and bundle."""
+    errors = []
+    by_source = {e["source"]: e for e in entries}
+    manifest_path = root / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else {"files": [], "assets": []}
+    bundle = {item["destination"]: item for item in manifest["files"] if item["phase"] != "retirement"}
+    assets = {item["id"]: item for item in manifest["assets"]}
+    for canonical in sorted((root / ".mt-agent-devkit/skills").glob("*/SKILL.md")):
+        destination = canonical.relative_to(root).as_posix()
+        name = canonical.parent.name
+        try:
+            fields = wrappers.skill_frontmatter(canonical.read_text(encoding="utf-8"))
+            if fields["name"] != name:
+                raise ValueError("name does not match its directory")
+        except ValueError as error:
+            errors.append(f"invalid canonical skill frontmatter: {destination}: {error}")
+            continue
+        shared = bundle.get(destination)
+        if not shared or shared["owner"] != "shared" or shared["ownership"] != "managed":
+            errors.append(f"bundle lacks shared managed canonical skill: {destination}")
+        for provider in PROVIDERS:
+            source = f".{provider}/skills/{name}/SKILL.md"
+            entry = by_source.get(source)
+            if not entry or entry.get("renderer") != "skill" or entry["destination"] != destination:
+                errors.append(f"missing generated skill wrapper inventory entry: {source}")
+                continue
+            if not (root / source).is_file():
+                continue  # Reported by the inventory existence check.
+            try:
+                wrappers.skill_frontmatter((root / source).read_text(encoding="utf-8"))
+            except ValueError as error:
+                errors.append(f"invalid skill wrapper frontmatter: {source}: {error}")
+            item = bundle.get(source)
+            asset = assets.get(item["sources"][0]) if item and len(item["sources"]) == 1 else None
+            if not item or item["providers"] != [provider] or not asset:
+                errors.append(f"bundle lacks provider skill wrapper: {source}")
+                continue
+            text = (manifest_path.parent / asset["path"]).read_text(encoding="utf-8")
+            try:
+                if wrappers.skill_frontmatter(text)["name"] != name or destination not in text:
+                    raise ValueError("wrapper does not name and point at its canonical skill")
+            except ValueError as error:
+                errors.append(f"invalid bundle skill wrapper: {source}: {error}")
+    if not (root / SECURITY_SKILL).is_file():
+        errors.append(f"missing canonical security skill: {SECURITY_SKILL}")
+    return errors
+
+
+def orchestrator_security_errors(root) -> list[str]:
+    """The orchestrator loads agent-security (and Shell Safety) before any issue/PR read or workflow route."""
+    errors = []
+    for relative in ORCHESTRATOR_SOURCES:
+        text = (root / relative).read_text(encoding="utf-8")
+        load = text.find(SECURITY_SKILL)
+        # The first issue/PR read, GitHub mutation or workflow routing table.
+        first = min([m.start() for m in re.finditer(r"\bgh (?:issue|pr)\b|^\| Trigger \|", text, re.M)] or [len(text)])
+        if load < 0 or load > first:
+            errors.append(f"orchestrator does not load agent-security before the first issue/PR read: {relative}")
+        elif SHELL_SAFETY not in text[load:first] or "pipeline state" not in text[load:first]:
+            errors.append(f"orchestrator security load lacks Shell Safety read or pipeline-state record: {relative}")
+    return errors
+
+
 def validate(root=ROOT, migration_preservation=False) -> list[str]:
     """Validate live structure; frozen byte checks are an opt-in migration audit."""
     errors = []
@@ -93,9 +166,18 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
     baseline = inventory["source_revision"]
     listed = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", baseline], cwd=root, text=True).splitlines()
     expected = {p for p in listed if p.startswith((".claude/agents/working/", ".antigravity/agents/working/", ".claude/agents/workflows/", ".antigravity/agents/workflows/", ".claude/skills/", ".antigravity/skills/")) or p in ("AGENTS.md", "CLAUDE.md")}
-    if set(paths) != expected:
+    # Entries without a source revision were added after the migration baseline;
+    # only generated skill discovery wrappers may be added that way.
+    if {e["source"] for e in entries if e["source_revision"]} != expected:
         errors.append("inventory does not account for every baseline internal file")
+    for entry in entries:
+        if not entry["source_revision"] and (entry["ownership"] != "generated-wrapper" or entry.get("renderer") != "skill"):
+            errors.append(f"post-baseline inventory entry is not a generated skill wrapper: {entry['source']}")
     wrappers = module("wrappers", shared / "scripts/generate_wrappers.py")
+    errors.extend(skill_errors(root, entries, wrappers))
+    blocks = module("security_blocks", shared / "scripts/generate_security_blocks.py")
+    errors.extend(blocks.findings(root))
+    errors.extend(orchestrator_security_errors(root))
     for entry in entries:
         source, destination = root / entry["source"], root / entry["destination"]
         if not source.exists() or not destination.exists():
