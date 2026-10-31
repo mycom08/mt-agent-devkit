@@ -40,6 +40,8 @@ class RoutingTests(unittest.TestCase):
         definitions += [x for role in REGISTRY['roles'].values() for x in role]
         definitions += [x for task in REGISTRY['tasks'].values() for x in task['reads']]
         definitions += [x for trigger in REGISTRY['triggers'].values() for x in trigger['reads']]
+        # Per-layout bootstrap mappings (PO -> po-core) are registry sources too.
+        definitions += [dict(source=path) for layouts in REGISTRY.get('bootstrap',{}).values() for path in layouts.values()]
         for role in REGISTRY['roles']:
             for entry in definitions:
                 self.write(entry['source'].format(**mapping, role=role, slug=role.lower(), bootstrap='.mt-agent-devkit/rules/'+role+'_Rules_Bootstrap.md'), '# Fixture\n' + ''.join('## '+str(n)+'. Section\nComplete guidance.\n' for n in range(1,21)))
@@ -77,7 +79,8 @@ class RoutingTests(unittest.TestCase):
             return {(x['source'],x['coverage'].get('section')) for x in self.build(role=role,task=task,triggers=list(triggers))['reads']}
         master='.mt-agent-devkit/rules/Story_Standard.md'
         self.assertIn((master,'14'),sections('QA','qa','.mt-agent-devkit/rules/QA_Rules_Bootstrap.md','Before validation/sign-off, read `Story_Standard.md §14`'))
-        self.assertIn((master,'14'),sections('Product_Owner','closure','.mt-agent-devkit/rules/Story_Standard_PO.md','Read `Story_Standard.md §14` before acceptance.'))
+        self.assertIn((master,'14'),sections('Product_Owner','closure','.mt-agent-devkit/skills/po-verify-close/SKILL.md','Read `Story_Standard.md §14` and the applicable independent per-AC verification report'))
+        self.assertIn((master,'14'),sections('Product_Owner','po_validation','.mt-agent-devkit/skills/po-validate-ac/SKILL.md','Read `Story_Standard.md §14` and the current canonical story scope'))
         self.assertIn(('.mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md','2'),sections('QA','implementation','.mt-agent-devkit/instructions/qa_instructions.md','live user instruction conflicts rule in `§2`'))
         self.assertIn(('.mt-agent-devkit/rules/Clean_Code_Rules.md',None),sections('Technical_Lead','review','.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','**Source code / script changes only**',('source_review',)))
         self.assertIn(('.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','2'),sections('Technical_Lead','review','.mt-agent-devkit/instructions/technical_lead_instructions.md','After each working session on an unfinished story',('context_anchoring',)))
@@ -88,7 +91,7 @@ class RoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(m.Blocked,'unsupported trigger'): self.build(role='QA',task='qa',triggers=['context_anchoring'])
 
     def test_all_internal_tasks_and_triggers_resolve_actual_guidance(self):
-        for folder in ('rules','instructions','context','contracts'):
+        for folder in ('rules','instructions','context','contracts','skills'):
             shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
         for task,definition in REGISTRY['tasks'].items():
             for role in definition['roles']:
@@ -102,6 +105,35 @@ class RoutingTests(unittest.TestCase):
                             self.write(source,'### Fact 1 — Matched\nActual selected fact.\n### Fact 2 — Other\nExcluded.\n')
                             context['memory_match']=dict(source=source,coverage={'kind':'fact','fact':'1'},reason='observed keyword match')
                         self.build(role=role,task=task,triggers=[trigger],context=context)
+
+    def test_internal_po_tasks_route_to_po_skills_without_retired_rules(self):
+        # ST-000288: every internal PO task builds a valid manifest on po-core without the deleted PO rules.
+        for folder in ('rules','instructions','context','contracts','skills'):
+            shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
+        retired=('Product_Owner_Rules_Bootstrap.md','Product_Owner_Rules_Read_On_Demand.md','Story_Standard_PO.md')
+        for name in retired: self.assertFalse((ROOT/'.mt-agent-devkit/rules'/name).exists())
+        expected={'implementation':{'po-core','po-comment'},'fix':{'po-core','po-comment'},'closure':{'po-core','po-verify-close','po-comment'},
+                  'scope_question':{'po-core','po-answer-questions','po-comment'},'po_validation':{'po-core','po-validate-ac','po-comment'}}
+        tasks={t for t,d in REGISTRY['tasks'].items() if 'Product_Owner' in d['roles']}
+        self.assertEqual(tasks,set(expected))
+        for task,skills in expected.items():
+            with self.subTest(task=task):
+                manifest=self.build(role='Product_Owner',task=task,triggers=['story_body_write'])
+                m.validate(self.root,manifest,REGISTRY)
+                sources=[x['source'] for x in manifest['reads']]
+                self.assertEqual(next(x['source'] for x in manifest['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/skills/po-core/SKILL.md')
+                self.assertEqual(skills|{'po-write-story'},{s.split('/')[2] for s in sources if s.startswith('.mt-agent-devkit/skills/')})
+                self.assertFalse([s for s in sources if s.endswith(retired)])
+        with self.assertRaisesRegex(m.Blocked,'unsupported role/task'): self.build(role='QA',task='po_validation')
+
+    def test_bootstrap_mapping_is_per_layout_and_confined(self):
+        registry=copy.deepcopy(REGISTRY)
+        self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md'}})
+        registry['bootstrap']['Product_Owner']['internal']='../escape.md'
+        request=copy.deepcopy(self.request); request.update(role='Product_Owner',task='closure')
+        with self.assertRaisesRegex(m.Blocked,'invalid bootstrap mapping'): m.build(self.root,request,registry=registry)
+        # Other roles keep their rules bootstrap.
+        self.assertEqual(next(x['source'] for x in self.build()['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md')
 
     def test_memory_recall_requires_exact_own_bounded_fact(self):
         with self.assertRaisesRegex(m.Blocked,'memory_match'): self.build(triggers=['memory_recall'])
@@ -266,6 +298,12 @@ class InstalledTests(unittest.TestCase):
                             installed.validate(target,built)
                             self.assertEqual(built['reads'][0]['source'],'.'+provider+'/harness/Provider_Adapter.md')
                             selected={(x['source'],x['coverage'].get('section')) for x in built['reads']}
+                            if role=='Product_Owner':
+                                # NB2: the target layout keeps the current PO rules until ST-000289.
+                                self.assertFalse(any('/skills/po-' in x['source'] for x in built['reads']))
+                                self.assertEqual(next(x['source'] for x in built['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md')
+                                if task in ('closure','po_validation'):
+                                    self.assertIn(('.mt-agent-devkit/rules/Story_Standard_PO.md','14'),selected)
                             if task=='qa':
                                 authority=(target/'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md').read_text(encoding='utf-8')
                                 self.assertIn('read `Story_Standard.md §14`',authority)

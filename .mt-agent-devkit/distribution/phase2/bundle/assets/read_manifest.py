@@ -132,6 +132,12 @@ def routes(root, request, registry):
     if session is not None and (not isinstance(session, str) or not session.strip() or len(session) > 256): raise Blocked('invalid session identity')
     mapping = {**bound, 'role': role, 'slug': role.lower(), 'priming': '.mt-agent-devkit/context/Project_Priming_Bootstrap.md' if request['layout'] == 'internal' else '.mt-agent-devkit/context/Project_Priming.md'}
     mapping['bootstrap'] = '.mt-agent-devkit/rules/' + role + ('_Rules.md' if request['layout'] == 'target' and role in ('Business_Analyst', 'UI_UX_Designer') else '_Rules_Bootstrap.md')
+    # Per-layout registry mapping: a role whose rules became skills (PO -> po-core)
+    # switches only in the layouts the registry names; other layouts keep the rules file.
+    override = registry.get('bootstrap', {}).get(role, {}).get(request['layout'])
+    if override is not None:
+        if not isinstance(override, str) or not override.startswith('.mt-agent-devkit/'): raise Blocked('invalid bootstrap mapping for role: ' + role)
+        mapping['bootstrap'] = override
     entries = []
     def add(definition):
         item = dict(definition)

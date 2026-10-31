@@ -100,4 +100,5 @@ backlog → ready → in-progress → review → testing → done
 | Project overview and architecture | `.mt-agent-devkit/context/Project_Priming_Bootstrap.md` |
 | All workflow trigger mappings | `.mt-agent-devkit/instructions/orchestrator_instructions.md` §Sprint Workflows (Devkit) |
 | Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
+| Product Owner procedures (one skill per PO activity) | `.mt-agent-devkit/skills/po-core/SKILL.md` and the other `po-*` skills under `.mt-agent-devkit/skills/` |
 | CI/CD story validation | `.mt-agent-devkit/rules/CICD_Validation_Guide.md` |

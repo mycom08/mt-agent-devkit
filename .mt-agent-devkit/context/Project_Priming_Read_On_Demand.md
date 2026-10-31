@@ -129,6 +129,16 @@ Porting an already-validated bootstrap/on-demand split (e.g. the devkit-team's o
 - **The `read-section` skill's own worked example** — if the example cites a file this change deletes or splits, repoint it to the correct successor file/section as part of the *same* change, not as an afterthought discovered later. Update both the template copy (`templates/skills/read-section/SKILL_template.md`) and the working copy (`.mt-agent-devkit/contracts/Read_Section.md`) together — they must not drift to two different examples.
 - **Numbering-gap prose vs. the validator:** `validate_templates.py`'s section-ref checker treats any bare `§N` substring as a citation needing a real heading — it cannot tell a real citation from prose *describing* an intentional gap. When documenting a gap in prose (e.g. in a `## Version` footer), write "section N", never "§N" — the glyph is what triggers the check.
 
+
+### Folding a Role's Rules into Skills (internal layout)
+
+Replacing a role's rules files with canonical skills (ST-000288: the PO rules became the `po-*` skills) ripples beyond the new skill files:
+
+- **Skills** — each canonical `.mt-agent-devkit/skills/<name>/SKILL.md` carries `name`/`description` frontmatter and a `**Requires:**` line naming the skills it depends on, instead of restating their rules. Add one `generated-wrapper`/`skill` inventory entry per provider in `migration-inventory.json`, then run `generate_wrappers.py`.
+- **Deleted files** — post the deletion list on the story issue before `git rm`. Move each deleted baseline wrapper from `files` to the inventory's `retired` list, and remap inventory `consumers` that named a deleted file.
+- **Routing** — switch the role in `read-routing.json` through the per-layout `bootstrap` mapping and `layouts` alternatives; a layout whose deployed files are unchanged keeps the old sources as its override.
+- **Citations** — `scripts/validate_retired_citations.py` rejects any bare-filename or `§`-citation of a retired file in the internal corpus; extend its list when retiring more files.
+- **Spawn sites** — every workflow that spawns the role names the skill for that activity in the assignment.
 ---
 
 ## 16. Reference Links

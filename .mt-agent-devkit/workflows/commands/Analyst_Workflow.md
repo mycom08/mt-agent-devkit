@@ -163,6 +163,7 @@ Agents omit a section entirely if they have nothing to add to it. The `UI/UX Des
    - **If yes** → UI/UX Designer joins the parallel wave (step 2).
    - **If no** → proceed with just TL + PO; skip every UI/UX-Designer-conditional step below for the rest of Stage 2.
 2. **Spawn** TL agent (**model policy: design-review**), PO agent (**model policy: standard**), and — only if step 1 detected a UI layer — UI/UX Designer agent (**model policy: standard**) in the **same orchestrator message** — they run in parallel
+   - The PO assignment names the `po-write-story` and `po-plan-docs` skills (roadmap story shape and document placement); `po-roadmap-drain` does not apply to this pre-repo roadmap
    - Save TL `session_handle` as `tl_session`; save PO `session_handle` as `po_session`; if spawned, save UI/UX Designer `session_handle` as `uiux_session`
 3. TL reads `spec.md` + `business_requirements.md`:
    - Writes `architecture.md` covering: architecture choices, component design, data handling details, error handling strategies, CI/CD & deployment strategy, API-contract strategy, and any alternatives considered. Every diagram (Mermaid `.mmd` or PlantUML `.puml`) is written as a separate file under `diagrams/` and linked from `architecture.md` — never embedded inline.
