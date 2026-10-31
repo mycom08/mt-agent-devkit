@@ -1193,8 +1193,8 @@
     {
       "id": "read_manifest.py",
       "path": "assets/read_manifest.py",
-      "sha256": "c59f0eac8245535e05f8e3c42717c8ab87303e5c579befb1a0e67aa2c84e8ffb",
-      "bytes": 19255,
+      "sha256": "2e1922ed218dfa052549af925905f849db34db6c18a000aa46b323d7fb0dd2c4",
+      "bytes": 19731,
       "kind": "script"
     },
     {
@@ -1242,15 +1242,15 @@
     {
       "id": "Read_Manifest.md",
       "path": "assets/Read_Manifest.md",
-      "sha256": "54ba5ccc5579ddb2493aa98661e53e2057f8b668dc832d17911aaa510441a4c9",
-      "bytes": 12085,
+      "sha256": "48138678cefbaeae0c346d4fee4e68a3cfaa4cac371e16bde1917ef66b9a7508",
+      "bytes": 12390,
       "kind": "contract"
     },
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "5bfa0aeaa6bdd7f01bc98914d89e2d488cba6611c8cb1d53a3ee06877b727115",
-      "bytes": 34731,
+      "sha256": "66666f8e8527097b46fde1a6cbc4935e5be09188e4ecb6ea48b19a8f09766376",
+      "bytes": 37878,
       "kind": "contract"
     },
     {

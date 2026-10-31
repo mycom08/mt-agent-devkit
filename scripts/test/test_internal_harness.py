@@ -497,5 +497,131 @@ class AgentSecuritySkillTests(unittest.TestCase):
         self.assertTrue(all("before the first issue/PR read" in e for e in errors))
 
 
+class PoSkillsTests(unittest.TestCase):
+    """ST-000288: ten po-* skills replace the internal PO rules files."""
+    citations_spec = importlib.util.spec_from_file_location("retired_citations", ROOT / "scripts/validate_retired_citations.py")
+    citations = importlib.util.module_from_spec(citations_spec)
+    citations_spec.loader.exec_module(citations)
+    RETIRED = (".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+               ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+               ".mt-agent-devkit/rules/Story_Standard_PO.md")
+
+    def inventory(self):
+        return json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text(encoding="utf-8"))
+
+    def fixture(self, *relatives):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name)
+        for relative in relatives:
+            for source in ([ROOT / relative] if (ROOT / relative).is_file() else (ROOT / relative).rglob("*")):
+                if source.is_file():
+                    target = root / source.relative_to(ROOT)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(source.read_bytes())
+        return root
+
+    def test_ten_canonical_skills_with_internal_wrappers_and_budgets(self):
+        self.assertEqual(10, len(validator.PO_SKILLS))
+        self.assertEqual([], validator.skill_errors(ROOT, self.inventory()["files"], wrappers))
+        self.assertEqual([], validator.skill_reference_errors(ROOT))
+        for name in validator.PO_SKILLS:
+            canonical = ROOT / f".mt-agent-devkit/skills/{name}/SKILL.md"
+            text = canonical.read_text(encoding="utf-8")
+            self.assertEqual(wrappers.skill_frontmatter(text)["name"], name)
+            self.assertLessEqual(len(text.encode("utf-8")), 1500 if name == "po-core" else 4000)
+            for provider in validator.PROVIDERS:
+                wrapper = (ROOT / f".{provider}/skills/{name}/SKILL.md").read_text(encoding="utf-8")
+                self.assertEqual(wrappers.skill_frontmatter(wrapper), wrappers.skill_frontmatter(text))
+                self.assertIn(f".mt-agent-devkit/skills/{name}/SKILL.md", wrapper)
+        self.assertIn("`agent-security`", (ROOT / ".mt-agent-devkit/skills/po-core/SKILL.md").read_text(encoding="utf-8"))
+        story = (ROOT / ".mt-agent-devkit/skills/po-write-story/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("zero-padded to six digits", story)
+        self.assertIn("Create the issue first", story)
+
+    def test_requires_and_budget_failures_are_reported(self):
+        root = self.fixture(".mt-agent-devkit/skills")
+        skill = root / ".mt-agent-devkit/skills/po-comment/SKILL.md"
+        skill.write_text(skill.read_text(encoding="utf-8").replace("**Requires:** `po-core`", "**Requires:** `po-missing`, `po-comment`"), encoding="utf-8")
+        core = root / ".mt-agent-devkit/skills/po-core/SKILL.md"
+        core.write_text(core.read_text(encoding="utf-8") + "x" * 400, encoding="utf-8")
+        errors = validator.skill_reference_errors(root)
+        self.assertIn("unresolved skill reference po-missing: .mt-agent-devkit/skills/po-comment/SKILL.md", errors)
+        self.assertIn("skill requires itself: .mt-agent-devkit/skills/po-comment/SKILL.md", errors)
+        self.assertIn("skill exceeds its 1500-byte budget: .mt-agent-devkit/skills/po-core/SKILL.md", errors)
+        (root / ".mt-agent-devkit/skills/po-validate-ac/SKILL.md").unlink()
+        self.assertIn("missing canonical PO skill: .mt-agent-devkit/skills/po-validate-ac/SKILL.md", validator.skill_reference_errors(root))
+
+    def test_po_skills_are_internal_only_and_target_bundle_keeps_po_rules(self):
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+        destinations = {f["destination"] for f in manifest["files"] if f["phase"] != "retirement"}
+        self.assertFalse([d for d in destinations if "/skills/po-" in d])
+        for retired in self.RETIRED:
+            self.assertIn(retired, destinations)
+        broken = json.loads(json.dumps(manifest))
+        broken["files"].append({**next(f for f in manifest["files"] if f["destination"] == ".mt-agent-devkit/skills/agent-security/SKILL.md"),
+                                "destination": ".mt-agent-devkit/skills/po-core/SKILL.md"})
+        root = self.fixture(".mt-agent-devkit/skills", ".claude/skills", ".antigravity/skills", ".codex/skills")
+        path = root / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(broken), encoding="utf-8")
+        (root / ".mt-agent-devkit/distribution/phase2/bundle/assets").mkdir()
+        for asset in manifest["assets"]:
+            if "agent-security" in asset["id"]:
+                (path.parent / asset["path"]).write_bytes((ROOT / ".mt-agent-devkit/distribution/phase2/bundle" / asset["path"]).read_bytes())
+        self.assertIn("internal-only skill shipped before its distribution story: .mt-agent-devkit/skills/po-core/SKILL.md",
+                      validator.skill_errors(root, self.inventory()["files"], wrappers))
+
+    def test_retired_files_and_wrappers_are_deleted_and_ledgered(self):
+        inventory = self.inventory()
+        retired = {item["source"] for item in inventory["retired"]}
+        self.assertEqual(6, len(retired))
+        for source in retired | set(self.RETIRED):
+            self.assertFalse((ROOT / source).exists(), source)
+        self.assertFalse(retired & {e["source"] for e in inventory["files"]})
+        for entry in inventory["files"]:
+            self.assertFalse(set(entry["consumers"]) & set(self.RETIRED), entry["source"])
+        instructions = (ROOT / ".mt-agent-devkit/instructions/product_owner_instructions.md").read_text(encoding="utf-8")
+        self.assertIn("Load `po-core`", instructions)
+        self.assertIn("then the skill named in your assignment", instructions)
+        self.assertIn("## Selected Common Routing", instructions)
+
+    def test_retired_citation_validator_scope(self):
+        self.assertEqual([], self.citations.findings(ROOT))
+        root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json",
+                            ".mt-agent-devkit/contracts/migration-inventory.json", ".claude/skills/po-core/SKILL.md", "CLAUDE.md")
+        self.assertEqual([], self.citations.findings(root))  # Target overrides and the retirement ledger are out of scope.
+        core = root / ".mt-agent-devkit/rules/Agent_Common_Core.md"
+        core.write_text(core.read_text(encoding="utf-8") + "\nSee `Story_Standard_PO.md` §14 and PO Bootstrap §11a.\n"
+                        "Legacy `Story_Standard_PO_template.md` stays frozen.\n", encoding="utf-8")
+        wrapper = root / ".claude/skills/po-core/SKILL.md"
+        wrapper.write_text(wrapper.read_text(encoding="utf-8") + "Product_Owner_Rules_Read_On_Demand §5\n", encoding="utf-8")
+        registry = root / ".mt-agent-devkit/contracts/read-routing.json"
+        data = json.loads(registry.read_text(encoding="utf-8"))
+        data["tasks"]["closure"]["reads"][0]["source"] = ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md"
+        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        found = self.citations.findings(root)
+        self.assertEqual(4, len(found), found)
+        self.assertTrue(any("Agent_Common_Core.md" in f and "Story_Standard_PO.md" in f for f in found))
+        self.assertTrue(any("PO Bootstrap" in f for f in found))
+        self.assertTrue(any(".claude/skills/po-core/SKILL.md" in f for f in found))
+        self.assertTrue(any("read-routing.json" in f for f in found))
+        self.assertFalse(any("_template" in f for f in found))
+
+    def test_retired_inventory_source_must_be_gone(self):
+        root = self.fixture(".mt-agent-devkit/contracts/migration-inventory.json")
+        source = self.inventory()["retired"][0]["source"]
+        (root / source).parent.mkdir(parents=True, exist_ok=True)
+        (root / source).write_text("stale\n", encoding="utf-8")
+        inventory = self.inventory()
+        self.assertEqual([], validator.retired_errors(ROOT, inventory))
+        inventory["files"].append({**inventory["files"][0], "source": inventory["retired"][1]["source"]})
+        inventory["retired"][2].pop("reason")
+        errors = validator.retired_errors(root, inventory)
+        self.assertIn(f"retired inventory source still exists: {source}", errors)
+        self.assertIn(f"retired inventory source is still a live entry: {inventory['retired'][1]['source']}", errors)
+        self.assertIn(f"retired inventory entry lacks story/reason: {inventory['retired'][2]['source']}", errors)
+
+
 if __name__ == "__main__":
     unittest.main()

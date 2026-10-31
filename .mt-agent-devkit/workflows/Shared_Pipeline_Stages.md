@@ -276,7 +276,7 @@ When the implementer returns with a mid-implementation consultation report inste
 
 2. **Spawn or resume the answering agent(s):**
    - If `Owner` is TL → spawn/resume Technical Lead (**model policy: standard**) with the question and story context
-   - If `Owner` is PO → spawn/resume Product Owner (**model policy: standard**) with the question and story context
+   - If `Owner` is PO → spawn/resume Product Owner (**model policy: standard**) with the question and story context; the assignment names the `po-answer-questions` skill (manifest task `scope_question`)
    - If `Owner` is both → spawn both in parallel (**model policy: standard** for each) (single orchestrator message)
 
    Spawn prompt must include:
@@ -354,7 +354,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 > **Merge gate — behavioral stories:** The Merge Procedure fires only at behavioral path step 9 — after QA confirms automation passes. Do NOT execute it at Stage 3 entry or immediately after Stage 2 approval.
 
-1. **If `Implementer` is `QA`** → skip a separate QA agent; PO validates each AC independently and records the applicable report under the acceptance gate before the orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
+1. **If `Implementer` is `QA`** → skip a separate QA agent; always **spawn** Product Owner (**model policy: standard**, manifest task `po_validation`) and name the `po-validate-ac` skill (`.mt-agent-devkit/skills/po-validate-ac/SKILL.md`) in the assignment. PO validates each AC independently and records the applicable per-AC report under the acceptance gate before the orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
@@ -414,7 +414,7 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 **Acceptance pre-check — both paths and modes:** Before any checkbox, done-status or closure write, apply `Story_Standard.md §14`: confirm merge and current independent PASS evidence for every remaining AC. FAIL, NOT VERIFIED, missing verdicts or insufficient evidence stop closure; a previous testing-pass summary is insufficient when its scope/evidence is stale. An auto-closed issue is not acceptance evidence; reopen it if unresolved verification remains. An approved tracked split requires updated linked bodies and renewed QA of the remaining scope before advancement. Fast-path and skipped-validator exceptions do not waive per-AC verification.
 
-> **GitHub mode closure-comment ordering (mandatory pre-check, not a memory item):** before posting any closure comment, run `gh issue view <number> --json state --jq '.state'`. **`CLOSED`** → the merged PR's `Closes #N`-style keyword already auto-closed the issue before Stage 4 ran; post the closure comment via a **separate** `gh issue comment` call — never combine it with `gh issue close --comment`, since `gh issue close` on an already-closed issue errors out and silently drops the comment along with it. **`OPEN`** → the combined `gh issue close --comment` call is safe to use as-is. Checking state first turns this from a rule to remember into a branch to execute — the prose warning alone was insufficient in practice (recurred in ST-000032 after already being documented from ST-000026).
+> **GitHub mode closure-comment ordering (mandatory pre-check on both paths, not a memory item):** before posting any closure comment, apply the closure-comment ordering in the `po-verify-close` skill (`.mt-agent-devkit/skills/po-verify-close/SKILL.md`, Close step 1): check `gh issue view <number> --json state --jq '.state'` first, and on `CLOSED` post the comment with a separate `gh issue comment`. Checking state first turns this from a rule to remember into a branch to execute — the prose warning alone was insufficient in practice (recurred in ST-000032 after already being documented from ST-000026).
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
@@ -424,15 +424,9 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
-1. **Spawn** Product Owner agent (**model policy: closure**); save its `session_handle` as `po_session` (resume via `po_session` if still active from a previous story in this sprint)
-2. PO reads for closure only — **skip Project_Priming and reading/writing the Working Record**:
-   - `.mt-agent-devkit/rules/Story_Standard_PO.md` (§14 AC rules); `Agent_Common_Bootstrap.md` (full file, every section mandatory)
-   - `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md`
-   - `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`
-3. PO verifies acceptance and closes the story:
-   - **Elevated verification requirement check:** if the story body contains an explicit elevated/extra QA validation requirement section (distinct from standard AC), confirm QA's sign-off comment specifically addresses that requirement's named conditions before ticking AC — a generic "AC pass / tests green" comment is not sufficient closure evidence for a story that named a higher bar for itself.
-   - **Closure signal when implementer = validator:** when the story's routing table (Stage 0) assigned the same role as both implementer and what would otherwise be validator, and that stage was accordingly skipped, the closure signal includes the applicable independent per-AC validation report required by the acceptance gate plus a confirmed merge; reviewer approval alone cannot verify an unexercised AC.
-   - Tick AC checkboxes (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
+1. **Spawn** Product Owner agent (**model policy: closure**, manifest task `closure`); save its `session_handle` as `po_session` (resume via `po_session` if still active from a previous story in this sprint); name the `po-verify-close` skill in the assignment
+2. PO reads for closure only — **skip Project_Priming and reading/writing the Working Record**: `Agent_Common_Bootstrap.md` (full file, every section mandatory), `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`, and the `po-core`, `po-verify-close` and `po-comment` skills
+3. PO verifies acceptance and closes the story per `po-verify-close` (`.mt-agent-devkit/skills/po-verify-close/SKILL.md`): acceptance questions, evidence check including the elevated-verification and implementer = validator closure signals, AC ticking with `--body-file`, `status:done` and close
 4. PO evaluates/completes its own metadata under `Agent_Common_Bootstrap.md §7`; only required triggers load/write its contribution before handoff.
 5. **Start Story Workflow:** pipeline ends here
 

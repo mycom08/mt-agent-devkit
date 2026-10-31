@@ -4,7 +4,7 @@ Triggered by: `"continue sprint"` or `"/sprint"` in the selected provider entryp
 
 Every worker spawn or resume uses the validated manifest dispatch in Shared Pipeline Stages and `.mt-agent-devkit/contracts/Read_Manifest.md`; routing comes only from the canonical registry, including specialist handoffs and safe resumes.
 
-The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable. Pipeline completes when no more `status:ready` stories exist.
+The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable (`po-promote-ready` skill, `.mt-agent-devkit/skills/po-promote-ready/SKILL.md`). Pipeline completes when no more `status:ready` stories exist.
 
 ---
 

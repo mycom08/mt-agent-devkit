@@ -23,45 +23,14 @@ Before legacy checklist below, consume validated manifest selected Common source
 
 ## Pre-Work Checklist
 
-For Stage 4 story closure, use the reduced sequence in Story Closure Task below: skip Project_Priming and reading/writing your Working Record. The full Agent_Common_Bootstrap read remains mandatory.
-
-Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Your records:
+Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Stage 4 story closure skips Project Priming and reading/writing your Working Record; the full Agent_Common_Bootstrap read remains mandatory. Your records:
 
 | Record | Path |
 |---|---|
 | Project Priming | `.mt-agent-devkit/context/Project_Priming_Bootstrap.md` |
 | Working Record | `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` |
-| Rules (bootstrap tier — the only rules file read at spawn) | `.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md` |
 | Memory | `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md` |
 
-When writing or managing stories, also read **Story Standard (PO)** — `.mt-agent-devkit/rules/Story_Standard_PO.md`.
+## PO Skills
 
----
-
-## Project Memory
-
-Record durable facts in `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`. Rules and format: `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §1` (PO records `## Stored Facts` only).
-
----
-
-## Story Closure Task (Stage 4)
-
-Only when the orchestrator asks you to close a story — skip reading and writing your Working Record; read Agent_Common_Bootstrap.md in full. Reduced read set and full procedure in `.mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md §1`. Otherwise skip.
-
----
-
-## Refine Sprint Task
-
-Only when the orchestrator asks you to participate in a **Sprint Refinement** — both roles (Answer Scope/AC Questions, Final Status Update) in `.mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md §2`. Otherwise skip.
-
----
-
-## Plan Next Sprint Task
-
-Only when the orchestrator asks you to run the **Plan Next Sprint** workflow — full 5-step procedure in `.mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md §3`. Otherwise skip.
-
----
-
-## Working Record
-
-Outside Stage 4 story closure, update `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` at start and end of each session per `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md §1`. Log Completed (story IDs, backlog prioritization, acceptance decisions, scope gating), In Progress, and Impediments.
+Load `po-core` (`.mt-agent-devkit/skills/po-core/SKILL.md`) in full, then the skill named in your assignment, from `.mt-agent-devkit/skills/<name>/SKILL.md`. Each skill names the skills it requires; load those too. If the assignment names no skill, report that to the orchestrator rather than guessing.

@@ -129,6 +129,11 @@
     "Business_Analyst": [],
     "UI_UX_Designer": []
   },
+  "bootstrap": {
+    "Product_Owner": {
+      "internal": ".mt-agent-devkit/skills/po-core/SKILL.md"
+    }
+  },
   "tasks": {
     "implementation": {
       "roles": [
@@ -261,17 +266,22 @@
         },
         {
           "id": "po_standard",
-          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "source": ".mt-agent-devkit/skills/po-comment/SKILL.md",
           "coverage": {
             "kind": "full"
           },
-          "reason": "po standard",
+          "reason": "po comment rules",
           "after": [
             "memory"
           ],
           "roles": [
             "Product_Owner"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md"
+            }
+          }
         }
       ]
     },
@@ -408,17 +418,22 @@
         },
         {
           "id": "po_standard",
-          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "source": ".mt-agent-devkit/skills/po-comment/SKILL.md",
           "coverage": {
             "kind": "full"
           },
-          "reason": "po standard",
+          "reason": "po comment rules",
           "after": [
             "memory"
           ],
           "roles": [
             "Product_Owner"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md"
+            }
+          }
         }
       ]
     },
@@ -549,7 +564,7 @@
       "reads": [
         {
           "id": "bootstrap",
-          "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+          "source": "{bootstrap}",
           "coverage": {
             "kind": "full"
           },
@@ -571,27 +586,106 @@
         },
         {
           "id": "acceptance",
-          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "source": ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "14"
+            "kind": "full"
           },
           "reason": "acceptance",
           "after": [
             "common"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+              "coverage": {
+                "kind": "section",
+                "section": "14"
+              }
+            }
+          }
         },
         {
           "id": "closure",
-          "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/po-comment/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "closure",
+          "reason": "closure comment rules",
           "after": [
             "common"
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "1"
+              },
+              "reason": "closure"
+            }
+          }
+        },
+        {
+          "id": "acceptance_contract",
+          "source": ".mt-agent-devkit/rules/Story_Standard.md",
+          "coverage": {
+            "kind": "section",
+            "section": "14"
+          },
+          "reason": "acceptance contract",
+          "after": [
+            "memory"
           ]
+        }
+      ]
+    },
+    "po_validation": {
+      "roles": [
+        "Product_Owner"
+      ],
+      "ordinary": true,
+      "context": [
+        "story",
+        "decisions",
+        "artifact",
+        "verification"
+      ],
+      "reads": [
+        {
+          "id": "validate_ac",
+          "source": ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "Stage 3 PO validation when QA is the implementer",
+          "after": [
+            "memory"
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+              "coverage": {
+                "kind": "section",
+                "section": "14"
+              }
+            }
+          }
+        },
+        {
+          "id": "comment",
+          "source": ".mt-agent-devkit/skills/po-comment/SKILL.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "validation report comment rules",
+          "after": [
+            "memory"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
         },
         {
           "id": "acceptance_contract",
@@ -667,14 +761,35 @@
       "reads": [
         {
           "id": "standard",
-          "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+          "source": ".mt-agent-devkit/skills/po-answer-questions/SKILL.md",
           "coverage": {
             "kind": "full"
           },
           "reason": "standard",
           "after": [
             "common"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md"
+            }
+          }
+        },
+        {
+          "id": "comment",
+          "source": ".mt-agent-devkit/skills/po-comment/SKILL.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "answer comment rules",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
         }
       ]
     },
@@ -1331,15 +1446,23 @@
       "reads": [
         {
           "id": "trigger_story_body_write",
-          "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/po-write-story/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "5"
+            "kind": "full"
           },
           "reason": "trigger story body write",
           "after": [
             "memory"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "5"
+              }
+            }
+          }
         }
       ]
     },

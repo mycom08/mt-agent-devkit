@@ -88,6 +88,15 @@ ORCHESTRATOR_SOURCES = (
     ".mt-agent-devkit/instructions/orchestrator_instructions.md",
     ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md",
 )
+# PO skills are internal-layout only until distribution (ST-000289); the bundle
+# keeps shipping the PO rules files meanwhile (NB2).
+INTERNAL_ONLY_SKILL_PREFIX = "po-"
+PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
+             "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
+SKILL_SIZE_LIMITS = {"po-core": 1500}
+DEFAULT_PO_SKILL_LIMIT = 4000
+REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
+SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+)`")
 
 
 def skill_errors(root, entries, wrappers) -> list[str]:
@@ -108,8 +117,12 @@ def skill_errors(root, entries, wrappers) -> list[str]:
         except ValueError as error:
             errors.append(f"invalid canonical skill frontmatter: {destination}: {error}")
             continue
+        internal_only = name.startswith(INTERNAL_ONLY_SKILL_PREFIX)
         shared = bundle.get(destination)
-        if not shared or shared["owner"] != "shared" or shared["ownership"] != "managed":
+        if internal_only:
+            if shared:
+                errors.append(f"internal-only skill shipped before its distribution story: {destination}")
+        elif not shared or shared["owner"] != "shared" or shared["ownership"] != "managed":
             errors.append(f"bundle lacks shared managed canonical skill: {destination}")
         for provider in PROVIDERS:
             source = f".{provider}/skills/{name}/SKILL.md"
@@ -123,6 +136,8 @@ def skill_errors(root, entries, wrappers) -> list[str]:
                 wrappers.skill_frontmatter((root / source).read_text(encoding="utf-8"))
             except ValueError as error:
                 errors.append(f"invalid skill wrapper frontmatter: {source}: {error}")
+            if internal_only:
+                continue  # Internal discovery only; no bundle wrapper yet.
             item = bundle.get(source)
             asset = assets.get(item["sources"][0]) if item and len(item["sources"]) == 1 else None
             if not item or item["providers"] != [provider] or not asset:
@@ -136,6 +151,31 @@ def skill_errors(root, entries, wrappers) -> list[str]:
                 errors.append(f"invalid bundle skill wrapper: {source}: {error}")
     if not (root / SECURITY_SKILL).is_file():
         errors.append(f"missing canonical security skill: {SECURITY_SKILL}")
+    return errors
+
+
+def skill_reference_errors(root) -> list[str]:
+    """PO skills exist within their size budgets; every skill-to-skill reference resolves."""
+    errors = []
+    skills = root / ".mt-agent-devkit/skills"
+    for name in PO_SKILLS:
+        if not (skills / name / "SKILL.md").is_file():
+            errors.append(f"missing canonical PO skill: .mt-agent-devkit/skills/{name}/SKILL.md")
+    for canonical in sorted(skills.glob("*/SKILL.md")):
+        name, text = canonical.parent.name, canonical.read_text(encoding="utf-8")
+        relative = canonical.relative_to(root).as_posix()
+        limit = SKILL_SIZE_LIMITS.get(name, DEFAULT_PO_SKILL_LIMIT if name.startswith("po-") else None)
+        if limit is not None and len(text.encode("utf-8")) > limit:
+            errors.append(f"skill exceeds its {limit}-byte budget: {relative}")
+        requires = REQUIRES.findall(text)
+        if name.startswith("po-") and len(requires) != 1:
+            errors.append(f"PO skill must name its required skills on one **Requires:** line: {relative}")
+        required = SKILL_MENTION.findall("\n".join(requires))
+        if name in required:
+            errors.append(f"skill requires itself: {relative}")
+        for reference in sorted(set(required) | set(SKILL_MENTION.findall(text))):
+            if not (skills / reference / "SKILL.md").is_file():
+                errors.append(f"unresolved skill reference {reference}: {relative}")
     return errors
 
 
@@ -154,6 +194,20 @@ def orchestrator_security_errors(root) -> list[str]:
     return errors
 
 
+def retired_errors(root, inventory) -> list[str]:
+    """Retired baseline sources are recorded once, are no live entry and are really deleted."""
+    errors = []
+    live = {e["source"] for e in inventory["files"]}
+    for item in inventory.get("retired", []):
+        if not item.get("retired_by") or not item.get("reason"):
+            errors.append(f"retired inventory entry lacks story/reason: {item['source']}")
+        if (root / item["source"]).exists():
+            errors.append(f"retired inventory source still exists: {item['source']}")
+        if item["source"] in live:
+            errors.append(f"retired inventory source is still a live entry: {item['source']}")
+    return errors
+
+
 def validate(root=ROOT, migration_preservation=False) -> list[str]:
     """Validate live structure; frozen byte checks are an opt-in migration audit."""
     errors = []
@@ -168,7 +222,11 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
     expected = {p for p in listed if p.startswith((".claude/agents/working/", ".antigravity/agents/working/", ".claude/agents/workflows/", ".antigravity/agents/workflows/", ".claude/skills/", ".antigravity/skills/")) or p in ("AGENTS.md", "CLAUDE.md")}
     # Entries without a source revision were added after the migration baseline;
     # only generated skill discovery wrappers may be added that way.
-    if {e["source"] for e in entries if e["source_revision"]} != expected:
+    # Retired baseline files (deleted by a later story) stay accounted for in the
+    # inventory's `retired` ledger and must really be gone.
+    retired = inventory.get("retired", [])
+    errors.extend(retired_errors(root, inventory))
+    if {e["source"] for e in entries if e["source_revision"]} | {r["source"] for r in retired} != expected:
         errors.append("inventory does not account for every baseline internal file")
     for entry in entries:
         if not entry["source_revision"] and (entry["ownership"] != "generated-wrapper" or entry.get("renderer") != "skill"):
@@ -178,6 +236,9 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
     blocks = module("security_blocks", shared / "scripts/generate_security_blocks.py")
     errors.extend(blocks.findings(root))
     errors.extend(orchestrator_security_errors(root))
+    errors.extend(skill_reference_errors(root))
+    citations = module("retired_citations", root / "scripts/validate_retired_citations.py")
+    errors.extend(citations.findings(root))
     for entry in entries:
         source, destination = root / entry["source"], root / entry["destination"]
         if not source.exists() or not destination.exists():

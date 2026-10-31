@@ -164,7 +164,7 @@ Then execute:
 
 ## Version
 
-**Version:** 1.3 — Added §5 (Code Review & PR Approval, relocated verbatim from `Technical_Lead_Rules_Bootstrap.md`'s old §2 — that section loaded on every TL spawn regardless of shape, including the answer-a-question shape which never opens a PR) and §6 (Answer-a-Question Task, new — read set modelled on `Product_Owner_Rules_Read_On_Demand.md §1`'s shape, citing `Agent_Common_Bootstrap.md` in full per that file's own no-section-read header). Devkit#179.
+**Version:** 1.3 — Added §5 (Code Review & PR Approval, relocated verbatim from `Technical_Lead_Rules_Bootstrap.md`'s old §2 — that section loaded on every TL spawn regardless of shape, including the answer-a-question shape which never opens a PR) and §6 (Answer-a-Question Task, new — read set modelled on the PO Stage 4 closure read set's shape (now the `po-verify-close` skill), citing `Agent_Common_Bootstrap.md` in full per that file's own no-section-read header). Devkit#179.
 **Previous:** 1.2 — Renamed from `Technical_Lead_Rules_Extended.md` to `Technical_Lead_Rules_Read_On_Demand.md`, matching `Developer_Rules_Read_On_Demand.md`'s naming convention (no content change) — see `Bootstrap_OnDemand_Split_Notes.md`.
 **1.1:** Added §4 (TL as Implementer — Status Transitions), relocated from `Story_Standard_TL.md` §4 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
 **1.0:** (created 2026-08-20, split out of `Technical_Lead_Rules.md` v1.3 per devkit issue #123).

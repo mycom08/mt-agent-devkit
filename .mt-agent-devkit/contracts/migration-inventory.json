@@ -227,7 +227,6 @@
       "ownership": "generated-wrapper",
       "destination": ".mt-agent-devkit/instructions/product_owner_instructions.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
         ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
         "CLAUDE.md",
         "AGENTS.md"
@@ -517,8 +516,7 @@
         ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
         ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
         ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/skills/po-core/SKILL.md",
         ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
@@ -643,36 +641,6 @@
       ]
     },
     {
-      "source": ".antigravity/agents/working/rules/Product_Owner_Rules_Bootstrap.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "ae3687286e58b9402b1d28cdb55c95c8d23c4dd37b544f82e13c09f49fb05908",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/product_owner_instructions.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".antigravity/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "ee6e183cd52cee9dd06b45b5c34a62e1a0cc19a8ba7ed50e30e7919d768d9b8e",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/product_owner_instructions.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
       "source": ".antigravity/agents/working/rules/QA_Rules_Bootstrap.md",
       "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
       "baseline_sha256": "5b073dc883c55249816189769788b2b9dd5c7fa231a40e0c5a08762bc7de7fe8",
@@ -723,7 +691,9 @@
       "consumers": [
         ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
         ".mt-agent-devkit/rules/Story_Standard_Dev.md",
-        ".mt-agent-devkit/rules/Story_Standard_PO.md",
+        ".mt-agent-devkit/skills/po-comment/SKILL.md",
+        ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+        ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
         ".mt-agent-devkit/rules/Story_Standard_QA.md",
         ".mt-agent-devkit/rules/Story_Standard_TL.md",
         ".mt-agent-devkit/rules/Story_Standard_UIUX.md"
@@ -741,23 +711,6 @@
       "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
       "consumers": [
         ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".antigravity/agents/working/rules/Story_Standard_PO.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "935a2443cf15764e1e7e693c1ae5639f837dcd3e4e250693b0d00f5e1155494f",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Story_Standard_PO.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/product_owner_instructions.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-        ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
-        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
       "consumer_contract": [
@@ -1090,7 +1043,7 @@
       "destination": ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
       "consumers": [
         ".mt-agent-devkit/instructions/orchestrator_instructions.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
       "consumer_contract": [
@@ -1547,13 +1500,12 @@
       "ownership": "generated-wrapper",
       "destination": ".mt-agent-devkit/instructions/product_owner_instructions.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
         ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
         "CLAUDE.md",
         "AGENTS.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "discovery_frontmatter": "---\nname: Product Owner\ndescription: Acts as Scrum PO \u2014 owns the backlog, validates acceptance criteria, prioritizes stories, and gates scope\n---\n\n",
+      "discovery_frontmatter": "---\nname: Product Owner\ndescription: Acts as Scrum PO — owns the backlog, validates acceptance criteria, prioritizes stories, and gates scope\n---\n\n",
       "consumer_contract": [
         "role pre-work, section routing, story pipeline and internal commands"
       ]
@@ -1605,7 +1557,7 @@
         "AGENTS.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "discovery_frontmatter": "---\nname: UI/UX Designer\ndescription: Turns a wireframe or backlog story into a runnable prototype \u2014 real routes/components wired to a local mock backend, not a static mockup\n---\n\n",
+      "discovery_frontmatter": "---\nname: UI/UX Designer\ndescription: Turns a wireframe or backlog story into a runnable prototype — real routes/components wired to a local mock backend, not a static mockup\n---\n\n",
       "consumer_contract": [
         "role pre-work, section routing, story pipeline and internal commands"
       ]
@@ -2079,8 +2031,7 @@
         ".mt-agent-devkit/instructions/ui_ux_designer_instructions.md",
         ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
         ".mt-agent-devkit/rules/Business_Analyst_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        ".mt-agent-devkit/skills/po-core/SKILL.md",
         ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
@@ -2205,36 +2156,6 @@
       ]
     },
     {
-      "source": ".claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "318c0a48e8e86f1cb1456ae1fb7c254905f7930d377a7a854e3c84443a962eb7",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/product_owner_instructions.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".claude/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "e086677fd0dc28ba7a68487d535b9589ca0514f3ba974d0da46c7f19cfd76d98",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/product_owner_instructions.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
       "source": ".claude/agents/working/rules/QA_Rules_Bootstrap.md",
       "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
       "baseline_sha256": "028df3c7ca5e7eaaebbfa32bd9e543bd52222c601e3c5dc5c26693ce57eecec4",
@@ -2285,7 +2206,9 @@
       "consumers": [
         ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
         ".mt-agent-devkit/rules/Story_Standard_Dev.md",
-        ".mt-agent-devkit/rules/Story_Standard_PO.md",
+        ".mt-agent-devkit/skills/po-comment/SKILL.md",
+        ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+        ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
         ".mt-agent-devkit/rules/Story_Standard_QA.md",
         ".mt-agent-devkit/rules/Story_Standard_TL.md",
         ".mt-agent-devkit/rules/Story_Standard_UIUX.md"
@@ -2303,23 +2226,6 @@
       "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
       "consumers": [
         ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".claude/agents/working/rules/Story_Standard_PO.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "9c59a34543e383cb9036ed2529f7759054a6ced80c8da2b0022939aa6d62edad",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Story_Standard_PO.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/product_owner_instructions.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-        ".mt-agent-devkit/workflows/Create_Stories_Workflow.md",
-        ".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
       "consumer_contract": [
@@ -2637,7 +2543,7 @@
       "destination": ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
       "consumers": [
         ".mt-agent-devkit/instructions/orchestrator_instructions.md",
-        ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
       "consumer_contract": [
@@ -2854,6 +2760,500 @@
       "consumer_contract": [
         "native provider discovery"
       ]
+    },
+    {
+      "source": ".claude/skills/po-core/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-core/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-core/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-core/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-core/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-core/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-comment/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-comment/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-comment/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-comment/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-comment/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-comment/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-plan-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-plan-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-plan-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-plan-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-plan-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-plan-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-write-story/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-write-story/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-write-story/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-write-story/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-write-story/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-write-story/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-roadmap-drain/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-roadmap-drain/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-roadmap-drain/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-roadmap-drain/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-roadmap-drain/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-roadmap-drain/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-plan-sprint/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-plan-sprint/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-plan-sprint/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-answer-questions/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-answer-questions/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-answer-questions/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-answer-questions/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-answer-questions/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-answer-questions/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-promote-ready/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-promote-ready/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-promote-ready/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-promote-ready/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-promote-ready/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-promote-ready/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-verify-close/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-verify-close/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-verify-close/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/po-validate-ac/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/po-validate-ac/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/po-validate-ac/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/product_owner_instructions.md"
+      ],
+      "reason": "Post-baseline PO skill (ST-000288); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    }
+  ],
+  "retired": [
+    {
+      "source": ".antigravity/agents/working/rules/Product_Owner_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ae3687286e58b9402b1d28cdb55c95c8d23c4dd37b544f82e13c09f49fb05908",
+      "retired_by": "ST-000288",
+      "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "ee6e183cd52cee9dd06b45b5c34a62e1a0cc19a8ba7ed50e30e7919d768d9b8e",
+      "retired_by": "ST-000288",
+      "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_PO.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "935a2443cf15764e1e7e693c1ae5639f837dcd3e4e250693b0d00f5e1155494f",
+      "retired_by": "ST-000288",
+      "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Product_Owner_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "318c0a48e8e86f1cb1456ae1fb7c254905f7930d377a7a854e3c84443a962eb7",
+      "retired_by": "ST-000288",
+      "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e086677fd0dc28ba7a68487d535b9589ca0514f3ba974d0da46c7f19cfd76d98",
+      "retired_by": "ST-000288",
+      "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_PO.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "9c59a34543e383cb9036ed2529f7759054a6ced80c8da2b0022939aa6d62edad",
+      "retired_by": "ST-000288",
+      "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
     }
   ]
 }

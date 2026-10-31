@@ -66,6 +66,7 @@ Write format, access control, retention and the character cap are owned by `Agen
 | Devkit workflows | `.mt-agent-devkit/workflows/commands/` |
 | Templates (for target projects) | `.claude/agents/templates/` |
 | Shared agent sources | `.mt-agent-devkit/` |
+| Shared skills | `.mt-agent-devkit/skills/<name>/SKILL.md` (canonical); `.claude/`, `.antigravity/`, `.codex/` `skills/` hold generated discovery wrappers. PO procedures are the `po-*` skills |
 | Analyst output | `result/analyst/` |
 | Version | `VERSION` (`x.y.z-SNAPSHOT` on `main`) — owned by `.github/workflows/release.yml`, never hand-edited |
 | Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.claude/agents/templates/`); devkit-internal workflows (`.mt-agent-devkit/workflows/commands/`) are excluded |
