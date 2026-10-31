@@ -79,8 +79,8 @@ Examples (all also require common identity/bindings and `context` entries):
 |---|---|---|
 | Developer / implementation, fresh | story, decisions | Full Developer Bootstrap; no broad Story Standard |
 | Developer / peer_review, fresh | story, decisions, artifact, verification | Developer Bootstrap plus peer-review sections |
-| Product_Owner / closure, expired | story, verification, merge | Common, PO core, live memory, acceptance/closure reads (internal: `po-core`, `po-verify-close`, `po-comment` skills; target: PO rules until its switch); no priming/record |
-| Product_Owner / po_validation, fresh | story, decisions, artifact, verification | QA-as-implementer Stage 3: PO core, `po-validate-ac`, `po-comment`, acceptance contract (internal layout; target keeps PO rules) |
+| Product_Owner / closure, expired | story, verification, merge | Common, PO core, live memory, acceptance/closure reads (`po-core`, `po-verify-close`, `po-comment` skills, both layouts); no priming/record |
+| Product_Owner / po_validation, fresh | story, decisions, artifact, verification | QA-as-implementer Stage 3: PO core, `po-validate-ac`, `po-comment`, acceptance contract (both layouts) |
 | Technical_Lead / question, fresh | story, question, pause | Common, live memory, TL comment/question sections; no full TL startup |
 | Developer / fix, same | story, decisions, findings, diff, delta | New findings/delta always read; receipts gate every omission |
 
