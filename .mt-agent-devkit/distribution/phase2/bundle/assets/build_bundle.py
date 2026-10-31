@@ -9,6 +9,9 @@ import shutil
 import tempfile
 import subprocess
 
+# Skills shipped as a shared canonical file plus per-provider discovery wrappers.
+SHARED_SKILLS = ("agent-security",)
+
 
 def neutral(text):
     text = text.replace("{{AGENT_DIR_PREFIX}}/agents/templates/", ".claude/agents/templates/")
@@ -85,6 +88,18 @@ def build(root, destination):
                 content += "\nBefore state access, require the selected adapter path and concrete PROVIDER_ROOT/RUNTIME_ROOT/COMMAND_ROOT from the orchestrator packet. Never discover another provider's state.\n"
             aid = asset(identifier, content.encode())
             entry(identifier, [aid], ".mt-agent-devkit/" + identifier, ownership="project_adapted" if folder == "instructions" else "managed")
+    # Shared skills: one canonical shared-owner file plus a thin discovery wrapper
+    # per selected provider (frontmatter and a single pointer to the canonical).
+    for skill_name in SHARED_SKILLS:
+        content = (templates / "skills" / skill_name / "SKILL_template.md").read_text(encoding="utf-8-sig")
+        canonical = ".mt-agent-devkit/skills/" + skill_name + "/SKILL.md"
+        aid = asset("skills/" + skill_name, content.encode())
+        entry("skills/" + skill_name, [aid], canonical)
+        frontmatter = re.match(r"---\n.*?\n---\n", content.replace("\r\n", "\n"), re.S).group(0)
+        wrapper = frontmatter + "\nRead `" + canonical + "` in full before acting; it is the only owner of this skill's rules.\n"
+        for provider in ("claude", "antigravity", "codex"):
+            aid = asset(provider + "/skill/" + skill_name, wrapper.encode(), "adapter")
+            entry(provider + "/skill/" + skill_name, [aid], "." + provider + "/skills/" + skill_name + "/SKILL.md", owner="selected_provider", providers=(provider,), phase="discovery")
     for source in sorted((templates / "shared/workflows").glob("*_Shared_template.md")):
         name = source.name.replace("_Shared_template", "")
         common = asset("workflow_shared/" + name, neutral(source.read_text(encoding="utf-8-sig")).encode())

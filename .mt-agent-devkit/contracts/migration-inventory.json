@@ -2809,6 +2809,51 @@
       "consumer_contract": [
         "native provider discovery"
       ]
+    },
+    {
+      "source": ".claude/skills/agent-security/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/agent-security/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Post-baseline shared skill (ST-000287); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/agent-security/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/agent-security/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Post-baseline shared skill (ST-000287); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/agent-security/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/agent-security/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/orchestrator_instructions.md"
+      ],
+      "reason": "Post-baseline shared skill (ST-000287); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
     }
   ]
 }

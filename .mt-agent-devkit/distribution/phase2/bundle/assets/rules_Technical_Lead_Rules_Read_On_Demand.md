@@ -98,7 +98,7 @@ Triggered from `Story_Standard_TL.md` §4. When `**Assigned:** Technical Lead` a
 
 Triggered from `technical_lead_instructions.md`'s Answer-a-Question Task heading. When the orchestrator resumes/spawns you to answer a mid-implementation scope or design question, read only:
 - `.mt-agent-devkit/rules/Story_Standard_TL.md` (§9 Comment Standard only — reply format)
-- `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` (full — its own header forbids section-reading; §2 Secret Handling and §4 External Content Handling both apply to answering a comment on an untrusted issue thread)
+- `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` (full — its own header forbids section-reading; §2 Secret Handling and §4 External Content Handling, the generated copies of `agent-security` skill parts A and B, both apply to answering a comment on an untrusted issue thread)
 - `{RUNTIME_ROOT}/memory/Technical_Lead_Memory.md` (full — live index only, not the archive)
 
 Then execute:

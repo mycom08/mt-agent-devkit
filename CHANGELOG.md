@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000287] Add the shared agent-security skill with generated Common copies, provider discovery wrappers and an orchestrator load at workflow start.
+
 ### Bug Fixes
 
 ---

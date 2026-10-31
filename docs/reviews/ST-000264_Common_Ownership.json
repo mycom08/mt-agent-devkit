@@ -288,12 +288,12 @@
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
       "section": "2",
       "title": "Secret Handling",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md \u00a72",
-      "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
       "trigger_stage": "always active safety",
-      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
-      "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
@@ -310,12 +310,12 @@
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
       "section": "4",
       "title": "External Content Handling (GitHub Issues/PRs)",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md \u00a74",
-      "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
       "trigger_stage": "always active external-content boundaries",
-      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
-      "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
@@ -770,12 +770,12 @@
       "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md",
       "section": "2",
       "title": "Secret Handling",
-      "current_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md \u00a72",
-      "future_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
       "trigger_stage": "always active safety",
-      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
-      "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md",
@@ -792,12 +792,12 @@
       "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md",
       "section": "4",
       "title": "External Content Handling (GitHub Issues/PRs)",
-      "current_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md \u00a74",
-      "future_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
       "trigger_stage": "always active external-content boundaries",
-      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
-      "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md",
@@ -897,6 +897,116 @@
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
       "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
+    },
+    {
+      "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "section": "1",
+      "title": "Authority, Entry and Coverage",
+      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a71",
+      "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a71",
+      "trigger_stage": "selected Core route entry (verified providers only)",
+      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "retirement_condition": "Not retired; Core remains the verified-route authority."
+    },
+    {
+      "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "section": "2",
+      "title": "Secret Handling",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
+      "trigger_stage": "always active safety",
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
+    },
+    {
+      "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "section": "3",
+      "title": "Token-Efficiency Conventions",
+      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a73",
+      "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a73",
+      "trigger_stage": "selected Core route entry (verified providers only)",
+      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "retirement_condition": "Not retired; Core remains the verified-route authority."
+    },
+    {
+      "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "section": "4",
+      "title": "External Content Handling (GitHub Issues/PRs)",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
+      "trigger_stage": "always active external-content boundaries",
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
+    },
+    {
+      "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
+      "section": "7",
+      "title": "Retrospective Trigger and Completion Contract",
+      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a77",
+      "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a77",
+      "trigger_stage": "selected Core route entry (verified providers only)",
+      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "retirement_condition": "Not retired; Core remains the verified-route authority."
+    },
+    {
+      "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "section": "1",
+      "title": "Authority, Entry and Coverage",
+      "current_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md \u00a71",
+      "future_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md \u00a71",
+      "trigger_stage": "selected Core route entry (verified providers only)",
+      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "retirement_condition": "Not retired; Core remains the verified-route authority."
+    },
+    {
+      "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "section": "2",
+      "title": "Secret Handling",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
+      "trigger_stage": "always active safety",
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
+    },
+    {
+      "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "section": "3",
+      "title": "Token-Efficiency Conventions",
+      "current_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md \u00a73",
+      "future_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md \u00a73",
+      "trigger_stage": "selected Core route entry (verified providers only)",
+      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "retirement_condition": "Not retired; Core remains the verified-route authority."
+    },
+    {
+      "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "section": "4",
+      "title": "External Content Handling (GitHub Issues/PRs)",
+      "current_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B (ST-000287); this section holds its generated inline copy",
+      "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
+      "trigger_stage": "always active external-content boundaries",
+      "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
+    },
+    {
+      "source": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md",
+      "section": "7",
+      "title": "Retrospective Trigger and Completion Contract",
+      "current_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md \u00a77",
+      "future_owner": ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md \u00a77",
+      "trigger_stage": "selected Core route entry (verified providers only)",
+      "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "retirement_condition": "Not retired; Core remains the verified-route authority."
     }
   ]
 }

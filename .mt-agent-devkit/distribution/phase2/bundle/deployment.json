@@ -10,22 +10,22 @@
     {
       "id": "bridge_provenance.json",
       "path": "assets/bridge_provenance.json",
-      "sha256": "8dc8cd052a82b982f0f3eb998ad189427a59c56c1ce724c5e3f5a3fe1b06ca94",
-      "bytes": 679,
+      "sha256": "b8941e8495ac31efd01299e9878373719ac71edd8b12fa28b4bb66b780e77ede",
+      "bytes": 693,
       "kind": "contract"
     },
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "48d77bee0425350bd2b6b91cb8a475450d99c51e5643d11f3018b9303ecb0755",
-      "bytes": 17072,
+      "sha256": "9612fab2b0aa835312cf07ec77d203663a7d386b6ae5adc6b5f56293ce6b6c5c",
+      "bytes": 17455,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Core.md",
       "path": "assets/rules_Agent_Common_Core.md",
-      "sha256": "2727d9cd80247d4d4f683182c84829186aa93fd71c3ec38b3f3fc4f94c364cb9",
-      "bytes": 12762,
+      "sha256": "5cc2ef097424e1e1cb534f8c34d1116c97d5cc43c0bf8cb762b4e1d7dd2fbfa6",
+      "bytes": 13088,
       "kind": "template"
     },
     {
@@ -234,8 +234,8 @@
     {
       "id": "rules/Technical_Lead_Rules_Read_On_Demand.md",
       "path": "assets/rules_Technical_Lead_Rules_Read_On_Demand.md",
-      "sha256": "b080ecc4d8183a92fd5bd4d91759f1f62415667537e0ccde5ab08a989bf42ab9",
-      "bytes": 6181,
+      "sha256": "bbbfc21a24ad6d2ba0b13a9abc8c49d09a31208b9f498fcfead68c17340e6bbd",
+      "bytes": 6244,
       "kind": "template"
     },
     {
@@ -293,6 +293,34 @@
       "sha256": "847a942b88f41c4761d122737fcbe0cdb6bb1e5796106614db684afe5dd67606",
       "bytes": 3919,
       "kind": "template"
+    },
+    {
+      "id": "skills/agent-security",
+      "path": "assets/skills_agent-security",
+      "sha256": "6cd57ffd6175f485c157d531be9cfd708eaeb1f614eb7d7a1f3af60acd8d2be0",
+      "bytes": 2435,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/agent-security",
+      "path": "assets/claude_skill_agent-security",
+      "sha256": "efff4eb3ce0a9d4f03b37a25da083611ba310487270b58491d96b04b6efb4847",
+      "bytes": 408,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/agent-security",
+      "path": "assets/antigravity_skill_agent-security",
+      "sha256": "efff4eb3ce0a9d4f03b37a25da083611ba310487270b58491d96b04b6efb4847",
+      "bytes": 408,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/agent-security",
+      "path": "assets/codex_skill_agent-security",
+      "sha256": "efff4eb3ce0a9d4f03b37a25da083611ba310487270b58491d96b04b6efb4847",
+      "bytes": 408,
+      "kind": "adapter"
     },
     {
       "id": "workflow_shared/Create_Stories_Workflow.md",
@@ -423,8 +451,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "89e6ff2a857c3c5b9004317a645db26bcec6a4963c88164728dafeb3dd17e58e",
-      "bytes": 14664,
+      "sha256": "35ddf1a315d82be7db2fbb6f515e506ff346c6c987253c25b23b540c31a4b8d8",
+      "bytes": 14726,
       "kind": "template"
     },
     {
@@ -465,8 +493,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "76250c664e9e5b954afd568d5f3d5036c3762bf3d7eed9c5a05caf905eefacf2",
-      "bytes": 3854,
+      "sha256": "98d176edec15cf409f14c8eaf1d783bdcf2c3cd07df891d927095adf9db2579f",
+      "bytes": 4617,
       "kind": "template"
     },
     {
@@ -1123,8 +1151,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "2f22e5861c34044dfb59c6f892d3b24c1922541d32a6fa028dd6db4a98247693",
-      "bytes": 26710,
+      "sha256": "df5aceb761d75f7dcb90d2e99a2e054339b51b61767d72ab48d705cbcf9177df",
+      "bytes": 27890,
       "kind": "script"
     },
     {
@@ -2239,6 +2267,100 @@
       "renderer": "copy",
       "legacy_paths": [],
       "phase": "content",
+      "required": true
+    },
+    {
+      "id": "skills/agent-security",
+      "sources": [
+        "skills/agent-security"
+      ],
+      "destination": ".mt-agent-devkit/skills/agent-security/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/agent-security",
+      "sources": [
+        "claude/skill/agent-security"
+      ],
+      "destination": ".claude/skills/agent-security/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/agent-security",
+      "sources": [
+        "antigravity/skill/agent-security"
+      ],
+      "destination": ".antigravity/skills/agent-security/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/agent-security",
+      "sources": [
+        "codex/skill/agent-security"
+      ],
+      "destination": ".codex/skills/agent-security/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
       "required": true
     },
     {

@@ -16,6 +16,7 @@ on:
       - ".antigravity/agents/working/**"
       - ".claude/skills/**"
       - ".antigravity/skills/**"
+      - ".codex/skills/**"
       - "AGENTS.md"
       - "CLAUDE.md"
       # The gate script and this workflow must trigger their own gate. Without
@@ -36,6 +37,11 @@ jobs:
 
       - name: Run validate_templates.py
         run: python scripts/validate_templates.py
+
+      - name: Check generated agent-security blocks and skill wrappers
+        run: |
+          python .mt-agent-devkit/scripts/generate_security_blocks.py --check
+          python .mt-agent-devkit/scripts/generate_wrappers.py --check
 
       - name: Validate internal shared harness and provider routing
         run: |

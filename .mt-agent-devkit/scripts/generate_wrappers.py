@@ -6,12 +6,46 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[2]
+SKILL_SOURCE = re.compile(r"^\.(?:claude|antigravity|codex)/skills/([a-z0-9-]+)/SKILL\.md$")
+SKILL_DESTINATION = re.compile(r"^\.mt-agent-devkit/skills/([a-z0-9-]+)/SKILL\.md$")
+
+
+def skill_frontmatter(text: str) -> dict:
+    """Parse the flat discovery frontmatter; raise ValueError when malformed."""
+    match = re.match(r"---\n(.*?)\n---\n", text, re.S)
+    if not match:
+        raise ValueError("missing discovery frontmatter")
+    fields = {}
+    for line in match.group(1).splitlines():
+        key, sep, value = line.partition(": ")
+        if not sep or not value.strip():
+            raise ValueError(f"malformed frontmatter line: {line!r}")
+        fields[key] = value.strip()
+    if set(fields) != {"name", "description"}:
+        raise ValueError("frontmatter must hold exactly name and description")
+    return fields
+
+
+def render_skill(entry: dict, root: Path = ROOT) -> str:
+    """Discovery wrapper: canonical frontmatter plus one pointer to the canonical file."""
+    source, destination = entry["source"], entry["destination"]
+    wrapper, canonical = SKILL_SOURCE.match(source), SKILL_DESTINATION.match(destination)
+    if not wrapper or not canonical or wrapper.group(1) != canonical.group(1):
+        raise ValueError(f"skill wrapper must point at its own canonical skill: {source}")
+    fields = skill_frontmatter((root / destination).read_text(encoding="utf-8"))
+    if fields["name"] != canonical.group(1):
+        raise ValueError(f"skill name does not match its directory: {destination}")
+    return (f"---\nname: {fields['name']}\ndescription: {fields['description']}\n---\n\n"
+            f"Read `{destination}` in full before acting; it is the only owner of this skill's rules.\n")
 
 
 def render(entry: dict) -> str:
     source, destination = entry["source"], entry["destination"]
+    if entry.get("renderer") == "skill":
+        return render_skill(entry)
     if source.endswith(".py"):
         return ('"""Generated compatibility wrapper; edit the canonical source instead."""\n'
                 'from pathlib import Path\nimport runpy\n'
