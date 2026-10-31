@@ -10,7 +10,10 @@ import tempfile
 import subprocess
 
 # Skills shipped as a shared canonical file plus per-provider discovery wrappers.
-SHARED_SKILLS = ("agent-security",)
+# The po-* skills ship from ST-000289; the old PO rules templates stay in the
+# bundle, unused, until their retirement story (ST-000290).
+SHARED_SKILLS = ("agent-security", "po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
+                 "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
 
 
 def neutral(text):
@@ -136,7 +139,7 @@ def build(root, destination):
         aid = asset(name, neutral(source.read_text(encoding="utf-8-sig")).encode())
         entry(name, [aid], ".mt-agent-devkit/workflows/" + name + ".md", profiles=("project_root",))
     for profile in ("repo", "project_root"):
-        content = "## Shared Agent Harness\n\n**Mode:** {{MODE}}\n\nCanonical project context: `.mt-agent-devkit/context/Project_Priming.md`. Read it at session start.\n\n" + selection + "\n\nShared instructions, rules and workflows belong to `.mt-agent-devkit/`; provider-local memory and records remain at the selected RUNTIME_ROOT. Preserve project sections and role roster customizations outside this managed block.\n\n## Agent File Integrity\n\nShared instructions, rules, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.\n\nIndependent implementation, TL review, QA and PO gates remain mandatory. In GitHub mode post verdicts with `gh pr comment`, never self-approve with `gh pr review --approve`. In strict mode use local story/review records and avoid GitHub mutations.\n"
+        content = "## Shared Agent Harness\n\n**Mode:** {{MODE}}\n\nCanonical project context: `.mt-agent-devkit/context/Project_Priming.md`. Read it at session start.\n\n" + selection + "\n\nShared instructions, rules and workflows belong to `.mt-agent-devkit/`; provider-local memory and records remain at the selected RUNTIME_ROOT. Preserve project sections and role roster customizations outside this managed block.\n\n## Agent File Integrity\n\nShared instructions, rules, skills, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.\n\nIndependent implementation, TL review, QA and PO gates remain mandatory. In GitHub mode post verdicts with `gh pr comment`, never self-approve with `gh pr review --approve`. In strict mode use local story/review records and avoid GitHub mutations.\n"
         if profile == "repo":
             content += "\nBefore a requested workflow, the top-level orchestrator reads `.mt-agent-devkit/instructions/orchestrator_instructions.md`. Workers read their named `.mt-agent-devkit/instructions/<role>_instructions.md` and selected adapter.\n"
             content += "\nUse the project's explicit Agent Roster; when none is provided, the default roles are Technical Lead, Developer, QA, Product Owner, Business Analyst and UI/UX Designer, with corresponding lowercase underscore role instruction filenames under `.mt-agent-devkit/instructions/`. Project roster customizations take precedence over this default.\n"

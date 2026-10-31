@@ -29,7 +29,7 @@ Each specialized agent must read its instruction file before starting any work.
 | Business Analyst | `{{AGENT_DIR_PREFIX}}/agents/business_analyst_instructions.md` |
 | UI/UX Designer | `{{AGENT_DIR_PREFIX}}/agents/ui_ux_designer_instructions.md` |
 
-Agent memory, rules, working records, and context live under `{{AGENT_DIR_PREFIX}}/agents/`.
+Agent memory, rules, working records, and context live under `{{AGENT_DIR_PREFIX}}/agents/`. Product Owner procedures are skills: the Product Owner loads `po-core` (`.mt-agent-devkit/skills/po-core/SKILL.md`) and then the `po-*` skill named in its assignment.
 
 > **Project-mutable — never blindly overwritten on sync/update.** This table's paths and role set are edited locally per project: a `-ui-prototype` companion repo trims it to 3 roles, and a project migrated from the old flat instruction-file layout has its paths rewritten in place (`Update_Project_Workflow.md`'s "Path structure detection" step). It stays in `{{ROOT_FILE}}` rather than `orchestrator_instructions.md` for exactly that reason — `orchestrator_instructions.md` is devkit-verbatim, always overwritten in full, with no per-project preservation.
 
@@ -53,6 +53,7 @@ Protected paths — read-only for all agents and the orchestrator at all times:
 | `{{AGENT_DIR_PREFIX}}/agents/rules/` | All rules files |
 | `{{AGENT_DIR_PREFIX}}/agents/workflows/` | All workflow files |
 | `{{AGENT_DIR_PREFIX}}/agents/context/` | Project priming and document index |
+| `.mt-agent-devkit/skills/` and `{{AGENT_DIR_PREFIX}}/skills/` | Shared canonical skills and their provider discovery wrappers |
 | `{{AGENT_DIR_PREFIX}}/agents/devkit_version.txt` | Installed devkit version stamp |
 | `{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md` | Orchestrator-only routing, session-management, and completion-report reference |
 

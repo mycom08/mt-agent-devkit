@@ -80,7 +80,7 @@ After all implementer agents report back, check: **did every agent report all th
 1. Orchestrator collates all implementer reports to determine which agents have tagged questions
 2. **Spawn or resume** TL (**policy: design-review**) first (reuse `tl_session` if active); save/update `tl_session` in state file
 3. TL answers all technical questions across all stories in a single pass and signals completion
-4. **Then spawn or resume** PO (**policy: standard**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions
+4. **Then spawn or resume** PO (**policy: standard**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions, and name the `po-answer-questions` skill in the assignment
 5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC:
    - **GitHub mode:** PO updates the issue body (`--body-file` per `Agent_Common_Bootstrap.md` §6)
    - **Strict mode:** PO edits the AC section in the story MD file directly, then appends a comment entry to `## Comments` noting the change
@@ -109,8 +109,8 @@ After all implementer agents report back, check: **did every agent report all th
 
 ## Stage 4 — PO Status Update
 
-1. **Resume** PO agent via `po_session` from state file (spawn new if expired)
-2. PO checks each story in the target sprint independently:
+1. **Resume** PO agent via `po_session` from state file (spawn new if expired); name the `po-promote-ready` skill in the assignment
+2. PO checks each story in the target sprint independently (`po-promote-ready` readiness test):
    - Implementer posted a final "all clear" comment → update story status to `ready`. This covers **both** paths: the Stage 3 resolution comment on a story that had questions, and the Stage 1 step 7 cleared note on a story that never had any.
      - **GitHub mode:** remove `status:backlog`, add `status:ready`
      - **Strict mode:** edit `**Status:** ready` in the story MD file

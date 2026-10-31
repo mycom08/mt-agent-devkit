@@ -131,7 +131,8 @@
   },
   "bootstrap": {
     "Product_Owner": {
-      "internal": ".mt-agent-devkit/skills/po-core/SKILL.md"
+      "internal": ".mt-agent-devkit/skills/po-core/SKILL.md",
+      "target": ".mt-agent-devkit/skills/po-core/SKILL.md"
     }
   },
   "tasks": {
@@ -276,12 +277,7 @@
           ],
           "roles": [
             "Product_Owner"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md"
-            }
-          }
+          ]
         }
       ]
     },
@@ -428,12 +424,7 @@
           ],
           "roles": [
             "Product_Owner"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md"
-            }
-          }
+          ]
         }
       ]
     },
@@ -593,16 +584,7 @@
           "reason": "acceptance",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
-              "coverage": {
-                "kind": "section",
-                "section": "14"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "closure",
@@ -613,17 +595,7 @@
           "reason": "closure comment rules",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "1"
-              },
-              "reason": "closure"
-            }
-          }
+          ]
         },
         {
           "id": "acceptance_contract",
@@ -660,16 +632,7 @@
           "reason": "Stage 3 PO validation when QA is the implementer",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md",
-              "coverage": {
-                "kind": "section",
-                "section": "14"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "comment",
@@ -680,12 +643,7 @@
           "reason": "validation report comment rules",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         },
         {
           "id": "acceptance_contract",
@@ -768,12 +726,7 @@
           "reason": "standard",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Story_Standard_PO.md"
-            }
-          }
+          ]
         },
         {
           "id": "comment",
@@ -784,12 +737,7 @@
           "reason": "answer comment rules",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         }
       ]
     },
@@ -1453,16 +1401,7 @@
           "reason": "trigger story body write",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "5"
-              }
-            }
-          }
+          ]
         }
       ]
     },

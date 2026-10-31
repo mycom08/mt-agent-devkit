@@ -30,6 +30,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 - [ST-000287] Add the shared agent-security skill with generated Common copies, provider discovery wrappers and an orchestrator load at workflow start.
 - [ST-000288] Replace the devkit's internal PO rules files with ten `po-*` skills loaded per PO activity, with internal-only PO routing to `po-core`, a `po_validation` task and a retired-citation validator; target projects keep the current PO files.
+- [ST-000289] Ship the ten `po-*` skills to target projects as shared canonical skills with per-provider discovery wrappers, slim the target PO instructions, and route target PO manifests (including `po_validation`) through `po-core`; the old PO rules files still install, unused, until their retirement.
 
 ### Bug Fixes
 
