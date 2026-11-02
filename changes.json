@@ -32,7 +32,12 @@
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000289] PO assignments name po-answer-questions and po-promote-ready.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000289] PO question, QA-implementer validation and closure steps name their po-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/Repo_Root_Shared_template.md": "[ST-000289] Notes PO skills and protects the shared skills directories.",
-      ".mt-agent-devkit/contracts/read-routing.json": "[ST-000289] Target-layout PO routing, including po_validation, resolves to po-core and the po-* skills."
+      ".mt-agent-devkit/contracts/read-routing.json": "[ST-000289] Target-layout PO routing, including po_validation, resolves to po-core and the po-* skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Product_Owner_Rules_Bootstrap_template.md": "[ST-000290] Removed; installed copies retire behind the po-* skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Product_Owner_Rules_Read_On_Demand_template.md": "[ST-000290] Removed; installed copies retire behind the po-* skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_PO_template.md": "[ST-000290] Removed; installed copies retire behind the po-* skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000290] Retirement review, porting step for customised retired files, sync between sprints.",
+      ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000290] Retirement review, porting step for customised retired files, sync between sprints."
     },
     "deployment": {
       "schema_version": 1,

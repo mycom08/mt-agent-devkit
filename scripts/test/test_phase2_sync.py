@@ -1,4 +1,6 @@
 """Actual offline release acquisition against a commit-frozen artifact tree."""
+import contextlib
+import io
 import json
 from pathlib import Path
 import sys
@@ -20,7 +22,7 @@ import bootstrap
 from scripts.open_next_snapshot import next_snapshot
 
 
-class SyncTests(unittest.TestCase):
+class SyncFixture(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -44,6 +46,11 @@ class SyncTests(unittest.TestCase):
         suffix = relative.removeprefix(".mt-agent-devkit/distribution/phase2/bundle/")
         return (self.bundle / suffix).read_bytes()
 
+    def snapshot(self):
+        return {p.relative_to(self.target).as_posix(): p.read_bytes() for p in self.target.rglob("*") if p.is_file()}
+
+
+class SyncTests(SyncFixture):
     def test_commit_pinned_real_release_apply_and_repeat(self):
         result = sync.release(self.target, "fixture/devkit", "codex", "github", "repo", self.adaptations, apply=True, acquire=self.acquire, refs=self.refs)
         self.assertEqual(result["status"], "verified")
@@ -101,9 +108,6 @@ class SyncTests(unittest.TestCase):
             for token, value in (("AGENT_DIR_PREFIX", "."+provider), ("ROOT_FILE", native), ("AGENT_CLI_NAME", "Claude Code" if provider == "claude" else "Antigravity")):
                 content = content.replace("{{"+token+"}}", value)
             (agents/"workflows/Sync_Devkit_Workflow.md").write_text(content, encoding="utf-8")
-
-    def snapshot(self):
-        return {p.relative_to(self.target).as_posix(): p.read_bytes() for p in self.target.rglob("*") if p.is_file()}
 
     def test_bridge_stamp_requires_exact_authenticated_compatible_bridge(self):
         self.legacy("claude", "0.1.51", bridge=True)
@@ -263,6 +267,103 @@ class SyncTests(unittest.TestCase):
             self.assertEqual(bootstrap.main(), 0)
         self.assertFalse(custom.exists())
         self.assertIn("Keep project decisions", (self.target/".mt-agent-devkit/rules/Clean_Code_Rules.md").read_text())
+
+
+class PoRetirementTests(SyncFixture):
+    """ST-000290: receipt-based retirement of the old PO rules files."""
+    RETIRED = tuple(".mt-agent-devkit/rules/" + name for name in build_bundle.RETIRED_RULES)
+
+    def setUp(self):
+        super().setUp()
+        self.metadata["0.1.52"] = self.metadata["0.1.51"]
+
+    def installed_previous_release(self, provider, adapted=False, drop=None):
+        """Install, then record the PO rules files a pre-retirement release installed.
+
+        The receipt entries carry the same fields the engine writes on apply.
+        """
+        self.commit = "c" * 40
+        adaptations = dict(self.adaptations)
+        entrypoint = "CLAUDE.md" if provider == "claude" else "AGENTS.md"
+        adaptations[entrypoint] = adaptations.pop("AGENTS.md")
+        self.adaptations = adaptations
+        sync.release(self.target, "fixture/devkit", provider, "github", "repo", adaptations, apply=True, acquire=self.acquire, refs=self.refs)
+        path = self.target / deployment.RECEIPT
+        receipt = json.loads(path.read_text())
+        for relative in self.RETIRED:
+            stock = ("# " + Path(relative).stem + "\nStock PO rules from the previous release.\n").encode()
+            content = stock + b"Project customisation.\n" if adapted else stock
+            (self.target / relative).write_bytes(content)
+            record = {"id": "rules/" + Path(relative).name, "path": relative, "rendered_sha256": deployment.digest(content), "ownership": "managed", "stock_sha256": deployment.digest(stock), "adapted": adapted}
+            for field in drop or ():
+                record.pop(field)
+            receipt["managed_files"].append(record)
+        deployment.jsonwrite(path, receipt)
+        deployment.verify(self.target)
+
+    def next_release(self, provider, resolutions=None):
+        refs = "e" * 40 + " refs/tags/v0.1.52\n"
+        self.commit = "e" * 40
+        return sync.release(self.target, "fixture/devkit", provider, "github", "repo", {}, resolutions, apply=True, acquire=self.acquire, refs=refs)
+
+    def test_stock_receipt_target_retires_po_rules_without_manual_resolution(self):
+        for provider in ("codex", "claude"):
+            with self.subTest(provider=provider):
+                self.target = self.root / ("stock-" + provider)
+                self.target.mkdir()
+                self.installed_previous_release(provider)
+                messages = io.StringIO()
+                with contextlib.redirect_stderr(messages):
+                    result = self.next_release(provider)
+                self.assertEqual(result["status"], "verified")
+                for relative in self.RETIRED:
+                    self.assertFalse((self.target / relative).exists(), relative)
+                    self.assertIn(relative, result["written"])
+                    self.assertIn("generated retirement: " + relative + " (stock retirement in 0.1.52)", messages.getvalue())
+                receipt = deployment.verify(self.target)
+                self.assertFalse(set(self.RETIRED) & {record["path"] for record in receipt["managed_files"]})
+                for name in build_bundle.PO_SKILLS:
+                    self.assertTrue((self.target / (".mt-agent-devkit/skills/" + name + "/SKILL.md")).is_file(), name)
+                    self.assertTrue((self.target / ("." + provider + "/skills/" + name + "/SKILL.md")).is_file(), name)
+                self.assertTrue((self.target / ".mt-agent-devkit/instructions/product_owner_instructions.md").is_file())
+
+    def test_generated_resolution_shape(self):
+        self.installed_previous_release("codex")
+        previous = deployment.inspect(self.target)["receipt"]
+        resolutions = {}
+        generated = lifecycle.retirement_resolutions(self.target, previous, set(self.RETIRED) | {".mt-agent-devkit/rules/Unlisted.md"}, "0.1.52", resolutions)
+        self.assertEqual(generated, sorted(self.RETIRED))
+        for relative in self.RETIRED:
+            self.assertEqual(resolutions[relative], {"before_sha256": deployment.digest((self.target / relative).read_bytes()), "after_sha256": None, "reason": "stock retirement in 0.1.52"})
+        # Only paths listed in the new manifest's retirements are eligible.
+        self.assertEqual([], lifecycle.retirement_resolutions(self.target, previous, set(), "0.1.52", {}))
+
+    def test_customised_retired_file_raises_porting_conflict_until_resolved(self):
+        self.installed_previous_release("codex", adapted=True)
+        before = self.snapshot()
+        with self.assertRaisesRegex(deployment.Conflict, r"^retired file \.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap\.md is customised; port the customization into the replacing skill, then resolve$"):
+            self.next_release("codex")
+        self.assertEqual(self.snapshot(), before)
+        # After porting, an exact reviewed resolution per path completes the retirement.
+        resolutions = {relative: {"before_sha256": deployment.digest((self.target / relative).read_bytes()), "after_sha256": None, "reason": "Customisation ported into po-* skills"} for relative in self.RETIRED}
+        self.assertEqual(self.next_release("codex", resolutions)["status"], "verified")
+        for relative in self.RETIRED:
+            self.assertFalse((self.target / relative).exists(), relative)
+
+    def test_unknown_or_divergent_baseline_stays_a_conflict(self):
+        cases = {"adapted missing": {"drop": ("adapted",)}, "stock hash missing": {"drop": ("stock_sha256",)}, "edited after install": {}}
+        for label, options in cases.items():
+            with self.subTest(case=label):
+                self.target = self.root / label.replace(" ", "-")
+                self.target.mkdir()
+                self.adaptations = {"AGENTS.md": "# Fixture\n**Mode:** github\n", ".mt-agent-devkit/context/Project_Priming.md": "# Actual project context\n", ".mt-agent-devkit/context/Document_Index.md": "# Actual index\n"}
+                self.installed_previous_release("codex", **options)
+                if label == "edited after install":
+                    with (self.target / self.RETIRED[0]).open("a") as stream: stream.write("local edit\n")
+                before = self.snapshot()
+                with self.assertRaisesRegex(deployment.Conflict, "exact reviewed retirement and surviving dependencies required"), contextlib.redirect_stderr(io.StringIO()):
+                    self.next_release("codex")
+                self.assertEqual(self.snapshot(), before)
 
 
 if __name__ == "__main__": unittest.main()

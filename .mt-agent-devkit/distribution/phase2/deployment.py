@@ -269,7 +269,9 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
             if renderer not in ("managed_sections", "provider_settings") and destination in adaptations and item["ownership"] in ("managed", "project_adapted", "provider_config"):
                 content = substituted(adaptations[destination], values).encode()
             baseline = baselines.get(destination, {})
-            if baseline.get("adapted") and destination not in adaptations and renderer not in ("managed_sections", "approved_adaptation", "provider_settings"):
+            # A retirement has no new content to compare; its customised-file gate
+            # is the porting conflict raised before planning plus the exact resolution below.
+            if baseline.get("adapted") and destination not in adaptations and item["phase"] != "retirement" and renderer not in ("managed_sections", "approved_adaptation", "provider_settings"):
                 if baseline.get("stock_sha256") != stock_hash:
                     raise Conflict("review adapted content against changed source: " + destination)
                 if filehash(safe(target, destination)) != baseline["rendered_sha256"]:

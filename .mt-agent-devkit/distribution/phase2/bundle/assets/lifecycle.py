@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 
 import build_bundle
@@ -31,16 +32,56 @@ def ignores(target, bound, mode, adaptations, resolutions):
     return adaptations, resolutions
 
 
-def prepare(target, bound, mode, adaptations, resolutions=None, manifest_path=None):
+def retirement_paths(manifest_path):
+    if manifest_path is None:
+        return set()
+    return {record["path"] for record in deployment.load(manifest_path)["legacy_support"].get("retirements", [])}
+
+
+def retirement_resolutions(target, previous, retired, version, resolutions):
+    """Generate a resolution only for a provably stock receipt-based retired file.
+
+    A missing receipt, entry, `adapted` flag or `stock_sha256`, or a current hash
+    other than the receipt's rendered hash, is unknown and stays a conflict. A
+    customised file must be ported first and is never auto-resolved.
+    """
+    baselines = {record["path"]: record for record in previous["managed_files"]}
+    generated = []
+    for path in sorted(retired):
+        if path in resolutions or path not in baselines:
+            continue
+        current = deployment.filehash(deployment.safe(target, path))
+        if current is None:
+            continue
+        baseline = baselines[path]
+        if baseline.get("adapted") is True:
+            raise deployment.Conflict("retired file " + path + " is customised; port the customization into the replacing skill, then resolve")
+        if baseline.get("adapted") is False and baseline.get("stock_sha256") and current == baseline["rendered_sha256"]:
+            resolutions[path] = {"before_sha256": current, "after_sha256": None, "reason": "stock retirement in " + version}
+            generated.append(path)
+    return generated
+
+
+def prepare(target, bound, mode, adaptations, resolutions=None, manifest_path=None, version=None):
     previous = deployment.inspect(target)["receipt"]
     adaptations, resolutions = ignores(target, bound, mode, adaptations, resolutions)
-    if not previous:
+    retired = retirement_paths(manifest_path)
+    if previous:
+        if version:
+            for path in retirement_resolutions(target, previous, retired, version, resolutions):
+                # The sync review step lists every generated retirement before apply.
+                print("generated retirement: " + path + " (stock retirement in " + version + ")", file=sys.stderr)
+    else:
         legacy, candidates = migration.review_candidates(target, sorted(deployment.PROVIDERS), manifest_path)
         if set(legacy["providers"]) - set(bound):
             raise deployment.Conflict("bind every existing legacy provider before shared migration")
         if legacy["mode"] and legacy["mode"] != mode:
             raise deployment.Conflict("legacy mode switching excluded")
         for path, candidate in candidates.items():
+            # A retired file has no shared successor to adapt; its legacy copies
+            # keep the manual reviewed-resolution path instead.
+            if path in retired and set(candidate["legacy_paths"]) <= retired:
+                continue
             if path not in adaptations:
                 raise deployment.Conflict("review legacy content before migration: " + path)
         # Approved content is explicit; preserved runtime never enters adaptations.
@@ -56,9 +97,9 @@ def local(target, devkit_root, provider, mode, profile, adaptations, resolutions
         bundle = Path(folder)
         build_bundle.build(devkit_root, bundle)
         manifest = bundle / "deployment.json"
-        adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions, manifest)
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=devkit_root).decode().strip()
         version = (devkit_root / "VERSION").read_text().strip()
+        adaptations, resolutions = prepare(target, bound, mode, adaptations, resolutions, manifest, version)
         source = {"kind": "local", "tag": None, "commit": commit, "snapshot_version": version, "manifest_sha256": deployment.digest(manifest.read_bytes())}
         plan = deployment.plan(target, manifest, source, mode, profile, bound, adaptations, resolutions)
         return deployment.apply(target, plan) if apply else plan
@@ -86,8 +127,10 @@ def main():
         if args.operation == "bundle":
             if not all((args.manifest, args.source, args.bindings)): parser.error("bundle requires manifest, source and bindings")
             bound = deployment.load(args.bindings)
-            adaptations, resolutions = prepare(args.target, bound, args.mode, adaptations, resolutions, args.manifest)
-            result = deployment.plan(args.target, args.manifest, deployment.load(args.source), args.mode, args.profile, bound, adaptations, resolutions)
+            source = deployment.load(args.source)
+            version = source["tag"][1:] if source.get("kind") == "release" and source.get("tag") else source.get("snapshot_version")
+            adaptations, resolutions = prepare(args.target, bound, args.mode, adaptations, resolutions, args.manifest, version)
+            result = deployment.plan(args.target, args.manifest, source, args.mode, args.profile, bound, adaptations, resolutions)
             if args.apply: result = deployment.apply(args.target, result)
         else:
             if not args.devkit_root: parser.error("local lifecycle requires devkit root")

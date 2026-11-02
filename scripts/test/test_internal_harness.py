@@ -556,8 +556,8 @@ class PoSkillsTests(unittest.TestCase):
     def bundle(self):
         return json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
 
-    def test_bundle_ships_po_skills_and_keeps_old_po_templates_unused(self):
-        # ST-000289: shared canonical skill plus one wrapper per provider; old PO rules stay until ST-000290.
+    def test_bundle_ships_po_skills_and_retires_old_po_templates(self):
+        # ST-000289: shared canonical skill plus one wrapper per provider. ST-000290: old PO rules retire.
         manifest = self.bundle()
         live = {f["destination"]: f for f in manifest["files"] if f["phase"] != "retirement"}
         assets = {a["id"]: a for a in manifest["assets"]}
@@ -570,8 +570,27 @@ class PoSkillsTests(unittest.TestCase):
             for provider in validator.PROVIDERS:
                 wrapper = live[f".{provider}/skills/{name}/SKILL.md"]
                 self.assertEqual((wrapper["owner"], wrapper["providers"], wrapper["phase"]), ("selected_provider", [provider], "discovery"))
+        survivors = [f"skills/{name}" for name in validator.PO_SKILLS] + ["instructions/product_owner_instructions.md"]
+        for survivor in survivors:  # Shared IDs carry no provider suffix, so they exist in every plan.
+            self.assertEqual(live[".mt-agent-devkit/" + survivor + ("/SKILL.md" if survivor.startswith("skills/") else "")]["id"], survivor)
+        records = {r["path"]: r for r in manifest["legacy_support"]["retirements"]}
+        retiring = {f["destination"]: f for f in manifest["files"] if f["phase"] == "retirement"}
         for retired in self.RETIRED:
-            self.assertIn(retired, live)  # Unused until ST-000290 retires them.
+            name = Path(retired).name
+            self.assertNotIn(retired, live)
+            self.assertFalse((ROOT / ".mt-agent-devkit/distribution/phase2/templates/rules" / name.replace(".md", "_template.md")).exists())
+            self.assertFalse(any(name.removesuffix(".md") in a["id"] for a in manifest["assets"]), name)
+            shared = retiring[retired]
+            self.assertEqual((shared["owner"], shared["ownership"], shared["providers"], shared["modes"], shared["required"]),
+                             ("shared", "managed", list(validator.PROVIDERS), ["github", "strict"], False))
+            self.assertEqual(records[retired]["after_verified_ids"], survivors)
+            for provider in ("claude", "antigravity"):
+                legacy = f".{provider}/agents/rules/{name}"
+                self.assertEqual(sorted(f["modes"][0] for f in manifest["files"] if f["destination"] == legacy and f["phase"] == "retirement"), ["github", "strict"])
+                self.assertEqual(records[legacy]["after_verified_ids"], survivors)
+        for item in manifest["files"]:  # Every retirement entry sets `required` explicitly to False.
+            if item["phase"] == "retirement":
+                self.assertIs(item["required"], False, item["id"])
         self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
 
     def test_target_skill_templates_are_generic_and_mode_aware(self):
@@ -670,6 +689,21 @@ class PoSkillsTests(unittest.TestCase):
         self.assertTrue(any(".claude/skills/po-core/SKILL.md" in f for f in found))
         self.assertTrue(any("read-routing.json" in f for f in found))
         self.assertFalse(any("_template" in f for f in found))
+
+    def test_retired_citation_validator_covers_phase2_templates_and_bundle(self):
+        # ST-000290: Phase 2 templates and every bundle asset are in scope; retirement ledgers are not.
+        phase2 = ".mt-agent-devkit/distribution/phase2"
+        root = self.fixture(phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/Sync_Devkit_Workflow_template.md",
+                            phase2 + "/build_bundle.py", phase2 + "/bundle/deployment.json",
+                            phase2 + "/bundle/assets/orchestrator_shared", phase2 + "/bundle/assets/build_bundle.py")
+        self.assertEqual([], self.citations.findings(root))
+        for relative in ("/templates/rules/Story_Standard_template.md", "/Sync_Devkit_Workflow_template.md", "/bundle/assets/orchestrator_shared"):
+            path = root / (phase2 + relative)
+            path.write_text(path.read_text(encoding="utf-8") + "\nSee `Story_Standard_PO.md` §14.\n", encoding="utf-8")
+        found = self.citations.findings(root)
+        self.assertEqual(3, len(found), found)
+        self.assertTrue(any("bundle/assets/orchestrator_shared" in f for f in found))
+        self.assertFalse(any("build_bundle.py" in f or "deployment.json" in f for f in found))
 
     def test_retired_inventory_source_must_be_gone(self):
         root = self.fixture(".mt-agent-devkit/contracts/migration-inventory.json")

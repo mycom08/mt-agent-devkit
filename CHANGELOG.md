@@ -31,6 +31,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000287] Add the shared agent-security skill with generated Common copies, provider discovery wrappers and an orchestrator load at workflow start.
 - [ST-000288] Replace the devkit's internal PO rules files with ten `po-*` skills loaded per PO activity, with internal-only PO routing to `po-core`, a `po_validation` task and a retired-citation validator; target projects keep the current PO files.
 - [ST-000289] Ship the ten `po-*` skills to target projects as shared canonical skills with per-provider discovery wrappers, slim the target PO instructions, and route target PO manifests (including `po_validation`) through `po-core`; the old PO rules files still install, unused, until their retirement.
+- [ST-000290] Retire the old PO rules files (`Product_Owner_Rules_Bootstrap.md`, `Product_Owner_Rules_Read_On_Demand.md`, `Story_Standard_PO.md`) in target projects: sync deletes a stock receipt-based copy on its own, legacy 0.1.48-0.1.50 installs keep the manual reviewed resolution, and a customised copy stops sync until you port the customization into the replacing `po-*` skill and resolve it. Sync between sprints, since a session resumed mid-sprint may still hold the old rules.
 
 ### Bug Fixes
 
