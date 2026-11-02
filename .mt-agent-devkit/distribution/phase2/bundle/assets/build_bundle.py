@@ -10,10 +10,14 @@ import tempfile
 import subprocess
 
 # Skills shipped as a shared canonical file plus per-provider discovery wrappers.
-# The po-* skills ship from ST-000289; the old PO rules templates stay in the
-# bundle, unused, until their retirement story (ST-000290).
 SHARED_SKILLS = ("agent-security", "po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
                  "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
+PO_SKILLS = tuple(name for name in SHARED_SKILLS if name.startswith("po-"))
+# Rules files whose templates left the bundle (ST-000290). Their installed copies
+# retire behind survivors present in every plan: the shared canonical PO skill
+# IDs (never a provider-suffixed operation ID) and the slim PO instructions.
+RETIRED_RULES = ("Product_Owner_Rules_Bootstrap.md", "Product_Owner_Rules_Read_On_Demand.md", "Story_Standard_PO.md")
+RETIRED_SURVIVORS = tuple("skills/" + name for name in PO_SKILLS) + ("instructions/product_owner_instructions.md",)
 
 
 def neutral(text):
@@ -62,8 +66,8 @@ def build(root, destination):
         assets.append({"id": identifier, "path": path, "sha256": hashlib.sha256(content).hexdigest(), "bytes": len(content), "kind": kind})
         return identifier
 
-    def entry(identifier, source_ids, target, profiles=("repo",), owner="shared", ownership="managed", renderer="copy", modes=("github", "strict"), providers=("claude", "antigravity", "codex"), phase="content"):
-        files.append({"id": identifier, "sources": source_ids, "destination": target, "owner": owner, "ownership": ownership, "profiles": list(profiles), "modes": list(modes), "providers": list(providers), "renderer": renderer, "legacy_paths": [], "phase": phase, "required": True})
+    def entry(identifier, source_ids, target, profiles=("repo",), owner="shared", ownership="managed", renderer="copy", modes=("github", "strict"), providers=("claude", "antigravity", "codex"), phase="content", required=True):
+        files.append({"id": identifier, "sources": source_ids, "destination": target, "owner": owner, "ownership": ownership, "profiles": list(profiles), "modes": list(modes), "providers": list(providers), "renderer": renderer, "legacy_paths": [], "phase": phase, "required": required})
 
     templates = implementation / "templates"
     # Bridge stamps reflect the newest release, not the surviving legacy layout.
@@ -242,9 +246,21 @@ def build(root, destination):
                         legacy = "." + provider + "/agents/" + variant
                         identifier = "retire/" + provider + "/" + profile + "/" + mode + "/" + existing["id"] + "/" + variant
                         root_id = "root_" + profile + "/" + ("CLAUDE.md" if provider == "claude" else "AGENTS.md")
-                        entry(identifier, [], legacy, profiles=(profile,), owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement")
-                        files[-1]["required"] = False
+                        entry(identifier, [], legacy, profiles=(profile,), owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement", required=False)
                         retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": [existing["id"], root_id]})
+    # Retired rules have no surviving shared entry to derive legacy retirements
+    # from, so every installed variant is listed explicitly: the shared layout
+    # copy (receipt-based targets) and each legacy provider/mode layout (0.1.48-0.1.50).
+    for name in RETIRED_RULES:
+        identifier = "retire/shared/rules/" + name
+        entry(identifier, [], ".mt-agent-devkit/rules/" + name, phase="retirement", required=False)
+        retirements.append({"logical_id": identifier, "path": ".mt-agent-devkit/rules/" + name, "after_verified_ids": list(RETIRED_SURVIVORS)})
+        for provider in ("claude", "antigravity"):
+            for mode in ("github", "strict"):
+                identifier = "retire/" + provider + "/repo/" + mode + "/retired/rules/" + name
+                legacy = "." + provider + "/agents/rules/" + name
+                entry(identifier, [], legacy, owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement", required=False)
+                retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": list(RETIRED_SURVIVORS)})
     manifest = {"schema_version": 1, "layout_version": 2, "minimum_python": "3.10", "profiles": ["repo", "project_root"], "assets": assets, "files": files, "legacy_support": {"versions": ["0.1.48", "0.1.49", "0.1.50"], "providers": ["claude", "antigravity"], "modes": ["github", "strict"], "retirements": retirements}}
     (destination / "deployment.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest

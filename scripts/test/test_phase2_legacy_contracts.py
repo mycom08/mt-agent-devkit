@@ -120,6 +120,16 @@ class LegacyContracts(unittest.TestCase):
                                 settings_path.write_text(json.dumps(settings), encoding="utf-8")
                                 retained_native = {p: p.read_bytes() for p in (
                                     settings_path, agents / "scripts/check_devkit_version.sh", agents / "scripts/check_devkit_version.ps1")}
+                                # Every supported legacy release installed the three PO rules
+                                # files, rendered from its own frozen templates (ST-000290).
+                                legacy_po = []
+                                for name in build_bundle.RETIRED_RULES:
+                                    text = (frozen / ".claude/agents/templates/rules" / name.replace(".md", "_template.md")).read_text(encoding="utf-8-sig")
+                                    for token, value in (("AGENT_DIR_PREFIX", "."+provider), ("ROOT_FILE", native), ("AGENT_CLI_NAME", "Claude Code" if provider == "claude" else "Antigravity")):
+                                        text = text.replace("{{"+token+"}}", value)
+                                    (agents / "rules").mkdir(exist_ok=True)
+                                    (agents / "rules" / name).write_text(text, encoding="utf-8")
+                                    legacy_po.append(agents / "rules" / name)
                                 memory = agents / "memory/Developer_Memory.md"
                                 memory.parent.mkdir(); memory.write_bytes(b"durable personalized memory\n")
                                 counter = agents / "docs/story_counter.txt"
@@ -145,6 +155,11 @@ class LegacyContracts(unittest.TestCase):
                                 # Second invocation reviewed transfer is explicit, not guessed by engine.
                                 _, candidates = migration.review_candidates(target, [provider], bundle/"deployment.json")
                                 adaptations = {p: value["bytes"].decode("utf-8-sig") for p, value in candidates.items()}
+                                # A retired rules file has no shared successor to adapt; review
+                                # supplies only its exact manual retirement resolution below.
+                                for name in build_bundle.RETIRED_RULES:
+                                    self.assertIn(".mt-agent-devkit/rules/" + name, adaptations)
+                                    adaptations.pop(".mt-agent-devkit/rules/" + name)
                                 adaptations[".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md"] = (ROOT/".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md").read_text(encoding="utf-8")
                                 adaptations.pop(".mt-agent-devkit/instructions/orchestrator_instructions.md")
                                 # Review retains the canonical shared orchestrator instead
@@ -167,6 +182,16 @@ class LegacyContracts(unittest.TestCase):
                                 result = sync.release(target, "fixture/devkit", provider, mode, "repo", adaptations, resolutions, True, acquire, commit+" refs/tags/v0.1.51\n")
                                 self.assertEqual(result["status"], "verified")
                                 self.assertEqual(deployment.verify(target)["source"]["commit"], commit)
+                                # After the manual reviewed resolution no PO rule file remains
+                                # in either layout, and the replacing skills are installed.
+                                for path in legacy_po:
+                                    self.assertFalse(path.exists(), path)
+                                for name in build_bundle.RETIRED_RULES:
+                                    self.assertFalse((target / ".mt-agent-devkit/rules" / name).exists(), name)
+                                    self.assertFalse(list(target.rglob(name)), name)
+                                for name in build_bundle.PO_SKILLS:
+                                    self.assertTrue((target / ".mt-agent-devkit/skills" / name / "SKILL.md").is_file(), name)
+                                    self.assertTrue((target / ("." + provider) / "skills" / name / "SKILL.md").is_file(), name)
                                 self.assertFalse(destination.exists())
                                 for obsolete in ("developer_instructions.md", "instructions/developer_instructions.md", "orchestrator_instructions.md", "context/Project_Priming.md"):
                                     self.assertFalse((agents/obsolete).exists(), obsolete)

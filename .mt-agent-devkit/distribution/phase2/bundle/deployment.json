@@ -141,20 +141,6 @@
       "kind": "template"
     },
     {
-      "id": "rules/Product_Owner_Rules_Bootstrap.md",
-      "path": "assets/rules_Product_Owner_Rules_Bootstrap.md",
-      "sha256": "d161a2a7aded0b01888c50e32a05d38096d8afdd9df468cff2d7b9bc47c2e8da",
-      "bytes": 11833,
-      "kind": "template"
-    },
-    {
-      "id": "rules/Product_Owner_Rules_Read_On_Demand.md",
-      "path": "assets/rules_Product_Owner_Rules_Read_On_Demand.md",
-      "sha256": "6605244e52bbfcefaf3b1ef519177cf0c8acc2e137138a876703ea2cdf69f514",
-      "bytes": 16699,
-      "kind": "template"
-    },
-    {
       "id": "rules/QA_Rules_Bootstrap.md",
       "path": "assets/rules_QA_Rules_Bootstrap.md",
       "sha256": "69e0edd9e3a43c5a4dc3f94198ee88e08a24f077e23b533c3f0fcd07548af675",
@@ -180,13 +166,6 @@
       "path": "assets/rules_Story_Standard_Dev.md",
       "sha256": "ee3e10e94bf1a5ab594f87704ee6b65f8f58a3a05b8bf945610e21184893514e",
       "bytes": 1302,
-      "kind": "template"
-    },
-    {
-      "id": "rules/Story_Standard_PO.md",
-      "path": "assets/rules_Story_Standard_PO.md",
-      "sha256": "53463e59937e852565ca04f78e8081c8abea55d135bbeda3f6259d44df09330e",
-      "bytes": 6980,
       "kind": "template"
     },
     {
@@ -857,8 +836,8 @@
     {
       "id": "Sync_Devkit_Project_Workflow",
       "path": "assets/Sync_Devkit_Project_Workflow",
-      "sha256": "56c26c609cbbb6c22a9d5acb7e1b7d32657981fc8fdbc6b0e101015a7122561d",
-      "bytes": 2628,
+      "sha256": "e3b8d9e664257aaa8f2efe4821a965af18c2f7ad784f7011463f10de7b73f35c",
+      "bytes": 3742,
       "kind": "template"
     },
     {
@@ -1375,8 +1354,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "1f28cee76573c71b75823c682df2d6c921f2a2e42f6d68b9859fd27301aef577",
-      "bytes": 36669,
+      "sha256": "11a36a9e2367647bd768fecac9edcc83b49ce3b1a9c9d24aca361fdc7a9662a2",
+      "bytes": 36880,
       "kind": "script"
     },
     {
@@ -1403,15 +1382,15 @@
     {
       "id": "sync.py",
       "path": "assets/sync.py",
-      "sha256": "c71fc13f919cf1b1e85d17023962013a539ea7dc86407ab34994bd51081abace",
-      "bytes": 4846,
+      "sha256": "dd8b2e379d8ddff81967b83d5363f0e9f46978056524ea90d2c180de9c83eff1",
+      "bytes": 4855,
       "kind": "script"
     },
     {
       "id": "lifecycle.py",
       "path": "assets/lifecycle.py",
-      "sha256": "a305591b8a2adfc208bee4a4929da9a26889f71abd31ed36528dd78bed512d55",
-      "bytes": 5812,
+      "sha256": "ad6abc7d9d6971d5839cb396944b0a0760b6c4f7c910e18ef5d9d3eecbf4c686",
+      "bytes": 8093,
       "kind": "script"
     },
     {
@@ -1431,15 +1410,15 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "a6e6f0e6c666ee10ddea18feafaa8155536bc76a5b9af88a2a5a972f1818554f",
-      "bytes": 28229,
+      "sha256": "d495c36617929912e8cdee33374d1915aec126152112c15a68817456e64c36ac",
+      "bytes": 29725,
       "kind": "script"
     },
     {
       "id": "Sync_Devkit_Workflow",
       "path": "assets/Sync_Devkit_Workflow",
-      "sha256": "56c26c609cbbb6c22a9d5acb7e1b7d32657981fc8fdbc6b0e101015a7122561d",
-      "bytes": 2628,
+      "sha256": "e3b8d9e664257aaa8f2efe4821a965af18c2f7ad784f7011463f10de7b73f35c",
+      "bytes": 3742,
       "kind": "template"
     },
     {
@@ -2000,56 +1979,6 @@
       "required": true
     },
     {
-      "id": "rules/Product_Owner_Rules_Bootstrap.md",
-      "sources": [
-        "rules/Product_Owner_Rules_Bootstrap.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
-      "id": "rules/Product_Owner_Rules_Read_On_Demand.md",
-      "sources": [
-        "rules/Product_Owner_Rules_Read_On_Demand.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
       "id": "rules/QA_Rules_Bootstrap.md",
       "sources": [
         "rules/QA_Rules_Bootstrap.md"
@@ -2130,31 +2059,6 @@
         "rules/Story_Standard_Dev.md"
       ],
       "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
-      "id": "rules/Story_Standard_PO.md",
-      "sources": [
-        "rules/Story_Standard_PO.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Story_Standard_PO.md",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -8115,166 +8019,6 @@
       "required": false
     },
     {
-      "id": "retire/claude/repo/github/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/github/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
       "id": "retire/claude/repo/github/rules/QA_Rules_Bootstrap.md/rules/QA_Rules_Bootstrap.md",
       "sources": [],
       "destination": ".claude/agents/rules/QA_Rules_Bootstrap.md",
@@ -8578,86 +8322,6 @@
       "id": "retire/antigravity/repo/strict/rules/Story_Standard_Dev.md/rules/Story_Standard_Dev.md",
       "sources": [],
       "destination": ".antigravity/agents/rules/Story_Standard_Dev.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/github/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Story_Standard_PO.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Story_Standard_PO.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Story_Standard_PO.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Story_Standard_PO.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
@@ -14593,6 +14257,315 @@
       "legacy_paths": [],
       "phase": "retirement",
       "required": false
+    },
+    {
+      "id": "retire/shared/rules/Product_Owner_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/retired/rules/Product_Owner_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/retired/rules/Product_Owner_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/retired/rules/Product_Owner_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/retired/rules/Product_Owner_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/shared/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/shared/rules/Story_Standard_PO.md",
+      "sources": [],
+      "destination": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/retired/rules/Story_Standard_PO.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Story_Standard_PO.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/retired/rules/Story_Standard_PO.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Story_Standard_PO.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/retired/rules/Story_Standard_PO.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Story_Standard_PO.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/retired/rules/Story_Standard_PO.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Story_Standard_PO.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
     }
   ],
   "legacy_support": {
@@ -15187,70 +15160,6 @@
         ]
       },
       {
-        "logical_id": "retire/claude/repo/github/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-        "path": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Bootstrap.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-        "path": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Bootstrap.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-        "path": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Bootstrap.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Product_Owner_Rules_Bootstrap.md/rules/Product_Owner_Rules_Bootstrap.md",
-        "path": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Bootstrap.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/github/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "path": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Read_On_Demand.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "path": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Read_On_Demand.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "path": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Read_On_Demand.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Product_Owner_Rules_Read_On_Demand.md/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "path": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Product_Owner_Rules_Read_On_Demand.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
         "logical_id": "retire/claude/repo/github/rules/QA_Rules_Bootstrap.md/rules/QA_Rules_Bootstrap.md",
         "path": ".claude/agents/rules/QA_Rules_Bootstrap.md",
         "after_verified_ids": [
@@ -15375,38 +15284,6 @@
         "path": ".antigravity/agents/rules/Story_Standard_Dev.md",
         "after_verified_ids": [
           "rules/Story_Standard_Dev.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/github/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-        "path": ".claude/agents/rules/Story_Standard_PO.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_PO.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-        "path": ".claude/agents/rules/Story_Standard_PO.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_PO.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-        "path": ".antigravity/agents/rules/Story_Standard_PO.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_PO.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Story_Standard_PO.md/rules/Story_Standard_PO.md",
-        "path": ".antigravity/agents/rules/Story_Standard_PO.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_PO.md",
           "root_repo/AGENTS.md"
         ]
       },
@@ -17776,6 +17653,261 @@
         "after_verified_ids": [
           "wait_work.ps1",
           "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/shared/rules/Product_Owner_Rules_Bootstrap.md",
+        "path": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/retired/rules/Product_Owner_Rules_Bootstrap.md",
+        "path": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/retired/rules/Product_Owner_Rules_Bootstrap.md",
+        "path": ".claude/agents/rules/Product_Owner_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/retired/rules/Product_Owner_Rules_Bootstrap.md",
+        "path": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/retired/rules/Product_Owner_Rules_Bootstrap.md",
+        "path": ".antigravity/agents/rules/Product_Owner_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/shared/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "path": ".mt-agent-devkit/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "path": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "path": ".claude/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "path": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/retired/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "path": ".antigravity/agents/rules/Product_Owner_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/shared/rules/Story_Standard_PO.md",
+        "path": ".mt-agent-devkit/rules/Story_Standard_PO.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/retired/rules/Story_Standard_PO.md",
+        "path": ".claude/agents/rules/Story_Standard_PO.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/retired/rules/Story_Standard_PO.md",
+        "path": ".claude/agents/rules/Story_Standard_PO.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/retired/rules/Story_Standard_PO.md",
+        "path": ".antigravity/agents/rules/Story_Standard_PO.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/retired/rules/Story_Standard_PO.md",
+        "path": ".antigravity/agents/rules/Story_Standard_PO.md",
+        "after_verified_ids": [
+          "skills/po-core",
+          "skills/po-comment",
+          "skills/po-plan-docs",
+          "skills/po-write-story",
+          "skills/po-roadmap-drain",
+          "skills/po-plan-sprint",
+          "skills/po-answer-questions",
+          "skills/po-promote-ready",
+          "skills/po-verify-close",
+          "skills/po-validate-ac",
+          "instructions/product_owner_instructions.md"
         ]
       }
     ]
