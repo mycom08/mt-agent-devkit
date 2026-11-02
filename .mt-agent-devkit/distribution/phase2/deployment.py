@@ -271,7 +271,9 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
             baseline = baselines.get(destination, {})
             # A retirement has no new content to compare; its customised-file gate
             # is the porting conflict raised before planning plus the exact resolution below.
-            if baseline.get("adapted") and destination not in adaptations and item["phase"] != "retirement" and renderer not in ("managed_sections", "approved_adaptation", "provider_settings"):
+            # A create_if_absent file is the project's once created (e.g. project
+            # settings): any existing content is preserved below, never reviewed.
+            if baseline.get("adapted") and destination not in adaptations and item["phase"] != "retirement" and renderer not in ("managed_sections", "approved_adaptation", "provider_settings", "create_if_absent"):
                 if baseline.get("stock_sha256") != stock_hash:
                     raise Conflict("review adapted content against changed source: " + destination)
                 if filehash(safe(target, destination)) != baseline["rendered_sha256"]:
@@ -441,7 +443,10 @@ def apply(target, value, fail_at=None):
     if inspect(target)["nonterminal"]:
         raise Conflict("nonterminal workflow")
     existing_receipt = load(safe(target, RECEIPT)) if safe(target, RECEIPT).exists() else None
-    if all(op["action"] == "preserve" for op in value["operations"]) and existing_receipt and existing_receipt["source"] == value["source"] and existing_receipt["providers"] == value["providers"]:
+    # A preserved project-owned file edited since the receipt (e.g. project
+    # settings) is not a no-op: the full path below re-records its hash.
+    recorded = {f["path"]: f["rendered_sha256"] for f in existing_receipt["managed_files"]} if existing_receipt else {}
+    if all(op["action"] == "preserve" for op in value["operations"]) and existing_receipt and existing_receipt["source"] == value["source"] and existing_receipt["providers"] == value["providers"] and all(recorded.get(op["path"]) == op["after_sha256"] for op in value["operations"] if op["ownership"] != "runtime_seed"):
         unchanged(target, value["preservation_hashes"])
         verify(target)
         return {"status": "verified", "written": [], "no_op": True}

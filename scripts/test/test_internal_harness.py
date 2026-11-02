@@ -720,5 +720,61 @@ class PoSkillsTests(unittest.TestCase):
         self.assertIn(f"retired inventory entry lacks story/reason: {inventory['retired'][2]['source']}", errors)
 
 
+class PoExecutionSettingTests(unittest.TestCase):
+    """ST-000291: the po_execution setting and the contracts that let the orchestrator act as PO."""
+    PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"
+    ACTOR = "the orchestrator acting as PO under `po_execution: orchestrator`"
+
+    def read(self, relative):
+        return (ROOT / relative).read_text(encoding="utf-8")
+
+    def test_init_creates_subagent_default_and_sync_never_overwrites(self):
+        builder = validator.module("bundle_builder_291", ROOT / ".mt-agent-devkit/distribution/phase2/build_bundle.py")
+        deployment = validator.module("bundle_deployment_291", ROOT / ".mt-agent-devkit/distribution/phase2/deployment.py")
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder); bundle = base / "bundle"; builder.build(ROOT, bundle)
+            manifest = bundle / "deployment.json"
+            items = [f for f in json.loads(manifest.read_text(encoding="utf-8"))["files"] if f["destination"] == ".mt-agent-devkit/project_settings.json"]
+            self.assertEqual([("project_owned", "create_if_absent", "content")], [(f["ownership"], f["renderer"], f["phase"]) for f in items])
+            source = dict(kind="local", tag=None, commit="a" * 40, snapshot_version="0.1.55-SNAPSHOT", manifest_sha256=deployment.digest(manifest.read_bytes()))
+            target = base / "target"; target.mkdir()
+            bound = {"claude": {"PROVIDER_ROOT": ".claude", "RUNTIME_ROOT": ".claude/agents", "COMMAND_ROOT": ".claude/agents"}}
+            adaptations = {"CLAUDE.md": "# Fixture\n", ".mt-agent-devkit/context/Project_Priming.md": "# Fixture\n", ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "# Ignore\n"}
+            deployment.apply(target, deployment.plan(target, manifest, source, "github", "repo", bound, adaptations))
+            settings = target / ".mt-agent-devkit/project_settings.json"
+            self.assertEqual(json.loads(settings.read_text(encoding="utf-8")), {"po_execution": "subagent"})
+            settings.write_text('{"po_execution": "orchestrator"}\n', encoding="utf-8")
+            deployment.apply(target, deployment.plan(target, manifest, source, "github", "repo", bound, adaptations))
+            deployment.verify(target)
+            self.assertEqual(settings.read_text(encoding="utf-8"), '{"po_execution": "orchestrator"}\n')
+            # No entrypoint mirror: the managed CLAUDE.md block never states the setting.
+            self.assertNotIn("po_execution", (target / "CLAUDE.md").read_text(encoding="utf-8"))
+
+    def test_orchestrator_pins_setting_and_documents_the_trade_off(self):
+        for relative in (".mt-agent-devkit/instructions/orchestrator_instructions.md", self.PHASE2 + "shared/orchestrator_instructions_shared_template.md"):
+            with self.subTest(relative=relative):
+                text = self.read(relative)
+                for required in ("project_settings.py po_execution", "**PO Execution:**", "A resumed run uses its pinned value",
+                                 "resolves to `subagent` and the script reports it once", "**Accepted trade-off:**", "one actor both merges and records acceptance"):
+                    self.assertIn(required, text)
+        for relative in (".mt-agent-devkit/workflows/Sprint_Workflow.md", self.PHASE2 + "shared/workflows/Sprint_Workflow_Shared_template.md"):
+            self.assertIn("**PO Execution:** <subagent | orchestrator>", self.read(relative))
+
+    def test_story_standard_and_record_access_contracts_are_amended(self):
+        for relative in (".mt-agent-devkit/rules/Story_Standard.md", self.PHASE2 + "rules/Story_Standard_template.md"):
+            with self.subTest(relative=relative):
+                text = self.read(relative)
+                done = next(line for line in text.splitlines() if line.startswith("| **Done** |"))
+                role = next(line for line in text.splitlines() if line.startswith("| **PO** |"))
+                section = text[text.index("## 14."):text.index("## 15.")]
+                self.assertIn(self.ACTOR, done)
+                self.assertIn(self.ACTOR, role)
+                self.assertEqual(3, section.count(self.ACTOR))
+                self.assertIn("In `orchestrator` mode, the scope decision is the user's.", section)
+        for relative in (".mt-agent-devkit/rules/Agent_Common_Bootstrap.md", ".mt-agent-devkit/rules/Agent_Common_Working_Record.md",
+                         self.PHASE2 + "rules/Agent_Common_Bootstrap_template.md", self.PHASE2 + "rules/Agent_Common_Working_Record_template.md"):
+            self.assertIn(self.ACTOR + " owns the PO record and memory for that activity", self.read(relative), relative)
+
+
 if __name__ == "__main__":
     unittest.main()

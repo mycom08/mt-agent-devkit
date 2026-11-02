@@ -4,7 +4,7 @@
 
 Interruption, blocking, multi-session continuation or explicit status snapshot activates this capability. Read/write only own bound record after guidance; initialize missing own record locally. Clean single-session work is exempt. Sync authoritative tracker status before reporting.
 
-   **Updating it (every session, start and end):** rewrite-in-place snapshot semantics — the record holds only the current-state snapshot, not an append-only log; nothing outside the owning agent ever reads it, so nothing is lost by replacing rather than appending. At session end, overwrite Completed / In Progress / Impediments with this session's current state (never appended alongside a prior session's). Access control: read and update only your own record, never another agent's.
+   **Updating it (every session, start and end):** rewrite-in-place snapshot semantics — the record holds only the current-state snapshot, not an append-only log; nothing outside the owning agent ever reads it, so nothing is lost by replacing rather than appending. At session end, overwrite Completed / In Progress / Impediments with this session's current state (never appended alongside a prior session's). Access control: read and update only your own record, never another agent's. Exception: the orchestrator acting as PO under `po_execution: orchestrator` owns the PO record and memory for that activity.
 
    **Retention:** keep only the 3 most recent story entries (unit is story entries, not calendar days) — delete older entries before writing the new one. Enforced cap: **≤ 10,000 characters** (`wc -c`, not a line count; `≤ 60 lines` is non-enforced structural guidance only). Gitignored — never commit.
 
