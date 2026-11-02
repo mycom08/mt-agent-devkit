@@ -57,17 +57,18 @@ class ProjectSettingsTests(unittest.TestCase):
                 self.assertTrue(stderr.startswith("project_settings: "))
 
     def test_internal_settings_file_and_working_mirror_resolve(self):
-        # The devkit's own file holds the default, byte-identical to the bundle asset.
+        # The shipped bundle asset holds the default; the devkit's own file is project-owned and may differ.
         manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
         [item] = [f for f in manifest["files"] if f["destination"] == settings.SETTINGS_PATH]
         self.assertEqual((item["owner"], item["ownership"], item["renderer"]), ("shared", "project_owned", "create_if_absent"))
         [asset] = [a for a in manifest["assets"] if a["id"] == item["sources"][0]]
         bundle = ROOT / ".mt-agent-devkit/distribution/phase2/bundle" / asset["path"]
-        self.assertEqual(bundle.read_bytes(), (ROOT / settings.SETTINGS_PATH).read_bytes())
         self.assertEqual(json.loads(bundle.read_text(encoding="utf-8")), settings.DEFAULTS)
         result = subprocess.run([sys.executable, str(ROOT / ".mt-agent-devkit/scripts/project_settings.py"), "po_execution", "--root", str(ROOT)],
                                 capture_output=True, text=True, check=True)
-        self.assertEqual((result.stdout, result.stderr), ("subagent\n", ""))
+        # The devkit's own file may legitimately be set to either valid value, never reported.
+        self.assertIn(result.stdout, ("subagent\n", "orchestrator\n"))
+        self.assertEqual(result.stderr, "")
 
 
 if __name__ == "__main__":
