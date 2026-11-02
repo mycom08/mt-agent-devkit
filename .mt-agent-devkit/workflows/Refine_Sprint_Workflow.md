@@ -24,17 +24,20 @@ The orchestrator maintains `{RUNTIME_ROOT}/tmp/refine_pipeline_state.md` to supp
 **Sprint:** sprint-N
 **Stage:** <1 | 2 | 3 | 4>
 **Loop Count:** <per-story loop counts, e.g. "#125: 1, #126: 1">
+**PO Execution:** <subagent | orchestrator> (resolved once at workflow start; a resumed run keeps it)
+**PO Skills:** <one entry per inline PO activity, e.g. "refine-stage2-c1: po-core, po-answer-questions, po-comment", or empty>
+**PO Memory:** <read, or empty>
 **Sessions:**
 - dev_session: <session_handle or empty>
 - tl_session: <session_handle or empty>
 - qa_session: <session_handle or empty>
 - ba_session: <session_handle or empty>
-- po_session: <session_handle or empty>
+- po_session: <session_handle, inline (`orchestrator` mode), or empty>
 **Updated:** YYYY-MM-DDTHH:MM
 **Observations:**
 ```
 
-**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each stage transition. Update `Sessions` on spawn only — never overwrite a session ID when resuming via the selected adapter's resume operation. Increment per-story loop count at the start of Stage 3. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow. Delete after workflow review is complete (see Stage 4).
+**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each stage transition. Update `Sessions` on spawn only — never overwrite a session ID when resuming via the selected adapter's resume operation. Set `PO Execution` at Stage 1 entry per the orchestrator instructions and keep it unchanged on resume. In `orchestrator` mode, write `po_session: inline` and append `PO Skills` at each inline PO activity, and set `PO Memory: read` at the first one. Increment per-story loop count at the start of Stage 3. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow. Delete after workflow review is complete (see Stage 4).
 
 ---
 
@@ -71,7 +74,8 @@ After all implementer agents report back, check: **did every agent report all th
 1. Orchestrator collates all implementer reports to determine which agents have tagged questions
 2. **Spawn or resume** TL (**model policy: design-review**) first (reuse `tl_session` if active); save/update `tl_session` in state file
 3. TL answers all technical questions across all stories in a single pass and signals completion
-4. **Then spawn or resume** PO (**model policy: standard**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions, and name the `po-answer-questions` skill in the assignment
+4. **`PO Execution: subagent`:** spawn or resume PO (**model policy: standard**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions, and name the `po-answer-questions` skill in the assignment
+   **`PO Execution: orchestrator`:** after TL completes, the orchestrator answers inline as PO (touchpoint table and inline PO activity procedure in the orchestrator instructions) with TL's answers in hand: load `po-core`, `po-answer-questions` and `po-comment` (+ `po-write-story` when an AC changes), record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row per Stage 2 cycle. Refinement precedes Stage 1, so AC edits here follow the skills as usual
 5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC: PO updates the issue body (`--body-file` per `Agent_Common_Bootstrap.md` §6)
 6. Each agent appends answers in the same comment thread — does not open new threads for the same topic
 7. Each agent signals completion to the orchestrator (max 5-bullet summary)
@@ -96,7 +100,7 @@ After all implementer agents report back, check: **did every agent report all th
 
 ## Stage 4 — PO Status Update
 
-1. **Resume** PO agent via `po_session` from state file (spawn new if expired); name the `po-promote-ready` skill in the assignment
+1. **`PO Execution: subagent`:** resume the PO agent via `po_session` from state file (spawn new if expired); name the `po-promote-ready` skill in the assignment. **`PO Execution: orchestrator`:** the orchestrator performs steps 2–3 inline as PO: load `po-core` and `po-promote-ready`, record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row (`story_id` the sprint label, stage `refine-stage4`). The All-Clear Shortcut lands here too
 2. PO checks each story in the target sprint independently (`po-promote-ready` readiness test):
    - Implementer posted a final "all clear" comment → update story status to `ready`: remove `status:backlog`, add `status:ready`. This covers **both** paths: the Stage 3 resolution comment on a story that had questions, and the Stage 1 step 7 cleared note on a story that never had any.
    - No comment at all, or questions still open → leave as `status:backlog` (no change)
@@ -115,6 +119,7 @@ After all implementer agents report back, check: **did every agent report all th
 
 - **Check state file first** — always read `refine_pipeline_state.md` before spawning any agent; resume from recorded stage if it exists
 - **Session IDs in state file** — save on spawn; never overwrite on resume
+- **PO Execution** — the pinned value routes Stage 2 and Stage 4 per the orchestrator instructions' PO touchpoint table; `subagent` behavior is unchanged
 - **TL before PO in Stage 2** — TL answers technical questions first; PO reads TL answers before making scope decisions
 - **Story bodies in prompt** — orchestrator pre-fetches and passes issue content; agents do not re-fetch
 - **Parallel implementers** — each implementer reviews their assigned stories in one pass; spawn in parallel at Stage 1

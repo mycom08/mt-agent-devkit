@@ -173,6 +173,89 @@ class TelemetryTests(unittest.TestCase):
                 with self.subTest(source=source), self.assertRaises(telemetry.TelemetryError):
                     telemetry.validate_record({**record, "usage_source": source})
 
+    def harness_row(self, directory: Path, name: str, **changes) -> dict:
+        metadata = json.loads((FIXTURES / "complete_metadata.json").read_text(encoding="utf-8"))
+        metadata.update(changes)
+        path = directory / f"{name}.json"
+        path.write_text(json.dumps(metadata), encoding="utf-8")
+        loaded = telemetry.load_metadata(path)
+        source = "harness_report" if loaded.get("session_final_tokens") is not None else "unavailable"
+        return telemetry.build_record(loaded, source, None)
+
+    def test_orchestrator_story_total_row_is_harness_only(self) -> None:
+        # ST-000292 (R1): the orchestrator's own per-story total comes only from harness_report.
+        with tempfile.TemporaryDirectory(prefix="telemetry-orch-") as directory:
+            root = Path(directory)
+            row = self.harness_row(root, "orch", role="Orchestrator", stage="story_total",
+                                   session_mode="orchestrator_inline", session_final_tokens=9000)
+            self.assertEqual((row["role"], row["usage_source"]), ("Orchestrator", "harness_report"))
+            unmeasured = self.harness_row(root, "orch2", role="Orchestrator", stage="story_total", session_mode="orchestrator_inline")
+            self.assertEqual(unmeasured["usage_source"], "unavailable")
+            for change in ({"session_mode": "fresh"}, {"usage_source": "raw_transcript"}):
+                with self.subTest(change=change), self.assertRaises(telemetry.TelemetryError):
+                    telemetry.validate_record({**row, **change})
+            metadata = root / "orch-extract.json"
+            metadata.write_text(json.dumps({**json.loads((FIXTURES / "complete_metadata.json").read_text(encoding="utf-8")),
+                                            "role": "Orchestrator", "session_mode": "orchestrator_inline"}), encoding="utf-8")
+            argv = ["telemetry.py", "extract", "--transcript", str(FIXTURES / "streamed_with_result.jsonl"),
+                    "--metadata", str(metadata), "--output", str(root / "out.jsonl")]
+            with patch.object(telemetry.sys, "argv", argv):
+                self.assertEqual(telemetry.main(), 1)
+
+    def mode_rows(self, root: Path, run: str, *, orchestrator_tokens, worker_tokens, inline_po=False, story="ST-000001") -> list:
+        rows = [self.harness_row(root, f"{run}-o", run_id=run, story_id=story, role="Orchestrator", stage="story_total",
+                                 session_mode="orchestrator_inline",
+                                 **({"session_final_tokens": orchestrator_tokens} if orchestrator_tokens is not None else {}))]
+        for index, tokens in enumerate(worker_tokens):
+            rows.append(self.harness_row(root, f"{run}-w{index}", run_id=run, story_id=story, role="Developer", stage=f"stage{index}",
+                                         session_mode="fresh", **({"session_final_tokens": tokens} if tokens is not None else {})))
+        if inline_po:
+            rows.append(self.harness_row(root, f"{run}-po", run_id=run, story_id=story, role="PO", stage="closure",
+                                         session_mode="orchestrator_inline"))
+        return rows
+
+    def test_compare_modes_uses_orchestrator_plus_worker_totals_per_story(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="telemetry-compare-") as directory:
+            root = Path(directory)
+            subagent = self.mode_rows(root, "run-sub", orchestrator_tokens=1000, worker_tokens=[4000, 3000])
+            orchestrator = self.mode_rows(root, "run-orch", orchestrator_tokens=2500, worker_tokens=[4000], inline_po=True)
+            result = telemetry.compare_modes(subagent, orchestrator)
+            self.assertEqual(result["metric"], "session_final_tokens")
+            self.assertEqual(result["modes"]["subagent"]["stories"][0]["total"], 8000)
+            story = result["modes"]["orchestrator"]["stories"][0]
+            self.assertEqual((story["total"], story["inline_records"]), (6500, 1))
+            self.assertEqual(result["comparison"], {"status": "measured", "mean_saving": 1500})
+            self.assertEqual(result["paired_stories"], [{"story_id": "ST-000001", "status": "measured", "saving": 1500}])
+            # CLI path reads each mode's own run file.
+            paths = {}
+            for name, rows in (("sub", subagent), ("orch", orchestrator)):
+                paths[name] = root / f"{name}.jsonl"
+                paths[name].write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+            argv = ["telemetry.py", "compare", "--subagent", str(paths["sub"]), "--orchestrator", str(paths["orch"])]
+            with patch.object(telemetry.sys, "argv", argv), patch("sys.stdout") as stdout:
+                self.assertEqual(telemetry.main(), 0)
+            self.assertIn('"mean_saving": 1500', "".join(call.args[0] for call in stdout.write.call_args_list))
+
+    def test_compare_modes_records_unmeasured_and_never_estimates(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="telemetry-compare-") as directory:
+            root = Path(directory)
+            measured = self.mode_rows(root, "run-sub", orchestrator_tokens=1000, worker_tokens=[4000])
+            cases = {
+                "orchestrator total unavailable": self.mode_rows(root, "a", orchestrator_tokens=None, worker_tokens=[4000], inline_po=True),
+                "a worker stage has no session_final_tokens": self.mode_rows(root, "b", orchestrator_tokens=900, worker_tokens=[None]),
+                "no orchestrator story total": self.mode_rows(root, "c", orchestrator_tokens=900, worker_tokens=[4000])[1:],
+            }
+            for reason, rows in cases.items():
+                with self.subTest(reason=reason):
+                    result = telemetry.compare_modes(measured, rows)
+                    story = result["modes"]["orchestrator"]["stories"][0]
+                    self.assertEqual(story["status"], "unmeasured")
+                    self.assertTrue(story["reason"].startswith(reason))
+                    self.assertIsNone(story["total"])
+                    self.assertEqual(result["comparison"], {"status": "unmeasured", "mean_saving": None})
+            with self.assertRaisesRegex(telemetry.TelemetryError, "inline PO rows"):
+                telemetry.compare_modes(self.mode_rows(root, "d", orchestrator_tokens=1, worker_tokens=[1], inline_po=True), measured)
+
     def test_export_uses_a_strict_allowlist(self) -> None:
         record = self.extract_complete()
 

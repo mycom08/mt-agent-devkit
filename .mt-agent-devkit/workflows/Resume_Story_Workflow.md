@@ -8,6 +8,8 @@ Use this when a story has `status:blocked` and the required external information
 
 ---
 
+**Scope-change escalation (`PO Execution: orchestrator`):** when the blocked request is a Scope-Change Escalation from `Shared_Pipeline_Stages.md`, the user's recorded decision is the scope decision. Apply exactly that decision (a split follows `Story_Standard.md §14`; an AC body edit is the user's, not the orchestrator's), restore the status the story held before the block, and resume the recorded stage from the pipeline state file instead of restarting at Stage 0. A missing decision keeps the story blocked; the orchestrator never fills the gap itself.
+
 1. Fetch the story issue and read all comments — locate the blocked request comment and any replies
 2. Validate that all items in the **Still Need From You** table have been answered
 3. **If info is complete:**

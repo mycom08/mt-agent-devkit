@@ -530,7 +530,7 @@ Testing-pass requires PASS with sufficient evidence for every remaining current 
 The applicable independent QA sign-off must identify the scope/revision and per-AC evidence. Existing fast-path and skipped-validator routes still require their documented independent validation evidence for every AC; a skipped stage or reviewer approval alone cannot stand in for unperformed verification. Do not fabricate a QA-agent report when no QA agent ran.
 
 - `- [ ]` = not accepted, including FAIL or NOT VERIFIED.
-- `- [x]` = accepted by the PO, or the orchestrator acting as PO under `po_execution: orchestrator` only after the applicable independent verification confirms PASS.
+- `- [x]` = accepted by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`, only after the applicable independent verification confirms PASS.
 
 The PO, or the orchestrator acting as PO under `po_execution: orchestrator`, must locate that verification report, compare it with the current AC, and confirm merge before ticking checkboxes, closing, or setting done. Developer/TL assurances alone are not QA sign-off. A merged PR, auto-closed issue, or pre-ticked checkbox is not acceptance evidence. If auto-closure occurred with missing verification, reopen the story and retain/report its unresolved state; never mark it done.
 
@@ -541,7 +541,7 @@ An unverified requirement may leave the original scope only through this sequenc
 2. Create a named tracked follow-up preserving the requirement, dependency, and missing verification evidence (a story MD in strict mode).
 3. Update the canonical original body to link the follow-up and define the remaining scope; link the original from the follow-up. Preserve the earlier NOT VERIFIED report as history, not a converted PASS.
 4. Obtain renewed independent QA confirmation of every remaining original AC against that revised scope before testing-pass or merge advancement. Recheck any changed artifact under the existing review/SHA gates.
-5. Only after applicable verification passes and merge is confirmed may the PO, or the orchestrator acting as PO under `po_execution: orchestrator` accept the remaining original AC and close it. The follow-up remains open and unaccepted until its own verification succeeds.
+5. Only after applicable verification passes and merge is confirmed may the PO, or the orchestrator acting as PO under `po_execution: orchestrator`, accept the remaining original AC and close it. The follow-up remains open and unaccepted until its own verification succeeds.
 
 A decision alone, an untracked deferral, or a follow-up link without an updated original scope cannot satisfy this sequence. Any remaining NOT VERIFIED AC still blocks advancement.
 

@@ -6,6 +6,7 @@ Usage examples:
   python telemetry.py extract --agent-id a0123456789abcdef --metadata stage.json --output run.jsonl --append
   python telemetry.py harness --metadata stage.json --output record.json
   python telemetry.py aggregate --input run.jsonl
+  python telemetry.py compare --subagent subagent-run.jsonl --orchestrator orchestrator-run.jsonl
 
 Only fields in ``TELEMETRY_FIELDS`` are emitted. Raw transcript paths, content,
 prompts, tool input, and any unrecognised metadata are deliberately excluded.
@@ -60,14 +61,18 @@ USAGE_FIELDS = OPTIONAL_FIELDS[3:]
 # orchestrator performed inline, e.g. PO work under `po_execution: orchestrator`.
 # No worker transcript exists, so its rows always carry `usage_source: unavailable`.
 INLINE_SESSION_MODE = "orchestrator_inline"
+# The orchestrator's own per-story total (R1). It has no transcript discovery, so the
+# only verified source is a harness-reported `session_final_tokens` (`harness_report`).
+ORCHESTRATOR_ROLE = "Orchestrator"
 ALLOWED_SESSION_MODES = {"fresh", "same_session_resume", "expired_session_resume", INLINE_SESSION_MODE}
 ALLOWED_COMPLETION_STATUSES = {"completed", "blocked", "failed", "interrupted"}
 ALLOWED_USAGE_SOURCES = {"raw_transcript", "harness_report", "unavailable"}
 # Schema records use only these six role values. Metadata accepts the familiar
 # installed-workflow labels, then normalizes them before a record is written.
-CANONICAL_ROLES = {"Developer", "TL", "QA", "PO", "BA", "UI/UX"}
+CANONICAL_ROLES = {"Developer", "TL", "QA", "PO", "BA", "UI/UX", ORCHESTRATOR_ROLE}
 ROLE_ALIASES = {
     "Developer": "Developer", "TL": "TL", "QA": "QA", "PO": "PO", "BA": "BA", "UI/UX": "UI/UX",
+    ORCHESTRATOR_ROLE: ORCHESTRATOR_ROLE,
     "Technical Lead": "TL", "Product Owner": "PO", "Business Analyst": "BA", "UI/UX Designer": "UI/UX",
 }
 ALLOWED_ROLES = set(ROLE_ALIASES)
@@ -600,7 +605,12 @@ def validate_record(record: dict[str, Any]) -> None:
         error("harness_report records require session_final_tokens")
     if record["usage_source"] == "unavailable" and any(record[field] is not None for field in OPTIONAL_FIELDS):
         error("unavailable records must not contain measured usage")
-    if record["session_mode"] == INLINE_SESSION_MODE and record["usage_source"] != "unavailable":
+    if record["role"] == ORCHESTRATOR_ROLE:
+        if record["session_mode"] != INLINE_SESSION_MODE:
+            error("Orchestrator records require session_mode orchestrator_inline")
+        if record["usage_source"] == "raw_transcript":
+            error("Orchestrator records use harness_report or unavailable; no transcript discovery exists")
+    elif record["session_mode"] == INLINE_SESSION_MODE and record["usage_source"] != "unavailable":
         error("orchestrator_inline records require usage_source unavailable")
 
 
@@ -713,6 +723,65 @@ def summarize(records: list[dict[str, Any]]) -> dict[str, Any]:
     return {"schema_version": SCHEMA_VERSION, "runs": [summarize_run(run_id, by_run[run_id]) for run_id in sorted(by_run)]}
 
 
+def story_total(story_id: str, records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Orchestrator-plus-worker total for one story, measured only from verified final-context counts (R1).
+
+    The orchestrator part comes only from its ``harness_report`` row. Inline role rows
+    (``orchestrator_inline``) carry no usage by design: that work is inside the
+    orchestrator's own total. Every spawned worker row must report
+    ``session_final_tokens``. Anything else leaves the story unmeasured, never estimated.
+    """
+    orchestrator = [record for record in records if record["role"] == ORCHESTRATOR_ROLE]
+    workers = [record for record in records if record["session_mode"] != INLINE_SESSION_MODE]
+    inline = [record for record in records if record["role"] != ORCHESTRATOR_ROLE and record["session_mode"] == INLINE_SESSION_MODE]
+    result: dict[str, Any] = {"story_id": story_id, "runs": sorted({record["run_id"] for record in records}),
+                              "worker_records": len(workers), "inline_records": len(inline),
+                              "orchestrator_tokens": None, "worker_tokens": None, "total": None}
+    reason = None
+    if len(orchestrator) != 1:
+        reason = "no orchestrator story total" if not orchestrator else "more than one orchestrator story total"
+    elif orchestrator[0]["usage_source"] != "harness_report":
+        reason = "orchestrator total unavailable (no harness_report session_final_tokens)"
+    elif any(record["session_final_tokens"] is None for record in workers):
+        reason = "a worker stage has no session_final_tokens"
+    if reason is not None:
+        result.update(status="unmeasured", reason=reason)
+        return result
+    worker_tokens = sum(record["session_final_tokens"] for record in workers)
+    result.update(status="measured", reason=None, orchestrator_tokens=orchestrator[0]["session_final_tokens"],
+                  worker_tokens=worker_tokens, total=orchestrator[0]["session_final_tokens"] + worker_tokens)
+    return result
+
+
+def summarize_mode(records: list[dict[str, Any]]) -> dict[str, Any]:
+    by_story: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        by_story[record["story_id"]].append(record)
+    stories = [story_total(story_id, by_story[story_id]) for story_id in sorted(by_story)]
+    measured = [story["total"] for story in stories if story["status"] == "measured"]
+    return {"stories": stories, "measured_stories": len(measured), "unmeasured_stories": len(stories) - len(measured),
+            "mean_total": (sum(measured) / len(measured)) if measured else None}
+
+
+def compare_modes(subagent: list[dict[str, Any]], orchestrator: list[dict[str, Any]]) -> dict[str, Any]:
+    """Compare `po_execution` modes through per-story orchestrator-plus-worker totals (R1)."""
+    if any(record["role"] == "PO" and record["session_mode"] == INLINE_SESSION_MODE for record in subagent):
+        error("subagent-mode input contains inline PO rows; pass each mode's own run records")
+    modes = {"subagent": summarize_mode(subagent), "orchestrator": summarize_mode(orchestrator)}
+    paired = []
+    totals = {mode: {story["story_id"]: story for story in summary["stories"]} for mode, summary in modes.items()}
+    for story_id in sorted(set(totals["subagent"]) & set(totals["orchestrator"])):
+        left, right = totals["subagent"][story_id], totals["orchestrator"][story_id]
+        both = left["status"] == right["status"] == "measured"
+        paired.append({"story_id": story_id, "status": "measured" if both else "unmeasured",
+                       "saving": left["total"] - right["total"] if both else None})
+    means = [modes[mode]["mean_total"] for mode in ("subagent", "orchestrator")]
+    measured = all(mean is not None for mean in means)
+    return {"schema_version": SCHEMA_VERSION, "metric": "session_final_tokens", "modes": modes, "paired_stories": paired,
+            "comparison": {"status": "measured" if measured else "unmeasured",
+                           "mean_saving": means[0] - means[1] if measured else None}}
+
+
 def reconstruct_evidence(path: Path, story_id: str) -> dict[str, Any]:
     evidence = read_json(path)
     try:
@@ -769,6 +838,9 @@ def main() -> int:
             command.add_argument("--end-boundary", type=Path)
     aggregate = commands.add_parser("aggregate")
     aggregate.add_argument("--input", required=True, type=Path)
+    compare = commands.add_parser("compare", help="compare po_execution modes through per-story orchestrator-plus-worker totals")
+    compare.add_argument("--subagent", required=True, type=Path, help="run records collected under po_execution: subagent")
+    compare.add_argument("--orchestrator", required=True, type=Path, help="run records collected under po_execution: orchestrator")
     evidence = commands.add_parser("reconstruct-evidence")
     evidence.add_argument("--evidence", required=True, type=Path)
     evidence.add_argument("--story", required=True)
@@ -811,6 +883,8 @@ def main() -> int:
             write_record(record, args.output, args.append)
         elif args.command == "aggregate":
             print(json.dumps(summarize(read_records(args.input)), sort_keys=True))
+        elif args.command == "compare":
+            print(json.dumps(compare_modes(read_records(args.subagent), read_records(args.orchestrator)), sort_keys=True))
         else:
             print(json.dumps(reconstruct_evidence(args.evidence, args.story), sort_keys=True))
     except TelemetryError as exc:
