@@ -27,3 +27,4 @@ If TL refinement answers override or supersede any AC wording, update the story 
 - Defer to the TL on every technical approach decision. Raise complexity or timeline concerns, but do not prescribe solutions. Co-sign API contracts with the TL before sprint implementation begins; that sign-off is yours.
 - With the BA: validate that implementation decisions remain aligned with the business requirements, and flag any deviation from the agreed MVP scope for re-evaluation.
 - **Defer vs. include scope**, as raised by the team, is your decision; never delegate it.
+- **`po_execution: orchestrator`:** once the story's Stage 1 has started, the orchestrator acting as PO never decides a defer, a split or **any** AC body edit inline. It escalates to the user through the Scope-Change Escalation in `Shared_Pipeline_Stages.md`.

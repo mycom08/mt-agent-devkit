@@ -101,4 +101,5 @@ backlog → ready → in-progress → review → testing → done
 | All workflow trigger mappings | `.mt-agent-devkit/instructions/orchestrator_instructions.md` §Sprint Workflows (Devkit) |
 | Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
 | Product Owner procedures (one skill per PO activity) | `.mt-agent-devkit/skills/po-core/SKILL.md` and the other `po-*` skills under `.mt-agent-devkit/skills/` |
+| Who runs each PO activity (`po_execution: subagent` or `orchestrator`) | `.mt-agent-devkit/project_settings.json`; routing in `.mt-agent-devkit/instructions/orchestrator_instructions.md` §PO Touchpoints by `PO Execution` |
 | CI/CD story validation | `.mt-agent-devkit/rules/CICD_Validation_Guide.md` |

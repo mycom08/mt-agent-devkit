@@ -7,6 +7,8 @@ Triggered by: `"create stories"` or `"/create-stories"` in {ENTRYPOINT}
 
 The orchestrator acts as PO — read `.mt-agent-devkit/instructions/product_owner_instructions.md`, then load the `po-core` and `po-write-story` skills (`.mt-agent-devkit/skills/po-core/SKILL.md`, `.mt-agent-devkit/skills/po-write-story/SKILL.md`) before proceeding. **Do not spawn a PO agent.**
 
+**PO Execution:** this is the Create Stories row of the PO touchpoint table in the orchestrator instructions, inline in both modes. `subagent` mode is unchanged. In `orchestrator` mode, also apply that section's inline PO activity procedure (PO memory at the run's first PO activity, PO Working Record, `Orchestrator` retro identity, one `orchestrator_inline` telemetry row with `story_id` set to the sprint label, or `none` when no sprint is assigned); this workflow keeps no pipeline state file, so no state entry is written.
+
 ---
 
 ## Step 1 — Collect Requirements

@@ -115,7 +115,7 @@ Store `Implementer` in the pipeline state file. This determines which agent runs
 |---|---|---|---|
 | `Developer` | Developer | Technical Lead | QA |
 | `Technical Lead` | Technical Lead | Developer (peer review) | QA |
-| `QA` | QA | Technical Lead | Skipped — PO validates AC directly |
+| `QA` | QA | Technical Lead | Skipped — PO validates AC directly (forced PO spawn in both `PO Execution` modes) |
 | `Business Analyst` | Business Analyst | Technical Lead | QA |
 | `UI/UX Designer` | UI/UX Designer | Technical Lead | QA |
 
@@ -159,6 +159,8 @@ With only a real final-context counter use `harness`; without supported data use
 usage or label final-context tokens as cumulative consumption. Aggregate with
 `aggregate --input {RUNTIME_ROOT}/tmp/token-metrics/<run-id>.jsonl`; malformed
 input, duplicate stage identities and mixed schemas stop the run.
+
+Inline PO activities under `PO Execution: orchestrator` write one `role: PO`, `session_mode: orchestrator_inline` row each with `usage_source: unavailable`, and every story ends with one `Orchestrator` story-total row in both modes; both follow the orchestrator instructions (inline PO activity procedure and Measuring the saving (R1)). Compare the modes only with `telemetry.py compare`; a story without a harness-reported orchestrator total is unmeasured, never estimated.
 
 ### Bounded same-session resume
 
@@ -276,8 +278,9 @@ When the implementer returns with a mid-implementation consultation report inste
 
 2. **Spawn or resume the answering agent(s):**
    - If `Owner` is TL → spawn/resume Technical Lead (**model policy: standard**) with the question and story context
-   - If `Owner` is PO → spawn/resume Product Owner (**model policy: standard**) with the question and story context; the assignment names the `po-answer-questions` skill (manifest task `scope_question`)
+   - If `Owner` is PO → spawn/resume Product Owner (**model policy: standard**) with the question and story context; the assignment names the `po-answer-questions` skill (manifest task `scope_question`). **`PO Execution: orchestrator`:** do not spawn; the orchestrator answers inline as PO (load `po-core`, `po-answer-questions` and `po-comment`, set `po_session: inline`, append `PO Skills`, one `orchestrator_inline` telemetry row with stage `consultation-c<N>`) and posts the answer as a reply on the issue. If the answer needs a defer, a split or **any** AC body edit, it is not decided inline: run the Scope-Change Escalation below instead
    - If `Owner` is both → spawn both in parallel (**model policy: standard** for each) (single orchestrator message)
+   - Under `PO Execution: orchestrator` with `Owner` both → spawn TL only, then answer the PO part inline after TL's answer, as above
 
    Spawn prompt must include:
    - Story ID and GitHub Issue number
@@ -298,6 +301,10 @@ When the implementer returns with a mid-implementation consultation report inste
 6. **Loop limit:** counts toward the story's Impl→Reviewer loop limit if the consultation causes a re-review cycle; does not count otherwise.
 
 > **Distinguish from Blocked Story Procedure:** Use this when the question can be answered by TL or PO from existing context. Use the Blocked Story Procedure only when the answer requires input that no internal agent can provide (external system access, user preference, credentials, etc.).
+
+### Scope-Change Escalation (`PO Execution: orchestrator`)
+
+Once Stage 1 has started, a defer, a split or **any** AC body edit is never decided inline in `orchestrator` mode, at any later stage: a consultation answer, the Stage 3 acceptance gate, the Merge Procedure pre-check or Stage 4 closure (for example dropping a NOT VERIFIED AC). Every AC body edit counts, whatever its direction, so the merging actor never judges whether its own edit lowers the bar. The orchestrator stops the story and runs the Blocked Story Procedure below with the **user** as the owner to tag: the request states the proposed change and the AC it affects. The story stays blocked until the user's decision is recorded on it; `Resume_Story_Workflow.md` then applies exactly that decision and resumes the recorded stage. `subagent` mode is unchanged: the PO decides.
 
 ### Blocked Story Procedure (agent executes when external input is required)
 
@@ -350,11 +357,11 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ## Stage 3 — QA Validation
 
-**Acceptance gate — every route:** Before recording testing-pass or invoking Merge Procedure, read and apply `Story_Standard.md §14` to the current canonical scope. Require the applicable independent validation report with a verdict/evidence for every remaining AC. Any FAIL, NOT VERIFIED, absent verdict, or insufficient evidence stops advancement; neither green automation, reviewer approval, skipped validation nor a non-behavioral fast path overrides this gate. Record the reason and missing evidence, retain the unresolved testing/open state, and use the existing external-blocker procedure when needed. Scope splits must be approved, tracked and linked in revised story bodies before renewed QA sign-off; never reinterpret prior NOT VERIFIED as PASS.
+**Acceptance gate — every route:** Before recording testing-pass or invoking Merge Procedure, read and apply `Story_Standard.md §14` to the current canonical scope. Require the applicable independent validation report with a verdict/evidence for every remaining AC. Any FAIL, NOT VERIFIED, absent verdict, or insufficient evidence stops advancement; neither green automation, reviewer approval, skipped validation nor a non-behavioral fast path overrides this gate. Record the reason and missing evidence, retain the unresolved testing/open state, and use the existing external-blocker procedure when needed. Scope splits must be approved (by the user under `PO Execution: orchestrator`, through the Scope-Change Escalation), tracked and linked in revised story bodies before renewed QA sign-off; never reinterpret prior NOT VERIFIED as PASS.
 
 > **Merge gate — behavioral stories:** The Merge Procedure fires only at behavioral path step 9 — after QA confirms automation passes. Do NOT execute it at Stage 3 entry or immediately after Stage 2 approval.
 
-1. **If `Implementer` is `QA`** → skip a separate QA agent; always **spawn** Product Owner (**model policy: standard**, manifest task `po_validation`) and name the `po-validate-ac` skill (`.mt-agent-devkit/skills/po-validate-ac/SKILL.md`) in the assignment. PO validates each AC independently and records the applicable per-AC report under the acceptance gate before the orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
+1. **If `Implementer` is `QA`** → skip a separate QA agent; always **spawn** Product Owner (**forced spawn** in both `PO Execution` modes, never inline: the spawned PO is the only independent evidence producer here) (**model policy: standard**, manifest task `po_validation`) and name the `po-validate-ac` skill (`.mt-agent-devkit/skills/po-validate-ac/SKILL.md`) in the assignment. PO validates each AC independently and records the applicable per-AC report under the acceptance gate before the orchestrator executes the **Merge Procedure** below, then proceed to Stage 4
 
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
@@ -424,6 +431,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 ### Behavioral path (`Type: behavioral`)
 
+**`PO Execution: orchestrator`:** do not spawn. The orchestrator closes the story inline as PO per the orchestrator instructions' inline PO activity procedure: load `po-core`, `po-verify-close` and `po-comment`; set `po_session: inline` and append `stage4-closure: po-core, po-verify-close, po-comment` to `PO Skills`; read `Product_Owner_Memory.md` if this is the run's first PO activity; then perform step 3 below in full, including the judgement checks the merge pre-check does not cover (Definition of Done and open comments, backward compatibility, elevated verification). Skip the PO Working Record, record the completion identity with role `Orchestrator`, and write one `orchestrator_inline` telemetry row (stage `stage4-closure`). A scope change found here follows the Scope-Change Escalation. **`PO Execution: subagent`:** steps 1–5 below, unchanged.
+
 1. **Spawn** Product Owner agent (**model policy: closure**, manifest task `closure`); save its `session_handle` as `po_session` (resume via `po_session` if still active from a previous story in this sprint); name the `po-verify-close` skill in the assignment
 2. PO reads for closure only — **skip Project_Priming and reading/writing the Working Record**: `Agent_Common_Bootstrap.md` (full file, every section mandatory), `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`, and the `po-core`, `po-verify-close` and `po-comment` skills
 3. PO verifies acceptance and closes the story per `po-verify-close` (`.mt-agent-devkit/skills/po-verify-close/SKILL.md`): acceptance questions, evidence check including the elevated-verification and implementer = validator closure signals, AC ticking with `--body-file`, `status:done` and close
@@ -434,7 +443,8 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 Append a bullet to `Observations:` for each item that did **not** happen:
 
-- `[skipped-step]` If behavioral: `po_session` saved in state file immediately after spawn?
+- `[skipped-step]` If behavioral: `po_session` saved in state file immediately after spawn? Under `PO Execution: orchestrator`, `po_session: inline` with a `stage4-closure` entry in `PO Skills` satisfies this.
+- `[skipped-step]` `Orchestrator` story-total telemetry row written after Stage 4 (both modes; `unavailable` when the harness reports no orchestrator count)?
 - `[skipped-step]` `Stage` and `Updated` refreshed in state file after every stage transition (verify all 4)?
 - `[skipped-step]` All spawned session IDs recorded immediately (impl, reviewer if spawned, qa if spawned, po if spawned)?
 

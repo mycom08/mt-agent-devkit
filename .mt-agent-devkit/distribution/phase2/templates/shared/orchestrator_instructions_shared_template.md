@@ -15,6 +15,43 @@ At workflow start, before the first issue/PR read or GitHub mutation, load the `
 
 ---
 
+## PO Touchpoints by `PO Execution`
+
+Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps today's behavior unchanged. Each workflow names its row at the touchpoint; this section is the single procedure those rows cite.
+
+| Touchpoint | `subagent` | `orchestrator` | Inline skills |
+|---|---|---|---|
+| Create Stories | Inline (already) | Inline | `po-core`, `po-write-story` |
+| Plan Sprint Stages 1, 2, 4 | Spawn/resume `po_session` | **Spawn/resume (forced)** | none (the spawned PO loads `po-plan-sprint`) |
+| Refine Sprint Stage 2 (after TL) | Spawn/resume | Inline; TL still answers first | `po-core`, `po-answer-questions`, `po-comment` (+ `po-write-story` when an AC changes) |
+| Refine Sprint Stage 4 | Resume | Inline | `po-core`, `po-promote-ready` |
+| Pipeline Stage 2: Developer question with owner PO (Mid-Implementation Consultation) | Spawn/resume | Inline | `po-core`, `po-answer-questions`, `po-comment` |
+| Scope change after Stage 1 starts (defer, split or **any** AC body edit) | PO decides | **Escalate to the user** | none |
+| Pipeline Stage 3, QA is the implementer | Spawn | **Spawn (forced)** | none (the spawned PO loads `po-validate-ac`) |
+| Pipeline Stage 4 non-behavioral | Inline (already) | Inline (unchanged) | none |
+| Pipeline Stage 4 behavioral | Spawn (`closure` policy) | Inline | `po-core`, `po-verify-close`, `po-comment` |
+| Sprint Workflow next-story promotion | PO | Inline | `po-core`, `po-promote-ready` |
+
+**Forced spawns.** Plan Sprint and Stage 3 with QA as the implementer spawn a Product Owner in both modes. Never run them inline: planning is not delegated, and with QA as the implementer the spawned PO is the only independent evidence producer, so inline validation would certify the orchestrator's own merge gate.
+
+**Inline PO activity procedure.** For every inline row above:
+1. **Skills.** Before acting, load each listed skill, plus any skill its `**Requires:**` line names that is not already loaded. Read the canonical file `.mt-agent-devkit/skills/<name>/SKILL.md` in full; a provider without verified native skill discovery always reads that path (a skill directory does not prove discovery).
+2. **Pipeline state.** When the workflow keeps a state file, set `po_session: inline` and append one entry to `**PO Skills:**` naming the activity and the skills loaded (e.g. `stage4-closure: po-core, po-verify-close, po-comment`).
+3. **PO memory.** At the run's first PO activity, read `{{AGENT_DIR_PREFIX}}/agents/memory/Product_Owner_Memory.md` in full and record `**PO Memory:** read` in the state file. Write durable facts in the PO format, `## Stored Facts`, per `Agent_Common_Read_On_Demand.md §1` (fetch that section before the first write).
+4. **PO Working Record.** At the end of each inline activity whose skill writes the Working Record (`po-core` rules), update `{{AGENT_DIR_PREFIX}}/agents/working-record/Product_Owner_Working_Record.md` in the `Agent_Common_Bootstrap.md §1` format. Stage 4 closure skips it, as a spawned closure PO does.
+5. **Separate state.** The orchestrator's own Working Record and state stay unchanged: PO facts never go into orchestrator state, and orchestrator state never goes into PO records.
+6. **Retro identity.** The completion identity's role is `Orchestrator`, the actual actor, per `Agent_Common_Bootstrap.md §7`. Never record an unspawned `Product_Owner` identity.
+7. **Telemetry.** Write exactly one Schema v1 row per inline activity through `python .mt-agent-devkit/scripts/telemetry.py harness`: metadata `role: PO`, `session_mode: orchestrator_inline`, the orchestrator's model, and no `session_final_tokens`, so the row records `usage_source: unavailable`. `story_id` is the story served (the sprint label for a multi-story activity); `stage` names the activity and, for a repeated cycle, its number (e.g. `refine-stage2-c2`). Never extract, capture boundaries or estimate inline usage.
+8. **Model.** Inline work runs on the orchestrator's model. The `closure` and `standard` policies apply only to spawns.
+
+**Scope-change escalation (`orchestrator` mode).** Once a story's Stage 1 has started, a defer, a split or **any** AC body edit is never decided inline, whatever its direction and whoever proposes it (a worker, an inline PO answer or the orchestrator itself). The merging actor must not judge whether its own edit lowers the bar. Stop the story and run the Blocked Story Procedure in `Shared_Pipeline_Stages.md` addressed to the user: the comment (GitHub mode) or `## Comments` entry (strict mode) states the proposed change and the AC it affects, and the story takes the blocked status. Continue only after the user's decision is recorded on the story; then apply exactly that decision, following `Story_Standard.md §14` for a split. An inline answer that needs no scope change continues normally. Before Stage 1 (Create Stories, Refine Sprint) inline AC edits follow the skills as usual.
+
+**Observation checks.** Where a check asks whether `po_session` was saved after a spawn, `po_session: inline` with a matching `PO Skills` entry satisfies it for an inline touchpoint in `orchestrator` mode. A forced spawn still needs its real session handle.
+
+**Measuring the saving (R1).** Compare the modes only through orchestrator-plus-worker totals per story. After each story's Stage 4, in both modes, write one `Orchestrator` story-total row through `telemetry.py harness` (`role: Orchestrator`, `stage: story_total`, `session_mode: orchestrator_inline`), with `session_final_tokens` only when the harness reports the orchestrator's real count (`usage_source: harness_report`); otherwise the row is `unavailable`. Then run `python .mt-agent-devkit/scripts/telemetry.py compare --subagent <subagent-run.jsonl> --orchestrator <orchestrator-run.jsonl>`. A story without a harness-reported orchestrator total, or with a worker row lacking `session_final_tokens`, is reported as **unmeasured**, never estimated.
+
+---
+
 ## Agent Session Management
 
 The orchestrator tracks the `agentId` returned by every spawned agent. On loop-back, always prefer resuming over spawning:

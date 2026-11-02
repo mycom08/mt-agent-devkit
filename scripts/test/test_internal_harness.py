@@ -776,5 +776,121 @@ class PoExecutionSettingTests(unittest.TestCase):
             self.assertIn(self.ACTOR + " owns the PO record and memory for that activity", self.read(relative), relative)
 
 
+class OrchestratorPoModeTests(unittest.TestCase):
+    """ST-000292: every design section 5 row in the devkit workflows and their Phase 2 templates."""
+    PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"
+    ORCH = (".mt-agent-devkit/instructions/orchestrator_instructions.md", PHASE2 + "shared/orchestrator_instructions_shared_template.md")
+    ROWS = {
+        "Create Stories": ("Inline (already)", "Inline", "`po-core`, `po-write-story`"),
+        "Plan Sprint Stages 1, 2, 4": ("Spawn/resume `po_session`", "**Spawn/resume (forced)**", "`po-plan-sprint`"),
+        "Refine Sprint Stage 2 (after TL)": ("Spawn/resume", "Inline; TL still answers first", "`po-answer-questions`"),
+        "Refine Sprint Stage 4": ("Resume", "Inline", "`po-promote-ready`"),
+        "Pipeline Stage 2: Developer question with owner PO": ("Spawn/resume", "Inline", "`po-answer-questions`"),
+        "Scope change after Stage 1 starts": ("PO decides", "**Escalate to the user**", "none"),
+        "Pipeline Stage 3, QA is the implementer": ("Spawn", "**Spawn (forced)**", "`po-validate-ac`"),
+        "Pipeline Stage 4 non-behavioral": ("Inline (already)", "Inline (unchanged)", "none"),
+        "Pipeline Stage 4 behavioral": ("Spawn (`closure` policy)", "Inline", "`po-verify-close`"),
+        "Sprint Workflow next-story promotion": ("PO", "Inline", "`po-promote-ready`"),
+    }
+
+    def read(self, relative):
+        return (ROOT / relative).read_text(encoding="utf-8")
+
+    def pair(self, devkit, template):
+        return ((".mt-agent-devkit/workflows/" + devkit, self.read(".mt-agent-devkit/workflows/" + devkit)),
+                (self.PHASE2 + template, self.read(self.PHASE2 + template)))
+
+    def test_orchestrator_instructions_carry_the_full_behavior_matrix(self):
+        for relative in self.ORCH:
+            text = self.read(relative)
+            table = [line for line in text[text.index("## PO Touchpoints by `PO Execution`"):].splitlines() if line.startswith("| ")]
+            for touchpoint, (subagent, orchestrator, skill) in self.ROWS.items():
+                with self.subTest(relative=relative, touchpoint=touchpoint):
+                    row = next(line for line in table if line.startswith("| " + touchpoint))
+                    cells = [cell.strip() for cell in row.strip("|").split("|")]
+                    self.assertEqual((cells[1], cells[2]), (subagent, orchestrator))
+                    self.assertIn(skill, cells[3])
+
+    def test_inline_procedure_state_telemetry_and_retro_follow_section_7(self):
+        for relative in self.ORCH:
+            text = self.read(relative)
+            for required in (".mt-agent-devkit/skills/<name>/SKILL.md", "verified native skill discovery", "`po_session: inline`", "`**PO Skills:**`",
+                             "Product_Owner_Memory.md` in full and record `**PO Memory:** read`", "`## Stored Facts`", "Product_Owner_Working_Record.md",
+                             "Stage 4 closure skips it", "role is `Orchestrator`", "`role: PO`, `session_mode: orchestrator_inline`",
+                             "`usage_source: unavailable`", "Never extract, capture boundaries or estimate inline usage",
+                             "`po_session: inline` with a matching `PO Skills` entry satisfies it"):
+                with self.subTest(relative=relative, required=required):
+                    self.assertIn(required, text)
+
+    def test_forced_spawns_hold_in_both_modes(self):
+        for relative, text in self.pair("Plan_Sprint_Workflow.md", "shared/workflows/Plan_Sprint_Workflow_Shared_template.md"):
+            self.assertIn("**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline", text, relative)
+            self.assertIn("**Forced PO spawn**", text, relative)
+        for relative, text in self.pair("Shared_Pipeline_Stages.md", "shared/workflows/Shared_Pipeline_Stages_Shared_template.md"):
+            self.assertIn("always **spawn** Product Owner (**forced spawn** in both `PO Execution` modes, never inline", text, relative)
+            self.assertIn("manifest task `po_validation`", text, relative)
+
+    def test_scope_change_after_stage_1_escalates_to_the_user(self):
+        for relative in self.ORCH:
+            text = self.read(relative)
+            self.assertIn("a defer, a split or **any** AC body edit is never decided inline", text)
+            self.assertIn("Blocked Story Procedure in `Shared_Pipeline_Stages.md` addressed to the user", text)
+        for relative, text in self.pair("Shared_Pipeline_Stages.md", "shared/workflows/Shared_Pipeline_Stages_Shared_template.md"):
+            section = text[text.index("### Scope-Change Escalation (`PO Execution: orchestrator`)"):text.index("### Blocked Story Procedure")]
+            for required in ("**any** AC body edit is never decided inline", "Every AC body edit counts, whatever its direction",
+                             "with the **user** as the owner to tag", "`subagent` mode is unchanged: the PO decides"):
+                self.assertIn(required, section, relative)
+            self.assertIn("run the Scope-Change Escalation below instead", text, relative)
+            self.assertIn("approved (by the user under `PO Execution: orchestrator`, through the Scope-Change Escalation)", text, relative)
+        for relative, text in self.pair("Resume_Story_Workflow.md", "shared/workflows/Resume_Story_Workflow_Shared_template.md"):
+            self.assertIn("the user's recorded decision is the scope decision", text, relative)
+            self.assertIn("resume the recorded stage from the pipeline state file instead of restarting at Stage 0", text, relative)
+        for skill in ("po-answer-questions", "po-verify-close"):
+            for relative in (f".mt-agent-devkit/skills/{skill}/SKILL.md", f"{self.PHASE2}skills/{skill}/SKILL_template.md"):
+                self.assertIn("`po_execution: orchestrator`", self.read(relative), relative)
+
+    def test_each_workflow_touchpoint_routes_on_the_pinned_value(self):
+        for relative, text in self.pair("Create_Stories_Workflow.md", "shared/workflows/Create_Stories_Workflow_Shared_template.md"):
+            self.assertIn("**Do not spawn a PO agent.**", text, relative)
+            self.assertIn("this is the Create Stories row of the PO touchpoint table", text, relative)
+        for relative, text in self.pair("Refine_Sprint_Workflow.md", "shared/workflows/Refine_Sprint_Workflow_Shared_template.md"):
+            stage2 = text[text.index("## Stage 2"):text.index("## Stage 3")]
+            stage4 = text[text.index("## Stage 4"):text.index("## Pipeline Rules")]
+            self.assertIn("**`PO Execution: subagent`:** spawn or resume PO", stage2, relative)
+            self.assertIn("**`PO Execution: orchestrator`:** after TL completes, the orchestrator answers inline as PO", stage2, relative)
+            self.assertIn("`po-core`, `po-answer-questions` and `po-comment`", stage2, relative)
+            self.assertIn("**`PO Execution: subagent`:** resume the PO agent via `po_session`", stage4, relative)
+            self.assertIn("load `po-core` and `po-promote-ready`", stage4, relative)
+            for field in ("**PO Execution:**", "**PO Skills:**", "**PO Memory:**", "inline (`orchestrator` mode)"):
+                self.assertIn(field, text, relative)
+        for relative, text in self.pair("Shared_Pipeline_Stages.md", "shared/workflows/Shared_Pipeline_Stages_Shared_template.md"):
+            consultation = text[text.index("### Mid-Implementation Consultation Procedure"):text.index("### Scope-Change Escalation")]
+            self.assertIn("(manifest task `scope_question`). **`PO Execution: orchestrator`:** do not spawn; the orchestrator answers inline as PO", consultation, relative)
+            self.assertIn("spawn TL only, then answer the PO part inline", consultation, relative)
+            stage4 = text[text.index("## Stage 4 — PO Story Closure"):text.index("## Stage 5")]
+            fast = stage4[stage4.index("### Non-behavioral fast path"):stage4.index("### Behavioral path")]
+            self.assertIn("Orchestrator executes closure directly — no PO agent spawn", fast, relative)
+            self.assertNotIn("PO Execution", fast, relative)  # unchanged in both modes
+            behavioral = stage4[stage4.index("### Behavioral path"):stage4.index("### Orchestrator Observation Check")]
+            self.assertIn("**`PO Execution: orchestrator`:** do not spawn. The orchestrator closes the story inline as PO", behavioral, relative)
+            self.assertIn("load `po-core`, `po-verify-close` and `po-comment`", behavioral, relative)
+            self.assertIn("Skip the PO Working Record, record the completion identity with role `Orchestrator`", behavioral, relative)
+            self.assertIn("**`PO Execution: subagent`:** steps 1–5 below, unchanged.", behavioral, relative)
+            self.assertIn("manifest task `closure`", behavioral, relative)
+            self.assertIn("`po_session: inline` with a `stage4-closure` entry in `PO Skills` satisfies this", stage4, relative)
+            self.assertIn("`Orchestrator` story-total telemetry row written after Stage 4", stage4, relative)
+        for relative, text in self.pair("Sprint_Workflow.md", "shared/workflows/Sprint_Workflow_Shared_template.md"):
+            self.assertIn("Under `PO Execution: orchestrator` the orchestrator performs this promotion inline as PO", text, relative)
+            self.assertIn("**PO Skills:**", text, relative)
+            self.assertIn("A forced PO spawn (Stage 3 with QA as the implementer) still records its real session handle", text, relative)
+
+    def test_r1_comparison_rule_is_documented_with_the_collector(self):
+        for relative in self.ORCH:
+            text = self.read(relative)
+            self.assertIn("telemetry.py compare --subagent", text)
+            self.assertIn("is reported as **unmeasured**, never estimated", text)
+            self.assertIn("(`usage_source: harness_report`)", text)
+
+
 if __name__ == "__main__":
     unittest.main()

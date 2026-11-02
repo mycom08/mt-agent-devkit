@@ -192,8 +192,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "f1a1c4e91044e81e29bb366a908c6f7713f14d54aa4cd79fbd517b706210f85c",
-      "bytes": 37318,
+      "sha256": "f9f2f9e26d1c4893c5374d9d950dc330f3d1841a7852f82642f8d4f4b6dcd10a",
+      "bytes": 37320,
       "kind": "template"
     },
     {
@@ -472,8 +472,8 @@
     {
       "id": "skills/po-answer-questions",
       "path": "assets/skills_po-answer-questions",
-      "sha256": "5b9a4518016807460b12dbc3828fbfea0f94aeff6e7cf6623fe8f4dad2aaa1d1",
-      "bytes": 2136,
+      "sha256": "6cc2bfb45f1bdf6eb699b97a377199736e0f60b448baef40826ae668044a8125",
+      "bytes": 2396,
       "kind": "template"
     },
     {
@@ -528,8 +528,8 @@
     {
       "id": "skills/po-verify-close",
       "path": "assets/skills_po-verify-close",
-      "sha256": "1cb9d3702b6f1314e68e93379482a6790230276789a7754b62b3fb69e3bc8d5b",
-      "bytes": 3225,
+      "sha256": "951f68a9609bfbe500867125bd7c52ac64a238b55c77e07cc99e5716b5969b22",
+      "bytes": 3393,
       "kind": "template"
     },
     {
@@ -584,8 +584,8 @@
     {
       "id": "workflow_shared/Create_Stories_Workflow.md",
       "path": "assets/workflow_shared_Create_Stories_Workflow.md",
-      "sha256": "fa7a58f40b3084199226bbfe1998fe881ab032f894339648c4a504091342ce51",
-      "bytes": 5746,
+      "sha256": "d82a2f46540d56d472308f05c824be46fdfabc4f4bcb79cc1ea4a138bb8f9189",
+      "bytes": 6275,
       "kind": "template"
     },
     {
@@ -605,8 +605,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "b85e5557ff716742dd2a786c60a4347aac6e7b99837f7dc72d96548871e56de3",
-      "bytes": 12975,
+      "sha256": "05339a531765883810d2c621c263a5f132f81c32540a31014851a4776f12c233",
+      "bytes": 13285,
       "kind": "template"
     },
     {
@@ -647,8 +647,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "33330b1388f70e537492f67f1dd4d542284f6062ec70a4729709007c9e8f730e",
-      "bytes": 12263,
+      "sha256": "92b7238c01d04e1d2d3a7254af0fb3d385f7241cf13fe49f672f11aaab06a044",
+      "bytes": 13832,
       "kind": "template"
     },
     {
@@ -668,8 +668,8 @@
     {
       "id": "workflow_shared/Resume_Story_Workflow.md",
       "path": "assets/workflow_shared_Resume_Story_Workflow.md",
-      "sha256": "79ea2ef85ead109443b9910f255aa129420aa83db4e3f27bceae1f11088a90e0",
-      "bytes": 2298,
+      "sha256": "73016082a72f504208346583dc339bc9d2b7b07647f4ecf7eef991f4f3afada7",
+      "bytes": 2860,
       "kind": "template"
     },
     {
@@ -689,8 +689,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "a90218b7d98045ce2c079947ffdd40e8a4c24f3d9af75e8f672c79dc1b595330",
-      "bytes": 50031,
+      "sha256": "cc71c3bb153f09b4f14ea09f9b0fd41df273703f93bac3198c6d4c7314d75dff",
+      "bytes": 53329,
       "kind": "template"
     },
     {
@@ -710,8 +710,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "e0b4fa4a7226c7aba0759f6e83a8e3bce78436b1cb4dea3648175cda08c9388a",
-      "bytes": 15100,
+      "sha256": "c3456e1a79fb4c1f488990ced5ada1783e52f37ba4ece9a2c47a84ac98feb246",
+      "bytes": 16051,
       "kind": "template"
     },
     {
@@ -752,8 +752,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "67cc86c94e0b4dad42dd631ea6f0da08d0bf6d16ec5fa91bc38031d726e3bada",
-      "bytes": 6014,
+      "sha256": "d7d1ed2e88aad1ac622768026ec661c95a0cf6360ba859c45567ffa6e422c995",
+      "bytes": 11943,
       "kind": "template"
     },
     {
@@ -808,8 +808,8 @@
     {
       "id": "scripts/telemetry.py",
       "path": "assets/scripts_telemetry.py",
-      "sha256": "e6fd22c0aeb196312d8193d20df3ac912e3fd3d25984bd603965123f83f52f1d",
-      "bytes": 39613,
+      "sha256": "a8f3f5a5bba1606357fb61456557e95a8e36dcee208a68b2b5091dd6beddb809",
+      "bytes": 44955,
       "kind": "script"
     },
     {
@@ -1431,8 +1431,8 @@
     {
       "id": "Workflow_Guide",
       "path": "assets/Workflow_Guide",
-      "sha256": "ddd02a143d49de6ccd4e118ed072e6c5e666c4c92dc7ecad5066972eb67d25e8",
-      "bytes": 4329,
+      "sha256": "d01c3d0a7918ed8c737d643a12b00a364bec32647462910eace5f98cc1914de7",
+      "bytes": 4555,
       "kind": "template"
     },
     {

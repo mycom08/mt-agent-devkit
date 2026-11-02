@@ -22,7 +22,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 ## Stage 1 — Current Sprint Verification (PO)
 
-1. **Spawn** Product Owner agent (**model: sonnet**); save its `agentId` as `po_session`; pass `feature_name` and name the `po-plan-sprint` skill in the assignment (Plan Sprint always spawns a PO)
+1. **Spawn** Product Owner agent (**model: sonnet**); save its `agentId` as `po_session`; pass `feature_name` and name the `po-plan-sprint` skill in the assignment (**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline; see the PO touchpoint table in the orchestrator instructions)
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory) and loads the `po-core` and `po-plan-sprint` skills (`.mt-agent-devkit/skills/po-plan-sprint/SKILL.md`), plus the skills `po-plan-sprint` requires
 3. PO checks the active sprint:
    - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; read its `Sprint_N_Overview.md`
@@ -127,6 +127,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 - **Stage 0 first** — sprint context must be resolved before any agent is spawned
 - **One sprint at a time** — guard check in Stage 1 (feature sprints only); stop if next-sprint draft already exists
 - **Session reuse** — always resume an existing session before spawning
+- **Forced PO spawn** — Stages 1, 2 and 4 spawn/resume a real PO session (`po_session`) whatever the pinned `PO Execution` value; `orchestrator` mode never runs planning inline
 - **Parallel agents** — when multiple agents must answer questions, spawn/resume them in a single message simultaneously
 - **Dependency order** — if a roadmap exists, respect its dependency graph; if no roadmap, order by priority label (`Must-Have` → `Should-Have` → `Nice-to-Have`)
 - **Loop limit** — max 3 question-answer cycles before escalating to user
