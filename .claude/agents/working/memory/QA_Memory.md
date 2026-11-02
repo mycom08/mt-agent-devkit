@@ -47,12 +47,12 @@ Keywords: runtime mechanism, files logged by an earlier stage, computed at runti
 - **Fix:** prefix the command with `MSYS_NO_PATHCONV=1`, e.g. `MSYS_NO_PATHCONV=1 git show origin/<branch>:<path>`.
 - **Prevention:** always set `MSYS_NO_PATHCONV=1` for any git command whose argument contains a literal `:` (colon-syntax `ref:path`, `refspec:refspec`, etc.) run via the Bash tool on this platform.
 
-### Fix 2 — `python3` is a broken stub in this environment
-- **Problem:** `python3 -c ...` fails instead of running the script.
-- **Symptoms:** `Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.`
-- **Root Cause:** `python3` on `PATH` resolves to the Windows App Execution Alias stub, not the real interpreter; the real Python 3.12 install is only on `PATH` as `python`.
-- **Fix:** use `python`, not `python3`, for every Python invocation in this environment.
-- **Prevention:** default to `python` first; only fall back to `python3`/`py` if `python` itself is missing.
+### Fix 2 — Which Python name exists depends on the machine
+- **Problem:** Gates and `scripts/test/run.sh` call bare `python`; on some machines only `python3` exists (devkit Linux host, seen in ST-000287, 288, 290, 291, 292).
+- **Symptoms:** `python: command not found`; every gate fails before running.
+- **Root Cause:** the environment, not the repo. On the Windows host `python3` is an App Execution Alias stub and `python` is real; on the Linux host it is the reverse.
+- **Fix:** check `command -v python python3` first; if only `python3` exists, point a scratchpad shim named `python` at it and put that dir on `PATH`.
+- **Prevention:** never assume one name; do not edit the shared runner for this.
 
 ### Fix 3 — `grep -oP` (PCRE lookbehind) silently fails in this Bash tool's default shell locale
 - **Problem:** A shell script using `grep -oP '(?<=...)...'` produces empty output and the script falls through its own "field missing"/silent-exit guard — even though the same script works correctly on a normal developer machine or CI.

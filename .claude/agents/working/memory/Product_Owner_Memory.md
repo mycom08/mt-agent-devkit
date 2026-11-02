@@ -9,7 +9,7 @@
 - **Expires when:** The devkit relocates its template tree.
 
 ### Fact 2
-- **Rule:** Unscheduled backlog issues use title `[DEVKIT] <what is wrong>` with **no** `ST-` ID (IDs are assigned at sprint pull-in) and labels `status:backlog` + `enhancement-2` only — no sprint label, no feature label. This overrides `Product_Owner_Rules_Read_On_Demand.md §5`'s `[ST-XXXXXX][DEVKIT]` + `sprint-N` shape, which applies to stories filed straight into a sprint.
+- **Rule:** Unscheduled backlog issues use title `[DEVKIT] <what is wrong>` with **no** `ST-` ID (IDs are assigned at sprint pull-in) and labels `status:backlog` + `enhancement-2` only — no sprint label, no feature label. This overrides the `po-write-story` skill's `[ST-XXXXXX][DEVKIT]` + `sprint-N` shape, which applies to stories filed straight into a sprint.
 - **Applies when:** Filing backlog issues that are not being scheduled in the same act.
 - **Evidence:** House style in #174, #175, #176, #180; batch #182–#188.
-- **Expires when:** `§5` is amended to cover the unscheduled case directly.
+- **Expires when:** `po-write-story` is amended to cover the unscheduled case directly.

@@ -114,21 +114,24 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 ## 13. Feature Current State
 
-**No active sprint.** Sprint 8 (label `sprint-8`) closed on 2026-10-27 and shipped in release 0.1.54:
+**No active sprint.** Sprint 9 (label `sprint-9`, feature `role-skills`) closed on 2026-11-02; all six stories are done and unreleased (on `main`, version `0.1.55-SNAPSHOT`):
 
 | Issue | Story | Outcome |
 |---|---|---|
-| #262 | Fix Windows UTF-8 version notice decoding | done |
-| #264 | Common core and triggered capabilities | done |
-| #245 | Shared doc formats for specs, ADRs with mandatory NFRs, test docs and approval verdicts | returned to backlog |
-| #251 | Require isolated pre-fix and post-fix bug regression evidence | returned to backlog |
-| #258 | Define concise notices and explicit thread decisions | returned to backlog |
+| #287 | Shared `agent-security` skill, generated Common copies | done |
+| #288 | Ten internal `po-*` skills replace the PO rules files | done |
+| #289 | Ship `po-*` skills to targets, switch target PO routing | done |
+| #290 | Retire the PO rules files in targets | done |
+| #291 | `po_execution` setting, pinning, contract amendments | done |
+| #292 | Orchestrator-as-PO mode (inline touchpoints, forced spawns, escalation) | done |
 
-Next planned work: the `role-skills` feature (shared `agent-security` skill, PO skills, `po_execution` setting), design under `docs/feature/role-skills/`.
+The devkit's own `po_execution` is `orchestrator` (`.mt-agent-devkit/project_settings.json`, project-owned). Developer, TL and QA rules are not yet converted to skills. Design: `docs/feature/role-skills/`.
+
+Next planned work: none scheduled. Sprint 8 leftovers #245, #251, #258 remain in backlog.
 
 On hold (label `status:on-hold`): #265 Developer stage profiles and manifest routing, and #266 Profile migration behavior and efficiency comparison (depends on #265). Developer rules stay at their current owner until #265 resumes; umbrella #263 stays open and is also `status:on-hold`.
 
-Live state is the issue list: `gh issue list --label sprint-8 --state all`.
+Live state is the issue list: `gh issue list --label sprint-9 --state all`.
 
 ---
 
@@ -138,8 +141,8 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.5 — §13 records Sprint 8 as closed; no active sprint.
-**Previous:** 1.4 — §13 records Sprint 8 as the active sprint.
-**Last Updated:** 2026-10-27
+**Document Version:** 1.6 — §13 records Sprint 9 as closed; no active sprint.
+**Previous:** 1.5 — §13 records Sprint 8 as closed.
+**Last Updated:** 2026-11-02
 **Audience:** Development team, architects, AI agents
 
