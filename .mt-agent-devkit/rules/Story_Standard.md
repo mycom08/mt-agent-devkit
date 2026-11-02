@@ -21,7 +21,7 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | **In Progress** | Active development | Implementer | Dev branch created | `status:in-progress` |
 | **Review** | Dev complete, awaiting TL code review | Implementer | After creating PR | `status:review` |
 | **Testing** | Code approved, QA testing | TL | After TL PR approval | `status:testing` |
-| **Done** | Verified complete | PO | After all AC pass and PO ticks | `status:done` |
+| **Done** | Verified complete | PO, or the orchestrator acting as PO under `po_execution: orchestrator` | After all AC pass and the PO, or the orchestrator acting as PO under `po_execution: orchestrator`, ticks | `status:done` |
 | **Hotfix** | Bug found after Done; fix in progress | Implementer | After hotfix branch created | `status:hotfix` |
 
 **Status is tracked via GitHub Issue labels.** When changing status, remove the old label and add the new one.
@@ -181,7 +181,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 
 | Role | Can Do | Cannot Do |
 |------|--------|-----------|
-| **PO** | Create stories, define AC, clarify scope in Comment, tick AC checkboxes after QA confirms | Approve code, comment on implementation |
+| **PO** | Create stories, define AC, clarify scope in Comment, tick AC checkboxes after QA confirms. Acceptance (tick, done, close) is done by the PO, or the orchestrator acting as PO under `po_execution: orchestrator` | Approve code, comment on implementation |
 | **Developer** | Implement, write PR, ask for guidance, self-check AC before marking ready | Tick AC, answer scope questions, review code |
 | **TL** | Review code, approve PR, discuss technical design | Tick AC, test, clarify scope |
 | **QA** | Test AC, report test results in Comment, notify PO when all AC pass | Tick AC, review code, approve stories |
@@ -366,18 +366,18 @@ Testing-pass requires PASS with sufficient evidence for every remaining current 
 The applicable independent QA sign-off must identify the scope/revision and per-AC evidence. Existing fast-path and skipped-validator routes still require their documented independent validation evidence for every AC; a skipped stage or reviewer approval alone cannot stand in for unperformed verification. Do not fabricate a QA-agent report when no QA agent ran.
 
 - `- [ ]` = not accepted, including FAIL or NOT VERIFIED.
-- `- [x]` = accepted by PO only after the applicable independent verification confirms PASS.
+- `- [x]` = accepted by the PO, or the orchestrator acting as PO under `po_execution: orchestrator` only after the applicable independent verification confirms PASS.
 
-PO must locate that verification report, compare it with the current AC, and confirm merge before ticking checkboxes, closing, or setting done. Developer/TL assurances alone are not QA sign-off. A merged PR, auto-closed issue, or pre-ticked checkbox is not acceptance evidence. If auto-closure occurred with missing verification, reopen the story and retain/report its unresolved state; never mark it done.
+The PO, or the orchestrator acting as PO under `po_execution: orchestrator`, must locate that verification report, compare it with the current AC, and confirm merge before ticking checkboxes, closing, or setting done. Developer/TL assurances alone are not QA sign-off. A merged PR, auto-closed issue, or pre-ticked checkbox is not acceptance evidence. If auto-closure occurred with missing verification, reopen the story and retain/report its unresolved state; never mark it done.
 
 ### Explicit tracked scope split
 
 An unverified requirement may leave the original scope only through this sequence:
-1. Record an explicit PO/user scope decision; never silently delete or weaken the requirement.
+1. Record an explicit PO/user scope decision; never silently delete or weaken the requirement. In `orchestrator` mode, the scope decision is the user's.
 2. Create a named tracked follow-up preserving the requirement, dependency, and missing verification evidence (a story MD in strict mode).
 3. Update the canonical original body to link the follow-up and define the remaining scope; link the original from the follow-up. Preserve the earlier NOT VERIFIED report as history, not a converted PASS.
 4. Obtain renewed independent QA confirmation of every remaining original AC against that revised scope before testing-pass or merge advancement. Recheck any changed artifact under the existing review/SHA gates.
-5. Only after applicable verification passes and merge is confirmed may PO accept the remaining original AC and close it. The follow-up remains open and unaccepted until its own verification succeeds.
+5. Only after applicable verification passes and merge is confirmed may the PO, or the orchestrator acting as PO under `po_execution: orchestrator` accept the remaining original AC and close it. The follow-up remains open and unaccepted until its own verification succeeds.
 
 A decision alone, an untracked deferral, or a follow-up link without an updated original scope cannot satisfy this sequence. Any remaining NOT VERIFIED AC still blocks advancement.
 
@@ -397,6 +397,7 @@ allow-list is available.
 ## Version
 
 **Created:** 2026-06-16  
-**Version:** 1.3 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)  
+**Version:** 1.4 — §1 Done row, §7 and §14: acceptance by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`; §14 tracked split: in `orchestrator` mode the scope decision is the user's (ST-000291)  
+**Previous:** 1.3 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)  
 **Previous:** 1.2 — §2, §4, §7, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row (ST-000021)  
 **Previous:** 1.1 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (ST-000016 retro)

@@ -56,7 +56,11 @@ OPTIONAL_FIELDS = (
 TELEMETRY_FIELDS = REQUIRED_FIELDS + OPTIONAL_FIELDS
 METADATA_FIELDS = tuple(field for field in REQUIRED_FIELDS if field not in {"schema_version", "usage_source", "unavailable_fields"}) + ("session_final_tokens",)
 USAGE_FIELDS = OPTIONAL_FIELDS[3:]
-ALLOWED_SESSION_MODES = {"fresh", "same_session_resume", "expired_session_resume"}
+# `orchestrator_inline` (additive schema-v1 value) marks a role activity the top-level
+# orchestrator performed inline, e.g. PO work under `po_execution: orchestrator`.
+# No worker transcript exists, so its rows always carry `usage_source: unavailable`.
+INLINE_SESSION_MODE = "orchestrator_inline"
+ALLOWED_SESSION_MODES = {"fresh", "same_session_resume", "expired_session_resume", INLINE_SESSION_MODE}
 ALLOWED_COMPLETION_STATUSES = {"completed", "blocked", "failed", "interrupted"}
 ALLOWED_USAGE_SOURCES = {"raw_transcript", "harness_report", "unavailable"}
 # Schema records use only these six role values. Metadata accepts the familiar
@@ -596,6 +600,8 @@ def validate_record(record: dict[str, Any]) -> None:
         error("harness_report records require session_final_tokens")
     if record["usage_source"] == "unavailable" and any(record[field] is not None for field in OPTIONAL_FIELDS):
         error("unavailable records must not contain measured usage")
+    if record["session_mode"] == INLINE_SESSION_MODE and record["usage_source"] != "unavailable":
+        error("orchestrator_inline records require usage_source unavailable")
 
 
 def write_record(record: dict[str, Any], output: Path, append: bool = False) -> None:
@@ -783,6 +789,8 @@ def main() -> int:
                 write_boundary(capture_boundary(transcript, args.provider, args.session_id), args.output)
             else:
                 metadata = load_metadata(args.metadata)
+                if metadata["session_mode"] == INLINE_SESSION_MODE:
+                    error("orchestrator_inline activity has no worker transcript; use the harness command")
                 if bounded:
                     if args.start_boundary is None or args.end_boundary is None:
                         error("bounded extraction requires both start and end boundary files")

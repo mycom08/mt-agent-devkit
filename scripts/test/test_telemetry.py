@@ -135,6 +135,44 @@ class TelemetryTests(unittest.TestCase):
         for field in record["unavailable_fields"]:
             self.assertIsNone(record[field])
 
+    def inline_metadata(self, directory: Path, **changes) -> Path:
+        metadata = json.loads((FIXTURES / "complete_metadata.json").read_text(encoding="utf-8"))
+        metadata.update({"role": "Product Owner", "stage": "closure", "session_mode": "orchestrator_inline", **changes})
+        path = directory / "inline.json"
+        path.write_text(json.dumps(metadata), encoding="utf-8")
+        return path
+
+    def test_orchestrator_inline_po_row_validates_as_unavailable(self) -> None:
+        # ST-000291: inline PO work is one row, role PO, with no measured usage.
+        with tempfile.TemporaryDirectory(prefix="telemetry-inline-") as directory:
+            root = Path(directory)
+            output = root / "run.jsonl"
+            argv = ["telemetry.py", "harness", "--metadata", str(self.inline_metadata(root)), "--output", str(output), "--append"]
+            with patch.object(telemetry.sys, "argv", argv):
+                self.assertEqual(telemetry.main(), 0)
+            [record] = telemetry.read_records(output)
+            self.assertEqual((record["role"], record["session_mode"], record["usage_source"]), ("PO", "orchestrator_inline", "unavailable"))
+            self.assertEqual(record["unavailable_fields"], list(telemetry.OPTIONAL_FIELDS))
+            telemetry.validate_record(record)
+            telemetry.summarize([record])  # Inline rows aggregate alongside worker rows.
+
+    def test_orchestrator_inline_rejects_measured_usage_and_transcript_extraction(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="telemetry-inline-") as directory:
+            root = Path(directory)
+            output = root / "record.json"
+            metadata = self.inline_metadata(root, session_final_tokens=1000)
+            with patch.object(telemetry.sys, "argv", ["telemetry.py", "harness", "--metadata", str(metadata), "--output", str(output)]):
+                self.assertEqual(telemetry.main(), 1)
+            metadata = self.inline_metadata(root)
+            argv = ["telemetry.py", "extract", "--transcript", str(FIXTURES / "streamed_with_result.jsonl"), "--metadata", str(metadata), "--output", str(output)]
+            with patch.object(telemetry.sys, "argv", argv):
+                self.assertEqual(telemetry.main(), 1)
+            self.assertFalse(output.exists())
+            record = telemetry.build_record(telemetry.load_metadata(metadata), "unavailable", None)
+            for source in ("raw_transcript", "harness_report"):
+                with self.subTest(source=source), self.assertRaises(telemetry.TelemetryError):
+                    telemetry.validate_record({**record, "usage_source": source})
+
     def test_export_uses_a_strict_allowlist(self) -> None:
         record = self.extract_complete()
 

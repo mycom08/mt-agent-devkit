@@ -18,6 +18,8 @@ PO_SKILLS = tuple(name for name in SHARED_SKILLS if name.startswith("po-"))
 # IDs (never a provider-suffixed operation ID) and the slim PO instructions.
 RETIRED_RULES = ("Product_Owner_Rules_Bootstrap.md", "Product_Owner_Rules_Read_On_Demand.md", "Story_Standard_PO.md")
 RETIRED_SURVIVORS = tuple("skills/" + name for name in PO_SKILLS) + ("instructions/product_owner_instructions.md",)
+# Defaults written once into a target's project-owned settings file.
+PROJECT_SETTINGS_DEFAULTS = {"po_execution": "subagent"}
 
 
 def neutral(text):
@@ -200,6 +202,10 @@ def build(root, destination):
     entry("Sync_Devkit_Workflow", [aid], ".mt-agent-devkit/workflows/Sync_Devkit_Workflow.md")
     aid = asset("Workflow_Guide", neutral((templates / "workflows/Workflow_Guide_template.md").read_text(encoding="utf-8-sig")).encode())
     entry("Workflow_Guide", [aid], ".mt-agent-devkit/workflows/Workflow_Guide.md")
+    # Project settings (ST-000291): init creates the defaults, sync never overwrites
+    # the project's choice, and no entrypoint mirror exists to drift from it.
+    aid = asset("project_settings.json", (json.dumps(PROJECT_SETTINGS_DEFAULTS, indent=2) + "\n").encode(), "contract")
+    entry("project_settings", [aid], ".mt-agent-devkit/project_settings.json", ownership="project_owned", renderer="create_if_absent")
     aid = asset("Gitignore", b"# Managed runtime ignores\n")
     entry("Gitignore", [aid], ".gitignore", profiles=("repo", "project_root"), owner="project", ownership="project_adapted", renderer="approved_adaptation")
     aid = asset("Shell_Attributes", b"*.sh text eol=lf\n", "contract")

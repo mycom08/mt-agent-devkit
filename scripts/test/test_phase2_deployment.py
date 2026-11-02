@@ -119,6 +119,32 @@ class DeploymentTests(unittest.TestCase):
             self.plan()
         self.assertEqual((self.target / path).read_bytes(), b"custom rule\n")
 
+    def test_project_owned_settings_created_once_and_never_overwritten(self):
+        # ST-000291: project_owned + create_if_absent, as the po_execution settings file uses.
+        stock = b'{\n  "po_execution": "subagent"\n}\n'
+        (self.bundle / "settings.json").write_bytes(stock)
+        self.manifest["assets"].append({"id": "settings", "path": "settings.json", "sha256": d.digest(stock), "bytes": len(stock), "kind": "contract"})
+        self.manifest["files"].append({"id": "project_settings", "sources": ["settings"], "destination": ".mt-agent-devkit/project_settings.json", "owner": "shared", "ownership": "project_owned", "profiles": ["repo"], "modes": ["github", "strict"], "providers": sorted(d.PROVIDERS), "renderer": "create_if_absent", "legacy_paths": [], "phase": "content", "required": True})
+        self.flush()
+        settings = self.target / ".mt-agent-devkit/project_settings.json"
+        d.apply(self.target, self.plan())
+        self.assertEqual(settings.read_bytes(), stock)
+        for value in (b'{"po_execution": "orchestrator"}\n', b'{"po_execution": "subagent", "note": 1}\n', b"not json\n"):
+            with self.subTest(value=value):
+                settings.write_bytes(value)
+                plan = self.plan()
+                self.assertEqual(next(op for op in plan["operations"] if op["path"] == settings.relative_to(self.target).as_posix())["action"], "preserve")
+                self.assertNotIn("no_op", d.apply(self.target, plan))
+                self.assertEqual(settings.read_bytes(), value)
+                d.verify(self.target)
+                self.assertTrue(d.apply(self.target, self.plan())["no_op"])
+        content = b'{\n  "po_execution": "subagent",\n  "future": true\n}\n'
+        (self.bundle / "settings.json").write_bytes(content)
+        self.manifest["assets"][-1].update(sha256=d.digest(content), bytes=len(content))
+        self.flush()
+        d.apply(self.target, self.plan())
+        self.assertEqual(settings.read_bytes(), b"not json\n")
+
     def test_posix_without_proc_applies_and_recovers(self):
         import os
         from types import SimpleNamespace

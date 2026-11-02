@@ -83,7 +83,7 @@ For complex features, the team follows a design-first process before any code is
 
 **Location:** `{{AGENT_DIR_PREFIX}}/agents/working-record/{Agent_Name}_Working_Record.md`
 
-**Access control:** Read and update only your own record. Never read or modify another agent's record.
+**Access control:** Read and update only your own record. Never read or modify another agent's record. Exception: the orchestrator acting as PO under `po_execution: orchestrator` owns the PO record and memory for that activity.
 
 Update at **start of session** (read last story's context, sync story statuses from GitHub) and at **end of session** (rewrite completed work, in-progress items, impediments in place). Keep the 3 most recent story entries — the retention unit is story entries, not calendar days — capped at the `**Working record cap:**` value in `{{ROOT_FILE}}` (default ≤ 4,000 characters, `wc -c`, not a line count).
 

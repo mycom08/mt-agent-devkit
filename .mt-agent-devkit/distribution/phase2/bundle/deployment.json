@@ -17,8 +17,8 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "6e7313a4ff8ef6ad80acb282ae1f0468d2140be6a59a57efb31b2a89548ca4c5",
-      "bytes": 17452,
+      "sha256": "891ae0569dd9127c397dbd6aaed74c075ff78b8a18089261a5e08bacda9e238d",
+      "bytes": 17577,
       "kind": "template"
     },
     {
@@ -80,8 +80,8 @@
     {
       "id": "rules/Agent_Common_Working_Record.md",
       "path": "assets/rules_Agent_Common_Working_Record.md",
-      "sha256": "1a22f8592cdefb843bc241eb2dcec19a9d567e241daadfe75d4a1ad154a46f6f",
-      "bytes": 2926,
+      "sha256": "14eae31013f7a6628f4c254ce624243b4d593d8f7bd6424598384d54e37871c5",
+      "bytes": 3051,
       "kind": "template"
     },
     {
@@ -192,8 +192,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "7fa25c05508abf64e730ccc7aad2ffbe4ac89d0d41a0df1a786fda0b3716c638",
-      "bytes": 36549,
+      "sha256": "f1a1c4e91044e81e29bb366a908c6f7713f14d54aa4cd79fbd517b706210f85c",
+      "bytes": 37318,
       "kind": "template"
     },
     {
@@ -710,8 +710,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "d020797f5a4c23da7f94a9f97017e642c4d34ac9b2516414e100f8957e2921e6",
-      "bytes": 14786,
+      "sha256": "e0b4fa4a7226c7aba0759f6e83a8e3bce78436b1cb4dea3648175cda08c9388a",
+      "bytes": 15100,
       "kind": "template"
     },
     {
@@ -752,8 +752,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "98d176edec15cf409f14c8eaf1d783bdcf2c3cd07df891d927095adf9db2579f",
-      "bytes": 4617,
+      "sha256": "67cc86c94e0b4dad42dd631ea6f0da08d0bf6d16ec5fa91bc38031d726e3bada",
+      "bytes": 6014,
       "kind": "template"
     },
     {
@@ -792,6 +792,13 @@
       "kind": "script"
     },
     {
+      "id": "scripts/project_settings.py",
+      "path": "assets/scripts_project_settings.py",
+      "sha256": "42187f8d19ae8bed37294cc628da7281dfee92233dc854da8c34b671c674b699",
+      "bytes": 3318,
+      "kind": "script"
+    },
+    {
       "id": "scripts/retro_completion.py",
       "path": "assets/scripts_retro_completion.py",
       "sha256": "1fe1da4c70efe1233c83b80168c72722edc873a978a967dcd6365ca6e23c7edd",
@@ -801,15 +808,15 @@
     {
       "id": "scripts/telemetry.py",
       "path": "assets/scripts_telemetry.py",
-      "sha256": "bb529bff2572da5f299d85e2403abec24712f8b261240d11c03b2ede3731f63f",
-      "bytes": 38942,
+      "sha256": "e6fd22c0aeb196312d8193d20df3ac912e3fd3d25984bd603965123f83f52f1d",
+      "bytes": 39613,
       "kind": "script"
     },
     {
       "id": "priming_repo",
       "path": "assets/priming_repo",
-      "sha256": "bff4843a455db3ac7bf054943b1eef16c8fb3fdb4f8e819dc0d4936a299f502d",
-      "bytes": 8554,
+      "sha256": "6a3155bcfac80bf6bbbcddce29c8a45d67ed334500c728ae10447f2f17bce86b",
+      "bytes": 8679,
       "kind": "template"
     },
     {
@@ -1354,8 +1361,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "11a36a9e2367647bd768fecac9edcc83b49ce3b1a9c9d24aca361fdc7a9662a2",
-      "bytes": 36880,
+      "sha256": "48c9fd83572caba2244d6e75144e17944d1fa626819651e9ac533d49741229cd",
+      "bytes": 37456,
       "kind": "script"
     },
     {
@@ -1410,8 +1417,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "d495c36617929912e8cdee33374d1915aec126152112c15a68817456e64c36ac",
-      "bytes": 29725,
+      "sha256": "e0e34d4e5760815ccc0e7b1758fd42bde1a5eb7def383c7f660db75646c0dafb",
+      "bytes": 30269,
       "kind": "script"
     },
     {
@@ -1427,6 +1434,13 @@
       "sha256": "ddd02a143d49de6ccd4e118ed072e6c5e666c4c92dc7ecad5066972eb67d25e8",
       "bytes": 4329,
       "kind": "template"
+    },
+    {
+      "id": "project_settings.json",
+      "path": "assets/project_settings.json",
+      "sha256": "7d8c1e4e7ff2a7242699bd8be52874dc80dda55630dc941b2209e5e17b6f8e1b",
+      "bytes": 33,
+      "kind": "contract"
     },
     {
       "id": "Gitignore",
@@ -4016,6 +4030,32 @@
       "required": true
     },
     {
+      "id": "scripts/project_settings.py",
+      "sources": [
+        "scripts/project_settings.py"
+      ],
+      "destination": ".mt-agent-devkit/scripts/project_settings.py",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
       "id": "scripts/retro_completion.py",
       "sources": [
         "scripts/retro_completion.py"
@@ -6213,6 +6253,31 @@
         "codex"
       ],
       "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "project_settings",
+      "sources": [
+        "project_settings.json"
+      ],
+      "destination": ".mt-agent-devkit/project_settings.json",
+      "owner": "shared",
+      "ownership": "project_owned",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "create_if_absent",
       "legacy_paths": [],
       "phase": "content",
       "required": true
@@ -11212,6 +11277,166 @@
       ],
       "providers": [
         "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/scripts/project_settings.py/scripts/project_settings.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/project_settings.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
       ],
       "renderer": "copy",
       "legacy_paths": [],
@@ -16437,6 +16662,70 @@
         "after_verified_ids": [
           "scripts/check_devkit_version.sh",
           "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".claude/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".claude/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".claude/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".claude/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".antigravity/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".antigravity/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".antigravity/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/scripts/project_settings.py/scripts/project_settings.py",
+        "path": ".antigravity/agents/scripts/project_settings.py",
+        "after_verified_ids": [
+          "scripts/project_settings.py",
+          "root_project_root/AGENTS.md"
         ]
       },
       {
