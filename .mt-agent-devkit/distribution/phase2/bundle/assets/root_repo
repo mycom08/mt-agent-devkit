@@ -10,7 +10,7 @@ Shared instructions, rules and workflows belong to `.mt-agent-devkit/`; provider
 
 ## Agent File Integrity
 
-Shared instructions, rules, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.
+Shared instructions, rules, skills, workflows, context, adapters and discovery configuration are read-only during sprint work. Only explicitly requested sync/update deployment may change this infrastructure. Report needed upstream fixes rather than editing the installed harness during a story. Each role may access only its own memory and working record at the concrete selected runtime root.
 
 Independent implementation, TL review, QA and PO gates remain mandatory. In GitHub mode post verdicts with `gh pr comment`, never self-approve with `gh pr review --approve`. In strict mode use local story/review records and avoid GitHub mutations.
 

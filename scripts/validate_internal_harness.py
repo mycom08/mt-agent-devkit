@@ -88,9 +88,7 @@ ORCHESTRATOR_SOURCES = (
     ".mt-agent-devkit/instructions/orchestrator_instructions.md",
     ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md",
 )
-# PO skills are internal-layout only until distribution (ST-000289); the bundle
-# keeps shipping the PO rules files meanwhile (NB2).
-INTERNAL_ONLY_SKILL_PREFIX = "po-"
+SKILL_TEMPLATES = ".mt-agent-devkit/distribution/phase2/templates/skills"
 PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
              "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
 SKILL_SIZE_LIMITS = {"po-core": 1500}
@@ -117,13 +115,18 @@ def skill_errors(root, entries, wrappers) -> list[str]:
         except ValueError as error:
             errors.append(f"invalid canonical skill frontmatter: {destination}: {error}")
             continue
-        internal_only = name.startswith(INTERNAL_ONLY_SKILL_PREFIX)
         shared = bundle.get(destination)
-        if internal_only:
-            if shared:
-                errors.append(f"internal-only skill shipped before its distribution story: {destination}")
-        elif not shared or shared["owner"] != "shared" or shared["ownership"] != "managed":
+        if not shared or shared["owner"] != "shared" or shared["ownership"] != "managed" or shared["providers"] != list(PROVIDERS):
             errors.append(f"bundle lacks shared managed canonical skill: {destination}")
+        else:
+            asset = assets.get(shared["sources"][0]) if len(shared["sources"]) == 1 else None
+            try:
+                if not asset:
+                    raise ValueError("missing canonical asset")
+                if wrappers.skill_frontmatter((manifest_path.parent / asset["path"]).read_text(encoding="utf-8")) != fields:
+                    raise ValueError("frontmatter differs from the internal canonical skill")
+            except ValueError as error:
+                errors.append(f"invalid bundle canonical skill: {destination}: {error}")
         for provider in PROVIDERS:
             source = f".{provider}/skills/{name}/SKILL.md"
             entry = by_source.get(source)
@@ -136,8 +139,6 @@ def skill_errors(root, entries, wrappers) -> list[str]:
                 wrappers.skill_frontmatter((root / source).read_text(encoding="utf-8"))
             except ValueError as error:
                 errors.append(f"invalid skill wrapper frontmatter: {source}: {error}")
-            if internal_only:
-                continue  # Internal discovery only; no bundle wrapper yet.
             item = bundle.get(source)
             asset = assets.get(item["sources"][0]) if item and len(item["sources"]) == 1 else None
             if not item or item["providers"] != [provider] or not asset:
@@ -175,6 +176,39 @@ def skill_reference_errors(root) -> list[str]:
             errors.append(f"skill requires itself: {relative}")
         for reference in sorted(set(required) | set(SKILL_MENTION.findall(text))):
             if not (skills / reference / "SKILL.md").is_file():
+                errors.append(f"unresolved skill reference {reference}: {relative}")
+    return errors
+
+
+def skill_template_errors(root, wrappers) -> list[str]:
+    """Target skill templates mirror the internal skill set: same frontmatter, budgets and resolvable requires."""
+    errors = []
+    templates = root / SKILL_TEMPLATES
+    internal = {p.parent.name for p in (root / ".mt-agent-devkit/skills").glob("*/SKILL.md")}
+    shipped = {p.parent.name for p in templates.glob("*/SKILL_template.md")}
+    for name in sorted(internal - shipped):
+        errors.append(f"missing target skill template: {SKILL_TEMPLATES}/{name}/SKILL_template.md")
+    # Provider-local templates (read-section) are not canonical shared skills.
+    for name in sorted(internal & shipped):
+        path = templates / name / "SKILL_template.md"
+        relative, text = path.relative_to(root).as_posix(), path.read_text(encoding="utf-8")
+        canonical = root / ".mt-agent-devkit/skills" / name / "SKILL.md"
+        try:
+            fields = wrappers.skill_frontmatter(text)
+            if fields["name"] != name:
+                raise ValueError("name does not match its directory")
+            if canonical.is_file() and fields != wrappers.skill_frontmatter(canonical.read_text(encoding="utf-8")):
+                raise ValueError("frontmatter differs from the internal canonical skill")
+        except ValueError as error:
+            errors.append(f"invalid target skill template: {relative}: {error}")
+        limit = SKILL_SIZE_LIMITS.get(name, DEFAULT_PO_SKILL_LIMIT if name.startswith("po-") else None)
+        if limit is not None and len(text.encode("utf-8")) > limit:
+            errors.append(f"skill exceeds its {limit}-byte budget: {relative}")
+        requires = REQUIRES.findall(text)
+        if name.startswith("po-") and len(requires) != 1:
+            errors.append(f"PO skill must name its required skills on one **Requires:** line: {relative}")
+        for reference in sorted(set(SKILL_MENTION.findall(text))):
+            if reference not in shipped:
                 errors.append(f"unresolved skill reference {reference}: {relative}")
     return errors
 
@@ -237,6 +271,7 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
     errors.extend(blocks.findings(root))
     errors.extend(orchestrator_security_errors(root))
     errors.extend(skill_reference_errors(root))
+    errors.extend(skill_template_errors(root, wrappers))
     citations = module("retired_citations", root / "scripts/validate_retired_citations.py")
     errors.extend(citations.findings(root))
     for entry in entries:

@@ -139,6 +139,7 @@ Replacing a role's rules files with canonical skills (ST-000288: the PO rules be
 - **Routing** — switch the role in `read-routing.json` through the per-layout `bootstrap` mapping and `layouts` alternatives; a layout whose deployed files are unchanged keeps the old sources as its override.
 - **Citations** — `scripts/validate_retired_citations.py` rejects any bare-filename or `§`-citation of a retired file in the internal corpus; extend its list when retiring more files.
 - **Spawn sites** — every workflow that spawns the role names the skill for that activity in the assignment.
+- **Distribution (target layout, ST-000289)** — add a target-generic, mode-aware `templates/skills/<name>/SKILL_template.md` (same frontmatter and size budget as the canonical skill; `validate_internal_harness.py` checks both), add the name to `SHARED_SKILLS` in `build_bundle.py`, switch the role's `target` entry in the registry `bootstrap` mapping, drop the `layouts.target` overrides that kept the old sources, and rebuild the bundle. The old rules templates keep shipping, unused, until a separate retirement story removes them.
 ---
 
 ## 16. Reference Links

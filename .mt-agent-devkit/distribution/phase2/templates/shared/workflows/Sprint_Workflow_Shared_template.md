@@ -7,7 +7,7 @@ Triggered by: `"continue sprint"` or `"/sprint"` in {{ROOT_FILE}}
 
 Every worker spawn or resume uses the validated manifest dispatch in Shared Pipeline Stages and `.mt-agent-devkit/contracts/Read_Manifest.md`; routing comes only from the canonical registry, including specialist handoffs and safe resumes.
 
-The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable. Pipeline completes when no more `status:ready` stories exist.
+The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) for each `status:ready` story in sequence. After Stage 4 of each story, PO promotes the next `status:ready` story if applicable (`po-promote-ready` skill, `.mt-agent-devkit/skills/po-promote-ready/SKILL.md`). Pipeline completes when no more `status:ready` stories exist.
 
 ---
 
@@ -106,7 +106,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
      e. Preserve story retro and completion evidence; record reviewed source identities to avoid duplicate summary findings on resume.
      — Complete all stories before moving to step 2.
   2. **Sprint Consolidated Summary** — validate all expected completion identities first. With zero required retros, report “No triggered retrospectives” without opening/creating a retro summary or inventing findings; continue remaining independent sprint-end steps, including memory pruning. For mixed retros, read the actual completed sprint summary file. Append a final `## Sprint Consolidated Summary` section covering: common themes across stories, recurring blockers, what went well, and top 1–3 process improvement suggestions. Present the full file to the user.
-  3. **Release Decision** — fulfills the PO's Release Gate responsibility (`Product_Owner_Rules_Bootstrap.md` §8 and §9) without requiring a fresh agent spawn, same orchestrator-direct pattern as the other Sprint end steps. Check whether `VERSION` exists at the repo root:
+  3. **Release Decision** — fulfills the PO's Release Gate responsibility (the `po-plan-sprint` skill's release gate) without requiring a fresh agent spawn, same orchestrator-direct pattern as the other Sprint end steps. Check whether `VERSION` exists at the repo root:
      - **Does not exist** (non-Java repo, or a repo predating this convention) → nothing to do, skip to step 4.
      - **Exists** → read `VERSION` and `CHANGELOG.md`. Find the section whose heading matches `VERSION` with its `-SNAPSHOT` suffix stripped (e.g. `VERSION` is `0.0.2-SNAPSHOT` → look for `## [0.0.2]`). If that section has **no** entries under `### Changes`/`### Bug Fixes`, there's nothing release-worthy yet — skip to step 4 without asking.
      - Otherwise, **ask the user** (never decide this automatically — releasing is not an automatic sprint-end action):
@@ -115,7 +115,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
        If the roadmap defines Release Gate criteria, add a one-line note on whether Must-Have criteria currently look met (informational only — the user still decides).
      - **If no** → skip to step 4. Not shipping a release every sprint is a normal, expected outcome, not a failure state.
      - **If yes** — **GitHub mode only** (strict mode has no GitHub Actions to trigger `release.yml` against; tell the user releasing isn't available in strict mode and skip to step 4):
-       1. Strip the `-SNAPSHOT` suffix from `VERSION` (e.g. `0.0.2-SNAPSHOT` → `0.0.2`), commit and push directly to `main` — a small mechanical change, no story/PR needed (same class of action as other plan-file commits already made directly, see `Product_Owner_Rules_Bootstrap.md` §11).
+       1. Strip the `-SNAPSHOT` suffix from `VERSION` (e.g. `0.0.2-SNAPSHOT` → `0.0.2`), commit and push directly to `main` — a small mechanical change, no story/PR needed (same class of action as other plan-file commits already made directly, see the `po-plan-docs` skill).
        2. Trigger the release workflow: `gh workflow run release.yml --ref main`.
        3. Report the run back to the user (`gh run list --workflow=release.yml --limit 1`) and note that `release.yml` itself independently validates the tag/CHANGELOG and can still fail — this step only kicks it off, it doesn't guarantee success.
   4. **Devkit Contribution** — optional sharing of sprint retro signals with the devkit team. The sprint pipeline continues regardless of the user's answer.

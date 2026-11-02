@@ -128,7 +128,8 @@ class RoutingTests(unittest.TestCase):
 
     def test_bootstrap_mapping_is_per_layout_and_confined(self):
         registry=copy.deepcopy(REGISTRY)
-        self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md'}})
+        # ST-000289: both layouts now route the PO through po-core.
+        self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md','target':'.mt-agent-devkit/skills/po-core/SKILL.md'}})
         registry['bootstrap']['Product_Owner']['internal']='../escape.md'
         request=copy.deepcopy(self.request); request.update(role='Product_Owner',task='closure')
         with self.assertRaisesRegex(m.Blocked,'invalid bootstrap mapping'): m.build(self.root,request,registry=registry)
@@ -299,11 +300,14 @@ class InstalledTests(unittest.TestCase):
                             self.assertEqual(built['reads'][0]['source'],'.'+provider+'/harness/Provider_Adapter.md')
                             selected={(x['source'],x['coverage'].get('section')) for x in built['reads']}
                             if role=='Product_Owner':
-                                # NB2: the target layout keeps the current PO rules until ST-000289.
-                                self.assertFalse(any('/skills/po-' in x['source'] for x in built['reads']))
-                                self.assertEqual(next(x['source'] for x in built['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md')
+                                # ST-000289: target PO manifests resolve to po-core and the installed po-* skills.
+                                self.assertEqual(next(x['source'] for x in built['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/skills/po-core/SKILL.md')
+                                self.assertFalse([x['source'] for x in built['reads'] if x['source'].endswith(('Product_Owner_Rules_Bootstrap.md','Product_Owner_Rules_Read_On_Demand.md','Story_Standard_PO.md'))])
+                                skills={x['source'].split('/')[2] for x in built['reads'] if x['source'].startswith('.mt-agent-devkit/skills/')}
+                                self.assertEqual(skills,{'implementation':{'po-core','po-comment'},'fix':{'po-core','po-comment'},'closure':{'po-core','po-verify-close','po-comment'},
+                                                         'scope_question':{'po-core','po-answer-questions','po-comment'},'po_validation':{'po-core','po-validate-ac','po-comment'}}[task])
                                 if task in ('closure','po_validation'):
-                                    self.assertIn(('.mt-agent-devkit/rules/Story_Standard_PO.md','14'),selected)
+                                    self.assertIn(('.mt-agent-devkit/rules/Story_Standard.md','14'),selected)
                             if task=='qa':
                                 authority=(target/'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md').read_text(encoding='utf-8')
                                 self.assertIn('read `Story_Standard.md §14`',authority)

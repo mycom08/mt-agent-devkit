@@ -1,4 +1,5 @@
 """Adversarial routing/preservation tests, not native provider behavioral evidence."""
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -552,25 +553,85 @@ class PoSkillsTests(unittest.TestCase):
         (root / ".mt-agent-devkit/skills/po-validate-ac/SKILL.md").unlink()
         self.assertIn("missing canonical PO skill: .mt-agent-devkit/skills/po-validate-ac/SKILL.md", validator.skill_reference_errors(root))
 
-    def test_po_skills_are_internal_only_and_target_bundle_keeps_po_rules(self):
-        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
-        destinations = {f["destination"] for f in manifest["files"] if f["phase"] != "retirement"}
-        self.assertFalse([d for d in destinations if "/skills/po-" in d])
+    def bundle(self):
+        return json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+
+    def test_bundle_ships_po_skills_and_keeps_old_po_templates_unused(self):
+        # ST-000289: shared canonical skill plus one wrapper per provider; old PO rules stay until ST-000290.
+        manifest = self.bundle()
+        live = {f["destination"]: f for f in manifest["files"] if f["phase"] != "retirement"}
+        assets = {a["id"]: a for a in manifest["assets"]}
+        for name in validator.PO_SKILLS:
+            canonical = live[f".mt-agent-devkit/skills/{name}/SKILL.md"]
+            self.assertEqual((canonical["owner"], canonical["ownership"], canonical["providers"]), ("shared", "managed", list(validator.PROVIDERS)))
+            asset = assets[canonical["sources"][0]]
+            template = ROOT / validator.SKILL_TEMPLATES / name / "SKILL_template.md"
+            self.assertEqual(asset["sha256"], hashlib.sha256(template.read_bytes()).hexdigest())
+            for provider in validator.PROVIDERS:
+                wrapper = live[f".{provider}/skills/{name}/SKILL.md"]
+                self.assertEqual((wrapper["owner"], wrapper["providers"], wrapper["phase"]), ("selected_provider", [provider], "discovery"))
         for retired in self.RETIRED:
-            self.assertIn(retired, destinations)
+            self.assertIn(retired, live)  # Unused until ST-000290 retires them.
+        self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
+
+    def test_target_skill_templates_are_generic_and_mode_aware(self):
+        for name in validator.PO_SKILLS:
+            text = (ROOT / validator.SKILL_TEMPLATES / name / "SKILL_template.md").read_text(encoding="utf-8")
+            self.assertNotIn("mycom08/mt-agent-devkit", text, name)
+            self.assertNotIn("[DEVKIT]", text, name)
+            self.assertNotIn("Project_Priming_Read_On_Demand", text, name)
+            self.assertLessEqual(len(text.encode("utf-8")), 1500 if name == "po-core" else 4000)
+        for name in ("po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac"):
+            self.assertIn("trict mode", (ROOT / validator.SKILL_TEMPLATES / name / "SKILL_template.md").read_text(encoding="utf-8"), name)
+        instructions = (ROOT / ".mt-agent-devkit/distribution/phase2/templates/instructions/product_owner_instructions_template.md").read_text(encoding="utf-8")
+        self.assertIn("Load `po-core`", instructions)
+        self.assertIn("then the skill named in your assignment", instructions)
+        for retired in ("Product_Owner_Rules_Bootstrap", "Product_Owner_Rules_Read_On_Demand", "Story_Standard_PO"):
+            self.assertNotIn(retired, instructions)
+
+    def test_bundle_and_template_skill_failures_are_reported(self):
+        manifest = self.bundle()
         broken = json.loads(json.dumps(manifest))
-        broken["files"].append({**next(f for f in manifest["files"] if f["destination"] == ".mt-agent-devkit/skills/agent-security/SKILL.md"),
-                                "destination": ".mt-agent-devkit/skills/po-core/SKILL.md"})
-        root = self.fixture(".mt-agent-devkit/skills", ".claude/skills", ".antigravity/skills", ".codex/skills")
-        path = root / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(broken), encoding="utf-8")
-        (root / ".mt-agent-devkit/distribution/phase2/bundle/assets").mkdir()
-        for asset in manifest["assets"]:
-            if "agent-security" in asset["id"]:
-                (path.parent / asset["path"]).write_bytes((ROOT / ".mt-agent-devkit/distribution/phase2/bundle" / asset["path"]).read_bytes())
-        self.assertIn("internal-only skill shipped before its distribution story: .mt-agent-devkit/skills/po-core/SKILL.md",
-                      validator.skill_errors(root, self.inventory()["files"], wrappers))
+        broken["files"] = [f for f in broken["files"] if f["destination"] not in (".codex/skills/po-core/SKILL.md", ".mt-agent-devkit/skills/po-comment/SKILL.md")]
+        root = self.fixture(".mt-agent-devkit/skills", ".claude/skills", ".antigravity/skills", ".codex/skills",
+                            ".mt-agent-devkit/distribution/phase2/bundle", validator.SKILL_TEMPLATES)
+        (root / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").write_text(json.dumps(broken), encoding="utf-8")
+        errors = validator.skill_errors(root, self.inventory()["files"], wrappers)
+        self.assertIn("bundle lacks provider skill wrapper: .codex/skills/po-core/SKILL.md", errors)
+        self.assertIn("bundle lacks shared managed canonical skill: .mt-agent-devkit/skills/po-comment/SKILL.md", errors)
+        templates = root / validator.SKILL_TEMPLATES
+        (templates / "po-validate-ac/SKILL_template.md").unlink()
+        story = templates / "po-write-story/SKILL_template.md"
+        story.write_text(story.read_text(encoding="utf-8").replace("name: po-write-story", "name: po-story") + "x" * 1000, encoding="utf-8")
+        errors = validator.skill_template_errors(root, wrappers)
+        self.assertIn(f"missing target skill template: {validator.SKILL_TEMPLATES}/po-validate-ac/SKILL_template.md", errors)
+        self.assertIn(f"skill exceeds its 4000-byte budget: {validator.SKILL_TEMPLATES}/po-write-story/SKILL_template.md", errors)
+        self.assertTrue(any(e.startswith(f"invalid target skill template: {validator.SKILL_TEMPLATES}/po-write-story") for e in errors), errors)
+        self.assertTrue(any("unresolved skill reference po-validate-ac" in e for e in errors), errors)
+
+    def test_fresh_install_per_provider_receives_po_skills(self):
+        builder = validator.module("bundle_builder_289", ROOT / ".mt-agent-devkit/distribution/phase2/build_bundle.py")
+        deployment = validator.module("bundle_deployment_289", ROOT / ".mt-agent-devkit/distribution/phase2/deployment.py")
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder); bundle = base / "bundle"; builder.build(ROOT, bundle)
+            manifest = bundle / "deployment.json"
+            source = dict(kind="local", tag=None, commit="a" * 40, snapshot_version="0.1.53-SNAPSHOT", manifest_sha256=deployment.digest(manifest.read_bytes()))
+            for provider in validator.PROVIDERS:
+                with self.subTest(provider=provider):
+                    target = base / provider; target.mkdir()
+                    bound = {"PROVIDER_ROOT": "." + provider, "RUNTIME_ROOT": "." + provider + "/agents", "COMMAND_ROOT": "." + provider + "/agents"}
+                    entrypoint = "CLAUDE.md" if provider == "claude" else "AGENTS.md"
+                    adaptations = {entrypoint: "# Fixture\n", ".mt-agent-devkit/context/Project_Priming.md": "# Fixture\n", ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "# Ignore\n"}
+                    plan = deployment.plan(target, manifest, source, "github", "repo", {provider: bound}, adaptations)
+                    deployment.apply(target, plan); deployment.verify(target)
+                    for name in validator.PO_SKILLS:
+                        canonical = f".mt-agent-devkit/skills/{name}/SKILL.md"
+                        self.assertEqual((target / canonical).read_bytes(), (ROOT / validator.SKILL_TEMPLATES / name / "SKILL_template.md").read_bytes())
+                        wrapper = (target / f".{provider}/skills/{name}/SKILL.md").read_text(encoding="utf-8")
+                        self.assertEqual(wrappers.skill_frontmatter(wrapper)["name"], name)
+                        self.assertIn(canonical, wrapper)
+                        for other in set(validator.PROVIDERS) - {provider}:
+                            self.assertFalse((target / f".{other}/skills/{name}/SKILL.md").exists())
 
     def test_retired_files_and_wrappers_are_deleted_and_ledgered(self):
         inventory = self.inventory()
@@ -590,7 +651,7 @@ class PoSkillsTests(unittest.TestCase):
         self.assertEqual([], self.citations.findings(ROOT))
         root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json",
                             ".mt-agent-devkit/contracts/migration-inventory.json", ".claude/skills/po-core/SKILL.md", "CLAUDE.md")
-        self.assertEqual([], self.citations.findings(root))  # Target overrides and the retirement ledger are out of scope.
+        self.assertEqual([], self.citations.findings(root))  # The retirement ledger is out of scope.
         core = root / ".mt-agent-devkit/rules/Agent_Common_Core.md"
         core.write_text(core.read_text(encoding="utf-8") + "\nSee `Story_Standard_PO.md` §14 and PO Bootstrap §11a.\n"
                         "Legacy `Story_Standard_PO_template.md` stays frozen.\n", encoding="utf-8")
@@ -599,9 +660,11 @@ class PoSkillsTests(unittest.TestCase):
         registry = root / ".mt-agent-devkit/contracts/read-routing.json"
         data = json.loads(registry.read_text(encoding="utf-8"))
         data["tasks"]["closure"]["reads"][0]["source"] = ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md"
+        # ST-000289: target-layout alternatives are in scope too now both layouts route to the skills.
+        data["tasks"]["closure"]["reads"][1]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/Story_Standard_PO.md"}}
         registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
         found = self.citations.findings(root)
-        self.assertEqual(4, len(found), found)
+        self.assertEqual(5, len(found), found)
         self.assertTrue(any("Agent_Common_Core.md" in f and "Story_Standard_PO.md" in f for f in found))
         self.assertTrue(any("PO Bootstrap" in f for f in found))
         self.assertTrue(any(".claude/skills/po-core/SKILL.md" in f for f in found))

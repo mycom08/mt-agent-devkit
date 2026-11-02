@@ -5,7 +5,7 @@
 
 Triggered by: `"create stories"` or `"/create-stories"` in {ENTRYPOINT}
 
-The orchestrator acts as PO — read `.mt-agent-devkit/instructions/product_owner_instructions.md` and `.mt-agent-devkit/rules/Story_Standard_PO.md` before proceeding. **Do not spawn a PO agent.**
+The orchestrator acts as PO — read `.mt-agent-devkit/instructions/product_owner_instructions.md`, then load the `po-core` and `po-write-story` skills (`.mt-agent-devkit/skills/po-core/SKILL.md`, `.mt-agent-devkit/skills/po-write-story/SKILL.md`) before proceeding. **Do not spawn a PO agent.**
 
 ---
 
@@ -54,7 +54,7 @@ Also ask once: **"Which existing branch is the immutable base for these stories?
 
 **If `Mode: github`:**
 
-For each confirmed story, create a GitHub Issue following `Story_Standard_PO.md` §13:
+For each confirmed story, create a GitHub Issue following the `po-write-story` skill (story ID, title, labels and body template):
 - Labels: `status:backlog`, `feature:<name>` (if feature), `phase-N` (if feature), `sprint-N` (if sprint assigned)
 - Use `--body-file` pattern (see `Agent_Common_Bootstrap.md` §6)
 - Report created issue URLs to the user

@@ -17,15 +17,15 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "9612fab2b0aa835312cf07ec77d203663a7d386b6ae5adc6b5f56293ce6b6c5c",
-      "bytes": 17455,
+      "sha256": "6e7313a4ff8ef6ad80acb282ae1f0468d2140be6a59a57efb31b2a89548ca4c5",
+      "bytes": 17452,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Core.md",
       "path": "assets/rules_Agent_Common_Core.md",
-      "sha256": "5cc2ef097424e1e1cb534f8c34d1116c97d5cc43c0bf8cb762b4e1d7dd2fbfa6",
-      "bytes": 13088,
+      "sha256": "10ceb227d08b18d9a2a5943b0036fde9bda4dafb7b541a4372c14ad884965ef2",
+      "bytes": 13085,
       "kind": "template"
     },
     {
@@ -269,8 +269,8 @@
     {
       "id": "instructions/product_owner_instructions.md",
       "path": "assets/instructions_product_owner_instructions.md",
-      "sha256": "9a7aa3e6ba4bf24ecb077f9bd7a0365ffcca0abeda40c4d62e68355f475354ff",
-      "bytes": 3773,
+      "sha256": "490a5b17aafb20e9b57493d2d5eadc9166e4de63165f26cba6c0b835791a667f",
+      "bytes": 2570,
       "kind": "template"
     },
     {
@@ -323,10 +323,290 @@
       "kind": "adapter"
     },
     {
+      "id": "skills/po-core",
+      "path": "assets/skills_po-core",
+      "sha256": "87dab51ae3f87c559f3b6884643526c9a2e96a027f1c473390d8a5d4a5bdb3f2",
+      "bytes": 1391,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-core",
+      "path": "assets/claude_skill_po-core",
+      "sha256": "922f0cea5240cda2453ebfd658ac43dc58529b528372cecdf1026da9a49adb36",
+      "bytes": 299,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-core",
+      "path": "assets/antigravity_skill_po-core",
+      "sha256": "922f0cea5240cda2453ebfd658ac43dc58529b528372cecdf1026da9a49adb36",
+      "bytes": 299,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-core",
+      "path": "assets/codex_skill_po-core",
+      "sha256": "922f0cea5240cda2453ebfd658ac43dc58529b528372cecdf1026da9a49adb36",
+      "bytes": 299,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-comment",
+      "path": "assets/skills_po-comment",
+      "sha256": "6b6e3ec5d573721c5e8ce842c796c321a743bb9153faadd99f2d220b518009a8",
+      "bytes": 2110,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-comment",
+      "path": "assets/claude_skill_po-comment",
+      "sha256": "b282792886c898946ffc48c5d74c88423da9999947ee94e88cbad2efe798fc97",
+      "bytes": 333,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-comment",
+      "path": "assets/antigravity_skill_po-comment",
+      "sha256": "b282792886c898946ffc48c5d74c88423da9999947ee94e88cbad2efe798fc97",
+      "bytes": 333,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-comment",
+      "path": "assets/codex_skill_po-comment",
+      "sha256": "b282792886c898946ffc48c5d74c88423da9999947ee94e88cbad2efe798fc97",
+      "bytes": 333,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-plan-docs",
+      "path": "assets/skills_po-plan-docs",
+      "sha256": "fcd0a77005c04b2daebb2dc08243ecb72f6ad222c36712df9e26e118ac6a0673",
+      "bytes": 1188,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-plan-docs",
+      "path": "assets/claude_skill_po-plan-docs",
+      "sha256": "54253143f0986c5e8aa4b5d4447c8bace3f3e223f1ede3556088b868a27a6a31",
+      "bytes": 315,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-plan-docs",
+      "path": "assets/antigravity_skill_po-plan-docs",
+      "sha256": "54253143f0986c5e8aa4b5d4447c8bace3f3e223f1ede3556088b868a27a6a31",
+      "bytes": 315,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-plan-docs",
+      "path": "assets/codex_skill_po-plan-docs",
+      "sha256": "54253143f0986c5e8aa4b5d4447c8bace3f3e223f1ede3556088b868a27a6a31",
+      "bytes": 315,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-write-story",
+      "path": "assets/skills_po-write-story",
+      "sha256": "2b4d5fc75fadd5a08f7527090bb6fa4cbddd1117c7d78e60495057252d118fae",
+      "bytes": 3220,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-write-story",
+      "path": "assets/claude_skill_po-write-story",
+      "sha256": "c42d95c3bd0a325c70b3017319abbae71ff324535262769862827e7304bcc260",
+      "bytes": 374,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-write-story",
+      "path": "assets/antigravity_skill_po-write-story",
+      "sha256": "c42d95c3bd0a325c70b3017319abbae71ff324535262769862827e7304bcc260",
+      "bytes": 374,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-write-story",
+      "path": "assets/codex_skill_po-write-story",
+      "sha256": "c42d95c3bd0a325c70b3017319abbae71ff324535262769862827e7304bcc260",
+      "bytes": 374,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-roadmap-drain",
+      "path": "assets/skills_po-roadmap-drain",
+      "sha256": "49862faf886c9caa955d0ad37a92e75a08734f7ad9c3346da458936d9de15fc0",
+      "bytes": 2146,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-roadmap-drain",
+      "path": "assets/claude_skill_po-roadmap-drain",
+      "sha256": "d1b4cfe8cd047203bc53d900f1b314e0a0049ba04be32adecf8702abb0d80c73",
+      "bytes": 318,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-roadmap-drain",
+      "path": "assets/antigravity_skill_po-roadmap-drain",
+      "sha256": "d1b4cfe8cd047203bc53d900f1b314e0a0049ba04be32adecf8702abb0d80c73",
+      "bytes": 318,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-roadmap-drain",
+      "path": "assets/codex_skill_po-roadmap-drain",
+      "sha256": "d1b4cfe8cd047203bc53d900f1b314e0a0049ba04be32adecf8702abb0d80c73",
+      "bytes": 318,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-plan-sprint",
+      "path": "assets/skills_po-plan-sprint",
+      "sha256": "012e363ffb216c9aef731bcd44615a7d84cd7bc5ea7c701a0e8d600f39f3a67f",
+      "bytes": 3088,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-plan-sprint",
+      "path": "assets/claude_skill_po-plan-sprint",
+      "sha256": "718e5990e62df67e6595a6eeccbab3354f336eaa1b640a09a94018d5b03a0239",
+      "bytes": 360,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-plan-sprint",
+      "path": "assets/antigravity_skill_po-plan-sprint",
+      "sha256": "718e5990e62df67e6595a6eeccbab3354f336eaa1b640a09a94018d5b03a0239",
+      "bytes": 360,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-plan-sprint",
+      "path": "assets/codex_skill_po-plan-sprint",
+      "sha256": "718e5990e62df67e6595a6eeccbab3354f336eaa1b640a09a94018d5b03a0239",
+      "bytes": 360,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-answer-questions",
+      "path": "assets/skills_po-answer-questions",
+      "sha256": "5b9a4518016807460b12dbc3828fbfea0f94aeff6e7cf6623fe8f4dad2aaa1d1",
+      "bytes": 2136,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-answer-questions",
+      "path": "assets/claude_skill_po-answer-questions",
+      "sha256": "33f1e63e521ba6f019e91667b1504081fd987b1543a92ca1f57a4dac40bf277e",
+      "bytes": 369,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-answer-questions",
+      "path": "assets/antigravity_skill_po-answer-questions",
+      "sha256": "33f1e63e521ba6f019e91667b1504081fd987b1543a92ca1f57a4dac40bf277e",
+      "bytes": 369,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-answer-questions",
+      "path": "assets/codex_skill_po-answer-questions",
+      "sha256": "33f1e63e521ba6f019e91667b1504081fd987b1543a92ca1f57a4dac40bf277e",
+      "bytes": 369,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-promote-ready",
+      "path": "assets/skills_po-promote-ready",
+      "sha256": "3998438ddd2ed4715e6d0ddd5ef860b13f0433f028b95ab4d5852d7d50bb68da",
+      "bytes": 2375,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-promote-ready",
+      "path": "assets/claude_skill_po-promote-ready",
+      "sha256": "23d0315360e43d6952d8632fcc94a3b3cce29d3d5731737e95a27da575d57e88",
+      "bytes": 341,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-promote-ready",
+      "path": "assets/antigravity_skill_po-promote-ready",
+      "sha256": "23d0315360e43d6952d8632fcc94a3b3cce29d3d5731737e95a27da575d57e88",
+      "bytes": 341,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-promote-ready",
+      "path": "assets/codex_skill_po-promote-ready",
+      "sha256": "23d0315360e43d6952d8632fcc94a3b3cce29d3d5731737e95a27da575d57e88",
+      "bytes": 341,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-verify-close",
+      "path": "assets/skills_po-verify-close",
+      "sha256": "1cb9d3702b6f1314e68e93379482a6790230276789a7754b62b3fb69e3bc8d5b",
+      "bytes": 3225,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-verify-close",
+      "path": "assets/claude_skill_po-verify-close",
+      "sha256": "e5a52ad317d027f361371829878249761fada67bfcc02ada8f20111d11d6ce06",
+      "bytes": 379,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-verify-close",
+      "path": "assets/antigravity_skill_po-verify-close",
+      "sha256": "e5a52ad317d027f361371829878249761fada67bfcc02ada8f20111d11d6ce06",
+      "bytes": 379,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-verify-close",
+      "path": "assets/codex_skill_po-verify-close",
+      "sha256": "e5a52ad317d027f361371829878249761fada67bfcc02ada8f20111d11d6ce06",
+      "bytes": 379,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/po-validate-ac",
+      "path": "assets/skills_po-validate-ac",
+      "sha256": "ebda9c037d578ba433729d6efe9f394c8a3b162f6bcce5621c4d1be52c91a9f6",
+      "bytes": 1463,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/po-validate-ac",
+      "path": "assets/claude_skill_po-validate-ac",
+      "sha256": "0fa49469ad0c0b531cd2dccafd056f3935a7a0baeff856e91369ddaf6ea0ad8f",
+      "bytes": 346,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/po-validate-ac",
+      "path": "assets/antigravity_skill_po-validate-ac",
+      "sha256": "0fa49469ad0c0b531cd2dccafd056f3935a7a0baeff856e91369ddaf6ea0ad8f",
+      "bytes": 346,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/po-validate-ac",
+      "path": "assets/codex_skill_po-validate-ac",
+      "sha256": "0fa49469ad0c0b531cd2dccafd056f3935a7a0baeff856e91369ddaf6ea0ad8f",
+      "bytes": 346,
+      "kind": "adapter"
+    },
+    {
       "id": "workflow_shared/Create_Stories_Workflow.md",
       "path": "assets/workflow_shared_Create_Stories_Workflow.md",
-      "sha256": "0d784ff6e653f8876ca9c47292a83143feb2c3d0eaeab747e5781ad09a07a7cd",
-      "bytes": 5604,
+      "sha256": "fa7a58f40b3084199226bbfe1998fe881ab032f894339648c4a504091342ce51",
+      "bytes": 5746,
       "kind": "template"
     },
     {
@@ -346,8 +626,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "148fbff8dd1434b871b4e665a344204428908138aad1589414b286747160c7f2",
-      "bytes": 12806,
+      "sha256": "b85e5557ff716742dd2a786c60a4347aac6e7b99837f7dc72d96548871e56de3",
+      "bytes": 12975,
       "kind": "template"
     },
     {
@@ -388,8 +668,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "e0bcc7557762fe5524df3869c0e3d0e9cc2a70797120ca5f6efd8fbd0bb07e57",
-      "bytes": 12114,
+      "sha256": "33330b1388f70e537492f67f1dd4d542284f6062ec70a4729709007c9e8f730e",
+      "bytes": 12263,
       "kind": "template"
     },
     {
@@ -430,8 +710,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "d0480e0c4697e1521f1842252f5b7245f30fec535eed10128824f6e41ee1e29d",
-      "bytes": 50665,
+      "sha256": "a90218b7d98045ce2c079947ffdd40e8a4c24f3d9af75e8f672c79dc1b595330",
+      "bytes": 50031,
       "kind": "template"
     },
     {
@@ -451,8 +731,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "35ddf1a315d82be7db2fbb6f515e506ff346c6c987253c25b23b540c31a4b8d8",
-      "bytes": 14726,
+      "sha256": "d020797f5a4c23da7f94a9f97017e642c4d34ac9b2516414e100f8957e2921e6",
+      "bytes": 14786,
       "kind": "template"
     },
     {
@@ -584,15 +864,15 @@
     {
       "id": "root_repo",
       "path": "assets/root_repo",
-      "sha256": "c3ebee8813d0c53d697c7e9df48548a392b63433b569b3ca346dc3e80573e0d9",
-      "bytes": 2188,
+      "sha256": "bbaece1ebc537f3d3ff03d930ee2f192feafeb5f05ca57100451fea8fe9afac5",
+      "bytes": 2196,
       "kind": "template"
     },
     {
       "id": "root_project_root",
       "path": "assets/root_project_root",
-      "sha256": "9db20669c7c0039c5c98eded22c530fa05a4c5c1c6202914f677c99ec714d9f3",
-      "bytes": 1815,
+      "sha256": "915dad5318d936ec5218d4faaf064e8391d3691faa621f4caa40d13c0767dcbd",
+      "bytes": 1823,
       "kind": "template"
     },
     {
@@ -1151,8 +1431,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "df5aceb761d75f7dcb90d2e99a2e054339b51b61767d72ab48d705cbcf9177df",
-      "bytes": 27890,
+      "sha256": "a6e6f0e6c666ee10ddea18feafaa8155536bc76a5b9af88a2a5a972f1818554f",
+      "bytes": 28229,
       "kind": "script"
     },
     {
@@ -1242,15 +1522,15 @@
     {
       "id": "Read_Manifest.md",
       "path": "assets/Read_Manifest.md",
-      "sha256": "48138678cefbaeae0c346d4fee4e68a3cfaa4cac371e16bde1917ef66b9a7508",
-      "bytes": 12390,
+      "sha256": "8fbd40cd7888ae9cf43c0ffa08934eee154045b886cb079b86cf1dfca47dd117",
+      "bytes": 12333,
       "kind": "contract"
     },
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "66666f8e8527097b46fde1a6cbc4935e5be09188e4ecb6ea48b19a8f09766376",
-      "bytes": 37878,
+      "sha256": "2bfd7a24e272e53b5e7534e40e8345b71d7dcaadaf296961d48426dd7348c159",
+      "bytes": 36205,
       "kind": "contract"
     },
     {
@@ -2346,6 +2626,946 @@
         "codex/skill/agent-security"
       ],
       "destination": ".codex/skills/agent-security/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-core",
+      "sources": [
+        "skills/po-core"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-core/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-core",
+      "sources": [
+        "claude/skill/po-core"
+      ],
+      "destination": ".claude/skills/po-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-core",
+      "sources": [
+        "antigravity/skill/po-core"
+      ],
+      "destination": ".antigravity/skills/po-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-core",
+      "sources": [
+        "codex/skill/po-core"
+      ],
+      "destination": ".codex/skills/po-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-comment",
+      "sources": [
+        "skills/po-comment"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-comment/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-comment",
+      "sources": [
+        "claude/skill/po-comment"
+      ],
+      "destination": ".claude/skills/po-comment/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-comment",
+      "sources": [
+        "antigravity/skill/po-comment"
+      ],
+      "destination": ".antigravity/skills/po-comment/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-comment",
+      "sources": [
+        "codex/skill/po-comment"
+      ],
+      "destination": ".codex/skills/po-comment/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-plan-docs",
+      "sources": [
+        "skills/po-plan-docs"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-plan-docs/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-plan-docs",
+      "sources": [
+        "claude/skill/po-plan-docs"
+      ],
+      "destination": ".claude/skills/po-plan-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-plan-docs",
+      "sources": [
+        "antigravity/skill/po-plan-docs"
+      ],
+      "destination": ".antigravity/skills/po-plan-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-plan-docs",
+      "sources": [
+        "codex/skill/po-plan-docs"
+      ],
+      "destination": ".codex/skills/po-plan-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-write-story",
+      "sources": [
+        "skills/po-write-story"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-write-story/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-write-story",
+      "sources": [
+        "claude/skill/po-write-story"
+      ],
+      "destination": ".claude/skills/po-write-story/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-write-story",
+      "sources": [
+        "antigravity/skill/po-write-story"
+      ],
+      "destination": ".antigravity/skills/po-write-story/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-write-story",
+      "sources": [
+        "codex/skill/po-write-story"
+      ],
+      "destination": ".codex/skills/po-write-story/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-roadmap-drain",
+      "sources": [
+        "skills/po-roadmap-drain"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-roadmap-drain/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-roadmap-drain",
+      "sources": [
+        "claude/skill/po-roadmap-drain"
+      ],
+      "destination": ".claude/skills/po-roadmap-drain/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-roadmap-drain",
+      "sources": [
+        "antigravity/skill/po-roadmap-drain"
+      ],
+      "destination": ".antigravity/skills/po-roadmap-drain/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-roadmap-drain",
+      "sources": [
+        "codex/skill/po-roadmap-drain"
+      ],
+      "destination": ".codex/skills/po-roadmap-drain/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-plan-sprint",
+      "sources": [
+        "skills/po-plan-sprint"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-plan-sprint",
+      "sources": [
+        "claude/skill/po-plan-sprint"
+      ],
+      "destination": ".claude/skills/po-plan-sprint/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-plan-sprint",
+      "sources": [
+        "antigravity/skill/po-plan-sprint"
+      ],
+      "destination": ".antigravity/skills/po-plan-sprint/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-plan-sprint",
+      "sources": [
+        "codex/skill/po-plan-sprint"
+      ],
+      "destination": ".codex/skills/po-plan-sprint/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-answer-questions",
+      "sources": [
+        "skills/po-answer-questions"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-answer-questions/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-answer-questions",
+      "sources": [
+        "claude/skill/po-answer-questions"
+      ],
+      "destination": ".claude/skills/po-answer-questions/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-answer-questions",
+      "sources": [
+        "antigravity/skill/po-answer-questions"
+      ],
+      "destination": ".antigravity/skills/po-answer-questions/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-answer-questions",
+      "sources": [
+        "codex/skill/po-answer-questions"
+      ],
+      "destination": ".codex/skills/po-answer-questions/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-promote-ready",
+      "sources": [
+        "skills/po-promote-ready"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-promote-ready/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-promote-ready",
+      "sources": [
+        "claude/skill/po-promote-ready"
+      ],
+      "destination": ".claude/skills/po-promote-ready/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-promote-ready",
+      "sources": [
+        "antigravity/skill/po-promote-ready"
+      ],
+      "destination": ".antigravity/skills/po-promote-ready/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-promote-ready",
+      "sources": [
+        "codex/skill/po-promote-ready"
+      ],
+      "destination": ".codex/skills/po-promote-ready/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-verify-close",
+      "sources": [
+        "skills/po-verify-close"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-verify-close",
+      "sources": [
+        "claude/skill/po-verify-close"
+      ],
+      "destination": ".claude/skills/po-verify-close/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-verify-close",
+      "sources": [
+        "antigravity/skill/po-verify-close"
+      ],
+      "destination": ".antigravity/skills/po-verify-close/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-verify-close",
+      "sources": [
+        "codex/skill/po-verify-close"
+      ],
+      "destination": ".codex/skills/po-verify-close/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/po-validate-ac",
+      "sources": [
+        "skills/po-validate-ac"
+      ],
+      "destination": ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/po-validate-ac",
+      "sources": [
+        "claude/skill/po-validate-ac"
+      ],
+      "destination": ".claude/skills/po-validate-ac/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/po-validate-ac",
+      "sources": [
+        "antigravity/skill/po-validate-ac"
+      ],
+      "destination": ".antigravity/skills/po-validate-ac/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/po-validate-ac",
+      "sources": [
+        "codex/skill/po-validate-ac"
+      ],
+      "destination": ".codex/skills/po-validate-ac/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
