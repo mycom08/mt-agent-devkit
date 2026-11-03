@@ -17,6 +17,7 @@ Read this before your first `gh issue create` or `gh issue edit --body-file` of 
 ## Content Rules
 
 - Keep stories concise (2–3 pages); move technical detail to technical docs (`docs/technical/`) and link them. Include the user story, high-level AC (what, not how), business value and constraints, and a testable success definition. Exclude field-by-field specs, implementation walkthroughs, exact file content, pseudocode and line-by-line instructions.
+- **AC states the testable requirement only, no rationale.** The why belongs in the resolving comment or `Technical Scope`, never in the AC line.
 - `**Assigned:**` is mandatory, above `## User Story`: `Developer`, `Technical Lead`, `QA`, `Business Analyst` or `UI/UX Designer`, never "TBD". It drives pipeline routing.
 - Documentation or template story AC state their expected depth explicitly.
 - **Never write a version-bump AC.** No story bumps `VERSION`, names a target version or creates a `changes.json` version key. Where changes need recording, the AC folds them into the **current** unreleased `changes.json` entry with a `CHANGELOG.md` bullet.

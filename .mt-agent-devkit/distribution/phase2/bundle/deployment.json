@@ -332,8 +332,8 @@
     {
       "id": "skills/po-core",
       "path": "assets/skills_po-core",
-      "sha256": "87dab51ae3f87c559f3b6884643526c9a2e96a027f1c473390d8a5d4a5bdb3f2",
-      "bytes": 1391,
+      "sha256": "85e912aae7f969e7400e4d8684cc9e7e3afd61ab74436d23c11f5a295a61f3dc",
+      "bytes": 1441,
       "kind": "template"
     },
     {
@@ -360,8 +360,8 @@
     {
       "id": "skills/po-comment",
       "path": "assets/skills_po-comment",
-      "sha256": "cd592f5ee24061f65b96fca72f7b82e30b950e4e57534fc2a7c6a879a4014eac",
-      "bytes": 1173,
+      "sha256": "97a8062d7350e6ac24bc7aed150ceafa67ba0d8cd9787635917810adb63a927a",
+      "bytes": 1835,
       "kind": "template"
     },
     {
@@ -416,8 +416,8 @@
     {
       "id": "skills/po-write-story",
       "path": "assets/skills_po-write-story",
-      "sha256": "2b4d5fc75fadd5a08f7527090bb6fa4cbddd1117c7d78e60495057252d118fae",
-      "bytes": 3220,
+      "sha256": "45694005e9ae112d8fc5829ab80044cf28b7b7764c573d69a50d86d771712a23",
+      "bytes": 3366,
       "kind": "template"
     },
     {
@@ -528,8 +528,8 @@
     {
       "id": "skills/po-promote-ready",
       "path": "assets/skills_po-promote-ready",
-      "sha256": "3998438ddd2ed4715e6d0ddd5ef860b13f0433f028b95ab4d5852d7d50bb68da",
-      "bytes": 2375,
+      "sha256": "380146b37df00dd76e76a80b5b2529416c8c42e515363f0c4187c5888cbf9b4f",
+      "bytes": 3027,
       "kind": "template"
     },
     {
@@ -675,8 +675,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "578a16d98fe83e6cd21eda80dba62937d5b14da13fe31971e50b5f107e102e0d",
-      "bytes": 13814,
+      "sha256": "b2b7ad13df003939d20063455a3d9625b7db6258ce00e62fec16bcaff84dff72",
+      "bytes": 13866,
       "kind": "template"
     },
     {
@@ -717,8 +717,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "db5524540ccd2628655ffe24cfbd0fe41f647220233ddf0999c13b4842a79410",
-      "bytes": 53338,
+      "sha256": "a911156c678e3fa8f5f881267f6b51b952773db18ffe9153c416143af6a1e67c",
+      "bytes": 53390,
       "kind": "template"
     },
     {
@@ -780,8 +780,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "5a3049536e831da5d7ccfed7af0879579e731a371d9fbefdc406e93ef1e86bc6",
-      "bytes": 11952,
+      "sha256": "5cb5e9c3c2189bca5d7569ffe866a2cd2477a6673c4d7e3f49a0eaadec191f18",
+      "bytes": 12597,
       "kind": "template"
     },
     {

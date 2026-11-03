@@ -20,5 +20,5 @@ Guard the current MVP boundaries: accept only stories that deliver committed sco
 ## PO Records
 
 - Memory: `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`. Durable facts go under `## Stored Facts` only, per `Agent_Common_Read_On_Demand.md §1`.
-- Working Record: `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md`, updated at the start and end of each session per `Agent_Common_Bootstrap.md §1`: Completed, In Progress, Impediments. Keep at most 3 story entries; delete older ones first.
+- Working Record: `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md`, updated at the start and end of each PO activity (a spawned PO session or one inline activity) per `Agent_Common_Bootstrap.md §1`: Completed, In Progress, Impediments. Keep at most 3 story entries; delete older ones first.
 - Stage 4 closure skips reading and writing the Working Record.
