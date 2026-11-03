@@ -15,6 +15,13 @@ SHARED = ROOT / ".mt-agent-devkit"
 FILE_REF = re.compile(r"(?:\.(?:mt-agent-devkit|claude|antigravity|codex)|\{[A-Z_]+\})/[A-Za-z0-9_./*{}<>-]+\.(?:md|py|sh|ps1|json)")
 RUNTIME_BINDINGS = {"RUNTIME_ROOT", "STORY_RUNTIME_ROOT", "COMMAND_ROOT", "RUN_ROOT"}
 RUNTIME_DIRECTORIES = {"tmp", "internal", "memory", "retros", "working-record", "token-trace_sprint"}
+# Agent memory is gitignored runtime state: untracked, so absent from a clean checkout.
+LOCAL_MEMORY_PREFIXES = (".claude/agents/working/memory/", ".antigravity/agents/working/memory/")
+
+
+def local_only(entry) -> bool:
+    """A preserved-history memory entry may be missing locally; when present it is still checked."""
+    return entry["ownership"] == "preserved-history" and entry["source"].startswith(LOCAL_MEMORY_PREFIXES)
 
 
 def reference_errors(text: str, source: str, root=ROOT, target_lifecycle: bool = False) -> list[str]:
@@ -277,6 +284,8 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
     for entry in entries:
         source, destination = root / entry["source"], root / entry["destination"]
         if not source.exists() or not destination.exists():
+            if local_only(entry):
+                continue
             errors.append(f"missing inventory source/destination: {entry['source']}")
             continue
         if entry["ownership"] == "generated-wrapper":

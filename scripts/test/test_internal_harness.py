@@ -377,10 +377,24 @@ class CodexReceiptPersistenceTests(unittest.TestCase):
 
 
 class MigrationPreservationTests(unittest.TestCase):
+    def test_untracked_agent_memory_may_be_absent_but_other_sources_may_not(self):
+        from unittest.mock import patch
+        inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())
+        memory = [e["source"] for e in inventory["files"] if validator.local_only(e)]
+        other = next(e["source"] for e in inventory["files"] if e["ownership"] == "preserved-history" and not validator.local_only(e))
+        self.assertTrue(memory)
+        absent = {*memory, other}
+        original = Path.exists
+        def exists(path):
+            return False if path.is_relative_to(ROOT) and path.relative_to(ROOT).as_posix() in absent else original(path)
+        with patch.object(Path, "exists", exists):
+            findings = validator.validate()
+        self.assertEqual([f"missing inventory source/destination: {other}"], [f for f in findings if f.startswith("missing inventory")])
+
     def test_future_release_template_and_history_edits_are_not_frozen_by_ci(self):
         from unittest.mock import patch
         inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())
-        history = next(e["source"] for e in inventory["files"] if e["ownership"] == "preserved-history")
+        history = next(e["source"] for e in inventory["files"] if e["ownership"] == "preserved-history" and not validator.local_only(e))
         template = next(p.relative_to(ROOT).as_posix() for p in (ROOT / ".claude/agents/templates").rglob("*.md"))
         changed = {"VERSION", template, history}
         original = Path.read_bytes
