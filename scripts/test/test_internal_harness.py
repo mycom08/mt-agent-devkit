@@ -422,62 +422,40 @@ class MigrationPreservationTests(unittest.TestCase):
 
 class AgentSecuritySkillTests(unittest.TestCase):
     """ST-000287: shared agent-security skill, generated Common copies, orchestrator load."""
-    blocks = load("generate_security_blocks")
+    blocks = load("generate_common_blocks")
+    SKILL = ".mt-agent-devkit/skills/agent-security/SKILL.md"
 
     def skill(self):
-        return (ROOT / self.blocks.SKILL).read_text(encoding="utf-8")
+        return (ROOT / self.SKILL).read_text(encoding="utf-8")
 
     def test_skill_has_frontmatter_three_parts_and_size_budget(self):
         text = self.skill()
         self.assertEqual(wrappers.skill_frontmatter(text)["name"], "agent-security")
         for heading in ("## A. Secret Handling", "## B. External Content Handling", "## C. Orchestrator Shell Authority"):
             self.assertIn(heading, text)
+        self.assertEqual(["A", "B"], sorted(self.blocks.parts(text)))
         self.assertIn(".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md", text)
         self.assertLessEqual(len(text.encode("utf-8")), 2500)
 
     def test_common_copies_match_parts_a_and_b_and_never_inline_part_c(self):
-        text = self.skill()
+        parts = self.blocks.parts(self.skill())
+        rows = [b for b in self.blocks.BLOCKS if b.skill == "agent-security"]
+        self.assertEqual(8, len(rows))  # Core and Bootstrap, internal and Phase 2, parts A and B.
+        self.assertEqual({"internal", "phase2"}, {b.layer for b in rows})
         self.assertEqual([], self.blocks.findings(ROOT))
-        for relative in self.blocks.TARGETS:
-            target = (ROOT / relative).read_text(encoding="utf-8")
-            for part in self.blocks.PARTS:
-                with self.subTest(target=relative, part=part):
-                    self.assertIn(self.blocks.begin(part) + self.blocks.part_body(text, part) + self.blocks.end(part), target)
+        for row in rows:
+            target = (ROOT / row.target).read_text(encoding="utf-8")
+            with self.subTest(target=row.target, part=row.part):
+                self.assertIn(self.blocks.begin(row) + parts[row.part] + self.blocks.end(row), target)
+                self.assertIn("edit " + self.SKILL, self.blocks.begin(row))
             self.assertNotIn("Orchestrator Shell Authority", target)
             self.assertNotIn("part C", target)
 
-    def fixture(self):
-        folder = tempfile.TemporaryDirectory()
-        self.addCleanup(folder.cleanup)
-        root = Path(folder.name)
-        for relative in (self.blocks.SKILL, self.blocks.SKILL_TEMPLATE, *self.blocks.TARGETS):
-            (root / relative).parent.mkdir(parents=True, exist_ok=True)
-            (root / relative).write_bytes((ROOT / relative).read_bytes())
-        return root
-
-    def test_check_fails_on_any_byte_drift_and_write_repairs_it(self):
-        root = self.fixture()
-        target = root / self.blocks.TARGETS[1]
-        target.write_text(target.read_text(encoding="utf-8").replace("security incident", "security  incident"), encoding="utf-8")
-        self.assertEqual([f"{self.blocks.TARGETS[1]}: generated agent-security block drift"], self.blocks.findings(root))
-        self.assertEqual([], self.blocks.findings(root, write=True))
-        self.assertEqual([], self.blocks.findings(root))
-        self.assertEqual(target.read_bytes(), (ROOT / self.blocks.TARGETS[1]).read_bytes())
-
-    def test_check_fails_on_missing_marker_and_template_skill_drift(self):
-        root = self.fixture()
-        target = root / self.blocks.TARGETS[0]
-        target.write_text(target.read_text(encoding="utf-8").replace(self.blocks.end("B"), ""), encoding="utf-8")
-        (root / self.blocks.SKILL_TEMPLATE).write_text(self.skill() + "drift\n", encoding="utf-8")
-        errors = self.blocks.findings(root)
-        self.assertIn(f"{self.blocks.TARGETS[0]}: expected exactly one generated block for part B", errors)
-        self.assertTrue(any(e.startswith(self.blocks.SKILL_TEMPLATE) for e in errors))
-
     def test_skill_renderer_emits_frontmatter_and_single_pointer(self):
-        entry = {"source": ".codex/skills/agent-security/SKILL.md", "destination": self.blocks.SKILL, "renderer": "skill"}
+        entry = {"source": ".codex/skills/agent-security/SKILL.md", "destination": self.SKILL, "renderer": "skill"}
         text = wrappers.render(entry)
         self.assertEqual(wrappers.skill_frontmatter(text), wrappers.skill_frontmatter(self.skill()))
-        self.assertEqual(1, text.count(self.blocks.SKILL))
+        self.assertEqual(1, text.count(self.SKILL))
         self.assertNotIn("Secret Handling", text)
         with self.assertRaises(ValueError):
             wrappers.render({**entry, "source": ".codex/skills/other/SKILL.md"})
@@ -489,7 +467,7 @@ class AgentSecuritySkillTests(unittest.TestCase):
         self.assertEqual([], validator.skill_errors(ROOT, inventory["files"], wrappers))
         manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text())
         files = {f["destination"]: f for f in manifest["files"]}
-        self.assertEqual((files[self.blocks.SKILL]["owner"], files[self.blocks.SKILL]["ownership"]), ("shared", "managed"))
+        self.assertEqual((files[self.SKILL]["owner"], files[self.SKILL]["ownership"]), ("shared", "managed"))
         for provider in ("claude", "antigravity", "codex"):
             wrapper = f".{provider}/skills/agent-security/SKILL.md"
             self.assertTrue((ROOT / wrapper).is_file())
@@ -510,6 +488,131 @@ class AgentSecuritySkillTests(unittest.TestCase):
         errors = validator.orchestrator_security_errors(root)
         self.assertEqual(len(validator.ORCHESTRATOR_SOURCES), len(errors))
         self.assertTrue(all("before the first issue/PR read" in e for e in errors))
+
+
+class CommonSkillsTests(unittest.TestCase):
+    """ST-000307: common skills own the absorbed Common text; generate_common_blocks.py keeps the copies."""
+    blocks = load("generate_common_blocks")
+    RULES = ".mt-agent-devkit/rules/"
+
+    def fixture(self):
+        """Both skill layers and every mapped target, copied into a temporary root."""
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name)
+        files = {b.target for b in self.blocks.BLOCKS}
+        for layer in (self.blocks.INTERNAL_SKILLS, self.blocks.PHASE2_SKILLS):
+            files |= {p.relative_to(ROOT).as_posix() for p in (ROOT / layer).glob("*/SKILL*.md")}
+        for relative in files:
+            (root / relative).parent.mkdir(parents=True, exist_ok=True)
+            (root / relative).write_bytes((ROOT / relative).read_bytes())
+        return root
+
+    def edit(self, root, relative, old, new):
+        path = root / relative
+        text = path.read_text(encoding="utf-8")
+        self.assertIn(old, text)
+        path.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+    def test_seventeen_skills_frontmatter_budget_requires_and_wrappers(self):
+        self.assertEqual(17, len(validator.COMMON_SKILLS))
+        inventory = {e["source"]: e for e in json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]}
+        for name in validator.COMMON_SKILLS:
+            with self.subTest(skill=name):
+                text = (ROOT / f".mt-agent-devkit/skills/{name}/SKILL.md").read_text(encoding="utf-8")
+                self.assertEqual(name, wrappers.skill_frontmatter(text)["name"])
+                self.assertLessEqual(len(text.encode("utf-8")), 4000)
+                self.assertEqual(1, len(validator.REQUIRES.findall(text)))
+                for provider in validator.PROVIDERS:
+                    entry = inventory[f".{provider}/skills/{name}/SKILL.md"]
+                    self.assertEqual(("skill", f".mt-agent-devkit/skills/{name}/SKILL.md"), (entry["renderer"], entry["destination"]))
+        self.assertEqual([], validator.skill_reference_errors(ROOT))
+
+    def test_every_design_7b_target_holds_its_generated_blocks(self):
+        self.assertEqual([], self.blocks.findings(ROOT))
+        internal = {(b.target.removeprefix(self.RULES), b.block) for b in self.blocks.BLOCKS if b.layer == "internal"}
+        expected = {
+            "Agent_Common_Bootstrap.md": {"pre-work part read-order", "working-record part format", "pre-work part resume", "agent-security part A",
+                                          "token-efficiency part conventions", "agent-security part B", "shell-rules part rules",
+                                          "retro part detection", "retro-contribution part orchestration"},
+            "Agent_Common_Read_On_Demand.md": {"agent-memory part facts", "troubleshooting part format", "troubleshooting part protocol",
+                                               "retro-contribution part writing", "handoff part state", "credential-gate part gate", "agent-memory part two-tier"},
+            "Agent_Common_Core.md": {"agent-security part A", "agent-security part B", "token-efficiency part conventions",
+                                     "retro part detection", "retro-contribution part orchestration"},
+            "Agent_Common_Shell_Safety.md": {"shell-rules part safety"},
+            "Agent_Common_Working_Record.md": {"working-record part format"},
+            "Agent_Common_Memory.md": {"agent-memory part facts", "troubleshooting part format", "agent-memory part two-tier"},
+            "Agent_Common_Retro.md": {"retro-contribution part writing"},
+            "Agent_Common_Troubleshooting.md": {"troubleshooting part protocol"},
+            "Agent_Common_Credential_Gate.md": {"credential-gate part gate"},
+            "Agent_Common_Stage_Transition.md": {"handoff part state"},
+        }
+        self.assertEqual({(f, b) for f, names in expected.items() for b in names}, internal)
+        for row in self.blocks.BLOCKS:
+            if row.layer == "internal":
+                self.assertTrue(self.blocks.source(row.skill, "internal").startswith(".mt-agent-devkit/skills/"))
+
+    def test_check_fails_on_differing_block_and_write_repairs_it(self):
+        root = self.fixture()
+        target = self.RULES + "Agent_Common_Read_On_Demand.md"
+        self.edit(root, target, "Do not resume the blocked task", "Resume the blocked task")
+        self.assertEqual([f"{target}: generated block differs from its part: troubleshooting part protocol"], self.blocks.findings(root))
+        self.assertEqual([], self.blocks.findings(root, write=True))
+        self.assertEqual((ROOT / target).read_bytes(), (root / target).read_bytes())
+
+    def test_check_fails_on_missing_block(self):
+        root = self.fixture()
+        target = self.RULES + "Agent_Common_Stage_Transition.md"
+        row = next(b for b in self.blocks.BLOCKS if b.target == target)
+        text = (root / target).read_text(encoding="utf-8")
+        start, end = text.index(self.blocks.begin(row)), text.index(self.blocks.end(row)) + len(self.blocks.end(row))
+        (root / target).write_text(text[:start] + text[end:], encoding="utf-8")
+        self.assertEqual([f"{target}: generated block missing: handoff part state"], self.blocks.findings(root))
+        self.assertEqual([f"{target}: generated block missing: handoff part state"], self.blocks.findings(root, write=True))
+
+    def test_check_fails_on_duplicated_block(self):
+        root = self.fixture()
+        target = self.RULES + "Agent_Common_Credential_Gate.md"
+        row = next(b for b in self.blocks.BLOCKS if b.target == target)
+        text = (root / target).read_text(encoding="utf-8")
+        block = text[text.index(self.blocks.begin(row)):text.index(self.blocks.end(row)) + len(self.blocks.end(row))]
+        (root / target).write_text(text + "\n" + block, encoding="utf-8")
+        self.assertEqual([f"{target}: generated block duplicated: credential-gate part gate"], self.blocks.findings(root))
+
+    def test_check_fails_on_part_with_no_target(self):
+        root = self.fixture()
+        skill = ".mt-agent-devkit/skills/clean-code/SKILL.md"
+        self.edit(root, skill, "## 1. Meaningful Names\n", "## 1. Meaningful Names\n\n<!-- part: names -->\nUnmapped.\n<!-- /part: names -->\n")
+        self.assertEqual([f"{skill}: part names has no target"], self.blocks.findings(root))
+
+    def test_check_fails_on_unmapped_block_doubly_marked_part_and_template_copy_drift(self):
+        root = self.fixture()
+        target = self.RULES + "Agent_Common_Retro.md"
+        stray = self.blocks.row("clean-code", "names", "internal", target)
+        self.edit(root, target, "---\n", "---\n" + self.blocks.begin(stray) + "x\n" + self.blocks.end(stray))
+        skill = ".mt-agent-devkit/skills/handoff/SKILL.md"
+        self.edit(root, skill, "<!-- /part: state -->\n", "<!-- /part: state -->\n<!-- part: state -->\nx\n<!-- /part: state -->\n")
+        template = self.blocks.source("agent-security", "phase2")
+        (root / template).write_text((root / template).read_text(encoding="utf-8") + "drift\n", encoding="utf-8")
+        errors = self.blocks.findings(root)
+        self.assertIn(f"{target}: generated block clean-code part names is not in the mapping table", errors)
+        self.assertIn(f"{skill}: part marked more than once: state", errors)
+        self.assertIn(f"{template}: differs from {self.blocks.source('agent-security', 'internal')}", errors)
+
+    def test_old_generator_is_gone_and_callers_use_the_new_one(self):
+        self.assertFalse((ROOT / ".mt-agent-devkit/scripts/generate_security_blocks.py").exists())
+        for relative in ("scripts/validate_internal_harness.py", ".github/workflows/validate-templates.yml"):
+            text = (ROOT / relative).read_text(encoding="utf-8")
+            self.assertIn("generate_common_blocks.py", text)
+            self.assertNotIn("generate_security_blocks", text)
+
+    def test_undistributed_skills_are_exempt_only_from_distribution_checks(self):
+        self.assertEqual(frozenset(validator.COMMON_SKILLS), validator.UNDISTRIBUTED_SKILLS)
+        self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
+        inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]
+        broken = [e for e in inventory if e["source"] != ".claude/skills/retro/SKILL.md"]
+        self.assertIn("missing generated skill wrapper inventory entry: .claude/skills/retro/SKILL.md",
+                      validator.skill_errors(ROOT, broken, wrappers))
 
 
 class PoSkillsTests(unittest.TestCase):

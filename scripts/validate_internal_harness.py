@@ -98,10 +98,22 @@ ORCHESTRATOR_SOURCES = (
 SKILL_TEMPLATES = ".mt-agent-devkit/distribution/phase2/templates/skills"
 PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
              "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
+COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record", "agent-memory", "troubleshooting",
+                 "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
+                 "git-workflow", "change-metadata", "pre-pr-gate", "pr-review", "clean-code")
+# Internal skills with no Phase 2 template or bundle entry yet. ST-000310 ships every
+# common skill except change-metadata, which stays internal only (design B5).
+UNDISTRIBUTED_SKILLS = frozenset(COMMON_SKILLS)
 SKILL_SIZE_LIMITS = {"po-core": 1500}
 DEFAULT_PO_SKILL_LIMIT = 4000
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
-SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+|comment)`")
+SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS) + r")`")
+
+
+def skill_size_limit(name: str):
+    if name in SKILL_SIZE_LIMITS:
+        return SKILL_SIZE_LIMITS[name]
+    return DEFAULT_PO_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS else None
 
 
 def skill_errors(root, entries, wrappers) -> list[str]:
@@ -123,7 +135,11 @@ def skill_errors(root, entries, wrappers) -> list[str]:
             errors.append(f"invalid canonical skill frontmatter: {destination}: {error}")
             continue
         shared = bundle.get(destination)
-        if not shared or shared["owner"] != "shared" or shared["ownership"] != "managed" or shared["providers"] != list(PROVIDERS):
+        if name in UNDISTRIBUTED_SKILLS:
+            # Not shipped yet: the bundle must not carry it either.
+            if any(f"/skills/{name}/" in item for item in bundle):
+                errors.append(f"undistributed skill is in the bundle: {name}")
+        elif not shared or shared["owner"] != "shared" or shared["ownership"] != "managed" or shared["providers"] != list(PROVIDERS):
             errors.append(f"bundle lacks shared managed canonical skill: {destination}")
         else:
             asset = assets.get(shared["sources"][0]) if len(shared["sources"]) == 1 else None
@@ -146,6 +162,8 @@ def skill_errors(root, entries, wrappers) -> list[str]:
                 wrappers.skill_frontmatter((root / source).read_text(encoding="utf-8"))
             except ValueError as error:
                 errors.append(f"invalid skill wrapper frontmatter: {source}: {error}")
+            if name in UNDISTRIBUTED_SKILLS:
+                continue
             item = bundle.get(source)
             asset = assets.get(item["sources"][0]) if item and len(item["sources"]) == 1 else None
             if not item or item["providers"] != [provider] or not asset:
@@ -169,15 +187,20 @@ def skill_reference_errors(root) -> list[str]:
     for name in PO_SKILLS:
         if not (skills / name / "SKILL.md").is_file():
             errors.append(f"missing canonical PO skill: .mt-agent-devkit/skills/{name}/SKILL.md")
+    for name in COMMON_SKILLS:
+        if not (skills / name / "SKILL.md").is_file():
+            errors.append(f"missing canonical common skill: .mt-agent-devkit/skills/{name}/SKILL.md")
     for canonical in sorted(skills.glob("*/SKILL.md")):
         name, text = canonical.parent.name, canonical.read_text(encoding="utf-8")
         relative = canonical.relative_to(root).as_posix()
-        limit = SKILL_SIZE_LIMITS.get(name, DEFAULT_PO_SKILL_LIMIT if name.startswith("po-") else None)
+        limit = skill_size_limit(name)
         if limit is not None and len(text.encode("utf-8")) > limit:
             errors.append(f"skill exceeds its {limit}-byte budget: {relative}")
         requires = REQUIRES.findall(text)
         if name.startswith("po-") and len(requires) != 1:
             errors.append(f"PO skill must name its required skills on one **Requires:** line: {relative}")
+        if name in COMMON_SKILLS and len(requires) != 1:
+            errors.append(f"common skill must name its required skills on one **Requires:** line: {relative}")
         required = SKILL_MENTION.findall("\n".join(requires))
         if name in required:
             errors.append(f"skill requires itself: {relative}")
@@ -193,7 +216,7 @@ def skill_template_errors(root, wrappers) -> list[str]:
     templates = root / SKILL_TEMPLATES
     internal = {p.parent.name for p in (root / ".mt-agent-devkit/skills").glob("*/SKILL.md")}
     shipped = {p.parent.name for p in templates.glob("*/SKILL_template.md")}
-    for name in sorted(internal - shipped):
+    for name in sorted(internal - shipped - UNDISTRIBUTED_SKILLS):
         errors.append(f"missing target skill template: {SKILL_TEMPLATES}/{name}/SKILL_template.md")
     # Provider-local templates (read-section) are not canonical shared skills.
     for name in sorted(internal & shipped):
@@ -208,7 +231,7 @@ def skill_template_errors(root, wrappers) -> list[str]:
                 raise ValueError("frontmatter differs from the internal canonical skill")
         except ValueError as error:
             errors.append(f"invalid target skill template: {relative}: {error}")
-        limit = SKILL_SIZE_LIMITS.get(name, DEFAULT_PO_SKILL_LIMIT if name.startswith("po-") else None)
+        limit = skill_size_limit(name)
         if limit is not None and len(text.encode("utf-8")) > limit:
             errors.append(f"skill exceeds its {limit}-byte budget: {relative}")
         requires = REQUIRES.findall(text)
@@ -274,7 +297,7 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
             errors.append(f"post-baseline inventory entry is not a generated skill wrapper: {entry['source']}")
     wrappers = module("wrappers", shared / "scripts/generate_wrappers.py")
     errors.extend(skill_errors(root, entries, wrappers))
-    blocks = module("security_blocks", shared / "scripts/generate_security_blocks.py")
+    blocks = module("common_blocks", shared / "scripts/generate_common_blocks.py")
     errors.extend(blocks.findings(root))
     errors.extend(orchestrator_security_errors(root))
     errors.extend(skill_reference_errors(root))

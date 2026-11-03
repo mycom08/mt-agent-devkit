@@ -2,7 +2,9 @@
 
 ## 5. Runtime-State Handoff (implementer & reviewer roles)
 
+<!-- BEGIN GENERATED handoff part state: edit .mt-agent-devkit/skills/handoff/SKILL.md, then regenerate -->
 Memory, Working Records, retrospectives, telemetry, and pipeline state are local runtime state. Never `git add`, commit, or push them on a product branch; report stage completion after the local handoff.
+<!-- END GENERATED handoff part state -->
 
 ---
 

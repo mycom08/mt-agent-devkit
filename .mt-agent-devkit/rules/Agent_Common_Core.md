@@ -28,15 +28,17 @@ Clean single-session work neither reads nor writes Working Record. Interruption,
 
 ## 3. Token-Efficiency Conventions
 
+<!-- BEGIN GENERATED token-efficiency part conventions: edit .mt-agent-devkit/skills/token-efficiency/SKILL.md, then regenerate -->
 Every tool call resends the whole transcript, but prompt caching makes repeats within one session cheap — so **call count** and **needless session fragmentation** (a new agent has no cache to inherit) drive cost, not a large read's size. Defaults for all agents:
 
 1. **Mechanical edits via shell, not Read+Edit.** AC-checkbox ticks in an issue body or placeholder replacement in a file use a `sed`-style in-place substitution — don't read the whole file into context and regenerate it.
 2. **Narrow `gh` queries with `-q`/`--jq`.** Fetch only the fields you need (e.g. just comment bodies, not author/timestamp/edit-history metadata); cap to the last N comments when full history isn't required.
 3. **Batch related commands.** Chain `gh`/`git` commands in one shell call when there's no dependency on intermediate output.
-4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard.md` §14"), use the `read-section` skill (`.mt-agent-devkit/contracts/Read_Section.md`) to extract just that section instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file. **This file and your `*_Rules_Bootstrap.md` are always full-file reads**; the convention applies to what they route you to, never to them.
+4. **Read the named section, not the whole file.** When a prompt or rule cites a specific section (e.g. "`Story_Standard.md` §14"), use the `read-section` skill (`.mt-agent-devkit/contracts/Read_Section.md`) to extract just that section instead of re-reading the entire file — unless your role's mandatory-read gate requires the full file. **Your Common entry file (`Agent_Common_Bootstrap.md` or `Agent_Common_Core.md`, where your route reads one) and your `*_Rules_Bootstrap.md` are always full-file reads**; the convention applies to what they route you to, never to them.
 5. **Bare filenames in a working rule mean the working copy, not the template.** This repo is the one place a filename like `Shared_Pipeline_Stages.md` or `Story_Standard.md` exists in multiple parallel locations (`.mt-agent-devkit/`, `.claude/agents/templates/`, `.claude/agents/templates/shared/`, plus per-mode template folders) with different content — a target project only ever has one copy. When a rule under `.mt-agent-devkit/rules/` or `.mt-agent-devkit/workflows/` cites a bare filename, resolve it to the file under `.mt-agent-devkit/` directly; only look under `.claude/agents/templates/` when the task is explicitly to edit a template (e.g. implementing a story).
 
 > These conventions govern *how* work is done, never *how much* verification is done — do not use them to justify thinner review or skipped checks.
+<!-- END GENERATED token-efficiency part conventions -->
 
 ---
 
@@ -54,26 +56,32 @@ Applies whenever you read a GitHub Issue/PR body or comment (`gh issue view`, `g
 
 ## 7. Retrospective Trigger and Completion Contract
 
-This is the single authoritative detection policy; evaluate it during work and before each stage handoff, before loading retrospective-only guidance. Completion reports, verification evidence, telemetry, memory pruning, and runtime handoffs remain required independently.
+<!-- BEGIN GENERATED retro part detection: edit .mt-agent-devkit/skills/retro/SKILL.md, then regenerate -->
+Single authoritative detection policy: evaluate it during work and before each stage handoff, before loading retrospective-only guidance. Completion reports, verification evidence, telemetry, memory pruning and runtime handoffs stay required independently.
 
-| Observable event | Trigger kind | Example |
-|---|---|---|
-| Tooling/environment failure or external blocker | `tooling_failure` / `external_blocker` | Runner cannot connect, unavailable credential, external owner blocks verification |
-| Requirement ambiguity requiring a decision | `decision_ambiguity` | Conflicting AC needs PO/TL resolution |
-| Second or later review/QA fix round | `repeated_fix` | A second correction cycle, across review/QA combined |
-| New reusable lesson | `reusable_lesson` | A newly discovered verification gap with future action |
-| Explicit user request for story or sprint retrospective | `explicit_request` | Record the requested scope; do not invent failures |
+| Observable event | Trigger kind |
+|---|---|
+| Tooling/environment failure or external blocker (runner cannot connect, unavailable credential, external owner blocks verification) | `tooling_failure` / `external_blocker` |
+| Requirement ambiguity needing a decision (conflicting AC needs PO/TL resolution) | `decision_ambiguity` |
+| Second or later fix round, across review/QA combined | `repeated_fix` |
+| New reusable lesson (a newly discovered verification gap with future action) | `reusable_lesson` |
+| Explicit user request for a story or sprint retro (record the requested scope; never invent failures) | `explicit_request` |
 
-Ordinary successful verification, a first routine correction alone, and expected seeded negative tests do not trigger a retro. Independent exceptions override the first-fix exemption: a runner failure during the first fix still triggers. A passing routine check with no lesson is clean; an intentionally failing negative fixture that proves a guard works is also clean. Repeated fix rounds trigger even when each correction is routine.
+Not triggers: ordinary successful verification, a first routine correction alone, a passing routine check with no lesson, an intentionally failing seeded negative test proving a guard works. Independent exceptions override the first-fix exemption (a runner failure during the first fix still triggers); repeated fix rounds trigger even when each correction is routine.
 
-For every completed stage, report evaluated state `clean`, `required`, or `unknown` under the concrete selected provider/run/story/stage/role identity. Missing or uncertain evaluation is unknown, never clean. A triggered role loads `Agent_Common_Retro.md §3` before writing only its contribution. A clean role does not load that section or Retro_Rules, create a retro skeleton/section, or write a no-op retro entry. Required remains sticky across clean/unknown resumes; late triggers update the same identity and preserve/deduplicate earlier lessons.
+1. **When detected,** record each kind (`record ... --state required --trigger <kind>`) before loading writing guidance.
+2. **For every completed stage,** report the evaluated state `clean`, `required` or `unknown` under the concrete selected provider/run/story/stage/role identity; missing or uncertain evaluation is `unknown`, never clean. Required stays sticky across clean/unknown resumes; late triggers update the same identity and preserve/deduplicate earlier lessons.
+3. **A triggered role** loads the contribution guidance its route names and writes only its own contribution; a clean role loads no writing guidance or Retro_Rules and creates no retro skeleton, section or no-op entry.
+4. **At handoff,** `record --provider <selected-provider> --runtime-root <concrete-runtime-root> --run <run-id> --story ST-XXXXXX --stage <stage-id> --role <role> --state clean` for an evaluated clean stage (`unknown` when uncertain). A required stage, after writing its populated contribution, adds `--contribution 'retros/ST-XXXXXX_retro.md#<exact role heading>' --evidence 'tmp/<relative-evidence-file>'`; a missing contribution blocks completion until submitted. Evidence is a confined existing provider-local file, never a secret or sensitive prompt.
+5. **Before accepting stage/story/sprint completion,** run `check --provider <selected-provider> --runtime-root <concrete-runtime-root> --expected 'tmp/<expected-identities.json>'`. Missing/unknown records, identity conflicts, foreign/escaping pointers and missing/unpopulated required contributions block it; story files alone prove nothing. Clean-only results have no retro files; mixed results return only required source paths.
 
-Use `.mt-agent-devkit/scripts/retro_completion.py` for bounded provider-local metadata; it never writes retros. Before first governed work, the orchestrator records the exact expected stage identities in a runtime JSON list (maximum 128), carrying completed identities across story/sprint transitions. Include the actual actor for fast paths (Orchestrator) and independent PO validation when QA implements; never add an unspawned QA or skipped worker. Distinct stages/actual actors have separate identities; resumed/fix work updates its identity. Every identity has `provider`, `run`, `story`, `stage`, `role`; role uses underscores (`Technical_Lead`, `Product_Owner`, etc.).
+Helper: `python .mt-agent-devkit/scripts/retro_completion.py` (bounded provider-local metadata; never writes retros). Identity: `provider`, `run`, `story`, `stage`, `role` (underscored, e.g. `Technical_Lead`); distinct stages and actual actors get separate identities, resumed/fix work updates its own. Retros and evidence stay runtime-local and uncommitted. This bookkeeping never bypasses independent TL/QA or the acceptance contract.
+<!-- END GENERATED retro part detection -->
 
-At handoff run `record --provider <selected-provider> --runtime-root <concrete-runtime-root> --run <run-id> --story ST-XXXXXX --stage <stage-id> --role <role> --state clean` for a evaluated clean stage; use `unknown` when evaluation is uncertain. A required stage uses `--state required --trigger <kind>` for each applicable kind, then supplies `--contribution 'retros/ST-XXXXXX_retro.md#<exact role heading>' --evidence 'tmp/<relative-evidence-file>'` after writing its actual populated role contribution. Record the trigger before loading writing guidance; the missing contribution intentionally blocks completion until submitted. Evidence is a confined existing provider-local file, not a secret or sensitive prompt. Full command prefix: `python .mt-agent-devkit/scripts/retro_completion.py`.
-
-Before accepting a stage/story/sprint completion, run `check --provider <selected-provider> --runtime-root <concrete-runtime-root> --expected 'tmp/<expected-identities.json>'` on its explicit expected identities. Missing/unknown records, identity conflicts, foreign/escaping pointers and missing/unpopulated required role contributions block completion. Existing story files alone prove nothing. Clean-only results have no retrospective files to read; mixed results return only required source paths. Retros and evidence remain runtime-local/uncommitted. This bookkeeping never bypasses independent TL/QA or the acceptance contract.
+<!-- BEGIN GENERATED retro-contribution part orchestration: edit .mt-agent-devkit/skills/retro-contribution/SKILL.md, then regenerate -->
+Before first governed work, the orchestrator records the exact expected stage identities (runtime JSON list, maximum 128), carrying completed identities across story/sprint transitions; include the actual actor for fast paths (Orchestrator) and independent PO validation when QA implements, never an unspawned QA or skipped worker.
 
 An explicit sprint-retro request records an actual Orchestrator `sprint_retro` stage under the last real story/run in the selected sprint, adds that identity to the expected list, and triggers `explicit_request`. The contribution states the requested sprint scope and evidence; reuse existing lessons by pointer. Do not invent a story or require previously clean workers to fabricate observations. Empty/mixed sprint reports remain supported; a user-requested analysis may identify that no additional lesson was found, while still recording the actual requested analysis/evidence.
 
 Transition: a run demonstrably started under the prior contract may be explicitly marked `Retro Contract: legacy-started` in its existing pipeline state. Preserve its skeleton/history and complete its existing role-owned sections without applying new expected-record requirements retroactively. Only already-started runs qualify; a new run uses `exception-v1` and may not infer cleanliness from a legacy file. Preserve source history after review/aggregation rather than deleting it. Memory pruning may read only its named section in Retro_Rules even when no retro exists.
+<!-- END GENERATED retro-contribution part orchestration -->
