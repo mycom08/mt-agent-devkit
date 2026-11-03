@@ -192,45 +192,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 
 ## 9. Comment Standard
 
-All discussions happen as **GitHub Issue comments** — never inside the issue body.
-
-Each comment follows this format:
-
-```markdown
-## [Comment title]
-**Thread Status:** Open | In Progress | Resolved  
-**Area:** [Workflow / Template / AC / File]
-
-**Developer - 2026-04-17**
-Question or concern.
-
-**TL - 2026-04-17**
-Response and decision.
-
-**Decision:** [What we decided and why]  
-**Next:** [Owner or "None"]
-```
-
-**Comment-writing standard (all roles):**
-
-1. **Decision-first.** The first line states the decision/outcome. Rationale follows, capped at ~2–3 sentences per point.
-2. **One topic per comment.** A comment answers the questions asked and nothing else. A finding that surfaces while answering — however relevant — posts as its own comment with its own thread status. Bundling makes a thread unresolvable: it cannot be closed while any of its topics stays open, so a multi-topic comment leaves `Thread Status` with no coherent value.
-   > Replying to several questions **that were genuinely asked together** in one comment is fine and expected — this is not a one-reply-per-question rule. What it prohibits is an *unasked* finding smuggled into an answer.
-3. **Length cap: ~150–200 words per comment**, checked with `wc -w` at the Commenter gate (§12). Exemption: QA validation reports (per-AC evidence) may be longer — thoroughness there is high-signal.
-   > **Draft to the shape, not to the counter.** Before writing, decide the shape: **one short paragraph per topic** — decision first, one-line why, pointer to the evidence. A comment drafted that way lands near the cap without anyone counting. The `wc -w` check is a **backstop that should almost never fire**, not the drafting method: a long draft cut down to 200 words costs several full re-reads of your context and produces worse prose than 200 words written deliberately. If the check fails by more than a little, the fix is usually that you bundled a second topic (rule 2) — split it, don't compress it.
-4. **Evidence by pointer, not transcript.** Applies to issue comments and PR comments alike. Cite what was checked (file/doc name + one-line result). Full check logs go in your own working record, not the thread. **Never paste command output, check transcripts, or verification logs into a comment** — state the verdict in one line and cite the working record. A reader who needs the transcript can open it; a reader who does not pays for it on every read of the thread.
-   > **Single carve-out — gate-mandated CI evidence.** The literal `gh pr checks <PR-number>` output that the §12 Reviewer gate requires in a **PR approval comment** is a mandated audit artifact and is exempt from this rule. It is the *only* exemption: no other output, transcript, or log may be pasted, in any comment, by any role.
-5. **Body edits are announced, not reproduced.** When a comment's decision is written into the story body in the same pass, the comment states which section changed, what kind of change, and why — never the resulting body text. The body is current truth; the comment is the reason it changed. Reproducing the new wording creates a second copy that goes stale on the next edit and then contradicts the body.
-6. **Corrections state the delta only.** What changed, what didn't, one-line why. Never re-derive conclusions that didn't change.
-7. **No comments about comments.** If a prior comment lacked substance, put the substance in your working record and post one pointer line.
-8. **One close-out per thread.** Post the "resolved / ready" hand-off line once; never restate it in later comments.
-9. **Recommended default format** — compact bullets: claim → source checked → verdict. Not a license for thinner review.
-
-**Rules for comments:**
-- Reply in the same comment when continuing the same issue; a new topic gets its own comment (rule 2).
-- When a comment changes AC or delivery expectations — including a **design-first approval comment that narrows or supersedes an AC** — update the issue body in the **same pass** so later-stage reviewers never have to reconcile the body AC against a separate design thread.
-- **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`, `**Dev**`).
-- **Never use a bare `#` prefix** — use the `ST-XXXXXX` format or plain text instead.
+All discussions happen as **GitHub Issue comments**, never inside the issue body. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `Developer_Rules_Read_On_Demand.md §20`, `po-comment`).
 
 ---
 
@@ -262,31 +224,13 @@ In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (
 - [ ] All CI checks on the PR have **finished**
 - [ ] No CI check is in a **failed** state
 - [ ] Review criteria pass (per agent-specific rules)
-- [ ] **Paste the literal `gh pr checks <PR-number>` output into the approval comment** — turns "I confirmed CI was green" into an auditable artifact instead of a self-report. This paste is the single carve-out to §9 rule 4 (gate-mandated CI evidence); nothing else in the approval comment may be a transcript.
+- [ ] **Paste the literal `gh pr checks <PR-number>` output into the approval comment** — turns "I confirmed CI was green" into an auditable artifact instead of a self-report. This paste is the single carve-out to the `comment` skill's rule 4 (gate-mandated CI evidence); nothing else in the approval comment may be a transcript.
 
 > **Pre-existing vs PR-introduced problems:** A defect or contradiction **introduced by this PR** blocks approval — request changes. A **pre-existing** problem found in a file **outside the PR's scope** does not block — approve and record it as a follow-up story instead.
 
 ### Commenter — Before Posting an Issue Comment
 
-Applies to every role, on every issue comment.
-
-**Before you draft** — one line, and it is what makes the rest of this gate cheap:
-
-- [ ] Shape chosen: one short paragraph per topic — decision, one-line why, pointer (§9 rule 3)
-
-**Before you post:**
-
-- [ ] Answers only the questions asked — a new finding gets its own comment (§9 rule 2)
-- [ ] No command output, check transcript, or verification log pasted inline — verdict in one line, cite the working record (§9 rule 4). The `gh pr checks` carve-out belongs to PR approval comments only; it never applies here
-- [ ] A decision written into the story body in this same pass is announced, not reproduced (§9 rule 5)
-- [ ] Facts already recorded in your memory file are cited, not re-explained (`Agent_Common_Read_On_Demand.md §1` rule 4)
-- [ ] Word count checked — `wc -w` ≤ 200, or a stated exception
-
-> **Stated exception:** QA per-AC validation evidence (§9 rule 3) may exceed the cap. Note the exception in the comment; do not silently skip the check.
->
-> **If the count fails, don't start truncating.** Re-check the first item instead: an over-length draft is usually a bundled second topic (rule 2) or a pasted transcript (rule 4), and both are fixed by removing something whole rather than by compressing everything. Iterative trim-and-recount is the most expensive way to reach 200 words — each pass re-reads your entire context.
-
-**Only then:** Post the comment
+Applies to every role, on every issue comment: run the Commenter gate in the `comment` skill before posting.
 
 ### Merge Gate
 
@@ -397,7 +341,8 @@ allow-list is available.
 ## Version
 
 **Created:** 2026-06-16  
-**Version:** 1.4 — §1 Done row, §7 and §14: acceptance by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`; §14 tracked split: in `orchestrator` mode the scope decision is the user's (ST-000291)  
+**Version:** 1.5 — §9 and the §12 Commenter gate point to the shared `comment` skill, which now owns the comment standard (ST-999001)  
+**Previous:** 1.4 — §1 Done row, §7 and §14: acceptance by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`; §14 tracked split: in `orchestrator` mode the scope decision is the user's (ST-000291)  
 **Previous:** 1.3 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)  
 **Previous:** 1.2 — §2, §4, §7, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row (ST-000021)  
 **Previous:** 1.1 — §3 adds per-file vs global fixture-coverage AC guidance; §9 requires same-pass body-AC reconciliation when a design-first approval narrows an AC (ST-000016 retro)

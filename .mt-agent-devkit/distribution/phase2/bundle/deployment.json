@@ -10,8 +10,8 @@
     {
       "id": "bridge_provenance.json",
       "path": "assets/bridge_provenance.json",
-      "sha256": "b8941e8495ac31efd01299e9878373719ac71edd8b12fa28b4bb66b780e77ede",
-      "bytes": 693,
+      "sha256": "f8e1db846e8d0bf1ceb99b9296a114c8be35ae71fb02e470cbef66cfb0f2f128",
+      "bytes": 707,
       "kind": "contract"
     },
     {
@@ -101,8 +101,8 @@
     {
       "id": "rules/Business_Analyst_Rules.md",
       "path": "assets/rules_Business_Analyst_Rules.md",
-      "sha256": "b930784b14f8a8cd1fa01fd1454ed4fdc9750143728d1205be1a370d6b6731ca",
-      "bytes": 2651,
+      "sha256": "d27ab06458914a07d7798031c7a1b6eb594cbbd7cab8ef2a26cce9ea0fe97363",
+      "bytes": 2740,
       "kind": "template"
     },
     {
@@ -122,15 +122,15 @@
     {
       "id": "rules/Developer_Rules_Bootstrap.md",
       "path": "assets/rules_Developer_Rules_Bootstrap.md",
-      "sha256": "593da7007a2523f533baceb4e6d2ea3b3d292a04e46bcd07774690e857be410c",
-      "bytes": 18205,
+      "sha256": "abdf78a209b543e742e0b23c7cf0119d5bdc291191196e906dbb650723bc5805",
+      "bytes": 18298,
       "kind": "template"
     },
     {
       "id": "rules/Developer_Rules_Read_On_Demand.md",
       "path": "assets/rules_Developer_Rules_Read_On_Demand.md",
-      "sha256": "384a461dbf750f9880c4e25572529f7e9eb544659a110c13424c8f87a68e9fa7",
-      "bytes": 14972,
+      "sha256": "f35b32b6933e68d32ec65e8f937aa41fe78e46fb797928a28f329eddf84fd803",
+      "bytes": 13862,
       "kind": "template"
     },
     {
@@ -164,43 +164,43 @@
     {
       "id": "rules/Story_Standard_Dev.md",
       "path": "assets/rules_Story_Standard_Dev.md",
-      "sha256": "ee3e10e94bf1a5ab594f87704ee6b65f8f58a3a05b8bf945610e21184893514e",
-      "bytes": 1302,
+      "sha256": "5a5f33dc0c0fd4363d3b962ac79e0a0e72b5c408de2fcb8faa4effb9ceac4ff4",
+      "bytes": 1475,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard_QA.md",
       "path": "assets/rules_Story_Standard_QA.md",
-      "sha256": "eff798f1bd0de194a7272750b531b761c63178a85cdcf94e6f3831054eb64d13",
-      "bytes": 4468,
+      "sha256": "c58e46bd5fe711c34028c097e8ddf2aa8768f9dd5e26cd77bde6497f647ae9ef",
+      "bytes": 3404,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard_TL.md",
       "path": "assets/rules_Story_Standard_TL.md",
-      "sha256": "6fa74de435925cc64437d47a9f79e236a5764b414436b296a0e8243b7bdc9d64",
-      "bytes": 5177,
+      "sha256": "2b0384437fee0a0a07bc8362ee4cb29e9e49f7c95cf3882dea8f49be914f9356",
+      "bytes": 3646,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard_UIUX.md",
       "path": "assets/rules_Story_Standard_UIUX.md",
-      "sha256": "d1e57fa029436779f4041335d72329196118171d5098b574e7c972ecf58a7686",
-      "bytes": 3679,
+      "sha256": "0b144e6454f28d52fb94c79d9b8094b39a527b62318ba8734b3ce8a69e950d42",
+      "bytes": 2435,
       "kind": "template"
     },
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "f9f2f9e26d1c4893c5374d9d950dc330f3d1841a7852f82642f8d4f4b6dcd10a",
-      "bytes": 37320,
+      "sha256": "93c6a48434bc1731b27af6f7e9ae06b7563f6d20726ac9b2814b0e78502650fa",
+      "bytes": 31582,
       "kind": "template"
     },
     {
       "id": "rules/Strict_Mode_Story_Guide.md",
       "path": "assets/rules_Strict_Mode_Story_Guide.md",
-      "sha256": "f910554722c9c81194f664127bb3287fe0170b02f7528f50ccb32b7b5dcd7643",
-      "bytes": 9743,
+      "sha256": "49d290f2060a49f75f1153c1bc88f51901485b9de71f9c2315f019a20a5a339e",
+      "bytes": 8887,
       "kind": "template"
     },
     {
@@ -302,6 +302,34 @@
       "kind": "adapter"
     },
     {
+      "id": "skills/comment",
+      "path": "assets/skills_comment",
+      "sha256": "02be9ee326228d2ebaac14094e8b3665aa1bbdf8aa77d0bf7bc641bcd4c030c9",
+      "bytes": 4972,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/comment",
+      "path": "assets/claude_skill_comment",
+      "sha256": "693800a03dd6bb6e747b602855850e3758ac0fc246c75579fe2ddffaf7905035",
+      "bytes": 388,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/comment",
+      "path": "assets/antigravity_skill_comment",
+      "sha256": "693800a03dd6bb6e747b602855850e3758ac0fc246c75579fe2ddffaf7905035",
+      "bytes": 388,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/comment",
+      "path": "assets/codex_skill_comment",
+      "sha256": "693800a03dd6bb6e747b602855850e3758ac0fc246c75579fe2ddffaf7905035",
+      "bytes": 388,
+      "kind": "adapter"
+    },
+    {
       "id": "skills/po-core",
       "path": "assets/skills_po-core",
       "sha256": "87dab51ae3f87c559f3b6884643526c9a2e96a027f1c473390d8a5d4a5bdb3f2",
@@ -332,8 +360,8 @@
     {
       "id": "skills/po-comment",
       "path": "assets/skills_po-comment",
-      "sha256": "6b6e3ec5d573721c5e8ce842c796c321a743bb9153faadd99f2d220b518009a8",
-      "bytes": 2110,
+      "sha256": "cd592f5ee24061f65b96fca72f7b82e30b950e4e57534fc2a7c6a879a4014eac",
+      "bytes": 1173,
       "kind": "template"
     },
     {
@@ -647,8 +675,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "92b7238c01d04e1d2d3a7254af0fb3d385f7241cf13fe49f672f11aaab06a044",
-      "bytes": 13832,
+      "sha256": "6bd00eb6ddb90ad6a4e233c4f4f82d28d3498d57ac30c0b0ca517ad279e48bf1",
+      "bytes": 13805,
       "kind": "template"
     },
     {
@@ -1417,8 +1445,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "e0e34d4e5760815ccc0e7b1758fd42bde1a5eb7def383c7f660db75646c0dafb",
-      "bytes": 30269,
+      "sha256": "8b80736b6316e64249ce2420da943d9a9667aea7fd393b5e56ad6b91e727e837",
+      "bytes": 30280,
       "kind": "script"
     },
     {
@@ -1515,15 +1543,15 @@
     {
       "id": "Read_Manifest.md",
       "path": "assets/Read_Manifest.md",
-      "sha256": "8fbd40cd7888ae9cf43c0ffa08934eee154045b886cb079b86cf1dfca47dd117",
-      "bytes": 12333,
+      "sha256": "cc5d08fe3e3a50b3bad5bae34de0e88c835eaea46b002e792d094312ed1d5932",
+      "bytes": 12542,
       "kind": "contract"
     },
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "2bfd7a24e272e53b5e7534e40e8345b71d7dcaadaf296961d48426dd7348c159",
-      "bytes": 36205,
+      "sha256": "47dd2d235d3747c363d964552c08e581232d5c7be4877283ca59263ff8e1e0db",
+      "bytes": 38555,
       "kind": "contract"
     },
     {
@@ -2544,6 +2572,100 @@
         "codex/skill/agent-security"
       ],
       "destination": ".codex/skills/agent-security/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/comment",
+      "sources": [
+        "skills/comment"
+      ],
+      "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/comment",
+      "sources": [
+        "claude/skill/comment"
+      ],
+      "destination": ".claude/skills/comment/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/comment",
+      "sources": [
+        "antigravity/skill/comment"
+      ],
+      "destination": ".antigravity/skills/comment/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/comment",
+      "sources": [
+        "codex/skill/comment"
+      ],
+      "destination": ".codex/skills/comment/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [

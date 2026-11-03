@@ -327,6 +327,26 @@ class PoRetirementTests(SyncFixture):
                     self.assertTrue((self.target / ("." + provider + "/skills/" + name + "/SKILL.md")).is_file(), name)
                 self.assertTrue((self.target / ".mt-agent-devkit/instructions/product_owner_instructions.md").is_file())
 
+    def test_older_target_without_comment_skill_installs_it(self):
+        # ST-999001: a target installed before the shared comment skill existed gains it cleanly on sync.
+        provider = "codex"
+        self.installed_previous_release(provider)
+        added = (".mt-agent-devkit/skills/comment/SKILL.md", "." + provider + "/skills/comment/SKILL.md")
+        path = self.target / deployment.RECEIPT
+        receipt = json.loads(path.read_text())
+        receipt["managed_files"] = [record for record in receipt["managed_files"] if record["path"] not in added]
+        deployment.jsonwrite(path, receipt)
+        for relative in added:
+            (self.target / relative).unlink()
+        with contextlib.redirect_stderr(io.StringIO()):
+            result = self.next_release(provider)
+        self.assertEqual(result["status"], "verified")
+        receipt = deployment.verify(self.target)
+        for relative in added:
+            self.assertTrue((self.target / relative).is_file(), relative)
+            self.assertIn(relative, {record["path"] for record in receipt["managed_files"]})
+        self.assertIn("**Requires:** `po-core`, `comment`", (self.target / ".mt-agent-devkit/skills/po-comment/SKILL.md").read_text(encoding="utf-8"))
+
     def test_generated_resolution_shape(self):
         self.installed_previous_release("codex")
         previous = deployment.inspect(self.target)["receipt"]

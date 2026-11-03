@@ -51,25 +51,10 @@ Only when a bug is found after story is `status:done` — steps in `QA_Rules_Rea
 
 ## 9. Comment Standard
 
-```markdown
-## [Comment title]
-**Thread Status:** Open | In Progress | Resolved  
-**Area:** [Workflow / Template / AC / File]
+Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. QA-only additions:
 
-**QA - YYYY-MM-DD**
-Validation results and findings per AC.
-
-**Decision:** [What we decided and why]  
-**Next:** [Owner or "None"]
-```
-
-- Report per-AC validation results in a single comment per story
-- Reply in the same thread when re-validating or following up on the same issue
-- **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**TL**`)
-- **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **One topic per comment** — a finding outside the AC you were asked to validate gets its own comment, not a paragraph inside the validation report.
-- **Writing standard:** decision-first (first line = the verdict), evidence by pointer, corrections state the delta only, no comments about comments, one close-out line per thread. **Never paste raw command output or test transcripts** — one-line verdict per AC, full logs in your working record. **Draft to shape:** one line per AC — criterion, verdict, pointer. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
-- **Exemption — yours alone:** per-AC validation reports may exceed the general ~150–200 word cap; thorough per-AC evidence is high-signal and expected. The gate's `wc -w` item is satisfied by stating the exemption in the comment — it is an exemption from the *cap*, not from the transcript and one-topic rules, which still apply.
+- Report per-AC validation results in a single comment per story, one line per AC (criterion, verdict, pointer); reply in the same thread when re-validating.
+- **Cap exemption, yours alone:** a per-AC validation report may exceed the ~150–200 word cap. State the exemption in the comment to satisfy the gate's `wc -w` item. It exempts the *cap* only, never the transcript or one-topic rules.
 
 ---
 

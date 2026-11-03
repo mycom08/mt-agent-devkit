@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-999001] Add a shared comment skill that owns the comment standard and Commenter gate for every role; role rules keep only their role-specific notes.
+
 ### Bug Fixes
 
 ---

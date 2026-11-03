@@ -36,7 +36,7 @@ Authoritative owner: `Developer_Rules_Read_On_Demand.md §16`.
 
 ## 9. Comment Standard
 
-Authoritative owner: `Developer_Rules_Read_On_Demand.md §15`.
+Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. Dev-only notes: `Developer_Rules_Read_On_Demand.md §15`.
 
 ---
 

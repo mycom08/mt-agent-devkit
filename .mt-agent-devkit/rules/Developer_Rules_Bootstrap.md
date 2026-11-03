@@ -185,7 +185,7 @@ Tag **TL** in the comment to request review.
 
 | Trigger | Fetch |
 |---|---|
-| Before posting a story/PR comment or editing the issue body | `Developer_Rules_Read_On_Demand.md §20` (Comment Standard and Commenter gate) |
+| Before posting a story/PR comment or editing the issue body | The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`, full: comment standard and Commenter gate), then `Developer_Rules_Read_On_Demand.md §20` (Dev-only notes) |
 | Creating or updating a project document | `Developer_Rules_Read_On_Demand.md §8` (Document Placement) |
 | Blocked on a story and reporting it | `Developer_Rules_Read_On_Demand.md §7` (Reporting & Blockers) |
 | A question surfaces mid-implementation, or a live user instruction contradicts the issue thread | `Developer_Rules_Read_On_Demand.md §12–§13` |

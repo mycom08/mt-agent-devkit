@@ -112,8 +112,9 @@ class RoutingTests(unittest.TestCase):
             shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
         retired=('Product_Owner_Rules_Bootstrap.md','Product_Owner_Rules_Read_On_Demand.md','Story_Standard_PO.md')
         for name in retired: self.assertFalse((ROOT/'.mt-agent-devkit/rules'/name).exists())
-        expected={'implementation':{'po-core','po-comment'},'fix':{'po-core','po-comment'},'closure':{'po-core','po-verify-close','po-comment'},
-                  'scope_question':{'po-core','po-answer-questions','po-comment'},'po_validation':{'po-core','po-validate-ac','po-comment'}}
+        # ST-999001: po-comment requires the shared comment skill, so every PO task also reads it.
+        expected={'implementation':{'po-core','po-comment','comment'},'fix':{'po-core','po-comment','comment'},'closure':{'po-core','po-verify-close','po-comment','comment'},
+                  'scope_question':{'po-core','po-answer-questions','po-comment','comment'},'po_validation':{'po-core','po-validate-ac','po-comment','comment'}}
         tasks={t for t,d in REGISTRY['tasks'].items() if 'Product_Owner' in d['roles']}
         self.assertEqual(tasks,set(expected))
         for task,skills in expected.items():
@@ -125,6 +126,34 @@ class RoutingTests(unittest.TestCase):
                 self.assertEqual(skills|{'po-write-story'},{s.split('/')[2] for s in sources if s.startswith('.mt-agent-devkit/skills/')})
                 self.assertFalse([s for s in sources if s.endswith(retired)])
         with self.assertRaisesRegex(m.Blocked,'unsupported role/task'): self.build(role='QA',task='po_validation')
+
+    def test_every_role_comment_route_resolves_to_comment_skill(self):
+        # ST-999001: the shared comment skill owns the comment standard and Commenter gate for every role.
+        for folder in ('rules','instructions','context','contracts','skills'):
+            shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
+        skill='.mt-agent-devkit/skills/comment/SKILL.md'
+        roles=('Developer','Technical_Lead','QA','Product_Owner','Business_Analyst','UI_UX_Designer')
+        self.assertEqual(REGISTRY['triggers']['commenter']['roles'],[])
+        for role in roles:
+            with self.subTest(role=role):
+                manifest=self.build(role=role,task='implementation',triggers=['commenter'])
+                m.validate(self.root,manifest,REGISTRY)
+                entry=next(x for x in manifest['reads'] if x['id']=='trigger_commenter')
+                self.assertEqual((entry['source'],entry['coverage']),(skill,{'kind':'full'}))
+        # The Developer routing row loads the skill first, then only the Dev-only notes.
+        manifest=self.build(triggers=['story_comment'])
+        reads={x['id']:x for x in manifest['reads']}
+        self.assertEqual(reads['trigger_story_comment_standard']['source'],skill)
+        self.assertEqual((reads['trigger_story_comment']['source'],reads['trigger_story_comment']['coverage']),('.mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md',{'kind':'section','section':'20'}))
+        self.assertEqual(reads['trigger_story_comment']['after'],['trigger_story_comment_standard'])
+        # Comment-bearing PO and TL question tasks read the skill without a trigger.
+        for role,task in (('Product_Owner','closure'),('Product_Owner','scope_question'),('Product_Owner','po_validation'),('Technical_Lead','question')):
+            with self.subTest(role=role,task=task):
+                self.assertIn(skill,[x['source'] for x in self.build(role=role,task=task)['reads']])
+        # Role rules point at the skill instead of restating it.
+        for name in ('Story_Standard.md','Story_Standard_Dev.md','Story_Standard_TL.md','Story_Standard_QA.md','Story_Standard_UIUX.md','Developer_Rules_Bootstrap.md'):
+            self.assertIn(skill,(ROOT/'.mt-agent-devkit/rules'/name).read_text(encoding='utf-8'),name)
+        self.assertIn('**Requires:** `po-core`, `comment`',(ROOT/'.mt-agent-devkit/skills/po-comment/SKILL.md').read_text(encoding='utf-8'))
 
     def test_bootstrap_mapping_is_per_layout_and_confined(self):
         registry=copy.deepcopy(REGISTRY)
@@ -304,8 +333,8 @@ class InstalledTests(unittest.TestCase):
                                 self.assertEqual(next(x['source'] for x in built['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/skills/po-core/SKILL.md')
                                 self.assertFalse([x['source'] for x in built['reads'] if x['source'].endswith(('Product_Owner_Rules_Bootstrap.md','Product_Owner_Rules_Read_On_Demand.md','Story_Standard_PO.md'))])
                                 skills={x['source'].split('/')[2] for x in built['reads'] if x['source'].startswith('.mt-agent-devkit/skills/')}
-                                self.assertEqual(skills,{'implementation':{'po-core','po-comment'},'fix':{'po-core','po-comment'},'closure':{'po-core','po-verify-close','po-comment'},
-                                                         'scope_question':{'po-core','po-answer-questions','po-comment'},'po_validation':{'po-core','po-validate-ac','po-comment'}}[task])
+                                self.assertEqual(skills,{'implementation':{'po-core','po-comment','comment'},'fix':{'po-core','po-comment','comment'},'closure':{'po-core','po-verify-close','po-comment','comment'},
+                                                         'scope_question':{'po-core','po-answer-questions','po-comment','comment'},'po_validation':{'po-core','po-validate-ac','po-comment','comment'}}[task])
                                 if task in ('closure','po_validation'):
                                     self.assertIn(('.mt-agent-devkit/rules/Story_Standard.md','14'),selected)
                             if task=='qa':
