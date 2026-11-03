@@ -108,7 +108,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 **When:** Work complete, ready for review  
 **Action:**
 1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
-2. Run applicable pre-PR checks (see `Developer_Rules_Read_On_Demand.md` §5 or role-specific rules)
+2. Run applicable pre-PR checks (the `pre-pr-gate` skill, `.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`, for every implementer role)
 3. Create PR from dev branch → `main`; title: `[ST-XXXXXX][DEVKIT] Story title`
 4. Remove label `status:in-progress`, add label `status:review`
 5. Request reviewer in issue Comment
@@ -215,7 +215,7 @@ In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (
 
 - [ ] Issue label: `status:review`
 - [ ] Self-checked all AC locally (do **NOT** tick checkboxes; PO ticks only)
-- [ ] Applicable pre-PR checks pass (see role-specific rules §5/§13)
+- [ ] Applicable pre-PR checks pass (the `pre-pr-gate` skill)
 - [ ] PR created with story ID in title: `[ST-XXXXXX][DEVKIT] ...`
 - [ ] PR targets `main`
 
@@ -341,7 +341,8 @@ allow-list is available.
 ## Version
 
 **Created:** 2026-06-16  
-**Version:** 1.5 — §9 and the §12 Commenter gate point to the shared `comment` skill, which now owns the comment standard (ST-000304)  
+**Version:** 1.6 — §4 and the §12 implementer gate point to the shared `pre-pr-gate` skill; the stale `Developer_Rules_Read_On_Demand.md §5` citation is gone (ST-000308)  
+**Previous:** 1.5 — §9 and the §12 Commenter gate point to the shared `comment` skill, which now owns the comment standard (ST-000304)  
 **Previous:** 1.4 — §1 Done row, §7 and §14: acceptance by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`; §14 tracked split: in `orchestrator` mode the scope decision is the user's (ST-000291)  
 **Previous:** 1.3 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)  
 **Previous:** 1.2 — §2, §4, §7, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row (ST-000021)  

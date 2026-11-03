@@ -15,7 +15,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.mt
 | **Editing any file under `.claude/agents/templates/`** — dual-update rule, `changes.json` fold-in shape and ordering (the version itself is never hand-edited). Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
 | You have been assigned a story | `§3` (Story Workflow) |
 | Starting a complex change — new workflow stage, major template restructure, new devkit command | `§4` (Design First Before Implementation) |
-| Creating or updating a project document | `§6` (Internal Project Documents) — the canonical paths |
+| Creating or updating a project document | `§6` (Internal Project Documents) — a pointer to `context/Document_Index.md`, the single document path list |
 | You need the devkit's own command surface (writing or auditing docs about triggers) | `§10` (Core Commands) |
 | You need the repo or raw-content URL | `§16` (Reference Links) |
 

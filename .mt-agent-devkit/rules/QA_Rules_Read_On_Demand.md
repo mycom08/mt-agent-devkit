@@ -6,26 +6,13 @@
 
 ## 1. Pre-PR Gate (when acting as Implementer)
 
-Triggered from `QA_Rules_Bootstrap.md §9`. When QA is the story Implementer, run the applicable local checks before opening a PR:
-
-| Change type | Required local check |
-|---|---|
-| `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
-| `.ps1` files changed | PowerShell syntax check — zero parse errors |
-| Internal shared harness, provider adapters, working wrappers/skills or root entrypoints changed | `python scripts/validate_internal_harness.py` + wrapper `--check` + `python -m unittest scripts.test.test_internal_harness` + template validator + `bash scripts/test/run.sh`, all exit 0; frozen migration preservation is not an ongoing gate |
-| `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| `.claude/agents/templates/**` or `.claude/agents/workflows/**` changed | `python scripts/validate_templates.py` + `bash scripts/test/run.sh` — both exit 0 (see `docs/Template_Test_Strategy.md`) |
-| Docs only (no templates, workflows, or scripts) | Exempt |
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+Triggered from `QA_Rules_Bootstrap.md §9`. When QA is the story Implementer, run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR. It is the same gate for every implementer.
 
 ---
 
 ## 2. Live User Instruction Conflicts (when acting as Implementer)
 
-Triggered from `QA_Rules_Bootstrap.md §10`.
-
-If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread, the live instruction takes precedence. Acknowledge the conflict, proceed with the live instruction, and document the override in the PR description.
+Triggered from `QA_Rules_Bootstrap.md §10`. The rule is `raise-question` §5 (`.mt-agent-devkit/skills/raise-question/SKILL.md`).
 
 ---
 
@@ -41,6 +28,7 @@ Triggered from `Story_Standard_QA.md §6`. When a bug is found after story is `s
 
 ## Version
 
-**Version:** 1.2 — Renamed from `QA_Rules_Extended.md` to `QA_Rules_Read_On_Demand.md`, matching `Developer_Rules_Read_On_Demand.md`'s naming convention (no content change) — see `Bootstrap_OnDemand_Split_Notes.md`.
+**Version:** 1.3 — §1 points to `pre-pr-gate`, §2 to `raise-question` §5 (ST-000308).
+**Previous:** 1.2 — Renamed from `QA_Rules_Extended.md` to `QA_Rules_Read_On_Demand.md`, matching `Developer_Rules_Read_On_Demand.md`'s naming convention (no content change) — see `Bootstrap_OnDemand_Split_Notes.md`.
 **Previous:** 1.1 — Added §3 (Hotfix — QA Role), relocated from `Story_Standard_QA.md` §6 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
 **1.0:** (created 2026-08-20, split out of `QA_Rules.md` v1.4 per devkit issue #123).

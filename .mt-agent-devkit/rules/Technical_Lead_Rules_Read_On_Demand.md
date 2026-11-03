@@ -8,10 +8,7 @@
 
 Triggered from `Technical_Lead_Rules_Bootstrap.md §5`. Rare — only when the orchestrator assigns TL as the story implementer.
 
-1. Before status or product writes, create a dev branch only through `branch_preflight.py inspect` then `branch_preflight.py create`, using the immutable Base Branch and verified full SHA — **never work directly on `main`**.
-2. Push all implementation work to that dev branch
-3. Open a PR from the dev branch → `main`
-4. PR title: `[ST-XXXXXX][DEVKIT] Story title`
+Branch, commits, push and PR follow the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`), the same procedure every implementer uses. Load it before creating the branch.
 
 ---
 
@@ -19,7 +16,7 @@ Triggered from `Technical_Lead_Rules_Bootstrap.md §5`. Rare — only when the o
 
 Triggered from `Technical_Lead_Rules_Bootstrap.md §11`.
 
-After each working session on an unfinished story, create or update a context-anchoring note under `docs/technical/` or `docs/feature/<feature_name>/questions/`.
+After each working session on an unfinished story, create or update a context-anchoring note in the folder `project-docs` Placement 3 names (`docs/technical/` or `docs/feature/<feature_name>/questions/`).
 
 ```md
 # Feature: <feature_name>
@@ -41,16 +38,7 @@ After each working session on an unfinished story, create or update a context-an
 
 Triggered from `Technical_Lead_Rules_Bootstrap.md §13`. Applies only when TL is acting as Implementer per §1 above.
 
-| Change type | Required local check |
-|---|---|
-| `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
-| `.ps1` files changed | PowerShell syntax check — zero parse errors |
-| `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| Template / workflow / rules / docs only | Exempt |
-
-Include a one-line check result note in the PR description.
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+Run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening the PR and before each fix push. It is the same gate for every implementer: harness, template and rules changes run the validators and are never exempt as docs-only.
 
 ---
 
@@ -86,27 +74,17 @@ Triggered from `Story_Standard_TL.md §4`. When `**Assigned:** Technical Lead` a
 
 Triggered from `Technical_Lead_Rules_Bootstrap.md §15` — orchestrator assigns you as Stage 2 reviewer, or you are otherwise reviewing a PR. Relocated verbatim from `Technical_Lead_Rules_Bootstrap.md`'s old §2 (v1.5, devkit#179) — this content loaded on every TL spawn before, including spawns that never review a PR; it is now fetched only when the review shape actually fires.
 
-**Before reviewing, locate the work:**
-1. Open the GitHub Issue for the story being reviewed
-2. Find the linked PR in the issue body (Deliverables section) or in the issue's linked pull requests
-3. If no PR is linked, ask Dev to link it before proceeding
+**Shared reviewer procedure:** load the `pr-review` skill (`.mt-agent-devkit/skills/pr-review/SKILL.md`) first. It owns locating the work, the CI gate (pending-CI wait, the check actually executed, head SHA, red-check diagnosis), naming and stale-reference criteria (citation accuracy, deleted or renamed files via `git ls-tree`, the old-path grep), credential evidence, inline change requests ("at minimum these"), the issue notify comment and the `gh pr comment` verdict. The TL-only rules below add to it.
 
-**Review checklist:**
-
-In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
+**Review checklist (TL-only):**
 
 For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
 - **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
-- **Confirm the check actually executed, not just its conclusion:** open the job log and confirm the target check actually ran before accepting a green/red conclusion at face value. A run that fails at dependency resolution before anything meaningful executes is a different failure mode than a real failure — call it out as such, don't treat it as proof either way.
-- **Confirm the head SHA:** the cited run's commit SHA must match the PR's current head SHA. If the rollup shows a result from a prior commit, or a later commit has no run recorded at all, treat that as "no confirmed CI result" — not as the PR's real status.
-- **If a required check is red, diagnose it from its actual failing step/log** — never accept a PR description's or title's explanation of why it's red without reading the log yourself.
 - **Dependency-pin check:** if the story changes or introduces a version pin, confirm the pinned version is actually resolvable, not just present in a local cache.
 - **Resume-rule branch completeness (state-file / pipeline stories):** if the story adds a new pipeline-state field, status value, or step to a resumable workflow, verify the resume/routing logic has an explicit branch for every value its own write rules can produce — not just the pre-existing ones. A new terminal or interrupted-window state with no matching resume branch silently falls into the nearest existing branch instead of doing the right thing.
-- **Citation accuracy:** before citing a rule as `<file> §N`, open the file and confirm N is the section's actual heading number — a `grep -n` result is a *line* number, not a section number, and a wrong-but-existing section number ships silently past casual review.
 - Verify compliance with the approved implementation design
-- Check: naming conventions, cross-reference correctness, template structure completeness
-- **Source code / script changes only** — verify compliance with `.mt-agent-devkit/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling) for `.sh` and `.ps1` scripts
-- **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common_Read_On_Demand.md §6`
+- Check template structure completeness
+- **Source code / script changes only** — verify compliance with the `clean-code` skill (`.mt-agent-devkit/skills/clean-code/SKILL.md`) for `.sh` and `.ps1` scripts
 - **UI Prototype PRs (only if the story touches a repo generated by Build Software's UI-bearing companion-repo convention):** apply `.mt-agent-devkit/rules/UI_Prototype_Rules.md` before approving. Not applicable to the devkit's own repo (markdown-only, no UI-bearing companion repos), but this mirror stays in sync with the template per Project_Priming_Read_On_Demand.md §15.
 - **Approve** via PR comment when all criteria pass; leave blocking comments if they do not
 - Cannot approve your own work — seek Developer peer review
@@ -117,31 +95,21 @@ When reviewing a story whose Technical Scope lists only workflow YAML files, use
 - Secret/credential scope — no widened access beyond what the job needs
 - Blast radius on existing triggers/jobs — confirm no unrelated job's behavior changes
 - Rollback safety — can this be reverted without side effects
-- The CI-execution/SHA/red-check-diagnosis bullets above still apply
+- The `pr-review` CI gate (executed, head SHA, red-check diagnosis) still applies
 
 Skip: naming conventions, cross-reference correctness, template structure completeness, Clean Code review.
 
 **Documentation / template stories:**
-Review checklist differs — focus on:
+Review checklist differs — focus on these, with the `pr-review` stale-reference, section-completeness and deleted-file criteria:
 - **Accuracy:** Does the template or workflow reflect the intended agent behavior?
-- **No stale references:** Are all file paths, section references, and placeholder names correct?
-- **Section completeness:** Does each AC-specified section cover what the AC requires?
 - **Backward compatibility:** Will existing target projects that have already run `init project` continue to work after `sync devkit`?
-- **File deletions / renames:** If the story deletes or renames files, confirm the original is absent from the branch tree — do not rely on the diff alone; verify via `gh api repos/mycom08/mt-agent-devkit/git/trees/{ref}?recursive=1` or `git ls-tree` on the PR branch.
-- **Path-reference stories:** If the story updates file path references inside a workflow or rules file, grep that file for the old path string before approving: `grep -n "old_path" <file>`. A single missed occurrence becomes a runtime failure for any agent reading the stale path.
 
 **AC Clarifications:**
 When your answer changes or narrows the meaning of an AC, **update the story body AC description** to reflect the authorised interpretation.
 
 **Distinguishing this from "TL commenting on scope" (`Story_Standard_TL.md` §7 red flag):** narrowing an AC's *technical* interpretation is your job, per above. If your answer would instead create a **new** deliverable the existing AC doesn't already imply, document the technical detail in AC/Technical Scope as usual, but flag PO in the same comment to confirm the scope addition — don't expand scope on your own authority.
 
-**Change Requests:**
-- Post each required change as an **inline comment on the PR** with enough detail for Dev to action it
-- After posting all PR inline comments, post a **brief notify comment on the GitHub Issue**
-- **Fix/call-site menus are not exhaustive by default:** when a change request names specific files, call sites, or fix options, phrase it as "at minimum these, plus any site/mechanism sharing the same pattern" rather than a bare list — a bare list invites treating it as complete, and the implementer is often closer to the full mechanism inventory than the reviewer.
-
-**PR Approval:**
-- When approving, post a **brief comment on the GitHub Issue** to notify the team
+**Change requests and approval notices** follow `pr-review` steps 5–7.
 
 **You are the merge gate.** No PR merges without your explicit approval.
 
@@ -164,7 +132,8 @@ Then execute:
 
 ## Version
 
-**Version:** 1.3 — Added §5 (Code Review & PR Approval, relocated verbatim from `Technical_Lead_Rules_Bootstrap.md`'s old §2 — that section loaded on every TL spawn regardless of shape, including the answer-a-question shape which never opens a PR) and §6 (Answer-a-Question Task, new — read set modelled on the PO Stage 4 closure read set's shape (now the `po-verify-close` skill), citing `Agent_Common_Bootstrap.md` in full per that file's own no-section-read header). Devkit#179.
+**Version:** 1.4 — §1 points to `git-workflow`, §3 to `pre-pr-gate` (the stricter gate: harness, template and rules changes are no longer exempt for TL as implementer), §5 to `pr-review` for the shared reviewer procedure and to `clean-code`; TL-only review rules stay here (ST-000308).
+**Previous:** 1.3 — Added §5 (Code Review & PR Approval, relocated verbatim from `Technical_Lead_Rules_Bootstrap.md`'s old §2 — that section loaded on every TL spawn regardless of shape, including the answer-a-question shape which never opens a PR) and §6 (Answer-a-Question Task, new — read set modelled on the PO Stage 4 closure read set's shape (now the `po-verify-close` skill), citing `Agent_Common_Bootstrap.md` in full per that file's own no-section-read header). Devkit#179.
 **Previous:** 1.2 — Renamed from `Technical_Lead_Rules_Extended.md` to `Technical_Lead_Rules_Read_On_Demand.md`, matching `Developer_Rules_Read_On_Demand.md`'s naming convention (no content change) — see `Bootstrap_OnDemand_Split_Notes.md`.
 **1.1:** Added §4 (TL as Implementer — Status Transitions), relocated from `Story_Standard_TL.md` §4 per devkit issue #133 (extends the #123 pattern to the Story_Standard views).
 **1.0:** (created 2026-08-20, split out of `Technical_Lead_Rules.md` v1.3 per devkit issue #123).

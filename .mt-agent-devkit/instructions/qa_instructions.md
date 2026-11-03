@@ -39,7 +39,7 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 
 ## When Acting as Story Implementer
 
-Rare — only when QA is the story Implementer. Pre-PR gate checklist in `.mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md §1`; live user instruction conflicts rule in `§2`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+Rare — only when QA is the story Implementer. Pre-PR gate: the `pre-pr-gate` skill; live user instruction conflicts: `raise-question` §5 (`QA_Rules_Read_On_Demand.md §1`–`§2` point to them). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 

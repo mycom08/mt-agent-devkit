@@ -153,27 +153,34 @@
       "reads": [
         {
           "id": "tl_implementation_1",
-          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "Existing authoritative tl implementation 1 requirement",
+          "reason": "TL implementer branch, commit and PR procedure (git-workflow)",
           "after": [
             "memory"
           ],
           "roles": [
             "Technical_Lead"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "1"
+              }
+            }
+          }
         },
         {
           "id": "tl_implementation_3",
-          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "3"
+            "kind": "full"
           },
-          "reason": "Existing authoritative tl implementation 3 requirement",
+          "reason": "TL implementer pre-PR gate (pre-pr-gate)",
           "after": [
             "memory"
           ],
@@ -203,27 +210,34 @@
         },
         {
           "id": "qa_implementation",
-          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "Existing authoritative qa implementation requirement",
+          "reason": "QA implementer pre-PR gate (pre-pr-gate)",
           "after": [
             "memory"
           ],
           "roles": [
             "QA"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "1"
+              }
+            }
+          }
         },
         {
           "id": "ba_implementation",
-          "source": ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "Existing authoritative ba implementation requirement",
+          "reason": "BA implementer pre-PR gate (pre-pr-gate)",
           "after": [
             "memory"
           ],
@@ -238,18 +252,26 @@
         },
         {
           "id": "qa_implementation_conflict",
-          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/raise-question/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "2"
+            "kind": "full"
           },
-          "reason": "qa implementation conflict",
+          "reason": "QA implementer live user instruction conflicts (raise-question)",
           "after": [
             "memory"
           ],
           "roles": [
             "QA"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "2"
+              }
+            }
+          }
         },
         {
           "id": "ui_standard",
@@ -314,27 +336,34 @@
       "reads": [
         {
           "id": "tl_implementation_1",
-          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "Existing authoritative tl implementation 1 requirement",
+          "reason": "TL implementer branch, commit and PR procedure (git-workflow)",
           "after": [
             "memory"
           ],
           "roles": [
             "Technical_Lead"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "1"
+              }
+            }
+          }
         },
         {
           "id": "tl_implementation_3",
-          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "3"
+            "kind": "full"
           },
-          "reason": "Existing authoritative tl implementation 3 requirement",
+          "reason": "TL implementer pre-PR gate (pre-pr-gate)",
           "after": [
             "memory"
           ],
@@ -364,27 +393,34 @@
         },
         {
           "id": "qa_implementation",
-          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "Existing authoritative qa implementation requirement",
+          "reason": "QA implementer pre-PR gate (pre-pr-gate)",
           "after": [
             "memory"
           ],
           "roles": [
             "QA"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "1"
+              }
+            }
+          }
         },
         {
           "id": "ba_implementation",
-          "source": ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "Existing authoritative ba implementation requirement",
+          "reason": "BA implementer pre-PR gate (pre-pr-gate)",
           "after": [
             "memory"
           ],
@@ -399,18 +435,26 @@
         },
         {
           "id": "qa_implementation_conflict",
-          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/raise-question/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "2"
+            "kind": "full"
           },
-          "reason": "qa implementation conflict",
+          "reason": "QA implementer live user instruction conflicts (raise-question)",
           "after": [
             "memory"
           ],
           "roles": [
             "QA"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "2"
+              }
+            }
+          }
         },
         {
           "id": "ui_standard",
@@ -468,6 +512,22 @@
         "verification"
       ],
       "reads": [
+        {
+          "id": "review_procedure",
+          "source": ".mt-agent-devkit/skills/pr-review/SKILL.md",
+          "coverage": {
+            "kind": "full"
+          },
+          "reason": "shared reviewer procedure the TL review section points to (pr-review)",
+          "after": [
+            "common"
+          ],
+          "layouts": {
+            "target": {
+              "enabled": false
+            }
+          }
+        },
         {
           "id": "review",
           "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
@@ -1082,12 +1142,11 @@
         },
         {
           "id": "trigger_document_paths",
-          "source": ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/context/Document_Index.md",
           "coverage": {
-            "kind": "section",
-            "section": "6"
+            "kind": "full"
           },
-          "reason": "trigger document paths",
+          "reason": "trigger document paths: the single document path list",
           "after": [
             "memory"
           ],
@@ -1133,12 +1192,11 @@
         },
         {
           "id": "trigger_ui_consultation",
-          "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/raise-question/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "1"
+            "kind": "full"
           },
-          "reason": "trigger ui consultation",
+          "reason": "trigger ui consultation (raise-question)",
           "after": [
             "memory"
           ],
@@ -1189,12 +1247,11 @@
         },
         {
           "id": "trigger_ui_live_conflict",
-          "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/raise-question/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "2"
+            "kind": "full"
           },
-          "reason": "trigger ui live conflict",
+          "reason": "trigger ui live conflict (raise-question)",
           "after": [
             "memory"
           ],
@@ -1213,18 +1270,26 @@
         },
         {
           "id": "trigger_qa_conflict",
-          "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/raise-question/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "2"
+            "kind": "full"
           },
-          "reason": "trigger qa conflict",
+          "reason": "trigger qa conflict (raise-question)",
           "after": [
             "memory"
           ],
           "roles": [
             "QA"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "2"
+              }
+            }
+          }
         }
       ]
     },
@@ -1250,18 +1315,26 @@
         },
         {
           "id": "trigger_tl_pre_pr",
-          "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+          "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
           "coverage": {
-            "kind": "section",
-            "section": "3"
+            "kind": "full"
           },
-          "reason": "TL implementer preparing PR",
+          "reason": "TL implementer preparing PR (pre-pr-gate)",
           "after": [
             "memory"
           ],
           "roles": [
             "Technical_Lead"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+              "coverage": {
+                "kind": "section",
+                "section": "3"
+              }
+            }
+          }
         }
       ]
     },
@@ -1293,14 +1366,22 @@
       "reads": [
         {
           "id": "trigger_clean_code",
-          "source": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
+          "source": ".mt-agent-devkit/skills/clean-code/SKILL.md",
           "coverage": {
             "kind": "full"
           },
-          "reason": "trigger clean code",
+          "reason": "trigger clean code (clean-code)",
           "after": [
             "memory"
-          ]
+          ],
+          "layouts": {
+            "target": {
+              "source": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
+              "coverage": {
+                "kind": "full"
+              }
+            }
+          }
         }
       ]
     },

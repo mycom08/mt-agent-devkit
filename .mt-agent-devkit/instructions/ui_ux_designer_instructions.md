@@ -43,7 +43,7 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 
 ## Mid-Implementation Consultation / Live User Instruction Conflicts
 
-Rare, task-specific — full procedure in `.mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md §1` (a question surfaces during implementation) and `§2` (a live instruction contradicts a prior decision). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+Rare, task-specific — full procedure in the `raise-question` skill, §3 (a question surfaces during implementation) and §5 (a live instruction contradicts a prior decision); `.mt-agent-devkit/rules/UI_UX_Designer_Rules_Read_On_Demand.md §1`–`§2` point to them. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 

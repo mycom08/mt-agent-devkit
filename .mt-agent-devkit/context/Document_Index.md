@@ -1,6 +1,6 @@
 # Document Index — mt-agent-devkit
 
-Quick lookup for all project documents and external references. Update this file whenever a document is added, moved, or removed.
+Quick lookup for all project documents and external references. This is the single document path list: `Project_Priming_Read_On_Demand.md §6` points here, and placement rules live in the `project-docs` skill. Update this file whenever a document is added, moved, or removed.
 
 ---
 
@@ -33,7 +33,7 @@ Quick lookup for all project documents and external references. Update this file
 
 | Document | Path Pattern |
 |---|---|
-| Sprint Overview | `docs/sprints/Sprint_N_Overview.md` |
+| Sprint Overviews | `docs/sprints/Sprint_N_Overview.md` |
 | ST-000254 QA Scenarios | `docs/sprints/ST_000254_Read_Manifest_Test_Scenarios.md` |
 | ST-000262 QA Scenarios | `docs/sprints/ST_000262_Test_Scenarios.md` |
 | ST-000264 Common Capability QA Scenarios | `docs/sprints/ST_000264_Common_Capability_Test_Scenarios.md` |
@@ -67,7 +67,7 @@ Quick lookup for all project documents and external references. Update this file
 
 ---
 
-**Last Updated:** 2026-09-21
+**Last Updated:** 2026-11-03
 
 ## Multi-Provider Harness
 

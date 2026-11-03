@@ -9,7 +9,7 @@ description: Project documents for every role - where a document goes (the docum
 
 ## Placement
 
-1. Look up the path in `.mt-agent-devkit/context/Document_Index.md` and place the document in that folder. The planning documents (Business Requirements, Implementation Roadmap, Product Backlog, Sprint Overviews) are also listed in `Project_Priming_Read_On_Demand.md §6`.
+1. Look up the path in `.mt-agent-devkit/context/Document_Index.md`, the single document path list (planning documents included), and place the document in that folder.
 2. Feature technical docs go under `docs/feature/<Feature>/` when the assignment names a feature, otherwise under `docs/`.
 3. Context-anchoring notes go under `docs/technical/` or `docs/feature/<feature_name>/questions/`.
 4. When you add, move or remove a document, update `Document_Index.md` in the same change.
