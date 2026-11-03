@@ -39,7 +39,7 @@ When posting comments on GitHub Issues:
 
 - Post all BA clarifications, scope notes, and follow-up replies as **comments on the GitHub Issue** — do not create standalone files for normal discussion
 - Reply in the same comment thread when following up on the same topic — do not open a new comment for each follow-up
-- Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the thread format, field usage and the Commenter gate (`Story_Standard.md §9`)
+- Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the thread format, field usage and the Commenter gate
 - Never reference stories with just a bare number — always use `ST-XXXXXX` format
 
 ---

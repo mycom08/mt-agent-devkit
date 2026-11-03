@@ -36,4 +36,18 @@ Ripple: `Refine_Sprint_Workflow.md` (and its Phase 2 shared template), the Devel
 
 - `.claude/agents/templates/` (legacy layout) is unchanged, per CLAUDE.md ("unchanged until Phase 2") and the ST-000287/289 precedent. Legacy installs keep their restated comment rules.
 - The bundle `bridge_provenance.json` change comes from the existing release-snapshot drift on `main`. It is not part of this story.
-- Two citations still name "the Commenter gate in `Story_Standard.md §12`": `Agent_Common_Memory.md` and `Agent_Common_Read_On_Demand.md` (and their templates). They still resolve, because that subsection now points to the skill. They were left as is to limit scope.
+- The Common-file Commenter-gate citations were left open after the first pass; fix round 1 closes them (below).
+
+## Fix round 1 (TL follow-ups 1-3, user decision item 9; AC3 pointers, no AC text change)
+
+1. **BA rule.** `Business_Analyst_Rules_Bootstrap.md` and the Phase 2 `Business_Analyst_Rules_template.md` drop the wrong `Story_Standard.md §9` citation. They now name only the `comment` skill path.
+2. **PO Skills examples.** The example entries now list `comment`: `stage4-closure: po-core, po-verify-close, po-comment, comment` and `refine-stage2-c1: ..., po-comment, comment`. Files changed:
+   - `orchestrator_instructions.md` step 2, `Sprint_Workflow.md`, `Refine_Sprint_Workflow.md`, and the `Shared_Pipeline_Stages.md` Stage 4 append.
+   - The four matching Phase 2 shared templates.
+
+   The "Inline skills" column is unchanged, because transitive `**Requires:**` loading already covers `comment`.
+3. **Common citations.** `Agent_Common_Memory.md` and `Agent_Common_Read_On_Demand.md`, and their Phase 2 templates, now cite "the Commenter gate in the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`)". The legacy `.claude/agents/templates/rules/Agent_Common_Read_On_Demand_template.md` was deliberately left unchanged, following the ST-000287/289 precedent: the legacy layout does not ship the `comment` skill, so pointing it there would leave a dangling reference.
+
+The bundle assets were regenerated and `changes.json` `0.1.56-SNAPSHOT` descriptions were folded in.
+
+**Gates (all exit 0):** `validate_templates.py` 0 · `validate_internal_harness.py` 0 · `generate_wrappers.py --check` 0 · `unittest scripts.test.test_internal_harness` 0 · `bash scripts/test/run.sh` 0 (227 tests, 10 fixtures; `python`→`python3` shim) · `build_bundle.py --check` 0.

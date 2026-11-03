@@ -21,7 +21,12 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-999001] Comment routing row loads the comment skill first.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Business_Analyst_Rules_template.md": "[ST-999001] Comment rule names the comment skill.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Strict_Mode_Story_Guide_template.md": "[ST-999001] Comment entries follow the comment skill instead of a restated standard.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-999001] Refinement question comment uses the comment skill format."
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-999001] Refinement question comment uses the comment skill format; PO Skills example lists comment.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-999001] Stage 4 PO Skills entry lists comment.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-999001] PO Skills example lists comment.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-999001] PO Skills example lists comment.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-999001] Commenter gate citation names the comment skill.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Memory_template.md": "[ST-999001] Commenter gate citation names the comment skill."
     },
     "deployment": {
       "schema_version": 1,

@@ -32,7 +32,7 @@ The orchestrator maintains `{{AGENT_DIR_PREFIX}}/agents/tmp/refine_pipeline_stat
 **Stage:** <1 | 2 | 3 | 4>
 **Loop Count:** <per-story loop counts, e.g. "#125: 1, #126: 1">
 **PO Execution:** <subagent | orchestrator> (resolved once at workflow start; a resumed run keeps it)
-**PO Skills:** <one entry per inline PO activity, e.g. "refine-stage2-c1: po-core, po-answer-questions, po-comment", or empty>
+**PO Skills:** <one entry per inline PO activity, e.g. "refine-stage2-c1: po-core, po-answer-questions, po-comment, comment", or empty>
 **PO Memory:** <read, or empty>
 **Sessions:**
 - dev_session: <agentId or empty>

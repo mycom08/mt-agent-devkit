@@ -38,7 +38,7 @@ Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps 
 
 **Inline PO activity procedure.** For every inline row above:
 1. **Skills.** Before acting, load each listed skill, plus any skill its `**Requires:**` line names that is not already loaded. Read the canonical file `.mt-agent-devkit/skills/<name>/SKILL.md` in full; a provider without verified native skill discovery always reads that path (a skill directory does not prove discovery).
-2. **Pipeline state.** When the workflow keeps a state file, set `po_session: inline` and append one entry to `**PO Skills:**` naming the activity and the skills loaded (e.g. `stage4-closure: po-core, po-verify-close, po-comment`).
+2. **Pipeline state.** When the workflow keeps a state file, set `po_session: inline` and append one entry to `**PO Skills:**` naming the activity and the skills loaded (e.g. `stage4-closure: po-core, po-verify-close, po-comment, comment`).
 3. **PO memory.** At the run's first PO activity, read `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md` in full and record `**PO Memory:** read` in the state file. Write durable facts in the PO format, `## Stored Facts`, per `Agent_Common_Read_On_Demand.md §1` (fetch that section before the first write).
 4. **PO Working Record.** At the end of each inline activity whose skill writes the Working Record (`po-core` rules), update `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` in the `Agent_Common_Bootstrap.md §1` format. Stage 4 closure skips it, as a spawned closure PO does.
 5. **Separate state.** The orchestrator's own Working Record and state stay unchanged: PO facts never go into orchestrator state, and orchestrator state never goes into PO records.

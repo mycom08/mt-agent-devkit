@@ -39,7 +39,7 @@ The orchestrator maintains `{RUNTIME_ROOT}/tmp/sprint_pipeline_state.md` to supp
 **Retro Contract:** exception-v1
 **Security Skill:** agent-security (loaded at workflow start)
 **PO Execution:** <subagent | orchestrator> (resolved once at workflow start; a resumed run keeps it)
-**PO Skills:** <one entry per inline PO activity for this story, e.g. "stage4-closure: po-core, po-verify-close, po-comment", or empty>
+**PO Skills:** <one entry per inline PO activity for this story, e.g. "stage4-closure: po-core, po-verify-close, po-comment, comment", or empty>
 **PO Memory:** <read, or empty> (PO memory is read once, at the run's first PO activity)
 **Retro Expected:** <confined runtime JSON path of actual stage identities>
 **Repro Skipped:** <comma-separated story IDs not reproduced this run, or empty>
