@@ -53,27 +53,6 @@ Record **durable facts only** for future sessions (not task state or conversatio
 
 > PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts stays scoped to Dev/TL/QA.
 <!-- END GENERATED troubleshooting part format -->
-## Stored Facts
-
-### Fact N
-- **Rule:** the reusable decision/convention (this is line 1 — already required by rule 1 above)
-- **Applies when:** the trigger condition that makes an agent need this
-- **Evidence:** one-line pointer — story ID, `file:section` (point, don't mirror — rule 4)
-- **Expires when:** the premise whose failure makes this fact wrong
-
-## Troubleshooting Facts
-
-### Fix N — <short label>
-- **Problem:** Short label (e.g., "gh CLI authentication fails")
-- **Symptoms:** Exact error message or observable behavior
-- **Root Cause:** Why it happened
-- **Fix:** Exact commands/steps to resolve
-- **Prevention:** What to check upfront to avoid this next time
-```
-
-> PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The four-field Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts is unchanged and stays scoped to Dev/TL/QA.
-
-> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above** — see §8. PO, BA, and UI/UX Designer are unaffected.
 
 ---
 

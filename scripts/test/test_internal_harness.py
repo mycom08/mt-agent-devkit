@@ -2,6 +2,7 @@
 import hashlib
 import importlib.util
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -551,6 +552,20 @@ class CommonSkillsTests(unittest.TestCase):
         for row in self.blocks.BLOCKS:
             if row.layer == "internal":
                 self.assertTrue(self.blocks.source(row.skill, "internal").startswith(".mt-agent-devkit/skills/"))
+
+    def test_generated_sections_hold_no_leftover_text_and_balanced_fences(self):
+        """Text outside the blocks of a generated section is a second owner (fix round 1)."""
+        allowed = {"Interruption, blocking, multi-session continuation or explicit status snapshot activates this capability."}
+        for target in sorted({b.target for b in self.blocks.BLOCKS}):
+            text = (ROOT / target).read_text(encoding="utf-8")
+            self.assertEqual(0, len(re.findall(r"^```", text, re.M)) % 2, target)
+            for section in re.split(r"(?m)^(?=## [0-9]+[a-z]?\.)", text)[1:]:
+                if "BEGIN GENERATED" not in section:
+                    continue
+                rest = re.sub(r"(?s)<!-- BEGIN GENERATED (.+?):.*?<!-- END GENERATED \1 -->\n", "", section)
+                leftover = [line for line in rest.splitlines()[1:] if line.strip() not in ("", "---")
+                            and not any(line.startswith(a) for a in allowed)]
+                self.assertEqual([], leftover, f"{target}: {section.splitlines()[0]}")
 
     def test_check_fails_on_differing_block_and_write_repairs_it(self):
         root = self.fixture()

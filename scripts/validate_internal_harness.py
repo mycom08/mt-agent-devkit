@@ -105,7 +105,7 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
 # common skill except change-metadata, which stays internal only (design B5).
 UNDISTRIBUTED_SKILLS = frozenset(COMMON_SKILLS)
 SKILL_SIZE_LIMITS = {"po-core": 1500}
-DEFAULT_PO_SKILL_LIMIT = 4000
+DEFAULT_SKILL_LIMIT = 4000  # po-* and common skills
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
 SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS) + r")`")
 
@@ -113,7 +113,7 @@ SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+|comment|" + "|".join(re.e
 def skill_size_limit(name: str):
     if name in SKILL_SIZE_LIMITS:
         return SKILL_SIZE_LIMITS[name]
-    return DEFAULT_PO_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS else None
+    return DEFAULT_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS else None
 
 
 def skill_errors(root, entries, wrappers) -> list[str]:
