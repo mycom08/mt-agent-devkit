@@ -1,7 +1,7 @@
 # Developer Skills Proposal
 
 **Feature:** `role-skills`
-**Status:** Revision 4. **TL-approved** on PR #306 (approved with changes; C1 and C2 folded in). Ready for story creation
+**Status:** Revision 5. **TL-approved** on PR #306 (approved with changes; C1 and C2 folded in). Ready for story creation
 **Date:** 2026-11-03
 **Scope:** The devkit's internal harness (`.mt-agent-devkit/`) and the distributed Phase 2 templates (`.mt-agent-devkit/distribution/phase2/templates/`). The frozen legacy corpus under `.claude/agents/templates/` is not touched.
 **Precedent:** `PO_Skills_And_Orchestrator_PO_Proposal.md` (Sprint 9). This proposal reuses its layout, generators, retirement mechanism and validators. It does not repeat their design.
@@ -231,7 +231,7 @@ Every entry that reads a Developer rule file, `Clean_Code_Rules.md`, or Common t
 
 - `Technical_Lead_Rules_Read_On_Demand.md:108` (`Clean_Code_Rules.md`) → `clean-code`.
 - `Apply_Retros_Workflow.md` `:58`, `:84`, `:123`: Developer lessons target the owning skill template, not the retired rules template.
-- `migration-inventory.json`: `retired` entries for the four retired files, `skill` entries for every new skill.
+- `migration-inventory.json`: `skill` entries land **with the story that creates each skill**, because `generate_wrappers.py` builds the provider wrappers from them (A1 for the common skills, B for the Developer skills). `retired` entries for the four retired files land in D.
 - The retired-citation validator allows history mentions inside `**Version:**`/`**Previous:**` lines (TL Bootstrap `:143`, QA On-Demand `:3`, `:44`).
 
 ---
@@ -271,11 +271,11 @@ The Phase 2 Developer templates differ from the internal files. Every target sec
 | Story | Scope | Estimate | Depends on | Exit criteria |
 |---|---|---|---|---|
 | **#303** Point-of-use loading for inline PO | The #303 proposal and its related gaps (R6) | 3 | — | Inline PO procedure loads each skill before its action; per-action checks are numbered steps; citation and timing gaps fixed |
-| **A1** Common skills and generator, internal | The 17 common skills (internal); `generate_common_blocks.py` with part markers, two-source table and `--check`; internal generated blocks per §7b (Common Bootstrap, On-Demand, Core and modules); rule-by-rule ownership map | 8 | #303 | Generator `--check` green; ownership map shows no lost or weakened rule; the existing Core clause test passes on generated text; all internal gates green |
+| **A1** Common skills and generator, internal | The 17 common skills (internal); `generate_common_blocks.py` with part markers, two-source table and `--check`; internal generated blocks per §7b (Common Bootstrap, On-Demand, Core and modules); `migration-inventory.json` `skill` entries for the common skills; rule-by-rule ownership map at `docs/feature/role-skills/Dev_Skills_Ownership_Map.md` (B and A2 extend it); R5 name check | 8 | #303 | Generator `--check` green; ownership map shows no lost or weakened rule; the existing Core clause test passes on generated text; all internal gates green |
 | **A2** Other roles point to common skills, internal | TL, QA, UI/UX, BA rule pointers; `comment`, `po-core`, `po-comment`, `po-answer-questions`, `po-plan-docs` changes; R3 index; §6 drift fixes; the non-Developer `read-routing.json` rows in §8b | 5 | A1 | No duplicate authority between role files and common skills; routing tests green |
-| **B** Developer skills, internal | The 6 Developer skills; load map and slim `developer_instructions.md`; `read_manifest.py` per §8a (common override, `role_sources` with list mapping, full coverage and source deduplication, `capability_routes` guard, `Blocked` lookups) with tests; the two Developer-sample capability tests moved to TL or QA plus a Developer skip test (§7b); Developer `read-routing.json` rows; `orchestrator_instructions.md:14` amendment; `Shared_Pipeline_Stages.md` packets; delete the internal Developer rule files and `Story_Standard_Dev.md`; measurement table | 13 | A2 | Developer manifests resolve to skills for every task and trigger; target-layout manifests unchanged and valid; citation validator green internally; bytes and read calls reported per spawn type |
+| **B** Developer skills, internal | The 6 Developer skills and their `migration-inventory.json` `skill` entries; load map (§4) and resumed-session rule (§5) in a slim `developer_instructions.md`; `read_manifest.py` per §8a (common override, `role_sources` with list mapping, full coverage and source deduplication, `capability_routes` guard, `Blocked` lookups) with tests; the two Developer-sample capability tests moved to TL or QA plus a Developer skip test (§7b); Developer `read-routing.json` rows; `orchestrator_instructions.md:14` amendment; `Shared_Pipeline_Stages.md` packets; delete the internal Developer rule files and `Story_Standard_Dev.md`; measurement table at `docs/feature/role-skills/Dev_Skills_Measurement.md` | 13 | A2 | Developer manifests resolve to skills for every task and trigger; target-layout manifests unchanged and valid; citation validator green internally; bytes and read calls reported per spawn type |
 | **C** Distribution | Phase 2 skill templates for all common and Developer skills (except `change-metadata`); Phase 2 generated blocks; target mapping per §9; bundle entries and wrappers; target-layout `common`, `bootstrap` and `role_sources` overrides | 13 | B | Bundle `--check` green; generator `--check` green for Phase 2; target Developer manifests resolve to skills; every §9 row has its text in the named skill template |
-| **D** Retirement | Remove `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`, `Story_Standard_Dev.md`, `Clean_Code_Rules.md` from targets; legacy migration tests; validator over templates and bundle; `migration-inventory.json` retired entries; `Apply_Retros_Workflow.md`; CHANGELOG | 5 | C | Each legacy fixture migrates without leaving the files; a customised file raises the porting conflict |
+| **D** Retirement | Remove `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`, `Story_Standard_Dev.md`, `Clean_Code_Rules.md` from targets; legacy migration tests; validator over templates and bundle; `migration-inventory.json` `retired` entries only; `Apply_Retros_Workflow.md`; CHANGELOG | 5 | C | Each legacy fixture migrates without leaving the files; a customised file raises the porting conflict |
 
 **Total: 47 points.** Merge order #303 → A1 → A2 → B → C → D. A1 to D ship in one release, as the PO stories did; #303 may release earlier.
 
@@ -331,6 +331,7 @@ The Phase 2 Developer templates differ from the internal files. Every target sec
 
 | Rev | Change |
 |---|---|
+| 5 | Story-creation gaps from the PO: `skill` inventory entries move to A1 and B (wrappers depend on them), D keeps only `retired` entries; ownership map and measurement table locations; R5 in A1 and §5 in B named in §10. Story IDs: #303, A1 #307, A2 #308, B #309, C #310, D #311 |
 | 4 | TL re-review on PR #306: **Approved with changes**; C1 (`role_sources` list mapping, coverage, deduplication) and C2 (capability test impact) folded in |
 | 3 | TL review on PR #306 (Changes requested): B1–B5 and N1–N7 addressed (§13). New: two-source generator with part markers and section map, manifest `common` override and `role_sources`, full routing inventory, target mapping, `retro-contribution` and `dev-verify` skills, A split into A1/A2; 47 points |
 | 2 | §10 open points resolved as R1–R7; `memory` renamed `agent-memory`; #303 added as the first story (37 points) |
