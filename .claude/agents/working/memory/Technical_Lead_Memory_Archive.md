@@ -89,4 +89,10 @@
 - **Evidence:** ST-000144 PR #189 (head `0dcb2be`, empty rollup, approved on a local run); same shape on PR #181.
 - **Expires when:** §6's `[skip ci]` condition is rewritten to key on the CI path filter.
 
+### Fact 20
+- **Rule:** Deleting a file has a different ledger per layer, and it lands in the story that deletes the file. Internal baseline file deleted: move its wrapper entries from `files` to `retired` in `migration-inventory.json` (`validate_internal_harness.py` `retired_errors` and baseline accounting), drop it from other entries' `consumers`, and add its stem to `validate_retired_citations.py` for the internal corpus. Target file retired: `build_bundle.py` `RETIRED_RULES` plus survivors, regenerated bundle retirement entries, Phase 2 template deleted, and the citation check extended to the distribution corpus. In both cases remove its rows from `docs/reviews/ST-000264_Common_Ownership.json`, because `test_common_capabilities.py` reads every `source`.
+- **Applies when:** designing or reviewing any story that deletes or retires a rules file.
+- **Evidence:** Sprint 10 refine: Dev_Skills_Proposal §8c put internal `retired` entries in story D (ST-000311). Corrected in TL answers on ST-000309 and ST-000311. Precedent: ST-000288 (internal) and ST-000290 (targets).
+- **Expires when:** the ledgers or the ownership-inventory test change.
+
 > Numbering gaps (6, 13–16) are pruned facts — do not renumber.

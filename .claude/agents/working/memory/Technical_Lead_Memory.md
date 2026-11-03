@@ -50,6 +50,9 @@ Keywords: replace-verbatim list, project-preserved section, Adaptive vs Mechanic
 ### Fact 19 — Empty `statusCheckRollup` on a `templates/**` PR = suppressed check, not a pass
 Keywords: `[skip ci]`, `validate-templates.yml` path filter, empty rollup, head SHA local validator run, `Developer_Rules_Bootstrap` §6 `*.md` condition
 
+### Fact 20 — Deleting a file: internal retired ledger vs bundle RETIRED_RULES, in the deleting story
+Keywords: `migration-inventory.json` `retired`, `retired_errors`, `build_bundle.py` `RETIRED_RULES`, `RETIRED_SURVIVORS`, `validate_retired_citations.py` corpus split, `ST-000264_Common_Ownership.json` source rows, ST-000288/ST-000290 precedent
+
 ## Troubleshooting Facts
 
 No troubleshooting facts recorded yet.
