@@ -1,7 +1,7 @@
 # Developer Skills Proposal
 
 **Feature:** `role-skills`
-**Status:** Revision 3, TL findings B1–B5 and N1–N7 from PR #306 addressed (§13); ready for TL re-review
+**Status:** Revision 4. **TL-approved** on PR #306 (approved with changes; C1 and C2 folded in). Ready for story creation
 **Date:** 2026-11-03
 **Scope:** The devkit's internal harness (`.mt-agent-devkit/`) and the distributed Phase 2 templates (`.mt-agent-devkit/distribution/phase2/templates/`). The frozen legacy corpus under `.claude/agents/templates/` is not touched.
 **Precedent:** `PO_Skills_And_Orchestrator_PO_Proposal.md` (Sprint 9). This proposal reuses its layout, generators, retirement mechanism and validators. It does not repeat their design.
@@ -178,7 +178,9 @@ The other roles keep reading the old Common files. To stop the temporary duplica
 | `Agent_Common_Working_Record.md` body (B4: live through the `working_record` trigger) | `working-record/format` | `working-record` |
 | `Agent_Common_Core.md` §3, §7 and the `Memory`, `Retro`, `Troubleshooting`, `Credential_Gate`, `Stage_Transition` modules | the matching parts above | as above |
 
-The last row closes R4 fully: the Core-route files keep their paths, ids and references (so `capability_routes`, `test_common_capabilities.py` and `test_internal_harness.py` are unchanged), but their absorbed text is generated, so no rule has two hand-written owners on any route.
+The last row closes R4 fully: the Core-route files keep their paths, ids and references, so `capability_routes` needs no change in story A1, but their absorbed text is generated, so no rule has two hand-written owners on any route. Test impact (TL re-review C2):
+- **A1:** the existing Core clause test in `test_common_capabilities.py` (`NOT VERIFIED`, truncation, sticky and the other asserted clauses) must keep passing once Core text is generated from the skills.
+- **B:** two tests use the Developer as the sample role under a verified provider: `test_clean_required_and_forbidden_capabilities` (expects Core plus `Developer_Rules_Bootstrap.md`) and the legacy-memory test (expects `common` = `Agent_Common_Bootstrap.md`). Both break when the Developer gets its own Common skills and skips `capability_routes`. Story B switches them to TL or QA and adds the Developer skip test.
 
 ### 7c. What changes for the other roles
 
@@ -195,7 +197,7 @@ The skills rewrite some rules as numbered steps (U4), so the generated text the 
 | Per-role Common override | New registry key `common` beside `bootstrap`: `common.<role>.<layout>` is a list of skill reads. The first keeps the id `common`, so `priming`, `peer_review` and every `after: ["common"]` still resolve; the rest get their own ids (`common_agent_security`, `common_token_efficiency`, `common_shell_rules`, `common_retro`) with `after: ["common"]`. Developer gets the override for `internal` in story B and `target` in story C |
 | Bootstrap override | `bootstrap.Developer.<layout>` → `dev-core`, the existing PO mechanism (`read_manifest.py:135`) |
 | `agent-security` as a manifest entry | The Developer no longer reads the generated copy in Common, so `agent-security` becomes a Developer manifest entry (via the override) and stays in the load map for non-manifest spawns. `orchestrator_instructions.md:14` ("never a read-manifest entry") is amended to "a manifest entry only for roles whose Common is skill-based" |
-| Role source substitutions | New registry key `role_sources.<role>.<layout>`: a map from an old source (with optional section) to a skill path, applied in `add()` after formatting. It lets shared trigger and task entries route the Developer to skills without forking every entry. The `completion` trigger maps `Agent_Common_Bootstrap.md` (full) → `retro` and `handoff` for the Developer |
+| Role source substitutions | New registry key `role_sources.<role>.<layout>`: a map from an old source (with optional section) to a **list** of skill paths, applied in `add()` after formatting. It lets shared trigger and task entries route the Developer to skills without forking every entry. Rules (TL re-review C1):<br>• **One entry per skill.** The first keeps the original id; the rest get `<id>_<n>` with the same `after`.<br>• **Coverage becomes full.** A substituted entry's `coverage` is reset to `{"kind": "full"}`, because a skill has no `## N.` section headings (`trigger_memory_fact` §8, `trigger_memory_shape` §1, the On-Demand §2, §3, §5, §6 entries).<br>• **Duplicates by source are removed.** When two entries resolve to the same skill source (both `memory_fact` reads → `agent-memory`; `completion` → `retro`, already read at spawn), the first entry is kept, later ones are dropped, and every `after` that named a dropped id is rewritten to the kept id.<br>The `completion` trigger maps `Agent_Common_Bootstrap.md` (full) → [`retro`, `handoff`] for the Developer; after deduplication only `handoff` is added |
 | `capability_routes` | Skipped for a role with a `common` override; the skill route is that role's only Common authority. The bare `next(...)` lookups in route building (`:157`, `:212`, `:223`, `:224`, `:237`) raise `Blocked` with a reason instead of `StopIteration`. A test enables a provider in a fixture registry and asserts the Developer route keeps its skills |
 
 ### 8b. `read-routing.json` inventory
@@ -269,9 +271,9 @@ The Phase 2 Developer templates differ from the internal files. Every target sec
 | Story | Scope | Estimate | Depends on | Exit criteria |
 |---|---|---|---|---|
 | **#303** Point-of-use loading for inline PO | The #303 proposal and its related gaps (R6) | 3 | — | Inline PO procedure loads each skill before its action; per-action checks are numbered steps; citation and timing gaps fixed |
-| **A1** Common skills and generator, internal | The 17 common skills (internal); `generate_common_blocks.py` with part markers, two-source table and `--check`; internal generated blocks per §7b (Common Bootstrap, On-Demand, Core and modules); rule-by-rule ownership map | 8 | #303 | Generator `--check` green; ownership map shows no lost or weakened rule; all internal gates green |
+| **A1** Common skills and generator, internal | The 17 common skills (internal); `generate_common_blocks.py` with part markers, two-source table and `--check`; internal generated blocks per §7b (Common Bootstrap, On-Demand, Core and modules); rule-by-rule ownership map | 8 | #303 | Generator `--check` green; ownership map shows no lost or weakened rule; the existing Core clause test passes on generated text; all internal gates green |
 | **A2** Other roles point to common skills, internal | TL, QA, UI/UX, BA rule pointers; `comment`, `po-core`, `po-comment`, `po-answer-questions`, `po-plan-docs` changes; R3 index; §6 drift fixes; the non-Developer `read-routing.json` rows in §8b | 5 | A1 | No duplicate authority between role files and common skills; routing tests green |
-| **B** Developer skills, internal | The 6 Developer skills; load map and slim `developer_instructions.md`; `read_manifest.py` per §8a (common override, `role_sources`, `capability_routes` guard, `Blocked` lookups) with tests; Developer `read-routing.json` rows; `orchestrator_instructions.md:14` amendment; `Shared_Pipeline_Stages.md` packets; delete the internal Developer rule files and `Story_Standard_Dev.md`; measurement table | 13 | A2 | Developer manifests resolve to skills for every task and trigger; target-layout manifests unchanged and valid; citation validator green internally; bytes and read calls reported per spawn type |
+| **B** Developer skills, internal | The 6 Developer skills; load map and slim `developer_instructions.md`; `read_manifest.py` per §8a (common override, `role_sources` with list mapping, full coverage and source deduplication, `capability_routes` guard, `Blocked` lookups) with tests; the two Developer-sample capability tests moved to TL or QA plus a Developer skip test (§7b); Developer `read-routing.json` rows; `orchestrator_instructions.md:14` amendment; `Shared_Pipeline_Stages.md` packets; delete the internal Developer rule files and `Story_Standard_Dev.md`; measurement table | 13 | A2 | Developer manifests resolve to skills for every task and trigger; target-layout manifests unchanged and valid; citation validator green internally; bytes and read calls reported per spawn type |
 | **C** Distribution | Phase 2 skill templates for all common and Developer skills (except `change-metadata`); Phase 2 generated blocks; target mapping per §9; bundle entries and wrappers; target-layout `common`, `bootstrap` and `role_sources` overrides | 13 | B | Bundle `--check` green; generator `--check` green for Phase 2; target Developer manifests resolve to skills; every §9 row has its text in the named skill template |
 | **D** Retirement | Remove `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`, `Story_Standard_Dev.md`, `Clean_Code_Rules.md` from targets; legacy migration tests; validator over templates and bundle; `migration-inventory.json` retired entries; `Apply_Retros_Workflow.md`; CHANGELOG | 5 | C | Each legacy fixture migrates without leaving the files; a customised file raises the porting conflict |
 
@@ -319,6 +321,9 @@ The Phase 2 Developer templates differ from the internal files. Every target sec
 | N5 Missing ripple | §4 (packets, Selected Common Routing), §8c |
 | N6 Working Record trigger | "Before any Working Record write" (§4) |
 | N7 Story A size; read calls | A split into A1 and A2; measurement counts read calls (§2, §10) |
+| **Re-review (rev 3): Approved with changes** | |
+| C1 `role_sources` too narrow | List mapping, full coverage on substitution, deduplication by source (§8a) |
+| C2 `test_common_capabilities.py` changes in B | Test impact stated (§7b); A1 and B exit criteria updated (§10) |
 
 ---
 
@@ -326,6 +331,7 @@ The Phase 2 Developer templates differ from the internal files. Every target sec
 
 | Rev | Change |
 |---|---|
+| 4 | TL re-review on PR #306: **Approved with changes**; C1 (`role_sources` list mapping, coverage, deduplication) and C2 (capability test impact) folded in |
 | 3 | TL review on PR #306 (Changes requested): B1–B5 and N1–N7 addressed (§13). New: two-source generator with part markers and section map, manifest `common` override and `role_sources`, full routing inventory, target mapping, `retro-contribution` and `dev-verify` skills, A split into A1/A2; 47 points |
 | 2 | §10 open points resolved as R1–R7; `memory` renamed `agent-memory`; #303 added as the first story (37 points) |
 | 1 | Initial draft from the user's decisions U1–U8 |
