@@ -203,7 +203,7 @@ For any story with an existing integration script, run `bash tests/feature/.../S
 
 ## Version
 
-**Version:** 1.3 — §15 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-999001).
+**Version:** 1.3 — §15 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-000304).
 **Previous:** 1.2 — Added §14 (Refine Sprint Task), relocated verbatim from `developer_instructions_template.md`, which now carries a one-line trigger pointer instead of the full procedure; the instruction file is read on every Developer spawn, the refinement procedure applies to one workflow.
 **Previous:** 1.1 — Added §12 (Developer as Reviewer) and §13 (Hotfix), relocated from `Story_Standard_Dev_template.md` sections 4, 6, and 12 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
 **Previous:** 1.0 — Split out of `Developer_Rules_template.md` v2.11 (§7–§8 relocated as-is; §11 Peer Review relocated as-is, renumbered §9; Mid-Implementation Consultation and Live User Instruction Conflicts extracted from §2's inline text, new §10/§11), mirroring the boundary already validated on the devkit's own team.

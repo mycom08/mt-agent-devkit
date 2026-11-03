@@ -535,7 +535,7 @@ gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done"
 ## Version
 
 **Created:** 2026-04-17
-**Version:** 3.1 — §9 and the §12 Commenter gate point to the shared `comment` skill, which now owns the comment standard (ST-999001)
+**Version:** 3.1 — §9 and the §12 Commenter gate point to the shared `comment` skill, which now owns the comment standard (ST-000304)
 **Previous:** 3.0 — §1 Done row, §7 and §14: acceptance by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`; §14 tracked split: in `orchestrator` mode the scope decision is the user's (ST-000291)
 **Previous:** 2.9 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)
 **Previous:** 2.8 — §2, §7, §11, §13: adds `UI/UX Designer` as a sixth valid `**Assigned:**` role and role-boundary row

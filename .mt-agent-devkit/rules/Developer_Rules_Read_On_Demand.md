@@ -149,7 +149,7 @@ Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) first; it 
 
 ## Version
 
-**Version:** 2.2 — §20 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-999001).
+**Version:** 2.2 — §20 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-000304).
 **Previous:** 2.1 — numbering preamble condensed; the benchmark rationale for the §1–§6 move lives in this footer and the commit log, not in the read path.
 **Previous:** 2.0 — §1–§6 moved out to `Developer_Rules_Bootstrap.md` at their original numbers. A full story spawn triggers all six, so fetching them here cost a `read-section` load plus a 7,640-char fetch and saved nothing (2026-08-21 benchmark #148/#149). This file now holds only genuinely conditional rules: §7, §8, §12–§17.
 **Previous:** 1.1 — `Developer_Rules_Extended.md` §1–§6 merged in as §12–§17, one on-demand file per role.

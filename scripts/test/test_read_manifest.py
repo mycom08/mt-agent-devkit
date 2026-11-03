@@ -112,7 +112,7 @@ class RoutingTests(unittest.TestCase):
             shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
         retired=('Product_Owner_Rules_Bootstrap.md','Product_Owner_Rules_Read_On_Demand.md','Story_Standard_PO.md')
         for name in retired: self.assertFalse((ROOT/'.mt-agent-devkit/rules'/name).exists())
-        # ST-999001: po-comment requires the shared comment skill, so every PO task also reads it.
+        # ST-000304: po-comment requires the shared comment skill, so every PO task also reads it.
         expected={'implementation':{'po-core','po-comment','comment'},'fix':{'po-core','po-comment','comment'},'closure':{'po-core','po-verify-close','po-comment','comment'},
                   'scope_question':{'po-core','po-answer-questions','po-comment','comment'},'po_validation':{'po-core','po-validate-ac','po-comment','comment'}}
         tasks={t for t,d in REGISTRY['tasks'].items() if 'Product_Owner' in d['roles']}
@@ -128,7 +128,7 @@ class RoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(m.Blocked,'unsupported role/task'): self.build(role='QA',task='po_validation')
 
     def test_every_role_comment_route_resolves_to_comment_skill(self):
-        # ST-999001: the shared comment skill owns the comment standard and Commenter gate for every role.
+        # ST-000304: the shared comment skill owns the comment standard and Commenter gate for every role.
         for folder in ('rules','instructions','context','contracts','skills'):
             shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
         skill='.mt-agent-devkit/skills/comment/SKILL.md'

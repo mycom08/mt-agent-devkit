@@ -2773,7 +2773,7 @@
         ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         ".mt-agent-devkit/skills/po-comment/SKILL.md"
       ],
-      "reason": "Post-baseline shared skill (ST-999001); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "reason": "Post-baseline shared skill (ST-000304); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
         "native provider discovery"
       ]
@@ -2790,7 +2790,7 @@
         ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         ".mt-agent-devkit/skills/po-comment/SKILL.md"
       ],
-      "reason": "Post-baseline shared skill (ST-999001); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "reason": "Post-baseline shared skill (ST-000304); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
         "native provider discovery"
       ]
@@ -2807,7 +2807,7 @@
         ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         ".mt-agent-devkit/skills/po-comment/SKILL.md"
       ],
-      "reason": "Post-baseline shared skill (ST-999001); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "reason": "Post-baseline shared skill (ST-000304); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
         "native provider discovery"
       ]

@@ -129,7 +129,7 @@
     {
       "id": "rules/Developer_Rules_Read_On_Demand.md",
       "path": "assets/rules_Developer_Rules_Read_On_Demand.md",
-      "sha256": "f35b32b6933e68d32ec65e8f937aa41fe78e46fb797928a28f329eddf84fd803",
+      "sha256": "101757fddaf2cd2fa16f95c61ae366d99460f005c607cbccea608f0550ac45c0",
       "bytes": 13862,
       "kind": "template"
     },
@@ -192,7 +192,7 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "93c6a48434bc1731b27af6f7e9ae06b7563f6d20726ac9b2814b0e78502650fa",
+      "sha256": "553bbc06c728d55299119f766a021b78bdce06cca0ba360dc1aa28260774bf01",
       "bytes": 31582,
       "kind": "template"
     },

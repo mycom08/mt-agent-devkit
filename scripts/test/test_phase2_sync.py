@@ -328,7 +328,7 @@ class PoRetirementTests(SyncFixture):
                 self.assertTrue((self.target / ".mt-agent-devkit/instructions/product_owner_instructions.md").is_file())
 
     def test_older_target_without_comment_skill_installs_it(self):
-        # ST-999001: a target installed before the shared comment skill existed gains it cleanly on sync.
+        # ST-000304: a target installed before the shared comment skill existed gains it cleanly on sync.
         provider = "codex"
         self.installed_previous_release(provider)
         added = (".mt-agent-devkit/skills/comment/SKILL.md", "." + provider + "/skills/comment/SKILL.md")
