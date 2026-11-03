@@ -2762,6 +2762,57 @@
       ]
     },
     {
+      "source": ".claude/skills/comment/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Story_Standard.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/skills/po-comment/SKILL.md"
+      ],
+      "reason": "Post-baseline shared skill (ST-999001); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/comment/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Story_Standard.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/skills/po-comment/SKILL.md"
+      ],
+      "reason": "Post-baseline shared skill (ST-999001); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/comment/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Story_Standard.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/skills/po-comment/SKILL.md"
+      ],
+      "reason": "Post-baseline shared skill (ST-999001); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
       "source": ".claude/skills/po-core/SKILL.md",
       "source_revision": null,
       "baseline_sha256": null,

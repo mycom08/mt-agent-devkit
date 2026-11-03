@@ -50,26 +50,7 @@ Status is tracked via GitHub Issue labels — not inside the body. Discussions h
 
 ## 9. Comment Standard
 
-```markdown
-## [Comment title]
-**Thread Status:** Open | In Progress | Resolved  
-**Area:** [Flow / Screen / AC / File]
-
-**UI/UX Designer - YYYY-MM-DD**
-Question or concern.
-
-**PO - YYYY-MM-DD**
-Response and decision.
-
-**Decision:** [What we decided and why]  
-**Next:** [Owner or "None"]
-```
-
-- **One topic per comment** — answer the questions asked and nothing else; a finding that surfaces while answering posts as its own comment with its own thread status. Batching replies to questions asked together is fine; smuggling an unasked finding into an answer is not.
-- Reply in the same thread for the same topic
-- **Never use the `@` prefix** — write role names without it (e.g., `**PO**`, `**TL**`)
-- **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; **never paste command output or check transcripts** — verdict in one line, logs in your working record; a body edit made in the same pass is announced, not reproduced; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. UI/UX Designer has no role-only comment rules.
 
 ---
 

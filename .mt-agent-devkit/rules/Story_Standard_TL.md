@@ -41,24 +41,10 @@ Only when `**Assigned:** Technical Lead` and TL is running Stage 1 (implementati
 
 ## 9. Comment Standard
 
-```markdown
-## [Comment title]
-**Thread Status:** Open | In Progress | Resolved  
-**Area:** [Workflow / Template / AC / File]
+Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. TL-only additions:
 
-**TL - YYYY-MM-DD**
-Technical decision or review feedback.
-
-**Decision:** [What we decided and why]  
-**Next:** [Owner or "None"]
-```
-
-- Post code review changes as **inline PR comments** + a brief notify comment on the GitHub Issue
-- Reply in the same thread for the same topic
-- **Never use the `@` prefix** — write role names without it (e.g., `**Dev**`, `**PO**`)
-- **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **One topic per comment** — answer the questions asked and nothing else. A finding that surfaces *while* reviewing — however relevant — posts as its own comment with its own thread status; a bundled thread cannot be resolved while any of its topics stays open. Batching replies to questions asked together is fine.
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; evidence by pointer — **never paste command output, check transcripts, or verification logs**, state the verdict in one line and cite your working record; carve-out: paste the literal `gh pr checks <PR-number>` output when it's the §12 Reviewer gate's PR approval comment — nothing else gets pasted; facts already recorded in your memory file are cited, not re-explained (`Agent_Common_Read_On_Demand.md §1` rule 4); corrections state the delta only; no comments about comments; one close-out line per thread. Story-body edits: decision itself, ≤ 5 lines, pointer to the resolving comment — announce, never reproduce. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rules: `Story_Standard.md §3 (Body Amendments), §9`.
+- Post code review changes as **inline PR comments** plus a brief notify comment on the GitHub Issue.
+- A PR approval comment carries the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires (the `comment` skill's single transcript carve-out).
 
 ---
 
