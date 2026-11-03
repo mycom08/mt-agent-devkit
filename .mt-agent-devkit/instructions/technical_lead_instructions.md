@@ -40,7 +40,7 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 
 ## When Acting as Story Implementer
 
-Rare — only when the orchestrator assigns you as the story implementer instead of reviewer. Full procedure — branch/PR creation, pre-PR gate, status transitions — in `.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md §1` (branch/PR), `§3` (pre-PR gate), `§4` (status transitions). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+Rare — only when the orchestrator assigns you as the story implementer instead of reviewer. Full procedure — branch/PR creation, pre-PR gate, status transitions — in the `git-workflow` skill (branch/PR), the `pre-pr-gate` skill (pre-PR gate) and `.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md §4` (status transitions). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 

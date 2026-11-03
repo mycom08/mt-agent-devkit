@@ -28,13 +28,13 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 
 ## When Acting as Story Implementer
 
-Rare — only when the orchestrator assigns you as the story implementer instead of analyst. Pre-PR gate procedure in `.mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md §1`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+Rare — only when the orchestrator assigns you as the story implementer instead of analyst. Pre-PR gate: the `pre-pr-gate` skill (`.mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md §1` points to it). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
 ## Document Placement Rules
 
-When you update or create project documents, use the current feature-doc structure. Refer to the project's document index for correct paths (see `Project_Priming_Read_On_Demand.md` §6 Internal Project Documents).
+Before you create, move or rename a project document, load the `project-docs` skill. It owns the path list (`.mt-agent-devkit/context/Document_Index.md`) and naming.
 
 ---
 

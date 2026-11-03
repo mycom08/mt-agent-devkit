@@ -1550,8 +1550,8 @@
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "47dd2d235d3747c363d964552c08e581232d5c7be4877283ca59263ff8e1e0db",
-      "bytes": 38555,
+      "sha256": "8a8c771a67213ca24a3206e28cb7f1185fc44c1718bd4dd0f9c5378e3f5f862c",
+      "bytes": 40813,
       "kind": "contract"
     },
     {

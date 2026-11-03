@@ -30,24 +30,13 @@ Before building anything, regardless of story status, UI/UX Designer **must** re
 
 ### Step 2 — Identify and raise questions
 
-After reading, identify anything unclear: missing wireframe detail, ambiguous flow, undecided data shape for the mock backend.
-
-- **If questions exist:** Post a comment on the GitHub Issue and **explicitly tag** the right person:
-  - Scope, flow, or missing wireframe detail → tag **PO** (Product Owner)
-  - Technical questions (routing approach, mock-backend tooling, integration boundary with the real backend) → tag **TL** (Technical Lead)
-- **Do not assume or invent answers** — wait for a response before proceeding
-
-> **Gate:** Do not begin building the prototype until all blocking questions have a confirmed answer from PO or TL.
+After reading, follow the pre-start gate in `raise-question` §2 (`.mt-agent-devkit/skills/raise-question/SKILL.md`). UI/UX examples: missing wireframe detail or an ambiguous flow goes to **PO**; routing approach, mock-backend tooling or the integration boundary with the real backend goes to **TL**. Do not begin building the prototype until every blocking question has a confirmed answer.
 
 ### Step 3 — Start implementation
 
-Once all blocking questions are resolved:
+Once all blocking questions are resolved, create the branch and move the story to `status:in-progress` per `git-workflow` §1 (`.mt-agent-devkit/skills/git-workflow/SKILL.md`), then begin building the prototype.
 
-1. Create `ST-XXXXXX/short-description` only through `branch_preflight.py create` using the story's immutable Base Branch and the full Base/Remote Base SHAs verified by Story Base Preflight; never branch directly from the current checkout.
-2. **Update story status after successful branch verification** — Remove label `status:ready` and add `status:in-progress`.
-3. Begin building the prototype
-
-**Mid-implementation consultation / live user instruction conflicts:** rare, task-specific — see `UI_UX_Designer_Rules_Read_On_Demand.md §1` (when a question surfaces during implementation) and `§2` (when a live instruction contradicts a prior decision). Otherwise skip.
+**Mid-implementation consultation / live user instruction conflicts:** rare, task-specific — `raise-question` §3 (when a question surfaces during implementation) and §5 (when a live instruction contradicts a prior decision). Otherwise skip.
 
 ---
 
@@ -105,10 +94,9 @@ Include a one-line check result note in the PR description.
 
 ## 6. Git Workflow
 
-- **Dev branch:** `ST-XXXXXX/short-description` (branch off `main`)
-- **PR title:** `[ST-XXXXXX][DEVKIT] Story title`
-- **PR description:** Must include `Closes #<issue-number>`, the start command, and the mock-only handoff note (§4)
-- **Wait for TL approval** before merging
+Branch name, commits, `[skip ci]`, PR title and description, and merge sync follow the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`). UI/UX additions:
+
+- **PR description** also carries the start command and the mock-only handoff note (§4)
 
 **Story comment after opening PR (mandatory):**
 
@@ -116,32 +104,24 @@ After creating the PR, post a short comment on the GitHub Issue:
 > "PR #XX opened for review — [brief one-line summary of the flow prototyped]."
 Tag **TL** in the comment to request review.
 
-**Commit Message Rules:**
-- Format: `<type>(<scope>): <subject>` — Conventional Commits
-- Subject: imperative mood, ≤ 50 characters
-- Footer: always include `Story: ST-XXXXXX`
-- **Subject-line length is a non-blocking style nit.**
-- **Docs-only pushes skip CI:** when every file in the push is non-code, add `[skip ci]` on its own line in the head commit's message body.
-
 ---
 
 ## 7. Reporting & Blockers
 
-- Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
-- Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
+- Working Record writes follow the `working-record` skill (`.mt-agent-devkit/skills/working-record/SKILL.md`)
+- Blockers follow `raise-question` §4; UI/UX tags TL or PO
 
 ---
 
 ## 8. Runtime-State Handoff (mandatory before handoff)
 
-Keep agent state local and uncommitted before signaling stage completion — see `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — the `handoff` skill owns the rule; your route reads its generated copy, `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 9. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker, follow the check-memory → fix → record-to-memory protocol in `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker, follow the `troubleshooting` skill's check-memory → fix → record-to-memory protocol; your route reads its generated copy, `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 
@@ -151,8 +131,8 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 | Trigger | Fetch |
 |---|---|
-| A question surfaces during implementation that needs a judgment call from PO/TL | `UI_UX_Designer_Rules_Read_On_Demand.md §1` (Mid-Implementation Consultation) |
-| A live user instruction contradicts a prior decision recorded on the issue | `UI_UX_Designer_Rules_Read_On_Demand.md §2` (Live User Instruction Conflicts) |
+| A question surfaces during implementation that needs a judgment call from PO/TL | `raise-question` §3 (Mid-Implementation Consultation); `UI_UX_Designer_Rules_Read_On_Demand.md §1` points to it |
+| A live user instruction contradicts a prior decision recorded on the issue | `raise-question` §5 (Live User Instruction Conflicts); `UI_UX_Designer_Rules_Read_On_Demand.md §2` points to it |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit, troubleshooting — are routed by `Agent_Common_Bootstrap.md §5` and §8–§9 above.
 
@@ -160,7 +140,8 @@ On any tooling/environment blocker, follow the check-memory → fix → record-t
 
 ## Version
 
-**Version:** 2.1 — §1 gate table repointed from `Story_Standard.md` to the new role-scoped `Story_Standard_UIUX.md` (~4.1k chars vs. the full 22.7k-char master), matching the Dev/PO/TL/QA view convention (ST-000124). §3's `Story_Standard.md §4` citation is unchanged — the new view does not carry the Implementer Workflow section, since this file's own §2 already restates that workflow inline.
+**Version:** 2.2 — §2, §6–§10 point to the common skills (`raise-question`, `git-workflow`, `working-record`, `handoff`, `troubleshooting`); the file-type `[skip ci]` rule is replaced by `git-workflow`'s CI path-filter rule (ST-000308).
+**Previous:** 2.1 — §1 gate table repointed from `Story_Standard.md` to the new role-scoped `Story_Standard_UIUX.md` (~4.1k chars vs. the full 22.7k-char master), matching the Dev/PO/TL/QA view convention (ST-000124). §3's `Story_Standard.md §4` citation is unchanged — the new view does not carry the Implementer Workflow section, since this file's own §2 already restates that workflow inline.
 **Previous:** 2.0 — Split into `UI_UX_Designer_Rules_Bootstrap.md` (this file) + `UI_UX_Designer_Rules_Read_On_Demand.md`, matching the Dev/TL/QA/PO/BA bootstrap/on-demand convention. §2's "Mid-implementation consultation" and "Live user instruction conflicts" sub-blocks (task-specific, not needed at every story) moved to the on-demand file as §1/§2; the rest of §2 (reading the story, raising questions, starting implementation) and all other sections stayed, being needed at spawn regardless of task. Added §10 routing table. Section numbers §1, §3–§9 unchanged, so `UI_Prototype_Rules.md`'s existing citation of this file's §4 still resolves correctly.
 **Previous:** 1.1 — §4: one-line trigger pointer to `UI_Prototype_Rules.md` (ST-000022; intentionally-diverged mirror note, devkit itself has no UI-bearing repos)
 **Created:** 2026-07-20

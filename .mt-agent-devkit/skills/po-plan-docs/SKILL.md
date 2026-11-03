@@ -5,12 +5,7 @@ description: Product Owner plan documents - placement, Title_Case_With_Underscor
 
 # PO Plan Docs
 
-**Requires:** `po-core`
-
-## Placement and Naming
-
-- When you create or update a project document, use the current structure in `Project_Priming_Read_On_Demand.md §6`.
-- Name documents in `Title_Case_With_Underscores`.
+**Requires:** `po-core`, `project-docs` (placement and naming of every plan document)
 
 ## Plan Commit (mandatory after any plan update)
 

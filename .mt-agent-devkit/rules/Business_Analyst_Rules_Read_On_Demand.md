@@ -9,20 +9,12 @@ Not loaded at spawn. Fetch a section only when its named trigger fires — see `
 
 ## 1. Pre-PR Gate (when acting as Implementer)
 
-When BA is the story Implementer, run the applicable local checks before opening a PR:
-
-| Change type | Required local check |
-|---|---|
-| `.sh` files changed | `bash -n <each changed .sh file>` — zero errors |
-| `.ps1` files changed | PowerShell syntax check — zero parse errors |
-| `.github/workflows/` changed | Validate YAML syntax; verify job structure and step ordering |
-| Docs / template / workflow only | Exempt |
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+When BA is the story Implementer, run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR. It is the same gate for every implementer: harness, template and workflow changes run the validators and are never exempt as docs-only.
 
 ---
 
 ## Version
 
-**Version:** 1.0 — Split out of `Business_Analyst_Rules.md` (now `_Bootstrap.md`) §2, unchanged content, renumbered §1.
+**Version:** 1.1 — §1 points to `pre-pr-gate`, the stricter gate (ST-000308).
+**Previous:** 1.0 — Split out of `Business_Analyst_Rules.md` (now `_Bootstrap.md`) §2, unchanged content, renumbered §1.
 **Created:** 2026-08-25

@@ -81,13 +81,14 @@ class RoutingTests(unittest.TestCase):
         self.assertIn((master,'14'),sections('QA','qa','.mt-agent-devkit/rules/QA_Rules_Bootstrap.md','Before validation/sign-off, read `Story_Standard.md §14`'))
         self.assertIn((master,'14'),sections('Product_Owner','closure','.mt-agent-devkit/skills/po-verify-close/SKILL.md','Read `Story_Standard.md §14` and the applicable independent per-AC verification report'))
         self.assertIn((master,'14'),sections('Product_Owner','po_validation','.mt-agent-devkit/skills/po-validate-ac/SKILL.md','Read `Story_Standard.md §14` and the current canonical story scope'))
-        self.assertIn(('.mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md','2'),sections('QA','implementation','.mt-agent-devkit/instructions/qa_instructions.md','live user instruction conflicts rule in `§2`'))
-        self.assertIn(('.mt-agent-devkit/rules/Clean_Code_Rules.md',None),sections('Technical_Lead','review','.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','**Source code / script changes only**',('source_review',)))
+        # ST-000308: internal QA/TL rows read the common skills their rule files now point to.
+        self.assertIn(('.mt-agent-devkit/skills/raise-question/SKILL.md',None),sections('QA','implementation','.mt-agent-devkit/instructions/qa_instructions.md','live user instruction conflicts: `raise-question` §5'))
+        self.assertIn(('.mt-agent-devkit/skills/clean-code/SKILL.md',None),sections('Technical_Lead','review','.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','**Source code / script changes only** — verify compliance with the `clean-code` skill',('source_review',)))
         self.assertIn(('.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','2'),sections('Technical_Lead','review','.mt-agent-devkit/instructions/technical_lead_instructions.md','After each working session on an unfinished story',('context_anchoring',)))
 
     def test_conditional_reads_are_not_startup(self):
         fresh=self.build(role='Technical_Lead',task='review')
-        self.assertFalse(any('Clean_Code_Rules' in x['source'] for x in fresh['reads']))
+        self.assertFalse(any('Clean_Code_Rules' in x['source'] or '/clean-code/' in x['source'] for x in fresh['reads']))
         with self.assertRaisesRegex(m.Blocked,'unsupported trigger'): self.build(role='QA',task='qa',triggers=['context_anchoring'])
 
     def test_all_internal_tasks_and_triggers_resolve_actual_guidance(self):
@@ -154,6 +155,46 @@ class RoutingTests(unittest.TestCase):
         for name in ('Story_Standard.md','Story_Standard_Dev.md','Story_Standard_TL.md','Story_Standard_QA.md','Story_Standard_UIUX.md','Developer_Rules_Bootstrap.md'):
             self.assertIn(skill,(ROOT/'.mt-agent-devkit/rules'/name).read_text(encoding='utf-8'),name)
         self.assertIn('**Requires:** `po-core`, `comment`',(ROOT/'.mt-agent-devkit/skills/po-comment/SKILL.md').read_text(encoding='utf-8'))
+
+    def test_non_developer_rows_point_to_common_skills_internal_only(self):
+        # ST-000308: re-pointed non-Developer rows read the common skill internally and
+        # keep their pre-skill target source (or stay disabled) until ST-000312.
+        for folder in ('rules','instructions','context','contracts','skills'):
+            shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
+        cases=[('Technical_Lead','implementation',[],'tl_implementation_1','git-workflow'),
+               ('Technical_Lead','fix',[],'tl_implementation_3','pre-pr-gate'),
+               ('Technical_Lead','implementation',['pre_pr'],'trigger_tl_pre_pr','pre-pr-gate'),
+               ('Technical_Lead','review',['source_review'],'trigger_clean_code','clean-code'),
+               ('Technical_Lead','review',[],'review_procedure','pr-review'),
+               ('QA','implementation',[],'qa_implementation','pre-pr-gate'),
+               ('QA','fix',[],'qa_implementation_conflict','raise-question'),
+               ('QA','implementation',['live_conflict'],'trigger_qa_conflict','raise-question'),
+               ('Business_Analyst','implementation',[],'ba_implementation','pre-pr-gate'),
+               ('UI_UX_Designer','implementation',['consultation'],'trigger_ui_consultation','raise-question'),
+               ('UI_UX_Designer','fix',['live_conflict'],'trigger_ui_live_conflict','raise-question')]
+        definitions=[x for t in REGISTRY['tasks'].values() for x in t['reads']]+[x for t in REGISTRY['triggers'].values() for x in t['reads']]
+        for role,task,triggers,entry_id,skill in cases:
+            with self.subTest(role=role,task=task,entry=entry_id):
+                manifest=self.build(role=role,task=task,triggers=triggers)
+                m.validate(self.root,manifest,REGISTRY)
+                entry=next(x for x in manifest['reads'] if x['id']==entry_id)
+                self.assertEqual((entry['source'],entry['coverage']),('.mt-agent-devkit/skills/'+skill+'/SKILL.md',{'kind':'full'}))
+                for definition in (x for x in definitions if x['id']==entry_id):
+                    target={**definition,**definition.get('layouts',{}).get('target',{})}
+                    self.assertTrue(target.get('enabled',True) is False or not target['source'].startswith('.mt-agent-devkit/skills/'),entry_id)
+        for role in REGISTRY['roles']:
+            with self.subTest(role=role,entry='trigger_document_paths'):
+                entry=next(x for x in self.build(role=role,triggers=['document_update'])['reads'] if x['id']=='trigger_document_paths')
+                self.assertEqual((entry['source'],entry['coverage']),('.mt-agent-devkit/context/Document_Index.md',{'kind':'full'}))
+        # The rule files point at the skills instead of restating them.
+        rules=ROOT/'.mt-agent-devkit/rules'
+        for name,skills in (('Technical_Lead_Rules_Read_On_Demand.md',('git-workflow','pre-pr-gate','pr-review','clean-code')),
+                            ('QA_Rules_Read_On_Demand.md',('pre-pr-gate','raise-question')),('Business_Analyst_Rules_Read_On_Demand.md',('pre-pr-gate',)),
+                            ('UI_UX_Designer_Rules_Read_On_Demand.md',('raise-question',))):
+            text=(rules/name).read_text(encoding='utf-8')
+            for skill in skills: self.assertIn('.mt-agent-devkit/skills/'+skill+'/SKILL.md',text,name)
+            self.assertNotIn('| Change type | Required local check |',text,name)
+        self.assertNotIn('Clean_Code_Rules.md',(rules/'Technical_Lead_Rules_Read_On_Demand.md').read_text(encoding='utf-8'))
 
     def test_bootstrap_mapping_is_per_layout_and_confined(self):
         registry=copy.deepcopy(REGISTRY)

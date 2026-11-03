@@ -48,12 +48,7 @@ For complex changes (new workflow stage, major template restructure, new devkit 
 
 ## 6. Internal Project Documents
 
-| Document | Path |
-|----------|------|
-| Business Requirements | `docs/requirements/Business_Requirements.md` |
-| Implementation Roadmap | `docs/plan/Implementation_Roadmap.md` |
-| Product Backlog | `docs/plan/Product_Backlog.md` |
-| Sprint Overviews | `docs/sprints/Sprint_N_Overview.md` |
+`.mt-agent-devkit/context/Document_Index.md` is the single document path list, the planning documents included. Placement and naming rules: the `project-docs` skill.
 
 ---
 

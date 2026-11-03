@@ -17,7 +17,7 @@
 
 ## 8. Document Placement
 
-When you update or create project documents, use the current structure. Refer section `## 6. Internal Project Documents` in the Project Priming document.
+When you update or create project documents, use the paths in `.mt-agent-devkit/context/Document_Index.md`, the single document path list.
 
 ---
 
@@ -62,7 +62,7 @@ If a live instruction from the user during implementation contradicts a prior de
 When the orchestrator assigns Dev as peer reviewer:
 - Verify the PR follows naming conventions and pre-PR gate checks from §4–§5 — except commit subject-line **length**, which is a non-blocking nit per §6: note it in a comment, never request changes over it alone
 - Check for obvious logic errors or missing content
-- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see `Technical_Lead_Rules_Read_On_Demand.md §5` for the full detail (same rules apply to peer review)
+- **Confirm the CI check actually executed, not just its conclusion**, confirm the cited run's head SHA matches the PR's current head SHA, and diagnose any red required check from its actual failing log — see the `pr-review` skill, step 3, for the full detail (same rules apply to peer review)
 - Post inline PR comments for required changes; post a brief notify comment on the GitHub Issue
 - When all criteria pass, post approval as a comment on the PR (GitHub blocks self-approval — use `gh pr comment`)
 
@@ -143,13 +143,14 @@ Triggered by the post-Done bug route in `Developer_Rules_Bootstrap.md §18`. Whe
 Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) first; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. Dev-only notes:
 
 - **Peer-review CI paste:** when peer-reviewing, the approval comment carries the literal `gh pr checks <PR-number>` output `Developer_Rules_Read_On_Demand.md §16` requires (the `comment` skill's single transcript carve-out).
-- **Same-pass body update:** when a comment resolves a scope/AC question, update the issue body to match in the same pass, and announce the edit rather than reproduce it.
+- **Same-pass body update:** owned by the `comment` skill (Thread and body; rule 5 for announcing the edit).
 
 ---
 
 ## Version
 
-**Version:** 2.2 — §20 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-000304).
+**Version:** 2.3 — §20 same-pass note points to `comment`; §8 cites `context/Document_Index.md`; §14 cites `pr-review` for the CI checks (ST-000308).
+**Previous:** 2.2 — §20 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-000304).
 **Previous:** 2.1 — numbering preamble condensed; the benchmark rationale for the §1–§6 move lives in this footer and the commit log, not in the read path.
 **Previous:** 2.0 — §1–§6 moved out to `Developer_Rules_Bootstrap.md` at their original numbers. A full story spawn triggers all six, so fetching them here cost a `read-section` load plus a 7,640-char fetch and saved nothing (2026-08-21 benchmark #148/#149). This file now holds only genuinely conditional rules: §7, §8, §12–§17.
 **Previous:** 1.1 — `Developer_Rules_Extended.md` §1–§6 merged in as §12–§17, one on-demand file per role.

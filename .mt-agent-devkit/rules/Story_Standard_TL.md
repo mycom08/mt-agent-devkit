@@ -43,8 +43,7 @@ Only when `**Assigned:** Technical Lead` and TL is running Stage 1 (implementati
 
 Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. TL-only additions:
 
-- Post code review changes as **inline PR comments** plus a brief notify comment on the GitHub Issue.
-- A PR approval comment carries the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires (the `comment` skill's single transcript carve-out).
+- Review comments (inline change requests, the issue notify comment, and the approval carrying the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires) follow the `pr-review` skill, steps 5–7.
 
 ---
 

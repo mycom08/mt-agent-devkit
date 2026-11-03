@@ -31,6 +31,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000304] Add a shared comment skill that owns the comment standard and Commenter gate for every role; role rules keep only their role-specific notes.
 - [ST-000303] Inline PO work loads each PO skill right before the action it governs, with numbered readiness and pre-post checks and one Working Record timing rule.
 - [ST-000307] Add 17 internal common skills that own the shared how-to rules; the kept Common files now hold generated copies checked by the new `generate_common_blocks.py`, which replaces `generate_security_blocks.py`.
+- [ST-000308] TL, QA, UI/UX and BA rules and the PO skills point to the common skills instead of keeping their own copies, and `context/Document_Index.md` is the single document path list; TL (and BA) as implementer now run the stricter `pre-pr-gate`, so harness, template and rules changes are no longer exempt as docs-only.
 
 ### Bug Fixes
 
