@@ -18,6 +18,7 @@ Read this before your first story create or body edit of the session. In github 
 ## Content Rules
 
 - Concise (2–3 pages): user story, high-level AC (what, not how), business value and constraints, a testable success definition, links to technical docs (`docs/feature/`). No field-by-field definitions, schemas, code samples or step-by-step instructions.
+- **AC states the testable requirement only, no rationale.** The why belongs in the resolving comment or `Technical Scope`, never in the AC line.
 - `**Assigned:**` is mandatory, above `## User Story`: `Developer`, `Technical Lead`, `QA`, `Business Analyst` or `UI/UX Designer`, never "TBD".
 - Documentation story AC state their expected depth explicitly.
 - PATCH/PUT stories state each request field's mutability before `status:ready`.

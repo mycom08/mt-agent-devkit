@@ -84,7 +84,7 @@ After all implementer agents report back, check: **did every agent report all th
 2. **Spawn or resume** TL (**model: opus**) first (reuse `tl_session` if active); save/update `tl_session` in state file
 3. TL answers all technical questions across all stories in a single pass and signals completion
 4. **`PO Execution: subagent`:** spawn or resume PO (**model: sonnet**) (reuse `po_session` if active); save/update `po_session` in state file — pass TL's answers summary so PO has full technical context before making scope decisions, and name the `po-answer-questions` skill in the assignment
-   **`PO Execution: orchestrator`:** after TL completes, the orchestrator answers inline as PO (touchpoint table and inline PO activity procedure in the orchestrator instructions) with TL's answers in hand: load `po-core`, `po-answer-questions` and `po-comment` (+ `po-write-story` when an AC changes), record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row per Stage 2 cycle. Refinement precedes Stage 1, so AC edits here follow the skills as usual
+   **`PO Execution: orchestrator`:** after TL completes, the orchestrator answers inline as PO (touchpoint table and inline PO activity procedure in the orchestrator instructions) with TL's answers in hand: load `po-core`, `po-answer-questions` and `po-comment` (+ `po-write-story` when an AC changes), each at its point of use, record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row per Stage 2 cycle. Refinement precedes Stage 1, so AC edits here follow the skills as usual
 5. PO answers all scope/AC questions across all stories in a single pass. If answering a question changes or clarifies an AC:
    - **GitHub mode:** PO updates the issue body (`--body-file` per `Agent_Common_Bootstrap.md` §6)
    - **Strict mode:** PO edits the AC section in the story MD file directly, then appends a comment entry to `## Comments` noting the change
@@ -113,7 +113,7 @@ After all implementer agents report back, check: **did every agent report all th
 
 ## Stage 4 — PO Status Update
 
-1. **`PO Execution: subagent`:** resume the PO agent via `po_session` from state file (spawn new if expired); name the `po-promote-ready` skill in the assignment. **`PO Execution: orchestrator`:** the orchestrator performs steps 2–3 inline as PO: load `po-core` and `po-promote-ready`, record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row (`story_id` the sprint label, stage `refine-stage4`). The All-Clear Shortcut lands here too
+1. **`PO Execution: subagent`:** resume the PO agent via `po_session` from state file (spawn new if expired); name the `po-promote-ready` skill in the assignment. **`PO Execution: orchestrator`:** the orchestrator performs steps 2–3 inline as PO: load `po-core` and `po-promote-ready`, each at its point of use, record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row (`story_id` the sprint label, stage `refine-stage4`). The All-Clear Shortcut lands here too
 2. PO checks each story in the target sprint independently (`po-promote-ready` readiness test):
    - Implementer posted a final "all clear" comment → update story status to `ready`. This covers **both** paths: the Stage 3 resolution comment on a story that had questions, and the Stage 1 step 7 cleared note on a story that never had any.
      - **GitHub mode:** remove `status:backlog`, add `status:ready`

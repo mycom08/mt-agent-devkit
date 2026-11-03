@@ -19,9 +19,9 @@ Before doing anything else, read the following files to understand the project c
 
 ## PO Touchpoints by `PO Execution`
 
-Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps today's behavior unchanged. Each workflow names its row at the touchpoint; this section is the single procedure those rows cite.
+Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps today's behavior unchanged. Each workflow names its row at the touchpoint; this section is the single procedure those rows cite. The last column lists the skills an inline activity may need, not a bulk-load list: inline procedure step 1 loads each one at its point of use.
 
-| Touchpoint | `subagent` | `orchestrator` | Inline skills |
+| Touchpoint | `subagent` | `orchestrator` | Skills an inline activity may need |
 |---|---|---|---|
 | Create Stories | Inline (already) | Inline | `po-core`, `po-write-story` |
 | Plan Sprint Stages 1, 2, 4 | Spawn/resume `po_session` | **Spawn/resume (forced)** | none (the spawned PO loads `po-plan-sprint`) |
@@ -37,10 +37,10 @@ Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps 
 **Forced spawns.** Plan Sprint and Stage 3 with QA as the implementer spawn a Product Owner in both modes. Never run them inline: planning is not delegated, and with QA as the implementer the spawned PO is the only independent evidence producer, so inline validation would certify the orchestrator's own merge gate.
 
 **Inline PO activity procedure.** For every inline row above:
-1. **Skills.** Before acting, load each listed skill, plus any skill its `**Requires:**` line names that is not already loaded. Read the canonical file `.mt-agent-devkit/skills/<name>/SKILL.md` in full; a provider without verified native skill discovery always reads that path (a skill directory does not prove discovery).
+1. **Skills, at the point of use.** Load each skill immediately before the action it governs, never all at the start of the activity: `po-core` when the activity starts; `po-answer-questions` before writing an answer; `po-comment` (with `comment`) before each post; `po-write-story` only when an AC or other body text is about to change; `po-promote-ready` before each promotion; `po-verify-close` before closure. Also load any skill a loaded skill's `**Requires:**` line names that is not already loaded. When other work has passed since a skill was read, read it again before its action. Read the canonical file `.mt-agent-devkit/skills/<name>/SKILL.md` in full; a provider without verified native skill discovery always reads that path (a skill directory does not prove discovery).
 2. **Pipeline state.** When the workflow keeps a state file, set `po_session: inline` and append one entry to `**PO Skills:**` naming the activity and the skills loaded (e.g. `stage4-closure: po-core, po-verify-close, po-comment, comment`).
 3. **PO memory.** At the run's first PO activity, read `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md` in full and record `**PO Memory:** read` in the state file. Write durable facts in the PO format, `## Stored Facts`, per `Agent_Common_Read_On_Demand.md §1` (fetch that section before the first write).
-4. **PO Working Record.** At the end of each inline activity whose skill writes the Working Record (`po-core` rules), update `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` in the `Agent_Common_Bootstrap.md §1` format. Stage 4 closure skips it, as a spawned closure PO does.
+4. **PO Working Record.** Update `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md` at the start and end of each inline activity, in the `Agent_Common_Bootstrap.md §1` format: one inline activity counts as one PO session (`po-core` rules). Stage 4 closure skips it, as a spawned closure PO does.
 5. **Separate state.** The orchestrator's own Working Record and state stay unchanged: PO facts never go into orchestrator state, and orchestrator state never goes into PO records.
 6. **Retro identity.** The completion identity's role is `Orchestrator`, the actual actor, per `Agent_Common_Bootstrap.md §7`. Never record an unspawned `Product_Owner` identity.
 7. **Telemetry.** Write exactly one Schema v1 row per inline activity through `python .mt-agent-devkit/scripts/telemetry.py harness`: metadata `role: PO`, `session_mode: orchestrator_inline`, the orchestrator's model, and no `session_final_tokens`, so the row records `usage_source: unavailable`. `story_id` is the story served (the sprint label for a multi-story activity); `stage` names the activity and, for a repeated cycle, its number (e.g. `refine-stage2-c2`). Never extract, capture boundaries or estimate inline usage.

@@ -836,6 +836,26 @@ class OrchestratorPoModeTests(unittest.TestCase):
                 with self.subTest(relative=relative, required=required):
                     self.assertIn(required, text)
 
+    def test_inline_skills_load_at_point_of_use_with_explicit_checks(self):
+        """ST-000303: point-of-use loading, numbered per-action checks and one Working Record timing, in both layers."""
+        for relative in self.ORCH:
+            text = self.read(relative)
+            for required in ("not a bulk-load list", "**Skills, at the point of use.** Load each skill immediately before the action it governs",
+                             "`po-comment` (with `comment`) before each post", "`po-write-story` only when an AC",
+                             "`po-promote-ready` before each promotion", "at the start and end of each inline activity"):
+                self.assertIn(required, text, relative)
+            self.assertNotIn("Before acting, load each listed skill", text, relative)
+        for name, required in (("po-promote-ready", ("1. **Open points.**", "2. **AC against the decided approach.**", "TL refinement answers",
+                                                     "design-first approval", "3. **Dependencies.**", "`**Depends on:**`", "4. **Promote.**")),
+                               ("po-comment", ("## Before Each Post", "2. Run the word count before posting", "start and end (`po-core`)")),
+                               ("po-write-story", ("**AC states the testable requirement only, no rationale.**",)),
+                               ("po-core", ("start and end of each PO activity (a spawned PO session or one inline activity)", "Stage 4 closure skips"))):
+            for relative in (f".mt-agent-devkit/skills/{name}/SKILL.md", f"{self.PHASE2}skills/{name}/SKILL_template.md"):
+                text = self.read(relative)
+                for phrase in required:
+                    with self.subTest(relative=relative, phrase=phrase):
+                        self.assertIn(phrase, text)
+
     def test_forced_spawns_hold_in_both_modes(self):
         for relative, text in self.pair("Plan_Sprint_Workflow.md", "shared/workflows/Plan_Sprint_Workflow_Shared_template.md"):
             self.assertIn("**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline", text, relative)
