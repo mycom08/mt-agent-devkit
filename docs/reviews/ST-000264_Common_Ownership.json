@@ -277,11 +277,11 @@
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
       "section": "1",
       "title": "Pre-Work Sequence",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md \u00a71",
+      "current_owner": ".mt-agent-devkit/skills/pre-work/SKILL.md part read-order; .mt-agent-devkit/skills/working-record/SKILL.md part format; .mt-agent-devkit/skills/pre-work/SKILL.md part resume (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md, .mt-agent-devkit/rules/Agent_Common_Working_Record.md",
       "trigger_stage": "validated entry; record only interruption/block/continuation/status",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
@@ -292,18 +292,18 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
       "trigger_stage": "always active safety",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
       "section": "3",
       "title": "Token-Efficiency Conventions",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md \u00a73",
+      "current_owner": ".mt-agent-devkit/skills/token-efficiency/SKILL.md part conventions (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md",
       "trigger_stage": "always active bounded reads",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
@@ -314,7 +314,7 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
       "trigger_stage": "always active external-content boundaries",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
@@ -332,77 +332,77 @@
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
       "section": "6",
       "title": "Shell Command Rules \u2014 Permissions and Tool Choice",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md \u00a76",
+      "current_owner": ".mt-agent-devkit/skills/shell-rules/SKILL.md part rules (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md",
       "trigger_stage": "before first governed shell/Git/GitHub operation",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
       "section": "7",
       "title": "Retrospective Trigger and Completion Contract",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md \u00a77",
+      "current_owner": ".mt-agent-devkit/skills/retro/SKILL.md part detection; .mt-agent-devkit/skills/retro-contribution/SKILL.md part orchestration (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md",
       "trigger_stage": "always active detection/completion",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
       "section": "1",
       "title": "Project Memory",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md \u00a71",
+      "current_owner": ".mt-agent-devkit/skills/agent-memory/SKILL.md part facts; .mt-agent-devkit/skills/troubleshooting/SKILL.md part format (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Memory.md",
       "trigger_stage": "durable memory write",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
       "section": "2",
       "title": "Troubleshooting Protocol",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md \u00a72",
+      "current_owner": ".mt-agent-devkit/skills/troubleshooting/SKILL.md part protocol (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Troubleshooting.md",
       "trigger_stage": "observed tooling/environment failure",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
       "section": "3",
       "title": "Triggered Retrospective Contribution",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md \u00a73",
+      "current_owner": ".mt-agent-devkit/skills/retro-contribution/SKILL.md part writing (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Retro.md",
       "trigger_stage": "recorded required retrospective",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
       "section": "5",
       "title": "Runtime-State Handoff (implementer & reviewer roles)",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md \u00a75",
+      "current_owner": ".mt-agent-devkit/skills/handoff/SKILL.md part state (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Stage_Transition.md",
       "trigger_stage": "persistent runtime handoff",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
       "section": "6",
       "title": "Credential-Gated Verification",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md \u00a76",
+      "current_owner": ".mt-agent-devkit/skills/credential-gate/SKILL.md part gate (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Credential_Gate.md",
       "trigger_stage": "missing required credential",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
@@ -420,11 +420,11 @@
       "source": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
       "section": "8",
       "title": "Two-Tier Memory (devkit-internal pilot \u2014 Developer, QA, Technical Lead only)",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md \u00a78",
+      "current_owner": ".mt-agent-devkit/skills/agent-memory/SKILL.md part two-tier (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Memory.md",
       "trigger_stage": "keyword match or durable fact write",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority.",
+      "compatibility": "Original full safe policy only for unverified providers; capability policy only for verified Codex. Mutually exclusive authority. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Retire legacy section only after native verification and migration of every remaining provider/consumer; do not remove full safe fallback now."
     },
     {
@@ -774,7 +774,7 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
       "trigger_stage": "always active safety",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
@@ -796,7 +796,7 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
       "trigger_stage": "always active external-content boundaries",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
@@ -917,18 +917,18 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
       "trigger_stage": "always active safety",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
       "section": "3",
       "title": "Token-Efficiency Conventions",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a73",
+      "current_owner": ".mt-agent-devkit/skills/token-efficiency/SKILL.md part conventions (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a73",
       "trigger_stage": "selected Core route entry (verified providers only)",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Not retired; Core remains the verified-route authority."
     },
     {
@@ -939,18 +939,18 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
       "trigger_stage": "always active external-content boundaries",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
       "source": ".mt-agent-devkit/rules/Agent_Common_Core.md",
       "section": "7",
       "title": "Retrospective Trigger and Completion Contract",
-      "current_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a77",
+      "current_owner": ".mt-agent-devkit/skills/retro/SKILL.md part detection; .mt-agent-devkit/skills/retro-contribution/SKILL.md part orchestration (ST-000307); this section holds the generated inline copy",
       "future_owner": ".mt-agent-devkit/rules/Agent_Common_Core.md \u00a77",
       "trigger_stage": "selected Core route entry (verified providers only)",
       "migrated_consumers": "Verified Codex Common routes only; native smoke gate controls activation",
-      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for.",
+      "compatibility": "Unchanged by ST-000287; recorded so every Core heading is accounted for. Generated (ST-000307): each block equals its skill part; a differing, missing or duplicated block or an unmapped part fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Reworded per docs/feature/role-skills/Dev_Skills_Ownership_Map.md; no rule lost or weakened.",
       "retirement_condition": "Not retired; Core remains the verified-route authority."
     },
     {
@@ -972,7 +972,7 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part A",
       "trigger_stage": "always active safety",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part A; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {
@@ -994,7 +994,7 @@
       "future_owner": ".mt-agent-devkit/skills/agent-security/SKILL.md part B",
       "trigger_stage": "always active external-content boundaries",
       "migrated_consumers": "Orchestrator loads the full agent-security skill at workflow start; every Common-route worker keeps the generated inline copy (no read-manifest entry)",
-      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_security_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
+      "compatibility": "Generated block is byte-identical to skill part B; drift fails .mt-agent-devkit/scripts/generate_common_blocks.py --check and validate_internal_harness.py. Worker text unchanged.",
       "retirement_condition": "Keep the generated inline copy while any Common route lacks a guaranteed skill load; edit only the skill, then regenerate."
     },
     {

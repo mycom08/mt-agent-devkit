@@ -276,8 +276,8 @@
     {
       "id": "skills/agent-security",
       "path": "assets/skills_agent-security",
-      "sha256": "6cd57ffd6175f485c157d531be9cfd708eaeb1f614eb7d7a1f3af60acd8d2be0",
-      "bytes": 2435,
+      "sha256": "1067fd99c1964e2f7f234aad6c4310cf7a422748ddae1fa590900e31716bd5bc",
+      "bytes": 2422,
       "kind": "template"
     },
     {

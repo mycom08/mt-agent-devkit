@@ -38,9 +38,9 @@ jobs:
       - name: Run validate_templates.py
         run: python scripts/validate_templates.py
 
-      - name: Check generated agent-security blocks and skill wrappers
+      - name: Check generated common-skill blocks and skill wrappers
         run: |
-          python .mt-agent-devkit/scripts/generate_security_blocks.py --check
+          python .mt-agent-devkit/scripts/generate_common_blocks.py --check
           python .mt-agent-devkit/scripts/generate_wrappers.py --check
 
       - name: Validate internal shared harness and provider routing

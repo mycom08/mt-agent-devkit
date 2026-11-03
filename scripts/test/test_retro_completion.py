@@ -160,7 +160,10 @@ class CompletionTests(unittest.TestCase):
         builder.build(ROOT, bundle)
         manifest = bundle / 'deployment.json'
         source = dict(kind='local', tag=None, commit='a' * 40, snapshot_version='0.1.53-SNAPSHOT', manifest_sha256=d.digest(manifest.read_bytes()))
-        canonical = (ROOT / '.mt-agent-devkit/rules/Agent_Common_Bootstrap.md').read_text(encoding='utf-8').split('## 7.', 1)[1].strip()
+        # Installed targets take Common text from the Phase 2 layer (design two layers, two sources).
+        template = (ROOT / '.mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md').read_text(encoding='utf-8')
+        canonical = template.split('## 7.', 1)[1].split('## Version', 1)[0].strip().removesuffix('---').strip()
+        self.assertIn('retro_completion.py', canonical)
         for provider in d.PROVIDERS:
             for mode in ['github', 'strict']:
                 with self.subTest(provider=provider, mode=mode):

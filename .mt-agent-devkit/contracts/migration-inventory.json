@@ -3261,6 +3261,813 @@
       "consumer_contract": [
         "native provider discovery"
       ]
+    },
+    {
+      "source": ".claude/skills/pre-work/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pre-work/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/pre-work/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pre-work/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/pre-work/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pre-work/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/token-efficiency/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/token-efficiency/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/token-efficiency/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/shell-rules/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/shell-rules/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/shell-rules/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/shell-rules/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/shell-rules/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/shell-rules/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/working-record/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/working-record/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Working_Record.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/working-record/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/working-record/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Working_Record.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/working-record/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/working-record/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Working_Record.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/agent-memory/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/agent-memory/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Memory.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/agent-memory/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/agent-memory/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Memory.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/agent-memory/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/agent-memory/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Memory.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/troubleshooting/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/troubleshooting/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Troubleshooting.md",
+        ".mt-agent-devkit/rules/Agent_Common_Memory.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/troubleshooting/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/troubleshooting/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Troubleshooting.md",
+        ".mt-agent-devkit/rules/Agent_Common_Memory.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/troubleshooting/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/troubleshooting/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Troubleshooting.md",
+        ".mt-agent-devkit/rules/Agent_Common_Memory.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/credential-gate/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/credential-gate/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Credential_Gate.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/credential-gate/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/credential-gate/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Credential_Gate.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/credential-gate/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/credential-gate/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Credential_Gate.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/retro/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/retro/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/retro/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/retro/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/retro/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/retro/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/retro-contribution/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/retro-contribution/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Retro.md",
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/retro-contribution/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/retro-contribution/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Retro.md",
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/retro-contribution/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/retro-contribution/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Retro.md",
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md",
+        ".mt-agent-devkit/rules/Agent_Common_Core.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/handoff/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/handoff/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Stage_Transition.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/handoff/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/handoff/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Stage_Transition.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/handoff/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/handoff/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md",
+        ".mt-agent-devkit/rules/Agent_Common_Stage_Transition.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/raise-question/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/raise-question/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/raise-question/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/project-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/project-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/project-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/git-workflow/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/git-workflow/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/git-workflow/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/change-metadata/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/change-metadata/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/change-metadata/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/change-metadata/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/change-metadata/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/change-metadata/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/pre-pr-gate/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/pre-pr-gate/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/pre-pr-gate/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/pr-review/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/pr-review/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/pr-review/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/clean-code/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Clean_Code_Rules.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/clean-code/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Clean_Code_Rules.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/clean-code/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/rules/Clean_Code_Rules.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
     }
   ],
   "retired": [
