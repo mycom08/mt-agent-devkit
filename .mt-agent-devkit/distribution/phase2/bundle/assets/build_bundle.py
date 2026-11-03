@@ -10,7 +10,7 @@ import tempfile
 import subprocess
 
 # Skills shipped as a shared canonical file plus per-provider discovery wrappers.
-SHARED_SKILLS = ("agent-security", "po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
+SHARED_SKILLS = ("agent-security", "comment", "po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
                  "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
 PO_SKILLS = tuple(name for name in SHARED_SKILLS if name.startswith("po-"))
 # Rules files whose templates left the bundle (ST-000290). Their installed copies

@@ -213,7 +213,7 @@ After QA sign-off, when merging the dev branch PR into the feature branch (or ma
 
 | Trigger | Fetch |
 |---|---|
-| Before posting a story/PR comment or editing the issue body | `Developer_Rules_Read_On_Demand.md §15` (Comment Standard and Commenter gate) |
+| Before posting a story/PR comment or editing the issue body | The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`, full: comment standard and Commenter gate), then `Developer_Rules_Read_On_Demand.md §15` (Dev-only notes) |
 | A technical document is observed inaccurate, contradictory or ambiguous | `Developer_Rules_Read_On_Demand.md §16` (Technical Doc Divergence) |
 | Story touches an endpoint | `Developer_Rules_Read_On_Demand.md §17` before code and before merge |
 | Behavioral source/SQL/config/Docker/environment/CI change, or an existing story integration script | `Developer_Rules_Read_On_Demand.md §18` before PR |

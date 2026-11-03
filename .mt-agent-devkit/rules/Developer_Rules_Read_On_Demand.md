@@ -86,7 +86,7 @@ For each story ask:
 If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
 
 ### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Developer_Rules_Read_On_Demand.md` §20 comment format. Set `**Thread Status:** Open`. One comment per story.
+For each story with open points, post **one GitHub issue comment** following the `comment` skill's format. Set `**Thread Status:** Open`. One comment per story.
 
 ### Step 4 — Review Answers and Confirm
 After the orchestrator notifies you that TL and PO have answered:
@@ -140,33 +140,17 @@ Triggered by the post-Done bug route in `Developer_Rules_Bootstrap.md §18`. Whe
 
 ## 20. Comment Standard
 
-```markdown
-## [Comment title]
-**Thread Status:** Open | In Progress | Resolved
-**Area:** [Workflow / Template / AC / File]
+Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) first; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. Dev-only notes:
 
-**Developer - YYYY-MM-DD**
-Question or concern.
-
-**TL - YYYY-MM-DD**
-Response and decision.
-
-**Decision:** [What we decided and why]
-**Next:** [Owner or "None"]
-```
-
-- **One topic per comment** — answer the questions asked and nothing else; a finding that surfaces while answering posts as its own comment with its own thread status. Batching replies to questions asked together is fine; smuggling an unasked finding into an answer is not.
-- Reply in the same thread for the same topic
-- When a comment resolves a scope/AC question, update the issue body to match
-- **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`)
-- **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; **never paste command output or check transcripts** — verdict in one line, logs in your working record; carve-out: paste the literal `gh pr checks <PR-number>` output when peer-reviewing (`Developer_Rules_Read_On_Demand.md §16` requires it in the approval comment) — nothing else gets pasted; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Peer-review CI paste:** when peer-reviewing, the approval comment carries the literal `gh pr checks <PR-number>` output `Developer_Rules_Read_On_Demand.md §16` requires (the `comment` skill's single transcript carve-out).
+- **Same-pass body update:** when a comment resolves a scope/AC question, update the issue body to match in the same pass, and announce the edit rather than reproduce it.
 
 ---
 
 ## Version
 
-**Version:** 2.1 — numbering preamble condensed; the benchmark rationale for the §1–§6 move lives in this footer and the commit log, not in the read path.
+**Version:** 2.2 — §20 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-000304).
+**Previous:** 2.1 — numbering preamble condensed; the benchmark rationale for the §1–§6 move lives in this footer and the commit log, not in the read path.
 **Previous:** 2.0 — §1–§6 moved out to `Developer_Rules_Bootstrap.md` at their original numbers. A full story spawn triggers all six, so fetching them here cost a `read-section` load plus a 7,640-char fetch and saved nothing (2026-08-21 benchmark #148/#149). This file now holds only genuinely conditional rules: §7, §8, §12–§17.
 **Previous:** 1.1 — `Developer_Rules_Extended.md` §1–§6 merged in as §12–§17, one on-demand file per role.
 **Created:** 2026-08-21

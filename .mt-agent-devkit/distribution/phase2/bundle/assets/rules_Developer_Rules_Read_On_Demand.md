@@ -146,7 +146,7 @@ For each story ask:
 If a story has **no open points**, it still needs an explicit **cleared note**: post one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent — Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
 
 ### Step 3 — Post Question Comments
-For each story with open points, post **one GitHub issue comment** following `Developer_Rules_Read_On_Demand.md` §15 comment format:
+For each story with open points, post **one GitHub issue comment** following the `comment` skill's format:
 - Group technical questions under a `**TL**` heading
 - Group scope/AC questions under a `**PO**` heading
 - Set `**Thread Status:** Open`
@@ -165,27 +165,10 @@ After the orchestrator notifies you that TL and PO have answered:
 
 ## 15. Comment Standard
 
-```markdown
-## [Comment title]
-**Thread Status:** Open | In Progress | Resolved
-**Area:** [Endpoint / AC / Section / File]
+Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) first; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. Dev-only notes:
 
-**Developer - YYYY-MM-DD**
-Question or concern.
-
-**TL - YYYY-MM-DD**
-Response and decision.
-
-**Decision:** [What we decided and why]
-**Next:** [Owner or "None"]
-```
-
-- **One topic per comment** — answer the questions asked and nothing else; a finding that surfaces while answering posts as its own comment with its own thread status. Batching replies to questions asked together is fine; smuggling an unasked finding into an answer is not.
-- Reply in the same thread for the same topic
-- When a comment resolves a scope/AC question, update the issue body to match
-- **Never use the `@` prefix** — write role names without it (e.g., `**TL**`, `**PO**`). An `@` prefix triggers a GitHub mention to a real user account.
-- **Never use a bare `#` prefix** — use `ST-XXXXXX` format or plain text. A bare `#` creates a GitHub cross-reference to an unrelated issue or PR.
-- **Writing standard:** decision-first (first line = the decision/outcome), rationale ≤ 2–3 sentences per point, cap ~150–200 words, draft to shape rather than trim-and-recount; **never paste command output or check transcripts** — verdict in one line, logs in your working record; carve-out: paste the literal `gh pr checks <PR-number>` output when peer-reviewing (`Developer_Rules_Read_On_Demand.md §12` requires it in the approval comment) — nothing else gets pasted; a body edit made in the same pass is announced, not reproduced; facts already in your memory file are cited, not re-explained; corrections state the delta only; no comments about comments; one close-out line per thread. Run the **Commenter gate** (`Story_Standard.md §12`) before posting. Full rule: `Story_Standard.md §9`.
+- **Peer-review CI paste:** when peer-reviewing, the approval comment carries the literal `gh pr checks <PR-number>` output `Developer_Rules_Read_On_Demand.md §12` requires (the `comment` skill's single transcript carve-out).
+- **Same-pass body update:** when a comment resolves a scope/AC question, update the story body to match in the same pass, and announce the edit rather than reproduce it.
 
 ---
 
@@ -220,7 +203,8 @@ For any story with an existing integration script, run `bash tests/feature/.../S
 
 ## Version
 
-**Version:** 1.2 — Added §14 (Refine Sprint Task), relocated verbatim from `developer_instructions_template.md`, which now carries a one-line trigger pointer instead of the full procedure; the instruction file is read on every Developer spawn, the refinement procedure applies to one workflow.
+**Version:** 1.3 — §15 reduced to Dev-only notes; the shared `comment` skill owns the comment standard and Commenter gate (ST-000304).
+**Previous:** 1.2 — Added §14 (Refine Sprint Task), relocated verbatim from `developer_instructions_template.md`, which now carries a one-line trigger pointer instead of the full procedure; the instruction file is read on every Developer spawn, the refinement procedure applies to one workflow.
 **Previous:** 1.1 — Added §12 (Developer as Reviewer) and §13 (Hotfix), relocated from `Story_Standard_Dev_template.md` sections 4, 6, and 12 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
 **Previous:** 1.0 — Split out of `Developer_Rules_template.md` v2.11 (§7–§8 relocated as-is; §11 Peer Review relocated as-is, renumbered §9; Mid-Implementation Consultation and Live User Instruction Conflicts extracted from §2's inline text, new §10/§11), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25

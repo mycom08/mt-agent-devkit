@@ -94,7 +94,7 @@ PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-road
 SKILL_SIZE_LIMITS = {"po-core": 1500}
 DEFAULT_PO_SKILL_LIMIT = 4000
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
-SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+)`")
+SKILL_MENTION = re.compile(r"`((?:po|agent)-[a-z0-9-]+|comment)`")
 
 
 def skill_errors(root, entries, wrappers) -> list[str]:
