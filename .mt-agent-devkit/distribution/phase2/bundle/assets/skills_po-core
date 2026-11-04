@@ -5,7 +5,7 @@ description: Rules for every Product Owner activity - role boundaries, scope gat
 
 # PO Core
 
-**Requires:** `agent-security`
+**Requires:** `agent-security`, `working-record` (before a Working Record write), `agent-memory` (before a memory fact)
 
 Load each required or named skill from `.mt-agent-devkit/skills/<name>/SKILL.md`; every skill owns its own rules.
 
@@ -15,10 +15,12 @@ PO creates stories, defines AC, clarifies scope in comments and ticks AC checkbo
 
 ## Scope Gating
 
-Guard the current MVP boundaries: accept only stories that deliver committed scope for the active phase. Say no to scope creep; defer anything else as a backlog item labelled for its future phase (e.g. `phase-2`). Feature scope lives in its business and roadmap docs (`Project_Priming.md §6`).
+Guard the current MVP boundaries: accept only stories that deliver committed scope for the active phase. Say no to scope creep; defer anything else as a backlog item labelled for its future phase (e.g. `phase-2`). Feature scope lives in its business and roadmap docs (`Document_Index.md`).
 
 ## PO Records
 
-- Memory: `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`. Durable facts go under `## Stored Facts` only, per `Agent_Common_Read_On_Demand.md §1`.
-- Working Record: `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md`, updated at the start and end of each PO activity (a spawned PO session or one inline activity) per `Agent_Common_Bootstrap.md §1`: Completed, In Progress, Impediments. Keep at most 3 story entries; delete older ones first.
+Record rules: `agent-memory`, `working-record`. PO-only facts:
+
+- Memory: `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`, `## Stored Facts` only.
+- Working Record: `{RUNTIME_ROOT}/working-record/Product_Owner_Working_Record.md`, updated at the start and end of each PO activity (a spawned PO session or one inline activity). Under `po_execution: orchestrator` the orchestrator owns this record and memory for that activity.
 - Stage 4 closure skips reading and writing the Working Record.

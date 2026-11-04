@@ -29,54 +29,13 @@ Before building anything, regardless of story status, UI/UX Designer **must** re
 
 ### Step 2 — Identify and raise questions
 
-After reading, identify anything unclear: missing wireframe detail, ambiguous flow, undecided data shape for the mock backend.
-
-- **If questions exist:** Post a comment on the GitHub Issue and **explicitly tag** the right person:
-  - Scope, flow, or missing wireframe detail → tag **PO** (Product Owner)
-  - Technical questions (routing approach, mock-backend tooling, integration boundary with the real backend) → tag **TL** (Technical Lead)
-- **Do not assume or invent answers** — wait for a response before proceeding
-
-> **Gate:** Do not begin building the prototype until all blocking questions have a confirmed answer from PO or TL.
+After reading, follow the pre-start gate in `raise-question` section 2 (`.mt-agent-devkit/skills/raise-question/SKILL.md`). UI/UX examples: missing wireframe detail or an ambiguous flow goes to **PO**; routing approach, mock-backend tooling or the integration boundary with the real backend goes to **TL**. Do not begin building the prototype until every blocking question has a confirmed answer.
 
 ### Step 3 — Start implementation
 
-Once all blocking questions are resolved:
+Once all blocking questions are resolved, create the branch and move the story to `status:in-progress` per `git-workflow` section 1 (`.mt-agent-devkit/skills/git-workflow/SKILL.md`), then begin building the prototype.
 
-1. Create `ST-XXXXXX/short-description` only through `branch_preflight.py create` using the story's immutable Base Branch and the full Base/Remote Base SHAs verified by Story Base Preflight; never branch directly from the current checkout.
-2. **Update story status after successful branch verification** — Remove label `status:ready` (or `status:backlog`), add label `status:in-progress`.
-3. Begin building the prototype
-
-**Mid-implementation consultation (when a question surfaces during implementation):**
-
-If you encounter an unclear flow, ambiguous AC, or a technical decision point (e.g., which mock-backend approach fits the target stack) while building — and making a judgment call is not appropriate — do NOT use the Blocked Story Procedure and do NOT ask the user. Instead:
-
-1. Identify who owns the question:
-   - Flow or scope question → **PO**
-   - Technical question → **TL**
-   - Both → **PO + TL**
-2. Post a comment on the GitHub Issue tagging the right role(s). Use the format:
-   ```
-   **Mid-implementation question — [TL / PO / both]**
-   <specific question — one clear sentence>
-   **Decision needed:** <what answer would unblock you>
-   ```
-3. Report back to the orchestrator using this format:
-   ```
-   Mid-implementation consultation needed — ST-XXXXXX
-   Owner: <TL / PO / both>
-   Question: <same question as posted on issue>
-   Decision needed: <same decision needed>
-   Implementation paused at: <brief description of where you stopped>
-   Question recorded on story: posted
-   ```
-4. Do NOT change the story label. The orchestrator will spawn or resume TL and/or PO to answer in the issue thread, then resume you with their response.
-5. When the orchestrator resumes you with the answer: read it, apply it, and continue from where you paused.
-
-> Use this for genuine ambiguities that would otherwise require a judgment call affecting scope or design. Do not use it for implementation details you can reasonably decide yourself (e.g., exact spacing, color values not specified by the wireframe).
-
-**Live user instruction conflicts (mandatory rule during implementation):**
-
-If a live instruction from the user during implementation contradicts a prior decision recorded in the issue thread, the live instruction takes precedence. Acknowledge the conflict, proceed with the live instruction, and document the override in the PR description.
+**Mid-implementation consultation / live user instruction conflicts:** rare, task-specific — `raise-question` section 3 (when a question surfaces during implementation, e.g. which mock-backend approach fits the target stack; never use the Blocked Story Procedure or ask the user) and section 5 (when a live instruction contradicts a prior decision). Do not consult on details you can reasonably decide yourself (e.g., exact spacing, color values not specified by the wireframe).
 
 ---
 
@@ -137,10 +96,9 @@ If any applicable check fails, fix it before creating the PR.
 
 ## 6. Git Workflow
 
-- **Dev branch:** `ST-XXXXXX/short-description` (branch off the feature branch or main)
-- **PR title:** `[ST-XXXXXX][FEATURE] Story title`
-- **PR description:** Must include `Closes #<issue-number>`, the start command, and the mock-only handoff note (§4)
-- **Wait for TL approval** before merging
+Branch name, commits, `[skip ci]`, PR title and description, and merge sync follow the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`). UI/UX additions:
+
+- **PR description** also carries the start command and the mock-only handoff note (§4)
 
 **Story comment after opening PR (mandatory):**
 
@@ -148,37 +106,30 @@ After creating the PR, post a short comment on the GitHub Issue:
 > "PR #XX opened for review — [brief one-line summary of the flow prototyped]."
 Tag **TL** in the comment to request review.
 
-**Commit Message Rules:**
-- Format: `<type>(<scope>): <subject>` — Conventional Commits
-- Subject: imperative mood, ≤ 50 characters
-- Footer: always include `Story: ST-XXXXXX`
-- **Subject-line length is a non-blocking style nit** — a reviewer notes a violation in a PR comment but must not request changes or trigger a fix-loop over length alone.
-
 ---
 
 ## 7. Document Placement
 
-Place the prototype source under the project's standard feature-doc/source structure — see `Project_Priming.md §Internal Documents` for the current paths. Link the wireframe/design source in the story's **Design Source** field (see `Story_Standard_UIUX.md §2`) rather than pasting it into the story body.
+Place the prototype source under the project's standard feature-doc/source structure — before creating, moving or renaming a document, load the `project-docs` skill (`.mt-agent-devkit/skills/project-docs/SKILL.md`), which owns the path list (`{{AGENT_DIR_PREFIX}}/agents/context/Document_Index.md`) and naming. Link the wireframe/design source in the story's **Design Source** field (see `Story_Standard_UIUX.md §2`) rather than pasting it into the story body.
 
 ---
 
 ## 8. Reporting & Blockers
 
-- Keep working record updates short and fact-based (file paths, PR #s, story IDs, commits)
-- Post blockers immediately as a comment in the GitHub Issue; tag TL or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
+- Working Record writes follow the `working-record` skill (`.mt-agent-devkit/skills/working-record/SKILL.md`)
+- Blockers follow `raise-question` section 4; UI/UX tags TL or PO
 
 ---
 
 ## 9. Runtime-State Handoff (mandatory before handoff)
 
-Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — the `handoff` skill owns the rule; your route reads its generated copy, `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 10. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (prototype won't start, mock backend won't run, script/CLI errors), follow the check-memory → fix → record-to-memory protocol in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (prototype won't start, mock backend won't run, script/CLI errors), follow the `troubleshooting` skill's check-memory → fix → record-to-memory protocol; your route reads its generated copy, `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 

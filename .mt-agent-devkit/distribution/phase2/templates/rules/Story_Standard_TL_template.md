@@ -55,8 +55,7 @@ When Dev flags a technical doc as inaccurate via a story comment:
 
 Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the template, Thread Status, writing rules, prefix bans and the Commenter gate. TL-only additions:
 
-- Post code review changes as **inline PR comments** plus a brief notify comment on the issue (strict mode: the story file `## Comments`).
-- A PR approval comment carries the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires (the `comment` skill's single transcript carve-out).
+- Review comments (inline change requests, the issue notify comment, and the approval carrying the literal `gh pr checks <PR-number>` output the §12 Reviewer gate requires) follow the `pr-review` skill (`.mt-agent-devkit/skills/pr-review/SKILL.md`), steps 5–7. Strict mode: the notify comment goes to the story file `## Comments`.
 
 ---
 

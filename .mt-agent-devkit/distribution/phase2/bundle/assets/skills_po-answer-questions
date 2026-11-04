@@ -13,7 +13,7 @@ Applies to refine-sprint Stage 2, a mid-implementation question whose owner is P
 
 1. Read the full comment thread on the story (GitHub issue, or the story file's `## Comments` in strict mode).
 2. Answer every question tagged to **PO** in a reply within the **same comment thread** (`po-comment`); set `**Thread Status:**` to `In Progress` while answering.
-3. Your decisions are binding. If you change or clarify an AC, update the story body to match (`po-write-story`): `--body-file` in github mode; in strict mode edit the AC in the story file and add a comment entry noting the change.
+3. Your decisions are binding. A changed or clarified AC goes into the body in the same pass (`comment` owns that rule), written through `po-write-story`: `--body-file` in github mode; in strict mode edit the AC in the story file and add a comment entry noting the change.
 4. When all your questions in a story are answered, note it.
 
 ## AC Synchronisation (mandatory before `status:ready`)

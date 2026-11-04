@@ -51,7 +51,7 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 **Before testing:**
 - Always create a test scenario document first — do not begin testing without it
-- Place it under `docs/feature/<feature_name>/test-scenarios/` using `Title_Case_With_Underscores`
+- Place it under `docs/feature/<feature_name>/test-scenarios/`, named per `project-docs`
 - The scenario must cover: happy path, error cases, edge cases (empty values, invalid input, data isolation)
 - **Exceptions to the test-scenario document:**
   - **CI/workflow-only stories** (Technical Scope is `.github/workflows/**` only): capture the CI run URL(s) plus relevant job log excerpts (e.g. a registry-push digest) as the validation artifact instead — there is no meaningful feature-behavior scenario to document.
@@ -95,7 +95,7 @@ When integration tests share setup/teardown state (e.g. a shared fixture cleared
 **API testing:**
 - Test all API endpoints using `curl` or an equivalent HTTP client
 - When a story requires more than one call, create a script to run them all
-- Place the script under `tests/feature/<feature_name>/scripts/` using `Title_Case_With_Underscores` (e.g., `ST-XXXXXX_API_Test.sh`)
+- Place the script under `tests/feature/<feature_name>/scripts/`, named per `project-docs` (e.g., `ST-XXXXXX_API_Test.sh`)
 - The script must be runnable as-is — include base URL variable, required headers, and a clear label before each request
 
 **Credential handling in test scripts:**
@@ -145,18 +145,14 @@ A happy-path test alone is not sufficient — the rejection branch must be a sep
 
 ## 5. Document Placement
 
-- Place all new documents in the correct feature-doc subfolder — see `{{AGENT_DIR_PREFIX}}/agents/context/Document_Index.md` for paths
-- Use `Title_Case_With_Underscores` for all document file names (e.g., `My_Technical_Document.md`)
-- Test scenario docs go under `docs/feature/<feature_name>/test-scenarios/`
+Before creating, moving or renaming a document, load the `project-docs` skill (`.mt-agent-devkit/skills/project-docs/SKILL.md`). It owns the path list (`{{AGENT_DIR_PREFIX}}/agents/context/Document_Index.md`) and naming. Test scenario documents keep the §4 locations.
 
 ---
 
 ## 6. Story Comment
 
-- Post QA findings, acceptance gaps, regression risks, and sign-off notes as **comments on the GitHub Issue**
-- Reply in the same comment when retesting or validating the same issue
+- Post QA findings, acceptance gaps, regression risks, and sign-off notes as **comments on the GitHub Issue**; the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the format and threading (QA additions in `Story_Standard_QA.md §9`)
 - Do not create standalone review-note files for normal story discussion
-- See `Project_Priming.md §13` for the full Comment format
 
 ---
 
@@ -197,7 +193,7 @@ After all story Acceptance Criteria are verified and before giving merge sign-of
 
 ## 9. Pre-PR Gate (when acting as Implementer)
 
-Rare — only when QA is the story Implementer. Checklist in `QA_Rules_Read_On_Demand.md §1`.
+Rare — only when QA is the story Implementer. Run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`; `QA_Rules_Read_On_Demand.md §1` points to it).
 
 > This rule applies to QA as **Implementer**. §8 (Automation Regression Run) applies to QA as **Validator** — they are separate gates at different pipeline stages.
 
@@ -205,27 +201,26 @@ Rare — only when QA is the story Implementer. Checklist in `QA_Rules_Read_On_D
 
 ## 10. Live User Instruction Conflicts (when acting as Implementer)
 
-Rare — only when QA is the story Implementer. Rule in `QA_Rules_Read_On_Demand.md §2`.
+Rare — only when QA is the story Implementer. Rule in `raise-question` section 5 (`.mt-agent-devkit/skills/raise-question/SKILL.md`; `QA_Rules_Read_On_Demand.md §2` points to it).
 
 ---
 
 ## 11. Reporting & Blockers
 
-- Keep working record updates short and fact-based (story IDs, test results, AC status)
-- Post blockers immediately as a Comment on the GitHub Issue; tag Dev or TL as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
+- Working Record writes follow the `working-record` skill (`.mt-agent-devkit/skills/working-record/SKILL.md`); QA entries record story IDs, test results and AC status
+- Blockers follow `raise-question` section 4; QA tags Dev or TL
 
 ---
 
 ## 12. Runtime-State Handoff (mandatory before handoff)
 
-Keep agent state local and uncommitted before signaling stage completion — see `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — the `handoff` skill owns the rule; your route reads its generated copy, `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 13. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (sandbox won't start, automation runner cannot connect, test scripts fail, CI/auth errors), follow the `troubleshooting` skill's check-memory → fix → record-to-memory protocol; your route reads its generated copy, `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 
@@ -235,7 +230,7 @@ On any tooling/environment blocker (sandbox won't start, automation runner canno
 
 | Trigger | Fetch |
 |---|---|
-| QA is the story Implementer | `QA_Rules_Read_On_Demand.md §1` (pre-PR gate), `§2` (live user instruction conflicts) |
+| QA is the story Implementer | The `pre-pr-gate` skill (pre-PR gate) and `raise-question` section 5 (live user instruction conflicts); `QA_Rules_Read_On_Demand.md §1`–`§2` point to them |
 | A bug is found after story is `status:done` (hotfix) | `QA_Rules_Read_On_Demand.md §3` |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Runtime-State Handoff and Troubleshooting Protocol are already resolved directly by §12/§13 above.

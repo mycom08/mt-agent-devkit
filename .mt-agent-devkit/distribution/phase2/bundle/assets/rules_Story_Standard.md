@@ -141,7 +141,7 @@ When an AC requires "one negative fixture (or test) per check/invariant," distin
 ### Status: In Progress → Review
 **When:** Work complete, ready for review
 **Action:**
-1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks)
+1. Self-check all AC locally — confirm each criterion is met (do **NOT** tick checkboxes; only PO ticks), and run the applicable pre-PR checks (the `pre-pr-gate` skill, `.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`, for every implementer role)
 2. Run integration test script in Git Bash: `bash tests/feature/.../ST-XXXXXX_*.sh` (see `docs/wiki/Testing_Guidelines.md`)
 3. Source files follow naming standard (no generic names like `utils`, `helpers`, `types`)
 4. Create PR from dev branch → **feature branch** (NOT master); title: `[ST-XXXXXX][FEATURE] Story title`
@@ -273,7 +273,7 @@ If during implementation you discover that a **technical document** (e.g., `<Fea
 
 ## 9. Comment Standard
 
-All discussions happen as comments (GitHub Issue comments in GitHub mode, `## Comments` entries in strict mode), never inside the story body. The body is for User Story, AC and Deliverables only. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `Developer_Rules_Read_On_Demand.md §15`, `po-comment`).
+All discussions happen as comments (GitHub Issue comments in GitHub mode, `## Comments` entries in strict mode), never inside the story body. The body is for User Story, AC and Deliverables only. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `pr-review` for the Developer's peer-review CI paste, `po-comment`).
 
 ---
 
@@ -347,7 +347,7 @@ Applies to all implementer roles (Developer, Technical Lead, QA, Business Analys
 
 - [ ] Issue label: `status:review`
 - [ ] API spec verified — implementation matches spec for all affected endpoints (`docs/api/`)
-- [ ] If any file in `docs/api/` or `.spectral.yaml` changed: spec lint passes and spec drift check passes — see agent-specific rules for exact commands
+- [ ] If any file in `docs/api/` or `.spectral.yaml` changed: spec lint passes and spec drift check passes — exact commands in the `pre-pr-gate` skill
 - [ ] Self-checked all AC locally — each criterion confirmed met (do **NOT** tick checkboxes; PO ticks only)
 - [ ] Integration test script exists at `tests/feature/<feature_name>/scripts/ST-XXXXXX_*.sh`
 - [ ] Integration test script passes when run via Git Bash

@@ -28,7 +28,7 @@ Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` in full. Ever
 
 ## Document Placement Rules
 
-When you update or create project documents, use the current feature-doc structure. Refer to the project's document index for correct paths (see `Project_Priming.md` §Internal Documents).
+Before you create, move or rename a project document, load the `project-docs` skill (`.mt-agent-devkit/skills/project-docs/SKILL.md`). It owns the path list (`{{AGENT_DIR_PREFIX}}/agents/context/Document_Index.md`) and naming.
 
 ---
 

@@ -20,28 +20,19 @@ Do these **in order** before any design or review work:
 
 ## 2. Code Review & PR Approval
 
-**Before reviewing, locate the work:**
-1. Open the GitHub Issue for the story being reviewed
-2. Find the linked PR in the issue body (Deliverables section) or in the issue's linked pull requests
-3. If no PR is linked, ask Dev to link it before proceeding — do not review unlinked PRs
+**Shared reviewer procedure:** load the `pr-review` skill (`.mt-agent-devkit/skills/pr-review/SKILL.md`) first. It owns locating the work, the CI gate (pending-CI wait, the check actually executed, head SHA, red-check diagnosis), naming and stale-reference criteria (deleted or renamed files via `git ls-tree`, the old-path grep), credential evidence, inline change requests ("at minimum these"), the issue notify comment and the `gh pr comment` verdict. The TL-only rules below add to it.
 
-**Review checklist:**
-
-In GitHub mode, pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING cannot advance review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the existing explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate exact head and approval scope. Strict mode uses local verification without GitHub.
+**Review checklist (TL-only):**
 
 For long local verification, use `.mt-agent-devkit/contracts/Local_Verify.md` (local-verify) with the full required command, selected provider bindings and a new run ID. Launch once; resume only supported waits on that identity. Missing completion is not success. Keep provider-local logs and independent verification gates.
-- **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding
-- **Confirm the check actually executed, not just its conclusion:** open the job log and confirm the target suite actually ran (non-zero test count) before accepting a green/red conclusion at face value. A run that fails at dependency resolution before any test executes is a different failure mode than a real test failure — call it out as such, don't treat it as proof either way.
-- **Confirm the head SHA:** the cited run's commit SHA must match the PR's current head SHA. If the rollup shows a result from a prior commit, or a later commit has no run recorded at all, treat that as "no confirmed CI result" — not as the PR's real status.
-- **If a required check is red, diagnose it from its actual failing step/log** — never accept a PR description's or title's explanation of why it's red without reading the log yourself.
+- **CI gate (mandatory first step):** See `Story_Standard_TL.md` §12 Reviewer Gate — all CI checks must finish and pass before proceeding. For a test suite, "actually executed" (`pr-review` step 3) means a non-zero test count.
 - **Dependency-pin check:** if the story changes or introduces a cross-module/cross-repo version pin, confirm the pinned version is actually resolvable from the shared registry the CI runner uses (not just present in a local build cache) — e.g. check the publish/release job's own run history for that version.
 - **Resume-rule branch completeness (state-file / pipeline stories):** if the story adds a new pipeline-state field, status value, or step to a resumable workflow, verify the resume/routing logic has an explicit branch for every value its own write rules can produce — not just the pre-existing ones. A new terminal or interrupted-window state with no matching resume branch silently falls into the nearest existing branch instead of doing the right thing.
 - **Citation accuracy:** before citing a rule as `<file> §N`, open the file and confirm N is the section's actual heading number — a `grep -n` result is a *line* number, not a section number, and a wrong-but-existing section number ships silently past casual review.
 - Verify compliance with `docs/wiki/Development_Standards.md` and the approved implementation design
-- Check: naming conventions, data isolation, error format, test coverage, migration correctness
-- **Source code changes only** — verify compliance with `.mt-agent-devkit/rules/Clean_Code_Rules.md` (meaningful names, single responsibility, no side effects, error handling)
-- **Missing credential in the implementer's evidence** — do not accept a dummy-value substitute or a same-secret-different-code-path analogy as proof a credential-gated check passed; see `Agent_Common_Read_On_Demand.md §6`
-- **Approve** by posting an approval verdict via `gh pr comment <number>` when all criteria pass (never `gh pr review --approve` — GitHub blocks self-approval); leave blocking comments if they do not
+- Check: data isolation, error format, test coverage, migration correctness
+- **Source code changes only** — verify compliance with the `clean-code` skill (`.mt-agent-devkit/skills/clean-code/SKILL.md`)
+- **Approve** when all criteria pass, with the `pr-review` step 7 verdict; leave blocking comments if they do not
 - Cannot approve your own work — seek a second reviewer when acting as implementer
 
 **CI/Workflow stories (Technical Scope is `.github/workflows/**` only, no source/schema/entity files):**
@@ -50,7 +41,7 @@ When reviewing a story whose Technical Scope lists only workflow YAML files, use
 - Secret/credential scope — no widened access beyond what the job needs
 - Blast radius on existing triggers/jobs — confirm no unrelated job's behavior changes
 - Rollback safety — can this be reverted without side effects
-- The CI-execution/SHA/red-check-diagnosis bullets above still apply — this checklist only trims what's structurally inapplicable to a YAML-only diff
+- The `pr-review` CI gate (executed, head SHA, red-check diagnosis) still applies — this checklist only trims what's structurally inapplicable to a YAML-only diff
 
 Skip: naming conventions, entity/DTO conventions, migration correctness, layering, Clean Code review, domain-specific NFR design questions.
 
@@ -64,13 +55,10 @@ When reviewing a story with no endpoint, spec, or schema changes, use this abbre
 Skip: spec diff, migration risk, backward-compat checks (no public interface changed).
 
 **Documentation stories (no source files, no migrations, no API spec changes):**
-Review checklist differs from code review — focus on:
+Review checklist differs from code review — focus on these, with the `pr-review` stale-reference and deleted-file criteria:
 - **Accuracy:** Does the document reflect the current implementation? Cross-check key claims against source files.
-- **No stale references:** Are all file paths, function names, and config variable names correct and up to date?
 - **Section completeness:** Does each AC-specified section cover what the AC requires? Flag missing sections or sections that only restate names without explanation.
 - **Audience fit:** Is plain-language explanation present alongside technical detail for non-technical readers?
-- **File deletions / renames:** If the story deletes or renames files, confirm the original is absent from the branch tree — do not rely on the diff alone; verify via the GitHub API or `git ls-tree` on the PR branch.
-- **Path-reference stories:** If the story updates file path references inside a document, grep that file for the old path string before approving: `grep -n "old_path" <file>`. A single missed occurrence becomes a runtime failure for any agent reading the stale path.
 
 **UI Prototype PRs (UI-bearing repos only):**
 If this repo has (or is paired with) a `-ui-prototype` companion repo, apply `.mt-agent-devkit/rules/UI_Prototype_Rules.md` before approving any PR for a screen with a prototype counterpart.
@@ -80,13 +68,7 @@ When your answer changes or narrows the meaning of an AC (e.g., designating one 
 
 **Distinguishing this from "TL commenting on scope" (`Story_Standard_TL.md` §7 red flag):** narrowing an AC's *technical* interpretation to reflect an approved design decision is your job and belongs in the story body, per above. If your answer would instead create a **new** deliverable or requirement that the existing AC doesn't already imply (not just narrow one), still document the technical detail in AC/Technical Scope, but flag PO in the same comment to confirm the scope addition — do not silently expand scope on your own authority.
 
-**Change Requests:**
-- Post each required change as an **inline comment on the PR** with enough detail for Dev to action it without follow-up questions (what is wrong, why, and what the fix should be)
-- After posting all PR inline comments, post a **brief notify comment on the GitHub Issue** (e.g., "CR raised on PR #XX — N items require changes before approval")
-- **Fix/call-site menus are not exhaustive by default:** when a change request names specific files, call sites, or fix options, phrase it as "at minimum these, plus any site/mechanism sharing the same pattern" rather than a bare list — a bare list invites treating it as complete, and the implementer is often closer to the full mechanism inventory than the reviewer.
-
-**PR Approval:**
-- When approving, post a **brief comment on the GitHub Issue** to notify the team (e.g., "PR #XX approved — moving to status:testing for QA")
+**Change requests and approval notices** follow `pr-review` steps 5–7. TL-only:
 - **Do NOT instruct the orchestrator or Dev to merge** — merging is the orchestrator's responsibility and happens only after QA automation passes
 
 **You are the review gate, not the merge gate.** Your approval moves the story to QA testing. The orchestrator merges after QA passes.
@@ -150,42 +132,32 @@ See `Story_Standard.md` §4 for the full workflow and gate conditions.
 
 ## 5. Git & Commit Standards
 
-- **PR approval:** Post the approval verdict via `gh pr comment <number>` (never `gh pr review --approve` — GitHub blocks self-approval); leave inline comments for required changes
-- **Commit messages:** Conventional Commits format — enforce on review
-  - Format: `<type>(<scope>): <subject>`
-  - Subject: imperative mood, ≤ 50 characters
-  - Body (when needed): explain *why*, wrap at 72 characters per line
-  - Footer: `Story: ST-XXXXXX`; `BREAKING CHANGE:` if applicable
-  - See `docs/wiki/Development_Standards.md §2` for full type list and example
+- **PR approval:** verdict through `gh pr comment`, never `gh pr review --approve`; inline comments for required changes (`pr-review`, via §2)
+- **Commit messages:** the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`) owns the commit convention; enforce it on review. TL-only: add a `BREAKING CHANGE:` footer when applicable
 
 ### When acting as Implementer
 
-Rare — only when the orchestrator assigns TL as story implementer. Procedure in `Technical_Lead_Rules_Read_On_Demand.md §1`.
+Rare — only when the orchestrator assigns TL as story implementer. Branch, commits and PR follow `git-workflow` (`Technical_Lead_Rules_Read_On_Demand.md §1`).
 
 ---
 
 ## 6. Document Placement
 
-- Place all new documents in the correct feature-doc subfolder — see `Project_Priming.md §4`
-- Use `Title_Case_With_Underscores` for all document file names (e.g., `My_Technical_Document.md`)
-- Context-anchoring notes go under `docs/feature/<feature_name>/questions/` unless another subfolder fits better
+Before creating, moving or renaming a document, load the `project-docs` skill (`.mt-agent-devkit/skills/project-docs/SKILL.md`). It owns the path list (`context/Document_Index.md`), naming, and the context-anchoring note folders.
 
 ---
 
 ## 7. Story Comment
 
-- Post design decisions, implementation impact, blockers, and follow-up replies as **comments on the GitHub Issue**
-- Keep replies in the same thread when responding to an existing Dev, PO, BA, or QA comment
+- Post design decisions, implementation impact, blockers, and follow-up replies as **comments on the GitHub Issue**; the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the format and threading
 - Do not create standalone review-note files for normal story discussion
-- See `Project_Priming.md §13` for the full Comment format
 
 ---
 
 ## 8. Reporting & Blockers
 
-- Keep working record updates short and fact-based (design decisions, schema changes, PR links)
-- Post blockers immediately as a Comment on the GitHub Issue; tag BA or PO as appropriate
-- **Working record retention:** Delete entries older than the 3 most recent story entries before writing a new one — the record must never exceed 3 story entries (see `Agent_Common_Bootstrap.md §1` for the char cap and snapshot format)
+- Working Record writes follow the `working-record` skill (`.mt-agent-devkit/skills/working-record/SKILL.md`); TL entries record design decisions, schema changes and PR links
+- Blockers follow `raise-question` section 4 (`.mt-agent-devkit/skills/raise-question/SKILL.md`); TL tags BA or PO
 
 ---
 
@@ -197,19 +169,19 @@ After each working session on an unfinished feature, create or update a context-
 
 ## 10. Pre-PR Gate (when acting as Implementer)
 
-Rare — only when acting as Implementer per §5. Checklist in `Technical_Lead_Rules_Read_On_Demand.md §3`.
+Rare — only when acting as Implementer per §5. Run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`), the same gate as every implementer (`Technical_Lead_Rules_Read_On_Demand.md §3` points to it).
 
 ---
 
 ## 11. Runtime-State Handoff (mandatory before handoff)
 
-Keep agent state local and uncommitted before signaling stage completion — see `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — the `handoff` skill owns the rule; your route reads its generated copy, `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 12. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the `troubleshooting` skill's check-memory → fix → record-to-memory protocol; your route reads its generated copy, `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 
@@ -219,9 +191,9 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 | Trigger | Fetch |
 |---|---|
-| Orchestrator assigns TL as story implementer | `Technical_Lead_Rules_Read_On_Demand.md §1` (branch/PR procedure), `§4` (status transitions, from `Story_Standard_TL.md §4`) |
+| Orchestrator assigns TL as story implementer | The `git-workflow` skill (branch/PR procedure; `Technical_Lead_Rules_Read_On_Demand.md §1` points to it) and `Technical_Lead_Rules_Read_On_Demand.md §4` (status transitions, from `Story_Standard_TL.md §4`) |
 | End of a working session on an unfinished story | `Technical_Lead_Rules_Read_On_Demand.md §2` (Context Anchoring) |
-| TL is acting as Implementer and about to open a PR | `Technical_Lead_Rules_Read_On_Demand.md §3` (Pre-PR Gate) |
+| TL is acting as Implementer and about to open a PR | The `pre-pr-gate` skill (`Technical_Lead_Rules_Read_On_Demand.md §3` points to it) |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification — are routed by `Agent_Common_Bootstrap.md §5`. Runtime-State Handoff and Troubleshooting Protocol are already resolved directly by §11/§12 above.
 

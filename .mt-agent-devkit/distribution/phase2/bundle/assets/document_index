@@ -1,6 +1,6 @@
 # Document Index — {PROJECT_NAME}
 
-Quick lookup for all project documents and external references. Update this file whenever a document is added, moved, or removed.
+Quick lookup for all project documents and external references. This is the single document path list: `Project_Priming.md §6` points here, and placement rules live in the `project-docs` skill. Update this file whenever a document is added, moved, or removed.
 
 ---
 
@@ -21,22 +21,25 @@ Quick lookup for all project documents and external references. Update this file
 | Technical Analysis | `docs/technical/Technical_Analysis.md` |
 | Architecture Overview | `docs/technical/Architecture.md` |
 | Development Standards | `docs/wiki/Development_Standards.md` |
+| Code Review Checklist | `docs/wiki/Code_Review_Checklist.md` |
 | Testing Guidelines | `docs/wiki/Testing_Guidelines.md` |
 
 ### API Specification
 
 | Document | Path |
 |---|---|
-| API Spec | *(add path or repo reference)* |
+| API Spec | `docs/api/{project-api-spec}.yaml` *(or a repo reference)* |
 
 ### Sprint & Feature Docs
 
 | Document | Path Pattern |
 |---|---|
-| Sprint Overview | `docs/sprints/Sprint_N_Overview.md` |
+| Sprint Overviews | `docs/sprints/Sprint_N_Overview.md` |
+| Feature Docs | `docs/feature/<feature_name>/` |
 | Feature: Technical Implementation | `docs/feature/<feature_name>/<Feature_Name>_Technical_Implementation.md` |
-| Feature: Test Scenarios | `docs/feature/<feature_name>/test-scenarios/` |
+| Feature: Test Scenarios | `docs/feature/<feature_name>/test-scenarios/` (one file per story) |
 | Feature: Test Scripts | `tests/feature/<feature_name>/scripts/` |
+| Feature: Test Reports | `tests/feature/<feature_name>/report/` |
 | Feature: Context Anchoring | `docs/feature/<feature_name>/questions/` |
 
 ---
