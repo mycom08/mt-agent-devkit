@@ -1,10 +1,15 @@
-"""Reject citations of retired rule files (ST-000288, extended in ST-000290).
+"""Reject citations of retired rule files (ST-000288, extended in ST-000290 and ST-000309).
 
 The PO rule files below were folded into the `po-*` skills. Any bare-filename,
 path or section citation of them is a stale route. The corpus is the internal
 harness (both registry layouts route the PO through the skills since ST-000289)
 plus, since their retirement in targets (ST-000290), the Phase 2 templates and
 every bundle asset. The deployment engine's full-path gate stays as a second net.
+
+The Developer rule files and `Clean_Code_Rules.md` are retired in the internal
+harness only (ST-000309): the Phase 2 templates, bundle assets and the registry's
+`layouts.target` alternatives still name them until ST-000311 extends the check.
+History mentions on `**Version:**`/`**Previous:**` lines are not citations.
 """
 from __future__ import annotations
 import json
@@ -19,6 +24,11 @@ RETIRED = ("Product_Owner_Rules_Bootstrap", "Product_Owner_Rules_Read_On_Demand"
 CITATION = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(RETIRED) + r")(?:\.md)?(?![A-Za-z0-9_])")
 # Section citations by the retired files' short names, e.g. "PO Bootstrap §11a".
 SHORT_CITATION = re.compile(r"\bPO (?:Rules )?(?:Bootstrap|On-Demand|Read[ _]On[ _]Demand)(?:\.md)?\s*§")
+INTERNAL_RETIRED = ("Developer_Rules_Bootstrap", "Developer_Rules_Read_On_Demand", "Story_Standard_Dev", "Clean_Code_Rules")
+INTERNAL_CITATION = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(INTERNAL_RETIRED) + r")(?:\.md)?(?![A-Za-z0-9_])")
+INTERNAL_SHORT_CITATION = re.compile(r"\bDev(?:eloper)? (?:Rules )?(?:Bootstrap|On-Demand|Read[ _]On[ _]Demand)(?:\.md)?\s*§")
+HISTORY = re.compile(r"^\s*\*\*(?:Version|Previous):\*\*")
+REGISTRY = ".mt-agent-devkit/contracts/read-routing.json"
 SUFFIXES = (".md", ".json", ".py", ".sh", ".ps1")
 LEDGER = ".mt-agent-devkit/contracts/migration-inventory.json"  # Records the retirements themselves.
 PHASE2 = ".mt-agent-devkit/distribution/phase2"
@@ -44,6 +54,16 @@ def distribution(root: Path) -> set[str]:
     return paths - set(DISTRIBUTION_LEDGERS)
 
 
+def strip_target_layouts(value):
+    """Drop `layouts.target` alternatives: target Developer routes keep their files until ST-000310."""
+    if isinstance(value, dict):
+        return {key: strip_target_layouts({k: v for k, v in item.items() if k != "target"} if key == "layouts" and isinstance(item, dict) else item)
+                for key, item in value.items()}
+    if isinstance(value, list):
+        return [strip_target_layouts(item) for item in value]
+    return value
+
+
 def corpus(root: Path) -> list[str]:
     shared = root / ".mt-agent-devkit"
     paths = {p.relative_to(root).as_posix() for p in shared.rglob("*")
@@ -66,13 +86,28 @@ def corpus(root: Path) -> list[str]:
     return sorted(paths)
 
 
+def scan(relative: str, text: str, patterns) -> list[str]:
+    errors = []
+    for number, line in enumerate(text.splitlines(), 1):
+        if HISTORY.match(line):
+            continue
+        for pattern in patterns:
+            for match in pattern.finditer(line):
+                errors.append(f"citation of retired rule file: {relative}:{number}: {match.group().strip()}")
+    return errors
+
+
 def findings(root: Path = ROOT) -> list[str]:
     errors = []
+    shipped = distribution(root)
     for relative in corpus(root):
         text = (root / relative).read_text(encoding="utf-8")
-        for number, line in enumerate(text.splitlines(), 1):
-            for match in [*CITATION.finditer(line), *SHORT_CITATION.finditer(line)]:
-                errors.append(f"citation of retired rule file: {relative}:{number}: {match.group().strip()}")
+        errors.extend(scan(relative, text, (CITATION, SHORT_CITATION)))
+        if relative in shipped:
+            continue  # Target-layer files keep the Developer files until ST-000311.
+        if relative == REGISTRY:
+            text = json.dumps(strip_target_layouts(json.loads(text)), indent=2)
+        errors.extend(scan(relative, text, (INTERNAL_CITATION, INTERNAL_SHORT_CITATION)))
     return errors
 
 

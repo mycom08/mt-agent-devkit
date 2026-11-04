@@ -32,6 +32,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000303] Inline PO work loads each PO skill right before the action it governs, with numbered readiness and pre-post checks and one Working Record timing rule.
 - [ST-000307] Add 17 internal common skills that own the shared how-to rules; the kept Common files now hold generated copies checked by the new `generate_common_blocks.py`, which replaces `generate_security_blocks.py`.
 - [ST-000308] TL, QA, UI/UX and BA rules and the PO skills point to the common skills instead of keeping their own copies, and `context/Document_Index.md` is the single document path list; TL (and BA) as implementer now run the stricter `pre-pr-gate`, so harness, template and rules changes are no longer exempt as docs-only.
+- [ST-000309] The internal Developer reads six `dev-*` skills and the common skills through a point-of-use load map instead of its rules files: `read_manifest.py` gains per-role `common` and `bootstrap` overrides and `role_sources` (skill lists, full coverage, deduplication), skips the Core capability route for skill-based roles and blocks with a reason on missing entries. The internal `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`, `Story_Standard_Dev.md` and `Clean_Code_Rules.md` are deleted and their citations rejected; target projects are unchanged.
 
 ### Bug Fixes
 

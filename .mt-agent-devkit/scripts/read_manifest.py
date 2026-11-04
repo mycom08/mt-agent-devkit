@@ -66,6 +66,50 @@ def covered(root, source, coverage):
     return ''.join(lines[start:end]).encode('utf-8')
 
 
+def entry(entries, entry_id, reason):
+    """The one route entry with this id; a missing entry blocks with a reason."""
+    found = next((x for x in entries if x['id'] == entry_id), None)
+    if found is None: raise Blocked(reason + ': route has no ' + entry_id + ' entry')
+    return found
+
+
+def skill_list(value, what):
+    if not isinstance(value, list) or not value or not all(isinstance(x, str) and x.startswith('.mt-agent-devkit/skills/') and x.endswith('/SKILL.md') for x in value):
+        raise Blocked('invalid ' + what + ': a non-empty list of skill paths is required')
+    return value
+
+
+def source_key(item):
+    """Role-source key: the source, plus ` §N` for a section read."""
+    coverage = item.get('coverage', {})
+    return item['source'] + (' §' + str(coverage['section']) if coverage.get('kind') == 'section' else '')
+
+
+def substitute(item, skills, prefix=None):
+    """One entry per skill: the first keeps the id, the rest get <id>_<n>; skills are read in full."""
+    result = []
+    for number, skill in enumerate(skills, 1):
+        name = skill.split('/')[2].replace('-', '_')
+        new_id = item['id'] if number == 1 else (prefix + name if prefix else item['id'] + '_' + str(number))
+        after = list(item['after']) if number == 1 or not prefix else [item['id']]
+        result.append({**item, 'id': new_id, 'source': skill, 'coverage': {'kind': 'full'}, 'after': after})
+    return result
+
+
+def deduplicate(entries):
+    """Keep the first entry per skill source; rewrite every `after` naming a dropped id."""
+    kept, renamed, result = {}, {}, []
+    for item in entries:
+        if item['source'].startswith('.mt-agent-devkit/skills/') and item['source'] in kept:
+            renamed[item['id']] = kept[item['source']]
+            continue
+        kept.setdefault(item['source'], item['id'])
+        result.append(item)
+    for item in result:
+        item['after'] = list(dict.fromkeys(renamed.get(x, x) for x in item['after'] if renamed.get(x, x) != item['id']))
+    return result
+
+
 def bindings(root, request):
     provider = request.get('provider')
     if provider not in ('claude', 'antigravity', 'codex'): raise Blocked('unknown selected provider')
@@ -138,6 +182,13 @@ def routes(root, request, registry):
     if override is not None:
         if not isinstance(override, str) or not override.startswith('.mt-agent-devkit/'): raise Blocked('invalid bootstrap mapping for role: ' + role)
         mapping['bootstrap'] = override
+    # A role whose Common is skill-based reads a list of skills in place of the Common file,
+    # and its role_sources route shared entries to skills; other roles keep the shared files.
+    common = registry.get('common', {}).get(role, {}).get(request['layout'])
+    if common is not None: skill_list(common, 'common mapping for role: ' + role)
+    sources = registry.get('role_sources', {}).get(role, {}).get(request['layout'], {})
+    if not isinstance(sources, dict): raise Blocked('invalid role_sources mapping for role: ' + role)
+    for key, skills in sources.items(): skill_list(skills, 'role_sources mapping for ' + key)
     entries = []
     def add(definition):
         item = dict(definition)
@@ -147,14 +198,20 @@ def routes(root, request, registry):
         item.update(alternatives.get(request['layout'], {}))
         if item.pop('enabled', True) is False: return
         item['source'] = item['source'].format(**mapping)
-        entries.append(item)
+        if item['id'] == 'common':
+            # Only the common override replaces the Common anchor; role_sources never does.
+            entries.extend(substitute(item, common, prefix='common_') if common is not None else [item])
+        elif source_key(item) in sources:
+            entries.extend(substitute(item, sources[source_key(item)]))
+        else:
+            entries.append(item)
     for item in registry['entry']: add(item)
     for item in task['reads']: add(item)
     if task.get('ordinary'):
         for item in registry['ordinary']: add(item)
         for item in registry['roles'][role]: add(item)
         if role in ('Technical_Lead', 'QA'):
-            next(x for x in entries if x['id'] == 'bootstrap')['after'] = ['standard']
+            entry(entries, 'bootstrap', 'role standard ordering')['after'] = ['standard']
     entries += context_entries(root, request, task)
     triggers = request.get('triggers', [])
     if not isinstance(triggers, list) or len(set(triggers)) != len(triggers): raise Blocked('triggers must be unique names')
@@ -177,8 +234,11 @@ def routes(root, request, registry):
                     raise Blocked('memory recall requires exact own archive fact coverage')
                 entries.append(item)
     if request.get('mode') not in ('github', 'strict'): raise Blocked('explicit mode required')
+    if common is not None or sources:
+        entries = deduplicate(entries)
     policy = registry.get('common_capabilities', {})
-    if request['provider'] in policy.get('verified_providers', []):
+    # The skill route is the only Common authority of a role with a common override.
+    if request['provider'] in policy.get('verified_providers', []) and common is None:
         entries = capability_routes(root, request, entries, policy, bound)
     ids = {x['id'] for x in entries}
     if len(ids) != len(entries): raise Blocked('duplicate route entry')
@@ -209,7 +269,7 @@ def capability_routes(root, request, entries, policy, bound):
             return entries  # Existing full Bootstrap/record/live-memory authority.
         if any(headings.count(name) != 1 for name in ('Standing Checks', 'Keyword Index', 'Troubleshooting Facts')):
             raise Blocked('two-tier memory headings require exactly one of each: ' + live)
-    next(x for x in entries if x['id'] == 'common')['source'] = policy['core']
+    entry(entries, 'common', 'Common capability route')['source'] = policy['core']
     record = 'working_record' in request.get('triggers', []) or request['session_state'] == 'expired'
     if not record:
         entries = [x for x in entries if x['id'] != 'record']
@@ -220,8 +280,8 @@ def capability_routes(root, request, entries, policy, bound):
         # A trigger may occur in reduced tasks that never had an ordinary record.
         if not any(x['id'] == 'record' for x in entries):
             entries.append(dict(id='record', source=own, coverage={'kind':'full'}, reason='Observed record trigger', after=['trigger_working_record']))
-        next(x for x in entries if x['id'] == 'record')['after'] = ['trigger_working_record']
-    memory = next(x for x in entries if x['id'] == 'memory')
+        entry(entries, 'record', 'working record route')['after'] = ['trigger_working_record']
+    memory = entry(entries, 'memory', 'two-tier memory route')
     if role in policy['two_tier_roles']:
         memory['coverage'] = {'kind':'memory_section', 'heading':'Keyword Index'}
         entries.append(dict(id='standing_checks',source=live,coverage={'kind':'memory_section','heading':'Standing Checks'},reason='Unconditional Standing Checks',after=list(memory['after'])))
@@ -234,7 +294,7 @@ def capability_routes(root, request, entries, policy, bound):
             if name == 'completion': item['coverage'] = {'kind':'full'}
     if 'tooling_failure' in request.get('triggers', []) and role in policy['two_tier_roles']:
         entries.append(dict(id='troubleshooting_facts',source=live,coverage={'kind':'memory_section','heading':'Troubleshooting Facts'},reason='Failure recall before diagnosis',after=['common']))
-        next(x for x in entries if x['id'] == 'trigger_tooling_failure')['after'] = ['troubleshooting_facts']
+        entry(entries, 'trigger_tooling_failure', 'troubleshooting route')['after'] = ['troubleshooting_facts']
     return entries
 
 

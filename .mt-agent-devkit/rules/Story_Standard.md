@@ -192,7 +192,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 
 ## 9. Comment Standard
 
-All discussions happen as **GitHub Issue comments**, never inside the issue body. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `Developer_Rules_Read_On_Demand.md §20`, `po-comment`).
+All discussions happen as **GitHub Issue comments**, never inside the issue body. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `pr-review` for the Developer's peer-review CI paste, `po-comment`).
 
 ---
 
@@ -341,7 +341,8 @@ allow-list is available.
 ## Version
 
 **Created:** 2026-06-16  
-**Version:** 1.6 — §4 and the §12 implementer gate point to the shared `pre-pr-gate` skill; the stale `Developer_Rules_Read_On_Demand.md §5` citation is gone (ST-000308)  
+**Version:** 1.7 — §9 role-only additions: the Developer's peer-review CI paste is owned by `pr-review` (ST-000309)  
+**Previous:** 1.6 — §4 and the §12 implementer gate point to the shared `pre-pr-gate` skill; the stale `Developer_Rules_Read_On_Demand.md §5` citation is gone (ST-000308)  
 **Previous:** 1.5 — §9 and the §12 Commenter gate point to the shared `comment` skill, which now owns the comment standard (ST-000304)  
 **Previous:** 1.4 — §1 Done row, §7 and §14: acceptance by the PO, or the orchestrator acting as PO under `po_execution: orchestrator`; §14 tracked split: in `orchestrator` mode the scope decision is the user's (ST-000291)  
 **Previous:** 1.3 — §9: one-topic-per-comment promoted to a numbered writing rule, transcript prohibition made explicit with a single named carve-out for gate-mandated CI evidence, "body edits are announced, not reproduced" added; §12: new **Commenter** gate makes the ~150–200 word cap a `wc -w` self-check, split into a before-you-draft shape target and before-you-post checks so the count is a backstop rather than a trim-and-recount loop (ST-000038)  

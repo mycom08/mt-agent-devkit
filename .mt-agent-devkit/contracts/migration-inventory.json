@@ -195,7 +195,6 @@
       "ownership": "generated-wrapper",
       "destination": ".mt-agent-devkit/instructions/developer_instructions.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         "CLAUDE.md",
         "AGENTS.md"
       ],
@@ -599,48 +598,6 @@
       ]
     },
     {
-      "source": ".antigravity/agents/working/rules/Clean_Code_Rules.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "efbabc75cb1d5bf94bb3431aa4bb091ad92b3374a54a68247c8cd634e3cee00a",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
-      "consumers": [
-        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".antigravity/agents/working/rules/Developer_Rules_Bootstrap.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "e94f22cf0508a68ee85212540f397bc2ac5941cff3ef40fba795d402a32bfb9a",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/developer_instructions.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".antigravity/agents/working/rules/Developer_Rules_Read_On_Demand.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "898be3ddca5f0d6c4654b3cb83d9a06c2333b9e350dfd311ee26894dfac46385",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/developer_instructions.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
       "source": ".antigravity/agents/working/rules/QA_Rules_Bootstrap.md",
       "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
       "baseline_sha256": "5b073dc883c55249816189769788b2b9dd5c7fa231a40e0c5a08762bc7de7fe8",
@@ -690,27 +647,12 @@
       "destination": ".mt-agent-devkit/rules/Story_Standard.md",
       "consumers": [
         ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
-        ".mt-agent-devkit/rules/Story_Standard_Dev.md",
         ".mt-agent-devkit/skills/po-comment/SKILL.md",
         ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
         ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
         ".mt-agent-devkit/rules/Story_Standard_QA.md",
         ".mt-agent-devkit/rules/Story_Standard_TL.md",
         ".mt-agent-devkit/rules/Story_Standard_UIUX.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".antigravity/agents/working/rules/Story_Standard_Dev.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "dc2ec69f75530b2fdc3d1fe9a2bfb172864365acb87cb600158fc1547f8c7ac0",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
-      "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
       "consumer_contract": [
@@ -795,7 +737,6 @@
       "ownership": "generated-wrapper",
       "destination": ".mt-agent-devkit/rules/UI_Prototype_Rules.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
         ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
@@ -1467,7 +1408,6 @@
       "ownership": "generated-wrapper",
       "destination": ".mt-agent-devkit/instructions/developer_instructions.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         "CLAUDE.md",
         "AGENTS.md"
       ],
@@ -2114,48 +2054,6 @@
       ]
     },
     {
-      "source": ".claude/agents/working/rules/Clean_Code_Rules.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "efbabc75cb1d5bf94bb3431aa4bb091ad92b3374a54a68247c8cd634e3cee00a",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
-      "consumers": [
-        ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".claude/agents/working/rules/Developer_Rules_Bootstrap.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "b87a3e012fffa868eddb668e8eb9f69f757a443ea194c12c14679b3125f9ab84",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/developer_instructions.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".claude/agents/working/rules/Developer_Rules_Read_On_Demand.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "91a1bb27a154a3e790061ad0c0dd7408999feeb9b279a5e9c57ae2b7a9c0d572",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-      "consumers": [
-        ".mt-agent-devkit/instructions/developer_instructions.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
       "source": ".claude/agents/working/rules/QA_Rules_Bootstrap.md",
       "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
       "baseline_sha256": "028df3c7ca5e7eaaebbfa32bd9e543bd52222c601e3c5dc5c26693ce57eecec4",
@@ -2205,27 +2103,12 @@
       "destination": ".mt-agent-devkit/rules/Story_Standard.md",
       "consumers": [
         ".mt-agent-devkit/context/Project_Priming_Read_On_Demand.md",
-        ".mt-agent-devkit/rules/Story_Standard_Dev.md",
         ".mt-agent-devkit/skills/po-comment/SKILL.md",
         ".mt-agent-devkit/skills/po-validate-ac/SKILL.md",
         ".mt-agent-devkit/skills/po-verify-close/SKILL.md",
         ".mt-agent-devkit/rules/Story_Standard_QA.md",
         ".mt-agent-devkit/rules/Story_Standard_TL.md",
         ".mt-agent-devkit/rules/Story_Standard_UIUX.md"
-      ],
-      "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "consumer_contract": [
-        "role pre-work, section routing, story pipeline and internal commands"
-      ]
-    },
-    {
-      "source": ".claude/agents/working/rules/Story_Standard_Dev.md",
-      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
-      "baseline_sha256": "48c7fe7190e048c9bcf125708b9086f92ffb8ac1689139a501ebb13db6b82c47",
-      "ownership": "generated-wrapper",
-      "destination": ".mt-agent-devkit/rules/Story_Standard_Dev.md",
-      "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
       "consumer_contract": [
@@ -2310,7 +2193,6 @@
       "ownership": "generated-wrapper",
       "destination": ".mt-agent-devkit/rules/UI_Prototype_Rules.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md",
         ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
         ".mt-agent-devkit/rules/UI_UX_Designer_Rules_Bootstrap.md"
@@ -2705,7 +2587,6 @@
         ".mt-agent-devkit/contracts/Provider_Contract.md",
         ".mt-agent-devkit/instructions/orchestrator_instructions.md",
         ".mt-agent-devkit/rules/Audit_Rules.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
         ".mt-agent-devkit/workflows/Workflow_Guide.md",
         ".mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md",
         ".mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md",
@@ -2770,8 +2651,8 @@
       "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
       "consumers": [
         ".mt-agent-devkit/rules/Story_Standard.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/skills/po-comment/SKILL.md"
+        ".mt-agent-devkit/skills/po-comment/SKILL.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline shared skill (ST-000304); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -2787,8 +2668,8 @@
       "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
       "consumers": [
         ".mt-agent-devkit/rules/Story_Standard.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/skills/po-comment/SKILL.md"
+        ".mt-agent-devkit/skills/po-comment/SKILL.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline shared skill (ST-000304); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -2804,8 +2685,8 @@
       "destination": ".mt-agent-devkit/skills/comment/SKILL.md",
       "consumers": [
         ".mt-agent-devkit/rules/Story_Standard.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/skills/po-comment/SKILL.md"
+        ".mt-agent-devkit/skills/po-comment/SKILL.md",
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline shared skill (ST-000304); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3756,8 +3637,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3772,8 +3652,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3788,8 +3667,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3804,8 +3682,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3820,8 +3697,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3836,8 +3712,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3852,7 +3727,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3867,7 +3742,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3882,7 +3757,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3897,7 +3772,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/change-metadata/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3912,7 +3787,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/change-metadata/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3927,7 +3802,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/change-metadata/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3942,7 +3817,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3957,7 +3832,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3972,7 +3847,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -3987,7 +3862,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -4002,7 +3877,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -4017,7 +3892,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -4032,7 +3907,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Clean_Code_Rules.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -4047,7 +3922,7 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Clean_Code_Rules.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
@@ -4062,9 +3937,297 @@
       "renderer": "skill",
       "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
       "consumers": [
-        ".mt-agent-devkit/rules/Clean_Code_Rules.md"
+        ".mt-agent-devkit/instructions/developer_instructions.md"
       ],
       "reason": "Post-baseline common skill (ST-000307); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/dev-core/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-core/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/dev-core/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-core/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/dev-core/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-core/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/dev-implement/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-implement/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/dev-implement/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-implement/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/dev-implement/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-implement/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/dev-deliver/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-deliver/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/dev-deliver/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-deliver/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/dev-deliver/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-deliver/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/dev-verify/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-verify/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/dev-verify/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-verify/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/dev-verify/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-verify/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/dev-refine/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/dev-refine/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/dev-refine/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/dev-hotfix/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-hotfix/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/dev-hotfix/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-hotfix/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/dev-hotfix/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/dev-hotfix/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/instructions/developer_instructions.md",
+        ".mt-agent-devkit/contracts/read-routing.json"
+      ],
+      "reason": "Post-baseline Developer skill (ST-000309); provider discovery wrapper generated from the canonical skill frontmatter.",
       "consumer_contract": [
         "native provider discovery"
       ]
@@ -4112,6 +4275,62 @@
       "baseline_sha256": "9c59a34543e383cb9036ed2529f7759054a6ced80c8da2b0022939aa6d62edad",
       "retired_by": "ST-000288",
       "reason": "PO rules folded into the po-* skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Clean_Code_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "efbabc75cb1d5bf94bb3431aa4bb091ad92b3374a54a68247c8cd634e3cee00a",
+      "retired_by": "ST-000309",
+      "reason": "Clean code rules folded into the clean-code skill; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Developer_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "e94f22cf0508a68ee85212540f397bc2ac5941cff3ef40fba795d402a32bfb9a",
+      "retired_by": "ST-000309",
+      "reason": "Developer rules folded into the dev-* and common skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Developer_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "898be3ddca5f0d6c4654b3cb83d9a06c2333b9e350dfd311ee26894dfac46385",
+      "retired_by": "ST-000309",
+      "reason": "Developer rules folded into the dev-* and common skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".antigravity/agents/working/rules/Story_Standard_Dev.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "dc2ec69f75530b2fdc3d1fe9a2bfb172864365acb87cb600158fc1547f8c7ac0",
+      "retired_by": "ST-000309",
+      "reason": "Developer rules folded into the dev-* and common skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Clean_Code_Rules.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "efbabc75cb1d5bf94bb3431aa4bb091ad92b3374a54a68247c8cd634e3cee00a",
+      "retired_by": "ST-000309",
+      "reason": "Clean code rules folded into the clean-code skill; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Developer_Rules_Bootstrap.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "b87a3e012fffa868eddb668e8eb9f69f757a443ea194c12c14679b3125f9ab84",
+      "retired_by": "ST-000309",
+      "reason": "Developer rules folded into the dev-* and common skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Developer_Rules_Read_On_Demand.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "91a1bb27a154a3e790061ad0c0dd7408999feeb9b279a5e9c57ae2b7a9c0d572",
+      "retired_by": "ST-000309",
+      "reason": "Developer rules folded into the dev-* and common skills; canonical file and generated wrapper deleted."
+    },
+    {
+      "source": ".claude/agents/working/rules/Story_Standard_Dev.md",
+      "source_revision": "62349287bc9835093a02586d8658993ba8ac685b",
+      "baseline_sha256": "48c7fe7190e048c9bcf125708b9086f92ffb8ac1689139a501ebb13db6b82c47",
+      "retired_by": "ST-000309",
+      "reason": "Developer rules folded into the dev-* and common skills; canonical file and generated wrapper deleted."
     }
   ]
 }

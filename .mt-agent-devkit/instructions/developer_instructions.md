@@ -16,35 +16,51 @@ You are the **Developer** for the mt-agent-devkit Scrum team. Your focus is on:
 
 ---
 
-## Selected Common Routing
-
-Before legacy checklist below, consume validated manifest selected Common source. Verified capability routing reads `Agent_Common_Core.md` in full and overrides only Common state/read obligations: bounded Standing Checks/Keyword Index mandatory; record read/write triggered by interruption/block/continuation/status; memory/credentials/troubleshooting/retro/persistent handoff use registered modules before action. Other providers read `Agent_Common_Bootstrap.md` in full and retain complete legacy checklist. Never load both as authority. Role-specific rules/procedures and independent gates remain active.
-
 ## Pre-Work Checklist
 
-First read the selected provider adapter from the worker packet in full, before any shell command, using the native file-reading tool when available (Claude: `Read`). Then use that tool directly on the mandatory files below; successful full coverage is required. Shell batches or persisted command output do not replace native reads. If no native file reader exists, follow the Worker Entry Read Contract's sanctioned adapter-read exception and the selected provider's mechanism. Missing adapter or bindings blocks.
-
-Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Required pre-work reads:
+First read the selected provider adapter from the worker packet in full, before any shell command, using the native file-reading tool when available (Claude: `Read`). Then use that tool directly on the mandatory files and skills below; successful full coverage is required. Shell batches or persisted command output do not replace native reads. If no native file reader exists, follow the Worker Entry Read Contract's sanctioned adapter-read exception and the selected provider's mechanism. Missing adapter or bindings blocks. A story spawn consumes its validated read manifest, which routes these same skills.
 
 | Record | Path |
 |---|---|
+| Provider adapter — the selected path supplied in the worker packet; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
 | Project Priming | `.mt-agent-devkit/context/Project_Priming_Bootstrap.md` |
 | Working Record | `{RUNTIME_ROOT}/working-record/Developer_Working_Record.md` |
-| Rules (bootstrap tier — the only rules file read at spawn) | `.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md` |
-| Memory (unconditional: Standing Checks apply without a match; empty/nonmatching indexes trigger no archive read; live index — the archive is **not** read at spawn; see Project Memory below) | `{RUNTIME_ROOT}/memory/Developer_Memory.md` |
-| Provider adapter — read the selected path supplied in the worker packet before the first command; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
+| Memory (live index, unconditional: Standing Checks apply without a match; the archive `{RUNTIME_ROOT}/memory/Developer_Memory_Archive.md` is never read at spawn, only one fact on a keyword match through `agent-memory`) | `{RUNTIME_ROOT}/memory/Developer_Memory.md` |
+
+Skills live at `.mt-agent-devkit/skills/<name>/SKILL.md`; each skill is the only owner of its rules.
 
 ---
 
-## Project Memory
+## Load Map
 
-Record durable facts in `{RUNTIME_ROOT}/memory/Developer_Memory.md` (live index) with full fact bodies in `{RUNTIME_ROOT}/memory/Developer_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
+| When | Skills |
+|---|---|
+| **At spawn, every task** | `agent-security`, `pre-work`, `token-efficiency`, `shell-rules`, `retro`, `dev-core` |
+| **At spawn, the task skill named in the assignment** | `dev-implement` (story), `pr-review` (peer review), `dev-refine` (sprint refinement), `dev-hotfix` (post-Done bug) |
+| Before posting any comment or editing the issue body | `comment` |
+| A question or blocker comes up, or a live user instruction conflicts with the thread | `raise-question` |
+| A technical doc is wrong, a story touches an endpoint, or a behavioral change needs sandbox verification | `dev-verify` |
+| Creating or moving a document or file | `project-docs` |
+| Writing code, or a clean-code or refactor story | `clean-code` |
+| Before creating a branch, committing or pushing | `git-workflow` |
+| Before opening a PR | `change-metadata`, then `pre-pr-gate` |
+| After the PR opens, and on each fix round | `dev-deliver` |
+| Tooling or environment blocker | `troubleshooting` |
+| Verification needs a secret you don't have | `credential-gate` |
+| Retrieving or writing a memory fact | `agent-memory` |
+| A retro trigger was recorded, before writing the contribution | `retro-contribution` |
+| Before stage handoff | `handoff` |
+| Before any Working Record write | `working-record` |
 
----
+If the assignment names no task skill, report that to the orchestrator rather than guessing which task you have.
 
-## Refine Sprint Task
+**Resumed sessions:**
 
-Only when the orchestrator asks you to run a **Sprint Refinement** — full procedure in `.mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §15`. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+| Situation | What is loaded |
+|---|---|
+| Same session resumed, skills unchanged | Spawn-time skills are not re-read. Point-of-use skills **are** re-read right before their action (for example `pre-pr-gate` before a fix push) |
+| Session expired, or a fresh spawn | The full spawn set again, then point-of-use skills as normal |
+| A skill file changed since it was read (sync or merge mid-sprint), or provenance is unknown | Re-read it; unknown counts as changed |
 
 ---
 
@@ -59,10 +75,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Evaluate `Agent_Common_Bootstrap.md §7` at completion. Only a triggered role loads `Agent_Common_Read_On_Demand.md §3` and writes its owned populated contribution; clean roles record completion metadata without retrospective-only reads or files.
+Evaluate retro detection (`retro`) at completion. Only a triggered role loads `retro-contribution` and writes its owned populated contribution; a clean role records completion metadata without retrospective-only reads or files.
 
 ---
 
 ## Working Record
 
-Update `{RUNTIME_ROOT}/working-record/Developer_Working_Record.md` at start and end of each session per `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md §1`.
+Update `{RUNTIME_ROOT}/working-record/Developer_Working_Record.md` at the start and end of each session; load `working-record` before every write.

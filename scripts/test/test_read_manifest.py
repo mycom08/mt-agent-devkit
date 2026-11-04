@@ -42,6 +42,9 @@ class RoutingTests(unittest.TestCase):
         definitions += [x for trigger in REGISTRY['triggers'].values() for x in trigger['reads']]
         # Per-layout bootstrap mappings (PO -> po-core) are registry sources too.
         definitions += [dict(source=path) for layouts in REGISTRY.get('bootstrap',{}).values() for path in layouts.values()]
+        # ST-000309: per-role Common skill lists and role-source substitutions are registry sources too.
+        definitions += [dict(source=path) for layouts in REGISTRY.get('common',{}).values() for paths in layouts.values() for path in paths]
+        definitions += [dict(source=path) for layouts in REGISTRY.get('role_sources',{}).values() for table in layouts.values() for paths in table.values() for path in paths]
         for role in REGISTRY['roles']:
             for entry in definitions:
                 self.write(entry['source'].format(**mapping, role=role, slug=role.lower(), bootstrap='.mt-agent-devkit/rules/'+role+'_Rules_Bootstrap.md'), '# Fixture\n' + ''.join('## '+str(n)+'. Section\nComplete guidance.\n' for n in range(1,21)))
@@ -61,8 +64,12 @@ class RoutingTests(unittest.TestCase):
 
     def test_exact_implementation_and_forbidden_reads(self):
         manifest = self.build()
-        self.assertEqual({x['id'] for x in manifest['reads']},{'adapter','role','common','priming','record','bootstrap','memory','context_story','context_decisions','story_workflow'})
+        self.assertEqual({x['id'] for x in manifest['reads']},{'adapter','role','common','common_agent_security','common_token_efficiency','common_shell_rules','common_retro',
+                                                              'priming','record','bootstrap','memory','dev_implementation','context_story','context_decisions','story_workflow'})
         self.assertFalse(any('Story_Standard_Dev' in x['source'] or 'Archive' in x['source'] for x in manifest['reads']))
+        # Other roles keep the full Common bootstrap and their rules bootstrap.
+        tl={x['id']:x['source'] for x in self.build(role='Technical_Lead')['reads']}
+        self.assertEqual((tl['common'],tl['bootstrap']),('.mt-agent-devkit/rules/Agent_Common_Bootstrap.md','.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md'))
 
     def test_order_prerequisites(self):
         reads = self.build()['reads']; seen=set()
@@ -141,18 +148,17 @@ class RoutingTests(unittest.TestCase):
                 m.validate(self.root,manifest,REGISTRY)
                 entry=next(x for x in manifest['reads'] if x['id']=='trigger_commenter')
                 self.assertEqual((entry['source'],entry['coverage']),(skill,{'kind':'full'}))
-        # The Developer routing row loads the skill first, then only the Dev-only notes.
+        # ST-000309: the internal Developer routing row loads only the comment skill.
         manifest=self.build(triggers=['story_comment'])
         reads={x['id']:x for x in manifest['reads']}
         self.assertEqual(reads['trigger_story_comment_standard']['source'],skill)
-        self.assertEqual((reads['trigger_story_comment']['source'],reads['trigger_story_comment']['coverage']),('.mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md',{'kind':'section','section':'20'}))
-        self.assertEqual(reads['trigger_story_comment']['after'],['trigger_story_comment_standard'])
+        self.assertNotIn('trigger_story_comment',reads)
         # Comment-bearing PO and TL question tasks read the skill without a trigger.
         for role,task in (('Product_Owner','closure'),('Product_Owner','scope_question'),('Product_Owner','po_validation'),('Technical_Lead','question')):
             with self.subTest(role=role,task=task):
                 self.assertIn(skill,[x['source'] for x in self.build(role=role,task=task)['reads']])
         # Role rules point at the skill instead of restating it.
-        for name in ('Story_Standard.md','Story_Standard_Dev.md','Story_Standard_TL.md','Story_Standard_QA.md','Story_Standard_UIUX.md','Developer_Rules_Bootstrap.md'):
+        for name in ('Story_Standard.md','Story_Standard_TL.md','Story_Standard_QA.md','Story_Standard_UIUX.md'):
             self.assertIn(skill,(ROOT/'.mt-agent-devkit/rules'/name).read_text(encoding='utf-8'),name)
         self.assertIn('**Requires:** `po-core`, `comment`',(ROOT/'.mt-agent-devkit/skills/po-comment/SKILL.md').read_text(encoding='utf-8'))
 
@@ -199,12 +205,15 @@ class RoutingTests(unittest.TestCase):
     def test_bootstrap_mapping_is_per_layout_and_confined(self):
         registry=copy.deepcopy(REGISTRY)
         # ST-000289: both layouts now route the PO through po-core.
-        self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md','target':'.mt-agent-devkit/skills/po-core/SKILL.md'}})
+        # ST-000309: the Developer switches to dev-core in the internal layout only.
+        self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md','target':'.mt-agent-devkit/skills/po-core/SKILL.md'},
+                                                'Developer':{'internal':'.mt-agent-devkit/skills/dev-core/SKILL.md'}})
         registry['bootstrap']['Product_Owner']['internal']='../escape.md'
         request=copy.deepcopy(self.request); request.update(role='Product_Owner',task='closure')
         with self.assertRaisesRegex(m.Blocked,'invalid bootstrap mapping'): m.build(self.root,request,registry=registry)
         # Other roles keep their rules bootstrap.
-        self.assertEqual(next(x['source'] for x in self.build()['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md')
+        self.assertEqual(next(x['source'] for x in self.build()['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/skills/dev-core/SKILL.md')
+        self.assertEqual(next(x['source'] for x in self.build(role='QA')['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md')
 
     def test_memory_recall_requires_exact_own_bounded_fact(self):
         with self.assertRaisesRegex(m.Blocked,'memory_match'): self.build(triggers=['memory_recall'])
@@ -265,7 +274,7 @@ class RoutingTests(unittest.TestCase):
 
     def test_changed_source_requires_read(self):
         fresh=self.build(); receipts=self.receipts(fresh)
-        self.write('.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md','# Changed\n')
+        self.write('.mt-agent-devkit/skills/dev-core/SKILL.md','# Changed\n')
         request=copy.deepcopy(fresh['request']); request.update(session_state='same',delta=self.delta())
         result=m.build(self.root,request,receipts,REGISTRY)
         self.assertIn('bootstrap',{x['id'] for x in result['reads']})
@@ -333,6 +342,141 @@ class RoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(m.Blocked,'missing source'): m.covered(self.root,'absent.md',{'kind':'full'})
 
 
+SKILL = '.mt-agent-devkit/skills/{}/SKILL.md'.format
+ON_DEMAND = '.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md'
+DEV_RETIRED = ('Developer_Rules_Bootstrap.md', 'Developer_Rules_Read_On_Demand.md', 'Story_Standard_Dev.md', 'Clean_Code_Rules.md')
+
+
+class DeveloperSkillRoutingTests(unittest.TestCase):
+    """ST-000309: the internal Developer route reads skills: common and bootstrap overrides, role_sources."""
+    write = RoutingTests.write
+    build = RoutingTests.build
+
+    def setUp(self):
+        RoutingTests.setUp(self)
+
+    def real(self):
+        for folder in ('rules','instructions','context','contracts','skills'):
+            shutil.copytree(ROOT/'.mt-agent-devkit'/folder,self.root/'.mt-agent-devkit'/folder,dirs_exist_ok=True)
+
+    def built(self, registry, **changes):
+        request=copy.deepcopy(self.request); request.update(changes)
+        return m.build(self.root,request,registry=registry)
+
+    def test_common_override_keeps_the_common_anchor_and_orders_the_rest_after_it(self):
+        reads=self.build()['reads']; by={x['id']:x for x in reads}
+        expected=[('common','pre-work',['role']),('common_agent_security','agent-security',['common']),('common_token_efficiency','token-efficiency',['common']),
+                  ('common_shell_rules','shell-rules',['common']),('common_retro','retro',['common'])]
+        for entry_id,skill,after in expected:
+            self.assertEqual((by[entry_id]['source'],by[entry_id]['coverage'],by[entry_id]['after']),(SKILL(skill),{'kind':'full'},after))
+        self.assertEqual(by['priming']['after'],['common'])
+        self.assertEqual(by['bootstrap']['source'],SKILL('dev-core'))
+        self.assertFalse(any(x['source'].startswith('.mt-agent-devkit/rules/Agent_Common_') for x in reads))
+        # The override is per layout: a layout the registry does not name keeps the Common file.
+        registry=copy.deepcopy(REGISTRY); registry['common']['Developer']={'target':registry['common']['Developer']['internal']}
+        self.assertEqual(next(x for x in self.built(registry)['reads'] if x['id']=='common')['source'],'.mt-agent-devkit/rules/Agent_Common_Bootstrap.md')
+
+    def test_role_sources_map_to_a_list_with_full_coverage(self):
+        registry=copy.deepcopy(REGISTRY)
+        registry['role_sources']['Developer']['internal'][ON_DEMAND+' §3']=[SKILL('retro-contribution'),SKILL('troubleshooting')]
+        by={x['id']:x for x in self.built(registry,triggers=['retro_required'])['reads']}
+        first,second=by['trigger_retro_required'],by['trigger_retro_required_2']
+        self.assertEqual((first['source'],first['coverage'],first['after']),(SKILL('retro-contribution'),{'kind':'full'},['common']))
+        self.assertEqual((second['source'],second['coverage'],second['after']),(SKILL('troubleshooting'),{'kind':'full'},['common']))
+        self.assertEqual(by['trigger_retro_rules']['after'],['trigger_retro_required'])
+        # Every section-scoped shared Common read becomes a full skill read.
+        for trigger,entry_id,skill in (('tooling_failure','trigger_tooling_failure','troubleshooting'),('credential_gate','trigger_credential_gate','credential-gate'),
+                                       ('runtime_handoff','trigger_runtime_handoff','handoff'),('memory_fact','trigger_memory_fact','agent-memory'),
+                                       ('working_record','trigger_working_record','working-record')):
+            with self.subTest(trigger=trigger):
+                entry=next(x for x in self.build(triggers=[trigger])['reads'] if x['id']==entry_id)
+                self.assertEqual((entry['source'],entry['coverage']),(SKILL(skill),{'kind':'full'}))
+
+    def test_duplicate_skill_sources_are_dropped_and_after_rewritten(self):
+        # completion -> [retro, handoff]: retro is already read at spawn, so only handoff is added.
+        by={x['id']:x for x in self.build(triggers=['completion'])['reads']}
+        self.assertNotIn('trigger_completion',by)
+        self.assertEqual((by['trigger_completion_2']['source'],by['trigger_completion_2']['after']),(SKILL('handoff'),['common']))
+        # Both memory_fact reads resolve to agent-memory: the first is kept.
+        ids=[x['id'] for x in self.build(triggers=['memory_fact'])['reads']]
+        self.assertIn('trigger_memory_fact',ids); self.assertNotIn('trigger_memory_shape',ids)
+        # shell_safety resolves to shell-rules, already read at spawn.
+        self.assertNotIn('trigger_shell_safety',{x['id'] for x in self.build(triggers=['shell_safety'])['reads']})
+        # An `after` naming a dropped entry is rewritten to the kept one.
+        registry=copy.deepcopy(REGISTRY)
+        registry['role_sources']['Developer']['internal'][ON_DEMAND+' §3']=[SKILL('retro')]
+        reads=self.built(registry,triggers=['retro_required'])['reads']; by={x['id']:x for x in reads}
+        self.assertNotIn('trigger_retro_required',by)
+        self.assertEqual(by['trigger_retro_rules']['after'],['common_retro'])
+        self.assertEqual(len({x['source'] for x in reads if x['source'].startswith('.mt-agent-devkit/skills/')}),
+                         len([x for x in reads if x['source'].startswith('.mt-agent-devkit/skills/')]))
+        # Roles without a skill-based route keep duplicate sources as before.
+        self.assertIn('trigger_shell_safety',{x['id'] for x in self.build(role='Technical_Lead',triggers=['shell_safety'])['reads']})
+
+    def test_invalid_overrides_block(self):
+        for key,value in (('common',{'Developer':{'internal':['../escape.md']}}),('common',{'Developer':{'internal':[]}}),
+                          ('role_sources',{'Developer':{'internal':{ON_DEMAND+' §2':SKILL('troubleshooting')}}}),('role_sources',{'Developer':{'internal':[]}})):
+            with self.subTest(key=key,value=value):
+                registry=copy.deepcopy(REGISTRY); registry[key]=value
+                with self.assertRaisesRegex(m.Blocked,'invalid'): self.built(registry)
+        with self.assertRaisesRegex(m.Blocked,'route has no memory entry'): m.entry([],'memory','two-tier memory route')
+
+    def test_every_developer_task_and_trigger_resolves_to_skills(self):
+        self.real()
+        for name in DEV_RETIRED: self.assertFalse((ROOT/'.mt-agent-devkit/rules'/name).exists(),name)
+        allowed={'.codex/harness/Provider_Adapter.md','.mt-agent-devkit/instructions/developer_instructions.md','.mt-agent-devkit/context/Project_Priming_Bootstrap.md',
+                 '.mt-agent-devkit/context/Project_Priming_Read_On_Demand.md','.mt-agent-devkit/context/Document_Index.md','.mt-agent-devkit/rules/UI_Prototype_Rules.md',
+                 '.mt-agent-devkit/rules/Retro_Rules.md','.mt-agent-devkit/contracts/Wait_Work.md','.mt-agent-devkit/contracts/Local_Verify.md','.mt-agent-devkit/contracts/Read_Manifest.md'}
+        task_skill={'implementation':'dev-implement','fix':'dev-deliver','peer_review':'pr-review'}
+        self.assertEqual({t for t,d in REGISTRY['tasks'].items() if 'Developer' in d['roles']},set(task_skill))
+        for task,skill in task_skill.items():
+            for trigger,route in REGISTRY['triggers'].items():
+                if route.get('roles') and 'Developer' not in route['roles']: continue
+                if route.get('layouts') and 'internal' not in route['layouts']: continue
+                with self.subTest(task=task,trigger=trigger):
+                    context=copy.deepcopy(self.request['context'])
+                    if trigger=='memory_recall':
+                        source=self.bound['RUNTIME_ROOT']+'/memory/Developer_Memory_Archive.md'
+                        self.write(source,'### Fact 1 — Matched\nActual selected fact.\n')
+                        context['memory_match']=dict(source=source,coverage={'kind':'fact','fact':'1'},reason='observed keyword match')
+                    manifest=self.build(task=task,triggers=[trigger],context=context)
+                    m.validate(self.root,manifest,REGISTRY)
+                    sources=[x['source'] for x in manifest['reads'] if not x['id'].startswith('context_')]
+                    self.assertIn(SKILL(skill),sources)
+                    other=[s for s in sources if not s.startswith(('.mt-agent-devkit/skills/',self.bound['RUNTIME_ROOT']+'/')) and s not in allowed]
+                    self.assertEqual([],other)
+                    self.assertFalse([s for s in sources if s.endswith(DEV_RETIRED)])
+        # Point-of-use triggers each add their skill.
+        for trigger,skills in (('pre_pr',('change-metadata','pre-pr-gate')),('consultation',('raise-question',)),('live_conflict',('raise-question',)),
+                               ('report_blocker',('raise-question',)),('document_update',('project-docs',)),('technical_doc_divergence',('dev-verify',)),
+                               ('clean_code_change',('clean-code',)),('source_review',('clean-code',)),('retro_required',('retro-contribution',))):
+            with self.subTest(trigger=trigger):
+                sources=[x['source'] for x in self.build(triggers=[trigger])['reads']]
+                for skill in skills: self.assertIn(SKILL(skill),sources)
+        reads=[x['id'] for x in self.build(triggers=['pre_pr'])['reads']]
+        self.assertLess(reads.index('trigger_pre_pr'),reads.index('trigger_pre_pr_gate'))
+
+    def test_developer_target_rows_keep_their_pre_skill_sources(self):
+        dev_on_demand='.mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md'
+        expected={('peer_review','review_checklist'):(dev_on_demand,'9'),('peer_review','review'):(dev_on_demand,'12'),
+                  ('story_comment','trigger_story_comment'):(dev_on_demand,'15'),('document_update','trigger_document_update'):(dev_on_demand,'8'),
+                  ('consultation','trigger_consultation'):(dev_on_demand,'10'),('live_conflict','trigger_live_conflict'):(dev_on_demand,'11'),
+                  ('pre_pr','trigger_pre_pr'):('.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md',None),('report_blocker','trigger_report_blocker'):(dev_on_demand,'7'),
+                  ('technical_doc_divergence','trigger_technical_doc_divergence'):(dev_on_demand,'16'),('clean_code_change','trigger_clean_code_change'):('.mt-agent-devkit/rules/Clean_Code_Rules.md',None)}
+        routes={**REGISTRY['tasks'],**REGISTRY['triggers']}
+        for (route,entry_id),(source,section) in expected.items():
+            with self.subTest(entry=entry_id):
+                definition=next(x for x in routes[route]['reads'] if x['id']==entry_id)
+                target={**definition,**definition.get('layouts',{}).get('target',{})}
+                self.assertIs(target.get('enabled',True),True)
+                self.assertEqual((target['source'],target['coverage'].get('section')),(source,section))
+        for entry_id in ('dev_implementation','dev_fix','trigger_pre_pr_gate'):
+            definition=next(x for r in routes.values() for x in r['reads'] if x['id']==entry_id)
+            self.assertIs(definition['layouts']['target']['enabled'],False)
+        self.assertNotIn('target',REGISTRY['bootstrap']['Developer']); self.assertNotIn('target',REGISTRY['common']['Developer'])
+        self.assertNotIn('target',REGISTRY['role_sources']['Developer'])
+
+
 class InstalledTests(unittest.TestCase):
     def test_real_all_provider_mode_layouts_use_same_registry_and_helper(self):
         builder=module('manifest_builder','.mt-agent-devkit/distribution/phase2/build_bundle.py')
@@ -369,6 +513,11 @@ class InstalledTests(unittest.TestCase):
                             installed.validate(target,built)
                             self.assertEqual(built['reads'][0]['source'],'.'+provider+'/harness/Provider_Adapter.md')
                             selected={(x['source'],x['coverage'].get('section')) for x in built['reads']}
+                            if role=='Developer':
+                                # ST-000309: target Developer manifests keep the rules files until ST-000310.
+                                by={x['id']:x['source'] for x in built['reads']}
+                                self.assertEqual((by['common'],by['bootstrap']),('.mt-agent-devkit/rules/Agent_Common_Bootstrap.md','.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md'))
+                                self.assertFalse([s for s in by.values() if '/skills/dev-' in s])
                             if role=='Product_Owner':
                                 # ST-000289: target PO manifests resolve to po-core and the installed po-* skills.
                                 self.assertEqual(next(x['source'] for x in built['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/skills/po-core/SKILL.md')
