@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7. ST-000309 (B) extends this map.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -93,7 +93,7 @@ Exit criterion (design §7c): every absorbed rule is mapped to its skill part, n
 
 ## 4. Developer, TL, QA and UI/UX Rules (no generated copy yet)
 
-These skills now hold the rules. The TL, QA, UI/UX and BA files point to them since ST-000308 (§7); the Developer files keep their text until ST-000309 deletes them.
+These skills now hold the rules. The TL, QA, UI/UX and BA files point to them since ST-000308 (§7); ST-000309 deleted the internal Developer files (§8).
 
 | Source rule | Owner | Change |
 |---|---|---|
@@ -214,9 +214,44 @@ Checked on 2026-11-03, internal layer only (the Phase 2 templates are ST-000312)
 - Role-only procedures: the UI/UX §5 prototype gate, the QA §4 test duties (`bash -n` on the story's scripts), QA §7 post-pass commit, TL §4 design questions, the TL §2 context anchoring template.
 - The CI-wait paragraph in `Story_Standard.md §12`, `Story_Standard_TL.md §12` and `pr-review` step 3 summarises `contracts/Wait_Work.md`, its owner. It is not a common-skill rule.
 - Generated Common copies the other roles still read (§1–§3); `generate_common_blocks.py --check` keeps them in sync.
-- The internal `Clean_Code_Rules.md` file: no internal route reads it any more (the target override still does), and ST-000309 deletes it.
+- The internal `Clean_Code_Rules.md` file: no internal route read it any more (the target override still does); ST-000309 deleted it.
 
 ---
 
-**Document Version:** 1.1 — ST-000308 (A2) adds §7, the no-duplicate-authority check
+## 8. Developer Files to Developer Skills (ST-000309)
+
+The internal `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`, `Story_Standard_Dev.md` and `Clean_Code_Rules.md` are deleted. Every rule they held has one owner below; rules already absorbed by a common skill are in §4. The Phase 2 templates keep their text until ST-000310 and ST-000311.
+
+| Source rule | Owner | Change |
+|---|---|---|
+| Bootstrap §1 implementation read contract (Bootstrap is the read; Story Standard Dev is not mandatory; fetch on trigger) | `developer_instructions.md` Load Map, `dev-core` load map | reworded: the load map is the read contract |
+| Bootstrap §2 step 1 read story, comments, touched files; fix stale references in-story | `dev-implement` steps 1–3 | step |
+| Bootstrap §2 step 2 questions and gate | `raise-question` §2, named by `dev-implement` step 4 | pointer |
+| Bootstrap §2 design-first rule, "Design approved" | `dev-implement` step 5 | verbatim |
+| Bootstrap §2 UI prototype reference | `dev-implement` step 6 | compacted |
+| Bootstrap §2 step 3 start | `git-workflow` §1, named by `dev-implement` step 7 | pointer |
+| Bootstrap §3 status flow, label moves, merge preconditions, do not tick AC, role boundaries | `dev-core` Role and Status | compacted, every rule kept |
+| Bootstrap §3 pointer to `Story_Standard.md` §4 | none | dropped: a pointer only, the flow is restated in `dev-core` |
+| Bootstrap §4, §5 | `change-metadata`, `project-docs`, `pre-pr-gate`, `credential-gate` (§4 of this map) | as §4 |
+| Bootstrap §6 PR-opened comment, delivery transitions, fix rounds, Deliverables, review-to-testing handoff, independent QA sign-off | `dev-deliver` §1–§3 | step |
+| Bootstrap §6 git rules | `git-workflow` (§4 of this map) | as §4 |
+| Bootstrap §18 routing table | `developer_instructions.md` Load Map, repeated in `dev-core` | replaced (design §4) |
+| Bootstrap §19 short records, retention | `working-record` (§4 of this map) | as §4 |
+| On-Demand §7, §12, §13 | `raise-question` §4, §3, §5 | as §4 |
+| On-Demand §8 | `project-docs` | as §4 |
+| On-Demand §14, §16 review checklist, reviewer procedure, reviewer gate | `pr-review` steps 2–7 | as §4 |
+| On-Demand §15 Refine Sprint steps 1–4, step-positioning check, cleared note | `dev-refine` §1–§4 | verbatim steps |
+| On-Demand §17 hotfix steps 1–4 | `dev-hotfix` steps 1–4 | verbatim; adds "run `pre-pr-gate`" from the Bootstrap §5 gate |
+| On-Demand §20 Dev-only comment notes | `comment` (same-pass), `pr-review` step 7 (CI paste) | pointer |
+| Target On-Demand §16 doc divergence (new internally) | `dev-verify` §1 | the target rule, now internal too |
+| Target On-Demand §17, §18 endpoint and sandbox verification | `dev-verify` §2 | states they do not apply internally |
+| `Story_Standard_Dev.md` §1, §4, §6, §7, §9, §12 | `dev-core`, `dev-implement`, `dev-hotfix`, `comment`, `pre-pr-gate`, `pr-review` | it was a pointer index; every target above |
+| `Clean_Code_Rules.md` | `clean-code` (§4 of this map) | as §4 |
+
+**Routing:** the internal Developer route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `dev-core` through `bootstrap`, the task skill through its task row, and the shared Common sections through `role_sources` (design §8a). Each Developer row keeps its pre-skill source under `layouts.target`.
+
+---
+
+**Document Version:** 1.2 — ST-000309 (B) adds §8, the Developer files
+**Previous:** 1.1 — ST-000308 (A2) adds §7, the no-duplicate-authority check
 **Previous:** 1.0 — ST-000307 (A1) map
