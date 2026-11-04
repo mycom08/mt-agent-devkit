@@ -1028,6 +1028,65 @@ class Phase2SkillTemplatesTests(unittest.TestCase):
             self.assertNotIn(gone, instructions)
 
 
+class Phase2OtherRolesPointerTests(unittest.TestCase):
+    """ST-000312: Phase 2 TL, QA, UI/UX, BA and PO templates point to the common skill templates."""
+    TEMPLATES = ROOT / ".mt-agent-devkit/distribution/phase2/templates"
+    # Retired with the old Developer templates in ST-000311; they keep their citations until then.
+    LEGACY = ("Developer_Rules_Bootstrap_template.md", "Developer_Rules_Read_On_Demand_template.md",
+              "Story_Standard_Dev_template.md", "Clean_Code_Rules_template.md", "Sync_Devkit_Workflow_template.md")
+
+    def text(self, relative):
+        return (self.TEMPLATES / relative).read_text(encoding="utf-8")
+
+    def test_only_legacy_templates_cite_clean_code_rules(self):
+        citing = sorted(p.name for p in self.TEMPLATES.rglob("*.md") if "Clean_Code_Rules.md" in p.read_text(encoding="utf-8"))
+        self.assertEqual([], [name for name in citing if name not in self.LEGACY])
+        self.assertIn(".mt-agent-devkit/skills/clean-code/SKILL.md", self.text("rules/Technical_Lead_Rules_Bootstrap_template.md"))
+
+    def test_implementer_gates_and_procedures_point_to_skills(self):
+        skill = ".mt-agent-devkit/skills/{}/SKILL.md".format
+        expected = {
+            "rules/Technical_Lead_Rules_Bootstrap_template.md": ("pr-review", "git-workflow", "project-docs", "comment", "working-record", "raise-question", "pre-pr-gate", "clean-code"),
+            "rules/Technical_Lead_Rules_Read_On_Demand_template.md": ("git-workflow", "pre-pr-gate"),
+            "rules/QA_Rules_Bootstrap_template.md": ("project-docs", "comment", "pre-pr-gate", "raise-question", "working-record"),
+            "rules/QA_Rules_Read_On_Demand_template.md": ("pre-pr-gate", "raise-question"),
+            "rules/UI_UX_Designer_Rules_template.md": ("raise-question", "git-workflow", "project-docs", "working-record"),
+            "rules/Business_Analyst_Rules_template.md": ("pre-pr-gate", "comment"),
+            "rules/Story_Standard_TL_template.md": ("pr-review",),
+            "instructions/business_analyst_instructions_template.md": ("project-docs",),
+        }
+        for relative, skills in expected.items():
+            text = self.text(relative)
+            for name in skills:
+                self.assertIn(skill(name), text, (relative, name))
+            # No restated pre-PR check table or mid-implementation consultation format survives.
+            self.assertNotIn("| Change type | Required local check |", text, relative)
+            self.assertNotIn("Mid-implementation consultation needed", text, relative)
+        # TL as implementer runs the stricter gate: no docs-only exemption is left (design section 6).
+        self.assertNotIn("| Docs or config only | Exempt |", self.text("rules/Technical_Lead_Rules_Read_On_Demand_template.md"))
+        self.assertNotIn("Conventional Commits", self.text("rules/UI_UX_Designer_Rules_template.md"))
+
+    def test_po_skill_templates_point_to_common_skills(self):
+        self.assertIn("**Requires:** `agent-security`, `working-record`", self.text("skills/po-core/SKILL_template.md"))
+        self.assertIn("**Requires:** `po-core`, `project-docs`", self.text("skills/po-plan-docs/SKILL_template.md"))
+        self.assertNotIn("## Placement and Naming", self.text("skills/po-plan-docs/SKILL_template.md"))
+        for name in ("po-comment", "po-answer-questions"):
+            self.assertIn("`comment`", self.text(f"skills/{name}/SKILL_template.md"))
+        self.assertNotIn("**Same-pass body update.**", self.text("skills/po-comment/SKILL_template.md"))
+
+    def test_document_index_is_the_single_path_list(self):
+        priming = self.text("context/Project_Priming_template.md")
+        section = priming.split("## 6. Internal Project Documents", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("Document_Index.md", section)
+        self.assertNotIn("`docs/", section)
+        index = self.text("context/Document_Index_template.md")
+        for path in ("docs/plan/Implementation_Roadmap.md", "docs/plan/Product_Backlog.md", "docs/sprints/Sprint_N_Overview.md",
+                     "docs/wiki/Code_Review_Checklist.md", "docs/api/{project-api-spec}.yaml", "tests/feature/<feature_name>/report/"):
+            self.assertIn(path, index)
+        cited = [p.name for p in self.TEMPLATES.rglob("*.md") if "Priming.md §Internal Documents" in p.read_text(encoding="utf-8")]
+        self.assertEqual([], cited)
+
+
 class PoExecutionSettingTests(unittest.TestCase):
     """ST-000291: the po_execution setting and the contracts that let the orchestrator act as PO."""
     PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"

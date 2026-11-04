@@ -8,13 +8,7 @@
 
 Triggered from `Technical_Lead_Rules_Bootstrap.md §5`. Rare — only when the orchestrator assigns TL as the story implementer.
 
-1. Create a dev branch from the feature branch — **never work directly on the feature branch or master**:
-   ```
-   python .mt-agent-devkit/scripts/branch_preflight.py create --mode github --base <Base Branch> --story-branch ST-XXXXXX/short-description --expected-base-sha <Verified Base SHA> --expected-remote-sha <Remote Base SHA>
-   ```
-2. Push all implementation work to that dev branch
-3. Open a PR from the dev branch → **feature branch** (NOT master)
-4. PR title: `[ST-XXXXXX][FEATURE] Story title`
+Branch, commits, push and PR follow the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`), the same procedure every implementer uses. Load it before creating the branch.
 
 > **Gate:** Do not open a PR targeting master. The feature branch is the merge target for all story PRs.
 
@@ -26,8 +20,8 @@ Triggered from `Technical_Lead_Rules_Bootstrap.md §9`.
 
 After each working session on an unfinished feature, create or update a context-anchoring note so work can resume without losing state.
 
-**Placement:** `docs/feature/<feature_name>/questions/` unless another subfolder is a better fit
-**Filename:** Must contain the feature name, `Title_Case_With_Underscores`
+**Placement:** the folder `project-docs` Placement 3 names (`docs/feature/<feature_name>/questions/` unless another subfolder is a better fit)
+**Filename:** Must contain the feature name, named per `project-docs`
 **Length:** Under 50 lines — decisions with reasoning, active constraints, open questions, and a done/remaining checklist
 
 Template:
@@ -49,20 +43,7 @@ Template:
 
 ## 3. Pre-PR Gate (when acting as Implementer)
 
-Triggered from `Technical_Lead_Rules_Bootstrap.md §10`. When TL is the story Implementer (not reviewer), run the applicable local checks before opening a PR. Do not open the PR if any check fails.
-
-| Change type | Required local check |
-|---|---|
-| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
-| API spec changed (`docs/api/{api-spec-file}` or lint config) | `{api-lint-command}` (zero errors) AND `{code-gen-command}` then `git diff --exit-code {generated-file-path}` (no diff) — skip code-gen check if project does not use spec-driven generation |
-| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
-| Both source and tests changed | Both checks above required |
-| CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
-| Docs or config only | Exempt |
-
-Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+Triggered from `Technical_Lead_Rules_Bootstrap.md §10`. When TL is the story Implementer (not reviewer), run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening the PR and before each fix push. It is the same gate for every implementer, including its PR check note: the build and unit tests always run, so no change is exempt as docs or config only.
 
 ---
 
@@ -111,6 +92,7 @@ Then execute:
 
 ## Version
 
-**Version:** 1.1 — Added §4 (TL as Implementer — Status Transitions), relocated from `Story_Standard_TL_template.md` §4 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
+**Version:** 1.2 — §1 points to `git-workflow`, §2 to `project-docs`, §3 to `pre-pr-gate`, the stricter gate (ST-000312).
+**Previous:** 1.1 — Added §4 (TL as Implementer — Status Transitions), relocated from `Story_Standard_TL_template.md` §4 per devkit issue #133 (ST-000134), extending the same trim already validated on the devkit's own team.
 **Previous:** 1.0 — Split out of `Technical_Lead_Rules_template.md` v2.2 (former section 5's "When acting as Implementer" subsection, former section 9 Context Anchoring, former section 10 Pre-PR Gate as Implementer relocated here as §1–§3), mirroring the boundary already validated on the devkit's own team.
 **Created:** 2026-08-25

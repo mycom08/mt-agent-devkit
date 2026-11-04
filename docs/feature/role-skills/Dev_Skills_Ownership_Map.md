@@ -190,12 +190,12 @@ Checked on 2026-11-03, internal layer only (the Phase 2 templates are ST-000312)
 |---|---|
 | `po-comment`, `po-answer-questions` | same-pass rule deleted, points to `comment`; PO-only kept (body edit through `po-write-story`, ≤ 5-line decision, AC sync before `status:ready`) |
 | `po-core` | PO Records point to `working-record` and `agent-memory`. Kept: PO paths, Stored Facts only, per-activity timing, the orchestrator-as-PO exception, closure skips the record |
-| `po-plan-docs` | requires `project-docs`; keeps only Plan Commit. Its frontmatter `description` still names placement, because it must match the Phase 2 template until ST-000312 |
+| `po-plan-docs` | requires `project-docs`; keeps only Plan Commit. Its frontmatter `description` dropped placement in ST-000312, with the Phase 2 template (§10a) |
 | `project-docs`, `Document_Index.md`, Priming On-Demand §6 | the index is the single path list. Its row is renamed Sprint Overviews (the §6 row it absorbs), and §6 is a pointer (R3) |
 
 ### 7c. Routing (internal layout)
 
-| Row | Internal | Target (until ST-000312) |
+| Row | Internal | Target until ST-000312 (§10c: now the skill) |
 |---|---|---|
 | `tl_implementation_1` | `git-workflow` | TL On-Demand §1 (override) |
 | `tl_implementation_3`, `ba_implementation` | `pre-pr-gate` | disabled, as before |
@@ -298,11 +298,45 @@ Every common and Developer skill except `change-metadata` has a Phase 2 template
 
 ### 9c. Target routing
 
-The registry gives the Developer `common`, `bootstrap` and `role_sources` overrides for `target` as well. Rows keep their old `layouts.target` sources; the target `role_sources` map each one to its shipped skill, so the old Developer templates stay in the bundle but no target Developer manifest reads them. ST-000311 retires those files and their keys. `dev_implementation` and `dev_fix` read their skill in both layouts; `pre_pr` reads `pre-pr-gate` in targets (`change-metadata` stays internal). `trigger_clean_code` is shared with TL: TL target manifests keep `Clean_Code_Rules.md` until ST-000312.
+The registry gives the Developer `common`, `bootstrap` and `role_sources` overrides for `target` as well. Rows keep their old `layouts.target` sources; the target `role_sources` map each one to its shipped skill, so the old Developer templates stay in the bundle but no target Developer manifest reads them. ST-000311 retires those files and their keys. `dev_implementation` and `dev_fix` read their skill in both layouts; `pre_pr` reads `pre-pr-gate` in targets (`change-metadata` stays internal). `trigger_clean_code` is shared with TL: TL target manifests kept `Clean_Code_Rules.md` until ST-000312, which switched the row to `clean-code` in both layouts (§10c).
 
 ---
 
-**Document Version:** 1.3 — ST-000310 (C) adds §9, Phase 2 templates and target routing
+## 10. Phase 2 Pointers for the Other Roles (ST-000312)
+
+The Phase 2 counterpart of §7. Checked on 2026-11-04 over the Phase 2 TL, QA, UI/UX and BA templates, their instruction templates, the `po-*` skill templates, the Story Standard templates and the context templates. **Result: no rule has two hand-written owners between those templates and a common skill template.** The legacy Developer templates and `Sync_Devkit_Workflow_template.md` are out of this check: ST-000311 retires or changes them, and they are the only Phase 2 templates still citing `Clean_Code_Rules.md`. Method as §7.
+
+### 10a. Templates
+
+| Template section | Was | Now |
+|---|---|---|
+| TL Bootstrap §2 | shared review steps (locate work, CI wait, executed, head SHA, red-check diagnosis, stale references, deleted files, old-path grep, credential evidence, change requests, notify) | pointer → `pr-review`. TL-only kept: local-verify, Reviewer Gate link (a test suite's non-zero count), dependency pin, resume-rule completeness, citation accuracy, Development Standards and design compliance, data isolation/error/test/migration checks, approval authority, the CI/workflow, refactor and documentation checklists, UI prototype, AC clarifications, the do-not-instruct-merge rule, the review gate |
+| TL Bootstrap §2 `Clean_Code_Rules.md` bullet | rule file reference | → `clean-code` |
+| TL Bootstrap §5 | commit format; approval | → `git-workflow` §2 (TL keeps the `BREAKING CHANGE:` footer); `gh pr comment` verdict through `pr-review` |
+| TL Bootstrap §6–§8, §10–§12 | placement and naming; same-thread replies; Working Record and blockers; pre-PR pointer; handoff; troubleshooting | → `project-docs`, `comment`, `working-record` and `raise-question` §4, `pre-pr-gate`, `handoff`, `troubleshooting` (generated Common copy kept on the route) |
+| TL On-Demand §1, §2, §3 | branch/PR steps; anchoring placement and naming; weaker check table ("Docs or config only → Exempt") | → `git-workflow` (master-PR gate kept); `project-docs`; `pre-pr-gate` (design §6: TL as implementer always runs build and unit tests) |
+| QA Bootstrap §4–§6, §9–§13 | scenario and script naming; placement; same-thread replies; pre-PR and live-conflict pointers; Working Record and blockers; handoff; troubleshooting | → `project-docs`, `comment`, `pre-pr-gate`, `raise-question` §5 and §4, `working-record`, `handoff`, `troubleshooting` |
+| QA On-Demand §1, §2 | check table; live-conflict rule | → `pre-pr-gate`; `raise-question` §5 |
+| UI/UX §2 steps 2–3, consultation, live conflicts | question gate, branch and status, consultation format, live-conflict rule | → `raise-question` §2, §3, §5, `git-workflow` §1; UI/UX question examples and the decide-it-yourself examples kept |
+| UI/UX §6–§10 | branch, title, `Closes`, commits; placement (`§Internal Documents`); Working Record and blockers; handoff; troubleshooting | → `git-workflow` (start command, handoff note, PR-opened comment kept), `project-docs`, `working-record`, `raise-question` §4, `handoff`, `troubleshooting` |
+| BA §2, §3, §4, §5; BA instructions placement | check table ("Docs or config only → Exempt"); same-thread and bare-number rules; handoff; troubleshooting; placement | → `pre-pr-gate`, `comment`, `handoff`, `troubleshooting`, `project-docs` |
+| `Story_Standard_TL` §9, `Story_Standard` §4, §9, §12 | review comments and the `gh pr checks` paste; pre-PR checks; Dev On-Demand §15 citation; "agent-specific rules" for spec commands | → `pr-review` steps 5–7; `pre-pr-gate`; `pr-review` (the citation ST-000311 would leave dangling) |
+| `Shared_Pipeline_Stages` Stage 2 stub re-check | TL Bootstrap §2 for the CI checks | names the `pr-review` CI gate plus the TL-only checks |
+| `po-core`, `po-comment`, `po-answer-questions`, `po-plan-docs` | as §7b, plus the scope-gating `Project_Priming.md §6` citation | as §7b; scope docs → `Document_Index.md`. The `po-plan-docs` frontmatter `description` drops placement in both layers |
+| `Project_Priming_template` §6, `Document_Index_template` | two path lists | §6 is a pointer (R3); the index absorbs Code Review Checklist, the API spec path, Feature Docs, Test Reports and per-story scenario files, and its row is renamed Sprint Overviews |
+
+### 10b. Kept on purpose
+
+The Phase 2 BA and UI/UX rules stay single files (no On-Demand tier), so their pointers sit in the one file. QA §4 keeps `Agent_Common_Read_On_Demand.md §6` for a missing credential: QA's route reads the generated Common copy of `credential-gate` (design §8b).
+
+### 10c. Target routing
+
+The ST-000308 `layouts.target` overrides in §7c are removed, so each row reads its skill in both layouts: `tl_implementation_1`, `qa_implementation`, `qa_implementation_conflict`, `trigger_qa_conflict`, `trigger_tl_pre_pr`, `trigger_clean_code` and `review_procedure`. The older overrides on `trigger_ui_consultation`, `trigger_ui_live_conflict`, `trigger_document_paths` and `ba_implementation` go too, because the templates they read are now pointers. `tl_implementation_3` stays off in targets: TL's `pre_pr` trigger already delivers `pre-pr-gate` there. The Developer `role_sources` key for `Clean_Code_Rules.md` still serves `trigger_clean_code_change` until ST-000311.
+
+---
+
+**Document Version:** 1.4 — ST-000312 (A2-P2) adds §10, the Phase 2 pointers and target routing
+**Previous:** 1.3 — ST-000310 (C) adds §9, Phase 2 templates and target routing
 **Previous:** 1.2 — ST-000309 (B) adds §8, the Developer files
 **Previous:** 1.1 — ST-000308 (A2) adds §7, the no-duplicate-authority check
 **Previous:** 1.0 — ST-000307 (A1) map

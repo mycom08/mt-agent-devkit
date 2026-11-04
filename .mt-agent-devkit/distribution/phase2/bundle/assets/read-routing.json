@@ -305,16 +305,7 @@
           ],
           "roles": [
             "Technical_Lead"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "1"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "tl_implementation_3",
@@ -362,16 +353,7 @@
           ],
           "roles": [
             "QA"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "1"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "ba_implementation",
@@ -385,12 +367,7 @@
           ],
           "roles": [
             "Business_Analyst"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         },
         {
           "id": "qa_implementation_conflict",
@@ -404,16 +381,7 @@
           ],
           "roles": [
             "QA"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "ui_standard",
@@ -502,16 +470,7 @@
           ],
           "roles": [
             "Technical_Lead"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "1"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "tl_implementation_3",
@@ -559,16 +518,7 @@
           ],
           "roles": [
             "QA"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "1"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "ba_implementation",
@@ -582,12 +532,7 @@
           ],
           "roles": [
             "Business_Analyst"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         },
         {
           "id": "qa_implementation_conflict",
@@ -601,16 +546,7 @@
           ],
           "roles": [
             "QA"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "ui_standard",
@@ -677,12 +613,7 @@
           "reason": "shared reviewer procedure the TL review section points to (pr-review)",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         },
         {
           "id": "review",
@@ -1315,15 +1246,7 @@
           "reason": "trigger document paths: the single document path list",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": "{priming}",
-              "coverage": {
-                "kind": "full"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1368,16 +1291,7 @@
           ],
           "roles": [
             "UI_UX_Designer"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1423,16 +1337,7 @@
           ],
           "roles": [
             "UI_UX_Designer"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/UI_UX_Designer_Rules.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "trigger_qa_conflict",
@@ -1446,16 +1351,7 @@
           ],
           "roles": [
             "QA"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1518,16 +1414,7 @@
           ],
           "roles": [
             "Technical_Lead"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "3"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1566,15 +1453,7 @@
           "reason": "trigger clean code (clean-code)",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
-              "coverage": {
-                "kind": "full"
-              }
-            }
-          }
+          ]
         }
       ]
     },

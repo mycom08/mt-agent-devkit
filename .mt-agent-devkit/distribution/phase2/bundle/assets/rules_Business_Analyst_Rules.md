@@ -17,19 +17,7 @@ Do these **in order** before any analysis or documentation work:
 
 ## 2. Pre-PR Gate (when acting as Implementer)
 
-When BA is the story Implementer, run the applicable local checks before opening a PR. Do not open the PR if any check fails.
-
-| Change type | Required local check |
-|---|---|
-| Source code changed | `{test-command}` must pass AND run `{integration-test-command}` against the sandbox; all assertions must pass |
-| Integration test collection or config changed | Run the relevant integration suite against the sandbox; all assertions must pass |
-| Both source and tests changed | Both checks above required |
-| CI workflow (`.github/workflows/`) changed | Validate YAML syntax; verify job structure and step ordering are correct |
-| Docs or config only | Exempt |
-
-Include a one-line test result note in the PR description (e.g., "`{test-command}` — PASS · integration tests — PASS").
-
-> **Gate:** Do not open a PR until all applicable checks pass.
+When BA is the story Implementer, run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR. It is the same gate for every implementer, including its PR check note: the build and unit tests always run, so no change is exempt as docs or config only.
 
 ---
 
@@ -38,21 +26,19 @@ Include a one-line test result note in the PR description (e.g., "`{test-command
 When posting comments on GitHub Issues:
 
 - Post all BA clarifications, scope notes, and follow-up replies as **comments on the GitHub Issue** — do not create standalone files for normal discussion
-- Reply in the same comment thread when following up on the same topic — do not open a new comment for each follow-up
-- Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the thread format, field usage and the Commenter gate
-- Never reference stories with just a bare number — always use `ST-XXXXXX` format
+- Load the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) before any comment; it owns the thread format, same-thread replies, the bare-number ban and the Commenter gate
 
 ---
 
 ## 4. Runtime-State Handoff (mandatory before handoff)
 
-Keep agent state local and uncommitted before signaling stage completion — see `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5`.
+Keep agent state local and uncommitted before signaling stage completion — the `handoff` skill owns the rule; your route reads its generated copy, `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5`.
 
 ---
 
 ## 5. Troubleshooting Protocol (mandatory on any tooling/environment blocker)
 
-On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the check-memory → fix → record-to-memory protocol in `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2`.
+On any tooling/environment blocker (tests won't run, sandbox won't start, automation runner cannot connect, script/CI/auth errors), follow the `troubleshooting` skill's check-memory → fix → record-to-memory protocol; your route reads its generated copy, `.mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2`.
 
 ---
 
