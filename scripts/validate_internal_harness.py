@@ -102,9 +102,9 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
                  "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
                  "git-workflow", "change-metadata", "pre-pr-gate", "pr-review", "clean-code")
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
-# Internal skills with no Phase 2 template or bundle entry yet. ST-000310 ships every
-# common and Developer skill except change-metadata, which stays internal only (design B5).
-UNDISTRIBUTED_SKILLS = frozenset(COMMON_SKILLS + DEV_SKILLS)
+# Internal skills with no Phase 2 template or bundle entry. change-metadata is devkit-internal
+# only (design B5); ST-000310 ships every other common and Developer skill.
+UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"})
 SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500}
 DEFAULT_SKILL_LIMIT = 4000  # po-*, common and Developer skills
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)

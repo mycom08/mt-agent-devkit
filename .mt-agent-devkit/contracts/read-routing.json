@@ -135,12 +135,20 @@
       "target": ".mt-agent-devkit/skills/po-core/SKILL.md"
     },
     "Developer": {
-      "internal": ".mt-agent-devkit/skills/dev-core/SKILL.md"
+      "internal": ".mt-agent-devkit/skills/dev-core/SKILL.md",
+      "target": ".mt-agent-devkit/skills/dev-core/SKILL.md"
     }
   },
   "common": {
     "Developer": {
       "internal": [
+        ".mt-agent-devkit/skills/pre-work/SKILL.md",
+        ".mt-agent-devkit/skills/agent-security/SKILL.md",
+        ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
+        ".mt-agent-devkit/skills/shell-rules/SKILL.md",
+        ".mt-agent-devkit/skills/retro/SKILL.md"
+      ],
+      "target": [
         ".mt-agent-devkit/skills/pre-work/SKILL.md",
         ".mt-agent-devkit/skills/agent-security/SKILL.md",
         ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
@@ -180,6 +188,78 @@
         ".mt-agent-devkit/rules/Agent_Common_Working_Record.md": [
           ".mt-agent-devkit/skills/working-record/SKILL.md"
         ]
+      },
+      "target": {
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §1": [
+          ".mt-agent-devkit/skills/agent-memory/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2": [
+          ".mt-agent-devkit/skills/troubleshooting/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §3": [
+          ".mt-agent-devkit/skills/retro-contribution/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5": [
+          ".mt-agent-devkit/skills/handoff/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §6": [
+          ".mt-agent-devkit/skills/credential-gate/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §8": [
+          ".mt-agent-devkit/skills/agent-memory/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md": [
+          ".mt-agent-devkit/skills/retro/SKILL.md",
+          ".mt-agent-devkit/skills/handoff/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md": [
+          ".mt-agent-devkit/skills/shell-rules/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Working_Record.md": [
+          ".mt-agent-devkit/skills/working-record/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §7": [
+          ".mt-agent-devkit/skills/raise-question/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §8": [
+          ".mt-agent-devkit/skills/project-docs/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §9": [
+          ".mt-agent-devkit/skills/pr-review/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §10": [
+          ".mt-agent-devkit/skills/raise-question/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §11": [
+          ".mt-agent-devkit/skills/raise-question/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §12": [
+          ".mt-agent-devkit/skills/pr-review/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §13": [
+          ".mt-agent-devkit/skills/dev-hotfix/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §14": [
+          ".mt-agent-devkit/skills/dev-refine/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §15": [
+          ".mt-agent-devkit/skills/comment/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §16": [
+          ".mt-agent-devkit/skills/dev-verify/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §17": [
+          ".mt-agent-devkit/skills/dev-verify/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §18": [
+          ".mt-agent-devkit/skills/dev-verify/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md": [
+          ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Clean_Code_Rules.md": [
+          ".mt-agent-devkit/skills/clean-code/SKILL.md"
+        ]
       }
     }
   },
@@ -211,12 +291,7 @@
           ],
           "roles": [
             "Developer"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         },
         {
           "id": "tl_implementation_1",
@@ -413,12 +488,7 @@
           ],
           "roles": [
             "Developer"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": false
-            }
-          }
+          ]
         },
         {
           "id": "tl_implementation_1",

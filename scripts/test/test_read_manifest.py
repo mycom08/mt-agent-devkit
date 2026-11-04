@@ -205,9 +205,9 @@ class RoutingTests(unittest.TestCase):
     def test_bootstrap_mapping_is_per_layout_and_confined(self):
         registry=copy.deepcopy(REGISTRY)
         # ST-000289: both layouts now route the PO through po-core.
-        # ST-000309: the Developer switches to dev-core in the internal layout only.
+        # ST-000309/ST-000310: the Developer switches to dev-core internally, then in targets.
         self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md','target':'.mt-agent-devkit/skills/po-core/SKILL.md'},
-                                                'Developer':{'internal':'.mt-agent-devkit/skills/dev-core/SKILL.md'}})
+                                                'Developer':{'internal':'.mt-agent-devkit/skills/dev-core/SKILL.md','target':'.mt-agent-devkit/skills/dev-core/SKILL.md'}})
         registry['bootstrap']['Product_Owner']['internal']='../escape.md'
         request=copy.deepcopy(self.request); request.update(role='Product_Owner',task='closure')
         with self.assertRaisesRegex(m.Blocked,'invalid bootstrap mapping'): m.build(self.root,request,registry=registry)
@@ -456,28 +456,56 @@ class DeveloperSkillRoutingTests(unittest.TestCase):
         reads=[x['id'] for x in self.build(triggers=['pre_pr'])['reads']]
         self.assertLess(reads.index('trigger_pre_pr'),reads.index('trigger_pre_pr_gate'))
 
-    def test_developer_target_rows_keep_their_pre_skill_sources(self):
+    def test_developer_target_overrides_route_the_old_target_sources_to_shipped_skills(self):
+        """ST-000310: rows keep their target alternatives; target role_sources map each to a shipped skill."""
         dev_on_demand='.mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md'
-        expected={('peer_review','review_checklist'):(dev_on_demand,'9'),('peer_review','review'):(dev_on_demand,'12'),
-                  ('story_comment','trigger_story_comment'):(dev_on_demand,'15'),('document_update','trigger_document_update'):(dev_on_demand,'8'),
-                  ('consultation','trigger_consultation'):(dev_on_demand,'10'),('live_conflict','trigger_live_conflict'):(dev_on_demand,'11'),
-                  ('pre_pr','trigger_pre_pr'):('.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md',None),('report_blocker','trigger_report_blocker'):(dev_on_demand,'7'),
-                  ('technical_doc_divergence','trigger_technical_doc_divergence'):(dev_on_demand,'16'),('clean_code_change','trigger_clean_code_change'):('.mt-agent-devkit/rules/Clean_Code_Rules.md',None)}
+        expected={('peer_review','review_checklist'):(dev_on_demand,'9','pr-review'),('peer_review','review'):(dev_on_demand,'12','pr-review'),
+                  ('story_comment','trigger_story_comment'):(dev_on_demand,'15','comment'),('document_update','trigger_document_update'):(dev_on_demand,'8','project-docs'),
+                  ('consultation','trigger_consultation'):(dev_on_demand,'10','raise-question'),('live_conflict','trigger_live_conflict'):(dev_on_demand,'11','raise-question'),
+                  ('pre_pr','trigger_pre_pr'):('.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md',None,'pre-pr-gate'),('report_blocker','trigger_report_blocker'):(dev_on_demand,'7','raise-question'),
+                  ('technical_doc_divergence','trigger_technical_doc_divergence'):(dev_on_demand,'16','dev-verify'),('endpoint_change','trigger_endpoint_change'):(dev_on_demand,'17','dev-verify'),
+                  ('behavioral_verification','trigger_behavioral_verification'):(dev_on_demand,'18','dev-verify'),
+                  ('clean_code_change','trigger_clean_code_change'):('.mt-agent-devkit/rules/Clean_Code_Rules.md',None,'clean-code'),
+                  ('source_review','trigger_clean_code'):('.mt-agent-devkit/rules/Clean_Code_Rules.md',None,'clean-code')}
         routes={**REGISTRY['tasks'],**REGISTRY['triggers']}
-        for (route,entry_id),(source,section) in expected.items():
+        sources=REGISTRY['role_sources']['Developer']['target']
+        templates=ROOT/'.mt-agent-devkit/distribution/phase2/templates/skills'
+        for (route,entry_id),(source,section,skill) in expected.items():
             with self.subTest(entry=entry_id):
                 definition=next(x for x in routes[route]['reads'] if x['id']==entry_id)
                 target={**definition,**definition.get('layouts',{}).get('target',{})}
                 self.assertIs(target.get('enabled',True),True)
                 self.assertEqual((target['source'],target['coverage'].get('section')),(source,section))
-        for entry_id in ('dev_implementation','dev_fix','trigger_pre_pr_gate'):
-            definition=next(x for r in routes.values() for x in r['reads'] if x['id']==entry_id)
-            self.assertIs(definition['layouts']['target']['enabled'],False)
-        self.assertNotIn('target',REGISTRY['bootstrap']['Developer']); self.assertNotIn('target',REGISTRY['common']['Developer'])
-        self.assertNotIn('target',REGISTRY['role_sources']['Developer'])
+                self.assertEqual(sources[source+(' §'+section if section else '')],[SKILL(skill)])
+        # The task skills ship now, so their rows read the skill in targets too; pre_pr reads pre-pr-gate once.
+        for entry_id in ('dev_implementation','dev_fix'):
+            self.assertNotIn('layouts',next(x for r in routes.values() for x in r['reads'] if x['id']==entry_id))
+        self.assertIs(next(x for x in routes['pre_pr']['reads'] if x['id']=='trigger_pre_pr_gate')['layouts']['target']['enabled'],False)
+        self.assertEqual(REGISTRY['common']['Developer']['target'],REGISTRY['common']['Developer']['internal'])
+        self.assertEqual(REGISTRY['bootstrap']['Developer']['target'],SKILL('dev-core'))
+        for key,value in REGISTRY['role_sources']['Developer']['internal'].items(): self.assertEqual(sources[key],value,key)
+        # Every target skill the Developer can read ships as a Phase 2 template; change-metadata never does.
+        shipped={p.parent.name for p in templates.glob('*/SKILL_template.md')}
+        for path in [*REGISTRY['common']['Developer']['target'],REGISTRY['bootstrap']['Developer']['target'],*[s for skills in sources.values() for s in skills]]:
+            self.assertIn(path.split('/')[2],shipped,path)
+        self.assertNotIn('change-metadata',shipped)
+
+
+# Point-of-use skills each installed target Developer trigger must add (ST-000310).
+TARGET_TRIGGER_SKILLS = {'pre_pr':('pre-pr-gate',),'consultation':('raise-question',),'live_conflict':('raise-question',),'report_blocker':('raise-question',),
+                         'document_update':('project-docs',),'technical_doc_divergence':('dev-verify',),'endpoint_change':('dev-verify',),
+                         'behavioral_verification':('dev-verify',),'clean_code_change':('clean-code',),'source_review':('clean-code',),
+                         'story_comment':('comment',),'retro_required':('retro-contribution',),'tooling_failure':('troubleshooting',),
+                         'credential_gate':('credential-gate',),'runtime_handoff':('handoff',),'memory_fact':('agent-memory',),
+                         'working_record':('working-record',),'completion':('handoff',)}
 
 
 class InstalledTests(unittest.TestCase):
+    @staticmethod
+    def old_developer_sources(sources):
+        """Old Developer rules, Common files and the internal-only change-metadata: never read by a target Developer."""
+        return [s for s in sources if s.endswith(DEV_RETIRED) or s.startswith('.mt-agent-devkit/rules/Agent_Common_') or '/change-metadata/' in s]
+
     def test_real_all_provider_mode_layouts_use_same_registry_and_helper(self):
         builder=module('manifest_builder','.mt-agent-devkit/distribution/phase2/build_bundle.py')
         deployment=module('manifest_deployment','.mt-agent-devkit/distribution/phase2/deployment.py')
@@ -514,10 +542,11 @@ class InstalledTests(unittest.TestCase):
                             self.assertEqual(built['reads'][0]['source'],'.'+provider+'/harness/Provider_Adapter.md')
                             selected={(x['source'],x['coverage'].get('section')) for x in built['reads']}
                             if role=='Developer':
-                                # ST-000309: target Developer manifests keep the rules files until ST-000310.
+                                # ST-000310: target Developer manifests resolve to the installed skills.
                                 by={x['id']:x['source'] for x in built['reads']}
-                                self.assertEqual((by['common'],by['bootstrap']),('.mt-agent-devkit/rules/Agent_Common_Bootstrap.md','.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md'))
-                                self.assertFalse([s for s in by.values() if '/skills/dev-' in s])
+                                self.assertEqual((by['common'],by['bootstrap']),(SKILL('pre-work'),SKILL('dev-core')))
+                                self.assertIn(SKILL({'implementation':'dev-implement','fix':'dev-deliver','peer_review':'pr-review'}[task]),by.values())
+                                self.assertEqual(self.old_developer_sources(by.values()),[])
                             if role=='Product_Owner':
                                 # ST-000289: target PO manifests resolve to po-core and the installed po-* skills.
                                 self.assertEqual(next(x['source'] for x in built['reads'] if x['id']=='bootstrap'),'.mt-agent-devkit/skills/po-core/SKILL.md')
@@ -545,19 +574,23 @@ class InstalledTests(unittest.TestCase):
                                     context['memory_match']=dict(source=own,coverage={'kind':'fact','fact':'1'},reason='keyword match')
                                 extended=installed.extend(target,built,[trigger])
                                 installed.validate(target,extended)
+                                if role=='Developer':
+                                    sources=[x['source'] for x in extended['reads']]
+                                    self.assertEqual(self.old_developer_sources(sources),[],trigger)
+                                    for skill in TARGET_TRIGGER_SKILLS.get(trigger,()): self.assertIn(SKILL(skill),sources,trigger)
                                 if trigger=='pre_pr' and role=='Technical_Lead':
                                     authority=(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8')
                                     self.assertIn('about to open a PR',authority)
                                     self.assertIn(('.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','3'),{(x['source'],x['coverage'].get('section')) for x in extended['reads']})
                                 if trigger=='development_convention':
-                                    authority=(target/'.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md').read_text(encoding='utf-8')
-                                    self.assertIn('Read `docs/wiki/Development_Standards.md`',authority)
+                                    authority=(target/SKILL('clean-code')).read_text(encoding='utf-8')
+                                    self.assertIn('read `docs/wiki/Development_Standards.md`',authority)
                                     self.assertTrue(any(x['source']=='docs/wiki/Development_Standards.md' for x in extended['reads']))
                                 if trigger=='clean_code_change':
-                                    authority=(target/'.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md').read_text(encoding='utf-8')
-                                    self.assertIn('**For Clean Code or refactor stories**',authority)
-                                    self.assertTrue(any(x['source'].endswith('/Clean_Code_Rules.md') for x in extended['reads']))
-                                if trigger=='source_review':
+                                    authority=(target/SKILL('clean-code')).read_text(encoding='utf-8')
+                                    self.assertIn('**Clean Code or refactor stories**',authority)
+                                    self.assertTrue(any(x['source']==SKILL('clean-code') for x in extended['reads']))
+                                if trigger=='source_review' and role=='Technical_Lead':
                                     authority=(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8')
                                     self.assertIn('Clean_Code_Rules.md',authority)
                                     self.assertTrue(any(x['source'].endswith('/Clean_Code_Rules.md') for x in extended['reads']))

@@ -560,7 +560,8 @@ class CommonSkillsTests(unittest.TestCase):
         for target in sorted({b.target for b in self.blocks.BLOCKS}):
             text = (ROOT / target).read_text(encoding="utf-8")
             self.assertEqual(0, len(re.findall(r"^```", text, re.M)) % 2, target)
-            for section in re.split(r"(?m)^(?=## [0-9]+[a-z]?\.)", text)[1:]:
+            # A `## Version` footer (Phase 2 templates) is its own section, not part of the last one.
+            for section in re.split(r"(?m)^(?=## (?:[0-9]+[a-z]?\.|Version))", text)[1:]:
                 if "BEGIN GENERATED" not in section:
                     continue
                 rest = re.sub(r"(?s)<!-- BEGIN GENERATED (.+?):.*?<!-- END GENERATED \1 -->\n", "", section)
@@ -623,7 +624,9 @@ class CommonSkillsTests(unittest.TestCase):
             self.assertNotIn("generate_security_blocks", text)
 
     def test_undistributed_skills_are_exempt_only_from_distribution_checks(self):
-        self.assertEqual(frozenset(validator.COMMON_SKILLS + validator.DEV_SKILLS), validator.UNDISTRIBUTED_SKILLS)
+        # ST-000310 ships every common and Developer skill except change-metadata (internal only, B5).
+        self.assertEqual(frozenset({"change-metadata"}), validator.UNDISTRIBUTED_SKILLS)
+        self.assertFalse((ROOT / validator.SKILL_TEMPLATES / "change-metadata").exists())
         self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
         inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]
         broken = [e for e in inventory if e["source"] != ".claude/skills/retro/SKILL.md"]
@@ -876,9 +879,9 @@ class DevSkillsTests(unittest.TestCase):
                     self.assertEqual(("skill", f".mt-agent-devkit/skills/{name}/SKILL.md"), (entry["renderer"], entry["destination"]))
                     self.assertEqual(wrappers.render(entry), (ROOT / entry["source"]).read_text(encoding="utf-8"))
         self.assertEqual([], validator.skill_reference_errors(ROOT))
-        # The skills are internal only until ST-000310 ships them.
-        self.assertLessEqual(frozenset(validator.DEV_SKILLS), validator.UNDISTRIBUTED_SKILLS)
-        self.assertFalse(list((ROOT / validator.SKILL_TEMPLATES).glob("dev-*")))
+        # ST-000310 ships them: each has a Phase 2 template with the same frontmatter.
+        self.assertFalse(frozenset(validator.DEV_SKILLS) & validator.UNDISTRIBUTED_SKILLS)
+        self.assertEqual(set(validator.DEV_SKILLS), {p.parent.name for p in (ROOT / validator.SKILL_TEMPLATES).glob("dev-*/SKILL_template.md")})
 
     def test_dev_core_repeats_the_point_of_use_load_map(self):
         core = (ROOT / ".mt-agent-devkit/skills/dev-core/SKILL.md").read_text(encoding="utf-8")
@@ -934,6 +937,95 @@ class DevSkillsTests(unittest.TestCase):
         self.assertTrue(any(".claude/skills/dev-core/SKILL.md" in f for f in found))
         self.assertTrue(any("read-routing.json" in f and "Story_Standard_Dev" in f for f in found))
         self.assertFalse(any("_template" in f or "**Previous:**" in f for f in found))
+
+
+class Phase2SkillTemplatesTests(unittest.TestCase):
+    """ST-000310: Phase 2 skill templates, Phase 2 generated blocks and the design section 9 target mapping."""
+    blocks = load("generate_common_blocks")
+    TEMPLATES = ".mt-agent-devkit/distribution/phase2/templates/"
+    fixture = CommonSkillsTests.fixture
+    edit = CommonSkillsTests.edit
+
+    def template(self, name):
+        return (ROOT / self.TEMPLATES / "skills" / name / "SKILL_template.md").read_text(encoding="utf-8")
+
+    def test_every_shipped_skill_has_a_template_except_change_metadata(self):
+        shipped = {p.parent.name for p in (ROOT / validator.SKILL_TEMPLATES).glob("*/SKILL_template.md")}
+        self.assertEqual(set(validator.COMMON_SKILLS + validator.DEV_SKILLS) - {"change-metadata"},
+                         shipped & set(validator.COMMON_SKILLS + validator.DEV_SKILLS))
+        self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
+        # The project-docs template omits the internal-only `_template` naming rule (design B5).
+        self.assertNotIn("_template", self.template("project-docs"))
+        for name in shipped:
+            self.assertNotIn("change-metadata", self.template(name), name)
+
+    def test_phase2_blocks_are_sourced_only_from_phase2_templates(self):
+        phase2 = [b for b in self.blocks.BLOCKS if b.layer == "phase2"]
+        internal = {(b.skill, b.part, b.target.removeprefix(".mt-agent-devkit/rules/")) for b in self.blocks.BLOCKS if b.layer == "internal"}
+        mirrored = {(b.skill, b.part, b.target.removeprefix(self.TEMPLATES + "rules/").replace("_template.md", ".md")) for b in phase2}
+        self.assertEqual(internal, mirrored)
+        for item in phase2:
+            self.assertTrue(item.target.startswith(self.TEMPLATES + "rules/"), item)
+        self.assertEqual([], self.blocks.findings())
+        # A Phase 2 part edit drifts only the Phase 2 targets; the internal copies never take it.
+        root = self.fixture()
+        skill = self.blocks.source("troubleshooting", "phase2")
+        self.edit(root, skill, "Do not resume the blocked task", "Resume the blocked task")
+        errors = self.blocks.findings(root)
+        self.assertEqual({e.split(":")[0] for e in errors},
+                         {self.TEMPLATES + "rules/Agent_Common_Read_On_Demand_template.md", self.TEMPLATES + "rules/Agent_Common_Troubleshooting_template.md"})
+        # A layer-neutral copy that drifts from its internal skill fails.
+        copy = self.blocks.source("retro", "phase2")
+        (root / copy).write_text((root / copy).read_text(encoding="utf-8") + "drift\n", encoding="utf-8")
+        self.assertIn(f"{copy}: differs from {self.blocks.source('retro', 'internal')}", self.blocks.findings(root))
+
+    def test_design_section_9_rows_have_their_text_in_the_named_skill(self):
+        rows = {  # design section 9 target section -> (skill, distinctive phrase)
+            "Bootstrap 1 read contract": ("dev-core", "This map is the read contract"),
+            "2 before starting": ("dev-implement", "Read every existing file the story modifies"),
+            "2 design first": ("dev-implement", "Design approved"),
+            "2 questions": ("raise-question", "do not begin implementation until every blocking question"),
+            "2 start": ("git-workflow", "branch_preflight.py create"),
+            "3 status": ("dev-core", "TL owns Testing"),
+            "4 development standard": ("clean-code", "docs/wiki/Development_Standards.md"),
+            "4 source naming": ("clean-code", "`utils`, `helpers`, `types`, `errors`, `interface`"),
+            "4 shared helper": ("clean-code", "Shared helper scope"),
+            "4 caller trace": ("clean-code", "Caller trace"),
+            "4 story files": ("dev-core", "{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md"),
+            "5 local-verify": ("pre-pr-gate", "Local_Verify.md"),
+            "5 check table": ("pre-pr-gate", "`{integration-test-command}`"),
+            "5 aggregate": ("pre-pr-gate", "Aggregate first"),
+            "5 short-circuit": ("pre-pr-gate", "Short-circuiting gates"),
+            "5 production build": ("pre-pr-gate", "Production build"),
+            "5 test note": ("pre-pr-gate", "`{test-command}` — PASS"),
+            "5 rename sweep": ("pre-pr-gate", 'grep -rn "<old-name>" docs/'),
+            "5 credential": ("credential-gate", "Never self-approve a skip"),
+            "5 spec first": ("dev-implement", "Spec first"),
+            "6 git workflow": ("git-workflow", "[ST-XXXXXX][FEATURE] Story title"),
+            "13 always-on": ("working-record", "Working record cap:"),
+            "On-Demand 7 blockers": ("raise-question", "## 4. Blockers"),
+            "10 consultation": ("raise-question", "Mid-implementation consultation needed"),
+            "11 live conflicts": ("raise-question", "the live instruction takes precedence"),
+            "8 document placement": ("project-docs", "Document_Index.md"),
+            "9 peer review": ("pr-review", "Stub/TODO re-check"),
+            "12 developer as reviewer": ("pr-review", "gh pr diff <number> --repo {github-org}/{repo-name}"),
+            "13 hotfix": ("dev-hotfix", "fix/ST-XXXXXX/short-description"),
+            "14 refine": ("dev-refine", "Step-positioning check"),
+            "15 comment CI paste": ("pr-review", "gh pr checks <PR-number>"),
+            "16 doc divergence": ("dev-verify", "## 1. Technical Doc Divergence"),
+            "17 endpoint": ("dev-verify", "## 2. Touched-Endpoint Verification"),
+            "18 sandbox": ("dev-verify", "docker compose"),
+        }
+        for row, (skill, phrase) in rows.items():
+            with self.subTest(row=row):
+                self.assertIn(phrase, self.template(skill))
+        # Pre-merge item 7 (Developer sets status:done) is dropped (N4).
+        self.assertNotIn("status:done", self.template("pre-pr-gate"))
+        # The Phase 2 Developer instructions carry the load map, not the old rules routing.
+        instructions = (ROOT / self.TEMPLATES / "instructions/developer_instructions_template.md").read_text(encoding="utf-8")
+        self.assertIn("## Load Map", instructions)
+        for gone in ("## Selected Common Routing", "Agent_Common_Bootstrap.md` in full", "Developer_Rules_", "change-metadata"):
+            self.assertNotIn(gone, instructions)
 
 
 class PoExecutionSettingTests(unittest.TestCase):

@@ -27,7 +27,8 @@ SOURCES = {
 }
 RULES = ".mt-agent-devkit/rules/"
 TEMPLATES = ".mt-agent-devkit/distribution/phase2/templates/rules/"
-COPIES = ("agent-security",)
+# Layer-neutral skills (ST-000310): the Phase 2 template is the internal skill, byte for byte.
+COPIES = ("agent-security", "shell-rules", "retro", "retro-contribution", "credential-gate")
 
 
 class Block(NamedTuple):
@@ -81,6 +82,12 @@ BLOCKS: tuple[Block, ...] = (
     row("troubleshooting", "protocol", "internal", RULES + "Agent_Common_Troubleshooting.md"),
     row("credential-gate", "gate", "internal", RULES + "Agent_Common_Credential_Gate.md"),
     row("handoff", "state", "internal", RULES + "Agent_Common_Stage_Transition.md"),
+)
+# Phase 2 (ST-000310): every internal common-skill row, sourced from the Phase 2 skill
+# templates into the Phase 2 rule templates. agent-security keeps its own rows above.
+BLOCKS += tuple(
+    row(item.skill, item.part, "phase2", TEMPLATES + item.target.removeprefix(RULES).replace(".md", "_template.md"))
+    for item in BLOCKS if item.layer == "internal" and item.skill != "agent-security"
 )
 
 PART = re.compile(r"^<!-- part: ([a-zA-Z0-9-]+) -->\n(.*?)^<!-- /part: \1 -->$", re.M | re.S)
