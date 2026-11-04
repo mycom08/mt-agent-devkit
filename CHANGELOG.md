@@ -24,7 +24,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ---
 
-## [0.1.56] - Unreleased
+## [0.1.56] - 2026-11-04
 
 ### Changes
 
