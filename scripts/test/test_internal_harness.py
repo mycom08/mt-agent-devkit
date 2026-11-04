@@ -913,30 +913,70 @@ class DevSkillsTests(unittest.TestCase):
         rows = json.loads((ROOT / "docs/reviews/ST-000264_Common_Ownership.json").read_text(encoding="utf-8"))["rows"]
         self.assertFalse([row for row in rows if row["source"] in self.RETIRED])
 
-    def test_retired_citation_validator_rejects_developer_files_internally_only(self):
+    def test_retired_citation_validator_rejects_developer_files_in_templates_and_bundle(self):
+        # ST-000311: the Developer files are retired in targets too, so the Phase 2 templates,
+        # every bundle asset and both registry layouts are in scope; history lines are not citations.
         self.assertEqual([], self.citations.findings(ROOT))
         phase2 = ".mt-agent-devkit/distribution/phase2"
         root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json", ".claude/skills/dev-core/SKILL.md",
-                            phase2 + "/templates/rules/Developer_Rules_Bootstrap_template.md")
-        self.assertEqual([], self.citations.findings(root))  # Target-layout alternatives and Phase 2 templates are out of scope.
-        core = root / ".mt-agent-devkit/rules/Agent_Common_Core.md"
-        core.write_text(core.read_text(encoding="utf-8") + "\nSee `Clean_Code_Rules.md` and Dev Bootstrap §5.\n"
-                        "**Previous:** 1.0 — split out of `Developer_Rules_Bootstrap.md`.\nLegacy `Story_Standard_Dev_template.md` stays frozen.\n", encoding="utf-8")
-        wrapper = root / ".claude/skills/dev-core/SKILL.md"
-        wrapper.write_text(wrapper.read_text(encoding="utf-8") + "Developer_Rules_Read_On_Demand §15\n", encoding="utf-8")
-        registry = root / ".mt-agent-devkit/contracts/read-routing.json"
-        data = json.loads(registry.read_text(encoding="utf-8"))
-        data["tasks"]["peer_review"]["reads"][0]["source"] = ".mt-agent-devkit/rules/Story_Standard_Dev.md"
-        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        template = root / phase2 / "templates/rules/Developer_Rules_Bootstrap_template.md"
-        template.write_text(template.read_text(encoding="utf-8") + "\nSee `Developer_Rules_Read_On_Demand.md` §10.\n", encoding="utf-8")
+                            phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/templates/skills/pre-pr-gate/SKILL_template.md",
+                            phase2 + "/bundle/assets/orchestrator_shared", phase2 + "/bundle/assets/read-routing.json",
+                            phase2 + "/build_bundle.py", phase2 + "/bundle/deployment.json")
+        self.assertEqual([], self.citations.findings(root))
+        history = "**Previous:** 1.0 — split out of `Developer_Rules_Bootstrap.md`.\n**Version:** 2.0 — `Clean_Code_Rules.md` retired.\nLegacy `Story_Standard_Dev_template.md` stays frozen.\n"
+        for relative, line in ((".mt-agent-devkit/rules/Agent_Common_Core.md", "See `Clean_Code_Rules.md` and Dev Bootstrap §5."),
+                               (".claude/skills/dev-core/SKILL.md", "Developer_Rules_Read_On_Demand §15"),
+                               (phase2 + "/templates/rules/Story_Standard_template.md", "See `Developer_Rules_Read_On_Demand.md` §10."),
+                               (phase2 + "/templates/skills/pre-pr-gate/SKILL_template.md", "Read `.mt-agent-devkit/rules/Story_Standard_Dev.md`."),
+                               (phase2 + "/bundle/assets/orchestrator_shared", "Developer On-Demand §9 applies.")):
+            path = root / relative
+            path.write_text(path.read_text(encoding="utf-8") + "\n" + line + "\n" + history, encoding="utf-8")
+        for relative in (".mt-agent-devkit/contracts/read-routing.json", phase2 + "/bundle/assets/read-routing.json"):
+            registry = root / relative
+            data = json.loads(registry.read_text(encoding="utf-8"))
+            data["tasks"]["peer_review"]["reads"][0]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"}}
+            registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
         found = self.citations.findings(root)
-        self.assertEqual(4, len(found), found)
-        self.assertTrue(any("Clean_Code_Rules.md" in f for f in found))
+        self.assertEqual(8, len(found), found)
+        for relative in (".mt-agent-devkit/rules/Agent_Common_Core.md", ".claude/skills/dev-core/SKILL.md", phase2 + "/templates/rules/Story_Standard_template.md",
+                         phase2 + "/templates/skills/pre-pr-gate/SKILL_template.md", phase2 + "/bundle/assets/orchestrator_shared",
+                         ".mt-agent-devkit/contracts/read-routing.json", phase2 + "/bundle/assets/read-routing.json"):
+            self.assertTrue(any(relative + ":" in f for f in found), relative)
         self.assertTrue(any("Dev Bootstrap" in f for f in found))
-        self.assertTrue(any(".claude/skills/dev-core/SKILL.md" in f for f in found))
-        self.assertTrue(any("read-routing.json" in f and "Story_Standard_Dev" in f for f in found))
-        self.assertFalse(any("_template" in f or "**Previous:**" in f for f in found))
+        # The retirement ledgers name the files on purpose; history lines and legacy `_template` names never count.
+        self.assertFalse(any("build_bundle.py" in f or "deployment.json" in f or "_template" in f.split(": ")[-1] for f in found))
+
+    def test_bundle_retires_developer_templates_behind_their_own_survivors(self):
+        # ST-000311: the ST-000290 mechanism, with per-file survivors present in every plan.
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+        live = {f["id"] for f in manifest["files"] if f["phase"] != "retirement"}
+        records = {r["path"]: r for r in manifest["legacy_support"]["retirements"]}
+        retiring = {f["destination"]: f for f in manifest["files"] if f["phase"] == "retirement"}
+        instructions = "instructions/developer_instructions.md"
+        for retired in self.RETIRED:
+            name = Path(retired).name
+            with self.subTest(file=name):
+                self.assertFalse((ROOT / ".mt-agent-devkit/distribution/phase2/templates/rules" / name.replace(".md", "_template.md")).exists())
+                self.assertFalse(any(name.removesuffix(".md") in a["id"] or name.removesuffix(".md") in a["path"] for a in manifest["assets"]), name)
+                shared = retiring[retired]
+                self.assertEqual((shared["owner"], shared["ownership"], shared["providers"], shared["modes"], shared["required"]),
+                                 ("shared", "managed", list(validator.PROVIDERS), ["github", "strict"], False))
+                survivors = records[retired]["after_verified_ids"]
+                self.assertTrue(survivors)
+                self.assertLessEqual(set(survivors), live)  # Shared IDs, no provider suffix: present in every plan.
+                self.assertTrue(all(s.startswith("skills/") for s in survivors if s != instructions))
+                self.assertEqual(instructions in survivors, name != "Clean_Code_Rules.md")
+                for provider in ("claude", "antigravity"):
+                    legacy = f".{provider}/agents/rules/{name}"
+                    self.assertEqual(sorted(f["modes"][0] for f in manifest["files"] if f["destination"] == legacy and f["phase"] == "retirement"), ["github", "strict"])
+                    self.assertEqual(records[legacy]["after_verified_ids"], survivors)
+        self.assertEqual(records[".mt-agent-devkit/rules/Clean_Code_Rules.md"]["after_verified_ids"], ["skills/clean-code"])
+        # Each file's survivors are the skills that own its rules (ownership map section 11).
+        self.assertIn("skills/dev-hotfix", records[".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md"]["after_verified_ids"])
+        self.assertIn("skills/pre-pr-gate", records[".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md"]["after_verified_ids"])
+        self.assertIn("skills/pr-review", records[".mt-agent-devkit/rules/Story_Standard_Dev.md"]["after_verified_ids"])
+        # No migration-inventory change: its only Developer retirements are the internal ST-000309 ones.
+        self.assertEqual({"ST-000309"}, {item["retired_by"] for item in self.inventory()["retired"] if Path(item["source"]).name in {Path(r).name for r in self.RETIRED}})
 
 
 class Phase2SkillTemplatesTests(unittest.TestCase):
@@ -1031,16 +1071,12 @@ class Phase2SkillTemplatesTests(unittest.TestCase):
 class Phase2OtherRolesPointerTests(unittest.TestCase):
     """ST-000312: Phase 2 TL, QA, UI/UX, BA and PO templates point to the common skill templates."""
     TEMPLATES = ROOT / ".mt-agent-devkit/distribution/phase2/templates"
-    # Retired with the old Developer templates in ST-000311; they keep their citations until then.
-    LEGACY = ("Developer_Rules_Bootstrap_template.md", "Developer_Rules_Read_On_Demand_template.md",
-              "Story_Standard_Dev_template.md", "Clean_Code_Rules_template.md", "Sync_Devkit_Workflow_template.md")
-
     def text(self, relative):
         return (self.TEMPLATES / relative).read_text(encoding="utf-8")
 
-    def test_only_legacy_templates_cite_clean_code_rules(self):
-        citing = sorted(p.name for p in self.TEMPLATES.rglob("*.md") if "Clean_Code_Rules.md" in p.read_text(encoding="utf-8"))
-        self.assertEqual([], [name for name in citing if name not in self.LEGACY])
+    def test_no_template_cites_clean_code_rules(self):
+        # ST-000311 deleted the old Developer templates, the last ones citing it, and cleaned the Sync lists.
+        self.assertEqual([], sorted(p.name for p in self.TEMPLATES.rglob("*.md") if "Clean_Code_Rules.md" in p.read_text(encoding="utf-8")))
         self.assertIn(".mt-agent-devkit/skills/clean-code/SKILL.md", self.text("rules/Technical_Lead_Rules_Bootstrap_template.md"))
 
     def test_implementer_gates_and_procedures_point_to_skills(self):

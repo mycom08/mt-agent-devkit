@@ -217,48 +217,6 @@
         ],
         ".mt-agent-devkit/rules/Agent_Common_Working_Record.md": [
           ".mt-agent-devkit/skills/working-record/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §7": [
-          ".mt-agent-devkit/skills/raise-question/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §8": [
-          ".mt-agent-devkit/skills/project-docs/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §9": [
-          ".mt-agent-devkit/skills/pr-review/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §10": [
-          ".mt-agent-devkit/skills/raise-question/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §11": [
-          ".mt-agent-devkit/skills/raise-question/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §12": [
-          ".mt-agent-devkit/skills/pr-review/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §13": [
-          ".mt-agent-devkit/skills/dev-hotfix/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §14": [
-          ".mt-agent-devkit/skills/dev-refine/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §15": [
-          ".mt-agent-devkit/skills/comment/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §16": [
-          ".mt-agent-devkit/skills/dev-verify/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §17": [
-          ".mt-agent-devkit/skills/dev-verify/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md §18": [
-          ".mt-agent-devkit/skills/dev-verify/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md": [
-          ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md"
-        ],
-        ".mt-agent-devkit/rules/Clean_Code_Rules.md": [
-          ".mt-agent-devkit/skills/clean-code/SKILL.md"
         ]
       }
     }
@@ -659,16 +617,7 @@
           "reason": "peer review procedure (pr-review)",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "9"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "review",
@@ -679,16 +628,7 @@
           "reason": "peer review procedure (pr-review)",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "12"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1186,28 +1126,6 @@
           "after": [
             "common"
           ]
-        },
-        {
-          "id": "trigger_story_comment",
-          "source": ".mt-agent-devkit/skills/comment/SKILL.md",
-          "coverage": {
-            "kind": "full"
-          },
-          "reason": "trigger story comment Dev-only notes (target layout; internally the comment skill only)",
-          "after": [
-            "trigger_story_comment_standard"
-          ],
-          "layouts": {
-            "target": {
-              "enabled": true,
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "15"
-              }
-            }
-          },
-          "enabled": false
         }
       ]
     },
@@ -1226,16 +1144,7 @@
           ],
           "roles": [
             "Developer"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "8"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "trigger_document_paths",
@@ -1266,15 +1175,6 @@
           "after": [
             "common"
           ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "10"
-              }
-            }
-          },
           "roles": [
             "Developer"
           ]
@@ -1312,15 +1212,6 @@
           "after": [
             "common"
           ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "11"
-              }
-            }
-          },
           "roles": [
             "Developer"
           ]
@@ -1376,7 +1267,7 @@
           ],
           "layouts": {
             "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Bootstrap.md",
+              "source": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
               "coverage": {
                 "kind": "full"
               }
@@ -1551,16 +1442,7 @@
           "reason": "trigger report blocker (raise-question)",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "7"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1578,16 +1460,7 @@
           "reason": "trigger technical doc divergence (dev-verify)",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "16"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1605,16 +1478,7 @@
           "reason": "trigger endpoint change",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "17"
-              }
-            }
-          }
+          ]
         }
       ],
       "layouts": [
@@ -1635,16 +1499,7 @@
           "reason": "trigger behavioral verification",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "18"
-              }
-            }
-          }
+          ]
         }
       ],
       "layouts": [
@@ -1728,15 +1583,7 @@
           "reason": "Clean Code or refactor story before edits (clean-code)",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Clean_Code_Rules.md",
-              "coverage": {
-                "kind": "full"
-              }
-            }
-          }
+          ]
         }
       ]
     },

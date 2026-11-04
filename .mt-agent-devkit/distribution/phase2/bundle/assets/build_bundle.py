@@ -18,11 +18,28 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
                  "git-workflow", "pre-pr-gate", "pr-review", "clean-code")
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
 SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS
-# Rules files whose templates left the bundle (ST-000290). Their installed copies
-# retire behind survivors present in every plan: the shared canonical PO skill
-# IDs (never a provider-suffixed operation ID) and the slim PO instructions.
-RETIRED_RULES = ("Product_Owner_Rules_Bootstrap.md", "Product_Owner_Rules_Read_On_Demand.md", "Story_Standard_PO.md")
-RETIRED_SURVIVORS = tuple("skills/" + name for name in PO_SKILLS) + ("instructions/product_owner_instructions.md",)
+# Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer).
+# Each installed copy retires behind its own survivors, present in every plan: the
+# shared canonical skill IDs that own its rules (never a provider-suffixed
+# operation ID) plus the slim role instructions that load them.
+def survivors(skills, instructions=None):
+    return tuple("skills/" + name for name in skills) + ((instructions,) if instructions else ())
+
+
+PO_SURVIVORS = survivors(PO_SKILLS, "instructions/product_owner_instructions.md")
+DEV_INSTRUCTIONS = "instructions/developer_instructions.md"
+RETIRED_SURVIVORS = {
+    "Product_Owner_Rules_Bootstrap.md": PO_SURVIVORS,
+    "Product_Owner_Rules_Read_On_Demand.md": PO_SURVIVORS,
+    "Story_Standard_PO.md": PO_SURVIVORS,
+    "Developer_Rules_Bootstrap.md": survivors(("dev-core", "dev-implement", "dev-deliver", "raise-question", "clean-code", "pre-pr-gate",
+                                               "credential-gate", "dev-verify", "git-workflow", "working-record"), DEV_INSTRUCTIONS),
+    "Developer_Rules_Read_On_Demand.md": survivors(("raise-question", "project-docs", "pr-review", "dev-hotfix", "dev-refine", "comment",
+                                                    "dev-verify"), DEV_INSTRUCTIONS),
+    "Story_Standard_Dev.md": survivors(("dev-core", "dev-implement", "dev-hotfix", "comment", "pre-pr-gate", "pr-review"), DEV_INSTRUCTIONS),
+    "Clean_Code_Rules.md": survivors(("clean-code",)),
+}
+RETIRED_RULES = tuple(RETIRED_SURVIVORS)
 # Defaults written once into a target's project-owned settings file.
 PROJECT_SETTINGS_DEFAULTS = {"po_execution": "subagent"}
 
@@ -264,16 +281,16 @@ def build(root, destination):
     # Retired rules have no surviving shared entry to derive legacy retirements
     # from, so every installed variant is listed explicitly: the shared layout
     # copy (receipt-based targets) and each legacy provider/mode layout (0.1.48-0.1.50).
-    for name in RETIRED_RULES:
+    for name, kept in RETIRED_SURVIVORS.items():
         identifier = "retire/shared/rules/" + name
         entry(identifier, [], ".mt-agent-devkit/rules/" + name, phase="retirement", required=False)
-        retirements.append({"logical_id": identifier, "path": ".mt-agent-devkit/rules/" + name, "after_verified_ids": list(RETIRED_SURVIVORS)})
+        retirements.append({"logical_id": identifier, "path": ".mt-agent-devkit/rules/" + name, "after_verified_ids": list(kept)})
         for provider in ("claude", "antigravity"):
             for mode in ("github", "strict"):
                 identifier = "retire/" + provider + "/repo/" + mode + "/retired/rules/" + name
                 legacy = "." + provider + "/agents/rules/" + name
                 entry(identifier, [], legacy, owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement", required=False)
-                retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": list(RETIRED_SURVIVORS)})
+                retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": list(kept)})
     manifest = {"schema_version": 1, "layout_version": 2, "minimum_python": "3.10", "profiles": ["repo", "project_root"], "assets": assets, "files": files, "legacy_support": {"versions": ["0.1.48", "0.1.49", "0.1.50"], "providers": ["claude", "antigravity"], "modes": ["github", "strict"], "retirements": retirements}}
     (destination / "deployment.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest

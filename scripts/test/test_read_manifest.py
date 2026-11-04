@@ -459,37 +459,37 @@ class DeveloperSkillRoutingTests(unittest.TestCase):
         reads=[x['id'] for x in self.build(triggers=['pre_pr'])['reads']]
         self.assertLess(reads.index('trigger_pre_pr'),reads.index('trigger_pre_pr_gate'))
 
-    def test_developer_target_overrides_route_the_old_target_sources_to_shipped_skills(self):
-        """ST-000310: rows keep their target alternatives; target role_sources map each to a shipped skill."""
-        dev_on_demand='.mt-agent-devkit/rules/Developer_Rules_Read_On_Demand.md'
-        expected={('peer_review','review_checklist'):(dev_on_demand,'9','pr-review'),('peer_review','review'):(dev_on_demand,'12','pr-review'),
-                  ('story_comment','trigger_story_comment'):(dev_on_demand,'15','comment'),('document_update','trigger_document_update'):(dev_on_demand,'8','project-docs'),
-                  ('consultation','trigger_consultation'):(dev_on_demand,'10','raise-question'),('live_conflict','trigger_live_conflict'):(dev_on_demand,'11','raise-question'),
-                  ('pre_pr','trigger_pre_pr'):('.mt-agent-devkit/rules/Developer_Rules_Bootstrap.md',None,'pre-pr-gate'),('report_blocker','trigger_report_blocker'):(dev_on_demand,'7','raise-question'),
-                  ('technical_doc_divergence','trigger_technical_doc_divergence'):(dev_on_demand,'16','dev-verify'),('endpoint_change','trigger_endpoint_change'):(dev_on_demand,'17','dev-verify'),
-                  ('behavioral_verification','trigger_behavioral_verification'):(dev_on_demand,'18','dev-verify'),
-                  ('clean_code_change','trigger_clean_code_change'):('.mt-agent-devkit/rules/Clean_Code_Rules.md',None,'clean-code')}
+    def test_developer_target_rows_read_the_shipped_skills_directly(self):
+        """ST-000311: the old Developer target sources and their role_sources keys are gone; each row reads its skill."""
+        expected={('peer_review','review_checklist'):'pr-review',('peer_review','review'):'pr-review',('document_update','trigger_document_update'):'project-docs',
+                  ('consultation','trigger_consultation'):'raise-question',('live_conflict','trigger_live_conflict'):'raise-question',
+                  ('pre_pr','trigger_pre_pr'):'pre-pr-gate',('report_blocker','trigger_report_blocker'):'raise-question',
+                  ('technical_doc_divergence','trigger_technical_doc_divergence'):'dev-verify',('endpoint_change','trigger_endpoint_change'):'dev-verify',
+                  ('behavioral_verification','trigger_behavioral_verification'):'dev-verify',('clean_code_change','trigger_clean_code_change'):'clean-code'}
         routes={**REGISTRY['tasks'],**REGISTRY['triggers']}
         sources=REGISTRY['role_sources']['Developer']['target']
         templates=ROOT/'.mt-agent-devkit/distribution/phase2/templates/skills'
-        for (route,entry_id),(source,section,skill) in expected.items():
+        for (route,entry_id),skill in expected.items():
             with self.subTest(entry=entry_id):
                 definition=next(x for x in routes[route]['reads'] if x['id']==entry_id)
                 target={**definition,**definition.get('layouts',{}).get('target',{})}
                 self.assertIs(target.get('enabled',True),True)
-                self.assertEqual((target['source'],target['coverage'].get('section')),(source,section))
-                self.assertEqual(sources[source+(' §'+section if section else '')],[SKILL(skill)])
-        # The task skills ship now, so their rows read the skill in targets too; pre_pr reads pre-pr-gate once.
-        # ST-000312: the shared TL/Dev source_review row reads clean-code in both layouts.
+                self.assertEqual((target['source'],target['coverage']),(SKILL(skill),{'kind':'full'}))
+        # Only pre_pr keeps a target alternative: change-metadata stays internal, so targets read pre-pr-gate once.
+        self.assertEqual([e for r,e in expected if 'target' in next(x for x in routes[r]['reads'] if x['id']==e).get('layouts',{})],['trigger_pre_pr'])
+        self.assertIs(next(x for x in routes['pre_pr']['reads'] if x['id']=='trigger_pre_pr_gate')['layouts']['target']['enabled'],False)
+        # The Dev-only comment notes row is gone; story_comment reads the comment skill in both layouts.
+        self.assertEqual([x['id'] for x in routes['story_comment']['reads']],['trigger_story_comment_standard'])
+        self.assertFalse([key for key in sources if key.split(' §')[0].endswith(DEV_RETIRED)])
+        self.assertNotIn('Developer_Rules',json.dumps(REGISTRY)); self.assertNotIn('Clean_Code_Rules',json.dumps(REGISTRY))
         for entry_id in ('dev_implementation','dev_fix','trigger_clean_code'):
             self.assertNotIn('layouts',next(x for r in routes.values() for x in r['reads'] if x['id']==entry_id))
-        self.assertIs(next(x for x in routes['pre_pr']['reads'] if x['id']=='trigger_pre_pr_gate')['layouts']['target']['enabled'],False)
         self.assertEqual(REGISTRY['common']['Developer']['target'],REGISTRY['common']['Developer']['internal'])
         self.assertEqual(REGISTRY['bootstrap']['Developer']['target'],SKILL('dev-core'))
-        for key,value in REGISTRY['role_sources']['Developer']['internal'].items(): self.assertEqual(sources[key],value,key)
+        self.assertEqual(sources,REGISTRY['role_sources']['Developer']['internal'])
         # Every target skill the Developer can read ships as a Phase 2 template; change-metadata never does.
         shipped={p.parent.name for p in templates.glob('*/SKILL_template.md')}
-        for path in [*REGISTRY['common']['Developer']['target'],REGISTRY['bootstrap']['Developer']['target'],*[s for skills in sources.values() for s in skills]]:
+        for path in [*REGISTRY['common']['Developer']['target'],REGISTRY['bootstrap']['Developer']['target'],*[s for skills in sources.values() for s in skills],*map(SKILL,expected.values())]:
             self.assertIn(path.split('/')[2],shipped,path)
         self.assertNotIn('change-metadata',shipped)
 

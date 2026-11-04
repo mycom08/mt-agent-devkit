@@ -189,7 +189,7 @@ class BundleTests(unittest.TestCase):
             target = Path(folder) / "target"
             target.mkdir()
             inputs = {"AGENTS.md": "# Project\n", ".mt-agent-devkit/context/Project_Priming.md": "# Context\n", ".mt-agent-devkit/context/Document_Index.md": "# Index\n"}
-            custom = {".mt-agent-devkit/instructions/developer_instructions.md": "# Customized developer\nKeep project choices.\n", ".mt-agent-devkit/rules/Clean_Code_Rules.md": "# Customized rules\nKeep project style.\n"}
+            custom = {".mt-agent-devkit/instructions/developer_instructions.md": "# Customized developer\nKeep project choices.\n", ".mt-agent-devkit/rules/Logging_Standard.md": "# Customized rules\nKeep project style.\n"}
             lifecycle.local(target, ROOT, "codex", "github", "repo", {**inputs, **custom}, apply=True)
             lifecycle.local(target, ROOT, "codex", "github", "repo", inputs, apply=True)
             for path, content in custom.items(): self.assertEqual((target/path).read_text(), content)
