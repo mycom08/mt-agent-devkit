@@ -15,10 +15,10 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000304] Section 9 and the Commenter gate point to the comment skill. [ST-000312] Implementer pre-PR checks and the Developer CI-paste note point to pre-pr-gate and pr-review.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_TL_template.md": "[ST-000304] Section 9 keeps only TL inline-review and CI-paste notes. [ST-000312] Review comments and the CI paste point to pr-review.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000304] Section 9 keeps only the per-AC report and cap exemption.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_Dev_template.md": "[ST-000304] Section 9 points to the comment skill and Dev notes.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_Dev_template.md": "[ST-000304] Section 9 points to the comment skill and Dev notes. [ST-000311] Removed; installed copies retire behind the dev-* and common skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_UIUX_template.md": "[ST-000304] Section 9 points to the comment skill.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000304] Section 15 reduced to Dev-only comment notes.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000304] Comment routing row loads the comment skill first.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000304] Section 15 reduced to Dev-only comment notes. [ST-000311] Removed; installed copies retire behind the dev-* and common skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000304] Comment routing row loads the comment skill first. [ST-000311] Removed; installed copies retire behind the dev-* and common skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Business_Analyst_Rules_template.md": "[ST-000304] Comment rule names the comment skill. [ST-000312] Pre-PR gate, comment threading, handoff and troubleshooting point to the common skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Strict_Mode_Story_Guide_template.md": "[ST-000304] Comment entries follow the comment skill instead of a restated standard.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000304] Refinement question comment uses the comment skill format; PO Skills example lists comment. [ST-000303] Inline PO skills load at their point of use.",
@@ -70,7 +70,12 @@
       ".mt-agent-devkit/distribution/phase2/templates/skills/po-answer-questions/SKILL_template.md": "[ST-000312] AC body sync rule points to comment.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/po-plan-docs/SKILL_template.md": "[ST-000312] Placement and naming come from project-docs.",
       ".mt-agent-devkit/distribution/phase2/templates/context/Project_Priming_template.md": "[ST-000312] Section 6 points to Document_Index, the single document path list.",
-      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000312] Single document path list; absorbs the Priming section 6 paths."
+      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000312] Single document path list; absorbs the Priming section 6 paths.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Clean_Code_Rules_template.md": "[ST-000311] Removed; installed copies retire behind the clean-code skill.",
+      ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000311] Retired Developer files leave the rules lists; porting step names their skills.",
+      ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000311] Porting step names the skills replacing the retired Developer files.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000311] Prototype commit note points to git-workflow, not the retired Developer rules.",
+      ".mt-agent-devkit/contracts/read-routing.json": "[ST-000311] Target Developer rows read their skills directly; retired file sources and keys removed."
     },
     "deployment": {
       "schema_version": 1,

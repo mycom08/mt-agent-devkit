@@ -120,16 +120,16 @@ class LegacyContracts(unittest.TestCase):
                                 settings_path.write_text(json.dumps(settings), encoding="utf-8")
                                 retained_native = {p: p.read_bytes() for p in (
                                     settings_path, agents / "scripts/check_devkit_version.sh", agents / "scripts/check_devkit_version.ps1")}
-                                # Every supported legacy release installed the three PO rules
-                                # files, rendered from its own frozen templates (ST-000290).
-                                legacy_po = []
+                                # Every supported legacy release installed the PO (ST-000290) and
+                                # Developer (ST-000311) rules files, rendered from its own frozen templates.
+                                legacy_rules = []
                                 for name in build_bundle.RETIRED_RULES:
                                     text = (frozen / ".claude/agents/templates/rules" / name.replace(".md", "_template.md")).read_text(encoding="utf-8-sig")
                                     for token, value in (("AGENT_DIR_PREFIX", "."+provider), ("ROOT_FILE", native), ("AGENT_CLI_NAME", "Claude Code" if provider == "claude" else "Antigravity")):
                                         text = text.replace("{{"+token+"}}", value)
                                     (agents / "rules").mkdir(exist_ok=True)
                                     (agents / "rules" / name).write_text(text, encoding="utf-8")
-                                    legacy_po.append(agents / "rules" / name)
+                                    legacy_rules.append(agents / "rules" / name)
                                 memory = agents / "memory/Developer_Memory.md"
                                 memory.parent.mkdir(); memory.write_bytes(b"durable personalized memory\n")
                                 counter = agents / "docs/story_counter.txt"
@@ -182,14 +182,14 @@ class LegacyContracts(unittest.TestCase):
                                 result = sync.release(target, "fixture/devkit", provider, mode, "repo", adaptations, resolutions, True, acquire, commit+" refs/tags/v0.1.51\n")
                                 self.assertEqual(result["status"], "verified")
                                 self.assertEqual(deployment.verify(target)["source"]["commit"], commit)
-                                # After the manual reviewed resolution no PO rule file remains
+                                # After the manual reviewed resolution no retired rule file remains
                                 # in either layout, and the replacing skills are installed.
-                                for path in legacy_po:
+                                for path in legacy_rules:
                                     self.assertFalse(path.exists(), path)
                                 for name in build_bundle.RETIRED_RULES:
                                     self.assertFalse((target / ".mt-agent-devkit/rules" / name).exists(), name)
                                     self.assertFalse(list(target.rglob(name)), name)
-                                for name in build_bundle.PO_SKILLS:
+                                for name in build_bundle.PO_SKILLS + build_bundle.DEV_SKILLS + ("clean-code", "pre-pr-gate"):
                                     self.assertTrue((target / ".mt-agent-devkit/skills" / name / "SKILL.md").is_file(), name)
                                     self.assertTrue((target / ("." + provider) / "skills" / name / "SKILL.md").is_file(), name)
                                 self.assertFalse(destination.exists())

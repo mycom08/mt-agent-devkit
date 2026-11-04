@@ -335,7 +335,23 @@ The ST-000308 `layouts.target` overrides in §7c are removed, so each row reads 
 
 ---
 
-**Document Version:** 1.4 — ST-000312 (A2-P2) adds §10, the Phase 2 pointers and target routing
+## 11. Target Retirement of the Developer Files (ST-000311)
+
+The Phase 2 templates `Developer_Rules_Bootstrap_template.md`, `Developer_Rules_Read_On_Demand_template.md`, `Story_Standard_Dev_template.md` and `Clean_Code_Rules_template.md` are deleted, with their bundle assets and their `ST-000264_Common_Ownership.json` rows. Installed copies retire through the ST-000290 mechanism: `build_bundle.py` `RETIRED_SURVIVORS` gives each file its own survivors, and the bundle lists a shared and a per-provider/mode legacy retirement entry (`required: false`) for each. `migration-inventory.json` is unchanged; its `retired` entries are the internal ones (§8).
+
+| Retired target file | Survivors (shared bundle IDs) |
+|---|---|
+| `Developer_Rules_Bootstrap.md` | `dev-core`, `dev-implement`, `dev-deliver`, `raise-question`, `clean-code`, `pre-pr-gate`, `credential-gate`, `dev-verify`, `git-workflow`, `working-record`, `instructions/developer_instructions.md` |
+| `Developer_Rules_Read_On_Demand.md` | `raise-question`, `project-docs`, `pr-review`, `dev-hotfix`, `dev-refine`, `comment`, `dev-verify`, `instructions/developer_instructions.md` |
+| `Story_Standard_Dev.md` | `dev-core`, `dev-implement`, `dev-hotfix`, `comment`, `pre-pr-gate`, `pr-review`, `instructions/developer_instructions.md` |
+| `Clean_Code_Rules.md` | `clean-code` |
+
+The survivors are the §9b owners of each file's sections (§8 for `Story_Standard_Dev.md`). **Routing:** the registry rows lose their old Developer `layouts.target` sources and the matching target `role_sources` keys, so each row reads its skill in both layouts. `trigger_pre_pr` keeps one target alternative, `pre-pr-gate`, because `change-metadata` is internal only; the Dev-only `trigger_story_comment` row is removed, since both layouts read the `comment` skill once. **Citations:** `validate_retired_citations.py` rejects the four names in the internal corpus, the Phase 2 templates and every bundle asset (both registry layouts included); `**Version:**`/`**Previous:**` lines and the retirement ledgers are exempt. The Sync template retired-file lists drop the four names, and `Apply_Retros_Workflow.md` sends Developer lessons to the owning skill template.
+
+---
+
+**Document Version:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files
+**Previous:** 1.4 — ST-000312 (A2-P2) adds §10, the Phase 2 pointers and target routing
 **Previous:** 1.3 — ST-000310 (C) adds §9, Phase 2 templates and target routing
 **Previous:** 1.2 — ST-000309 (B) adds §8, the Developer files
 **Previous:** 1.1 — ST-000308 (A2) adds §7, the no-duplicate-authority check

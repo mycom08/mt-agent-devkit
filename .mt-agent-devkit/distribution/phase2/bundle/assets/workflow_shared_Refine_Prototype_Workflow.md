@@ -81,7 +81,7 @@ Each iteration:
 2. **Apply the change directly** to the prototype repo's working tree, acting as UI/UX Designer. Follow `UI_UX_Designer_Rules.md §4`'s runnable-prototype standard (real routes/components, wired interaction against the mock backend — not a static render) for anything genuinely new; a small visual/copy tweak to an existing screen does not need to re-satisfy the full standard from scratch.
 3. **User reviews** — (re-)serve locally per Step 2 if needed, and wait for the user's feedback.
 4. **Commit directly to the prototype repo — no PR, no review gate.** This no-review exception applies only to the prototype repo, never to any production repo:
-   - Commit message: `prototype adaptation: <brief description>` — **never** the `Story:`/Conventional-Commits format used elsewhere in this project (`Developer_Rules_Bootstrap.md §6` / `UI_UX_Designer_Rules.md §6` do not apply to this repo's commits).
+   - Commit message: `prototype adaptation: <brief description>` — **never** the `Story:`/Conventional-Commits format used elsewhere in this project (the `git-workflow` skill, `.mt-agent-devkit/skills/git-workflow/SKILL.md`, and `UI_UX_Designer_Rules.md §6` do not apply to this repo's commits).
    - **GitHub mode:** push the commit live immediately after committing (`git push`).
    - **Strict mode:** commit locally only — do **not** push. Leave it for the user to decide whether and when to push.
 5. **Update the state file:** append an `Iterations` entry recording what was asked, what changed, the outcome (`kept` for now, `reverted`/`superseded by #N` if a later iteration undoes or replaces it — go back and correct the earlier entry's outcome when that happens), and the commit SHA. Increment `Iteration Count`.

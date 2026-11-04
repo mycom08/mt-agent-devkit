@@ -2,6 +2,7 @@
 import contextlib
 import io
 import json
+import re
 from pathlib import Path
 import sys
 import tempfile
@@ -96,7 +97,7 @@ class SyncTests(SyncFixture):
     def legacy(self, provider, version, text=None, bridge=False):
         agents = self.target / ("."+provider) / "agents"
         (agents/"rules").mkdir(parents=True, exist_ok=True)
-        (agents/"rules/Clean_Code_Rules.md").write_text(text or "# Rules\nRead ."+provider+"/agents/memory/Developer_Memory.md\n")
+        (agents/"rules/Logging_Standard.md").write_text(text or "# Rules\nRead ."+provider+"/agents/memory/Developer_Memory.md\n")
         (agents/"devkit_version.txt").write_text(version)
         native = "CLAUDE.md" if provider == "claude" else "AGENTS.md"
         (self.target/native).write_text("# Project customizations\n**Mode:** github\n")
@@ -138,14 +139,14 @@ class SyncTests(SyncFixture):
         self.legacy("antigravity", "0.1.50")
         report, candidates = migration.review_candidates(self.target, ["claude", "antigravity"])
         self.assertEqual(report["versions"], ["0.1.49", "0.1.50"])
-        rule = candidates[".mt-agent-devkit/rules/Clean_Code_Rules.md"]
+        rule = candidates[".mt-agent-devkit/rules/Logging_Standard.md"]
         self.assertTrue(rule["equivalent"])
         self.assertIsNone(rule["bytes"])
         self.assertEqual(len(rule["variants"]), 2)
         for engine in (ROOT/".mt-agent-devkit/distribution/phase2/migration.py", self.bundle/"assets/migration.py"):
             run = subprocess.run([sys.executable, str(engine), "--target", ".", "--manifest", str(self.bundle/"deployment.json"), "--provider", "claude", "--provider", "antigravity"], cwd=self.target, capture_output=True, encoding="utf-8")
             self.assertEqual(run.returncode, 0, run.stderr)
-            reported = json.loads(run.stdout)["candidates"][".mt-agent-devkit/rules/Clean_Code_Rules.md"]
+            reported = json.loads(run.stdout)["candidates"][".mt-agent-devkit/rules/Logging_Standard.md"]
             self.assertTrue(reported["equivalent"])
             self.assertIsNone(reported["proposed_text_for_review"])
             self.assertEqual(len(reported["variants"]), 2)
@@ -164,10 +165,10 @@ class SyncTests(SyncFixture):
         self.legacy("antigravity", "0.1.50", "# Rules\nKeep team B.\n")
         before = self.snapshot()
         _, candidates = migration.review_candidates(self.target, ["claude", "antigravity"])
-        rule = candidates[".mt-agent-devkit/rules/Clean_Code_Rules.md"]
+        rule = candidates[".mt-agent-devkit/rules/Logging_Standard.md"]
         self.assertFalse(rule["equivalent"])
         self.assertIsNone(rule["bytes"]); self.assertIsNone(rule["normalized_bytes"])
-        adaptations = {"CLAUDE.md": "# Project customizations\n**Mode:** github\n", "AGENTS.md":"# Project customizations\n**Mode:** github\n", ".mt-agent-devkit/context/Project_Priming.md":"# Context\n", ".mt-agent-devkit/context/Document_Index.md":"# Index\n", ".mt-agent-devkit/rules/Clean_Code_Rules.md":"# Rules\nKeep team A.\nKeep team B.\n"}
+        adaptations = {"CLAUDE.md": "# Project customizations\n**Mode:** github\n", "AGENTS.md":"# Project customizations\n**Mode:** github\n", ".mt-agent-devkit/context/Project_Priming.md":"# Context\n", ".mt-agent-devkit/context/Document_Index.md":"# Index\n", ".mt-agent-devkit/rules/Logging_Standard.md":"# Rules\nKeep team A.\nKeep team B.\n"}
         bound = deployment.inspect(self.target)["providers"]
         adaptations, resolutions = lifecycle.prepare(self.target, bound, "github", adaptations, manifest_path=self.bundle/"deployment.json")
         source = {"kind":"release", "tag":"v0.1.51", "commit":self.commit, "snapshot_version":None, "manifest_sha256":deployment.digest((self.bundle/"deployment.json").read_bytes())}
@@ -179,16 +180,16 @@ class SyncTests(SyncFixture):
         for provider in bound:
             stamp = "."+provider+"/agents/devkit_version.txt"
             resolutions[stamp] = {"before_sha256":deployment.digest(before[stamp]), "after_sha256":deployment.digest(b"0.1.51\n"), "reason":"Reviewed final compatibility stamp"}
-            path = "."+provider+"/agents/rules/Clean_Code_Rules.md"
+            path = "."+provider+"/agents/rules/Logging_Standard.md"
             resolutions[path] = {"before_sha256":deployment.digest(before[path]), "after_sha256":None, "reason":"Reviewed union of both custom rules"}
         plan = deployment.plan(self.target, self.bundle/"deployment.json", source, "github", "repo", bound, adaptations, resolutions)
         self.assertEqual(before, self.snapshot())
         deployment.apply(self.target, plan)
-        self.assertEqual((self.target/".mt-agent-devkit/rules/Clean_Code_Rules.md").read_text(), adaptations[".mt-agent-devkit/rules/Clean_Code_Rules.md"])
+        self.assertEqual((self.target/".mt-agent-devkit/rules/Logging_Standard.md").read_text(), adaptations[".mt-agent-devkit/rules/Logging_Standard.md"])
         for provider in bound:
             memory = "."+provider+"/agents/memory/Developer_Memory.md"
             self.assertEqual((self.target/memory).read_bytes(), before[memory])
-            self.assertFalse((self.target/("."+provider+"/agents/rules/Clean_Code_Rules.md")).exists())
+            self.assertFalse((self.target/("."+provider+"/agents/rules/Logging_Standard.md")).exists())
         self.assertTrue(list(self.target.glob(".*/agents/tmp/devkit-migrations/*/journal.json")))
         deployment.verify(self.target)
 
@@ -202,14 +203,14 @@ class SyncTests(SyncFixture):
             os.chdir(self.target)
             self.assertEqual(migration.review_candidates(".", ["claude"]), absolute)
             self.assertEqual(deployment.inspect("."), inspected)
-            adaptations = {"CLAUDE.md":"# Project customizations\n**Mode:** github\n", ".mt-agent-devkit/context/Project_Priming.md":"# Context\n", ".mt-agent-devkit/context/Document_Index.md":"# Index\n", ".mt-agent-devkit/rules/Clean_Code_Rules.md":"# Reviewed rule\n"}
+            adaptations = {"CLAUDE.md":"# Project customizations\n**Mode:** github\n", ".mt-agent-devkit/context/Project_Priming.md":"# Context\n", ".mt-agent-devkit/context/Document_Index.md":"# Index\n", ".mt-agent-devkit/rules/Logging_Standard.md":"# Reviewed rule\n"}
             source = {"kind":"release", "tag":"v0.1.51", "commit":self.commit, "snapshot_version":None, "manifest_sha256":deployment.digest((self.bundle/"deployment.json").read_bytes())}
             manifest = deployment.load(self.bundle/"deployment.json")
             asset = next(a for a in manifest["assets"] if a["id"] == "root_repo")
             after = deployment.managed_sections(adaptations["CLAUDE.md"], deployment.substituted((self.bundle/asset["path"]).read_text(encoding="utf-8"), {"MODE":"github"}))
             resolutions = {"CLAUDE.md":{"before_sha256":deployment.digest((self.target/"CLAUDE.md").read_bytes()), "after_sha256":deployment.digest(after.encode()), "reason":"Reviewed entrypoint"}, ".claude/agents/devkit_version.txt":{"before_sha256":deployment.digest(b"0.1.49"), "after_sha256":deployment.digest(b"0.1.51\n"), "reason":"Reviewed stamp"}}
             adaptations, resolutions = lifecycle.prepare(".", bound, "github", adaptations, resolutions, self.bundle/"deployment.json")
-            legacy_path = ".claude/agents/rules/Clean_Code_Rules.md"
+            legacy_path = ".claude/agents/rules/Logging_Standard.md"
             resolutions[legacy_path] = {"before_sha256":deployment.digest((self.target/legacy_path).read_bytes()), "after_sha256":None, "reason":"Reviewed shared rule transfer"}
             # Compare the exact serialized read-only plan, including fingerprints.
             a = deployment.plan(".", self.bundle/"deployment.json", source, "github", "repo", bound, adaptations, resolutions)
@@ -232,7 +233,7 @@ class SyncTests(SyncFixture):
     def test_documented_bootstrap_blocks_unreviewed_then_preserves_custom_legacy_rule(self):
         agents = self.target / ".claude/agents"
         (agents / "rules").mkdir(parents=True)
-        custom = agents / "rules/Clean_Code_Rules.md"
+        custom = agents / "rules/Logging_Standard.md"
         custom.write_text("# Custom rule\nKeep project decisions.\n")
         (agents / "devkit_version.txt").write_text("0.1.48")
         bound = {"claude": {"PROVIDER_ROOT": ".claude", "RUNTIME_ROOT": ".claude/agents", "COMMAND_ROOT": ".claude/agents"}}
@@ -255,7 +256,7 @@ class SyncTests(SyncFixture):
             self.assertEqual(bootstrap.main(), 2)
         self.assertFalse((self.target / sync.deployment.RECEIPT).exists())
         self.assertIn("Keep project decisions", custom.read_text())
-        adaptations[".mt-agent-devkit/rules/Clean_Code_Rules.md"] = custom.read_text()
+        adaptations[".mt-agent-devkit/rules/Logging_Standard.md"] = custom.read_text()
         inputs.write_text(json.dumps(adaptations))
         decisions = {custom.relative_to(self.target).as_posix(): {"before_sha256": sync.deployment.digest(custom.read_bytes()), "after_sha256": None, "reason": "Reviewed custom rule transfer"}, ".claude/agents/devkit_version.txt": {"before_sha256": sync.deployment.digest(b"0.1.48"), "after_sha256": sync.deployment.digest(b"0.1.51\n"), "reason": "Final compatibility stamp"}}
         resolutions.write_text(json.dumps(decisions))
@@ -266,11 +267,11 @@ class SyncTests(SyncFixture):
         with patch.object(sys, "argv", arguments), patch.object(bootstrap, "acquire_bundle", acquired), patch.object(bootstrap.subprocess, "run", quiet):
             self.assertEqual(bootstrap.main(), 0)
         self.assertFalse(custom.exists())
-        self.assertIn("Keep project decisions", (self.target/".mt-agent-devkit/rules/Clean_Code_Rules.md").read_text())
+        self.assertIn("Keep project decisions", (self.target/".mt-agent-devkit/rules/Logging_Standard.md").read_text())
 
 
-class PoRetirementTests(SyncFixture):
-    """ST-000290: receipt-based retirement of the old PO rules files."""
+class RulesRetirementTests(SyncFixture):
+    """Receipt-based retirement of the old PO (ST-000290) and Developer (ST-000311) rules files."""
     RETIRED = tuple(".mt-agent-devkit/rules/" + name for name in build_bundle.RETIRED_RULES)
 
     def setUp(self):
@@ -278,10 +279,12 @@ class PoRetirementTests(SyncFixture):
         self.metadata["0.1.52"] = self.metadata["0.1.51"]
 
     def installed_previous_release(self, provider, adapted=False, drop=None):
-        """Install, then record the PO rules files a pre-retirement release installed.
+        """Install, then record the rules files a pre-retirement release installed.
 
-        The receipt entries carry the same fields the engine writes on apply.
+        `adapted` is True (every file customised) or the paths customised. The
+        receipt entries carry the same fields the engine writes on apply.
         """
+        customised = set(self.RETIRED) if adapted is True else set(adapted or ())
         self.commit = "c" * 40
         adaptations = dict(self.adaptations)
         entrypoint = "CLAUDE.md" if provider == "claude" else "AGENTS.md"
@@ -291,10 +294,10 @@ class PoRetirementTests(SyncFixture):
         path = self.target / deployment.RECEIPT
         receipt = json.loads(path.read_text())
         for relative in self.RETIRED:
-            stock = ("# " + Path(relative).stem + "\nStock PO rules from the previous release.\n").encode()
-            content = stock + b"Project customisation.\n" if adapted else stock
+            stock = ("# " + Path(relative).stem + "\nStock rules from the previous release.\n").encode()
+            content = stock + b"Project customisation.\n" if relative in customised else stock
             (self.target / relative).write_bytes(content)
-            record = {"id": "rules/" + Path(relative).name, "path": relative, "rendered_sha256": deployment.digest(content), "ownership": "managed", "stock_sha256": deployment.digest(stock), "adapted": adapted}
+            record = {"id": "rules/" + Path(relative).name, "path": relative, "rendered_sha256": deployment.digest(content), "ownership": "managed", "stock_sha256": deployment.digest(stock), "adapted": relative in customised}
             for field in drop or ():
                 record.pop(field)
             receipt["managed_files"].append(record)
@@ -306,7 +309,7 @@ class PoRetirementTests(SyncFixture):
         self.commit = "e" * 40
         return sync.release(self.target, "fixture/devkit", provider, "github", "repo", {}, resolutions, apply=True, acquire=self.acquire, refs=refs)
 
-    def test_stock_receipt_target_retires_po_rules_without_manual_resolution(self):
+    def test_stock_receipt_target_retires_rules_without_manual_resolution(self):
         for provider in ("codex", "claude"):
             with self.subTest(provider=provider):
                 self.target = self.root / ("stock-" + provider)
@@ -322,10 +325,11 @@ class PoRetirementTests(SyncFixture):
                     self.assertIn("generated retirement: " + relative + " (stock retirement in 0.1.52)", messages.getvalue())
                 receipt = deployment.verify(self.target)
                 self.assertFalse(set(self.RETIRED) & {record["path"] for record in receipt["managed_files"]})
-                for name in build_bundle.PO_SKILLS:
+                for name in build_bundle.PO_SKILLS + build_bundle.DEV_SKILLS + ("clean-code", "pre-pr-gate", "raise-question"):
                     self.assertTrue((self.target / (".mt-agent-devkit/skills/" + name + "/SKILL.md")).is_file(), name)
                     self.assertTrue((self.target / ("." + provider + "/skills/" + name + "/SKILL.md")).is_file(), name)
-                self.assertTrue((self.target / ".mt-agent-devkit/instructions/product_owner_instructions.md").is_file())
+                for role in ("product_owner", "developer"):
+                    self.assertTrue((self.target / (".mt-agent-devkit/instructions/" + role + "_instructions.md")).is_file(), role)
 
     def test_older_target_without_comment_skill_installs_it(self):
         # ST-000304: a target installed before the shared comment skill existed gains it cleanly on sync.
@@ -361,14 +365,33 @@ class PoRetirementTests(SyncFixture):
     def test_customised_retired_file_raises_porting_conflict_until_resolved(self):
         self.installed_previous_release("codex", adapted=True)
         before = self.snapshot()
-        with self.assertRaisesRegex(deployment.Conflict, r"^retired file \.mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap\.md is customised; port the customization into the replacing skill, then resolve$"):
+        with self.assertRaisesRegex(deployment.Conflict, r"^retired file \.mt-agent-devkit/rules/Clean_Code_Rules\.md is customised; port the customization into the replacing skill, then resolve$"):
             self.next_release("codex")
         self.assertEqual(self.snapshot(), before)
         # After porting, an exact reviewed resolution per path completes the retirement.
-        resolutions = {relative: {"before_sha256": deployment.digest((self.target / relative).read_bytes()), "after_sha256": None, "reason": "Customisation ported into po-* skills"} for relative in self.RETIRED}
+        resolutions = {relative: {"before_sha256": deployment.digest((self.target / relative).read_bytes()), "after_sha256": None, "reason": "Customisation ported into the replacing skills"} for relative in self.RETIRED}
         self.assertEqual(self.next_release("codex", resolutions)["status"], "verified")
         for relative in self.RETIRED:
             self.assertFalse((self.target / relative).exists(), relative)
+
+    def test_each_customised_developer_file_raises_its_own_porting_conflict(self):
+        # ST-000311: one customised Developer file stops sync by name; the stock rest would retire alone.
+        for name in ("Developer_Rules_Bootstrap.md", "Developer_Rules_Read_On_Demand.md", "Story_Standard_Dev.md", "Clean_Code_Rules.md"):
+            relative = ".mt-agent-devkit/rules/" + name
+            with self.subTest(file=name):
+                self.assertIn(relative, self.RETIRED)
+                self.target = self.root / ("custom-" + name.removesuffix(".md"))
+                self.target.mkdir()
+                self.adaptations = {"AGENTS.md": "# Fixture\n**Mode:** github\n", ".mt-agent-devkit/context/Project_Priming.md": "# Actual project context\n", ".mt-agent-devkit/context/Document_Index.md": "# Actual index\n"}
+                self.installed_previous_release("codex", adapted={relative})
+                before = self.snapshot()
+                with self.assertRaisesRegex(deployment.Conflict, "^retired file " + re.escape(relative) + " is customised; port the customization into the replacing skill, then resolve$"):
+                    self.next_release("codex")
+                self.assertEqual(self.snapshot(), before)
+                resolution = {relative: {"before_sha256": deployment.digest((self.target / relative).read_bytes()), "after_sha256": None, "reason": "Customisation ported into the replacing skill"}}
+                with contextlib.redirect_stderr(io.StringIO()):
+                    self.assertEqual(self.next_release("codex", resolution)["status"], "verified")
+                self.assertFalse([path for path in self.RETIRED if (self.target / path).exists()])
 
     def test_unknown_or_divergent_baseline_stays_a_conflict(self):
         cases = {"adapted missing": {"drop": ("adapted",)}, "stock hash missing": {"drop": ("stock_sha256",)}, "edited after install": {}}

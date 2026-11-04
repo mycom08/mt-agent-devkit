@@ -476,9 +476,9 @@ class SkillInstallTests(unittest.TestCase):
                         for other in set(d.PROVIDERS) - {provider}:
                             self.assertFalse((target / ("." + other + "/skills/" + name)).exists(), other + "/" + name)
                     self.assertFalse((target / ".mt-agent-devkit/skills/change-metadata").exists())
-                    # The old Developer rules stay installed, unused, until ST-000311 retires them.
+                    # ST-000311: the old Developer rules no longer install.
                     for name in ("Developer_Rules_Bootstrap.md", "Developer_Rules_Read_On_Demand.md", "Story_Standard_Dev.md", "Clean_Code_Rules.md"):
-                        self.assertTrue((target / ".mt-agent-devkit/rules" / name).is_file(), name)
+                        self.assertFalse((target / ".mt-agent-devkit/rules" / name).exists(), name)
                     instructions = (target / ".mt-agent-devkit/instructions/developer_instructions.md").read_text(encoding="utf-8")
                     self.assertIn("## Load Map", instructions)
                     self.assertNotIn("Developer_Rules_", instructions)

@@ -11,7 +11,7 @@ This is a **devkit-internal maintainer workflow** — it is never deployed to ta
 ## Prerequisites
 
 - `gh` must be authenticated (`gh auth status`). If not, stop and tell the user to authenticate — this workflow reads and closes GitHub Issues.
-- All edits target template files under `.claude/agents/templates/` only. Devkit-internal workflow files (`.mt-agent-devkit/workflows/commands/`) may be improved too, but they do **not** count toward `changes.json`.
+- All edits target template files under `.claude/agents/templates/` only, except Developer lessons: the Developer rules templates are retired, so those lessons go to the owning skill template under `.mt-agent-devkit/distribution/phase2/templates/skills/<skill>/SKILL_template.md` (ST-000311). Devkit-internal workflow files (`.mt-agent-devkit/workflows/commands/`) may be improved too, but they do **not** count toward `changes.json`.
 
 ---
 
@@ -55,7 +55,7 @@ Using the routing in `community-retros/README.md`:
 | `[context]` | `templates/context/Project_Priming_template.md` or a memory template |
 | `[instruction]` | `templates/instructions/{role}_instructions_template.md` |
 | `[workflow]` | a workflow template under `templates/shared/workflows/` or `templates/{mode}/workflows/`, or `templates/rules/Agent_Common_Bootstrap_template.md` / `templates/rules/Agent_Common_Read_On_Demand_template.md` |
-| `[failure]` | a rules template (e.g. `templates/rules/Developer_Rules_Bootstrap_template.md`) or an instruction template |
+| `[failure]` | a rules template (e.g. `templates/rules/QA_Rules_Bootstrap_template.md`) or an instruction template; a Developer lesson goes to the owning skill template (`.mt-agent-devkit/distribution/phase2/templates/skills/<skill>/SKILL_template.md`, e.g. `pre-pr-gate`, `dev-implement`, `clean-code`), never a retired Developer rules template |
 
 If an item does not map to any template file (e.g. it only concerns a devkit-internal workflow), still list it but mark its target as `devkit-internal (no changes.json entry)`.
 
@@ -81,7 +81,7 @@ Present the prioritized items as a numbered table. Do **not** edit any file yet.
 Retro improvements found across N issue(s):
 
 #  Pri  Type         Freq  Target file                                  Proposed change
-1  ★★★  [failure]    1     rules/Developer_Rules_Bootstrap_template.md            Add pre-push secret-scan gate; credentials from env, no inline literal
+1  ★★★  [failure]    1     skills/pre-pr-gate/SKILL_template.md         Add pre-push secret-scan gate; credentials from env, no inline literal
 2  ★★   [workflow]   2     shared/workflows/Sprint_Workflow_Shared…     Flag "automation collection update required" when response shapes change
 3  ★    [instruction]1     instructions/qa_instructions_template.md     Define "no domain label" test-folder fallback
 …
@@ -102,7 +102,7 @@ For each **accepted** item, the orchestrator edits the target file directly — 
 1. Read the target template, make the minimal edit that addresses the signal, and preserve surrounding style.
 2. If a change affects a template that also has a devkit working copy kept in sync (the **dual-update pattern** — e.g. a `shared/workflows/*_Shared_template.md` change that mirrors `.mt-agent-devkit/workflows/*.md`), update both copies.
 3. Group edits by file so each file is touched once.
-4. Track, for every changed template under `.claude/agents/templates/`, a one-line description for `changes.json`. Separate `new` (first-time files) from `modified` (already existed).
+4. Track, for every changed template under `.claude/agents/templates/` or Phase 2 skill template, a one-line description for `changes.json`. Separate `new` (first-time files) from `modified` (already existed).
 
 > Never edit a target project's installed copy. Only edit the source templates under `.claude/agents/templates/` (and devkit working copies where the dual-update pattern applies).
 
@@ -120,10 +120,10 @@ Record everything from this run against the **current in-progress version** — 
    "0.1.49-SNAPSHOT": {
      "new": [],
      "modified": [
-       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md"
+       ".mt-agent-devkit/distribution/phase2/templates/skills/pre-pr-gate/SKILL_template.md"
      ],
      "descriptions": {
-       ".claude/agents/templates/rules/Developer_Rules_Bootstrap_template.md": "[Retro #27] Add a pre-push secret-scan gate; credentials must source from env with no inline literal default."
+       ".mt-agent-devkit/distribution/phase2/templates/skills/pre-pr-gate/SKILL_template.md": "[Retro #27] Add a pre-push secret-scan gate; credentials must source from env with no inline literal default."
      }
    }
    ```
@@ -172,7 +172,7 @@ What worked well (preserve — do not regress):
 
 - **Never edit before the user confirms** in Stage 3.
 - **Never hand-edit `VERSION`** — the `release` workflow owns it. All accepted changes fold into the current `-SNAPSHOT` key's existing `changes.json` entry; a run never creates a version key.
-- **Only `.claude/agents/templates/` files go in `changes.json`** — devkit-internal workflow edits do not.
+- **Only `.claude/agents/templates/` files and Phase 2 skill templates go in `changes.json`** — devkit-internal workflow edits do not.
 - **Dual-update pattern** — when a shared template has a synced devkit working copy, update both.
 - **`gh` required** — the workflow reads and closes GitHub Issues; stop early if `gh` is unauthenticated.
 - **Privacy is already enforced upstream** — retro Issues are privacy-filtered at export. If any signal still contains project-specific detail, generalize it before writing it into a template, per `Retro_Rules.md`.
