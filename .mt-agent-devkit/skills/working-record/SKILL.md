@@ -1,6 +1,6 @@
 ---
 name: working-record
-description: Working Record rules - rewrite-in-place snapshot, own-record access, 3-entry retention, 10,000-character cap, entry format and Blockers & Watch-outs. Load before any Working Record write.
+description: Working Record rules - rewrite-in-place snapshot, own-record access, 3-entry retention, the character cap, entry format and Blockers & Watch-outs. Load before any Working Record write.
 ---
 
 # Working Record

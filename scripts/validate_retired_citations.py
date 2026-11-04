@@ -7,8 +7,10 @@ plus, since their retirement in targets (ST-000290), the Phase 2 templates and
 every bundle asset. The deployment engine's full-path gate stays as a second net.
 
 The Developer rule files and `Clean_Code_Rules.md` are retired in the internal
-harness only (ST-000309): the Phase 2 templates, bundle assets and the registry's
-`layouts.target` alternatives still name them until ST-000311 extends the check.
+harness only (ST-000309): the Phase 2 templates, bundle assets, the registry's
+`layouts.target` alternatives and its target `role_sources` keys (ST-000310, which
+route those alternatives to the shipped skills) still name them until ST-000311
+extends the check.
 History mentions on `**Version:**`/`**Previous:**` lines are not citations.
 """
 from __future__ import annotations
@@ -54,10 +56,13 @@ def distribution(root: Path) -> set[str]:
     return paths - set(DISTRIBUTION_LEDGERS)
 
 
-def strip_target_layouts(value):
-    """Drop `layouts.target` alternatives: target Developer routes keep their files until ST-000310."""
+def strip_target_layouts(value, parent=None):
+    """Drop `layouts.target` alternatives and target `role_sources` maps: both name the old target files until ST-000311."""
     if isinstance(value, dict):
-        return {key: strip_target_layouts({k: v for k, v in item.items() if k != "target"} if key == "layouts" and isinstance(item, dict) else item)
+        if parent == "role_sources":
+            return {role: {k: v for k, v in layouts.items() if k != "target"} if isinstance(layouts, dict) else layouts
+                    for role, layouts in value.items()}
+        return {key: strip_target_layouts({k: v for k, v in item.items() if k != "target"} if key == "layouts" and isinstance(item, dict) else item, key)
                 for key, item in value.items()}
     if isinstance(value, list):
         return [strip_target_layouts(item) for item in value]

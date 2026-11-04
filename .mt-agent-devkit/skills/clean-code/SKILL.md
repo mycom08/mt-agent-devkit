@@ -1,6 +1,6 @@
 ---
 name: clean-code
-description: Clean code rules for scripts and structured content - names, functions, comments, shell error handling, unit tests and simple design. Load before writing code and when reviewing source or script changes.
+description: Clean code rules - names, functions, comments, error handling, unit tests and simple design. Load before writing code and when reviewing source or script changes.
 ---
 
 # Clean Code

@@ -440,4 +440,48 @@ class DeploymentTests(unittest.TestCase):
         self.assertFalse((self.target / d.LOCK).exists())
 
 
+
+class SkillInstallTests(unittest.TestCase):
+    """ST-000310: a fresh install for each provider receives the common and Developer skills."""
+    PHASE2 = ROOT / ".mt-agent-devkit/distribution/phase2"
+
+    def test_fresh_install_per_provider_receives_common_and_developer_skills(self):
+        spec = importlib.util.spec_from_file_location("phase2_builder", self.PHASE2 / "build_bundle.py")
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        skills = builder.COMMON_SKILLS + builder.DEV_SKILLS
+        self.assertNotIn("change-metadata", skills)
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            builder.build(ROOT, base / "bundle")
+            manifest = base / "bundle/deployment.json"
+            source = {"kind": "local", "tag": None, "commit": "a" * 40, "snapshot_version": "0.1.55-SNAPSHOT", "manifest_sha256": d.digest(manifest.read_bytes())}
+            for provider in sorted(d.PROVIDERS):
+                with self.subTest(provider=provider):
+                    target = base / provider
+                    target.mkdir()
+                    bound = {"PROVIDER_ROOT": "." + provider, "RUNTIME_ROOT": "." + provider + "/agents", "COMMAND_ROOT": "." + provider + "/agents"}
+                    entrypoint = "CLAUDE.md" if provider == "claude" else "AGENTS.md"
+                    adaptations = {entrypoint: "# Fixture\n", ".mt-agent-devkit/context/Project_Priming.md": "# Fixture\n",
+                                   ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "# Ignore\n"}
+                    d.apply(target, d.plan(target, manifest, source, "github", "repo", {provider: bound}, adaptations))
+                    d.verify(target)
+                    for name in skills:
+                        canonical = ".mt-agent-devkit/skills/" + name + "/SKILL.md"
+                        template = (self.PHASE2 / "templates/skills" / name / "SKILL_template.md").read_text(encoding="utf-8")
+                        self.assertEqual((target / canonical).read_text(encoding="utf-8").rstrip("\n"), template.rstrip("\n"), name)
+                        wrapper = (target / ("." + provider + "/skills/" + name + "/SKILL.md")).read_text(encoding="utf-8")
+                        self.assertIn("name: " + name + "\n", wrapper)
+                        self.assertIn(canonical, wrapper)
+                        for other in set(d.PROVIDERS) - {provider}:
+                            self.assertFalse((target / ("." + other + "/skills/" + name)).exists(), other + "/" + name)
+                    self.assertFalse((target / ".mt-agent-devkit/skills/change-metadata").exists())
+                    # The old Developer rules stay installed, unused, until ST-000311 retires them.
+                    for name in ("Developer_Rules_Bootstrap.md", "Developer_Rules_Read_On_Demand.md", "Story_Standard_Dev.md", "Clean_Code_Rules.md"):
+                        self.assertTrue((target / ".mt-agent-devkit/rules" / name).is_file(), name)
+                    instructions = (target / ".mt-agent-devkit/instructions/developer_instructions.md").read_text(encoding="utf-8")
+                    self.assertIn("## Load Map", instructions)
+                    self.assertNotIn("Developer_Rules_", instructions)
+
+
 if __name__ == "__main__": unittest.main()

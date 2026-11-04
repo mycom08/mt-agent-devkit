@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -149,7 +149,7 @@ Checked on 2026-11-03: each new skill name against every supported provider's bu
 
 ## 6. Distribution Status
 
-The 17 skills are internal only in this story. `validate_internal_harness.py` lists them in `UNDISTRIBUTED_SKILLS`, which exempts them from the Phase 2 template and bundle checks only (wrappers, frontmatter, budget and `**Requires:**` checks still apply) and fails if the bundle ships one early. ST-000310 ships every common skill except `change-metadata` (internal only, B5) and removes those names from the exemption.
+ST-000307 kept the 17 common skills internal through the `UNDISTRIBUTED_SKILLS` exemption in `validate_internal_harness.py`. Since ST-000310 every common and Developer skill ships as a Phase 2 template, a shared canonical bundle entry and one wrapper per provider (§9); `UNDISTRIBUTED_SKILLS` holds only `change-metadata`, which is internal only (B5) and fails the check if the bundle ever ships it.
 
 ---
 
@@ -252,6 +252,57 @@ The internal `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`
 
 ---
 
-**Document Version:** 1.2 — ST-000309 (B) adds §8, the Developer files
+## 9. Phase 2 Templates and Target Routing (ST-000310)
+
+Every common and Developer skill except `change-metadata` has a Phase 2 template at `.mt-agent-devkit/distribution/phase2/templates/skills/<name>/SKILL_template.md`, with the internal skill's frontmatter and budget. Each layer's skill is the only owner of that layer's text (design §3).
+
+### 9a. Phase 2 generated blocks
+
+`generate_common_blocks.py` has a Phase 2 row for every internal row in §1 (agent-security keeps its own rows). Each Phase 2 Common rule template takes its blocks only from the Phase 2 skill templates; the internal copies never take Phase 2 text. Five layer-neutral skills are byte copies of their internal skill (`COPIES`): `agent-security`, `shell-rules`, `retro`, `retro-contribution`, `credential-gate`.
+
+| Skill | Layer difference in the Phase 2 template |
+|---|---|
+| `pre-work` | Priming is the single `Project_Priming.md`; status sync names the tracker (strict mode: story files); resumed sessions use the adapter's resume operation |
+| `token-efficiency` | Item 5 (devkit bare-filename resolution) dropped |
+| `working-record` | Cap is the project's `**Working record cap:**` field (default 4,000) |
+| `agent-memory` | Cap is the project's `**Memory file cap:**` field (default 10,000); no internal-pilot note |
+| `troubleshooting` | Target applies-to list and example |
+| `handoff` | Target text kept: the versioned-agent-knowledge sentence |
+
+### 9b. Design §9 rows
+
+| Target section (old Developer templates) | Owner (Phase 2 skill template) | Change |
+|---|---|---|
+| Bootstrap §1 read contract; Development Standards fallback | `dev-core` load map; `clean-code` §1 | reworded: the load map is the read contract |
+| §2 steps 1–3, touched endpoints, design-first criteria, Clean Code and Logging Standard reads, UI prototype reference | `dev-implement` steps 1–9 | step |
+| §2 questions and gate | `raise-question` §2 | step; non-blocking questions kept |
+| §3 status flow, merge preconditions, AC ticking, role boundaries ("TL owns Testing") | `dev-core` | compacted |
+| §4 Development Standard, source naming, shared-helper scope, caller trace | `clean-code` §1 | verbatim rules, compacted examples |
+| §4 story files by mode | `dev-core` | compacted |
+| §5 local-verify, check table, aggregate command, short-circuit, production build, test note, rename sweep, pre-merge items 1–6 | `pre-pr-gate` | target check table kept; item 7 (`status:done`) dropped (N4) |
+| §5 credential bullet | `credential-gate` (required by `pre-pr-gate`) | pointer |
+| §5 spec-first rule | `dev-implement` step 10 | step |
+| §5 behavioral and endpoint pointers | `pre-pr-gate` §1 → `dev-verify` | pointer |
+| §6 branch, PR, commits (both modes), `[skip ci]`, merge sync | `git-workflow` | `[skip ci]` by CI path filter (stricter than the old file-type rule); feature-branch targets kept |
+| §6 PR-opened comment, delivery transitions | `dev-deliver` | step |
+| §12 routing table | `developer_instructions_template.md` load map, repeated in `dev-core` | replaced (design §4) |
+| §13 always-on | `working-record` | step |
+| On-Demand §7, §10, §11 | `raise-question` §4, §3, §5 | strict-mode line added (R7) |
+| On-Demand §8 | `project-docs` | the `_template` naming rule omitted (B5) |
+| On-Demand §9, §12 | `pr-review` | step; `{github-org}/{repo-name}` kept |
+| On-Demand §13 | `dev-hotfix` | fix branch and PR target the feature branch |
+| On-Demand §14 | `dev-refine` | Product Backlog lookup and `docs/api/` check kept |
+| On-Demand §15 | `comment`; CI paste in `pr-review` step 7 | pointer |
+| On-Demand §16, §17, §18 | `dev-verify` §1, §2, §3 | verbatim steps |
+| `Clean_Code_Rules_template.md` chapters 1–12 | `clean-code` §2–§6 | compacted to one rule line per chapter |
+
+### 9c. Target routing
+
+The registry gives the Developer `common`, `bootstrap` and `role_sources` overrides for `target` as well. Rows keep their old `layouts.target` sources; the target `role_sources` map each one to its shipped skill, so the old Developer templates stay in the bundle but no target Developer manifest reads them. ST-000311 retires those files and their keys. `dev_implementation` and `dev_fix` read their skill in both layouts; `pre_pr` reads `pre-pr-gate` in targets (`change-metadata` stays internal). `trigger_clean_code` is shared with TL: TL target manifests keep `Clean_Code_Rules.md` until ST-000312.
+
+---
+
+**Document Version:** 1.3 — ST-000310 (C) adds §9, Phase 2 templates and target routing
+**Previous:** 1.2 — ST-000309 (B) adds §8, the Developer files
 **Previous:** 1.1 — ST-000308 (A2) adds §7, the no-duplicate-authority check
 **Previous:** 1.0 — ST-000307 (A1) map

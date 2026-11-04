@@ -17,71 +17,71 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "891ae0569dd9127c397dbd6aaed74c075ff78b8a18089261a5e08bacda9e238d",
-      "bytes": 17577,
+      "sha256": "4dd9f9f3896d5a992b0b8ffb8772b2e5134778a055bd89fa80276e6c41e398d0",
+      "bytes": 18867,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Core.md",
       "path": "assets/rules_Agent_Common_Core.md",
-      "sha256": "10ceb227d08b18d9a2a5943b0036fde9bda4dafb7b541a4372c14ad884965ef2",
-      "bytes": 13085,
+      "sha256": "bc50eae4c7f378ea7ac5796f820857e4cea15a0db284c40a7a45e3daae0d4ff4",
+      "bytes": 13529,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Credential_Gate.md",
       "path": "assets/rules_Agent_Common_Credential_Gate.md",
-      "sha256": "5747090303f1c40e243633886e07d8cea052db3cd6a8a1b73603a4fe7b42ad43",
-      "bytes": 1012,
+      "sha256": "1a15046011229b65b3bef4b33510543a1a400267cb0ef263a5be2e386844f13c",
+      "bytes": 1184,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Memory.md",
       "path": "assets/rules_Agent_Common_Memory.md",
-      "sha256": "d1d9ba698e51ba9b70c0826295279d8c1ecba788ca60b4dab2446881fbbc3fc2",
-      "bytes": 5883,
+      "sha256": "9becdd0165765639d6558828942087e09ec85cf2f907d9339a9b38cddc7da0b3",
+      "bytes": 5004,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "path": "assets/rules_Agent_Common_Read_On_Demand.md",
-      "sha256": "871fd471038fd47b3e9124d6dc87da99e5981f877987c3ab03631717110b8e02",
-      "bytes": 12000,
+      "sha256": "8b6e29bb2b846aa090ddd1c6ae37e2d60e62486951efd90a6e6f4c6b757a6c09",
+      "bytes": 11855,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Retro.md",
       "path": "assets/rules_Agent_Common_Retro.md",
-      "sha256": "dc8e0a002d023b0e15ee087a3d3b2087fcd9da75eed4bb35bbaddccc59296c3d",
-      "bytes": 1241,
+      "sha256": "a2a475f09627b721e8434768ac09bfc6a8db12f04d8b4c431c574bfbc4bab64b",
+      "bytes": 1420,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Shell_Safety.md",
       "path": "assets/rules_Agent_Common_Shell_Safety.md",
-      "sha256": "1f257ec7ecd5e62ef9f368aa5be3283f9c9a3b6bfb33aa41df1a98f2e338f15c",
-      "bytes": 1328,
+      "sha256": "9768c67fac76fc0e05e269357777369f02f8af50f53c4c05c5929e4af35eedc0",
+      "bytes": 1492,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Stage_Transition.md",
       "path": "assets/rules_Agent_Common_Stage_Transition.md",
-      "sha256": "a1b012f47fbbbf1f11b4af615e554a41530cc6154c87e385a4b8a97fa8c6875f",
-      "bytes": 515,
+      "sha256": "0ca65ea3b9ad2321f2ffe1a6769d5d66939ac2e96c4e030c3fb3eaf7eb988dad",
+      "bytes": 665,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Troubleshooting.md",
       "path": "assets/rules_Agent_Common_Troubleshooting.md",
-      "sha256": "6b302e50ed3c61e9525505d851eabdd4f7cdd45cd5635d3f3d380b26ebaa4805",
-      "bytes": 853,
+      "sha256": "f3c14ab46debf39d5d97766ec357cf18fce89718c1a18ed9285d6113e5bb2a31",
+      "bytes": 1028,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Working_Record.md",
       "path": "assets/rules_Agent_Common_Working_Record.md",
-      "sha256": "14eae31013f7a6628f4c254ce624243b4d593d8f7bd6424598384d54e37871c5",
-      "bytes": 3051,
+      "sha256": "4a0436266f578f1189c827825be97b3d3cc1ef0d588f5d2c4061b8542ab65cbf",
+      "bytes": 2587,
       "kind": "template"
     },
     {
@@ -241,8 +241,8 @@
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "538e85c8c0f397926d2a713a455d1062f1001239b777f7ca0b674118cffd9904",
-      "bytes": 3954,
+      "sha256": "6e1fdb0a28d5daddceab114648700c3aa9906f4ddbf294a2ed53c67ac9fc9fb3",
+      "bytes": 4919,
       "kind": "template"
     },
     {
@@ -607,6 +607,622 @@
       "path": "assets/codex_skill_po-validate-ac",
       "sha256": "0fa49469ad0c0b531cd2dccafd056f3935a7a0baeff856e91369ddaf6ea0ad8f",
       "bytes": 346,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/pre-work",
+      "path": "assets/skills_pre-work",
+      "sha256": "123f465f52d10776ef549983b012c67be980f2cf716bea96eb009892482a5071",
+      "bytes": 3780,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/pre-work",
+      "path": "assets/claude_skill_pre-work",
+      "sha256": "c43274ec67aa4f4b859b2c17b14651e35e954d8754fb9c0f4c5d019933bba565",
+      "bytes": 379,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/pre-work",
+      "path": "assets/antigravity_skill_pre-work",
+      "sha256": "c43274ec67aa4f4b859b2c17b14651e35e954d8754fb9c0f4c5d019933bba565",
+      "bytes": 379,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/pre-work",
+      "path": "assets/codex_skill_pre-work",
+      "sha256": "c43274ec67aa4f4b859b2c17b14651e35e954d8754fb9c0f4c5d019933bba565",
+      "bytes": 379,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/token-efficiency",
+      "path": "assets/skills_token-efficiency",
+      "sha256": "bd02183f17e5eb0ca98fc2a2abc730701dc850f6c06f7577e8b83ff33befbb0a",
+      "bytes": 2104,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/token-efficiency",
+      "path": "assets/claude_skill_token-efficiency",
+      "sha256": "c43e630b8b9787d4060535b0782440db21e7ccdded200b148d09128419c70e73",
+      "bytes": 347,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/token-efficiency",
+      "path": "assets/antigravity_skill_token-efficiency",
+      "sha256": "c43e630b8b9787d4060535b0782440db21e7ccdded200b148d09128419c70e73",
+      "bytes": 347,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/token-efficiency",
+      "path": "assets/codex_skill_token-efficiency",
+      "sha256": "c43e630b8b9787d4060535b0782440db21e7ccdded200b148d09128419c70e73",
+      "bytes": 347,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/shell-rules",
+      "path": "assets/skills_shell-rules",
+      "sha256": "6a32398baa4cacd1057d02fbeded97c4752ec5435b040f2dd8cb4460b88796eb",
+      "bytes": 2298,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/shell-rules",
+      "path": "assets/claude_skill_shell-rules",
+      "sha256": "bd29bfddbe28a02488ffac7d1dbd2728d848d1512887df7621c5cc48c70dd936",
+      "bytes": 368,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/shell-rules",
+      "path": "assets/antigravity_skill_shell-rules",
+      "sha256": "bd29bfddbe28a02488ffac7d1dbd2728d848d1512887df7621c5cc48c70dd936",
+      "bytes": 368,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/shell-rules",
+      "path": "assets/codex_skill_shell-rules",
+      "sha256": "bd29bfddbe28a02488ffac7d1dbd2728d848d1512887df7621c5cc48c70dd936",
+      "bytes": 368,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/working-record",
+      "path": "assets/skills_working-record",
+      "sha256": "81189fd52c94d70786fb1aa27d4d691888c95d27a11f20ea106531e18065a43e",
+      "bytes": 3131,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/working-record",
+      "path": "assets/claude_skill_working-record",
+      "sha256": "e4122783a08ec9cc29d84e57eedd6c12b7017d927557e94a6830e226f75dad19",
+      "bytes": 350,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/working-record",
+      "path": "assets/antigravity_skill_working-record",
+      "sha256": "e4122783a08ec9cc29d84e57eedd6c12b7017d927557e94a6830e226f75dad19",
+      "bytes": 350,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/working-record",
+      "path": "assets/codex_skill_working-record",
+      "sha256": "e4122783a08ec9cc29d84e57eedd6c12b7017d927557e94a6830e226f75dad19",
+      "bytes": 350,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/agent-memory",
+      "path": "assets/skills_agent-memory",
+      "sha256": "a79816c53f743deeb67b11843e75d3fca190d2442b79962fce9519abc2dd4bcb",
+      "bytes": 3958,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/agent-memory",
+      "path": "assets/claude_skill_agent-memory",
+      "sha256": "3c824137fcfe14898e7095480f8cc1197a8f03e50562d9be682cfb761175eb2b",
+      "bytes": 307,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/agent-memory",
+      "path": "assets/antigravity_skill_agent-memory",
+      "sha256": "3c824137fcfe14898e7095480f8cc1197a8f03e50562d9be682cfb761175eb2b",
+      "bytes": 307,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/agent-memory",
+      "path": "assets/codex_skill_agent-memory",
+      "sha256": "3c824137fcfe14898e7095480f8cc1197a8f03e50562d9be682cfb761175eb2b",
+      "bytes": 307,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/troubleshooting",
+      "path": "assets/skills_troubleshooting",
+      "sha256": "5fe403fdfb7d8c592b1d0d71dd97c02df56315cea2525b78a2eb70ad2511082e",
+      "bytes": 2178,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/troubleshooting",
+      "path": "assets/claude_skill_troubleshooting",
+      "sha256": "79e0d0d016f20cca8b678dcb5b6a5403737a2096942df75529e5cd81a8dc18f8",
+      "bytes": 387,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/troubleshooting",
+      "path": "assets/antigravity_skill_troubleshooting",
+      "sha256": "79e0d0d016f20cca8b678dcb5b6a5403737a2096942df75529e5cd81a8dc18f8",
+      "bytes": 387,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/troubleshooting",
+      "path": "assets/codex_skill_troubleshooting",
+      "sha256": "79e0d0d016f20cca8b678dcb5b6a5403737a2096942df75529e5cd81a8dc18f8",
+      "bytes": 387,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/credential-gate",
+      "path": "assets/skills_credential-gate",
+      "sha256": "7cc5f8b558b6a8a90f4024a06369f370da1149e2ede64baf89bbac941552a1fa",
+      "bytes": 1657,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/credential-gate",
+      "path": "assets/claude_skill_credential-gate",
+      "sha256": "e9a09c40ee19e1064724663ea30f792e3a5f4c23cf30fbba1eef7bd8aeec48c8",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/credential-gate",
+      "path": "assets/antigravity_skill_credential-gate",
+      "sha256": "e9a09c40ee19e1064724663ea30f792e3a5f4c23cf30fbba1eef7bd8aeec48c8",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/credential-gate",
+      "path": "assets/codex_skill_credential-gate",
+      "sha256": "e9a09c40ee19e1064724663ea30f792e3a5f4c23cf30fbba1eef7bd8aeec48c8",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/retro",
+      "path": "assets/skills_retro",
+      "sha256": "4820e7c5055ea9b28f920dd8f6717c3cd2a63bed3238c8646671a0caea2c5490",
+      "bytes": 3912,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/retro",
+      "path": "assets/claude_skill_retro",
+      "sha256": "417456e597b920dee4f903c689187328810b7f175f5ee67b90bcdba3e18ecd5b",
+      "bytes": 310,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/retro",
+      "path": "assets/antigravity_skill_retro",
+      "sha256": "417456e597b920dee4f903c689187328810b7f175f5ee67b90bcdba3e18ecd5b",
+      "bytes": 310,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/retro",
+      "path": "assets/codex_skill_retro",
+      "sha256": "417456e597b920dee4f903c689187328810b7f175f5ee67b90bcdba3e18ecd5b",
+      "bytes": 310,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/retro-contribution",
+      "path": "assets/skills_retro-contribution",
+      "sha256": "30b820df4ac8deaff541dc783ff0300aea9f7cac74e12bbececf80e68bfa4805",
+      "bytes": 3506,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/retro-contribution",
+      "path": "assets/claude_skill_retro-contribution",
+      "sha256": "97d9ebb27ad701d2a5751a9463f3362c3f3f000ccce805fbafe6002dac0574e4",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/retro-contribution",
+      "path": "assets/antigravity_skill_retro-contribution",
+      "sha256": "97d9ebb27ad701d2a5751a9463f3362c3f3f000ccce805fbafe6002dac0574e4",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/retro-contribution",
+      "path": "assets/codex_skill_retro-contribution",
+      "sha256": "97d9ebb27ad701d2a5751a9463f3362c3f3f000ccce805fbafe6002dac0574e4",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/handoff",
+      "path": "assets/skills_handoff",
+      "sha256": "43d5b8bdb2b85aa955e6f6555718b5286b18c09d219b98ed326783461bae8c14",
+      "bytes": 1153,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/handoff",
+      "path": "assets/claude_skill_handoff",
+      "sha256": "a752f6bc591e3c2457fc94462800100458c390c66bbc6e7f2673d0a3f1149bcd",
+      "bytes": 362,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/handoff",
+      "path": "assets/antigravity_skill_handoff",
+      "sha256": "a752f6bc591e3c2457fc94462800100458c390c66bbc6e7f2673d0a3f1149bcd",
+      "bytes": 362,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/handoff",
+      "path": "assets/codex_skill_handoff",
+      "sha256": "a752f6bc591e3c2457fc94462800100458c390c66bbc6e7f2673d0a3f1149bcd",
+      "bytes": 362,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/raise-question",
+      "path": "assets/skills_raise-question",
+      "sha256": "75b91fba02a7d494f81469714f7761d563b9740dcf3018f5fc6b57f9b2fe28ba",
+      "bytes": 3089,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/raise-question",
+      "path": "assets/claude_skill_raise-question",
+      "sha256": "6684ec9874890263fbda8acb3c9685abd45f96d539f7cf54d554240b501714e0",
+      "bytes": 413,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/raise-question",
+      "path": "assets/antigravity_skill_raise-question",
+      "sha256": "6684ec9874890263fbda8acb3c9685abd45f96d539f7cf54d554240b501714e0",
+      "bytes": 413,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/raise-question",
+      "path": "assets/codex_skill_raise-question",
+      "sha256": "6684ec9874890263fbda8acb3c9685abd45f96d539f7cf54d554240b501714e0",
+      "bytes": 413,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/project-docs",
+      "path": "assets/skills_project-docs",
+      "sha256": "57336d834e7bf9bf6e3b4f6c9d9b293765b847b4f6347b091b63b8f781eed631",
+      "bytes": 1001,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/project-docs",
+      "path": "assets/claude_skill_project-docs",
+      "sha256": "eacf336a8aeb090c1bf634c19013291a5664c93e399842af02a948b1d510eabe",
+      "bytes": 366,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/project-docs",
+      "path": "assets/antigravity_skill_project-docs",
+      "sha256": "eacf336a8aeb090c1bf634c19013291a5664c93e399842af02a948b1d510eabe",
+      "bytes": 366,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/project-docs",
+      "path": "assets/codex_skill_project-docs",
+      "sha256": "eacf336a8aeb090c1bf634c19013291a5664c93e399842af02a948b1d510eabe",
+      "bytes": 366,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/git-workflow",
+      "path": "assets/skills_git-workflow",
+      "sha256": "a009ea337d3312cd263c2c1e66f4bd419f74cc85fe317c676c91821df731bc9f",
+      "bytes": 3465,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/git-workflow",
+      "path": "assets/claude_skill_git-workflow",
+      "sha256": "6c315ec1eae83622647829e615cfb779fc266364ff4f90e2a62eb6b8fadff901",
+      "bytes": 398,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/git-workflow",
+      "path": "assets/antigravity_skill_git-workflow",
+      "sha256": "6c315ec1eae83622647829e615cfb779fc266364ff4f90e2a62eb6b8fadff901",
+      "bytes": 398,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/git-workflow",
+      "path": "assets/codex_skill_git-workflow",
+      "sha256": "6c315ec1eae83622647829e615cfb779fc266364ff4f90e2a62eb6b8fadff901",
+      "bytes": 398,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/pre-pr-gate",
+      "path": "assets/skills_pre-pr-gate",
+      "sha256": "3bf324a2061b20cc70b8292e5589fc04e29091dd4614bc6a721769cee7997aa9",
+      "bytes": 3550,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/pre-pr-gate",
+      "path": "assets/claude_skill_pre-pr-gate",
+      "sha256": "cf916c12a1628cb984502409b4537616ceedc124529b5a151c6002758e6fb846",
+      "bytes": 450,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/pre-pr-gate",
+      "path": "assets/antigravity_skill_pre-pr-gate",
+      "sha256": "cf916c12a1628cb984502409b4537616ceedc124529b5a151c6002758e6fb846",
+      "bytes": 450,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/pre-pr-gate",
+      "path": "assets/codex_skill_pre-pr-gate",
+      "sha256": "cf916c12a1628cb984502409b4537616ceedc124529b5a151c6002758e6fb846",
+      "bytes": 450,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/pr-review",
+      "path": "assets/skills_pr-review",
+      "sha256": "825e104b03f236486e396e9a585aa9206527a73a891bb46e6b0fbc4222791f65",
+      "bytes": 3397,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/pr-review",
+      "path": "assets/claude_skill_pr-review",
+      "sha256": "a4aacc160adf9e84413f281a4f48cbcbcca0ede92696decb5b523907393ff1f7",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/pr-review",
+      "path": "assets/antigravity_skill_pr-review",
+      "sha256": "a4aacc160adf9e84413f281a4f48cbcbcca0ede92696decb5b523907393ff1f7",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/pr-review",
+      "path": "assets/codex_skill_pr-review",
+      "sha256": "a4aacc160adf9e84413f281a4f48cbcbcca0ede92696decb5b523907393ff1f7",
+      "bytes": 425,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/clean-code",
+      "path": "assets/skills_clean-code",
+      "sha256": "d25fd9cc34c41eba88b0aa8c78f1eb1c889ed7a05fa70af0eaeb3302758c0211",
+      "bytes": 3455,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/clean-code",
+      "path": "assets/claude_skill_clean-code",
+      "sha256": "a2cb9fd40e02ffe287e42cd53ae1e047dfae3a5eaf4b06dfb2b6cca9966247b2",
+      "bytes": 320,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/clean-code",
+      "path": "assets/antigravity_skill_clean-code",
+      "sha256": "a2cb9fd40e02ffe287e42cd53ae1e047dfae3a5eaf4b06dfb2b6cca9966247b2",
+      "bytes": 320,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/clean-code",
+      "path": "assets/codex_skill_clean-code",
+      "sha256": "a2cb9fd40e02ffe287e42cd53ae1e047dfae3a5eaf4b06dfb2b6cca9966247b2",
+      "bytes": 320,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/dev-core",
+      "path": "assets/skills_dev-core",
+      "sha256": "de7380fdb90435ba7958b7f459396d19c1e52e7650096f0ccffc91dff435d91e",
+      "bytes": 1480,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/dev-core",
+      "path": "assets/claude_skill_dev-core",
+      "sha256": "a47d08711fb7badddbf4b48da87618639e74345b88dcba7e42bab831481d8298",
+      "bytes": 302,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/dev-core",
+      "path": "assets/antigravity_skill_dev-core",
+      "sha256": "a47d08711fb7badddbf4b48da87618639e74345b88dcba7e42bab831481d8298",
+      "bytes": 302,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/dev-core",
+      "path": "assets/codex_skill_dev-core",
+      "sha256": "a47d08711fb7badddbf4b48da87618639e74345b88dcba7e42bab831481d8298",
+      "bytes": 302,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/dev-implement",
+      "path": "assets/skills_dev-implement",
+      "sha256": "3921d91ef6c195cc05729e472755df283ff64c50e64ab7a5482ff1b92de818c9",
+      "bytes": 2851,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/dev-implement",
+      "path": "assets/claude_skill_dev-implement",
+      "sha256": "b7721f6a1236acf72ee5d5dd82759fb47b6a50b87a3d54187b6cdd30ebe184da",
+      "bytes": 406,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/dev-implement",
+      "path": "assets/antigravity_skill_dev-implement",
+      "sha256": "b7721f6a1236acf72ee5d5dd82759fb47b6a50b87a3d54187b6cdd30ebe184da",
+      "bytes": 406,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/dev-implement",
+      "path": "assets/codex_skill_dev-implement",
+      "sha256": "b7721f6a1236acf72ee5d5dd82759fb47b6a50b87a3d54187b6cdd30ebe184da",
+      "bytes": 406,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/dev-deliver",
+      "path": "assets/skills_dev-deliver",
+      "sha256": "fa2fcd9ca0108cf087cbe3cc346fd20aee1631f8384a8181266fb19c94db30bb",
+      "bytes": 1439,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/dev-deliver",
+      "path": "assets/claude_skill_dev-deliver",
+      "sha256": "abfec04ba82281d35c7ec0bdccb27fa5a0f2a47c04b0ff82955277c21af7428f",
+      "bytes": 423,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/dev-deliver",
+      "path": "assets/antigravity_skill_dev-deliver",
+      "sha256": "abfec04ba82281d35c7ec0bdccb27fa5a0f2a47c04b0ff82955277c21af7428f",
+      "bytes": 423,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/dev-deliver",
+      "path": "assets/codex_skill_dev-deliver",
+      "sha256": "abfec04ba82281d35c7ec0bdccb27fa5a0f2a47c04b0ff82955277c21af7428f",
+      "bytes": 423,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/dev-verify",
+      "path": "assets/skills_dev-verify",
+      "sha256": "11e0460d3a9e3e17b05fcd453755efed53cbf77581bcb2a2b0cda865a98294fd",
+      "bytes": 2307,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/dev-verify",
+      "path": "assets/claude_skill_dev-verify",
+      "sha256": "6b270500be66d0d78b163593612fc3949f7318efc4427a9711e62e7d05df8ce2",
+      "bytes": 450,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/dev-verify",
+      "path": "assets/antigravity_skill_dev-verify",
+      "sha256": "6b270500be66d0d78b163593612fc3949f7318efc4427a9711e62e7d05df8ce2",
+      "bytes": 450,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/dev-verify",
+      "path": "assets/codex_skill_dev-verify",
+      "sha256": "6b270500be66d0d78b163593612fc3949f7318efc4427a9711e62e7d05df8ce2",
+      "bytes": 450,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/dev-refine",
+      "path": "assets/skills_dev-refine",
+      "sha256": "55e4ce98e425ffb73b87662e5e6553a8757b119cd093473deef1554c52a3a446",
+      "bytes": 2714,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/dev-refine",
+      "path": "assets/claude_skill_dev-refine",
+      "sha256": "18c39410f6aa16eb4975b2ce1361100baa0e5f5b89ef319f78e4edf219a83299",
+      "bytes": 430,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/dev-refine",
+      "path": "assets/antigravity_skill_dev-refine",
+      "sha256": "18c39410f6aa16eb4975b2ce1361100baa0e5f5b89ef319f78e4edf219a83299",
+      "bytes": 430,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/dev-refine",
+      "path": "assets/codex_skill_dev-refine",
+      "sha256": "18c39410f6aa16eb4975b2ce1361100baa0e5f5b89ef319f78e4edf219a83299",
+      "bytes": 430,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/dev-hotfix",
+      "path": "assets/skills_dev-hotfix",
+      "sha256": "70c52eb32c59b8e3fba15cbad3def1a177e80ca0feeba34d3b8ca99d0a0e3188",
+      "bytes": 1209,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/dev-hotfix",
+      "path": "assets/claude_skill_dev-hotfix",
+      "sha256": "49ec266209d214f3351d4afa1014fa8922cc3a16c511c42baa33c5cd88f5e625",
+      "bytes": 391,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/dev-hotfix",
+      "path": "assets/antigravity_skill_dev-hotfix",
+      "sha256": "49ec266209d214f3351d4afa1014fa8922cc3a16c511c42baa33c5cd88f5e625",
+      "bytes": 391,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/dev-hotfix",
+      "path": "assets/codex_skill_dev-hotfix",
+      "sha256": "49ec266209d214f3351d4afa1014fa8922cc3a16c511c42baa33c5cd88f5e625",
+      "bytes": 391,
       "kind": "adapter"
     },
     {
@@ -1445,8 +2061,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "8b80736b6316e64249ce2420da943d9a9667aea7fd393b5e56ad6b91e727e837",
-      "bytes": 30280,
+      "sha256": "ce4670ff2026100bd5c3a3a06c0221ea6f571794857e0c287d7a629251e3468a",
+      "bytes": 31001,
       "kind": "script"
     },
     {
@@ -1543,15 +2159,15 @@
     {
       "id": "Read_Manifest.md",
       "path": "assets/Read_Manifest.md",
-      "sha256": "be2c43c098cfbc8d850bb860f62d307e9c9d43b4209a33753984f55efefe372e",
-      "bytes": 13275,
+      "sha256": "e5fffe6180be4527b4a9f01d4e6ce8288fe30fc0fbe6576522ccf1c93e858c7d",
+      "bytes": 13423,
       "kind": "contract"
     },
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "f183bdb9359eb63d982d38cc24b13f42bfbe77a4c84606b08260e03bee2ccf4f",
-      "bytes": 46005,
+      "sha256": "4c893ce801e74712a222d6295f7441160f2e4de1e47d09fbfcf83f9b6bf80ab8",
+      "bytes": 49449,
       "kind": "contract"
     },
     {
@@ -3606,6 +4222,2074 @@
         "codex/skill/po-validate-ac"
       ],
       "destination": ".codex/skills/po-validate-ac/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/pre-work",
+      "sources": [
+        "skills/pre-work"
+      ],
+      "destination": ".mt-agent-devkit/skills/pre-work/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/pre-work",
+      "sources": [
+        "claude/skill/pre-work"
+      ],
+      "destination": ".claude/skills/pre-work/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/pre-work",
+      "sources": [
+        "antigravity/skill/pre-work"
+      ],
+      "destination": ".antigravity/skills/pre-work/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/pre-work",
+      "sources": [
+        "codex/skill/pre-work"
+      ],
+      "destination": ".codex/skills/pre-work/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/token-efficiency",
+      "sources": [
+        "skills/token-efficiency"
+      ],
+      "destination": ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/token-efficiency",
+      "sources": [
+        "claude/skill/token-efficiency"
+      ],
+      "destination": ".claude/skills/token-efficiency/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/token-efficiency",
+      "sources": [
+        "antigravity/skill/token-efficiency"
+      ],
+      "destination": ".antigravity/skills/token-efficiency/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/token-efficiency",
+      "sources": [
+        "codex/skill/token-efficiency"
+      ],
+      "destination": ".codex/skills/token-efficiency/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/shell-rules",
+      "sources": [
+        "skills/shell-rules"
+      ],
+      "destination": ".mt-agent-devkit/skills/shell-rules/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/shell-rules",
+      "sources": [
+        "claude/skill/shell-rules"
+      ],
+      "destination": ".claude/skills/shell-rules/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/shell-rules",
+      "sources": [
+        "antigravity/skill/shell-rules"
+      ],
+      "destination": ".antigravity/skills/shell-rules/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/shell-rules",
+      "sources": [
+        "codex/skill/shell-rules"
+      ],
+      "destination": ".codex/skills/shell-rules/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/working-record",
+      "sources": [
+        "skills/working-record"
+      ],
+      "destination": ".mt-agent-devkit/skills/working-record/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/working-record",
+      "sources": [
+        "claude/skill/working-record"
+      ],
+      "destination": ".claude/skills/working-record/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/working-record",
+      "sources": [
+        "antigravity/skill/working-record"
+      ],
+      "destination": ".antigravity/skills/working-record/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/working-record",
+      "sources": [
+        "codex/skill/working-record"
+      ],
+      "destination": ".codex/skills/working-record/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/agent-memory",
+      "sources": [
+        "skills/agent-memory"
+      ],
+      "destination": ".mt-agent-devkit/skills/agent-memory/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/agent-memory",
+      "sources": [
+        "claude/skill/agent-memory"
+      ],
+      "destination": ".claude/skills/agent-memory/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/agent-memory",
+      "sources": [
+        "antigravity/skill/agent-memory"
+      ],
+      "destination": ".antigravity/skills/agent-memory/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/agent-memory",
+      "sources": [
+        "codex/skill/agent-memory"
+      ],
+      "destination": ".codex/skills/agent-memory/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/troubleshooting",
+      "sources": [
+        "skills/troubleshooting"
+      ],
+      "destination": ".mt-agent-devkit/skills/troubleshooting/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/troubleshooting",
+      "sources": [
+        "claude/skill/troubleshooting"
+      ],
+      "destination": ".claude/skills/troubleshooting/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/troubleshooting",
+      "sources": [
+        "antigravity/skill/troubleshooting"
+      ],
+      "destination": ".antigravity/skills/troubleshooting/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/troubleshooting",
+      "sources": [
+        "codex/skill/troubleshooting"
+      ],
+      "destination": ".codex/skills/troubleshooting/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/credential-gate",
+      "sources": [
+        "skills/credential-gate"
+      ],
+      "destination": ".mt-agent-devkit/skills/credential-gate/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/credential-gate",
+      "sources": [
+        "claude/skill/credential-gate"
+      ],
+      "destination": ".claude/skills/credential-gate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/credential-gate",
+      "sources": [
+        "antigravity/skill/credential-gate"
+      ],
+      "destination": ".antigravity/skills/credential-gate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/credential-gate",
+      "sources": [
+        "codex/skill/credential-gate"
+      ],
+      "destination": ".codex/skills/credential-gate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/retro",
+      "sources": [
+        "skills/retro"
+      ],
+      "destination": ".mt-agent-devkit/skills/retro/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/retro",
+      "sources": [
+        "claude/skill/retro"
+      ],
+      "destination": ".claude/skills/retro/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/retro",
+      "sources": [
+        "antigravity/skill/retro"
+      ],
+      "destination": ".antigravity/skills/retro/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/retro",
+      "sources": [
+        "codex/skill/retro"
+      ],
+      "destination": ".codex/skills/retro/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/retro-contribution",
+      "sources": [
+        "skills/retro-contribution"
+      ],
+      "destination": ".mt-agent-devkit/skills/retro-contribution/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/retro-contribution",
+      "sources": [
+        "claude/skill/retro-contribution"
+      ],
+      "destination": ".claude/skills/retro-contribution/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/retro-contribution",
+      "sources": [
+        "antigravity/skill/retro-contribution"
+      ],
+      "destination": ".antigravity/skills/retro-contribution/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/retro-contribution",
+      "sources": [
+        "codex/skill/retro-contribution"
+      ],
+      "destination": ".codex/skills/retro-contribution/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/handoff",
+      "sources": [
+        "skills/handoff"
+      ],
+      "destination": ".mt-agent-devkit/skills/handoff/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/handoff",
+      "sources": [
+        "claude/skill/handoff"
+      ],
+      "destination": ".claude/skills/handoff/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/handoff",
+      "sources": [
+        "antigravity/skill/handoff"
+      ],
+      "destination": ".antigravity/skills/handoff/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/handoff",
+      "sources": [
+        "codex/skill/handoff"
+      ],
+      "destination": ".codex/skills/handoff/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/raise-question",
+      "sources": [
+        "skills/raise-question"
+      ],
+      "destination": ".mt-agent-devkit/skills/raise-question/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/raise-question",
+      "sources": [
+        "claude/skill/raise-question"
+      ],
+      "destination": ".claude/skills/raise-question/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/raise-question",
+      "sources": [
+        "antigravity/skill/raise-question"
+      ],
+      "destination": ".antigravity/skills/raise-question/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/raise-question",
+      "sources": [
+        "codex/skill/raise-question"
+      ],
+      "destination": ".codex/skills/raise-question/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/project-docs",
+      "sources": [
+        "skills/project-docs"
+      ],
+      "destination": ".mt-agent-devkit/skills/project-docs/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/project-docs",
+      "sources": [
+        "claude/skill/project-docs"
+      ],
+      "destination": ".claude/skills/project-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/project-docs",
+      "sources": [
+        "antigravity/skill/project-docs"
+      ],
+      "destination": ".antigravity/skills/project-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/project-docs",
+      "sources": [
+        "codex/skill/project-docs"
+      ],
+      "destination": ".codex/skills/project-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/git-workflow",
+      "sources": [
+        "skills/git-workflow"
+      ],
+      "destination": ".mt-agent-devkit/skills/git-workflow/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/git-workflow",
+      "sources": [
+        "claude/skill/git-workflow"
+      ],
+      "destination": ".claude/skills/git-workflow/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/git-workflow",
+      "sources": [
+        "antigravity/skill/git-workflow"
+      ],
+      "destination": ".antigravity/skills/git-workflow/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/git-workflow",
+      "sources": [
+        "codex/skill/git-workflow"
+      ],
+      "destination": ".codex/skills/git-workflow/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/pre-pr-gate",
+      "sources": [
+        "skills/pre-pr-gate"
+      ],
+      "destination": ".mt-agent-devkit/skills/pre-pr-gate/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/pre-pr-gate",
+      "sources": [
+        "claude/skill/pre-pr-gate"
+      ],
+      "destination": ".claude/skills/pre-pr-gate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/pre-pr-gate",
+      "sources": [
+        "antigravity/skill/pre-pr-gate"
+      ],
+      "destination": ".antigravity/skills/pre-pr-gate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/pre-pr-gate",
+      "sources": [
+        "codex/skill/pre-pr-gate"
+      ],
+      "destination": ".codex/skills/pre-pr-gate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/pr-review",
+      "sources": [
+        "skills/pr-review"
+      ],
+      "destination": ".mt-agent-devkit/skills/pr-review/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/pr-review",
+      "sources": [
+        "claude/skill/pr-review"
+      ],
+      "destination": ".claude/skills/pr-review/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/pr-review",
+      "sources": [
+        "antigravity/skill/pr-review"
+      ],
+      "destination": ".antigravity/skills/pr-review/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/pr-review",
+      "sources": [
+        "codex/skill/pr-review"
+      ],
+      "destination": ".codex/skills/pr-review/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/clean-code",
+      "sources": [
+        "skills/clean-code"
+      ],
+      "destination": ".mt-agent-devkit/skills/clean-code/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/clean-code",
+      "sources": [
+        "claude/skill/clean-code"
+      ],
+      "destination": ".claude/skills/clean-code/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/clean-code",
+      "sources": [
+        "antigravity/skill/clean-code"
+      ],
+      "destination": ".antigravity/skills/clean-code/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/clean-code",
+      "sources": [
+        "codex/skill/clean-code"
+      ],
+      "destination": ".codex/skills/clean-code/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/dev-core",
+      "sources": [
+        "skills/dev-core"
+      ],
+      "destination": ".mt-agent-devkit/skills/dev-core/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/dev-core",
+      "sources": [
+        "claude/skill/dev-core"
+      ],
+      "destination": ".claude/skills/dev-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/dev-core",
+      "sources": [
+        "antigravity/skill/dev-core"
+      ],
+      "destination": ".antigravity/skills/dev-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/dev-core",
+      "sources": [
+        "codex/skill/dev-core"
+      ],
+      "destination": ".codex/skills/dev-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/dev-implement",
+      "sources": [
+        "skills/dev-implement"
+      ],
+      "destination": ".mt-agent-devkit/skills/dev-implement/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/dev-implement",
+      "sources": [
+        "claude/skill/dev-implement"
+      ],
+      "destination": ".claude/skills/dev-implement/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/dev-implement",
+      "sources": [
+        "antigravity/skill/dev-implement"
+      ],
+      "destination": ".antigravity/skills/dev-implement/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/dev-implement",
+      "sources": [
+        "codex/skill/dev-implement"
+      ],
+      "destination": ".codex/skills/dev-implement/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/dev-deliver",
+      "sources": [
+        "skills/dev-deliver"
+      ],
+      "destination": ".mt-agent-devkit/skills/dev-deliver/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/dev-deliver",
+      "sources": [
+        "claude/skill/dev-deliver"
+      ],
+      "destination": ".claude/skills/dev-deliver/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/dev-deliver",
+      "sources": [
+        "antigravity/skill/dev-deliver"
+      ],
+      "destination": ".antigravity/skills/dev-deliver/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/dev-deliver",
+      "sources": [
+        "codex/skill/dev-deliver"
+      ],
+      "destination": ".codex/skills/dev-deliver/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/dev-verify",
+      "sources": [
+        "skills/dev-verify"
+      ],
+      "destination": ".mt-agent-devkit/skills/dev-verify/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/dev-verify",
+      "sources": [
+        "claude/skill/dev-verify"
+      ],
+      "destination": ".claude/skills/dev-verify/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/dev-verify",
+      "sources": [
+        "antigravity/skill/dev-verify"
+      ],
+      "destination": ".antigravity/skills/dev-verify/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/dev-verify",
+      "sources": [
+        "codex/skill/dev-verify"
+      ],
+      "destination": ".codex/skills/dev-verify/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/dev-refine",
+      "sources": [
+        "skills/dev-refine"
+      ],
+      "destination": ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/dev-refine",
+      "sources": [
+        "claude/skill/dev-refine"
+      ],
+      "destination": ".claude/skills/dev-refine/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/dev-refine",
+      "sources": [
+        "antigravity/skill/dev-refine"
+      ],
+      "destination": ".antigravity/skills/dev-refine/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/dev-refine",
+      "sources": [
+        "codex/skill/dev-refine"
+      ],
+      "destination": ".codex/skills/dev-refine/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/dev-hotfix",
+      "sources": [
+        "skills/dev-hotfix"
+      ],
+      "destination": ".mt-agent-devkit/skills/dev-hotfix/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/dev-hotfix",
+      "sources": [
+        "claude/skill/dev-hotfix"
+      ],
+      "destination": ".claude/skills/dev-hotfix/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/dev-hotfix",
+      "sources": [
+        "antigravity/skill/dev-hotfix"
+      ],
+      "destination": ".antigravity/skills/dev-hotfix/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/dev-hotfix",
+      "sources": [
+        "codex/skill/dev-hotfix"
+      ],
+      "destination": ".codex/skills/dev-hotfix/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [

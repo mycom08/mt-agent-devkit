@@ -4,45 +4,43 @@ Load on observed keyword match or durable fact write. Standing Checks and Keywor
 
 ## 1. Project Memory
 
-**Purpose.** Memory exists so an agent does not make the same mistake twice — a fix it worked out, a command or convention the user asked it to follow, or a trick specific to this project. It is not a session diary and not a substitute for the story tracker, the PR diff, or the Working Record.
+<!-- BEGIN GENERATED agent-memory part facts: edit .mt-agent-devkit/distribution/phase2/templates/skills/agent-memory/SKILL_template.md, then regenerate -->
+**Purpose.** Memory stops an agent making the same mistake twice: a fix it worked out, a convention the user asked for, a project-specific trick. Not a session diary, the story tracker, the PR diff or the Working Record.
 
-Update your memory file when you encounter a fact worth remembering for future sessions.
+Record **durable facts only** for future sessions (not task state or conversation context); update an existing fact rather than add a duplicate; keep entries short.
 
-- Record **durable facts only** — not current task state or conversation context.
-- Prefer updating an existing fact over adding a duplicate.
-- Keep entries short and practical.
+**Inclusion test** (before adding or keeping a line): *would losing it make someone repeat a mistake or re-derive something expensive?* If no, cut it.
 
-**Inclusion test** (apply before adding or keeping any line): *would losing this line cause someone to repeat a mistake, or re-derive something expensive?* If no, cut it.
-
-**Never record:**
-- Anything recoverable from the story, the PR diff, or the Working Record
-- History that drives no future action
-- A fact whose premise has expired
-- Narrative of how one story was verified
+**Never record:** anything recoverable from the story, PR diff or Working Record; history driving no future action; a fact whose premise expired; narrative of how one story was verified.
 
 **Fact-writing rules:**
 
-1. **Rule-first format.** Line 1 of the fact = the reusable rule/decision. Evidence and context follow in 1–3 sentences. Soft cap **~100–120 words per fact** — never a multi-paragraph narrative with the rule buried at the end.
-2. **Corrections rewrite in place.** When a fact is superseded or a number corrected, edit the fact body to the current truth and keep only a one-line `Corrected: <date> — <what changed>` note. Never stack correction addenda under stale text — a skimming agent reads the opening as current.
-3. **Prune on write, verified on schedule.** When adding a fact, still check whether it obsoletes an existing one — merge or delete the loser. This on-write check is not the only pruning mechanism: broader corpus staleness (expired-premise facts, history-only entries, duplicates missed at write time) is caught by the scheduled once-per-sprint pass in `Retro_Rules.md` (Sprint-End Memory Pruning) — do not rely on noticing it yourself mid-task.
-4. **Point, don't mirror.** If the substance lives in a committed project doc or another role's session artifacts, store a one-line pointer plus only your role-specific delta — never a full re-derivation.
-   > **Scope: memory writes *and* issue comments.** The same failure is more expensive in a comment, because a comment is re-read by every downstream role on the story. A fact already recorded in your own memory file is cited (`Developer_Memory.md` Fact N), never re-explained in a thread. Enforced by the Commenter gate in the `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`).
+1. **Rule-first format.** Line 1 = the reusable rule/decision; evidence and context follow in 1–3 sentences. Soft cap **~100–120 words per fact**; never bury the rule in a multi-paragraph narrative.
+2. **Corrections rewrite in place.** Edit a superseded fact to the current truth, keeping one `Corrected: <date> — <what changed>` line; never stack addenda under stale text.
+3. **Prune on write, verified on schedule.** On adding a fact, merge or delete any fact it obsoletes; broader staleness is caught by the once-per-sprint Sprint-End Memory Pruning in `Retro_Rules.md`.
+4. **Point, don't mirror.** If the substance lives in a committed doc or another role's session artifacts, store a one-line pointer plus your role-specific delta. Issue comments too (every downstream role re-reads them): cite a fact already in memory (`Developer_Memory.md` Fact N), never re-explain it (the Commenter gate in the `comment` skill).
 
-**Enforced file-level cap:** the value of **`**Memory file cap:**`** in this project's `{{ROOT_FILE}}` (default **10,000** if the field is absent), measured with `wc -c` — not a line count. `≤ 200 lines` is retained only as non-enforced structural guidance; it does not track token cost (a fully rule-compliant 60-line file can already run ~7,250 tokens) and is never itself checked.
+**Enforced file-level cap:** the **`**Memory file cap:**`** value in this project's entrypoint (`CLAUDE.md` or `AGENTS.md`) (default **10,000** characters if absent), `wc -c`; `≤ 200 lines` is non-enforced guidance only.
 
-**Format:**
-
-`## Stored Facts` uses its own four-field shape — distinct from `## Troubleshooting Facts` below, which keeps its existing shape unchanged:
+**Format:** `## Stored Facts` uses this four-field shape for all six roles:
 
 ```md
 ## Stored Facts
 
 ### Fact N
-- **Rule:** the reusable decision/convention (this is line 1 — already required by rule 1 above)
+- **Rule:** the reusable decision/convention (line 1, rule 1)
 - **Applies when:** the trigger condition that makes an agent need this
-- **Evidence:** one-line pointer — story ID, `file:section` (point, don't mirror — rule 4)
+- **Evidence:** one-line pointer — story ID, `file:section` (rule 4)
 - **Expires when:** the premise whose failure makes this fact wrong
+```
 
+> **Dev, QA and TL use the two-tier variant below**; PO, BA and UI/UX Designer keep the single file.
+<!-- END GENERATED agent-memory part facts -->
+
+<!-- BEGIN GENERATED troubleshooting part format: edit .mt-agent-devkit/distribution/phase2/templates/skills/troubleshooting/SKILL_template.md, then regenerate -->
+`## Troubleshooting Facts` keeps its own shape, distinct from `## Stored Facts`:
+
+```md
 ## Troubleshooting Facts
 
 ### Fix N — <short label>
@@ -53,24 +51,25 @@ Update your memory file when you encounter a fact worth remembering for future s
 - **Prevention:** What to check upfront to avoid this next time
 ```
 
-> PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The four-field Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts is unchanged and stays scoped to Dev/TL/QA.
-
-> **Developer, QA, and Technical Lead use a two-tier variant of this format, not the single file above** — see §8. PO, BA, and UI/UX Designer are unaffected.
+> PO and BA record `## Stored Facts` only — the `## Troubleshooting Facts` section applies to roles that run tooling (Developer, Technical Lead, QA). The Stored Facts shape applies uniformly across all six roles; Troubleshooting Facts stays scoped to Dev/TL/QA.
+<!-- END GENERATED troubleshooting part format -->
 
 ---
 
 ## 8. Two-Tier Memory (Developer, QA, Technical Lead only)
 
-Each role's `## Stored Facts` splits across two files:
+<!-- BEGIN GENERATED agent-memory part two-tier: edit .mt-agent-devkit/distribution/phase2/templates/skills/agent-memory/SKILL_template.md, then regenerate -->
+Dev, QA and TL split `## Stored Facts` across two files:
 
-- **`<Role>_Memory.md`** (live, bounded Standing Checks/Keyword Index on fresh/expired entry): **Standing Checks** — unconditional always-do actions, no recall needed (leave `*(none yet)*` if none qualify) — plus a **Keyword Index**: one line per fact, `### Fact N — <short title>` + a `Keywords:` line, no fact body. `## Troubleshooting Facts` stays here too, unchanged §1 shape.
-- **`<Role>_Memory_Archive.md`** (conditional — open only on a keyword match): full four-field bodies, unchanged §1 shape.
+- **`<Role>_Memory.md`** (live; bounded Standing Checks/Keyword Index reads at fresh or expired entry): **Standing Checks** — unconditional always-do actions (leave `*(none yet)*` if none qualify) — plus a **Keyword Index**: one line per fact, `### Fact N — <short title>` + a `Keywords:` line, no fact body. `## Troubleshooting Facts` stays here, unchanged shape.
+- **`<Role>_Memory_Archive.md`** (open only on a keyword match): full four-field bodies.
 
-**Retrieval:** bounded read only, never a full-file read of the archive — use the `read-section` skill (`{{AGENT_DIR_PREFIX}}/skills/read-section/`, heading marker `^### Fact `).
+**Retrieval:** bounded read only, never the full archive — use the `read-section` skill (`.mt-agent-devkit/contracts/Read_Section.md`, heading marker `^### Fact `).
 
-**Writing a fact:** append the body to the archive under the next number, then the matching index line — both files change together; an entry in one without the other is a defect. Numbers are never reused — retire gaps rather than renumbering.
+**Writing a fact:** append the body to the archive under the next number, then its index line — both files change together; an entry in only one is a defect. Never reuse or renumber; retire gaps.
 
-**Caps:** the live file falls under §1's cap (the configured `**Memory file cap:**` value, default 10,000) and should stay far under it by construction (no fact bodies). The archive has no separate cap yet — treat §1's cap as its working ceiling until a retention policy is settled.
+**Caps:** the live file stays far under the configured memory file cap by construction (no fact bodies); until a retention policy is settled, that cap is also the archive's ceiling.
+<!-- END GENERATED agent-memory part two-tier -->
 
 ---
 

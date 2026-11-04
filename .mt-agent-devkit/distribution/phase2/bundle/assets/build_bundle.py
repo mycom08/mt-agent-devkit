@@ -10,9 +10,14 @@ import tempfile
 import subprocess
 
 # Skills shipped as a shared canonical file plus per-provider discovery wrappers.
-SHARED_SKILLS = ("agent-security", "comment", "po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
-                 "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
-PO_SKILLS = tuple(name for name in SHARED_SKILLS if name.startswith("po-"))
+PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-roadmap-drain",
+             "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
+# Common and Developer skills (ST-000310); change-metadata is devkit-internal only.
+COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record", "agent-memory", "troubleshooting",
+                 "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
+                 "git-workflow", "pre-pr-gate", "pr-review", "clean-code")
+DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
+SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS
 # Rules files whose templates left the bundle (ST-000290). Their installed copies
 # retire behind survivors present in every plan: the shared canonical PO skill
 # IDs (never a provider-suffixed operation ID) and the slim PO instructions.
@@ -34,6 +39,8 @@ def neutral(text):
     text = text.replace("{{AGENT_DIR_PREFIX}}/agents/", "{RUNTIME_ROOT}/")
     text = text.replace("{{AGENT_DIR_PREFIX}}", "{PROVIDER_ROOT}")
     text = text.replace("{PROVIDER_ROOT}/skills/read-section/", ".mt-agent-devkit/contracts/Read_Section.md").replace(".claude/skills/read-section/", ".mt-agent-devkit/contracts/Read_Section.md")
+    # Generated-block markers name the Phase 2 skill template; a target's owner is the installed skill.
+    text = re.sub(r"\.mt-agent-devkit/distribution/phase2/templates/skills/([a-z0-9-]+)/SKILL_template\.md", r".mt-agent-devkit/skills/\1/SKILL.md", text)
     text = text.replace("{{ROOT_FILE}}", "{ENTRYPOINT}").replace("{{AGENT_CLI_NAME}}", "selected provider")
     # Generation examples contain project inputs resolved by their own workflow,
     # rather than installation tokens. Keep them explicit as runtime inputs.
