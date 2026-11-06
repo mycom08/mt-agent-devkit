@@ -250,7 +250,7 @@ These observable triggers route to the shared waiting contracts; Canonical read 
 
 **Orchestrator pre-spawn:** initialize `Retro Contract: exception-v1` and carry an explicit expected completion identity list at the bound runtime path before each actual stage/actor executes. Follow `Agent_Common_Bootstrap.md §7`; do not create a retro skeleton. Observe trigger events throughout work. Already-started legacy runs explicitly keep their prior contract and existing history.
 
-1. **Spawn** the agent matching the `Implementer` role — **Developer → `model policy: implementation`, reasoning effort medium**; any other implementer role → **model policy: standard**
+1. **Spawn** the agent matching the `Implementer` role — **Developer → `model policy: implementation`**; any other implementer role → **model policy: standard**
    > **Spawn-prompt reminder (mandatory-reading references):** name the exact mandatory read set in the role instruction. A Developer packet names the task skill from the `developer_instructions.md` load map (`dev-implement` for a story; `dev-hotfix` for a post-Done bug) and the Developer reads its spawn-time skills and observable routes; never offer the full cross-role Story Standard as a startup alternative. Preserve the selected adapter, role instruction and Common/role Bootstrap full-read gates.
 2. Agent reads its own instruction files, memory, and rules
 3. **Read the story:** Agent reads the assigned story from GitHub (`status:in-progress` or next `status:ready` story via `gh issue view`)

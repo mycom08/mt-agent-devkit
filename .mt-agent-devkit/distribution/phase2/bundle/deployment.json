@@ -1508,8 +1508,8 @@
     {
       "id": "claude/Provider_Adapter.md",
       "path": "assets/claude_Provider_Adapter.md",
-      "sha256": "33277431fd3f372ec6820c48067d43fcacf1c0f29ded81930a328b7c89921448",
-      "bytes": 6065,
+      "sha256": "3bf7bdb12806c1f628f025b3f4efa21e48ee7c17b2f9166048b3834eb380e228",
+      "bytes": 5989,
       "kind": "adapter"
     },
     {

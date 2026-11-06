@@ -12,13 +12,12 @@ feedback, respawning with the full fresh-start packet if missing or expired.
 Confirm actual completion, rather than treating a delivered message as a verdict.
 The worker ends its turn after a bounded final report.
 
-Claude policy mappings: `implementation` uses opus with medium reasoning for
-Developer implementation; `design-review` uses opus for TL architecture/review
-and Developer peer review (medium reasoning for the Developer). `standard` uses
-sonnet; `closure` uses haiku for PO closure. The Developer discovery default remains
-sonnet/high, while an explicit workflow assignment takes precedence. Only choose
-models the active runtime actually exposes; no paid runtime is launched by this
-adapter's discovery check.
+Claude policy mappings: `implementation` sets no model or effort override, so the
+Developer runs on its discovery default, sonnet/high; `design-review` uses opus
+for TL architecture/review and Developer peer review (medium reasoning for the
+Developer). `standard` uses sonnet; `closure` uses haiku for PO closure. Only
+choose models the active runtime actually exposes; no paid runtime is launched by
+this adapter's discovery check.
 
 ## Tools, permissions, and CI waiting
 
