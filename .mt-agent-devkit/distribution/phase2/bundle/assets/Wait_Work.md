@@ -40,8 +40,9 @@ resolved returns ERROR rather than certifying incomplete evidence. Request
 failures remain errors; a request reaching its window deadline remains pending.
 If a PR wait's protection or rules lookup answers the 403 "Upgrade to GitHub Pro
 or make this repository public", the plan has no such feature: discovery is
-skipped (`discovery_skipped` in JSON), so required names come only from
-`--required-check` and all visible checks and runs must pass. Any other GitHub
+skipped (`discovery_skipped` in JSON), so required names come from
+`--required-check` and from any lookup that answered, and all visible checks and
+runs must pass. Any other GitHub
 error returns ERROR naming its class: authentication, rate limit, feature
 unavailable, permission or network/API.
 

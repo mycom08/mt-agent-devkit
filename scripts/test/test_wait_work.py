@@ -326,7 +326,7 @@ class PlanLimitTests(unittest.TestCase):
             self.assertEqual(self.snapshot(GitHubFixture(heads=[OTHER]), self.upgrade(lookups))["outcome"], "STALE")
             self.assertEqual(self.snapshot(GitHubFixture([run()], heads=[SHA, OTHER]), self.upgrade(lookups))["outcome"], "STALE")
 
-    def test_required_check_is_the_only_required_source_when_skipped(self):
+    def test_required_check_supplies_required_names_when_skipped(self):
         for lookups in self.LOOKUP_SETS:
             evidence = self.snapshot(GitHubFixture([run()]), self.upgrade(lookups), ["security"])
             self.assertEqual((evidence["outcome"], evidence["missing_checks"]), ("PENDING", ["security"]))

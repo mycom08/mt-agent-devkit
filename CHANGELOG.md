@@ -30,7 +30,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
-- [ST-000321] `wait_work.py ci` no longer aborts on the "Upgrade to GitHub Pro" 403 from the protection and rules lookups on Free-plan private repos: it waits on runs and checks with `--required-check` as the only required names, and GitHub errors now name their class (authentication, rate limit, feature unavailable, permission).
+- [ST-000321] `wait_work.py ci` no longer aborts on the "Upgrade to GitHub Pro" 403 from the protection and rules lookups on Free-plan private repos: it waits on runs and checks with required names from `--required-check` and from any lookup that answered, and GitHub errors now name their class (authentication, rate limit, feature unavailable, permission).
 
 ---
 

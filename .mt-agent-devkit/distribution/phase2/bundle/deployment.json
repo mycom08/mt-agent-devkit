@@ -1480,8 +1480,8 @@
     {
       "id": "claude/skill/ci-watch",
       "path": "assets/claude_skill_ci-watch",
-      "sha256": "875402fbcacac75b597f63dfa6cb509bc4226833e9bf797c32bacde6fa45b8b8",
-      "bytes": 4676,
+      "sha256": "89bda00874c2a625cdad655584a2bfaca7c2912ff61f7fbe0f07211e262b87c7",
+      "bytes": 4706,
       "kind": "adapter"
     },
     {
@@ -1683,8 +1683,8 @@
     {
       "id": "antigravity/skill/ci-watch",
       "path": "assets/antigravity_skill_ci-watch",
-      "sha256": "53cc7dd547383d99921c40488bac56912c803b65fee24ec66d5e88a0c38be8f7",
-      "bytes": 4691,
+      "sha256": "2c8296903a4432c1ae87c547c10cb4063ae9226e4cdfcefe87d12e3bddc75c07",
+      "bytes": 4721,
       "kind": "adapter"
     },
     {
@@ -1830,8 +1830,8 @@
     {
       "id": "codex/skill/ci-watch",
       "path": "assets/codex_skill_ci-watch",
-      "sha256": "5b7f9fc195f31cfcc192539070a0a6b1ffbd1ff5b43788ae246dbd2ff0b0a13d",
-      "bytes": 4673,
+      "sha256": "f232098c48d610213522e9792b4875bee871c30a416fd046df3ce50e004d255c",
+      "bytes": 4703,
       "kind": "adapter"
     },
     {
@@ -2117,8 +2117,8 @@
     {
       "id": "Wait_Work.md",
       "path": "assets/Wait_Work.md",
-      "sha256": "a99798223008a4568c52d6591ca4bca5fc15134f7c70470486cb228abe966db9",
-      "bytes": 4502,
+      "sha256": "641bfcb9460af5005f8be8f01dfd4d9c531c09e65400717f3fad2eed3c9d8e26",
+      "bytes": 4532,
       "kind": "contract"
     },
     {
