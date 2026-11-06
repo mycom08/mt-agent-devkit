@@ -38,6 +38,12 @@ success under the canonical zero-check exception. Never treat a successful singl
 Actions run as all required checks. A required-workflow ruleset that cannot be
 resolved returns ERROR rather than certifying incomplete evidence. Request
 failures remain errors; a request reaching its window deadline remains pending.
+If a PR wait's protection or rules lookup answers the 403 "Upgrade to GitHub Pro
+or make this repository public", the plan has no such feature: discovery is
+skipped (`discovery_skipped` in JSON), so required names come only from
+`--required-check` and all visible checks and runs must pass. Any other GitHub
+error returns ERROR naming its class: authentication, rate limit, feature
+unavailable, permission or network/API.
 
 The helper rediscovers delayed evidence inside each window; it never starts CI.
 Use windows at most 540 seconds and shorter than the selected command tool's
