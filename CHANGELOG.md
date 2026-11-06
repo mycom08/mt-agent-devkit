@@ -28,7 +28,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
-- [DEVKIT] Claude Developer implementation now runs on its default model and effort (Sonnet / high) instead of Opus / medium.
+- [DEVKIT] Claude Developer implementation and peer review now run on the default model and effort (Sonnet / high) instead of Opus / medium.
 
 ### Bug Fixes
 

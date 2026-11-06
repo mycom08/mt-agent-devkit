@@ -336,8 +336,8 @@ After the implementer reports completion, append a bullet to `Observations:` for
 
 1. **Spawn** the reviewer agent based on the routing table in Stage 0; save its `session_handle` as `reviewer_session`
    - Default: **Technical Lead** reviews (**model policy: design-review**)
-   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model policy: design-review**); the spawn packet names the `pr-review` task skill (`developer_instructions.md` load map)
-   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model policy: standard** instead of design-review — Technical Lead reviewer only; a Developer peer reviewer stays on design-review policy.
+   - Exception: if `Implementer` is `Technical Lead` → **Developer** does peer review (**model policy: implementation**); the spawn packet names the `pr-review` task skill (`developer_instructions.md` load map)
+   - If Stage 1 reported `Outcome: verification-only` → right-size effort: read the implementer's cited evidence directly and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust the evidence. Default to **model policy: standard** instead of design-review — Technical Lead reviewer only; a Developer peer reviewer stays on implementation policy.
    - When the reviewer is Technical Lead, the spawn prompt names `Technical_Lead_Rules_Read_On_Demand.md §5` (Code Review & PR Approval) as the section to fetch per its own §15 routing table.
 2. Reviewer reads its own instruction files, memory, and rules
 3. **Reviewer reviews the PR** (use `gh pr comment` — GitHub blocks self-approval via `gh pr review --approve`); an approval comment cites the current head SHA as `**Approved-SHA:** <sha>` (`gh pr view <PR-number> --json headRefOid --jq '.headRefOid'`) — the Merge Procedure's Approval-scope gate reads this back later
