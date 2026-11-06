@@ -17,6 +17,12 @@ spec = importlib.util.spec_from_file_location("wait_work", ROOT / ".mt-agent-dev
 w = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(w)
 SHA, OTHER = "a" * 40, "b" * 40
+UPGRADE_403 = "gh: Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)"
+BAD_CREDENTIALS_401 = "gh: Bad credentials (HTTP 401)\nTry authenticating with:  gh auth login"
+SCOPE_403 = 'gh: This API operation needs the "repo" scope. To request it, run:  gh auth refresh -h github.com -s repo (HTTP 403)'
+FORBIDDEN_403 = "gh: Resource not accessible by personal access token (HTTP 403)"
+RATE_LIMIT_403 = "gh: API rate limit exceeded for user ID 1. (HTTP 403)"
+NOT_FOUND_404 = "gh: Branch not found (HTTP 404)"
 
 
 def run(name="CI", status="completed", conclusion="success", sha=SHA, identity=1):
@@ -24,13 +30,14 @@ def run(name="CI", status="completed", conclusion="success", sha=SHA, identity=1
 
 
 class GitHubFixture:
-    def __init__(self, runs=None, checks=None, required=(), heads=None, prior=None, external=None):
+    def __init__(self, runs=None, checks=None, required=(), heads=None, prior=None, external=None, base_exists=True):
         self.runs = runs or []
         self.checks = checks or []
         self.required = required
         self.heads = heads or [SHA]
         self.prior = prior or []
         self.external = external or []
+        self.base_exists = base_exists
         self.calls = []
 
     def __call__(self, args, **kwargs):
@@ -42,10 +49,15 @@ class GitHubFixture:
             return []
         if args[:2] == ["run", "list"]:
             return self.runs if args[args.index("--commit") + 1] == SHA else self.prior
+        if args[:2] == ["api", "graphql"] and not self.base_exists:
+            return {"data": {"repository": {"ref": None}}}
         if args[:2] == ["api", "graphql"]:
-            return {"data": {"repository": {"ref": {"branchProtectionRule": {"requiredStatusCheckContexts": list(self.required)}}}}}
+            rule = {"requiredStatusCheckContexts": list(self.required)} if self.required else None
+            return {"data": {"repository": {"ref": {"branchProtectionRule": rule}}}}
         if "/rules/" in args[-1]:
             return [[]]
+        if "/branches/" in args[-1]:
+            return {"name": "main"}
         if "/compare/" in args[-1]:
             return {"files": [{"filename": "docs/note.md"}]}
         if "/check-runs" in args[-1]:
@@ -227,6 +239,206 @@ class EvidenceTests(unittest.TestCase):
     def test_empty_aggregate_has_no_success(self):
         self.assertEqual(w.aggregate([], []), ("NO RUN", []))
         self.assertEqual(w.aggregate([], [], ["missing"]), ("PENDING", ["missing"]))
+
+
+def lookup_name(args):
+    if args[:2] == ["api", "graphql"]:
+        return "protection"
+    if "/rules/" in args[-1]:
+        return "rules"
+    if args[:2] in (["pr", "view"], ["pr", "checks"], ["run", "list"]):
+        return " ".join(args[:2])
+    return "branch" if "/branches/" in args[-1] else "other"
+
+
+class FailingGh:
+    """Stands in for the gh process, so the real gh_json classifies real stderr."""
+
+    def __init__(self, fixture, failures):
+        self.fixture = fixture
+        self.failures = failures
+
+    def __call__(self, command, **kwargs):
+        args = command[1:]
+        stderr = self.failures.get(lookup_name(args))
+        if stderr:
+            return subprocess.CompletedProcess(command, 1, "", stderr)
+        return subprocess.CompletedProcess(command, 0, json.dumps(self.fixture(args)), "")
+
+
+class PlanLimitTests(unittest.TestCase):
+    LOOKUP_SETS = (("protection",), ("rules",), ("protection", "rules"))
+
+    def snapshot(self, fixture, failures, required=()):
+        with patch.object(w.subprocess, "run", side_effect=FailingGh(fixture, failures)):
+            return w.ci_snapshot("owner/repo", 1, SHA, w.gh_json, required)
+
+    def upgrade(self, lookups):
+        return dict.fromkeys(lookups, UPGRADE_403)
+
+    def assert_error(self, fixture, failures, expected_class):
+        with self.assertRaises(w.WaitError) as caught:
+            self.snapshot(fixture, failures)
+        self.assertEqual(str(caught.exception), "GitHub " + expected_class + " error; recover then retry same identity")
+
+    def test_error_classes(self):
+        for stderr, expected in (
+            (BAD_CREDENTIALS_401, "authentication"),
+            ("HTTP 401", "authentication"),
+            ("gh: bad credentials", "authentication"),
+            ("To get started with GitHub CLI, please run:  gh auth login", "authentication"),
+            (RATE_LIMIT_403, "rate limit"),
+            ("gh: You have exceeded a secondary rate limit. (HTTP 403)", "rate limit"),
+            (UPGRADE_403, "feature unavailable"),
+            (SCOPE_403, "permission"),
+            (FORBIDDEN_403, "permission"),
+            ("gh: Upgrade your plan (HTTP 403)", "permission"),
+            (NOT_FOUND_404, "network/API"),
+            ("connection reset", "network/API"),
+        ):
+            self.assertEqual(w.error_class(stderr), expected, stderr)
+
+    def test_upgrade_403_on_either_or_both_lookups_reports_check_outcomes(self):
+        for lookups in self.LOOKUP_SETS:
+            for runs, checks, expected in (
+                ([run()], [{"name": "external", "state": "SUCCESS"}], "PASS"),
+                ([run(conclusion="failure")], [], "FAIL"),
+                ([run()], [{"name": "external", "state": "FAILURE"}], "FAIL"),
+                ([run(status="in_progress", conclusion=None)], [], "PENDING"),
+                ([run()], [{"name": "external", "status": "IN_PROGRESS"}], "PENDING"),
+            ):
+                evidence = self.snapshot(GitHubFixture(runs, checks), self.upgrade(lookups))
+                self.assertEqual(evidence["outcome"], expected, lookups)
+                self.assertTrue(evidence["discovery_skipped"])
+                self.assertEqual(evidence["inspected_sha"], SHA)
+
+    def test_free_plan_shape_null_protection_rule_with_rules_upgrade(self):
+        fixture = GitHubFixture([run()])
+        evidence = self.snapshot(fixture, self.upgrade(["rules"]))
+        self.assertEqual(evidence["outcome"], "PASS")
+        self.assertFalse(any(call[:2] == ["api", "repos/owner/repo/branches/main"] for call in fixture.calls))
+
+    def test_upgrade_403_keeps_no_run_and_stale(self):
+        for lookups in self.LOOKUP_SETS:
+            self.assertEqual(self.snapshot(GitHubFixture(), self.upgrade(lookups))["outcome"], "NO RUN")
+            evidence = self.snapshot(GitHubFixture(prior=[run(sha=OTHER)]), self.upgrade(lookups))
+            self.assertEqual((evidence["outcome"], evidence["zero_check_gate"]), ("NO RUN", "required"))
+            self.assertEqual(self.snapshot(GitHubFixture(heads=[OTHER]), self.upgrade(lookups))["outcome"], "STALE")
+            self.assertEqual(self.snapshot(GitHubFixture([run()], heads=[SHA, OTHER]), self.upgrade(lookups))["outcome"], "STALE")
+
+    def test_required_check_supplies_required_names_when_skipped(self):
+        for lookups in self.LOOKUP_SETS:
+            evidence = self.snapshot(GitHubFixture([run()]), self.upgrade(lookups), ["security"])
+            self.assertEqual((evidence["outcome"], evidence["missing_checks"]), ("PENDING", ["security"]))
+            evidence = self.snapshot(GitHubFixture([run()], [{"name": "security", "state": "SUCCESS"}]), self.upgrade(lookups), ["security"])
+            self.assertEqual((evidence["outcome"], evidence["missing_checks"]), ("PASS", []))
+            fixture = GitHubFixture([run()])
+            self.snapshot(fixture, self.upgrade(lookups))
+            self.assertFalse(any(call[:2] == ["pr", "checks"] for call in fixture.calls))
+
+    def test_contexts_from_the_answering_lookup_stay_required(self):
+        evidence = self.snapshot(GitHubFixture([run()], required=("security",)), self.upgrade(["rules"]))
+        self.assertEqual((evidence["outcome"], evidence["missing_checks"]), ("PENDING", ["security"]))
+
+    def test_missing_base_still_errors(self):
+        with self.assertRaises(w.WaitError) as caught:
+            self.snapshot(GitHubFixture([run()], base_exists=False), self.upgrade(["rules"]))
+        self.assertEqual(str(caught.exception), "base branch protection scope unavailable")
+        self.assert_error(GitHubFixture([run()]), {"protection": UPGRADE_403, "rules": UPGRADE_403, "branch": NOT_FOUND_404}, "network/API")
+
+    def test_other_errors_on_either_lookup_still_error(self):
+        for lookup in ("protection", "rules"):
+            for stderr, expected in ((BAD_CREDENTIALS_401, "authentication"), (SCOPE_403, "permission"), (FORBIDDEN_403, "permission"), (RATE_LIMIT_403, "rate limit")):
+                self.assert_error(GitHubFixture([run()]), {lookup: stderr}, expected)
+
+    def test_upgrade_403_on_any_other_lookup_still_errors(self):
+        for failures in (
+            {"pr view": UPGRADE_403},
+            {"run list": UPGRADE_403},
+            {"pr checks": UPGRADE_403},
+            {"protection": UPGRADE_403, "branch": UPGRADE_403},
+        ):
+            self.assert_error(GitHubFixture([run()]), failures, "feature unavailable")
+
+    def test_real_error_on_one_lookup_is_not_masked_by_upgrade_on_the_other(self):
+        self.assert_error(GitHubFixture([run()]), {"protection": UPGRADE_403, "rules": BAD_CREDENTIALS_401}, "authentication")
+        self.assert_error(GitHubFixture([run()]), {"protection": SCOPE_403, "rules": UPGRADE_403}, "permission")
+
+    def test_error_text_excludes_gh_output(self):
+        with self.assertRaises(w.WaitError) as caught:
+            self.snapshot(GitHubFixture([run()]), {"rules": "gh: Bad credentials secret-token (HTTP 401)"})
+        self.assertNotIn("secret-token", str(caught.exception))
+
+    def test_available_discovery_is_unchanged(self):
+        fixture = GitHubFixture([run()], required=("security",))
+        evidence = self.snapshot(fixture, {})
+        self.assertEqual((evidence["outcome"], evidence["missing_checks"]), ("PENDING", ["security"]))
+        self.assertNotIn("discovery_skipped", evidence)
+        self.assertTrue(any(call[:2] == ["pr", "checks"] for call in fixture.calls))
+
+    def test_only_the_upgrade_403_skips_discovery(self):
+        for rule in (None, {}, {"requiredStatusCheckContexts": None}, {"requiredStatusCheckContexts": []}):
+            fixture = GitHubFixture([run()])
+            calls = []
+            def request(args, **kwargs):
+                calls.append(args)
+                if lookup_name(args) == "protection":
+                    return {"data": {"repository": {"ref": {"branchProtectionRule": rule}}}}
+                if lookup_name(args) == "pr checks":
+                    return [{"name": "security", "bucket": "fail"}]
+                return fixture(args, **kwargs)
+            evidence = w.ci_snapshot("owner/repo", 1, SHA, request)
+            self.assertEqual(evidence["outcome"], "FAIL", rule)
+            self.assertNotIn("discovery_skipped", evidence)
+            self.assertTrue(any(lookup_name(call) == "pr checks" for call in calls), rule)
+
+    def test_null_lookup_answers_error_rather_than_skip(self):
+        fixture = GitHubFixture([run()])
+        for lookup, answer in (("protection", None), ("rules", None), ("rules", [None])):
+            def request(args, **kwargs):
+                return answer if lookup_name(args) == lookup else fixture(args, **kwargs)
+            with self.assertRaises((TypeError, AttributeError)):
+                w.ci_snapshot("owner/repo", 1, SHA, request)
+
+    def test_required_workflow_ruleset_errors_when_protection_is_plan_limited(self):
+        fixture = GitHubFixture([run()])
+        def request(args, **kwargs):
+            if lookup_name(args) == "protection":
+                raise w.FeatureUnavailable("GitHub feature unavailable error; recover then retry same identity")
+            return [[{"type": "workflows"}]] if "/rules/" in args[-1] else fixture(args, **kwargs)
+        with self.assertRaises(w.WaitError) as caught:
+            w.ci_snapshot("owner/repo", 1, SHA, request)
+        self.assertIn("required workflow rule", str(caught.exception))
+
+    def test_wait_polls_to_completion_and_binds_head_when_skipped(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder) / "ci"
+            fixture = GitHubFixture([run(status="in_progress", conclusion=None)])
+            now = [0.0]
+            def sleep(seconds):
+                now[0] += seconds
+                fixture.runs = [run()]
+            with patch.object(w.subprocess, "run", side_effect=FailingGh(fixture, self.upgrade(["rules"]))):
+                evidence = w.ci_wait(directory, "owner/repo", 1, None, [], 5, 1, w.gh_json, lambda: now[0], sleep)
+                self.assertEqual((evidence["outcome"], evidence["inspected_sha"]), ("PASS", SHA))
+                self.assertEqual(json.loads((directory / "identity.json").read_text())["expected_sha"], SHA)
+                fixture.heads = [OTHER]
+                self.assertEqual(w.ci_wait(directory, "owner/repo", 1, None, [], 0, 1, w.gh_json, lambda: now[0], sleep)["outcome"], "STALE")
+
+    def test_command_exit_codes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            harness = Path(folder) / ".claude/harness"
+            harness.mkdir(parents=True)
+            (harness / "state-paths.json").write_text(json.dumps({"PROVIDER_ROOT": ".claude", "RUNTIME_ROOT": ".claude/agents"}))
+            for identity, failures, expected in (
+                ("plan-limit", self.upgrade(["rules"]), 0),
+                ("unauthorized", {"rules": BAD_CREDENTIALS_401}, 3),
+                ("scope", {"rules": SCOPE_403}, 3),
+                ("rate-limit", {"protection": RATE_LIMIT_403}, 3),
+            ):
+                with patch.object(w.subprocess, "run", side_effect=FailingGh(GitHubFixture([run()]), failures)):
+                    code = w.main(["ci", "--provider", "claude", "--runtime-root", ".claude/agents", "--root", folder, "--id", identity, "--mode", "github", "--repo", "owner/repo", "--pr", "1", "--window", "0"])
+                self.assertEqual(code, expected, identity)
 
 
 class LocalTests(unittest.TestCase):

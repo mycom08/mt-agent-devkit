@@ -18,10 +18,16 @@ CODES = {"PASS": 0, "FAIL": 1, "NO RUN": 2, "ERROR": 3, "STALE": 4, "PENDING": 1
 SUCCESS = {"SUCCESS", "NEUTRAL", "SKIPPED"}
 PENDING = {"PENDING", "EXPECTED", "QUEUED", "IN_PROGRESS", "WAITING", "REQUESTED"}
 RUN_FIELDS = "databaseId,workflowDatabaseId,workflowName,event,attempt,status,conclusion,headSha,url"
+PLAN_LIMIT_MESSAGE = "upgrade to github pro or make this repository public"
+FEATURE_UNAVAILABLE = "feature unavailable"
 
 
 class WaitError(ValueError):
     """Sanitized errors: never include command output or credential values."""
+
+
+class FeatureUnavailable(WaitError):
+    """The repository's plan lacks the feature behind this lookup."""
 
 
 def load(path):
@@ -83,6 +89,17 @@ def result(outcome, **fields):
     return {"outcome": outcome, "exit_code": CODES[outcome], **fields}
 
 
+def error_class(stderr):
+    message = stderr.lower()
+    if re.search(r"\b401\b|bad credentials", message):
+        return "authentication"
+    if re.search(r"\b403\b", message):
+        if "rate limit" in message:
+            return "rate limit"
+        return FEATURE_UNAVAILABLE if PLAN_LIMIT_MESSAGE in message else "permission"
+    return "authentication" if "auth" in message or "login" in message else "network/API"
+
+
 def gh_json(arguments, timeout=30, allowed=(0,)):
     try:
         response = subprocess.run(["gh", *arguments], capture_output=True, encoding="utf-8", timeout=max(.01, timeout))
@@ -91,9 +108,9 @@ def gh_json(arguments, timeout=30, allowed=(0,)):
     except OSError as exc:
         raise WaitError("GitHub CLI unavailable") from exc
     if response.returncode not in allowed or (response.returncode and not response.stdout.strip() and not re.search(r"no (?:required )?checks reported", response.stderr, re.I)):
-        message = response.stderr.lower()
-        category = "authentication" if any(word in message for word in ("auth", "login", "401", "403")) else "network/API"
-        raise WaitError("GitHub " + category + " error; recover then retry same identity")
+        category = error_class(response.stderr)
+        error = FeatureUnavailable if category == FEATURE_UNAVAILABLE else WaitError
+        raise error("GitHub " + category + " error; recover then retry same identity")
     try:
         return json.loads(response.stdout or "[]")
     except ValueError as exc:
@@ -137,6 +154,32 @@ def latest_runs(runs, sha):
     return list(latest.values())
 
 
+def protection_contexts(repo, base, request):
+    """Required contexts from branch protection; raises FeatureUnavailable if the plan lacks it."""
+    owner, repository = repo.split("/")
+    protection = request(["api", "graphql", "-f", "query=query($owner:String!,$name:String!,$ref:String!){repository(owner:$owner,name:$name){ref(qualifiedName:$ref){branchProtectionRule{requiredStatusCheckContexts}}}}", "-f", "owner=" + owner, "-f", "name=" + repository, "-f", "ref=refs/heads/" + base])
+    if protection.get("errors"):
+        raise WaitError("required-check protection query unavailable")
+    reference = protection["data"]["repository"]["ref"]
+    if reference is None:
+        raise WaitError("base branch protection scope unavailable")
+    rule = reference.get("branchProtectionRule") or {}
+    return rule.get("requiredStatusCheckContexts") or []
+
+
+def ruleset_contexts(repo, base, request):
+    """Required contexts from rulesets; raises FeatureUnavailable if the plan lacks them."""
+    pages = request(["api", "--paginate", "--slurp", "repos/" + repo + "/rules/branches/" + quote(base, safe="") + "?per_page=100"])
+    contexts = []
+    for page in pages:
+        for rule in page:
+            if rule.get("type") == "required_status_checks":
+                contexts.extend(item["context"] for item in rule["parameters"]["required_status_checks"])
+            elif rule.get("type") == "workflows":
+                raise WaitError("required workflow rule needs explicit gate evidence; not certified by this helper")
+    return contexts
+
+
 def ci_snapshot(repo, pr, sha, request, required=()):
     fields = "headRefOid,statusCheckRollup,commits,baseRefName"
     view = request(["pr", "view", str(pr), "--repo", repo, "--json", fields]) if pr else None
@@ -158,33 +201,32 @@ def ci_snapshot(repo, pr, sha, request, required=()):
                 statuses.setdefault(item["context"], item)
         checks.extend(statuses.values())
     required_names = set(required)
+    discovery_skipped = False
     if view:
-        owner, repository = repo.split("/")
-        protection = request(["api", "graphql", "-f", "query=query($owner:String!,$name:String!,$ref:String!){repository(owner:$owner,name:$name){ref(qualifiedName:$ref){branchProtectionRule{requiredStatusCheckContexts}}}}", "-f", "owner=" + owner, "-f", "name=" + repository, "-f", "ref=refs/heads/" + view["baseRefName"]])
-        if protection.get("errors"):
-            raise WaitError("required-check protection query unavailable")
-        reference = protection["data"]["repository"]["ref"]
-        if reference is None:
-            raise WaitError("base branch protection scope unavailable")
-        rule = reference.get("branchProtectionRule") or {}
-        required_names.update(rule.get("requiredStatusCheckContexts", []))
-        rules = request(["api", "--paginate", "--slurp", "repos/" + repo + "/rules/branches/" + quote(view["baseRefName"], safe="") + "?per_page=100"])
-        for page in rules:
-            for rule in page:
-                if rule.get("type") == "required_status_checks":
-                    required_names.update(item["context"] for item in rule["parameters"]["required_status_checks"])
-                elif rule.get("type") == "workflows":
-                    raise WaitError("required workflow rule needs explicit gate evidence; not certified by this helper")
-        # gh's required-check selection incorporates repository protection rules.
-        selected = request(["pr", "checks", str(pr), "--repo", repo, "--required", "--json", "name,bucket"], allowed=(0, 1, 8))
-        if len(selected) >= 100:
-            raise WaitError("required-check result limit reached; complete evidence required")
-        required_names.update(item["name"] for item in selected)
-        # These selections may not be present yet in a concurrently read rollup.
-        for item in selected:
-            checks.append({"name": item["name"], "state": {"pass": "SUCCESS", "fail": "FAILURE", "pending": "PENDING", "cancel": "CANCELLED", "skipping": "SKIPPED"}.get(item.get("bucket"), "PENDING")})
+        base = view["baseRefName"]
+        try:
+            required_names.update(protection_contexts(repo, base, request))
+        except FeatureUnavailable:
+            # This answer says nothing about the base; a missing base must still fail.
+            request(["api", "repos/" + repo + "/branches/" + quote(base, safe="")])
+            discovery_skipped = True
+        try:
+            required_names.update(ruleset_contexts(repo, base, request))
+        except FeatureUnavailable:
+            discovery_skipped = True
+        if not discovery_skipped:
+            # gh's required-check selection incorporates repository protection rules.
+            selected = request(["pr", "checks", str(pr), "--repo", repo, "--required", "--json", "name,bucket"], allowed=(0, 1, 8))
+            if len(selected) >= 100:
+                raise WaitError("required-check result limit reached; complete evidence required")
+            required_names.update(item["name"] for item in selected)
+            # These selections may not be present yet in a concurrently read rollup.
+            for item in selected:
+                checks.append({"name": item["name"], "state": {"pass": "SUCCESS", "fail": "FAILURE", "pending": "PENDING", "cancel": "CANCELLED", "skipping": "SKIPPED"}.get(item.get("bucket"), "PENDING")})
     outcome, missing = aggregate(checks, runs, required_names)
     evidence = result(outcome, inspected_sha=current, runs=[{key: run.get(key) for key in ("databaseId", "workflowDatabaseId", "workflowName", "event", "attempt", "status", "conclusion", "headSha")} for run in runs], check_count=len(checks), missing_checks=missing, approval_scope="pr-head" if pr else "commit-only")
+    if discovery_skipped:
+        evidence["discovery_skipped"] = True
     if outcome == "NO RUN" and view:
         # Evidence only. The human zero-check gate must prove suppression/scope.
         for commit in reversed(view.get("commits", [])):

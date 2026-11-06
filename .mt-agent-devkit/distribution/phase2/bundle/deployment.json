@@ -10,8 +10,8 @@
     {
       "id": "bridge_provenance.json",
       "path": "assets/bridge_provenance.json",
-      "sha256": "f8e1db846e8d0bf1ceb99b9296a114c8be35ae71fb02e470cbef66cfb0f2f128",
-      "bytes": 707,
+      "sha256": "29f32a395e8860e16cb24e2c8b76939eb28635835fb22b1fa3542c730ed11ea5",
+      "bytes": 721,
       "kind": "contract"
     },
     {
@@ -1480,8 +1480,8 @@
     {
       "id": "claude/skill/ci-watch",
       "path": "assets/claude_skill_ci-watch",
-      "sha256": "7b81bbdd7bc3e0fd625333c02c136b01a6fe0756bc4df3769636c26653aeaaeb",
-      "bytes": 4254,
+      "sha256": "89bda00874c2a625cdad655584a2bfaca7c2912ff61f7fbe0f07211e262b87c7",
+      "bytes": 4706,
       "kind": "adapter"
     },
     {
@@ -1683,8 +1683,8 @@
     {
       "id": "antigravity/skill/ci-watch",
       "path": "assets/antigravity_skill_ci-watch",
-      "sha256": "f246c77bde53b0bb8eb898598c35a5d5f90dd5296c4cbfed78c100cd8ba2bfa5",
-      "bytes": 4269,
+      "sha256": "2c8296903a4432c1ae87c547c10cb4063ae9226e4cdfcefe87d12e3bddc75c07",
+      "bytes": 4721,
       "kind": "adapter"
     },
     {
@@ -1830,8 +1830,8 @@
     {
       "id": "codex/skill/ci-watch",
       "path": "assets/codex_skill_ci-watch",
-      "sha256": "d740933c2b5326931508ec1fb4207c2f30440a982eb5f551ccc8b25b3e404759",
-      "bytes": 4251,
+      "sha256": "f232098c48d610213522e9792b4875bee871c30a416fd046df3ce50e004d255c",
+      "bytes": 4703,
       "kind": "adapter"
     },
     {
@@ -2089,8 +2089,8 @@
     {
       "id": "wait_work.py",
       "path": "assets/wait_work.py",
-      "sha256": "6a5de32b208ffe290f1795e3393854abc1c3d7efd15adbb95de11b16447dd875",
-      "bytes": 18718,
+      "sha256": "947cc552c8014a45517ce176da89a8c3bd077b76c30c8a7b0a889eb40e28d602",
+      "bytes": 20239,
       "kind": "script"
     },
     {
@@ -2117,8 +2117,8 @@
     {
       "id": "Wait_Work.md",
       "path": "assets/Wait_Work.md",
-      "sha256": "1ec64315c752c8da56e49c2ef0c2354a564a4e8abe0456be5dc4a65bea904bdf",
-      "bytes": 4080,
+      "sha256": "641bfcb9460af5005f8be8f01dfd4d9c531c09e65400717f3fad2eed3c9d8e26",
+      "bytes": 4532,
       "kind": "contract"
     },
     {
