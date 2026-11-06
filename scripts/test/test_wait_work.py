@@ -376,6 +376,30 @@ class PlanLimitTests(unittest.TestCase):
         self.assertNotIn("discovery_skipped", evidence)
         self.assertTrue(any(call[:2] == ["pr", "checks"] for call in fixture.calls))
 
+    def test_only_the_upgrade_403_skips_discovery(self):
+        for rule in (None, {}, {"requiredStatusCheckContexts": None}, {"requiredStatusCheckContexts": []}):
+            fixture = GitHubFixture([run()])
+            calls = []
+            def request(args, **kwargs):
+                calls.append(args)
+                if lookup_name(args) == "protection":
+                    return {"data": {"repository": {"ref": {"branchProtectionRule": rule}}}}
+                if lookup_name(args) == "pr checks":
+                    return [{"name": "security", "bucket": "fail"}]
+                return fixture(args, **kwargs)
+            evidence = w.ci_snapshot("owner/repo", 1, SHA, request)
+            self.assertEqual(evidence["outcome"], "FAIL", rule)
+            self.assertNotIn("discovery_skipped", evidence)
+            self.assertTrue(any(lookup_name(call) == "pr checks" for call in calls), rule)
+
+    def test_null_lookup_answers_error_rather_than_skip(self):
+        fixture = GitHubFixture([run()])
+        for lookup, answer in (("protection", None), ("rules", None), ("rules", [None])):
+            def request(args, **kwargs):
+                return answer if lookup_name(args) == lookup else fixture(args, **kwargs)
+            with self.assertRaises((TypeError, AttributeError)):
+                w.ci_snapshot("owner/repo", 1, SHA, request)
+
     def test_required_workflow_ruleset_errors_when_protection_is_plan_limited(self):
         fixture = GitHubFixture([run()])
         def request(args, **kwargs):

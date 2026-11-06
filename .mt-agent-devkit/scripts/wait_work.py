@@ -155,29 +155,21 @@ def latest_runs(runs, sha):
 
 
 def protection_contexts(repo, base, request):
-    """Required contexts from branch protection, or None if the plan lacks it."""
+    """Required contexts from branch protection; raises FeatureUnavailable if the plan lacks it."""
     owner, repository = repo.split("/")
-    try:
-        protection = request(["api", "graphql", "-f", "query=query($owner:String!,$name:String!,$ref:String!){repository(owner:$owner,name:$name){ref(qualifiedName:$ref){branchProtectionRule{requiredStatusCheckContexts}}}}", "-f", "owner=" + owner, "-f", "name=" + repository, "-f", "ref=refs/heads/" + base])
-    except FeatureUnavailable:
-        # This answer says nothing about the base; a missing base must still fail.
-        request(["api", "repos/" + repo + "/branches/" + quote(base, safe="")])
-        return None
+    protection = request(["api", "graphql", "-f", "query=query($owner:String!,$name:String!,$ref:String!){repository(owner:$owner,name:$name){ref(qualifiedName:$ref){branchProtectionRule{requiredStatusCheckContexts}}}}", "-f", "owner=" + owner, "-f", "name=" + repository, "-f", "ref=refs/heads/" + base])
     if protection.get("errors"):
         raise WaitError("required-check protection query unavailable")
     reference = protection["data"]["repository"]["ref"]
     if reference is None:
         raise WaitError("base branch protection scope unavailable")
     rule = reference.get("branchProtectionRule") or {}
-    return rule.get("requiredStatusCheckContexts", [])
+    return rule.get("requiredStatusCheckContexts") or []
 
 
 def ruleset_contexts(repo, base, request):
-    """Required contexts from rulesets, or None if the plan lacks them."""
-    try:
-        pages = request(["api", "--paginate", "--slurp", "repos/" + repo + "/rules/branches/" + quote(base, safe="") + "?per_page=100"])
-    except FeatureUnavailable:
-        return None
+    """Required contexts from rulesets; raises FeatureUnavailable if the plan lacks them."""
+    pages = request(["api", "--paginate", "--slurp", "repos/" + repo + "/rules/branches/" + quote(base, safe="") + "?per_page=100"])
     contexts = []
     for page in pages:
         for rule in page:
@@ -211,10 +203,17 @@ def ci_snapshot(repo, pr, sha, request, required=()):
     required_names = set(required)
     discovery_skipped = False
     if view:
-        protection_names = protection_contexts(repo, view["baseRefName"], request)
-        ruleset_names = ruleset_contexts(repo, view["baseRefName"], request)
-        required_names.update(protection_names or (), ruleset_names or ())
-        discovery_skipped = protection_names is None or ruleset_names is None
+        base = view["baseRefName"]
+        try:
+            required_names.update(protection_contexts(repo, base, request))
+        except FeatureUnavailable:
+            # This answer says nothing about the base; a missing base must still fail.
+            request(["api", "repos/" + repo + "/branches/" + quote(base, safe="")])
+            discovery_skipped = True
+        try:
+            required_names.update(ruleset_contexts(repo, base, request))
+        except FeatureUnavailable:
+            discovery_skipped = True
         if not discovery_skipped:
             # gh's required-check selection incorporates repository protection rules.
             selected = request(["pr", "checks", str(pr), "--repo", repo, "--required", "--json", "name,bucket"], allowed=(0, 1, 8))

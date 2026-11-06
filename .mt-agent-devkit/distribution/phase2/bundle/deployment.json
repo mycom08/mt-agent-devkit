@@ -2089,8 +2089,8 @@
     {
       "id": "wait_work.py",
       "path": "assets/wait_work.py",
-      "sha256": "e792ef3db1b579a480d95f3a438e5d389a7ee23c71143bf8c73f80f82edadb6b",
-      "bytes": 20280,
+      "sha256": "947cc552c8014a45517ce176da89a8c3bd077b76c30c8a7b0a889eb40e28d602",
+      "bytes": 20239,
       "kind": "script"
     },
     {
