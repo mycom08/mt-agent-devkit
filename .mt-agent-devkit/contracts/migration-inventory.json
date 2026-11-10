@@ -1412,7 +1412,7 @@
         "AGENTS.md"
       ],
       "reason": "Claude canonical content and organization; actual provider mechanics extracted.",
-      "discovery_frontmatter": "---\nname: Developer\ndescription: Implements approved stories, follows technical guidance, and updates delivery-facing documentation for the feature\nmodel: sonnet\neffort: high\n---\n\n",
+      "discovery_frontmatter": "---\nname: Developer\ndescription: Implements approved stories, follows technical guidance, and updates delivery-facing documentation for the feature\nmodel: sonnet\n---\n\n",
       "consumer_contract": [
         "role pre-work, section routing, story pipeline and internal commands"
       ]

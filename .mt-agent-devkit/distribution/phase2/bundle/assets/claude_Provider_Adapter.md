@@ -13,7 +13,7 @@ Confirm actual completion, rather than treating a delivered message as a verdict
 The worker ends its turn after a bounded final report.
 
 Claude policy mappings: `implementation` sets no model or effort override, so the
-Developer runs on its discovery default, sonnet/high, for implementation and peer
+Developer runs on its discovery default, sonnet with the runtime's default effort, for implementation and peer
 review; `design-review` uses opus for TL architecture/review. `standard` uses
 sonnet; `closure` uses haiku for PO closure. Only choose models the active runtime
 actually exposes; no paid runtime is launched by this adapter's discovery check.
