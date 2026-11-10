@@ -183,7 +183,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 
      f. **Entrypoints (`CLAUDE.md`, `AGENTS.md`)** — edit only outside the `<!-- MT-AGENT-DEVKIT-START -->` / `<!-- MT-AGENT-DEVKIT-END -->` pair, and only two things: a stale overview status sentence, and a `**Devkit version:**` that differs from that provider's `{{AGENT_DIR_PREFIX}}/agents/devkit_version.txt` (normalize the version: trimmed, no leading `v`). For `AGENTS.md`, check every present stamp of a provider it serves (`.codex`, `.antigravity`); edit only when they all agree, otherwise add it to the "could not settle" list. Absent field: skip silently. Missing stamp or unbalanced markers: report and skip.
 
-     g. **Protected paths** — before any write, take the protected paths from the install receipt's `managed_files` (`.mt-agent-devkit/install-receipt.json`); with no receipt, fall back to the legacy `## Agent File Integrity` prefix table in the root entrypoint. Report a protected file instead of editing it; the entrypoint carve-out in step f is the only exception.
+     g. **Protected paths** — before any write, take the protected paths from the install receipt's `managed_files`; with no receipt, fall back to the legacy `## Agent File Integrity` prefix table in the root entrypoint. Report a protected file instead of editing it; the entrypoint carve-out in step f is the only exception.
 
      h. **Report** — one line per file (`kept` / `corrected` / `report-only`), like Memory Pruning's kept/pruned summary, plus a "could not settle" list for the user.
 
