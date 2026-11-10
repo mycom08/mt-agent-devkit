@@ -9,7 +9,7 @@ This file defines **what counts as a finding** for a target-project scan. It is 
 
 ## 1. Why This Scan Is Report-Only, Always
 
-Findings from this scan are never applied as edits inside the target project — `## Agent File Integrity` in this project's `{ENTRYPOINT}` marks `rules/`, `instructions/`, and `{ENTRYPOINT}` itself as protected paths, writable only by `sync devkit` / `update project`'s normal merge step, not by this audit. Every finding this spec defines is filed upstream as a GitHub Issue against the devkit repository (see the workflow file for the filing mechanics) — the fix, if any, lands in `templates/` and reaches this project on its next sync.
+Findings from this scan are never applied as edits inside the target project — `## Agent File Integrity` in this project's `{ENTRYPOINT}` marks `rules/`, `instructions/`, and `{ENTRYPOINT}` itself as protected paths, writable only by `sync devkit` / `update project`'s normal merge step, not by this audit (the one exception is the sprint-end Docs Sync step, which may correct two outside-block fields in `{ENTRYPOINT}`). Every finding this spec defines is filed upstream as a GitHub Issue against the devkit repository (see the workflow file for the filing mechanics) — the fix, if any, lands in `templates/` and reaches this project on its next sync.
 
 ---
 

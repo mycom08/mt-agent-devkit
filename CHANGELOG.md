@@ -29,6 +29,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Changes
 
 - [ST-000238] Add a planner-only `docs/Project_Roadmap.md` (Now / Next / Later / Done, named owner) that replaces the Priming status text: Stage 4 closure, `plan sprint` and `create stories` update it, and this repo gets its own. `sync devkit` delivers the updated workflows and a stock roadmap only when absent; an existing roadmap, Priming or Document_Index is never overwritten.
+- [ST-000283] Add a sprint-end Docs Sync step after Memory Pruning that checks the project roadmap, feature READMEs and entrypoint overview status and `**Devkit version:**` against the sprint's issues, and report-only for `context/` files. The root `Agent File Integrity` paragraph permits exactly those two outside-block entrypoint edits.
 - [DEVKIT] Claude Developer implementation and peer review now run on the default model and effort (Sonnet, runtime default effort) instead of Opus / medium.
 
 ### Bug Fixes

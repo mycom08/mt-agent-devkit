@@ -155,4 +155,24 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 
   4. **Memory Pruning** — runs regardless of the Devkit Contribution answer above. Read only `Retro_Rules.md`'s "Sprint-End Memory Pruning" heading-delimited section even when no retro exists: glob `{RUNTIME_ROOT}/memory/*_Memory.md`, apply the inclusion test and "Never record" list from `Agent_Common_Read_On_Demand.md §1` to each file's `## Stored Facts` entries, delete/merge what fails it, and report a one-line kept/pruned summary per file to the user. Orchestrator-direct, no agent spawn. This replaces the old per-write-only pruning judgment call with a step that actually runs on a schedule.
 
-  5. **Cleanup** — delete the verified pipeline state and this workflow's temporary files only, using the selected adapter's literal-path file operations. Preserve other active workflows and all records/memory. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).
+  5. **Docs Sync** — orchestrator-direct, no agent spawn. Checks status docs against the sprint's issues so roadmaps, feature READMEs and entrypoint overviews do not drift when stories finish. Reuses the project roadmap rules from the Stage 4 "Roadmap update" rule in `Shared_Pipeline_Stages.md` and the `Now / Next / Later / Done` buckets of `docs/Project_Roadmap.md`.
+
+     a. **Source (issues only, never memory)** — resolve N from the `Sprint` field in the state file. GitHub mode: `gh issue list --label sprint-N --state all --json number,title,state,labels --limit 200`. Strict mode: the story files filtered on `**Sprint:** sprint-N`. Stories removed from the sprint are found from the state file or `Sprint_N_Overview.md`; when neither exists, the report says "not detectable".
+
+     b. **Doc discovery (deterministic)** — build the doc set from: `docs/Project_Roadmap.md`; a word-boundary issue-number scan of `docs/` for each sprint issue (`grep -rnw -e '<number>' docs/`); and, for each `feature:*` label the sprint touched, the feature roadmap globs `docs/feature/<feature>/plan/*Roadmap*.md` plus `docs/feature/*/README.md` and its "Shipped stories" heading. List the doc set in the report even when nothing changes.
+
+     c. **Writes** — limited to status words, dates, sprint rollover text and "Shipped stories" rows keyed by issue number, using issue states only. Add a row only for a closed story. Never copy story lists into `docs/Project_Roadmap.md`. A topic moves bucket only when all its sprint issues agree. A section the sprint removed but a README still lists is reported, not edited.
+
+     d. **Project roadmap absent** — report it and skip; never create `docs/Project_Roadmap.md`.
+
+     e. **`context/` is report-only, always** — files under `context/` (Priming, Document_Index) are reported when stale and never edited.
+
+     f. **Entrypoints (`CLAUDE.md`, `AGENTS.md`)** — edit only outside the `<!-- MT-AGENT-DEVKIT-START -->` / `<!-- MT-AGENT-DEVKIT-END -->` pair, and only two things: a stale overview status sentence, and a `**Devkit version:**` that differs from that provider's `{RUNTIME_ROOT}/devkit_version.txt` (normalize the version: trimmed, no leading `v`). For `AGENTS.md`, check every present stamp of a provider it serves (`.codex`, `.antigravity`); edit only when they all agree, otherwise add it to the "could not settle" list. Absent field: skip silently. Missing stamp or unbalanced markers: report and skip.
+
+     g. **Protected paths** — before any write, take the protected paths from the install receipt's `managed_files` (`.mt-agent-devkit/install-receipt.json`); with no receipt, fall back to the legacy `## Agent File Integrity` prefix table in the root entrypoint. Report a protected file instead of editing it; the entrypoint carve-out in step f is the only exception.
+
+     h. **Report** — one line per file (`kept` / `corrected` / `report-only`), like Memory Pruning's kept/pruned summary, plus a "could not settle" list for the user.
+
+     i. **Commit** — GitHub mode commits straight to the base branch (per `po-plan-docs`); strict mode commits locally on `sprint-N-dev`. No PR, no story.
+
+  6. **Cleanup** — delete the verified pipeline state and this workflow's temporary files only, using the selected adapter's literal-path file operations. Preserve other active workflows and all records/memory. Agents must also delete any tmp files they created immediately after the file is no longer needed (e.g., after `gh` call using `--body-file`).

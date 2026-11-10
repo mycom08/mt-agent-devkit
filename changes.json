@@ -16,7 +16,9 @@
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000238] Stage 2 adds a PO roadmap check.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[ST-000238] Step 2 adds a roadmap check before stories are filed.",
       ".mt-agent-devkit/distribution/phase2/templates/context/Project_Priming_template.md": "[ST-000238] Status line points to docs/Project_Roadmap.md.",
-      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000238] Add the Project Roadmap row."
+      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000238] Add the Project Roadmap row.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000283] Sprint end gains an orchestrator-direct Docs Sync step before Cleanup.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Audit_Rules_template.md": "[ST-000283] Protected-path note names the Docs Sync entrypoint exception."
     },
     "deployment": {
       "schema_version": 1,
