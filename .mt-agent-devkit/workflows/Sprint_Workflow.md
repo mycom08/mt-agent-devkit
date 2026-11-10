@@ -159,7 +159,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 
      a. **Source (issues only, never memory)** — resolve N from the `Sprint` field in the state file. GitHub mode: `gh issue list --label sprint-N --state all --json number,title,state,labels --limit 200`. Strict mode: the story files filtered on `**Sprint:** sprint-N`. Stories removed from the sprint are found from the state file or `Sprint_N_Overview.md`; when neither exists, the report says "not detectable".
 
-     b. **Doc discovery (deterministic)** — build the doc set from: `docs/Project_Roadmap.md`; a word-boundary issue-number scan of `docs/` for each sprint issue (`grep -rnw -e '<number>' docs/`); and, for each `feature:*` label the sprint touched, the feature roadmap globs `docs/feature/<feature>/plan/*Roadmap*.md` plus `docs/feature/*/README.md` and its "Shipped stories" heading. List the doc set in the report even when nothing changes.
+     b. **Doc discovery (deterministic)** — build the doc set from: `docs/Project_Roadmap.md`; a word-boundary issue-number scan of `docs/` for each sprint issue (`grep -rnw -e '<number>' docs/`); and, for each feature the sprint touched (the `feature:*` label in GitHub mode, the story's `**Feature:**` field in strict mode), the feature roadmap globs `docs/feature/<feature>/plan/*Roadmap*.md` plus `docs/feature/*/README.md` and its "Shipped stories" heading. List the doc set in the report even when nothing changes.
 
      c. **Writes** — limited to status words, dates, sprint rollover text and "Shipped stories" rows keyed by issue number, using issue states only. Add a row only for a closed story. Never copy story lists into `docs/Project_Roadmap.md`. A topic moves bucket only when all its sprint issues agree. A section the sprint removed but a README still lists is reported, not edited.
 
@@ -169,7 +169,7 @@ The Story Base Preflight `inspect` PASS in `Shared_Pipeline_Stages.md` verifies 
 
      f. **Entrypoints (`CLAUDE.md`, `AGENTS.md`)** — edit only outside the `<!-- MT-AGENT-DEVKIT-START -->` / `<!-- MT-AGENT-DEVKIT-END -->` pair, and only two things: a stale overview status sentence, and a `**Devkit version:**` that differs from that provider's `{RUNTIME_ROOT}/devkit_version.txt` (normalize the version: trimmed, no leading `v`). For `AGENTS.md`, check every present stamp of a provider it serves (`.codex`, `.antigravity`); edit only when they all agree, otherwise add it to the "could not settle" list. Absent field: skip silently. Missing stamp or unbalanced markers: report and skip.
 
-     g. **Protected paths** — before any write, take the protected paths from the install receipt's `managed_files`; with no receipt, fall back to the legacy `## Agent File Integrity` prefix table in the root entrypoint. Report a protected file instead of editing it; the entrypoint carve-out in step f is the only exception.
+     g. **Protected paths** — before any write, take the protected paths from the install receipt's `managed_files` records whose `ownership` is not `project_owned` (`docs/Project_Roadmap.md` is `project_owned`, so it stays editable); with no receipt, fall back to the legacy `## Agent File Integrity` prefix table in the root entrypoint. Report a protected file instead of editing it; the entrypoint carve-out in step f is the only exception.
 
      h. **Report** — one line per file (`kept` / `corrected` / `report-only`), like Memory Pruning's kept/pruned summary, plus a "could not settle" list for the user.
 
