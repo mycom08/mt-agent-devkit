@@ -28,6 +28,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000238] Add a planner-only `docs/Project_Roadmap.md` (Now / Next / Later / Done, named owner) that replaces the Priming status text: Stage 4 closure, `plan sprint` and `create stories` update it, and this repo gets its own. `sync devkit` delivers the updated workflows and a stock roadmap only when absent; an existing roadmap, Priming or Document_Index is never overwritten.
 - [DEVKIT] Claude Developer implementation and peer review now run on the default model and effort (Sonnet, runtime default effort) instead of Opus / medium.
 
 ### Bug Fixes

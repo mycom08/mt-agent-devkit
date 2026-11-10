@@ -8,7 +8,7 @@
 
 **Purpose:** {what problem it solves and who uses it}.
 
-**Status:** {current implementation status, e.g., "✅ Phase 1 complete | 🔄 Next: Phase 2"}
+**Status:** see `docs/Project_Roadmap.md` (Now / Next / Later / Done).
 
 **Key traits:** {key architectural or operational traits, e.g., multi-tenant, event-driven, REST-based, etc.}
 

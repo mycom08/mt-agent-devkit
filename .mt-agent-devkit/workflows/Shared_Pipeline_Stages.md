@@ -423,21 +423,25 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 
 > **GitHub mode closure-comment ordering (mandatory pre-check on both paths, not a memory item):** before posting any closure comment, apply the closure-comment ordering in the `po-verify-close` skill (`.mt-agent-devkit/skills/po-verify-close/SKILL.md`, Close step 1): check `gh issue view <number> --json state --jq '.state'` first, and on `CLOSED` post the comment with a separate `gh issue comment`. Checking state first turns this from a rule to remember into a branch to execute — the prose warning alone was insufficient in practice (recurred in ST-000032 after already being documented from ST-000026).
 
+> **Roadmap update (orchestrator-direct, both paths, github and strict):** the orchestrator, not the PO agent, updates `docs/Project_Roadmap.md` only when this story makes a topic change bucket (Now / Next / Later / Done) or introduces a new topic; edit that topic's one line and `Last updated`, and leave the file untouched otherwise. When the file is missing, report it and skip; never create it here. In github mode commit and push the edit straight to the base branch (per the `po-plan-docs` skill); in strict mode commit it locally on `sprint-N-dev`. Closure is incremental; the sprint-end reconciliation is a separate story's job.
+
 ### Non-behavioral fast path (`Type: non-behavioral`)
 
 1. Orchestrator executes closure directly — no PO agent spawn:
    - Tick all AC checkboxes in the issue body (`gh issue edit` with `--body-file`); remove all `status:*` labels and add `status:done`; close the issue
-2. **Start Story Workflow:** pipeline ends here
+2. **Roadmap update:** apply the roadmap update rule above (orchestrator-direct)
+3. **Start Story Workflow:** pipeline ends here
 
 ### Behavioral path (`Type: behavioral`)
 
-**`PO Execution: orchestrator`:** do not spawn. The orchestrator closes the story inline as PO per the orchestrator instructions' inline PO activity procedure: load `po-core`, `po-verify-close` and `po-comment`, each at its point of use; set `po_session: inline` and append `stage4-closure: po-core, po-verify-close, po-comment, comment` to `PO Skills`; read `Product_Owner_Memory.md` if this is the run's first PO activity; then perform step 3 below in full, including the judgement checks the merge pre-check does not cover (Definition of Done and open comments, backward compatibility, elevated verification). Skip the PO Working Record, record the completion identity with role `Orchestrator`, and write one `orchestrator_inline` telemetry row (stage `stage4-closure`). A scope change found here follows the Scope-Change Escalation. **`PO Execution: subagent`:** steps 1–5 below, unchanged.
+**`PO Execution: orchestrator`:** do not spawn. The orchestrator closes the story inline as PO per the orchestrator instructions' inline PO activity procedure: load `po-core`, `po-verify-close` and `po-comment`, each at its point of use; set `po_session: inline` and append `stage4-closure: po-core, po-verify-close, po-comment, comment` to `PO Skills`; read `Product_Owner_Memory.md` if this is the run's first PO activity; then perform step 3 below in full, including the judgement checks the merge pre-check does not cover (Definition of Done and open comments, backward compatibility, elevated verification). Skip the PO Working Record, record the completion identity with role `Orchestrator`, and write one `orchestrator_inline` telemetry row (stage `stage4-closure`). A scope change found here follows the Scope-Change Escalation. **`PO Execution: subagent`:** steps 1–6 below, unchanged.
 
 1. **Spawn** Product Owner agent (**model policy: closure**, manifest task `closure`); save its `session_handle` as `po_session` (resume via `po_session` if still active from a previous story in this sprint); name the `po-verify-close` skill in the assignment
 2. PO reads for closure only — **skip Project_Priming and reading/writing the Working Record**: `Agent_Common_Bootstrap.md` (full file, every section mandatory), `{RUNTIME_ROOT}/memory/Product_Owner_Memory.md`, and the `po-core`, `po-verify-close` and `po-comment` skills
 3. PO verifies acceptance and closes the story per `po-verify-close` (`.mt-agent-devkit/skills/po-verify-close/SKILL.md`): acceptance questions, evidence check including the elevated-verification and implementer = validator closure signals, AC ticking with `--body-file`, `status:done` and close
 4. PO evaluates/completes its own metadata under `Agent_Common_Bootstrap.md §7`; only required triggers load/write its contribution before handoff.
-5. **Start Story Workflow:** pipeline ends here
+5. **Roadmap update:** the orchestrator applies the roadmap update rule above, after the PO closure completes
+6. **Start Story Workflow:** pipeline ends here
 
 ### Orchestrator Observation Check — Stage 4
 

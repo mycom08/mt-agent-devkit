@@ -164,6 +164,10 @@ def build(root, destination):
         entry("priming_" + profile, [aid], ".mt-agent-devkit/context/Project_Priming.md", profiles=(profile,), ownership="project_owned", renderer="approved_adaptation")
     index = asset("document_index", neutral((templates / "context/Document_Index_template.md").read_text(encoding="utf-8-sig")).encode())
     entry("document_index", [index], ".mt-agent-devkit/context/Document_Index.md", ownership="project_owned", renderer="approved_adaptation")
+    # Project roadmap (ST-000238): stock file created only when absent; an existing roadmap is never overwritten.
+    # create_if_absent writes bytes verbatim, so the template carries no {{TOKENS}}.
+    roadmap = asset("project_roadmap", (templates / "context/Project_Roadmap_template.md").read_bytes())
+    entry("project_roadmap", [roadmap], "docs/Project_Roadmap.md", ownership="project_owned", renderer="create_if_absent")
     for name in ("Build_Software_Project_Workflow", "Sync_Devkit_Project_Workflow"):
         source = implementation / "Sync_Devkit_Workflow_template.md" if name.startswith("Sync") else templates / "workflows" / (name + "_template.md")
         aid = asset(name, neutral(source.read_text(encoding="utf-8-sig")).encode())

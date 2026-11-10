@@ -114,26 +114,7 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 ## 13. Feature Current State
 
-**No active sprint.** Sprint 10 (label `sprint-10`, feature `role-skills`, phase 3) closed on 2026-11-04; all eight stories are done and released in `v0.1.56` (`main` is now `0.1.57-SNAPSHOT`):
-
-| Issue | Story | Outcome |
-|---|---|---|
-| #303 | Load inline PO skills at point of use with per-action checks | done |
-| #304 | Common `comment` skill for all agent roles | done |
-| #307 | Common skills and generated Common blocks (internal) | done |
-| #308 | Other roles point to common skills (internal) | done |
-| #309 | Developer skills, load map and manifest routing (internal) | done |
-| #310 | Ship Developer and common skills to targets, switch target routing | done |
-| #311 | Retire legacy Developer rules files in targets | done |
-| #312 | Other roles point to common skills (target templates) | done |
-
-Developer rules are now `dev-*` skills plus shared common skills, internally and in targets. TL, QA, BA and UI/UX rules files remain and point to the common skills. The devkit's own `po_execution` is `orchestrator` (`.mt-agent-devkit/project_settings.json`, project-owned). Design: `docs/feature/role-skills/`.
-
-Next planned work: none scheduled. Sprint 8 leftovers #245, #251, #258 remain in backlog.
-
-On hold (label `status:on-hold`): #265 Developer stage profiles and manifest routing, #266 Profile migration behavior and efficiency comparison (depends on #265), and umbrella #263.
-
-Live state is the issue list: `gh issue list --label sprint-10 --state all`.
+Current project status (Now / Next / Later / Done) lives in `docs/Project_Roadmap.md`, owned by the Product Owner and read by planners only. Live story state is the issue list: `gh issue list --label sprint-N --state all`.
 
 ---
 
@@ -143,8 +124,8 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.7 — §13 records Sprint 10 as closed and released; no active sprint.
-**Previous:** 1.6 — §13 records Sprint 9 as closed.
-**Last Updated:** 2026-11-05
+**Document Version:** 1.8 — §13 is a pointer to `docs/Project_Roadmap.md`.
+**Previous:** 1.7 — §13 records Sprint 10 as closed and released; no active sprint.
+**Last Updated:** 2026-11-10
 **Audience:** Development team, architects, AI agents
 
