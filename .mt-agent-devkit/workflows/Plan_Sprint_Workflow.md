@@ -47,6 +47,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 2. PO locates planning inputs based on context:
    - **Feature sprint**: glob `docs/feature/<feature_name>/plan/*Roadmap*.md` to find the roadmap file; read `docs/feature/<feature_name>/plan/Product_Backlog.md` for all `status:backlog` items
    - **Non-feature sprint**: run `gh issue list --label "status:backlog" --state open` as the backlog source
+2a. **Roadmap check (feature and non-feature sprints):** PO reads `docs/Project_Roadmap.md` and confirms its Now / Next / Later buckets match the sprint being planned. When a topic changes bucket or a new topic appears, PO edits that topic's one line and `Last updated`, committing straight to the base branch in github mode (per `po-plan-docs`) and locally on `sprint-N-dev` in strict mode. When the file is missing, report it and skip.
 3. PO selects stories up to **60 points** capacity:
    - **If roadmap exists**: respect the roadmap's dependency graph and planned sprint order
    - **If no roadmap**: order candidates by priority label (`Must-Have` first, then `Should-Have`, then `Nice-to-Have`)

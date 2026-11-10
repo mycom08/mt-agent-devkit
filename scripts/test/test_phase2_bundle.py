@@ -78,9 +78,13 @@ class BundleTests(unittest.TestCase):
                                 self.assertTrue((target / ".mt-agent-devkit/contracts/Read_Manifest.md").exists())
                                 self.assertTrue((target / ".mt-agent-devkit/scripts/read_manifest.py").exists())
                                 self.assertTrue((target / ".mt-agent-devkit/workflows/Start_Story_Workflow.md").exists())
+                                roadmap = (target / "docs/Project_Roadmap.md").read_text(encoding="utf-8")
+                                self.assertIn("## Now", roadmap)
+                                self.assertNotIn("{{", roadmap)
                                 self.assertNotIn("new `Agent` call", (target / ".mt-agent-devkit/instructions/orchestrator_instructions.md").read_text())
                             else:
                                 self.assertFalse((target / ".mt-agent-devkit/rules").exists())
+                                self.assertFalse((target / "docs/Project_Roadmap.md").exists())
                                 self.assertFalse((target / ".mt-agent-devkit/contracts/Read_Manifest.md").exists())
                                 self.assertFalse((target / ".mt-agent-devkit/contracts/read-routing.json").exists())
                                 self.assertFalse((target / ".mt-agent-devkit/scripts/read_manifest.py").exists())

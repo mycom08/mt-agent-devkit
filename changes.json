@@ -10,7 +10,13 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
       ".mt-agent-devkit/scripts/wait_work.py": "[ST-000321] Skip required-check discovery on the upgrade 403; name each GitHub error class.",
-      ".mt-agent-devkit/contracts/Wait_Work.md": "[ST-000321] State the Free-plan discovery skip and the GitHub error classes."
+      ".mt-agent-devkit/contracts/Wait_Work.md": "[ST-000321] State the Free-plan discovery skip and the GitHub error classes.",
+      ".mt-agent-devkit/distribution/phase2/templates/context/Project_Roadmap_template.md": "[ST-000238] New stock project roadmap, created in targets only when absent.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000238] Stage 4 closure gains an orchestrator-direct roadmap update step.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000238] Stage 2 adds a PO roadmap check.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Create_Stories_Workflow_Shared_template.md": "[ST-000238] Step 2 adds a roadmap check before stories are filed.",
+      ".mt-agent-devkit/distribution/phase2/templates/context/Project_Priming_template.md": "[ST-000238] Status line points to docs/Project_Roadmap.md.",
+      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000238] Add the Project Roadmap row."
     },
     "deployment": {
       "schema_version": 1,
