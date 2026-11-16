@@ -2,7 +2,7 @@
 
 **Readers:** Product Owner, Business Analyst, orchestrator. Implementers do not read this file; it is not part of Project Priming.
 **Owner:** Product Owner
-**Last updated:** 2026-11-10
+**Last updated:** 2026-11-16
 
 One line per topic, linking to the topic's own roadmap or umbrella issue. Never list stories here; a topic's story list lives in its own roadmap. No dates. A topic moves bucket when its state changes, and a new topic is added when work on it starts.
 
@@ -14,6 +14,7 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 - Analyze Requirements workflow for target projects: intake to approved specs, ADRs, roadmap, design and backlog stories — [#244](https://github.com/mycom08/mt-agent-devkit/issues/244)
 - UX foundation: project UX standard, feature design docs and pipeline enforcement for UI stories — [#233](https://github.com/mycom08/mt-agent-devkit/issues/233)
+- Role skills, remaining roles: Technical Lead (phase 4) and QA (phase 5) rules become `tl-*` and `qa-*` skills, shipped to targets, with the legacy rules files retired — [docs/feature/role-skills/](feature/role-skills/)
 - Project-owned model and effort override per agent, preserved by sync — [#322](https://github.com/mycom08/mt-agent-devkit/issues/322)
 
 ## Later
