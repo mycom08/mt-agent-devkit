@@ -8,13 +8,12 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 ## Now
 
-- Project roadmap and sprint-end docs sync (sprint-11): a planner-only status doc replaces the Priming status text, and a sprint-end check keeps roadmaps and entrypoints current — [#238](https://github.com/mycom08/mt-agent-devkit/issues/238), [#283](https://github.com/mycom08/mt-agent-devkit/issues/283)
+- Role skills, remaining roles: Technical Lead (phase 4) and QA (phase 5) rules become `tl-*` and `qa-*` skills, shipped to targets, with the legacy rules files retired — [docs/feature/role-skills/](feature/role-skills/) (sprint-12)
 
 ## Next
 
 - Analyze Requirements workflow for target projects: intake to approved specs, ADRs, roadmap, design and backlog stories — [#244](https://github.com/mycom08/mt-agent-devkit/issues/244)
 - UX foundation: project UX standard, feature design docs and pipeline enforcement for UI stories — [#233](https://github.com/mycom08/mt-agent-devkit/issues/233)
-- Role skills, remaining roles: Technical Lead (phase 4) and QA (phase 5) rules become `tl-*` and `qa-*` skills, shipped to targets, with the legacy rules files retired — [docs/feature/role-skills/](feature/role-skills/)
 - Project-owned model and effort override per agent, preserved by sync — [#322](https://github.com/mycom08/mt-agent-devkit/issues/322)
 
 ## Later
@@ -26,5 +25,6 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 ## Done
 
+- Project roadmap and sprint-end docs sync (sprint 11): a planner-only status doc replaces the Priming status text, and a sprint-end check keeps roadmaps and entrypoints current — [#238](https://github.com/mycom08/mt-agent-devkit/issues/238), [#283](https://github.com/mycom08/mt-agent-devkit/issues/283)
 - Role skills (sprint 10): Developer rules became `dev-*` and shared common skills, internally and in targets — [docs/feature/role-skills/](feature/role-skills/)
 - Multi-provider harness: shared `.mt-agent-devkit/` harness with Claude, Antigravity and Codex adapters and the Phase 2 bundle — [docs/feature/multi-provider-harness/](feature/multi-provider-harness/)
