@@ -1054,38 +1054,80 @@ class TlSkillsTests(unittest.TestCase):
         rows = json.loads((ROOT / "docs/reviews/ST-000264_Common_Ownership.json").read_text(encoding="utf-8"))["rows"]
         self.assertFalse([row for row in rows if row["source"] in self.RETIRED])
 
-    def test_retired_citation_validator_rejects_tl_files_in_every_registry_layout(self):
+    def test_retired_citation_validator_rejects_tl_files_in_templates_and_bundle(self):
+        # ST-000330: the TL files are retired in targets too, so the Phase 2 templates, every bundle asset and
+        # both registry layouts are in scope; history lines and the retirement ledgers are not citations.
         self.assertEqual([], self.citations.findings(ROOT))
         phase2 = ".mt-agent-devkit/distribution/phase2"
         root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json", ".claude/skills/tl-core/SKILL.md",
-                            phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/bundle/assets/read-routing.json")
+                            phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/templates/skills/tl-review/SKILL_template.md",
+                            phase2 + "/bundle/assets/orchestrator_shared", phase2 + "/bundle/assets/read-routing.json",
+                            phase2 + "/build_bundle.py", phase2 + "/bundle/deployment.json")
         self.assertEqual([], self.citations.findings(root))
-        history = "**Previous:** 1.0 — split out of `Technical_Lead_Rules_Bootstrap.md`.\n**Version:** 2.0 — `Story_Standard_TL.md` retired.\n"
+        history = "**Previous:** 1.0 — split out of `Technical_Lead_Rules_Bootstrap.md`.\n**Version:** 2.0 — `Story_Standard_TL.md` retired.\nLegacy `Story_Standard_TL_template.md` stays frozen.\n"
         for relative, line in ((".mt-agent-devkit/rules/Agent_Common_Core.md", "See `Technical_Lead_Rules_Read_On_Demand.md` and TL Bootstrap §5."),
-                               (".claude/skills/tl-core/SKILL.md", "Story_Standard_TL §12")):
+                               (".claude/skills/tl-core/SKILL.md", "Story_Standard_TL §12"),
+                               (phase2 + "/templates/rules/Story_Standard_template.md", "See `Technical_Lead_Rules_Bootstrap.md` §4."),
+                               (phase2 + "/templates/skills/tl-review/SKILL_template.md", "Read `.mt-agent-devkit/rules/Story_Standard_TL.md`."),
+                               (phase2 + "/bundle/assets/orchestrator_shared", "TL On-Demand §5 applies.")):
             path = root / relative
             path.write_text(path.read_text(encoding="utf-8") + "\n" + line + "\n" + history, encoding="utf-8")
-        # The shipped TL templates and bundle assets keep the TL files until ST-000330: a citation there is not an error yet.
-        shipped = root / phase2 / "templates/rules/Story_Standard_template.md"
-        shipped.write_text(shipped.read_text(encoding="utf-8") + "\nSee `Technical_Lead_Rules_Bootstrap.md` §4.\n", encoding="utf-8")
-        for relative, internal_layout in ((".mt-agent-devkit/contracts/read-routing.json", True), (phase2 + "/bundle/assets/read-routing.json", False)):
+        for relative in (".mt-agent-devkit/contracts/read-routing.json", phase2 + "/bundle/assets/read-routing.json"):
             registry = root / relative
             data = json.loads(registry.read_text(encoding="utf-8"))
-            data["tasks"]["review"]["reads"][1]["source"] = ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+            data["tasks"]["review"]["reads"][1]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md"}}
             registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
         found = self.citations.findings(root)
-        self.assertEqual(4, len(found), found)
-        for relative in (".mt-agent-devkit/rules/Agent_Common_Core.md", ".claude/skills/tl-core/SKILL.md", ".mt-agent-devkit/contracts/read-routing.json"):
+        self.assertEqual(8, len(found), found)
+        for relative in (".mt-agent-devkit/rules/Agent_Common_Core.md", ".claude/skills/tl-core/SKILL.md", phase2 + "/templates/rules/Story_Standard_template.md",
+                         phase2 + "/templates/skills/tl-review/SKILL_template.md", phase2 + "/bundle/assets/orchestrator_shared",
+                         ".mt-agent-devkit/contracts/read-routing.json", phase2 + "/bundle/assets/read-routing.json"):
             self.assertTrue(any(relative + ":" in f for f in found), relative)
         self.assertTrue(any("TL Bootstrap" in f for f in found))
-        self.assertFalse(any("Story_Standard_template" in f or "bundle/assets" in f for f in found))
-        # ST-000329: a target alternative inside the registry is a stale route too.
-        registry = root / ".mt-agent-devkit/contracts/read-routing.json"
-        data = json.loads(registry.read_text(encoding="utf-8"))
-        data["tasks"]["review"]["reads"][1]["source"] = ".mt-agent-devkit/skills/tl-review/SKILL.md"
-        data["tasks"]["review"]["reads"][1]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md"}}
-        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        self.assertTrue(any("contracts/read-routing.json" in f for f in self.citations.findings(root)))
+        self.assertTrue(any("TL On-Demand" in f for f in found))
+        self.assertFalse(any("build_bundle.py" in f or "deployment.json" in f or "_template" in f.split(": ")[-1] for f in found))
+
+    def test_bundle_retires_tl_templates_behind_their_own_survivors(self):
+        # ST-000330: the ST-000290 mechanism, with per-file survivors present in every plan.
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+        live = {f["id"] for f in manifest["files"] if f["phase"] != "retirement"}
+        records = {r["path"]: r for r in manifest["legacy_support"]["retirements"]}
+        retiring = {f["destination"]: f for f in manifest["files"] if f["phase"] == "retirement"}
+        instructions = "instructions/technical_lead_instructions.md"
+        for retired in self.RETIRED:
+            name = Path(retired).name
+            with self.subTest(file=name):
+                self.assertFalse((ROOT / ".mt-agent-devkit/distribution/phase2/templates/rules" / name.replace(".md", "_template.md")).exists())
+                self.assertFalse(any(name.removesuffix(".md") in a["id"] or name.removesuffix(".md") in a["path"] for a in manifest["assets"]), name)
+                shared = retiring[retired]
+                self.assertEqual((shared["owner"], shared["ownership"], shared["providers"], shared["modes"], shared["required"]),
+                                 ("shared", "managed", list(validator.PROVIDERS), ["github", "strict"], False))
+                survivors = records[retired]["after_verified_ids"]
+                self.assertIn(instructions, survivors)
+                self.assertLessEqual(set(survivors), live)  # Shared IDs, no provider suffix: present in every plan.
+                self.assertTrue(all(s.startswith("skills/") for s in survivors if s != instructions))
+                for provider in ("claude", "antigravity"):
+                    legacy = f".{provider}/agents/rules/{name}"
+                    self.assertEqual(sorted(f["modes"][0] for f in manifest["files"] if f["destination"] == legacy and f["phase"] == "retirement"), ["github", "strict"])
+                    self.assertEqual(records[legacy]["after_verified_ids"], survivors)
+        # Each file's survivors are the skills that own its rules (ownership map section 14).
+        self.assertIn("skills/tl-anchor", records[".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"]["after_verified_ids"])
+        self.assertIn("skills/tl-design", records[".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md"]["after_verified_ids"])
+        self.assertIn("skills/tl-core", records[".mt-agent-devkit/rules/Story_Standard_TL.md"]["after_verified_ids"])
+
+    def test_carried_over_legacy_target_rules_are_in_the_target_skills_only(self):
+        # ST-000330: the three rules the ST-000329 review found missing are carried into the target templates, within budget.
+        templates = ROOT / ".mt-agent-devkit/distribution/phase2/templates/skills"
+        review = (templates / "tl-review/SKILL_template.md").read_text(encoding="utf-8")
+        self.assertIn("non-zero test count", review)
+        self.assertIn("domain-specific NFR design questions", review)
+        self.assertIn("`BREAKING CHANGE:` footer", (templates / "tl-implement/SKILL_template.md").read_text(encoding="utf-8"))
+        self.assertLessEqual(len(review.encode("utf-8")), validator.DEFAULT_SKILL_LIMIT)
+        # Retired internally on purpose (ownership map section 14): the internal skills do not carry them.
+        for name in ("tl-review", "tl-implement"):
+            internal = (ROOT / f".mt-agent-devkit/skills/{name}/SKILL.md").read_text(encoding="utf-8")
+            for phrase in ("non-zero test count", "NFR design questions", "BREAKING CHANGE"):
+                self.assertNotIn(phrase, internal)
 
 
 class TlDistributionTests(unittest.TestCase):
@@ -1252,18 +1294,15 @@ class Phase2OtherRolesPointerTests(unittest.TestCase):
     def test_no_template_cites_clean_code_rules(self):
         # ST-000311 deleted the old Developer templates, the last ones citing it, and cleaned the Sync lists.
         self.assertEqual([], sorted(p.name for p in self.TEMPLATES.rglob("*.md") if "Clean_Code_Rules.md" in p.read_text(encoding="utf-8")))
-        self.assertIn(".mt-agent-devkit/skills/clean-code/SKILL.md", self.text("rules/Technical_Lead_Rules_Bootstrap_template.md"))
+        self.assertIn("`clean-code`", self.text("skills/tl-review/SKILL_template.md"))
 
     def test_implementer_gates_and_procedures_point_to_skills(self):
         skill = ".mt-agent-devkit/skills/{}/SKILL.md".format
         expected = {
-            "rules/Technical_Lead_Rules_Bootstrap_template.md": ("pr-review", "git-workflow", "project-docs", "comment", "working-record", "raise-question", "pre-pr-gate", "clean-code"),
-            "rules/Technical_Lead_Rules_Read_On_Demand_template.md": ("git-workflow", "pre-pr-gate"),
             "rules/QA_Rules_Bootstrap_template.md": ("project-docs", "comment", "pre-pr-gate", "raise-question", "working-record"),
             "rules/QA_Rules_Read_On_Demand_template.md": ("pre-pr-gate", "raise-question"),
             "rules/UI_UX_Designer_Rules_template.md": ("raise-question", "git-workflow", "project-docs", "working-record"),
             "rules/Business_Analyst_Rules_template.md": ("pre-pr-gate", "comment"),
-            "rules/Story_Standard_TL_template.md": ("pr-review",),
             "instructions/business_analyst_instructions_template.md": ("project-docs",),
         }
         for relative, skills in expected.items():
@@ -1274,7 +1313,7 @@ class Phase2OtherRolesPointerTests(unittest.TestCase):
             self.assertNotIn("| Change type | Required local check |", text, relative)
             self.assertNotIn("Mid-implementation consultation needed", text, relative)
         # TL as implementer runs the stricter gate: no docs-only exemption is left (design section 6).
-        self.assertNotIn("| Docs or config only | Exempt |", self.text("rules/Technical_Lead_Rules_Read_On_Demand_template.md"))
+        self.assertNotIn("| Docs or config only | Exempt |", self.text("skills/tl-implement/SKILL_template.md"))
         self.assertNotIn("Conventional Commits", self.text("rules/UI_UX_Designer_Rules_template.md"))
 
     def test_po_skill_templates_point_to_common_skills(self):

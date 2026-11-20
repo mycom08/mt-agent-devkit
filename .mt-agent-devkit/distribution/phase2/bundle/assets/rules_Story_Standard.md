@@ -273,7 +273,7 @@ If during implementation you discover that a **technical document** (e.g., `<Fea
 
 ## 9. Comment Standard
 
-All discussions happen as comments (GitHub Issue comments in GitHub mode, `## Comments` entries in strict mode), never inside the story body. The body is for User Story, AC and Deliverables only. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `pr-review` for the Developer's peer-review CI paste, `po-comment`).
+All discussions happen as comments (GitHub Issue comments in GitHub mode, `## Comments` entries in strict mode), never inside the story body. The body is for User Story, AC and Deliverables only. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`pr-review` for the review comments and the CI paste, `Story_Standard_QA.md`, `po-comment`).
 
 ---
 

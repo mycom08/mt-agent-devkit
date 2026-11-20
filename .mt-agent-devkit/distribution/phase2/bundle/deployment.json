@@ -148,13 +148,6 @@
       "kind": "template"
     },
     {
-      "id": "rules/Story_Standard_TL.md",
-      "path": "assets/rules_Story_Standard_TL.md",
-      "sha256": "6f83827e9c42e15d9a0d64c4899298c3fffee6efff52c649740cdd316e501316",
-      "bytes": 3678,
-      "kind": "template"
-    },
-    {
       "id": "rules/Story_Standard_UIUX.md",
       "path": "assets/rules_Story_Standard_UIUX.md",
       "sha256": "0b144e6454f28d52fb94c79d9b8094b39a527b62318ba8734b3ce8a69e950d42",
@@ -164,8 +157,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "cb95cc885408af6eba3a2584c612e8eec91fdc3ebc65958d888515a65ef8e876",
-      "bytes": 31712,
+      "sha256": "1ce4f28e1481a3ee06a677711f83bd08a85d613f0d0e844a929527d9cdad0847",
+      "bytes": 31688,
       "kind": "template"
     },
     {
@@ -173,20 +166,6 @@
       "path": "assets/rules_Strict_Mode_Story_Guide.md",
       "sha256": "49d290f2060a49f75f1153c1bc88f51901485b9de71f9c2315f019a20a5a339e",
       "bytes": 8887,
-      "kind": "template"
-    },
-    {
-      "id": "rules/Technical_Lead_Rules_Bootstrap.md",
-      "path": "assets/rules_Technical_Lead_Rules_Bootstrap.md",
-      "sha256": "49ef206cb00f7ade906b20eddb26e28d9472e92969569e957f6140a253799d8b",
-      "bytes": 13369,
-      "kind": "template"
-    },
-    {
-      "id": "rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "path": "assets/rules_Technical_Lead_Rules_Read_On_Demand.md",
-      "sha256": "732269b79bbcc2279e17f8e70524abe8967e2031e9e94b30da1c8300df9ff508",
-      "bytes": 5298,
       "kind": "template"
     },
     {
@@ -1256,8 +1235,8 @@
     {
       "id": "skills/tl-review",
       "path": "assets/skills_tl-review",
-      "sha256": "b638b9c864a0225dc8daa82f919a6c1ca180e1edc65efb5ea01543c9e34cae16",
-      "bytes": 3962,
+      "sha256": "6a1f6bb7909ffe8c38fb67d1b4619c1629ed34105148e2215759a84ade2fd7ac",
+      "bytes": 3999,
       "kind": "template"
     },
     {
@@ -1312,8 +1291,8 @@
     {
       "id": "skills/tl-implement",
       "path": "assets/skills_tl-implement",
-      "sha256": "bf09d7b6c6c46d61b0a0d8b75bd528df0790ff2ba769e07cac0b4be1bd3f04ef",
-      "bytes": 1665,
+      "sha256": "dda678ae1848f1610b0e763fd5577bb99ee7ba06f4f632c390630e8215ec39fb",
+      "bytes": 1745,
       "kind": "template"
     },
     {
@@ -1473,8 +1452,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "33d6439682918df0c368fd0bd67027351dfe48b11d7fd678b4e0aaafc3e6091c",
-      "bytes": 54245,
+      "sha256": "85684a7cc25feff53acb9920cc79e933633fe09339da3885e888c4145015be66",
+      "bytes": 54227,
       "kind": "template"
     },
     {
@@ -1634,8 +1613,8 @@
     {
       "id": "Sync_Devkit_Project_Workflow",
       "path": "assets/Sync_Devkit_Project_Workflow",
-      "sha256": "98e8c027a4e1d9f9929284d13d8a1aa13bbf4642bef059b083d97e95b4256e48",
-      "bytes": 3869,
+      "sha256": "c4b389e5968be12e7fdc725a416500594b5e44071b154264fc9b070c3212b8a1",
+      "bytes": 3936,
       "kind": "template"
     },
     {
@@ -2208,15 +2187,15 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "24c2811714521f0885ad8900587feceee9a76e21ff74dcc9041192d14d303bec",
-      "bytes": 32848,
+      "sha256": "4a4e033af153b055c26dd2e4f2d8c05c2685d145acf7166f79569f7109dad027",
+      "bytes": 33561,
       "kind": "script"
     },
     {
       "id": "Sync_Devkit_Workflow",
       "path": "assets/Sync_Devkit_Workflow",
-      "sha256": "98e8c027a4e1d9f9929284d13d8a1aa13bbf4642bef059b083d97e95b4256e48",
-      "bytes": 3869,
+      "sha256": "c4b389e5968be12e7fdc725a416500594b5e44071b154264fc9b070c3212b8a1",
+      "bytes": 3936,
       "kind": "template"
     },
     {
@@ -2809,31 +2788,6 @@
       "required": true
     },
     {
-      "id": "rules/Story_Standard_TL.md",
-      "sources": [
-        "rules/Story_Standard_TL.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Story_Standard_TL.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
       "id": "rules/Story_Standard_UIUX.md",
       "sources": [
         "rules/Story_Standard_UIUX.md"
@@ -2889,56 +2843,6 @@
         "rules/Strict_Mode_Story_Guide.md"
       ],
       "destination": ".mt-agent-devkit/rules/Strict_Mode_Story_Guide.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
-      "id": "rules/Technical_Lead_Rules_Bootstrap.md",
-      "sources": [
-        "rules/Technical_Lead_Rules_Bootstrap.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
-      "owner": "shared",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github",
-        "strict"
-      ],
-      "providers": [
-        "claude",
-        "antigravity",
-        "codex"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "content",
-      "required": true
-    },
-    {
-      "id": "rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "sources": [
-        "rules/Technical_Lead_Rules_Read_On_Demand.md"
-      ],
-      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -11606,86 +11510,6 @@
       "required": false
     },
     {
-      "id": "retire/claude/repo/github/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Story_Standard_TL.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Story_Standard_TL.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Story_Standard_TL.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Story_Standard_TL.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
       "id": "retire/claude/repo/github/rules/Story_Standard_UIUX.md/rules/Story_Standard_UIUX.md",
       "sources": [],
       "destination": ".claude/agents/rules/Story_Standard_UIUX.md",
@@ -11909,166 +11733,6 @@
       "id": "retire/antigravity/repo/strict/rules/Strict_Mode_Story_Guide.md/rules/Strict_Mode_Story_Guide.md",
       "sources": [],
       "destination": ".antigravity/agents/rules/Strict_Mode_Story_Guide.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/github/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/github/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/claude/repo/strict/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "strict"
-      ],
-      "providers": [
-        "claude"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/github/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "owner": "selected_provider",
-      "ownership": "managed",
-      "profiles": [
-        "repo"
-      ],
-      "modes": [
-        "github"
-      ],
-      "providers": [
-        "antigravity"
-      ],
-      "renderer": "copy",
-      "legacy_paths": [],
-      "phase": "retirement",
-      "required": false
-    },
-    {
-      "id": "retire/antigravity/repo/strict/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-      "sources": [],
-      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
@@ -18325,6 +17989,315 @@
       "legacy_paths": [],
       "phase": "retirement",
       "required": false
+    },
+    {
+      "id": "retire/shared/rules/Technical_Lead_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/shared/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/shared/rules/Story_Standard_TL.md",
+      "sources": [],
+      "destination": ".mt-agent-devkit/rules/Story_Standard_TL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/retired/rules/Story_Standard_TL.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Story_Standard_TL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/retired/rules/Story_Standard_TL.md",
+      "sources": [],
+      "destination": ".claude/agents/rules/Story_Standard_TL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/retired/rules/Story_Standard_TL.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Story_Standard_TL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/retired/rules/Story_Standard_TL.md",
+      "sources": [],
+      "destination": ".antigravity/agents/rules/Story_Standard_TL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
     }
   ],
   "legacy_support": {
@@ -18951,38 +18924,6 @@
         ]
       },
       {
-        "logical_id": "retire/claude/repo/github/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-        "path": ".claude/agents/rules/Story_Standard_TL.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_TL.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-        "path": ".claude/agents/rules/Story_Standard_TL.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_TL.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-        "path": ".antigravity/agents/rules/Story_Standard_TL.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_TL.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Story_Standard_TL.md/rules/Story_Standard_TL.md",
-        "path": ".antigravity/agents/rules/Story_Standard_TL.md",
-        "after_verified_ids": [
-          "rules/Story_Standard_TL.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
         "logical_id": "retire/claude/repo/github/rules/Story_Standard_UIUX.md/rules/Story_Standard_UIUX.md",
         "path": ".claude/agents/rules/Story_Standard_UIUX.md",
         "after_verified_ids": [
@@ -19075,70 +19016,6 @@
         "path": ".antigravity/agents/rules/Strict_Mode_Story_Guide.md",
         "after_verified_ids": [
           "rules/Strict_Mode_Story_Guide.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/github/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-        "path": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Bootstrap.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-        "path": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Bootstrap.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Bootstrap.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Technical_Lead_Rules_Bootstrap.md/rules/Technical_Lead_Rules_Bootstrap.md",
-        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Bootstrap.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/github/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "path": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Read_On_Demand.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/claude/repo/strict/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "path": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Read_On_Demand.md",
-          "root_repo/CLAUDE.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/github/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Read_On_Demand.md",
-          "root_repo/AGENTS.md"
-        ]
-      },
-      {
-        "logical_id": "retire/antigravity/repo/strict/rules/Technical_Lead_Rules_Read_On_Demand.md/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
-        "after_verified_ids": [
-          "rules/Technical_Lead_Rules_Read_On_Demand.md",
           "root_repo/AGENTS.md"
         ]
       },
@@ -21858,6 +21735,246 @@
         "path": ".antigravity/agents/rules/Clean_Code_Rules.md",
         "after_verified_ids": [
           "skills/clean-code"
+        ]
+      },
+      {
+        "logical_id": "retire/shared/rules/Technical_Lead_Rules_Bootstrap.md",
+        "path": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-design",
+          "skills/tl-review",
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "skills/raise-question",
+          "skills/working-record",
+          "skills/project-docs",
+          "skills/comment",
+          "skills/handoff",
+          "skills/troubleshooting",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+        "path": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-design",
+          "skills/tl-review",
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "skills/raise-question",
+          "skills/working-record",
+          "skills/project-docs",
+          "skills/comment",
+          "skills/handoff",
+          "skills/troubleshooting",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+        "path": ".claude/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-design",
+          "skills/tl-review",
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "skills/raise-question",
+          "skills/working-record",
+          "skills/project-docs",
+          "skills/comment",
+          "skills/handoff",
+          "skills/troubleshooting",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-design",
+          "skills/tl-review",
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "skills/raise-question",
+          "skills/working-record",
+          "skills/project-docs",
+          "skills/comment",
+          "skills/handoff",
+          "skills/troubleshooting",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/retired/rules/Technical_Lead_Rules_Bootstrap.md",
+        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Bootstrap.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-design",
+          "skills/tl-review",
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "skills/raise-question",
+          "skills/working-record",
+          "skills/project-docs",
+          "skills/comment",
+          "skills/handoff",
+          "skills/troubleshooting",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/shared/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "path": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "path": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "path": ".claude/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/retired/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "path": ".antigravity/agents/rules/Technical_Lead_Rules_Read_On_Demand.md",
+        "after_verified_ids": [
+          "skills/tl-implement",
+          "skills/tl-anchor",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/pr-review",
+          "skills/git-workflow",
+          "skills/pre-pr-gate",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/shared/rules/Story_Standard_TL.md",
+        "path": ".mt-agent-devkit/rules/Story_Standard_TL.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-implement",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/comment",
+          "skills/pr-review",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/retired/rules/Story_Standard_TL.md",
+        "path": ".claude/agents/rules/Story_Standard_TL.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-implement",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/comment",
+          "skills/pr-review",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/retired/rules/Story_Standard_TL.md",
+        "path": ".claude/agents/rules/Story_Standard_TL.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-implement",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/comment",
+          "skills/pr-review",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/retired/rules/Story_Standard_TL.md",
+        "path": ".antigravity/agents/rules/Story_Standard_TL.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-implement",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/comment",
+          "skills/pr-review",
+          "instructions/technical_lead_instructions.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/retired/rules/Story_Standard_TL.md",
+        "path": ".antigravity/agents/rules/Story_Standard_TL.md",
+        "after_verified_ids": [
+          "skills/tl-core",
+          "skills/tl-implement",
+          "skills/tl-review",
+          "skills/tl-answer",
+          "skills/comment",
+          "skills/pr-review",
+          "instructions/technical_lead_instructions.md"
         ]
       }
     ]
