@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -442,14 +443,14 @@ class DeploymentTests(unittest.TestCase):
 
 
 class SkillInstallTests(unittest.TestCase):
-    """ST-000310: a fresh install for each provider receives the common and Developer skills."""
+    """ST-000310/ST-000329: a fresh install for each provider receives the common, Developer and Technical Lead skills."""
     PHASE2 = ROOT / ".mt-agent-devkit/distribution/phase2"
 
     def test_fresh_install_per_provider_receives_common_and_developer_skills(self):
         spec = importlib.util.spec_from_file_location("phase2_builder", self.PHASE2 / "build_bundle.py")
         builder = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(builder)
-        skills = builder.COMMON_SKILLS + builder.DEV_SKILLS
+        skills = builder.COMMON_SKILLS + builder.DEV_SKILLS + builder.TL_SKILLS
         self.assertNotIn("change-metadata", skills)
         with tempfile.TemporaryDirectory() as folder:
             base = Path(folder)
@@ -482,6 +483,41 @@ class SkillInstallTests(unittest.TestCase):
                     instructions = (target / ".mt-agent-devkit/instructions/developer_instructions.md").read_text(encoding="utf-8")
                     self.assertIn("## Load Map", instructions)
                     self.assertNotIn("Developer_Rules_", instructions)
+                    # ST-000329: the Technical Lead instructions load the skills, not the TL rules files.
+                    tl = (target / ".mt-agent-devkit/instructions/technical_lead_instructions.md").read_text(encoding="utf-8")
+                    self.assertIn("## Load Map", tl)
+                    self.assertNotIn("Technical_Lead_Rules_", tl)
+                    self.assertNotIn("Story_Standard_TL", tl)
+
+    def test_sync_over_an_install_without_tl_skills_delivers_them(self):
+        spec = importlib.util.spec_from_file_location("phase2_builder_sync", self.PHASE2 / "build_bundle.py")
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        tl_destinations = {".mt-agent-devkit/skills/" + n + "/SKILL.md" for n in builder.TL_SKILLS}
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            builder.build(ROOT, base / "bundle")
+            full = json.loads((base / "bundle/deployment.json").read_text(encoding="utf-8"))
+            old = json.loads(json.dumps(full))
+            old["files"] = [f for f in old["files"] if not any(f["destination"].endswith("/skills/" + n + "/SKILL.md") for n in builder.TL_SKILLS)]
+            (base / "old").mkdir()
+            shutil.copytree(base / "bundle/assets", base / "old/assets")
+            (base / "old/deployment.json").write_text(json.dumps(old, indent=2), encoding="utf-8")
+            digest = lambda path: d.digest(path.read_bytes())
+            bound = {"PROVIDER_ROOT": ".claude", "RUNTIME_ROOT": ".claude/agents", "COMMAND_ROOT": ".claude/agents"}
+            adaptations = {"CLAUDE.md": "# Fixture\n", ".mt-agent-devkit/context/Project_Priming.md": "# Fixture\n",
+                           ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "# Ignore\n"}
+            target = base / "target"
+            target.mkdir()
+            first = {"kind": "local", "tag": None, "commit": "a" * 40, "snapshot_version": "0.1.57-SNAPSHOT", "manifest_sha256": digest(base / "old/deployment.json")}
+            d.apply(target, d.plan(target, base / "old/deployment.json", first, "github", "repo", {"claude": bound}, adaptations))
+            self.assertFalse(any((target / path).exists() for path in tl_destinations))
+            second = {"kind": "local", "tag": None, "commit": "b" * 40, "snapshot_version": "0.1.58-SNAPSHOT", "manifest_sha256": digest(base / "bundle/deployment.json")}
+            d.apply(target, d.plan(target, base / "bundle/deployment.json", second, "github", "repo", {"claude": bound}, adaptations))
+            d.verify(target)
+            for name in builder.TL_SKILLS:
+                self.assertTrue((target / ".mt-agent-devkit/skills" / name / "SKILL.md").is_file(), name)
+                self.assertTrue((target / ".claude/skills" / name / "SKILL.md").is_file(), name)
 
 
 if __name__ == "__main__": unittest.main()

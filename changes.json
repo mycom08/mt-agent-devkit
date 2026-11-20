@@ -8,7 +8,17 @@
     "removed": [],
     "descriptions": {
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately."
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-core/SKILL_template.md": "[ST-000329] New target TL skill: role boundaries, status ownership and the skill load map.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-design/SKILL_template.md": "[ST-000329] New target TL skill: evaluating approaches, recommendations, API design, design questions, constraints and deliverables.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-review/SKILL_template.md": "[ST-000329] New target TL skill: review gate, Reviewer Gate, TL-only checklist and the CI, refactor and documentation story variants.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-answer/SKILL_template.md": "[ST-000329] New target TL skill: answering a mid-implementation question, AC clarification, scope flag and technical doc divergence.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-implement/SKILL_template.md": "[ST-000329] New target TL skill: TL as story implementer, branch and PR gate and the peer-review status transitions.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-anchor/SKILL_template.md": "[ST-000329] New target TL skill: the context-anchoring note after a session on an unfinished story.",
+      ".mt-agent-devkit/distribution/phase2/templates/instructions/technical_lead_instructions_template.md": "[ST-000329] Technical Lead reads skills through a load map, not the TL rules files.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/pr-review/SKILL_template.md": "[ST-000329] TL approval authority names the tl-review skill.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000329] Testing-label note points to the tl-core skill.",
+      ".mt-agent-devkit/contracts/read-routing.json": "[ST-000329] Target-layout Technical Lead routing resolves to tl-core and the tl-* skills; the TL layouts.target overrides are removed."
     },
     "deployment": {
       "schema_version": 1,

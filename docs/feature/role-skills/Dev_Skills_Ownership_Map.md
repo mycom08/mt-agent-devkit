@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -352,7 +352,7 @@ The survivors are the §9b owners of each file's sections (§8 for `Story_Standa
 
 ## 12. Technical Lead Files to Technical Lead Skills (ST-000328)
 
-The internal `Technical_Lead_Rules_Bootstrap.md`, `Technical_Lead_Rules_Read_On_Demand.md` and `Story_Standard_TL.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Six skills hold every TL-only rule: `tl-core`, `tl-design`, `tl-review`, `tl-answer`, `tl-implement`, `tl-anchor`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 templates keep their text until ST-000329, so the target registry alternatives still name the old files (§12c).
+The internal `Technical_Lead_Rules_Bootstrap.md`, `Technical_Lead_Rules_Read_On_Demand.md` and `Story_Standard_TL.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Six skills hold every TL-only rule: `tl-core`, `tl-design`, `tl-review`, `tl-answer`, `tl-implement`, `tl-anchor`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 templates keep their files until ST-000330; ST-000329 ships the skills to targets (§13).
 
 ### 12a. Technical Lead Rules Bootstrap
 
@@ -419,11 +419,47 @@ The internal `Technical_Lead_Rules_Bootstrap.md`, `Technical_Lead_Rules_Read_On_
 
 ### 12c. Routing (internal layout)
 
-The internal Technical Lead route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `tl-core` through `bootstrap` (the `standard` row is disabled internally), the task skill through its task row, `tl-design` through the new `design_standards` trigger, and the shared Common sections through `role_sources`, as for the Developer. Each TL row keeps its pre-skill source under `layouts.target`, so installed targets are unchanged until ST-000329. `validate_retired_citations.py` rejects citations of the three files in the internal corpus and in the registry outside `layouts.target`.
+The internal Technical Lead route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `tl-core` through `bootstrap` (the `standard` row is disabled internally), the task skill through its task row, `tl-design` through the new `design_standards` trigger, and the shared Common sections through `role_sources`, as for the Developer. ST-000329 removed the `layouts.target` overrides and routes targets the same way (§13). `validate_retired_citations.py` rejects citations of the three files in the internal corpus and in the registry outside `layouts.target`.
+
+## 13. Technical Lead Skills in Targets (ST-000329)
+
+Each `tl-*` skill has a Phase 2 template at `.mt-agent-devkit/distribution/phase2/templates/skills/<name>/SKILL_template.md`, with the internal skill's frontmatter and budget, shipped as a shared managed canonical skill plus one wrapper per provider (`TL_SKILLS` in `build_bundle.py`). The legacy TL templates (`Technical_Lead_Rules_Bootstrap_template.md`, `Technical_Lead_Rules_Read_On_Demand_template.md`, `Story_Standard_TL_template.md`) still ship, unread, until ST-000330 retires them behind these survivors.
+
+### 13a. Target layer differences
+
+The target text keeps the old target rules, so it differs from the internal skills where the target file differed from the internal one (design §3: each layer's skill is the only owner of that layer's text).
+
+| Skill | Layer difference in the Phase 2 template |
+|---|---|
+| `tl-core` | AC is ticked by the PO at closure, not QA; story discussion in strict mode names the story file's `**Status:**` and `## Comments`; the load map drops `change-metadata` (internal only) |
+| `tl-design` | The project design standards (approach evaluation with performance, security and team capability, API design, deliverables per design task) replace the devkit template and `changes.json` rules; no `change-metadata` requirement; language and database versions come from `Project_Priming.md` instead of `{language-version}` placeholders |
+| `tl-review` | "Review gate, not the merge gate": the approval moves the story to QA testing and never instructs a merge; adds citation accuracy, the data isolation, error format, test coverage and migration checks against `docs/wiki/Development_Standards.md`, and the refactor story checklist; strict mode posts the verdict as a story comment entry |
+| `tl-answer` | Adds the technical doc divergence table (Story Standard TL §8) and the strict-mode comment note |
+| `tl-implement` | The feature branch is the merge target (no PR to master); PR title `[ST-XXXXXX][FEATURE]`; strict-mode note |
+| `tl-anchor` | Adds the file-name and 50-line rules |
+
+### 13b. Target rows to skills
+
+| Old target text | Owner | Change |
+|---|---|---|
+| Story Standard TL §1, §2, §7; Bootstrap §3 | `tl-core` | compacted, every rule kept |
+| Bootstrap §4 | `tl-design` §1-§6 | verbatim, placeholders replaced by `Project_Priming.md` |
+| Bootstrap §2 (checklists, AC clarifications, change requests); Story Standard TL §12 | `tl-review` §1-§5; `tl-answer` steps 3-4; `pr-review` steps 5-7 | as §12b, plus the target-only checks above |
+| Story Standard TL §8 | `tl-answer` | moved |
+| On-Demand §1, §3, §4 | `tl-implement` | step |
+| On-Demand §2 | `tl-anchor` | verbatim |
+| On-Demand §6 | `tl-answer` | reworded, as §12b |
+| Story Standard TL §9, Bootstrap §5-§8, §10-§12 | `comment`, `git-workflow`, `project-docs`, `working-record`, `raise-question`, `pre-pr-gate`, `handoff`, `troubleshooting` | pointer, named by the `tl-core` load map |
+| Bootstrap §13, `technical_lead_instructions_template.md` routing | Load Map in the instructions template, repeated in `tl-core` | replaced |
+
+### 13c. Target routing
+
+The registry gives the Technical Lead `bootstrap`, `common` and `role_sources` entries for `target` equal to the internal ones, and every `layouts.target` override that named a TL rules file is removed, so each row reads its skill in both layouts: `tl_implementation_4`, `review`, `question_rules`, the question `comment` row and `trigger_anchoring`. The `standard` row stays disabled in both layouts, so `Story_Standard_TL_template.md` is no longer read. `design_standards` is no longer internal only. `tl_implementation_3` stays off in targets: the `pre_pr` trigger already delivers `pre-pr-gate`. `validate_retired_citations.py` rejects the three TL names in every registry layout; the shipped templates and bundle assets are exempt until ST-000330. The `Story_Standard_template.md` Testing note and the `pr-review` template point to the TL skills.
 
 ---
 
-**Document Version:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files
+**Document Version:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets
+**Previous:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files
 **Previous:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files
 **Previous:** 1.4 — ST-000312 (A2-P2) adds §10, the Phase 2 pointers and target routing
 **Previous:** 1.3 — ST-000310 (C) adds §9, Phase 2 templates and target routing

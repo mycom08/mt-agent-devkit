@@ -110,12 +110,6 @@
         "after": [
           "record"
         ],
-        "layouts": {
-          "target": {
-            "source": ".mt-agent-devkit/rules/Story_Standard_TL.md",
-            "enabled": true
-          }
-        },
         "enabled": false
       }
     ],
@@ -146,7 +140,8 @@
       "target": ".mt-agent-devkit/skills/dev-core/SKILL.md"
     },
     "Technical_Lead": {
-      "internal": ".mt-agent-devkit/skills/tl-core/SKILL.md"
+      "internal": ".mt-agent-devkit/skills/tl-core/SKILL.md",
+      "target": ".mt-agent-devkit/skills/tl-core/SKILL.md"
     }
   },
   "common": {
@@ -168,6 +163,13 @@
     },
     "Technical_Lead": {
       "internal": [
+        ".mt-agent-devkit/skills/pre-work/SKILL.md",
+        ".mt-agent-devkit/skills/agent-security/SKILL.md",
+        ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
+        ".mt-agent-devkit/skills/shell-rules/SKILL.md",
+        ".mt-agent-devkit/skills/retro/SKILL.md"
+      ],
+      "target": [
         ".mt-agent-devkit/skills/pre-work/SKILL.md",
         ".mt-agent-devkit/skills/agent-security/SKILL.md",
         ".mt-agent-devkit/skills/token-efficiency/SKILL.md",
@@ -241,6 +243,36 @@
     },
     "Technical_Lead": {
       "internal": {
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §1": [
+          ".mt-agent-devkit/skills/agent-memory/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §2": [
+          ".mt-agent-devkit/skills/troubleshooting/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §3": [
+          ".mt-agent-devkit/skills/retro-contribution/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §5": [
+          ".mt-agent-devkit/skills/handoff/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §6": [
+          ".mt-agent-devkit/skills/credential-gate/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §8": [
+          ".mt-agent-devkit/skills/agent-memory/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md": [
+          ".mt-agent-devkit/skills/retro/SKILL.md",
+          ".mt-agent-devkit/skills/handoff/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Shell_Safety.md": [
+          ".mt-agent-devkit/skills/shell-rules/SKILL.md"
+        ],
+        ".mt-agent-devkit/rules/Agent_Common_Working_Record.md": [
+          ".mt-agent-devkit/skills/working-record/SKILL.md"
+        ]
+      },
+      "target": {
         ".mt-agent-devkit/rules/Agent_Common_Read_On_Demand.md §1": [
           ".mt-agent-devkit/skills/agent-memory/SKILL.md"
         ],
@@ -347,16 +379,7 @@
           ],
           "roles": [
             "Technical_Lead"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "4"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "qa_implementation",
@@ -520,16 +543,7 @@
           ],
           "roles": [
             "Technical_Lead"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "4"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "qa_implementation",
@@ -649,16 +663,7 @@
           "reason": "review",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -881,16 +886,7 @@
           "reason": "question rules",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "6"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "comment",
@@ -901,16 +897,7 @@
           "reason": "comment",
           "after": [
             "common"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Story_Standard_TL.md",
-              "coverage": {
-                "kind": "section",
-                "section": "9"
-              }
-            }
-          }
+          ]
         },
         {
           "id": "comment_standard",
@@ -1444,16 +1431,7 @@
           "reason": "trigger anchoring",
           "after": [
             "memory"
-          ],
-          "layouts": {
-            "target": {
-              "source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md",
-              "coverage": {
-                "kind": "section",
-                "section": "2"
-              }
-            }
-          }
+          ]
         }
       ]
     },
@@ -1733,9 +1711,6 @@
     "design_standards": {
       "roles": [
         "Technical_Lead"
-      ],
-      "layouts": [
-        "internal"
       ],
       "reads": [
         {

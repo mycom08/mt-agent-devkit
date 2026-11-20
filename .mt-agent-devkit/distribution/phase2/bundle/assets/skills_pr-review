@@ -7,7 +7,7 @@ description: Peer review procedure - locate the PR, read the diff, confirm CI ac
 
 **Requires:** `comment` (before any comment), `pre-pr-gate` (the checks you verify), `credential-gate` (credential evidence)
 
-TL keeps its approval authority (the merge gate, design compliance) in its own rules; this skill is the shared reviewer procedure. **Strict mode** has no PR: review the story file's change record and post the verdict as a story comment entry.
+TL keeps its approval authority (the review gate, design compliance, the Reviewer Gate) in the `tl-review` skill; this skill is the shared reviewer procedure. **Strict mode** has no PR: review the story file's change record and post the verdict as a story comment entry.
 
 ## Steps
 

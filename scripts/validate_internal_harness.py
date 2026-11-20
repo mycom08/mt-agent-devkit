@@ -104,9 +104,9 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
 TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
 # Internal skills with no Phase 2 template or bundle entry. change-metadata is devkit-internal
-# only (design B5); ST-000310 ships every other common and Developer skill; the Technical Lead
-# skills are internal until ST-000329 ships them.
-UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"} | set(TL_SKILLS))
+# only (design B5); ST-000310 ships every other common and Developer skill and ST-000329 ships
+# the Technical Lead skills.
+UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"})
 SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500, "tl-core": 1600}
 DEFAULT_SKILL_LIMIT = 4000  # po-*, common, Developer and Technical Lead skills
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)

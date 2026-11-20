@@ -164,8 +164,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "943e1410756d935d79ebd409af234efd2c369c63b97790b660c9e3a8c99f9604",
-      "bytes": 31732,
+      "sha256": "cb95cc885408af6eba3a2584c612e8eec91fdc3ebc65958d888515a65ef8e876",
+      "bytes": 31712,
       "kind": "template"
     },
     {
@@ -234,8 +234,8 @@
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "01cb9ee28a9eb87ff3041ab7622ca5a2707bcada3f1dad4b1ee092940f3afcfc",
-      "bytes": 4670,
+      "sha256": "e17408b2c89ceb2c93868982ddd17cf46098ec79870a4217b35cf731772f6593",
+      "bytes": 4765,
       "kind": "template"
     },
     {
@@ -976,8 +976,8 @@
     {
       "id": "skills/pr-review",
       "path": "assets/skills_pr-review",
-      "sha256": "825e104b03f236486e396e9a585aa9206527a73a891bb46e6b0fbc4222791f65",
-      "bytes": 3397,
+      "sha256": "58611d731c65f75cfb68fd63fdf2930d536baa7d0dd42280402822a3fb6ae196",
+      "bytes": 3425,
       "kind": "template"
     },
     {
@@ -1195,6 +1195,174 @@
       "path": "assets/codex_skill_dev-hotfix",
       "sha256": "49ec266209d214f3351d4afa1014fa8922cc3a16c511c42baa33c5cd88f5e625",
       "bytes": 391,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/tl-core",
+      "path": "assets/skills_tl-core",
+      "sha256": "2a632e58ff10a614ee4b391e520252a67bb63e2e856bc26b03ae424e6da5b4e7",
+      "bytes": 1596,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/tl-core",
+      "path": "assets/claude_skill_tl-core",
+      "sha256": "d0ea5b3ee9f80333e8d6d8b6bf23aef71bd77117a33438690a554247e219ce11",
+      "bytes": 307,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/tl-core",
+      "path": "assets/antigravity_skill_tl-core",
+      "sha256": "d0ea5b3ee9f80333e8d6d8b6bf23aef71bd77117a33438690a554247e219ce11",
+      "bytes": 307,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/tl-core",
+      "path": "assets/codex_skill_tl-core",
+      "sha256": "d0ea5b3ee9f80333e8d6d8b6bf23aef71bd77117a33438690a554247e219ce11",
+      "bytes": 307,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/tl-design",
+      "path": "assets/skills_tl-design",
+      "sha256": "5df052a57a10d45f21b9d7a77638e5398e0e58e28e7076e2ad6ed6aed27bef2f",
+      "bytes": 2005,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/tl-design",
+      "path": "assets/claude_skill_tl-design",
+      "sha256": "99754347dd4fd972cee30ac4789a674e77d7cd3a4c83ffff46ebe8a1557ce18c",
+      "bytes": 390,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/tl-design",
+      "path": "assets/antigravity_skill_tl-design",
+      "sha256": "99754347dd4fd972cee30ac4789a674e77d7cd3a4c83ffff46ebe8a1557ce18c",
+      "bytes": 390,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/tl-design",
+      "path": "assets/codex_skill_tl-design",
+      "sha256": "99754347dd4fd972cee30ac4789a674e77d7cd3a4c83ffff46ebe8a1557ce18c",
+      "bytes": 390,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/tl-review",
+      "path": "assets/skills_tl-review",
+      "sha256": "b638b9c864a0225dc8daa82f919a6c1ca180e1edc65efb5ea01543c9e34cae16",
+      "bytes": 3962,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/tl-review",
+      "path": "assets/claude_skill_tl-review",
+      "sha256": "c8aca846b8944fa6bc1f086fe3dc10afc7f08d317c8ffd28ff4f070417e87997",
+      "bytes": 395,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/tl-review",
+      "path": "assets/antigravity_skill_tl-review",
+      "sha256": "c8aca846b8944fa6bc1f086fe3dc10afc7f08d317c8ffd28ff4f070417e87997",
+      "bytes": 395,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/tl-review",
+      "path": "assets/codex_skill_tl-review",
+      "sha256": "c8aca846b8944fa6bc1f086fe3dc10afc7f08d317c8ffd28ff4f070417e87997",
+      "bytes": 395,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/tl-answer",
+      "path": "assets/skills_tl-answer",
+      "sha256": "f5994b63796354fb48165665137bf0b17d7afeeb0769cca4b728be33facd42eb",
+      "bytes": 2001,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/tl-answer",
+      "path": "assets/claude_skill_tl-answer",
+      "sha256": "ace34f7d0d51103a3752e4beedb194a5010d160f3b0da15fcc476b93312092e6",
+      "bytes": 427,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/tl-answer",
+      "path": "assets/antigravity_skill_tl-answer",
+      "sha256": "ace34f7d0d51103a3752e4beedb194a5010d160f3b0da15fcc476b93312092e6",
+      "bytes": 427,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/tl-answer",
+      "path": "assets/codex_skill_tl-answer",
+      "sha256": "ace34f7d0d51103a3752e4beedb194a5010d160f3b0da15fcc476b93312092e6",
+      "bytes": 427,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/tl-implement",
+      "path": "assets/skills_tl-implement",
+      "sha256": "bf09d7b6c6c46d61b0a0d8b75bd528df0790ff2ba769e07cac0b4be1bd3f04ef",
+      "bytes": 1665,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/tl-implement",
+      "path": "assets/claude_skill_tl-implement",
+      "sha256": "624bd59197da7d2521da65713d9bf887ba6d73b48f72e2e71b94045f66f48237",
+      "bytes": 375,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/tl-implement",
+      "path": "assets/antigravity_skill_tl-implement",
+      "sha256": "624bd59197da7d2521da65713d9bf887ba6d73b48f72e2e71b94045f66f48237",
+      "bytes": 375,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/tl-implement",
+      "path": "assets/codex_skill_tl-implement",
+      "sha256": "624bd59197da7d2521da65713d9bf887ba6d73b48f72e2e71b94045f66f48237",
+      "bytes": 375,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/tl-anchor",
+      "path": "assets/skills_tl-anchor",
+      "sha256": "49b8665ae1f43dd04bcf1ebb4b8ec07aba868ac7609b209f6b6e1ed766e080a7",
+      "bytes": 718,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/tl-anchor",
+      "path": "assets/claude_skill_tl-anchor",
+      "sha256": "1adf347d6c16d28904a39c8bc82888c54317cc57dc3968abf86b9c3ca288b54b",
+      "bytes": 299,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/tl-anchor",
+      "path": "assets/antigravity_skill_tl-anchor",
+      "sha256": "1adf347d6c16d28904a39c8bc82888c54317cc57dc3968abf86b9c3ca288b54b",
+      "bytes": 299,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/tl-anchor",
+      "path": "assets/codex_skill_tl-anchor",
+      "sha256": "1adf347d6c16d28904a39c8bc82888c54317cc57dc3968abf86b9c3ca288b54b",
+      "bytes": 299,
       "kind": "adapter"
     },
     {
@@ -2040,8 +2208,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "fc2ee01dd43a97f7f79b083d78c599627306f5bb5ad38bc031435895fc963c2d",
-      "bytes": 32644,
+      "sha256": "24c2811714521f0885ad8900587feceee9a76e21ff74dcc9041192d14d303bec",
+      "bytes": 32848,
       "kind": "script"
     },
     {
@@ -2145,8 +2313,8 @@
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "116ea73ff4642933893cee21a82c8ce1efadb7f3ad776fc254e9e7b8915c3435",
-      "bytes": 44306,
+      "sha256": "c5f76d8c77b4057a7f2c32d16e2270b4db576ad5bad2fc8866533e4b7c3738ae",
+      "bytes": 44168,
       "kind": "contract"
     },
     {
@@ -6169,6 +6337,570 @@
         "codex/skill/dev-hotfix"
       ],
       "destination": ".codex/skills/dev-hotfix/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/tl-core",
+      "sources": [
+        "skills/tl-core"
+      ],
+      "destination": ".mt-agent-devkit/skills/tl-core/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/tl-core",
+      "sources": [
+        "claude/skill/tl-core"
+      ],
+      "destination": ".claude/skills/tl-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/tl-core",
+      "sources": [
+        "antigravity/skill/tl-core"
+      ],
+      "destination": ".antigravity/skills/tl-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/tl-core",
+      "sources": [
+        "codex/skill/tl-core"
+      ],
+      "destination": ".codex/skills/tl-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/tl-design",
+      "sources": [
+        "skills/tl-design"
+      ],
+      "destination": ".mt-agent-devkit/skills/tl-design/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/tl-design",
+      "sources": [
+        "claude/skill/tl-design"
+      ],
+      "destination": ".claude/skills/tl-design/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/tl-design",
+      "sources": [
+        "antigravity/skill/tl-design"
+      ],
+      "destination": ".antigravity/skills/tl-design/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/tl-design",
+      "sources": [
+        "codex/skill/tl-design"
+      ],
+      "destination": ".codex/skills/tl-design/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/tl-review",
+      "sources": [
+        "skills/tl-review"
+      ],
+      "destination": ".mt-agent-devkit/skills/tl-review/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/tl-review",
+      "sources": [
+        "claude/skill/tl-review"
+      ],
+      "destination": ".claude/skills/tl-review/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/tl-review",
+      "sources": [
+        "antigravity/skill/tl-review"
+      ],
+      "destination": ".antigravity/skills/tl-review/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/tl-review",
+      "sources": [
+        "codex/skill/tl-review"
+      ],
+      "destination": ".codex/skills/tl-review/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/tl-answer",
+      "sources": [
+        "skills/tl-answer"
+      ],
+      "destination": ".mt-agent-devkit/skills/tl-answer/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/tl-answer",
+      "sources": [
+        "claude/skill/tl-answer"
+      ],
+      "destination": ".claude/skills/tl-answer/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/tl-answer",
+      "sources": [
+        "antigravity/skill/tl-answer"
+      ],
+      "destination": ".antigravity/skills/tl-answer/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/tl-answer",
+      "sources": [
+        "codex/skill/tl-answer"
+      ],
+      "destination": ".codex/skills/tl-answer/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/tl-implement",
+      "sources": [
+        "skills/tl-implement"
+      ],
+      "destination": ".mt-agent-devkit/skills/tl-implement/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/tl-implement",
+      "sources": [
+        "claude/skill/tl-implement"
+      ],
+      "destination": ".claude/skills/tl-implement/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/tl-implement",
+      "sources": [
+        "antigravity/skill/tl-implement"
+      ],
+      "destination": ".antigravity/skills/tl-implement/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/tl-implement",
+      "sources": [
+        "codex/skill/tl-implement"
+      ],
+      "destination": ".codex/skills/tl-implement/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/tl-anchor",
+      "sources": [
+        "skills/tl-anchor"
+      ],
+      "destination": ".mt-agent-devkit/skills/tl-anchor/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/tl-anchor",
+      "sources": [
+        "claude/skill/tl-anchor"
+      ],
+      "destination": ".claude/skills/tl-anchor/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/tl-anchor",
+      "sources": [
+        "antigravity/skill/tl-anchor"
+      ],
+      "destination": ".antigravity/skills/tl-anchor/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/tl-anchor",
+      "sources": [
+        "codex/skill/tl-anchor"
+      ],
+      "destination": ".codex/skills/tl-anchor/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [

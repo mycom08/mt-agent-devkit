@@ -630,8 +630,8 @@ class CommonSkillsTests(unittest.TestCase):
 
     def test_undistributed_skills_are_exempt_only_from_distribution_checks(self):
         # ST-000310 ships every common and Developer skill except change-metadata (internal only, B5);
-        # ST-000328 adds the Technical Lead skills, internal until ST-000329.
-        self.assertEqual(frozenset({"change-metadata"} | set(validator.TL_SKILLS)), validator.UNDISTRIBUTED_SKILLS)
+        # ST-000329 ships the Technical Lead skills too.
+        self.assertEqual(frozenset({"change-metadata"}), validator.UNDISTRIBUTED_SKILLS)
         self.assertFalse((ROOT / validator.SKILL_TEMPLATES / "change-metadata").exists())
         self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
         inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]
@@ -1008,9 +1008,14 @@ class TlSkillsTests(unittest.TestCase):
                     self.assertEqual(("skill", f".mt-agent-devkit/skills/{name}/SKILL.md"), (entry["renderer"], entry["destination"]))
                     self.assertEqual(wrappers.render(entry), (ROOT / entry["source"]).read_text(encoding="utf-8"))
         self.assertEqual([], validator.skill_reference_errors(ROOT))
-        # Internal until ST-000329: no Phase 2 template and no bundle entry yet.
-        self.assertTrue(frozenset(validator.TL_SKILLS) <= validator.UNDISTRIBUTED_SKILLS)
-        self.assertEqual([], list((ROOT / validator.SKILL_TEMPLATES).glob("tl-*")))
+        # ST-000329: every TL skill ships as a Phase 2 template with the internal frontmatter and budget.
+        self.assertFalse(frozenset(validator.TL_SKILLS) & validator.UNDISTRIBUTED_SKILLS)
+        self.assertEqual(set(validator.TL_SKILLS), {p.parent.name for p in (ROOT / validator.SKILL_TEMPLATES).glob("tl-*/SKILL_template.md")})
+        self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
+        for name in validator.TL_SKILLS:
+            text = (ROOT / validator.SKILL_TEMPLATES / name / "SKILL_template.md").read_text(encoding="utf-8")
+            self.assertLessEqual(len(text.encode("utf-8")), 1600 if name == "tl-core" else 4000, name)
+            self.assertNotIn("change-metadata", text, name)
 
     def test_tl_review_requires_pr_review_and_pr_review_points_back(self):
         review = (ROOT / ".mt-agent-devkit/skills/tl-review/SKILL.md").read_text(encoding="utf-8")
@@ -1049,7 +1054,7 @@ class TlSkillsTests(unittest.TestCase):
         rows = json.loads((ROOT / "docs/reviews/ST-000264_Common_Ownership.json").read_text(encoding="utf-8"))["rows"]
         self.assertFalse([row for row in rows if row["source"] in self.RETIRED])
 
-    def test_retired_citation_validator_rejects_tl_files_internally_only(self):
+    def test_retired_citation_validator_rejects_tl_files_in_every_registry_layout(self):
         self.assertEqual([], self.citations.findings(ROOT))
         phase2 = ".mt-agent-devkit/distribution/phase2"
         root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json", ".claude/skills/tl-core/SKILL.md",
@@ -1060,7 +1065,7 @@ class TlSkillsTests(unittest.TestCase):
                                (".claude/skills/tl-core/SKILL.md", "Story_Standard_TL §12")):
             path = root / relative
             path.write_text(path.read_text(encoding="utf-8") + "\n" + line + "\n" + history, encoding="utf-8")
-        # Target-layer files keep the TL files until ST-000329: a citation there is not an error yet.
+        # The shipped TL templates and bundle assets keep the TL files until ST-000330: a citation there is not an error yet.
         shipped = root / phase2 / "templates/rules/Story_Standard_template.md"
         shipped.write_text(shipped.read_text(encoding="utf-8") + "\nSee `Technical_Lead_Rules_Bootstrap.md` §4.\n", encoding="utf-8")
         for relative, internal_layout in ((".mt-agent-devkit/contracts/read-routing.json", True), (phase2 + "/bundle/assets/read-routing.json", False)):
@@ -1074,13 +1079,79 @@ class TlSkillsTests(unittest.TestCase):
             self.assertTrue(any(relative + ":" in f for f in found), relative)
         self.assertTrue(any("TL Bootstrap" in f for f in found))
         self.assertFalse(any("Story_Standard_template" in f or "bundle/assets" in f for f in found))
-        # A target alternative inside the internal registry is allowed.
+        # ST-000329: a target alternative inside the registry is a stale route too.
         registry = root / ".mt-agent-devkit/contracts/read-routing.json"
         data = json.loads(registry.read_text(encoding="utf-8"))
         data["tasks"]["review"]["reads"][1]["source"] = ".mt-agent-devkit/skills/tl-review/SKILL.md"
         data["tasks"]["review"]["reads"][1]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md"}}
         registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        self.assertFalse(any("contracts/read-routing.json" in f for f in self.citations.findings(root)))
+        self.assertTrue(any("contracts/read-routing.json" in f for f in self.citations.findings(root)))
+
+
+class TlDistributionTests(unittest.TestCase):
+    """ST-000329: the tl-* skills ship to targets; the target TL rules text lives in the skill templates."""
+    TEMPLATES = ROOT / ".mt-agent-devkit/distribution/phase2/templates"
+
+    def template(self, name):
+        return (self.TEMPLATES / "skills" / name / "SKILL_template.md").read_text(encoding="utf-8")
+
+    def test_bundle_ships_each_tl_skill_with_a_wrapper_per_provider(self):
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+        shipped = {item["destination"]: item for item in manifest["files"] if item["phase"] != "retirement"}
+        for name in validator.TL_SKILLS:
+            with self.subTest(skill=name):
+                item = shipped[f".mt-agent-devkit/skills/{name}/SKILL.md"]
+                self.assertEqual(("shared", "managed", list(validator.PROVIDERS)), (item["owner"], item["ownership"], item["providers"]))
+                for provider in validator.PROVIDERS:
+                    self.assertEqual([provider], shipped[f".{provider}/skills/{name}/SKILL.md"]["providers"])
+
+    def test_target_tl_rules_have_their_text_in_the_named_skill_template(self):
+        rows = {  # old target TL section -> (skill, distinctive phrase)
+            "Story Standard TL 1 status, Bootstrap 3": ("tl-core", "after you approve, before merge, to `status:testing`"),
+            "Story Standard TL 2 structure, 7 boundaries": ("tl-core", "Never tick AC (PO does at closure)"),
+            "Bootstrap 4 evaluating": ("tl-design", "team capability"),
+            "Bootstrap 4 recommendations": ("tl-design", "implementation timeline and critical path"),
+            "Bootstrap 4 API design": ("tl-design", "data isolation"),
+            "Bootstrap 4 key questions": ("tl-design", "Gradual rollout strategy"),
+            "Bootstrap 4 constraints": ("tl-design", "Maintain API stability"),
+            "Bootstrap 4 deliverables": ("tl-design", "Implementation roadmap with risk assessment"),
+            "Story Standard TL 12 reviewer gate": ("tl-review", "Zero checks reported is not passing evidence"),
+            "Bootstrap 2 dependency pin": ("tl-review", "Dependency pin"),
+            "Bootstrap 2 resume completeness": ("tl-review", "Resume-rule completeness"),
+            "Bootstrap 2 citation accuracy": ("tl-review", "Citation accuracy"),
+            "Bootstrap 2 standards and checks": ("tl-review", "data isolation, error format, test coverage and migration correctness"),
+            "Bootstrap 2 CI workflow stories": ("tl-review", "Gate-logic correctness"),
+            "Bootstrap 2 refactor stories": ("tl-review", "old symbol fully removed"),
+            "Bootstrap 2 documentation stories": ("tl-review", "Audience fit"),
+            "Bootstrap 2 UI prototype": ("tl-review", "UI_Prototype_Rules.md"),
+            "Bootstrap 2 not the merge gate": ("tl-review", "never instruct anyone to merge"),
+            "On-Demand 6 answer steps": ("tl-answer", "Report the answer to the orchestrator in one sentence"),
+            "Bootstrap 2 AC clarifications": ("tl-answer", "update the story body AC text"),
+            "Story Standard TL 8 doc divergence": ("tl-answer", "## Technical Doc Divergence"),
+            "On-Demand 1 master gate": ("tl-implement", "Do not open a PR targeting master"),
+            "On-Demand 4 status transitions": ("tl-implement", "## PR ready for peer review"),
+            "On-Demand 2 anchoring": ("tl-anchor", "Rejected Alternative"),
+        }
+        for row, (skill, phrase) in rows.items():
+            with self.subTest(row=row):
+                self.assertIn(phrase, self.template(skill))
+
+    def test_tl_instructions_template_carries_the_load_map_not_the_rules_routing(self):
+        instructions = (self.TEMPLATES / "instructions/technical_lead_instructions_template.md").read_text(encoding="utf-8")
+        self.assertIn("## Load Map", instructions)
+        for skill in ("tl-core", "tl-review", "tl-answer", "tl-implement", "tl-design", "tl-anchor", "pr-review"):
+            self.assertIn(f"`{skill}`", instructions)
+        for gone in ("## Selected Common Routing", "Agent_Common_Bootstrap.md` in full", "Technical_Lead_Rules_", "Story_Standard_TL", "change-metadata", "Answer-a-Question Task"):
+            self.assertNotIn(gone, instructions)
+        core = self.template("tl-core")
+        load_map = instructions.split("## Load Map", 1)[1].split("**Resumed sessions:**", 1)[0]
+        for row in [l for l in load_map.splitlines() if l.startswith("| ") and "At spawn" not in l and "| When |" not in l]:
+            for skill in re.findall(r"`([a-z-]+)`", row.split("|")[2]):
+                self.assertIn(f"`{skill}`", core, row)
+
+    def test_pr_review_template_names_tl_review(self):
+        self.assertIn("in the `tl-review` skill", self.template("pr-review"))
+        self.assertNotIn("Technical_Lead_Rules_Bootstrap.md §3", (self.TEMPLATES / "rules/Story_Standard_template.md").read_text(encoding="utf-8"))
 
 
 class Phase2SkillTemplatesTests(unittest.TestCase):
