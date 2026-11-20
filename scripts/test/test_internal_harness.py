@@ -235,6 +235,11 @@ class SectionAndWrapperTests(unittest.TestCase):
                 self.assertIn("`dev-core`", instruction)
                 self.assertIn("## Load Map", instruction)
                 self.assertIn("Standing Checks", instruction)
+            elif role == "technical_lead":
+                self.assertNotIn("Story_Standard_TL", instruction)
+                self.assertIn("`tl-core`", instruction)
+                self.assertIn("## Load Map", instruction)
+                self.assertIn("Standing Checks", instruction)
             else:
                 self.assertIn("mandatory full role-scoped read", instruction)
         bootstrap = (ROOT / ".mt-agent-devkit/rules/Agent_Common_Bootstrap.md").read_text(encoding="utf-8")
@@ -624,8 +629,9 @@ class CommonSkillsTests(unittest.TestCase):
             self.assertNotIn("generate_security_blocks", text)
 
     def test_undistributed_skills_are_exempt_only_from_distribution_checks(self):
-        # ST-000310 ships every common and Developer skill except change-metadata (internal only, B5).
-        self.assertEqual(frozenset({"change-metadata"}), validator.UNDISTRIBUTED_SKILLS)
+        # ST-000310 ships every common and Developer skill except change-metadata (internal only, B5);
+        # ST-000328 adds the Technical Lead skills, internal until ST-000329.
+        self.assertEqual(frozenset({"change-metadata"} | set(validator.TL_SKILLS)), validator.UNDISTRIBUTED_SKILLS)
         self.assertFalse((ROOT / validator.SKILL_TEMPLATES / "change-metadata").exists())
         self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
         inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]
@@ -977,6 +983,104 @@ class DevSkillsTests(unittest.TestCase):
         self.assertIn("skills/pr-review", records[".mt-agent-devkit/rules/Story_Standard_Dev.md"]["after_verified_ids"])
         # No migration-inventory change: its only Developer retirements are the internal ST-000309 ones.
         self.assertEqual({"ST-000309"}, {item["retired_by"] for item in self.inventory()["retired"] if Path(item["source"]).name in {Path(r).name for r in self.RETIRED}})
+
+
+class TlSkillsTests(unittest.TestCase):
+    """ST-000328: six internal Technical Lead skills replace the internal TL rules files."""
+    RETIRED = tuple(f".mt-agent-devkit/rules/{n}.md" for n in ("Technical_Lead_Rules_Bootstrap", "Technical_Lead_Rules_Read_On_Demand", "Story_Standard_TL"))
+    fixture = PoSkillsTests.fixture
+    citations = PoSkillsTests.citations
+
+    def inventory(self):
+        return json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text(encoding="utf-8"))
+
+    def test_six_skills_frontmatter_budgets_requires_and_wrappers(self):
+        self.assertEqual(("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor"), validator.TL_SKILLS)
+        inventory = {e["source"]: e for e in self.inventory()["files"]}
+        for name in validator.TL_SKILLS:
+            with self.subTest(skill=name):
+                text = (ROOT / f".mt-agent-devkit/skills/{name}/SKILL.md").read_text(encoding="utf-8")
+                self.assertEqual(name, wrappers.skill_frontmatter(text)["name"])
+                self.assertLessEqual(len(text.encode("utf-8")), 1600 if name == "tl-core" else 4000)
+                self.assertEqual(1, len(validator.REQUIRES.findall(text)))
+                for provider in validator.PROVIDERS:
+                    entry = inventory[f".{provider}/skills/{name}/SKILL.md"]
+                    self.assertEqual(("skill", f".mt-agent-devkit/skills/{name}/SKILL.md"), (entry["renderer"], entry["destination"]))
+                    self.assertEqual(wrappers.render(entry), (ROOT / entry["source"]).read_text(encoding="utf-8"))
+        self.assertEqual([], validator.skill_reference_errors(ROOT))
+        # Internal until ST-000329: no Phase 2 template and no bundle entry yet.
+        self.assertTrue(frozenset(validator.TL_SKILLS) <= validator.UNDISTRIBUTED_SKILLS)
+        self.assertEqual([], list((ROOT / validator.SKILL_TEMPLATES).glob("tl-*")))
+
+    def test_tl_review_requires_pr_review_and_pr_review_points_back(self):
+        review = (ROOT / ".mt-agent-devkit/skills/tl-review/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("`pr-review`", validator.REQUIRES.findall(review)[0])
+        for authority in ("the merge gate", "Reviewer Gate", "Zero checks reported is not passing evidence", "cannot approve your own work"):
+            self.assertIn(authority.lower(), review.lower())
+        pr_review = (ROOT / ".mt-agent-devkit/skills/pr-review/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("`tl-review` skill", pr_review.splitlines()[9])
+
+    def test_tl_core_repeats_the_point_of_use_load_map(self):
+        core = (ROOT / ".mt-agent-devkit/skills/tl-core/SKILL.md").read_text(encoding="utf-8")
+        instructions = (ROOT / ".mt-agent-devkit/instructions/technical_lead_instructions.md").read_text(encoding="utf-8")
+        load_map = instructions.split("## Load Map", 1)[1].split("**Resumed sessions:**", 1)[0]
+        point_of_use = [line for line in load_map.splitlines() if line.startswith("| ") and "At spawn" not in line and "| When |" not in line]
+        self.assertEqual(13, len(point_of_use))
+        for row in point_of_use:
+            for skill in re.findall(r"`([a-z-]+)`", row.split("|")[2]):
+                self.assertIn(f"`{skill}`", core, row)
+        self.assertIn("report it", core)
+        self.assertIn("report that to the orchestrator", instructions)
+        for gone in ("## Selected Common Routing", "Agent_Common_Bootstrap.md` in full", "Technical_Lead_Rules_", "Story_Standard_TL"):
+            self.assertNotIn(gone, instructions)
+
+    def test_retired_files_and_wrappers_are_deleted_and_ledgered(self):
+        inventory = self.inventory()
+        retired = [item for item in inventory["retired"] if item["retired_by"] == "ST-000328"]
+        names = {Path(r).name for r in self.RETIRED}
+        self.assertEqual({(p, n) for p in ("claude", "antigravity") for n in names},
+                         {(item["source"].split("/")[0][1:], Path(item["source"]).name) for item in retired})
+        self.assertTrue(all(item["baseline_sha256"] and item["reason"] for item in retired))
+        for source in [item["source"] for item in retired] + list(self.RETIRED):
+            self.assertFalse((ROOT / source).exists(), source)
+        for entry in inventory["files"]:
+            self.assertNotIn(entry["destination"], self.RETIRED)
+            self.assertFalse(set(entry["consumers"]) & set(self.RETIRED), entry["source"])
+        rows = json.loads((ROOT / "docs/reviews/ST-000264_Common_Ownership.json").read_text(encoding="utf-8"))["rows"]
+        self.assertFalse([row for row in rows if row["source"] in self.RETIRED])
+
+    def test_retired_citation_validator_rejects_tl_files_internally_only(self):
+        self.assertEqual([], self.citations.findings(ROOT))
+        phase2 = ".mt-agent-devkit/distribution/phase2"
+        root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json", ".claude/skills/tl-core/SKILL.md",
+                            phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/bundle/assets/read-routing.json")
+        self.assertEqual([], self.citations.findings(root))
+        history = "**Previous:** 1.0 — split out of `Technical_Lead_Rules_Bootstrap.md`.\n**Version:** 2.0 — `Story_Standard_TL.md` retired.\n"
+        for relative, line in ((".mt-agent-devkit/rules/Agent_Common_Core.md", "See `Technical_Lead_Rules_Read_On_Demand.md` and TL Bootstrap §5."),
+                               (".claude/skills/tl-core/SKILL.md", "Story_Standard_TL §12")):
+            path = root / relative
+            path.write_text(path.read_text(encoding="utf-8") + "\n" + line + "\n" + history, encoding="utf-8")
+        # Target-layer files keep the TL files until ST-000329: a citation there is not an error yet.
+        shipped = root / phase2 / "templates/rules/Story_Standard_template.md"
+        shipped.write_text(shipped.read_text(encoding="utf-8") + "\nSee `Technical_Lead_Rules_Bootstrap.md` §4.\n", encoding="utf-8")
+        for relative, internal_layout in ((".mt-agent-devkit/contracts/read-routing.json", True), (phase2 + "/bundle/assets/read-routing.json", False)):
+            registry = root / relative
+            data = json.loads(registry.read_text(encoding="utf-8"))
+            data["tasks"]["review"]["reads"][1]["source"] = ".mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md"
+            registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        found = self.citations.findings(root)
+        self.assertEqual(4, len(found), found)
+        for relative in (".mt-agent-devkit/rules/Agent_Common_Core.md", ".claude/skills/tl-core/SKILL.md", ".mt-agent-devkit/contracts/read-routing.json"):
+            self.assertTrue(any(relative + ":" in f for f in found), relative)
+        self.assertTrue(any("TL Bootstrap" in f for f in found))
+        self.assertFalse(any("Story_Standard_template" in f or "bundle/assets" in f for f in found))
+        # A target alternative inside the internal registry is allowed.
+        registry = root / ".mt-agent-devkit/contracts/read-routing.json"
+        data = json.loads(registry.read_text(encoding="utf-8"))
+        data["tasks"]["review"]["reads"][1]["source"] = ".mt-agent-devkit/skills/tl-review/SKILL.md"
+        data["tasks"]["review"]["reads"][1]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md"}}
+        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        self.assertFalse(any("contracts/read-routing.json" in f for f in self.citations.findings(root)))
 
 
 class Phase2SkillTemplatesTests(unittest.TestCase):
