@@ -29,6 +29,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Changes
 
 - [ST-000328] The internal Technical Lead reads six `tl-*` skills (`tl-core`, `tl-design`, `tl-review`, `tl-answer`, `tl-implement`, `tl-anchor`) and the common skills through a point-of-use load map instead of its rules files; approval authority (merge gate, Reviewer Gate, design compliance) lives in `tl-review`, which requires `pr-review`. The internal `Technical_Lead_Rules_Bootstrap.md`, `Technical_Lead_Rules_Read_On_Demand.md` and `Story_Standard_TL.md` are deleted with their wrappers and ledgered as retired, and `validate_retired_citations.py` rejects citations of them internally (installed targets keep them until ST-000329). `read_manifest.py` no longer needs a `standard` row to order a skill-based bootstrap. Read measurement: `docs/feature/role-skills/TL_Skills_Measurement.md`.
+- [ST-000329] Ship the six `tl-*` skills to target projects as shared canonical skills with per-provider discovery wrappers, slim the target Technical Lead instructions to a skill load map, and route target TL manifests (review, question, implementation, anchoring and design standards) through `tl-core` and the `tl-*` skills. `init project` and `sync devkit` deliver the skills; the old TL rules files still install, unused, until their retirement (ST-000330).
 ### Bug Fixes
 
 ---

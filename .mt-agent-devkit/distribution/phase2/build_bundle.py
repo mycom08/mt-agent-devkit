@@ -17,7 +17,9 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
                  "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
                  "git-workflow", "pre-pr-gate", "pr-review", "clean-code")
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
-SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS
+# Technical Lead skills (ST-000329); the TL rules templates keep shipping, unused, until ST-000330.
+TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
+SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS + TL_SKILLS
 # Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer).
 # Each installed copy retires behind its own survivors, present in every plan: the
 # shared canonical skill IDs that own its rules (never a provider-suffixed

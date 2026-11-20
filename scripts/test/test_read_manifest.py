@@ -212,10 +212,10 @@ class RoutingTests(unittest.TestCase):
         registry=copy.deepcopy(REGISTRY)
         # ST-000289: both layouts now route the PO through po-core.
         # ST-000309/ST-000310: the Developer switches to dev-core internally, then in targets.
-        # ST-000328: the Technical Lead switches to tl-core internally only.
+        # ST-000328/ST-000329: the Technical Lead switches to tl-core internally, then in targets.
         self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md','target':'.mt-agent-devkit/skills/po-core/SKILL.md'},
                                                 'Developer':{'internal':'.mt-agent-devkit/skills/dev-core/SKILL.md','target':'.mt-agent-devkit/skills/dev-core/SKILL.md'},
-                                                'Technical_Lead':{'internal':'.mt-agent-devkit/skills/tl-core/SKILL.md'}})
+                                                'Technical_Lead':{'internal':'.mt-agent-devkit/skills/tl-core/SKILL.md','target':'.mt-agent-devkit/skills/tl-core/SKILL.md'}})
         registry['bootstrap']['Product_Owner']['internal']='../escape.md'
         request=copy.deepcopy(self.request); request.update(role='Product_Owner',task='closure')
         with self.assertRaisesRegex(m.Blocked,'invalid bootstrap mapping'): m.build(self.root,request,registry=registry)
@@ -504,7 +504,7 @@ TL_TASK_SKILLS = {'implementation': ('tl-implement',), 'fix': ('tl-implement',),
 
 
 class TechnicalLeadSkillRoutingTests(unittest.TestCase):
-    """ST-000328: the internal Technical Lead route reads skills; the target layout keeps the old files until ST-000329."""
+    """ST-000328/ST-000329: the Technical Lead route reads skills in the internal and the target layout."""
     write = RoutingTests.write
     build = RoutingTests.build
 
@@ -559,7 +559,7 @@ class TechnicalLeadSkillRoutingTests(unittest.TestCase):
                                    ('review','memory_fact','agent-memory'),('review','tooling_failure','troubleshooting'),('review','credential_gate','credential-gate')):
             with self.subTest(trigger=trigger):
                 self.assertIn(SKILL(skill),[x['source'] for x in self.build(task=task,triggers=[trigger])['reads']])
-        # The design standards trigger is internal only: targets keep the rules file.
+        # The design standards trigger belongs to the Technical Lead only.
         with self.assertRaisesRegex(m.Blocked,'unsupported trigger for role'): self.build(role='QA',triggers=['design_standards'])
 
     def test_tl_question_reads_the_comment_skill_once(self):
@@ -568,29 +568,39 @@ class TechnicalLeadSkillRoutingTests(unittest.TestCase):
         self.assertEqual(sources.count(SKILL('tl-answer')),1)
         self.assertFalse([s for s in sources if s.endswith(('tl-core/SKILL.md','Project_Priming_Bootstrap.md'))])
 
-    def test_target_layout_still_names_the_tl_rule_files(self):
-        """The target registry alternatives keep the old files until ST-000329 ships the skills."""
+    def test_target_layout_reads_the_tl_skills_not_the_rule_files(self):
+        """ST-000329: no registry alternative names a TL rule file; each row reads its skill in both layouts."""
+        registry=json.dumps(REGISTRY)
+        for name in TL_RETIRED: self.assertNotIn(name,registry)
+        self.assertNotIn('Story_Standard_TL',registry)
+        def layouts(value):
+            if isinstance(value,dict):
+                if 'layouts' in value and isinstance(value['layouts'],dict): yield value
+                for item in value.values(): yield from layouts(item)
+            elif isinstance(value,list):
+                for item in value: yield from layouts(item)
+        for entry in layouts([REGISTRY['roles']['Technical_Lead'],REGISTRY['tasks'],REGISTRY['triggers']]):
+            if entry.get('id') in {x['id'] for x in REGISTRY['roles']['Technical_Lead']}:
+                self.assertNotIn('target',entry['layouts'],entry['id'])
+            for alternative in entry['layouts'].values():
+                self.assertNotIn('.mt-agent-devkit/rules/Technical_Lead',json.dumps(alternative),entry.get('id'))
         routes={**REGISTRY['tasks'],**REGISTRY['triggers']}
-        for route,entry_id,source,section in (('implementation','tl_implementation_4','Technical_Lead_Rules_Read_On_Demand.md','4'),
-                                              ('fix','tl_implementation_4','Technical_Lead_Rules_Read_On_Demand.md','4'),
-                                              ('review','review','Technical_Lead_Rules_Bootstrap.md','2'),
-                                              ('question','question_rules','Technical_Lead_Rules_Read_On_Demand.md','6'),
-                                              ('question','comment','Story_Standard_TL.md','9'),
-                                              ('context_anchoring','trigger_anchoring','Technical_Lead_Rules_Read_On_Demand.md','2')):
+        for route,entry_id,skill in (('implementation','tl_implementation_4','tl-implement'),('fix','tl_implementation_4','tl-implement'),
+                                     ('review','review','tl-review'),('question','question_rules','tl-answer'),('question','comment','comment'),
+                                     ('context_anchoring','trigger_anchoring','tl-anchor'),('design_standards','trigger_design_standards','tl-design')):
             with self.subTest(entry=entry_id,route=route):
                 definition=next(x for x in routes[route]['reads'] if x['id']==entry_id)
-                target=definition['layouts']['target']
-                self.assertEqual((target['source'],target['coverage']),('.mt-agent-devkit/rules/'+source,{'kind':'section','section':section}))
+                self.assertEqual((definition['source'],definition['coverage'],'target' in definition.get('layouts',{})),(SKILL(skill),{'kind':'full'},False))
+        self.assertNotIn('layouts',routes['design_standards'])
         standard=next(x for x in REGISTRY['roles']['Technical_Lead'] if x['id']=='standard')
-        self.assertEqual((standard['enabled'],standard['layouts']['target']),(False,{'source':'.mt-agent-devkit/rules/Story_Standard_TL.md','enabled':True}))
-        self.assertEqual(set(REGISTRY['bootstrap']['Technical_Lead']),{'internal'})
-        self.assertEqual(set(REGISTRY['common']['Technical_Lead']),{'internal'})
-        self.assertEqual(set(REGISTRY['role_sources']['Technical_Lead']),{'internal'})
-        self.assertFalse([k for k in REGISTRY['role_sources']['Technical_Lead']['internal'] if k.split(' §')[0].endswith(TL_RETIRED)])
+        self.assertEqual((standard['enabled'],'layouts' in standard),(False,False))
+        self.assertEqual(REGISTRY['bootstrap']['Technical_Lead']['target'],SKILL('tl-core'))
+        self.assertEqual(REGISTRY['common']['Technical_Lead']['target'],REGISTRY['common']['Technical_Lead']['internal'])
+        self.assertEqual(REGISTRY['role_sources']['Technical_Lead']['target'],REGISTRY['role_sources']['Technical_Lead']['internal'])
 
-    def test_tl_skills_are_internal_only_for_now(self):
+    def test_tl_skills_ship_as_phase2_templates(self):
         templates=ROOT/'.mt-agent-devkit/distribution/phase2/templates/skills'
-        self.assertEqual(sorted(p.parent.name for p in templates.glob('tl-*/SKILL_template.md')),[])
+        self.assertEqual(sorted(p.parent.name for p in templates.glob('tl-*/SKILL_template.md')),sorted(['tl-core','tl-design','tl-review','tl-answer','tl-implement','tl-anchor']))
 
 
 # Point-of-use skills each installed target Developer trigger must add (ST-000310).
@@ -604,6 +614,9 @@ TARGET_TRIGGER_SKILLS = {'pre_pr':('pre-pr-gate',),'consultation':('raise-questi
 
 # Target TL, QA and UI/UX routes that read the shipped skills since ST-000312, with each trigger's skill.
 NON_DEV_SKILL_ROLES = ('Technical_Lead', 'QA', 'UI_UX_Designer')
+TL_TRIGGER_SKILLS = {'design_standards':('tl-design',),'context_anchoring':('tl-anchor',),'pre_pr':('pre-pr-gate',),'source_review':('clean-code',),
+                     'retro_required':('retro-contribution',),'tooling_failure':('troubleshooting',),'credential_gate':('credential-gate',),
+                     'runtime_handoff':('handoff',),'memory_fact':('agent-memory',)}
 NON_DEV_TRIGGER_SKILLS = {('Technical_Lead','pre_pr'):('pre-pr-gate',),('Technical_Lead','source_review'):('clean-code',),
                           ('QA','live_conflict'):('raise-question',),('UI_UX_Designer','consultation'):('raise-question',),
                           ('UI_UX_Designer','live_conflict'):('raise-question',)}
@@ -614,6 +627,11 @@ class InstalledTests(unittest.TestCase):
     def retired_non_developer_sources(reads):
         """Target TL, QA and UI/UX reads that ST-000312 replaced with skills: TL On-Demand §3 and Clean_Code_Rules.md."""
         return sorted(r for r in reads if r[0].endswith('/Clean_Code_Rules.md') or r==('.mt-agent-devkit/rules/Technical_Lead_Rules_Read_On_Demand.md','3'))
+
+    @staticmethod
+    def old_tl_sources(sources):
+        """The three TL rule files and the Common rule files: never read by a target Technical Lead since ST-000329."""
+        return [s for s in sources if s.endswith(TL_RETIRED) or s.startswith('.mt-agent-devkit/rules/Agent_Common_')]
 
     @staticmethod
     def old_developer_sources(sources):
@@ -680,8 +698,15 @@ class InstalledTests(unittest.TestCase):
                                 self.assertIn('`raise-question` section 5',authority)
                                 self.assertIn(SKILL('pre-pr-gate'),authority)
                                 self.assertTrue({(SKILL('pre-pr-gate'),None),(SKILL('raise-question'),None)}<=selected)
+                            if role=='Technical_Lead':
+                                # ST-000329: target TL manifests resolve to the installed tl-* skills.
+                                by={x['id']:x['source'] for x in built['reads']}
+                                # The reduced answer task reads no tl-core (ST-000328); every other TL task does.
+                                self.assertEqual((by['common'],by.get('bootstrap')),(SKILL('pre-work'),None if task=='question' else SKILL('tl-core')))
+                                self.assertNotIn('standard',by)
+                                for skill in TL_TASK_SKILLS[task]: self.assertIn(SKILL(skill),by.values())
+                                self.assertEqual(self.old_tl_sources(by.values()),[])
                             if role=='Technical_Lead' and task=='review':
-                                self.assertIn(SKILL('pr-review'),(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8'))
                                 self.assertIn((SKILL('pr-review'),None),selected)
                             if role=='Technical_Lead' and task in ('implementation','fix'):
                                 self.assertIn((SKILL('git-workflow'),None),selected)
@@ -709,10 +734,9 @@ class InstalledTests(unittest.TestCase):
                                     # ST-000312: no target TL, QA or UI/UX manifest reads TL On-Demand §3 or Clean_Code_Rules.md.
                                     self.assertEqual(self.retired_non_developer_sources(reads),[],trigger)
                                     for skill in NON_DEV_TRIGGER_SKILLS.get((role,trigger),()): self.assertIn((SKILL(skill),None),reads,trigger)
-                                if trigger=='pre_pr' and role=='Technical_Lead':
-                                    authority=(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8')
-                                    self.assertIn('about to open a PR',authority)
-                                    self.assertIn(SKILL('pre-pr-gate'),authority)
+                                if role=='Technical_Lead':
+                                    self.assertEqual(self.old_tl_sources(x['source'] for x in extended['reads']),[],trigger)
+                                    for skill in TL_TRIGGER_SKILLS.get(trigger,()): self.assertIn(SKILL(skill),[x['source'] for x in extended['reads']],trigger)
                                 if trigger=='development_convention':
                                     authority=(target/SKILL('clean-code')).read_text(encoding='utf-8')
                                     self.assertIn('read `docs/wiki/Development_Standards.md`',authority)
@@ -721,10 +745,6 @@ class InstalledTests(unittest.TestCase):
                                     authority=(target/SKILL('clean-code')).read_text(encoding='utf-8')
                                     self.assertIn('**Clean Code or refactor stories**',authority)
                                     self.assertTrue(any(x['source']==SKILL('clean-code') for x in extended['reads']))
-                                if trigger=='source_review' and role=='Technical_Lead':
-                                    authority=(target/'.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md').read_text(encoding='utf-8')
-                                    self.assertIn(SKILL('clean-code'),authority)
-                                    self.assertNotIn('Clean_Code_Rules.md',authority)
 
 
 if __name__ == '__main__': unittest.main()
