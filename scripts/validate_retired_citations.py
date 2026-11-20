@@ -1,15 +1,12 @@
-"""Reject citations of retired rule files (ST-000288, extended in ST-000290, ST-000309, ST-000311, ST-000328 and ST-000329).
+"""Reject citations of retired rule files (ST-000288, extended in ST-000290, ST-000309, ST-000311, ST-000328, ST-000329 and ST-000330).
 
 The PO rule files were folded into the `po-*` skills, the Developer rule files and
-`Clean_Code_Rules.md` into the `dev-*` and common skills. Any bare-filename, path or
-section citation of them is a stale route. The corpus is the internal harness
-(every registry layout routes both roles through the skills) plus, since their
-retirement in targets (ST-000290 PO, ST-000311 Developer), the Phase 2 templates
-and every bundle asset. The deployment engine's full-path gate stays as a second net.
-The Technical Lead rule files (`Technical_Lead_Rules_Bootstrap`, `Technical_Lead_Rules_Read_On_Demand`,
-`Story_Standard_TL`) are folded into the `tl-*` skills in the internal harness (ST-000328) and in every registry
-layout (ST-000329). The Phase 2 templates and bundle assets still ship them, unused, until ST-000330 retires
-them in targets and extends the check to the distribution tree.
+`Clean_Code_Rules.md` into the `dev-*` and common skills, and the Technical Lead rule
+files into the `tl-*` skills. Any bare-filename, path or section citation of them is a
+stale route. The corpus is the internal harness (every registry layout routes all
+three roles through the skills) plus, since their retirement in targets (ST-000290 PO,
+ST-000311 Developer, ST-000330 Technical Lead), the Phase 2 templates and every bundle
+asset. The deployment engine's full-path gate stays as a second net.
 History mentions on `**Version:**`/`**Previous:**` lines are not citations.
 """
 from __future__ import annotations
@@ -20,16 +17,13 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 RETIRED = ("Product_Owner_Rules_Bootstrap", "Product_Owner_Rules_Read_On_Demand", "Story_Standard_PO",
-           "Developer_Rules_Bootstrap", "Developer_Rules_Read_On_Demand", "Story_Standard_Dev", "Clean_Code_Rules")
+           "Developer_Rules_Bootstrap", "Developer_Rules_Read_On_Demand", "Story_Standard_Dev", "Clean_Code_Rules",
+           "Technical_Lead_Rules_Bootstrap", "Technical_Lead_Rules_Read_On_Demand", "Story_Standard_TL")
 # A retired stem as a whole filename token (with or without `.md`); `_template`
 # legacy names are different files and do not match.
 CITATION = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(RETIRED) + r")(?:\.md)?(?![A-Za-z0-9_])")
-# Section citations by the retired files' short names, e.g. "PO Bootstrap §11a", "Dev On-Demand §15".
-SHORT_CITATION = re.compile(r"\b(?:PO|Dev(?:eloper)?) (?:Rules )?(?:Bootstrap|On-Demand|Read[ _]On[ _]Demand)(?:\.md)?\s*§")
-# Retired in the internal harness and the registry; the shipped target files keep them until ST-000330.
-INTERNAL_RETIRED = ("Technical_Lead_Rules_Bootstrap", "Technical_Lead_Rules_Read_On_Demand", "Story_Standard_TL")
-INTERNAL_CITATION = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(INTERNAL_RETIRED) + r")(?:\.md)?(?![A-Za-z0-9_])")
-INTERNAL_SHORT_CITATION = re.compile(r"\bTL (?:Rules )?(?:Bootstrap|On-Demand|Read[ _]On[ _]Demand)(?:\.md)?\s*§")
+# Section citations by the retired files' short names, e.g. "PO Bootstrap §11a", "Dev On-Demand §15", "TL Bootstrap §5".
+SHORT_CITATION = re.compile(r"\b(?:PO|TL|Dev(?:eloper)?) (?:Rules )?(?:Bootstrap|On-Demand|Read[ _]On[ _]Demand)(?:\.md)?\s*§")
 HISTORY = re.compile(r"^\s*\*\*(?:Version|Previous):\*\*")
 SUFFIXES = (".md", ".json", ".py", ".sh", ".ps1")
 LEDGER = ".mt-agent-devkit/contracts/migration-inventory.json"  # Records the retirements themselves.
@@ -91,13 +85,9 @@ def scan(relative: str, text: str, patterns) -> list[str]:
 
 def findings(root: Path = ROOT) -> list[str]:
     errors = []
-    shipped = distribution(root)
     for relative in corpus(root):
         text = (root / relative).read_text(encoding="utf-8")
         errors.extend(scan(relative, text, (CITATION, SHORT_CITATION)))
-        if relative in shipped:
-            continue  # Target-layer files keep the Technical Lead files until ST-000330.
-        errors.extend(scan(relative, text, (INTERNAL_CITATION, INTERNAL_SHORT_CITATION)))
     return errors
 
 

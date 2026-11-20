@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -312,7 +312,7 @@ The Phase 2 counterpart of §7. Checked on 2026-11-04 over the Phase 2 TL, QA, U
 |---|---|---|
 | TL Bootstrap §2 | shared review steps (locate work, CI wait, executed, head SHA, red-check diagnosis, stale references, deleted files, old-path grep, credential evidence, change requests, notify) | pointer → `pr-review`. TL-only kept: local-verify, Reviewer Gate link (a test suite's non-zero count), dependency pin, resume-rule completeness, citation accuracy, Development Standards and design compliance, data isolation/error/test/migration checks, approval authority, the CI/workflow, refactor and documentation checklists, UI prototype, AC clarifications, the do-not-instruct-merge rule, the review gate |
 | TL Bootstrap §2 `Clean_Code_Rules.md` bullet | rule file reference | → `clean-code` |
-| TL Bootstrap §5 | commit format; approval | → `git-workflow` §2 (TL keeps the `BREAKING CHANGE:` footer); `gh pr comment` verdict through `pr-review` |
+| TL Bootstrap §5 | commit format; approval | → `git-workflow` §2 (TL keeps the `BREAKING CHANGE:` footer: carried into `tl-implement` by ST-000330, §14b); `gh pr comment` verdict through `pr-review` |
 | TL Bootstrap §6–§8, §10–§12 | placement and naming; same-thread replies; Working Record and blockers; pre-PR pointer; handoff; troubleshooting | → `project-docs`, `comment`, `working-record` and `raise-question` §4, `pre-pr-gate`, `handoff`, `troubleshooting` (generated Common copy kept on the route) |
 | TL On-Demand §1, §2, §3 | branch/PR steps; anchoring placement and naming; weaker check table ("Docs or config only → Exempt") | → `git-workflow` (master-PR gate kept); `project-docs`; `pre-pr-gate` (design §6: TL as implementer always runs build and unit tests) |
 | QA Bootstrap §4–§6, §9–§13 | scenario and script naming; placement; same-thread replies; pre-PR and live-conflict pointers; Working Record and blockers; handoff; troubleshooting | → `project-docs`, `comment`, `pre-pr-gate`, `raise-question` §5 and §4, `working-record`, `handoff`, `troubleshooting` |
@@ -423,7 +423,7 @@ The internal Technical Lead route reads `pre-work`, `agent-security`, `token-eff
 
 ## 13. Technical Lead Skills in Targets (ST-000329)
 
-Each `tl-*` skill has a Phase 2 template at `.mt-agent-devkit/distribution/phase2/templates/skills/<name>/SKILL_template.md`, with the internal skill's frontmatter and budget, shipped as a shared managed canonical skill plus one wrapper per provider (`TL_SKILLS` in `build_bundle.py`). The legacy TL templates (`Technical_Lead_Rules_Bootstrap_template.md`, `Technical_Lead_Rules_Read_On_Demand_template.md`, `Story_Standard_TL_template.md`) still ship, unread, until ST-000330 retires them behind these survivors.
+Each `tl-*` skill has a Phase 2 template at `.mt-agent-devkit/distribution/phase2/templates/skills/<name>/SKILL_template.md`, with the internal skill's frontmatter and budget, shipped as a shared managed canonical skill plus one wrapper per provider (`TL_SKILLS` in `build_bundle.py`). The legacy TL templates (`Technical_Lead_Rules_Bootstrap_template.md`, `Technical_Lead_Rules_Read_On_Demand_template.md`, `Story_Standard_TL_template.md`) shipped, unread, until ST-000330 retired them behind these survivors (§14).
 
 ### 13a. Target layer differences
 
@@ -454,11 +454,38 @@ The target text keeps the old target rules, so it differs from the internal skil
 
 ### 13c. Target routing
 
-The registry gives the Technical Lead `bootstrap`, `common` and `role_sources` entries for `target` equal to the internal ones, and every `layouts.target` override that named a TL rules file is removed, so each row reads its skill in both layouts: `tl_implementation_4`, `review`, `question_rules`, the question `comment` row and `trigger_anchoring`. The `standard` row stays disabled in both layouts, so `Story_Standard_TL_template.md` is no longer read. `design_standards` is no longer internal only. `tl_implementation_3` stays off in targets: the `pre_pr` trigger already delivers `pre-pr-gate`. `validate_retired_citations.py` rejects the three TL names in every registry layout; the shipped templates and bundle assets are exempt until ST-000330. The `Story_Standard_template.md` Testing note and the `pr-review` template point to the TL skills.
+The registry gives the Technical Lead `bootstrap`, `common` and `role_sources` entries for `target` equal to the internal ones, and every `layouts.target` override that named a TL rules file is removed, so each row reads its skill in both layouts: `tl_implementation_4`, `review`, `question_rules`, the question `comment` row and `trigger_anchoring`. The `standard` row stays disabled in both layouts, so `Story_Standard_TL_template.md` is no longer read. `design_standards` is no longer internal only. `tl_implementation_3` stays off in targets: the `pre_pr` trigger already delivers `pre-pr-gate`. `validate_retired_citations.py` rejects the three TL names in every registry layout; the shipped templates and bundle assets were exempt until ST-000330 (§14). The `Story_Standard_template.md` Testing note and the `pr-review` template point to the TL skills.
+
+## 14. Target Retirement of the Technical Lead Files (ST-000330)
+
+The Phase 2 templates `Technical_Lead_Rules_Bootstrap_template.md`, `Technical_Lead_Rules_Read_On_Demand_template.md` and `Story_Standard_TL_template.md` are deleted, with their bundle assets. `ST-000264_Common_Ownership.json` has no TL rows, and `migration-inventory.json` is unchanged (its `retired` entries are the internal ST-000328 ones). Installed copies retire through the ST-000290 mechanism: `build_bundle.py` `RETIRED_SURVIVORS` gives each file its own survivors, and the bundle lists a shared and a per-provider/mode legacy retirement entry (`required: false`) for each.
+
+### 14a. Retired target file to survivors (shared bundle IDs)
+
+| Retired target file | Survivors |
+|---|---|
+| `Technical_Lead_Rules_Bootstrap.md` | `tl-core`, `tl-design`, `tl-review`, `tl-implement`, `tl-anchor`, `pr-review`, `git-workflow`, `pre-pr-gate`, `raise-question`, `working-record`, `project-docs`, `comment`, `handoff`, `troubleshooting`, `instructions/technical_lead_instructions.md` |
+| `Technical_Lead_Rules_Read_On_Demand.md` | `tl-implement`, `tl-anchor`, `tl-review`, `tl-answer`, `pr-review`, `git-workflow`, `pre-pr-gate`, `instructions/technical_lead_instructions.md` |
+| `Story_Standard_TL.md` | `tl-core`, `tl-implement`, `tl-review`, `tl-answer`, `comment`, `pr-review`, `instructions/technical_lead_instructions.md` |
+
+The survivors are the §13b owners of each file's sections. `validate_retired_citations.py` now rejects the three names (and `TL Bootstrap`/`TL On-Demand` section citations) in the internal corpus, the Phase 2 templates and every bundle asset, both registry layouts included; the retirement ledgers and `**Version:**`/`**Previous:**` lines are exempt. The Sync template retired-file lists drop the three names, its porting step names the `tl-*` skills, and the Shared Pipeline Stages stub re-check and the Story Standard section 9 point to `tl-review` and `pr-review`.
+
+### 14b. Rules the ST-000329 review found missing from the target skills
+
+Each was in a legacy target TL file and in no `tl-*` skill. Each was resolved before the files were deleted; none was dropped silently.
+
+| Legacy rule | Decision | Owner |
+|---|---|---|
+| "Actually executed" for a test suite means a non-zero test count (`Technical_Lead_Rules_Bootstrap` CI gate) | Carried, target only | Target `tl-review` Reviewer Gate: "No CI check is **failed**, and a test suite ran a non-zero test count." The template was at 3962 of 4000 bytes, so the limit is **not raised**: the cost was paid by trimming three phrases (the "(local-verify)" label, "companion" in the UI Prototype line, "plain-language explanation sits" to "plain language beside") with no rule weakened. It ends at 3999 bytes. Internal: retired on purpose, since the devkit has no test-suite CI gate that reports a test count |
+| TL-only `BREAKING CHANGE:` commit footer (`Technical_Lead_Rules_Bootstrap` section 5; §10a said it was kept) | Carried, target only | Target `tl-implement` section 1, as the TL-only addition to `git-workflow`. Internal: retired on purpose; the devkit commits `[ST-NNNNNN][DEVKIT]:` messages and its release notes come from `CHANGELOG.md`, so no tool reads the footer |
+| "Domain-specific NFR design questions" in the CI/workflow skip list (`Technical_Lead_Rules_Bootstrap`) | Carried, target only | Target `tl-review` section 3 skip list. Internal: retired on purpose; the devkit is Markdown-only and has no domain NFR design questions to skip |
+
+The internal skills stay free of the three rules; `TlSkillsTests` pins both sides.
 
 ---
 
-**Document Version:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets
+**Document Version:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
+**Previous:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets
 **Previous:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files
 **Previous:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files
 **Previous:** 1.4 — ST-000312 (A2-P2) adds §10, the Phase 2 pointers and target routing

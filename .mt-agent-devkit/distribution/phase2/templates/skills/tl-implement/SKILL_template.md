@@ -13,7 +13,7 @@ Rare: only when `**Assigned:** Technical Lead` and you run Stage 1 (implementati
 
 ## 1. Branch, Commits, PR
 
-Follow `git-workflow` as every implementer does. Do not open a PR targeting master: the feature branch is the merge target for all story PRs. Run `pre-pr-gate` before opening the PR and before each fix push; the build and unit tests always run, so no change is exempt as docs or config only.
+Follow `git-workflow` as every implementer does. TL-only: add a `BREAKING CHANGE:` footer to the commit message when applicable. Do not open a PR targeting master: the feature branch is the merge target for all story PRs. Run `pre-pr-gate` before opening the PR and before each fix push; the build and unit tests always run, so no change is exempt as docs or config only.
 
 ## 2. In Progress to Review
 

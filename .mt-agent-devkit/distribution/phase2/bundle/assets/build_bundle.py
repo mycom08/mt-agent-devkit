@@ -17,10 +17,10 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
                  "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
                  "git-workflow", "pre-pr-gate", "pr-review", "clean-code")
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
-# Technical Lead skills (ST-000329); the TL rules templates keep shipping, unused, until ST-000330.
+# Technical Lead skills (ST-000329); the TL rules templates were retired in ST-000330.
 TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
 SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS + TL_SKILLS
-# Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer).
+# Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer, ST-000330 Technical Lead).
 # Each installed copy retires behind its own survivors, present in every plan: the
 # shared canonical skill IDs that own its rules (never a provider-suffixed
 # operation ID) plus the slim role instructions that load them.
@@ -30,6 +30,7 @@ def survivors(skills, instructions=None):
 
 PO_SURVIVORS = survivors(PO_SKILLS, "instructions/product_owner_instructions.md")
 DEV_INSTRUCTIONS = "instructions/developer_instructions.md"
+TL_INSTRUCTIONS = "instructions/technical_lead_instructions.md"
 RETIRED_SURVIVORS = {
     "Product_Owner_Rules_Bootstrap.md": PO_SURVIVORS,
     "Product_Owner_Rules_Read_On_Demand.md": PO_SURVIVORS,
@@ -40,6 +41,10 @@ RETIRED_SURVIVORS = {
                                                     "dev-verify"), DEV_INSTRUCTIONS),
     "Story_Standard_Dev.md": survivors(("dev-core", "dev-implement", "dev-hotfix", "comment", "pre-pr-gate", "pr-review"), DEV_INSTRUCTIONS),
     "Clean_Code_Rules.md": survivors(("clean-code",)),
+    "Technical_Lead_Rules_Bootstrap.md": survivors(("tl-core", "tl-design", "tl-review", "tl-implement", "tl-anchor", "pr-review", "git-workflow", "pre-pr-gate",
+                                                    "raise-question", "working-record", "project-docs", "comment", "handoff", "troubleshooting"), TL_INSTRUCTIONS),
+    "Technical_Lead_Rules_Read_On_Demand.md": survivors(("tl-implement", "tl-anchor", "tl-review", "tl-answer", "pr-review", "git-workflow", "pre-pr-gate"), TL_INSTRUCTIONS),
+    "Story_Standard_TL.md": survivors(("tl-core", "tl-implement", "tl-review", "tl-answer", "comment", "pr-review"), TL_INSTRUCTIONS),
 }
 RETIRED_RULES = tuple(RETIRED_SURVIVORS)
 # Defaults written once into a target's project-owned settings file.
