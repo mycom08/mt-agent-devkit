@@ -102,19 +102,21 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
                  "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
                  "git-workflow", "change-metadata", "pre-pr-gate", "pr-review", "clean-code")
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
+TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
 # Internal skills with no Phase 2 template or bundle entry. change-metadata is devkit-internal
-# only (design B5); ST-000310 ships every other common and Developer skill.
-UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"})
-SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500}
-DEFAULT_SKILL_LIMIT = 4000  # po-*, common and Developer skills
+# only (design B5); ST-000310 ships every other common and Developer skill; the Technical Lead
+# skills are internal until ST-000329 ships them.
+UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"} | set(TL_SKILLS))
+SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500, "tl-core": 1600}
+DEFAULT_SKILL_LIMIT = 4000  # po-*, common, Developer and Technical Lead skills
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
-SKILL_MENTION = re.compile(r"`((?:po|agent|dev)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS) + r")`")
+SKILL_MENTION = re.compile(r"`((?:po|agent|dev|tl)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS) + r")`")
 
 
 def skill_size_limit(name: str):
     if name in SKILL_SIZE_LIMITS:
         return SKILL_SIZE_LIMITS[name]
-    return DEFAULT_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS or name in DEV_SKILLS else None
+    return DEFAULT_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS or name in DEV_SKILLS or name in TL_SKILLS else None
 
 
 def skill_errors(root, entries, wrappers) -> list[str]:
@@ -194,6 +196,9 @@ def skill_reference_errors(root) -> list[str]:
     for name in DEV_SKILLS:
         if not (skills / name / "SKILL.md").is_file():
             errors.append(f"missing canonical Developer skill: .mt-agent-devkit/skills/{name}/SKILL.md")
+    for name in TL_SKILLS:
+        if not (skills / name / "SKILL.md").is_file():
+            errors.append(f"missing canonical Technical Lead skill: .mt-agent-devkit/skills/{name}/SKILL.md")
     for canonical in sorted(skills.glob("*/SKILL.md")):
         name, text = canonical.parent.name, canonical.read_text(encoding="utf-8")
         relative = canonical.relative_to(root).as_posix()
@@ -207,6 +212,8 @@ def skill_reference_errors(root) -> list[str]:
             errors.append(f"common skill must name its required skills on one **Requires:** line: {relative}")
         if name in DEV_SKILLS and len(requires) != 1:
             errors.append(f"Developer skill must name its required skills on one **Requires:** line: {relative}")
+        if name in TL_SKILLS and len(requires) != 1:
+            errors.append(f"Technical Lead skill must name its required skills on one **Requires:** line: {relative}")
         required = SKILL_MENTION.findall("\n".join(requires))
         if name in required:
             errors.append(f"skill requires itself: {relative}")

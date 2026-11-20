@@ -120,7 +120,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 2. Push new commits
 3. Re-request review in issue Comment
 
-> **Note:** Moving the story to `status:testing` is **TL's action** — TL sets the label immediately after approving the PR (see `Technical_Lead_Rules_Bootstrap.md §3`). The Implementer does not change the label after opening the PR.
+> **Note:** Moving the story to `status:testing` is **TL's action** — TL sets the label immediately after approving the PR (see the `tl-core` skill). The Implementer does not change the label after opening the PR.
 
 ---
 
@@ -192,7 +192,7 @@ These rules govern **editing an existing story body** (refinement outcomes, corr
 
 ## 9. Comment Standard
 
-All discussions happen as **GitHub Issue comments**, never inside the issue body. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`Story_Standard_TL.md`, `Story_Standard_QA.md`, `pr-review` for the Developer's peer-review CI paste, `po-comment`).
+All discussions happen as **GitHub Issue comments**, never inside the issue body. The `comment` skill (`.mt-agent-devkit/skills/comment/SKILL.md`) owns the comment template and Thread Status, the writing rules, the `@` and bare `#` prefix bans, announcing body edits and the Commenter gate; load it before posting any comment. Role-only additions live in each role's rules (`tl-review` for the Technical Lead's review comments, `Story_Standard_QA.md`, `pr-review` for the Developer's peer-review CI paste, `po-comment`).
 
 ---
 

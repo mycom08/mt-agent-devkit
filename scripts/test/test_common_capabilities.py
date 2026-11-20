@@ -20,9 +20,9 @@ class CommonCapabilitiesTests(unittest.TestCase):
 
     def setUp(self):
         existing.RoutingTests.setUp(self)
-        # ST-000309: the Developer's Common is skill-based and skips this route, so the
-        # capability contracts use the Technical Lead as their sample two-tier role.
-        self.request['role'] = 'Technical_Lead'
+        # ST-000309 and ST-000328: the Developer's and Technical Lead's Common is skill-based and
+        # skips this route, so the capability contracts use QA as their sample two-tier role.
+        self.request['role'] = 'QA'
         shutil.copytree(ROOT / '.mt-agent-devkit/rules', self.root / '.mt-agent-devkit/rules', dirs_exist_ok=True)
         self.registry = copy.deepcopy(REGISTRY)
         self.registry['common_capabilities']['verified_providers'] = ['codex']
@@ -41,7 +41,7 @@ class CommonCapabilitiesTests(unittest.TestCase):
         self.assertNotIn('record', ids)
         selected = {x['source'] for x in result['reads']}
         self.assertIn('.mt-agent-devkit/rules/Agent_Common_Core.md', selected)
-        self.assertIn('.mt-agent-devkit/rules/Technical_Lead_Rules_Bootstrap.md', selected)
+        self.assertIn('.mt-agent-devkit/rules/QA_Rules_Bootstrap.md', selected)
         self.assertFalse(any(x.endswith(('Agent_Common_Bootstrap.md', 'Agent_Common_Retro.md', 'Agent_Common_Memory.md')) for x in selected))
         memory = next(x for x in result['reads'] if x['id'] == 'memory')
         self.assertEqual(memory['coverage'], {'kind': 'memory_section', 'heading': 'Keyword Index'})
@@ -102,7 +102,7 @@ class CommonCapabilitiesTests(unittest.TestCase):
         self.assertEqual(next(x for x in result['reads'] if x['id'] == 'memory')['coverage'], {'kind': 'full'})
 
     def test_bounded_heading_rejects_ambiguous_missing_and_unknown(self):
-        source = self.bound['RUNTIME_ROOT'] + '/memory/Technical_Lead_Memory.md'
+        source = self.bound['RUNTIME_ROOT'] + '/memory/QA_Memory.md'
         with self.assertRaisesRegex(m.Blocked, 'invalid bounded memory'):
             m.covered(self.root, source, {'kind': 'memory_section', 'heading': 'Stored Facts'})
         self.write(source, '## Standing Checks\nA\n## Standing Checks\nB\n')
@@ -122,8 +122,21 @@ class CommonCapabilitiesTests(unittest.TestCase):
                 self.assertIn('record', selected)
                 self.assertFalse({'standing_checks', 'troubleshooting_facts'} & set(selected))
                 self.assertFalse([x['source'] for x in result['reads'] if '/rules/Agent_Common_' in x['source']])
-        # The Technical Lead under the same registry still takes the Core route.
+        # QA under the same registry still takes the Core route.
         self.assertEqual(next(x for x in self.candidate()['reads'] if x['id'] == 'common')['source'], '.mt-agent-devkit/rules/Agent_Common_Core.md')
+
+    def test_technical_lead_common_override_skips_capability_routes(self):
+        for triggers in ([], ['tooling_failure', 'credential_gate', 'retro_required', 'runtime_handoff', 'completion']):
+            with self.subTest(triggers=triggers):
+                result = self.candidate(role='Technical_Lead', triggers=triggers)
+                selected = {x['id']: x for x in result['reads']}
+                self.assertEqual(selected['common']['source'], '.mt-agent-devkit/skills/pre-work/SKILL.md')
+                self.assertEqual(selected['bootstrap']['source'], '.mt-agent-devkit/skills/tl-core/SKILL.md')
+                self.assertEqual(selected['memory']['coverage'], {'kind': 'full'})
+                self.assertIn('record', selected)
+                self.assertNotIn('standard', selected)
+                self.assertFalse({'standing_checks', 'troubleshooting_facts'} & set(selected))
+                self.assertFalse([x['source'] for x in result['reads'] if '/rules/Agent_Common_' in x['source']])
 
     def test_route_lookups_block_with_a_reason(self):
         request = copy.deepcopy(self.request)
@@ -142,7 +155,7 @@ class CommonCapabilitiesTests(unittest.TestCase):
         self.assertIn('Never `git add`, commit, or push', (ROOT / '.mt-agent-devkit/rules/Agent_Common_Stage_Transition.md').read_text(encoding='utf-8'))
 
     def test_legacy_memory_preserves_full_safe_authority_without_conversion(self):
-        source = self.bound['RUNTIME_ROOT'] + '/memory/Technical_Lead_Memory.md'
+        source = self.bound['RUNTIME_ROOT'] + '/memory/QA_Memory.md'
         self.write(source, 'durable user fact\n')
         result = self.candidate()
         selected = {x['id']: x for x in result['reads']}
@@ -154,7 +167,7 @@ class CommonCapabilitiesTests(unittest.TestCase):
         self.assertFalse(result['receipts'])
 
     def test_partial_memory_format_blocks_even_without_failure_trigger(self):
-        source = self.bound['RUNTIME_ROOT'] + '/memory/Technical_Lead_Memory.md'
+        source = self.bound['RUNTIME_ROOT'] + '/memory/QA_Memory.md'
         self.write(source, '## Standing Checks\nA\n## Keyword Index\nB\n')
         with self.assertRaisesRegex(m.Blocked, 'exactly one'):
             self.candidate()

@@ -210,7 +210,8 @@ def routes(root, request, registry):
     if task.get('ordinary'):
         for item in registry['ordinary']: add(item)
         for item in registry['roles'][role]: add(item)
-        if role in ('Technical_Lead', 'QA'):
+        # A role whose standard became part of its skill route has no standard entry to order after.
+        if role in ('Technical_Lead', 'QA') and any(x['id'] == 'standard' for x in entries):
             entry(entries, 'bootstrap', 'role standard ordering')['after'] = ['standard']
     entries += context_entries(root, request, task)
     triggers = request.get('triggers', [])

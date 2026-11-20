@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -350,7 +350,81 @@ The survivors are the §9b owners of each file's sections (§8 for `Story_Standa
 
 ---
 
-**Document Version:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files
+## 12. Technical Lead Files to Technical Lead Skills (ST-000328)
+
+The internal `Technical_Lead_Rules_Bootstrap.md`, `Technical_Lead_Rules_Read_On_Demand.md` and `Story_Standard_TL.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Six skills hold every TL-only rule: `tl-core`, `tl-design`, `tl-review`, `tl-answer`, `tl-implement`, `tl-anchor`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 templates keep their text until ST-000329, so the target registry alternatives still name the old files (§12c).
+
+### 12a. Technical Lead Rules Bootstrap
+
+| Source rule | Owner | Change |
+|---|---|---|
+| §1 pre-start steps 1, 3 (priming, Working Record) | `pre-work` read order, `technical_lead_instructions.md` Pre-Work Checklist | pointer |
+| §1 step 2 (read `Story_Standard_TL.md`) | `tl-core` (the standard is part of the bootstrap skill) | replaced |
+| §1 step 4 (read the sprint's issues by `sprint-N`) | `tl-core` Role and Status | compacted |
+| §2 numbering-gap note | none | dropped: history of the old file |
+| §3 status flow, `status:review` when Dev opens a PR and tags you, `status:testing` after approval and before merge, only QA ticks AC, pointer to `Story_Standard.md` §4 | `tl-core` Role and Status | compacted, every rule kept |
+| §4 evaluating approaches (compatibility, patterns, sprint scope) | `tl-design` §1 | verbatim |
+| §4 recommendations (rationale, trade-offs, migration risks) | `tl-design` §2 | verbatim |
+| §4 template and workflow design (purpose, completion signal, `changes.json`) | `tl-design` §3 | verbatim; `changes.json` scope stays with `change-metadata` |
+| §4 key design questions | `tl-design` §4 | verbatim |
+| §4 technical constraints (file names, `_template`, `VERSION` and `changes.json`) | `tl-design` §5 | verbatim |
+| §5 PR approval through `gh pr comment`, inline comments | `pr-review` step 7, named by `tl-review` §2 | pointer |
+| §5 commit messages | `git-workflow` §2 (§4 of this map) | pointer |
+| §5 acting as implementer | `tl-implement` | step |
+| §6 document placement | `project-docs`, named in the `tl-core` load map | pointer |
+| §7 design decisions, impact, blockers as issue comments | `comment`, named in the `tl-core` load map | pointer |
+| §10 Working Record entries (design decisions, PR links, story IDs) | `working-record`, named in the `tl-core` load map with the entry kinds | pointer |
+| §10 blockers, tag BA or PO | `raise-question` §4, named in the `tl-core` load map with the tag targets | pointer |
+| §11 context anchoring | `tl-anchor` | pointer |
+| §12 runtime-state handoff | `handoff` (generated copy still read by other roles) | pointer |
+| §13 pre-PR gate when implementing | `pre-pr-gate`, required by `tl-implement` | pointer |
+| §14 troubleshooting protocol | `troubleshooting` | pointer |
+| §15 on-demand routing table | `technical_lead_instructions.md` Load Map, repeated in `tl-core` | replaced |
+| Version history | none | dropped: history of the old file |
+
+### 12b. Technical Lead Rules Read On Demand and Story Standard TL
+
+| Source rule | Owner | Change |
+|---|---|---|
+| On-Demand §1 branch, commits, push, PR | `tl-implement` §1 (requires `git-workflow`) | pointer |
+| On-Demand §2 context-anchoring note and template | `tl-anchor` | verbatim |
+| On-Demand §3 pre-PR gate; harness, template and rules changes never exempt | `tl-implement` §1 (requires `pre-pr-gate`) | verbatim |
+| On-Demand §4 In Progress to Review (label swap, PR title, Deliverables link, notify comment) | `tl-implement` §2 | verbatim |
+| On-Demand §4 Review to In Progress (address CR, push, re-request) | `tl-implement` §3 | verbatim |
+| On-Demand §5 shared reviewer procedure | `pr-review`, required by `tl-review` | pointer |
+| On-Demand §5 local-verify contract | `tl-review` §2 first bullet | verbatim |
+| On-Demand §5 CI gate first step | `tl-review` §1 | merged with Story Standard TL §12 |
+| On-Demand §5 dependency-pin check | `tl-review` §2 | compacted |
+| On-Demand §5 resume-rule branch completeness | `tl-review` §2 | compacted, both failure cases kept |
+| On-Demand §5 design compliance, template structure | `tl-review` §2 | verbatim |
+| On-Demand §5 source and script changes against `clean-code` | `tl-review` §2 (requires `clean-code`) | verbatim |
+| On-Demand §5 UI Prototype PRs | `tl-review` §2 | compacted: the "mirror stays in sync with the template" note dropped (it described the retired file) |
+| On-Demand §5 approve by PR comment; cannot approve your own work | `tl-review` header and §2 | verbatim |
+| On-Demand §5 CI/Workflow stories abbreviated checklist and skip list | `tl-review` §3 | verbatim |
+| On-Demand §5 documentation and template stories | `tl-review` §4 | verbatim |
+| On-Demand §5 AC clarifications; new deliverable flags PO | `tl-answer` steps 3–4 | verbatim, moved: the same rule serves the answer task |
+| On-Demand §5 change requests and approval notices | `pr-review` steps 5–7, named by `tl-review` §2 | pointer |
+| On-Demand §5 "you are the merge gate" | `tl-review` header | verbatim |
+| On-Demand §6 reduced read set (Story Standard TL §9, Common Bootstrap in full, live memory) | `tl-answer` intro; the manifest reads spawn-time skills, `comment`, live memory | reworded |
+| On-Demand §6 steps 1–4 | `tl-answer` steps 1, 2, 3, 5 | step |
+| Story Standard TL §1 status table | `tl-core` Role and Status | reworded: the Testing row said "after approval and merge"; it now says before merge, as the old Bootstrap §3 and `Story_Standard.md` §4 already did |
+| Story Standard TL §2 story structure | `tl-core` Role and Status | compacted |
+| Story Standard TL §4 TL as implementer | `tl-implement` | pointer |
+| Story Standard TL §7 role boundaries, red flags | `tl-core` Role and Status; AC-clarification distinction in `tl-answer` | compacted, every red flag kept |
+| Story Standard TL §9 comment standard | `comment`; review comments to `pr-review` steps 5–7 | pointer |
+| Story Standard TL §12 pending CI, strict mode | `pr-review` step 3 (word-for-word the same rule) | merged |
+| Story Standard TL §12 checklist, zero checks not passing evidence | `tl-review` §1 | verbatim |
+| `technical_lead_instructions.md` Selected Common Routing, Story Implementer, Context Anchoring, Answer-a-Question pointers | Load Map | replaced |
+| `technical_lead_instructions.md` Project Memory paragraph | Pre-Work Checklist memory row, `agent-memory` | pointer |
+
+### 12c. Routing (internal layout)
+
+The internal Technical Lead route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `tl-core` through `bootstrap` (the `standard` row is disabled internally), the task skill through its task row, `tl-design` through the new `design_standards` trigger, and the shared Common sections through `role_sources`, as for the Developer. Each TL row keeps its pre-skill source under `layouts.target`, so installed targets are unchanged until ST-000329. `validate_retired_citations.py` rejects citations of the three files in the internal corpus and in the registry outside `layouts.target`.
+
+---
+
+**Document Version:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files
+**Previous:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files
 **Previous:** 1.4 — ST-000312 (A2-P2) adds §10, the Phase 2 pointers and target routing
 **Previous:** 1.3 — ST-000310 (C) adds §9, Phase 2 templates and target routing
 **Previous:** 1.2 — ST-000309 (B) adds §8, the Developer files
