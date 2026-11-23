@@ -19,10 +19,10 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
 # Technical Lead skills (ST-000329); the TL rules templates were retired in ST-000330.
 TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
-# QA skills (ST-000332); the QA rules templates keep shipping, unused, until ST-000333.
+# QA skills (ST-000332); the QA rules templates were retired in ST-000333.
 QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix")
 SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS + TL_SKILLS + QA_SKILLS
-# Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer, ST-000330 Technical Lead).
+# Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer, ST-000330 Technical Lead, ST-000333 QA).
 # Each installed copy retires behind its own survivors, present in every plan: the
 # shared canonical skill IDs that own its rules (never a provider-suffixed
 # operation ID) plus the slim role instructions that load them.
@@ -33,6 +33,7 @@ def survivors(skills, instructions=None):
 PO_SURVIVORS = survivors(PO_SKILLS, "instructions/product_owner_instructions.md")
 DEV_INSTRUCTIONS = "instructions/developer_instructions.md"
 TL_INSTRUCTIONS = "instructions/technical_lead_instructions.md"
+QA_INSTRUCTIONS = "instructions/qa_instructions.md"
 RETIRED_SURVIVORS = {
     "Product_Owner_Rules_Bootstrap.md": PO_SURVIVORS,
     "Product_Owner_Rules_Read_On_Demand.md": PO_SURVIVORS,
@@ -47,6 +48,10 @@ RETIRED_SURVIVORS = {
                                                     "raise-question", "working-record", "project-docs", "comment", "handoff", "troubleshooting"), TL_INSTRUCTIONS),
     "Technical_Lead_Rules_Read_On_Demand.md": survivors(("tl-implement", "tl-anchor", "tl-review", "tl-answer", "pr-review", "git-workflow", "pre-pr-gate"), TL_INSTRUCTIONS),
     "Story_Standard_TL.md": survivors(("tl-core", "tl-implement", "tl-review", "tl-answer", "comment", "pr-review"), TL_INSTRUCTIONS),
+    "QA_Rules_Bootstrap.md": survivors(("qa-core", "qa-validate", "qa-testing", "qa-regression", "project-docs", "comment", "pre-pr-gate",
+                                        "raise-question", "working-record", "handoff", "troubleshooting"), QA_INSTRUCTIONS),
+    "QA_Rules_Read_On_Demand.md": survivors(("qa-hotfix", "pre-pr-gate", "raise-question"), QA_INSTRUCTIONS),
+    "Story_Standard_QA.md": survivors(("qa-core", "qa-validate", "qa-hotfix", "comment"), QA_INSTRUCTIONS),
 }
 RETIRED_RULES = tuple(RETIRED_SURVIVORS)
 # Defaults written once into a target's project-owned settings file.

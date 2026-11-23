@@ -1135,7 +1135,7 @@ class TlSkillsTests(unittest.TestCase):
 
 
 class QaSkillsTests(unittest.TestCase):
-    """ST-000331/ST-000332: five QA skills replace the QA rules files internally and in the registry; the legacy target templates ship, unused, until ST-000333."""
+    """ST-000331/ST-000332/ST-000333: five QA skills replace the QA rules files internally, in the registry and, since ST-000333, in the shipped templates and bundle."""
     RETIRED = tuple(f".mt-agent-devkit/rules/{n}.md" for n in ("QA_Rules_Bootstrap", "QA_Rules_Read_On_Demand", "Story_Standard_QA"))
     fixture = PoSkillsTests.fixture
     citations = PoSkillsTests.citations
@@ -1249,39 +1249,66 @@ class QaSkillsTests(unittest.TestCase):
         rows = json.loads((ROOT / "docs/reviews/ST-000264_Common_Ownership.json").read_text(encoding="utf-8"))["rows"]
         self.assertFalse([row for row in rows if row["source"] in self.RETIRED])
 
-    def test_retired_citation_validator_rejects_qa_files_in_every_registry_layout(self):
-        # ST-000332: the internal corpus and every registry layout are in scope; the Phase 2 templates and
-        # bundle assets keep the QA files until ST-000333. History lines are not citations.
+    def test_retired_citation_validator_rejects_qa_files_in_templates_and_bundle(self):
+        # ST-000333: the QA files are retired in targets too, so the Phase 2 templates, every bundle asset and
+        # both registry layouts are in scope; history lines and the retirement ledgers are not citations.
         self.assertEqual([], self.citations.findings(ROOT))
         phase2 = ".mt-agent-devkit/distribution/phase2"
         root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json", ".claude/skills/qa-core/SKILL.md",
-                            phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/bundle/assets/orchestrator_shared")
+                            phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/templates/skills/qa-validate/SKILL_template.md",
+                            phase2 + "/bundle/assets/orchestrator_shared", phase2 + "/bundle/assets/read-routing.json",
+                            phase2 + "/build_bundle.py", phase2 + "/bundle/deployment.json")
         self.assertEqual([], self.citations.findings(root))
         history = "**Previous:** 1.0 — split out of `QA_Rules_Bootstrap.md`.\n**Version:** 2.0 — `Story_Standard_QA.md` retired.\nLegacy `Story_Standard_QA_template.md` stays frozen.\n"
         for relative, line in ((".mt-agent-devkit/rules/Agent_Common_Core.md", "See `QA_Rules_Read_On_Demand.md` and QA Rules §8."),
-                               (".claude/skills/qa-core/SKILL.md", "Story_Standard_QA §6")):
+                               (".claude/skills/qa-core/SKILL.md", "Story_Standard_QA §6"),
+                               (phase2 + "/templates/rules/Story_Standard_template.md", "See `QA_Rules_Bootstrap.md` §4."),
+                               (phase2 + "/templates/skills/qa-validate/SKILL_template.md", "Read `.mt-agent-devkit/rules/Story_Standard_QA.md`."),
+                               (phase2 + "/bundle/assets/orchestrator_shared", "QA Bootstrap §4 applies.")):
             path = root / relative
             path.write_text(path.read_text(encoding="utf-8") + "\n" + line + "\n" + history, encoding="utf-8")
-        # Shipped target files still name the QA files without error.
-        for relative in (phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/bundle/assets/orchestrator_shared"):
-            path = root / relative
-            path.write_text(path.read_text(encoding="utf-8") + "\nSee `QA_Rules_Bootstrap.md` and QA Bootstrap §4.\n", encoding="utf-8")
-        registry = root / ".mt-agent-devkit/contracts/read-routing.json"
-        data = json.loads(registry.read_text(encoding="utf-8"))
+        for relative in (".mt-agent-devkit/contracts/read-routing.json", phase2 + "/bundle/assets/read-routing.json"):
+            registry = root / relative
+            data = json.loads(registry.read_text(encoding="utf-8"))
+            data["tasks"]["qa"]["reads"][0]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"}}
+            registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
         found = self.citations.findings(root)
-        self.assertEqual(3, len(found), found)
-        self.assertTrue(any("Agent_Common_Core.md" in f for f in found))
-        self.assertTrue(any("qa-core/SKILL.md" in f for f in found))
-        self.assertFalse(any("read-routing.json" in f or "orchestrator_shared" in f or "Story_Standard_template" in f for f in found))
-        # ST-000332: an alternative in the registry is a stale route in any layout.
-        data["tasks"]["qa"]["reads"][0]["source"] = ".mt-agent-devkit/skills/qa-validate/SKILL.md"
-        data["tasks"]["qa"]["reads"][0]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"}}
-        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        self.assertTrue(any("read-routing.json" in f for f in self.citations.findings(root)))
-        data["tasks"]["qa"]["reads"][0].pop("layouts")
-        data["tasks"]["qa"]["reads"][0]["source"] = ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"
-        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        self.assertTrue(any("read-routing.json" in f for f in self.citations.findings(root)))
+        self.assertEqual(8, len(found), found)
+        for relative in (".mt-agent-devkit/rules/Agent_Common_Core.md", ".claude/skills/qa-core/SKILL.md", phase2 + "/templates/rules/Story_Standard_template.md",
+                         phase2 + "/templates/skills/qa-validate/SKILL_template.md", phase2 + "/bundle/assets/orchestrator_shared",
+                         ".mt-agent-devkit/contracts/read-routing.json", phase2 + "/bundle/assets/read-routing.json"):
+            self.assertTrue(any(relative + ":" in f for f in found), relative)
+        self.assertTrue(any("QA Bootstrap" in f for f in found))
+        self.assertTrue(any("QA Rules" in f for f in found))
+        self.assertFalse(any("build_bundle.py" in f or "deployment.json" in f or "_template" in f.split(": ")[-1] for f in found))
+
+    def test_bundle_retires_qa_templates_behind_their_own_survivors(self):
+        # ST-000333: the ST-000290 mechanism, with per-file survivors present in every plan.
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+        live = {f["id"] for f in manifest["files"] if f["phase"] != "retirement"}
+        records = {r["path"]: r for r in manifest["legacy_support"]["retirements"]}
+        retiring = {f["destination"]: f for f in manifest["files"] if f["phase"] == "retirement"}
+        instructions = "instructions/qa_instructions.md"
+        for retired in self.RETIRED:
+            name = Path(retired).name
+            with self.subTest(file=name):
+                self.assertFalse((ROOT / ".mt-agent-devkit/distribution/phase2/templates/rules" / name.replace(".md", "_template.md")).exists())
+                self.assertFalse(any(name.removesuffix(".md") in a["id"] or name.removesuffix(".md") in a["path"] for a in manifest["assets"]), name)
+                shared = retiring[retired]
+                self.assertEqual((shared["owner"], shared["ownership"], shared["providers"], shared["modes"], shared["required"]),
+                                 ("shared", "managed", list(validator.PROVIDERS), ["github", "strict"], False))
+                survivors = records[retired]["after_verified_ids"]
+                self.assertIn(instructions, survivors)
+                self.assertLessEqual(set(survivors), live)  # Shared IDs, no provider suffix: present in every plan.
+                self.assertTrue(all(s.startswith("skills/") for s in survivors if s != instructions))
+                for provider in ("claude", "antigravity"):
+                    legacy = f".{provider}/agents/rules/{name}"
+                    self.assertEqual(sorted(f["modes"][0] for f in manifest["files"] if f["destination"] == legacy and f["phase"] == "retirement"), ["github", "strict"])
+                    self.assertEqual(records[legacy]["after_verified_ids"], survivors)
+        # Each file's survivors are the skills that own its rules (ownership map section 17).
+        self.assertIn("skills/qa-regression", records[".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"]["after_verified_ids"])
+        self.assertIn("skills/qa-hotfix", records[".mt-agent-devkit/rules/QA_Rules_Read_On_Demand.md"]["after_verified_ids"])
+        self.assertIn("skills/qa-core", records[".mt-agent-devkit/rules/Story_Standard_QA.md"]["after_verified_ids"])
 
 
 class QaDistributionTests(unittest.TestCase):
@@ -1518,8 +1545,6 @@ class Phase2OtherRolesPointerTests(unittest.TestCase):
     def test_implementer_gates_and_procedures_point_to_skills(self):
         skill = ".mt-agent-devkit/skills/{}/SKILL.md".format
         expected = {
-            "rules/QA_Rules_Bootstrap_template.md": ("project-docs", "comment", "pre-pr-gate", "raise-question", "working-record"),
-            "rules/QA_Rules_Read_On_Demand_template.md": ("pre-pr-gate", "raise-question"),
             "rules/UI_UX_Designer_Rules_template.md": ("raise-question", "git-workflow", "project-docs", "working-record"),
             "rules/Business_Analyst_Rules_template.md": ("pre-pr-gate", "comment"),
             "instructions/business_analyst_instructions_template.md": ("project-docs",),
