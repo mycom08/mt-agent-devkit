@@ -36,6 +36,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000333] Retire the old QA rules files (`QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md`, `Story_Standard_QA.md`) in target projects: each retires behind the `qa-*` skills that own its rules, sync deletes a stock receipt-based copy on its own, legacy 0.1.48-0.1.50 installs keep the manual reviewed resolution, and a customised copy stops sync until you port it into the replacing skill and resolve it. Sync between sprints, since a session resumed mid-sprint may still hold the old rules.
 - [ST-000345] A legacy install stamped with any plain `X.Y.Z` version from 0.1.51 up still migrates to the shared layout when its bridge files match the current bridge; the bundle no longer derives the recognized versions from `changes.json`.
 - [ST-000346] The templates validator no longer requires every template to appear in `changes.json` history or every listed path to exist, so old `changes.json` versions can be removed; its format and deployment manifest checks stay, with fixtures fed through `--changes-json` and `--manifest-root`.
+- [ST-000347] `changes.json` now keeps only the new snapshot plus the newest three released versions: `open_next_snapshot.py` drops older entries on each release, the file was trimmed once, and the Phase 2 rules footers cite `CHANGELOG.md` for change history. A legacy sync client more than three releases behind falls back to the documented full scan.
 ### Bug Fixes
 
 ---

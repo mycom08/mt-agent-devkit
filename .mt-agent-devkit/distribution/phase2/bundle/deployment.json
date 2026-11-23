@@ -17,7 +17,7 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "4dd9f9f3896d5a992b0b8ffb8772b2e5134778a055bd89fa80276e6c41e398d0",
+      "sha256": "e19aa7c9ba3113f1905e6a5817a2c106af827b7b191783eb092fc3972782680c",
       "bytes": 18867,
       "kind": "template"
     },
@@ -45,8 +45,8 @@
     {
       "id": "rules/Agent_Common_Read_On_Demand.md",
       "path": "assets/rules_Agent_Common_Read_On_Demand.md",
-      "sha256": "8b6e29bb2b846aa090ddd1c6ae37e2d60e62486951efd90a6e6f4c6b757a6c09",
-      "bytes": 11855,
+      "sha256": "033f4fe880e6d81059373f385a251099292d5b150c738241aa2236b112c7b0a2",
+      "bytes": 11847,
       "kind": "template"
     },
     {
@@ -101,7 +101,7 @@
     {
       "id": "rules/Business_Analyst_Rules.md",
       "path": "assets/rules_Business_Analyst_Rules.md",
-      "sha256": "626ed4a96e8cf467ec1862f90c880f0991fe012848ad43dfe89e9e41cc47c112",
+      "sha256": "e93a7f97ad995de509bc2b11ce9d943a17b6e7a5f9fd85d320b6e8a735923788",
       "bytes": 2103,
       "kind": "template"
     },
@@ -157,7 +157,7 @@
     {
       "id": "rules/UI_UX_Designer_Rules.md",
       "path": "assets/rules_UI_UX_Designer_Rules.md",
-      "sha256": "65e144a75bbd3712f648572dff57c64ee76d1d1e16b11b9bcd86ae32f65303eb",
+      "sha256": "8018d4b0f27a527119f2e569ae0ce929640a093952a3b1ee692e360569eea116",
       "bytes": 7849,
       "kind": "template"
     },

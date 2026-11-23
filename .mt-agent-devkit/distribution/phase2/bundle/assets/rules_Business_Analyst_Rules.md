@@ -44,5 +44,5 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ## Version
 
-**Version:** 1.2 (see `changes.json` for this file's change history)
+**Version:** 1.2 (see `CHANGELOG.md` for this file's change history)
 **Created:** 2026-05-25

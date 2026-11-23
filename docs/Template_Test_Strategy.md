@@ -186,6 +186,8 @@ headings from making an otherwise full-read instruction stale.
 
 Checks `changes.json` (the version-tracking manifest for target-project sync).
 It does not depend on history: old entries can be removed without failing.
+`changes.json` retains only the current snapshot plus the newest three released
+versions (four entries); `scripts/open_next_snapshot.py` trims it at each release.
 - Every version key parses as valid semver (`N.N.N`, or `N.N.N-SNAPSHOT`).
 - Every `deployment` declaration has exactly `schema_version` 1 and a manifest.
 - A deployment release's legacy `files`/`modified` arrays are exactly the two
@@ -199,7 +201,7 @@ The validator checks semver parseability but not ordering direction.
 Fixtures feed the check through `--changes-json <file>` and `--manifest-root
 <dir>`, never by replacing the repo-root `changes.json`. `scripts/test/run.sh`
 keeps one `manifest_*` fixture under `scripts/test/fixtures/bad/` per failure
-above, plus a clean run on the three newest real entries.
+above, plus a clean run on the retained real entries.
 
 ### #7 Markdown well-formedness (regex, not full CommonMark)
 

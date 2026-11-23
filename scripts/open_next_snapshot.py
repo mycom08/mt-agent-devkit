@@ -3,8 +3,11 @@ import argparse
 import json
 from pathlib import Path
 
+RETAINED_RELEASES = 3
+
 
 def next_snapshot(data, snapshot):
+    """Return the new snapshot plus the newest RETAINED_RELEASES released entries."""
     latest = next(iter(data.values()))
     entry = {"new": [], "modified": [], "removed": [], "descriptions": {}}
     if isinstance(latest, dict) and "deployment" in latest:
@@ -12,7 +15,7 @@ def next_snapshot(data, snapshot):
         entry.update(deployment=latest["deployment"], files=bridges, modified=bridges,
                      descriptions={path: "Compatible legacy sync bridge; shared payload declared separately." for path in bridges},
                      checksums={path: latest["checksums"][path] for path in bridges})
-    return {snapshot: entry, **data}
+    return {snapshot: entry, **dict(list(data.items())[:RETAINED_RELEASES])}
 
 
 if __name__ == "__main__":

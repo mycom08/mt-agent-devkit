@@ -161,7 +161,7 @@ The current `changes.json` version object declares the shared artifact:
 }
 ```
 
-Legacy `files`/`new`/`modified` lists, descriptions, and checksums remain for compatible clients. The two sync bridges stay in the legacy namespace; the new shared payload is declared separately. Older version entries retain their historical formats. Keep deployment metadata inside version objects.
+Legacy `files`/`new`/`modified` lists, descriptions, and checksums remain for compatible clients. The two sync bridges stay in the legacy namespace; the new shared payload is declared separately. Older version entries retain their historical formats. Keep deployment metadata inside version objects. `changes.json` retains only the current snapshot plus the newest three released versions (four entries); `scripts/open_next_snapshot.py` drops older ones when the release workflow opens the next snapshot, and `CHANGELOG.md` holds the full history. A legacy sync client more than three releases behind falls back to the documented full scan.
 
 ### Release checklist
 
