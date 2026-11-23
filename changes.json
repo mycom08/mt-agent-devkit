@@ -29,8 +29,11 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_TL_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000330] Stub re-check points to the tl-review skill, not the retired TL rules. [ST-000332] Stage 3 QA steps name qa-core, qa-validate, qa-testing and qa-regression, not the QA rules.",
-      ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000330] Retired TL files leave the rules lists; porting step names the tl-* skills.",
-      ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000330] Porting step names the tl-* skills replacing the retired TL files."
+      ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000330] Retired TL files leave the rules lists; porting step names the tl-* skills. [ST-000333] Retired QA files leave the rules lists; porting step names the qa-* skills.",
+      ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000330] Porting step names the tl-* skills replacing the retired TL files. [ST-000333] Porting step names the qa-* skills replacing the retired QA files.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Read_On_Demand_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills."
     },
     "deployment": {
       "schema_version": 1,

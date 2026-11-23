@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14; ST-000331 (QA, internal) adds §15; ST-000332 (QA, targets) adds §16.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14; ST-000331 (QA, internal) adds §15; ST-000332 (QA, targets) adds §16; ST-000333 (QA, retirement) adds §17.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -484,7 +484,7 @@ The internal skills stay free of the three rules; `TlSkillsTests` pins both side
 
 ## 15. QA Files to QA Skills (ST-000331)
 
-The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_Standard_QA.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Five skills hold every QA-only rule: `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `qa-hotfix`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 QA templates keep their files until ST-000333; ST-000332 ships the skills to targets (§16). Rows marked **dropped** are the three drops TL confirmed on PR 342.
+The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_Standard_QA.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Five skills hold every QA-only rule: `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `qa-hotfix`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 QA templates kept their files until ST-000333 retired them (§17); ST-000332 ships the skills to targets (§16). Rows marked **dropped** are the three drops TL confirmed on PR 342.
 
 ### 15a. QA Rules Bootstrap
 
@@ -576,11 +576,24 @@ The target text keeps the old target rules, so it differs from the internal skil
 
 ### 16c. Target routing
 
-The registry gives QA `bootstrap`, `common` and `role_sources` entries for `target` equal to the internal ones, and every `layouts.target` override that named a QA rules file is removed, so each row reads its skill in both layouts: the `standard` row (disabled in both layouts), `qa_validate` and `qa_testing`. `regression_check` and `post_done_bug` are no longer internal only. `validate_retired_citations.py` rejects the three QA names in every registry layout; the shipped templates and bundle assets stay exempt until ST-000333.
+The registry gives QA `bootstrap`, `common` and `role_sources` entries for `target` equal to the internal ones, and every `layouts.target` override that named a QA rules file is removed, so each row reads its skill in both layouts: the `standard` row (disabled in both layouts), `qa_validate` and `qa_testing`. `regression_check` and `post_done_bug` are no longer internal only. `validate_retired_citations.py` rejects the three QA names in every registry layout; the shipped templates and bundle assets were exempt until ST-000333 (§17).
+
+## 17. Target Retirement of the QA Files (ST-000333)
+
+The Phase 2 templates `QA_Rules_Bootstrap_template.md`, `QA_Rules_Read_On_Demand_template.md` and `Story_Standard_QA_template.md` are deleted, with their bundle assets. `ST-000264_Common_Ownership.json` has no QA rows, and `migration-inventory.json` is unchanged (its `retired` entries are the internal ST-000331 ones). Installed copies retire through the ST-000290 mechanism: `build_bundle.py` `RETIRED_SURVIVORS` gives each file its own survivors, and the bundle lists a shared and a per-provider/mode legacy retirement entry (`required: false`) for each.
+
+| Retired target file | Survivors (shared bundle IDs) |
+|---|---|
+| `QA_Rules_Bootstrap.md` | `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `project-docs`, `comment`, `pre-pr-gate`, `raise-question`, `working-record`, `handoff`, `troubleshooting`, `instructions/qa_instructions.md` |
+| `QA_Rules_Read_On_Demand.md` | `qa-hotfix`, `pre-pr-gate`, `raise-question`, `instructions/qa_instructions.md` |
+| `Story_Standard_QA.md` | `qa-core`, `qa-validate`, `qa-hotfix`, `comment`, `instructions/qa_instructions.md` |
+
+The survivors are the §16b owners of each file's sections (§15b for `Story_Standard_QA.md`). Unlike ST-000330, no legacy target rule was found missing from the skills, so no template text changes. `validate_retired_citations.py` now rejects the three names (and `QA Bootstrap`/`QA Rules` section citations) in the internal corpus, the Phase 2 templates and every bundle asset, both registry layouts included, and its seeded test covers the QA names; the retirement ledgers and `**Version:**`/`**Previous:**` lines are exempt. The Sync template retired-file lists drop the three names and its porting step names the `qa-*` skills.
 
 ---
 
-**Document Version:** 2.0 — ST-000332 (QA, targets) adds §16, the QA skills in targets
+**Document Version:** 2.1 — ST-000333 (QA retirement) adds §17, the target retirement of the QA files
+**Previous:** 2.0 — ST-000332 (QA, targets) adds §16, the QA skills in targets
 **Previous:** 1.9 — ST-000331 (QA, internal) adds §15, the QA files
 **Previous:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
 **Previous:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets

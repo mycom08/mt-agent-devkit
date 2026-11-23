@@ -121,7 +121,7 @@ class LegacyContracts(unittest.TestCase):
                                 retained_native = {p: p.read_bytes() for p in (
                                     settings_path, agents / "scripts/check_devkit_version.sh", agents / "scripts/check_devkit_version.ps1")}
                                 # Every supported legacy release installed the PO (ST-000290), Developer (ST-000311) and
-                                # Technical Lead (ST-000330) rules files, rendered from its own frozen templates.
+                                # Technical Lead (ST-000330) and QA (ST-000333) rules files, rendered from its own frozen templates.
                                 legacy_rules = []
                                 for name in build_bundle.RETIRED_RULES:
                                     text = (frozen / ".claude/agents/templates/rules" / name.replace(".md", "_template.md")).read_text(encoding="utf-8-sig")
@@ -189,7 +189,7 @@ class LegacyContracts(unittest.TestCase):
                                 for name in build_bundle.RETIRED_RULES:
                                     self.assertFalse((target / ".mt-agent-devkit/rules" / name).exists(), name)
                                     self.assertFalse(list(target.rglob(name)), name)
-                                for name in build_bundle.PO_SKILLS + build_bundle.DEV_SKILLS + build_bundle.TL_SKILLS + ("clean-code", "pre-pr-gate"):
+                                for name in build_bundle.PO_SKILLS + build_bundle.DEV_SKILLS + build_bundle.TL_SKILLS + build_bundle.QA_SKILLS + ("clean-code", "pre-pr-gate"):
                                     self.assertTrue((target / ".mt-agent-devkit/skills" / name / "SKILL.md").is_file(), name)
                                     self.assertTrue((target / ("." + provider) / "skills" / name / "SKILL.md").is_file(), name)
                                 self.assertFalse(destination.exists())
