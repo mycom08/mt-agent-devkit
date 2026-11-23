@@ -97,6 +97,40 @@ run_fixture "inv5: passive full-read necessary range" 1 \
 run_clean_fixture "inv5: full-read exclusions (negation, boundaries, indented fence)" \
     "$SCRIPT_DIR/fixtures/good/inv5_full_read_exclusions.md"
 
+# Invariant #6 -- changes.json format and deployment manifest integrity.
+# Each fixture feeds the check through --changes-json / --manifest-root;
+# the repo-root changes.json is never replaced. A clean Markdown file is the
+# scan target so only invariant #6 errors count.
+INV6_SCAN="$SCRIPT_DIR/fixtures/good/inv5_full_read_exclusions.md"
+run_fixture "inv6: invalid version key" 1 \
+    --changes-json "$FIXTURES_BAD/manifest_bad_version.json" "$INV6_SCAN"
+run_fixture "inv6: invalid deployment declaration" 1 \
+    --changes-json "$FIXTURES_BAD/manifest_bad_deployment.json" "$INV6_SCAN"
+run_fixture "inv6: legacy arrays are not the two bridges" 1 \
+    --changes-json "$FIXTURES_BAD/manifest_bad_legacy_arrays.json" \
+    --manifest-root "$FIXTURES_BAD/manifest_empty_root" "$INV6_SCAN"
+run_fixture "inv6: unsafe deployment asset path" 1 \
+    --changes-json "$FIXTURES_BAD/manifest_unsafe_asset.json" \
+    --manifest-root "$FIXTURES_BAD/manifest_unsafe_asset_root" "$INV6_SCAN"
+run_fixture "inv6: duplicate deployment asset path" 1 \
+    --changes-json "$FIXTURES_BAD/manifest_duplicate_asset.json" \
+    --manifest-root "$FIXTURES_BAD/manifest_duplicate_asset_root" "$INV6_SCAN"
+run_fixture "inv6: deployment asset hash mismatch" 1 \
+    --changes-json "$FIXTURES_BAD/manifest_bad_hash.json" \
+    --manifest-root "$FIXTURES_BAD/manifest_bad_hash_root" "$INV6_SCAN"
+
+# A changes.json holding only the three newest entries must pass.
+TRIMMED_CHANGES="$(mktemp)"
+python - "$REPO_ROOT/changes.json" "$TRIMMED_CHANGES" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1], encoding="utf-8"))
+trimmed = dict(list(data.items())[:3])
+json.dump(trimmed, open(sys.argv[2], "w", encoding="utf-8"))
+PY
+run_clean_fixture "inv6: three newest changes.json entries pass" \
+    --changes-json "$TRIMMED_CHANGES"
+rm -f "$TRIMMED_CHANGES"
+
 # Invariant #7 -- Markdown well-formedness (heading jump + unclosed fence)
 # Fixture filename retains its pre-FIX-03 `inv6` name; the invariant was #6
 # before the new full-read invariant was inserted.

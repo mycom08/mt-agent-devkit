@@ -184,20 +184,22 @@ headings from making an otherwise full-read instruction stale.
 
 ### #6 Manifest integrity (git-free)
 
-Checks `changes.json` (the version-tracking manifest for target-project sync):
-- Every path in every `new`/`modified` array exists on disk, unless listed in
-  `ALLOWLIST_REMOVED_PATHS` (paths legitimately deleted/moved in ST-000006 when
-  templates were split into the github/strict/shared layout).
-- Every file under `.claude/agents/templates/**` appears in at least one
-  `changes.json` entry, unless listed in `ALLOWLIST_UNTRACKED_TEMPLATES` (files
-  that predate changes.json tracking — see that constant for the list).
-- Every version key parses as valid semver (`N.N.N`).
+Checks `changes.json` (the version-tracking manifest for target-project sync).
+It does not depend on history: old entries can be removed without failing.
+- Every version key parses as valid semver (`N.N.N`, or `N.N.N-SNAPSHOT`).
+- Every `deployment` declaration has exactly `schema_version` 1 and a manifest.
+- A deployment release's legacy `files`/`modified` arrays are exactly the two
+  compatible sync bridges, with empty `new` and `removed`.
+- The isolated deployment manifest exists, and each asset path is safe (no `..`,
+  not absolute), unique, and matches its recorded sha256 and byte count.
 
 Note: `changes.json` uses newest-first (descending) key order by convention.
 The validator checks semver parseability but not ordering direction.
 
-**Backlog item:** Add a `v0.0.0` baseline entry covering all files in
-`ALLOWLIST_UNTRACKED_TEMPLATES` so the allowlist can eventually be emptied.
+Fixtures feed the check through `--changes-json <file>` and `--manifest-root
+<dir>`, never by replacing the repo-root `changes.json`. `scripts/test/run.sh`
+keeps one `manifest_*` fixture under `scripts/test/fixtures/bad/` per failure
+above, plus a clean run on the three newest real entries.
 
 ### #7 Markdown well-formedness (regex, not full CommonMark)
 

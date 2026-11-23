@@ -1,0 +1,16 @@
+{
+  "1.0.0": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "removed": [],
+    "files": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md"
+    ],
+    "deployment": {
+      "schema_version": 1,
+      "manifest": ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+    }
+  }
+}
