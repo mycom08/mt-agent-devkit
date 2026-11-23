@@ -25,6 +25,7 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 ## Done
 
+- Release metadata trim (sprint 13): `changes.json` keeps only the snapshot and the newest three released versions; legacy stamps from 0.1.51 still migrate and the coverage validator checks are retired — [#345](https://github.com/mycom08/mt-agent-devkit/issues/345), [#346](https://github.com/mycom08/mt-agent-devkit/issues/346), [#347](https://github.com/mycom08/mt-agent-devkit/issues/347)
 - Role skills, remaining roles (sprint 12): Technical Lead and QA rules became `tl-*` and `qa-*` skills, shipped to targets, with the legacy rules files retired — [docs/feature/role-skills/](feature/role-skills/)
 - Project roadmap and sprint-end docs sync (sprint 11): a planner-only status doc replaces the Priming status text, and a sprint-end check keeps roadmaps and entrypoints current — [#238](https://github.com/mycom08/mt-agent-devkit/issues/238), [#283](https://github.com/mycom08/mt-agent-devkit/issues/283)
 - Role skills (sprint 10): Developer rules became `dev-*` and shared common skills, internally and in targets — [docs/feature/role-skills/](feature/role-skills/)
