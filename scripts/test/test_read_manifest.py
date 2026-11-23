@@ -217,11 +217,11 @@ class RoutingTests(unittest.TestCase):
         # ST-000289: both layouts now route the PO through po-core.
         # ST-000309/ST-000310: the Developer switches to dev-core internally, then in targets.
         # ST-000328/ST-000329: the Technical Lead switches to tl-core internally, then in targets.
-        # ST-000331: QA switches to qa-core internally only; targets keep QA_Rules_Bootstrap.md until ST-000332.
+        # ST-000331/ST-000332: QA switches to qa-core internally, then in targets.
         self.assertEqual(registry['bootstrap'],{'Product_Owner':{'internal':'.mt-agent-devkit/skills/po-core/SKILL.md','target':'.mt-agent-devkit/skills/po-core/SKILL.md'},
                                                 'Developer':{'internal':'.mt-agent-devkit/skills/dev-core/SKILL.md','target':'.mt-agent-devkit/skills/dev-core/SKILL.md'},
                                                 'Technical_Lead':{'internal':'.mt-agent-devkit/skills/tl-core/SKILL.md','target':'.mt-agent-devkit/skills/tl-core/SKILL.md'},
-                                                'QA':{'internal':'.mt-agent-devkit/skills/qa-core/SKILL.md'}})
+                                                'QA':{'internal':'.mt-agent-devkit/skills/qa-core/SKILL.md','target':'.mt-agent-devkit/skills/qa-core/SKILL.md'}})
         registry['bootstrap']['Product_Owner']['internal']='../escape.md'
         request=copy.deepcopy(self.request); request.update(role='Product_Owner',task='closure')
         with self.assertRaisesRegex(m.Blocked,'invalid bootstrap mapping'): m.build(self.root,request,registry=registry)
@@ -616,7 +616,7 @@ QA_TASK_SKILLS = {'implementation': ('pre-pr-gate', 'raise-question'), 'fix': ('
 
 
 class QaSkillRoutingTests(unittest.TestCase):
-    """ST-000331: the internal QA route reads skills; installed targets keep the QA rule files until ST-000332."""
+    """ST-000331/ST-000332: the QA route reads skills in the internal and the target layout."""
     write = RoutingTests.write
     build = RoutingTests.build
 
@@ -643,7 +643,7 @@ class QaSkillRoutingTests(unittest.TestCase):
                 self.assertEqual([x['source'] for x in manifest['reads']].count(SKILL(skill)),1)
                 # The skill is a point-of-use read: a plain validation spawn does not carry it.
                 self.assertNotIn(SKILL(skill),[x['source'] for x in self.build()['reads']])
-                self.assertEqual(REGISTRY['triggers'][trigger]['layouts'],['internal'])
+                self.assertNotIn('layouts',REGISTRY['triggers'][trigger])
                 self.assertEqual(REGISTRY['triggers'][trigger]['roles'],['QA'])
                 with self.assertRaisesRegex(m.Blocked,'unsupported trigger for role'): self.build(role='Developer',task='implementation',triggers=[trigger])
 
@@ -676,19 +676,20 @@ class QaSkillRoutingTests(unittest.TestCase):
                     skills_read=[x for x in sources if x.startswith('.mt-agent-devkit/skills/')]
                     self.assertEqual(len(skills_read),len(set(skills_read)))
 
-    def test_target_layout_keeps_the_qa_rule_files_until_distribution(self):
-        """ST-000332 ships the qa-* skills: until then the registry alternatives keep targets on the QA files."""
+    def test_target_layout_reads_the_qa_skills_not_the_rule_files(self):
+        """ST-000332: no registry alternative names a QA rule file; each row reads its skill in both layouts."""
+        registry=json.dumps(REGISTRY)
+        for name in QA_RETIRED: self.assertNotIn(name.split('.')[0],registry)
         standard=next(x for x in REGISTRY['roles']['QA'] if x['id']=='standard')
-        self.assertEqual((standard['source'],standard['enabled'],standard['layouts']['target']),
-                         (SKILL('qa-core'),False,{'source':'.mt-agent-devkit/rules/Story_Standard_QA.md','enabled':True}))
-        self.assertNotIn('target',REGISTRY['bootstrap']['QA'])
-        self.assertNotIn('target',REGISTRY['common']['QA'])
-        self.assertNotIn('target',REGISTRY['role_sources']['QA'])
-        for entry_id in ('qa_validate','qa_testing'):
+        self.assertEqual((standard['source'],standard['enabled'],'layouts' in standard),(SKILL('qa-core'),False,False))
+        self.assertEqual(REGISTRY['bootstrap']['QA']['target'],SKILL('qa-core'))
+        self.assertEqual(REGISTRY['common']['QA']['target'],REGISTRY['common']['QA']['internal'])
+        self.assertEqual(REGISTRY['role_sources']['QA']['target'],REGISTRY['role_sources']['QA']['internal'])
+        for entry_id,skill in (('qa_validate','qa-validate'),('qa_testing','qa-testing')):
             definition=next(x for x in REGISTRY['tasks']['qa']['reads'] if x['id']==entry_id)
-            self.assertEqual(definition['layouts'],{'target':{'enabled':False}},entry_id)
+            self.assertEqual((definition['source'],'layouts' in definition),(SKILL(skill),False),entry_id)
         shipped=ROOT/'.mt-agent-devkit/distribution/phase2/templates/skills'
-        self.assertEqual(sorted(p.parent.name for p in shipped.glob('qa-*/SKILL_template.md')),[])
+        self.assertEqual(sorted(p.parent.name for p in shipped.glob('qa-*/SKILL_template.md')),sorted(['qa-core','qa-validate','qa-testing','qa-regression','qa-hotfix']))
 
 
 # Point-of-use skills each installed target Developer trigger must add (ST-000310).
@@ -710,6 +711,10 @@ NON_DEV_TRIGGER_SKILLS = {('Technical_Lead','pre_pr'):('pre-pr-gate',),('Technic
                           ('UI_UX_Designer','live_conflict'):('raise-question',)}
 
 
+QA_TRIGGER_SKILLS = {'regression_check':('qa-regression',),'post_done_bug':('qa-hotfix',),'retro_required':('retro-contribution',),'tooling_failure':('troubleshooting',),
+                    'credential_gate':('credential-gate',),'runtime_handoff':('handoff',),'memory_fact':('agent-memory',),'live_conflict':('raise-question',)}
+
+
 class InstalledTests(unittest.TestCase):
     @staticmethod
     def retired_non_developer_sources(reads):
@@ -720,6 +725,11 @@ class InstalledTests(unittest.TestCase):
     def old_tl_sources(sources):
         """The three TL rule files and the Common rule files: never read by a target Technical Lead since ST-000329."""
         return [s for s in sources if s.endswith(TL_RETIRED) or s.startswith('.mt-agent-devkit/rules/Agent_Common_')]
+
+    @staticmethod
+    def old_qa_sources(sources):
+        """The three QA rule files and the Common rule files: never read by a target QA since ST-000332."""
+        return [s for s in sources if s.endswith(QA_RETIRED) or s.startswith('.mt-agent-devkit/rules/Agent_Common_')]
 
     @staticmethod
     def old_developer_sources(sources):
@@ -777,15 +787,14 @@ class InstalledTests(unittest.TestCase):
                                 if task in ('closure','po_validation'):
                                     self.assertIn(('.mt-agent-devkit/rules/Story_Standard.md','14'),selected)
                             if task=='qa':
-                                authority=(target/'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md').read_text(encoding='utf-8')
-                                self.assertIn('read `Story_Standard.md §14`',authority)
                                 self.assertIn(('.mt-agent-devkit/rules/Story_Standard.md','14'),selected)
-                            if role=='QA' and task in ('implementation','fix'):
-                                # ST-000312: the QA rules point to the skills and the route reads them.
-                                authority=(target/'.mt-agent-devkit/rules/QA_Rules_Bootstrap.md').read_text(encoding='utf-8')
-                                self.assertIn('`raise-question` section 5',authority)
-                                self.assertIn(SKILL('pre-pr-gate'),authority)
-                                self.assertTrue({(SKILL('pre-pr-gate'),None),(SKILL('raise-question'),None)}<=selected)
+                            if role=='QA':
+                                # ST-000332: target QA manifests resolve to the installed qa-* skills.
+                                by={x['id']:x['source'] for x in built['reads']}
+                                self.assertEqual((by['common'],by['bootstrap']),(SKILL('pre-work'),SKILL('qa-core')))
+                                self.assertNotIn('standard',by)
+                                for skill in QA_TASK_SKILLS[task]: self.assertIn(SKILL(skill),by.values())
+                                self.assertEqual(self.old_qa_sources(by.values()),[])
                             if role=='Technical_Lead':
                                 # ST-000329: target TL manifests resolve to the installed tl-* skills.
                                 by={x['id']:x['source'] for x in built['reads']}
@@ -825,6 +834,9 @@ class InstalledTests(unittest.TestCase):
                                 if role=='Technical_Lead':
                                     self.assertEqual(self.old_tl_sources(x['source'] for x in extended['reads']),[],trigger)
                                     for skill in TL_TRIGGER_SKILLS.get(trigger,()): self.assertIn(SKILL(skill),[x['source'] for x in extended['reads']],trigger)
+                                if role=='QA':
+                                    self.assertEqual(self.old_qa_sources(x['source'] for x in extended['reads']),[],trigger)
+                                    for skill in QA_TRIGGER_SKILLS.get(trigger,()): self.assertIn(SKILL(skill),[x['source'] for x in extended['reads']],trigger)
                                 if trigger=='development_convention':
                                     authority=(target/SKILL('clean-code')).read_text(encoding='utf-8')
                                     self.assertIn('read `docs/wiki/Development_Standards.md`',authority)

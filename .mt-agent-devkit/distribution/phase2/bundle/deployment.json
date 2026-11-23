@@ -157,8 +157,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "1ce4f28e1481a3ee06a677711f83bd08a85d613f0d0e844a929527d9cdad0847",
-      "bytes": 31688,
+      "sha256": "45d9fd802bfd4d1c471dee506d052fcc2cd086d49e65d8e2f551823037acfd34",
+      "bytes": 31702,
       "kind": "template"
     },
     {
@@ -206,8 +206,8 @@
     {
       "id": "instructions/qa_instructions.md",
       "path": "assets/instructions_qa_instructions.md",
-      "sha256": "123cd753d01736167ee25ceb49259ce376960079d5b86549e6090a0d4584b41a",
-      "bytes": 4294,
+      "sha256": "a1eba0e3a3e2b354d885458b7a29d7a3adf0717eedc8ca018ed84d1c6e7bc9f8",
+      "bytes": 4589,
       "kind": "template"
     },
     {
@@ -1345,6 +1345,146 @@
       "kind": "adapter"
     },
     {
+      "id": "skills/qa-core",
+      "path": "assets/skills_qa-core",
+      "sha256": "937d67c3160d1d09ed39d7bd3f7cb7f998921db31999af2d7a499a6eb7146db1",
+      "bytes": 1361,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/qa-core",
+      "path": "assets/claude_skill_qa-core",
+      "sha256": "e18e55f58d83bdee3516c84cc74eb7ffe2e78195601cabf429e32364a76b7fb0",
+      "bytes": 304,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/qa-core",
+      "path": "assets/antigravity_skill_qa-core",
+      "sha256": "e18e55f58d83bdee3516c84cc74eb7ffe2e78195601cabf429e32364a76b7fb0",
+      "bytes": 304,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/qa-core",
+      "path": "assets/codex_skill_qa-core",
+      "sha256": "e18e55f58d83bdee3516c84cc74eb7ffe2e78195601cabf429e32364a76b7fb0",
+      "bytes": 304,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/qa-validate",
+      "path": "assets/skills_qa-validate",
+      "sha256": "624cc55756173daadc9cb5682c8608043666efac56c5ce8c5abb7acd3c064171",
+      "bytes": 2977,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/qa-validate",
+      "path": "assets/claude_skill_qa-validate",
+      "sha256": "dac7ad1cf42da06d04d8e9ce40bd5077ad9f93cbc176aa740ee3fd7f760d270b",
+      "bytes": 371,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/qa-validate",
+      "path": "assets/antigravity_skill_qa-validate",
+      "sha256": "dac7ad1cf42da06d04d8e9ce40bd5077ad9f93cbc176aa740ee3fd7f760d270b",
+      "bytes": 371,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/qa-validate",
+      "path": "assets/codex_skill_qa-validate",
+      "sha256": "dac7ad1cf42da06d04d8e9ce40bd5077ad9f93cbc176aa740ee3fd7f760d270b",
+      "bytes": 371,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/qa-testing",
+      "path": "assets/skills_qa-testing",
+      "sha256": "481427aa7708433c3307c9d3f65f08feaedf817e489a2588beac5772e341aad7",
+      "bytes": 3263,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/qa-testing",
+      "path": "assets/claude_skill_qa-testing",
+      "sha256": "605c8f68aead32823a8ed133598cc13faf6fad447d9cde83f67a43b12c0cd581",
+      "bytes": 393,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/qa-testing",
+      "path": "assets/antigravity_skill_qa-testing",
+      "sha256": "605c8f68aead32823a8ed133598cc13faf6fad447d9cde83f67a43b12c0cd581",
+      "bytes": 393,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/qa-testing",
+      "path": "assets/codex_skill_qa-testing",
+      "sha256": "605c8f68aead32823a8ed133598cc13faf6fad447d9cde83f67a43b12c0cd581",
+      "bytes": 393,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/qa-regression",
+      "path": "assets/skills_qa-regression",
+      "sha256": "2edd414941b704b7eb872745ca7ecfe09a62054a52244452cf77569e0861606a",
+      "bytes": 1891,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/qa-regression",
+      "path": "assets/claude_skill_qa-regression",
+      "sha256": "5b84e37a9b8cf19bfd34382a7b55f04835079d6df8562c79d9f6fde681e87cca",
+      "bytes": 404,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/qa-regression",
+      "path": "assets/antigravity_skill_qa-regression",
+      "sha256": "5b84e37a9b8cf19bfd34382a7b55f04835079d6df8562c79d9f6fde681e87cca",
+      "bytes": 404,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/qa-regression",
+      "path": "assets/codex_skill_qa-regression",
+      "sha256": "5b84e37a9b8cf19bfd34382a7b55f04835079d6df8562c79d9f6fde681e87cca",
+      "bytes": 404,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/qa-hotfix",
+      "path": "assets/skills_qa-hotfix",
+      "sha256": "0de786e7a066accbfd081742d3893cc1bf0e7c7cad90ccceb931b13c7a815935",
+      "bytes": 671,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/qa-hotfix",
+      "path": "assets/claude_skill_qa-hotfix",
+      "sha256": "8d1cfacd33ab30ccf2494a6cd9734604e212407879d99978acc420d83f93b058",
+      "bytes": 362,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/qa-hotfix",
+      "path": "assets/antigravity_skill_qa-hotfix",
+      "sha256": "8d1cfacd33ab30ccf2494a6cd9734604e212407879d99978acc420d83f93b058",
+      "bytes": 362,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/qa-hotfix",
+      "path": "assets/codex_skill_qa-hotfix",
+      "sha256": "8d1cfacd33ab30ccf2494a6cd9734604e212407879d99978acc420d83f93b058",
+      "bytes": 362,
+      "kind": "adapter"
+    },
+    {
       "id": "workflow_shared/Create_Stories_Workflow.md",
       "path": "assets/workflow_shared_Create_Stories_Workflow.md",
       "sha256": "292f51105af37e9687ac91f5235030d791859bfad9ba7ac03dace1a8410c7511",
@@ -1452,8 +1592,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "85684a7cc25feff53acb9920cc79e933633fe09339da3885e888c4145015be66",
-      "bytes": 54227,
+      "sha256": "bef89f3816b9d2531bcdb511b718aad0bc9d633d291dea46379cb71d64588adb",
+      "bytes": 54333,
       "kind": "template"
     },
     {
@@ -2187,8 +2327,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "4a4e033af153b055c26dd2e4f2d8c05c2685d145acf7166f79569f7109dad027",
-      "bytes": 33561,
+      "sha256": "c44e8bcc04a62383fffd268be80b423d1dc97f4d9ab0ca7bfb2435217312cd60",
+      "bytes": 33744,
       "kind": "script"
     },
     {
@@ -2292,8 +2432,8 @@
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "cf9d6c6d2524cdcb0c0a6c54f49f8de81d617e3072d6d00e8f7843a4eb51106f",
-      "bytes": 47809,
+      "sha256": "4f043aa0ea54a4f472ce2930bf7c67dc679a219728d148a26a8ae38517a4e9df",
+      "bytes": 49029,
       "kind": "contract"
     },
     {
@@ -6805,6 +6945,476 @@
         "codex/skill/tl-anchor"
       ],
       "destination": ".codex/skills/tl-anchor/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/qa-core",
+      "sources": [
+        "skills/qa-core"
+      ],
+      "destination": ".mt-agent-devkit/skills/qa-core/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/qa-core",
+      "sources": [
+        "claude/skill/qa-core"
+      ],
+      "destination": ".claude/skills/qa-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/qa-core",
+      "sources": [
+        "antigravity/skill/qa-core"
+      ],
+      "destination": ".antigravity/skills/qa-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/qa-core",
+      "sources": [
+        "codex/skill/qa-core"
+      ],
+      "destination": ".codex/skills/qa-core/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/qa-validate",
+      "sources": [
+        "skills/qa-validate"
+      ],
+      "destination": ".mt-agent-devkit/skills/qa-validate/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/qa-validate",
+      "sources": [
+        "claude/skill/qa-validate"
+      ],
+      "destination": ".claude/skills/qa-validate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/qa-validate",
+      "sources": [
+        "antigravity/skill/qa-validate"
+      ],
+      "destination": ".antigravity/skills/qa-validate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/qa-validate",
+      "sources": [
+        "codex/skill/qa-validate"
+      ],
+      "destination": ".codex/skills/qa-validate/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/qa-testing",
+      "sources": [
+        "skills/qa-testing"
+      ],
+      "destination": ".mt-agent-devkit/skills/qa-testing/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/qa-testing",
+      "sources": [
+        "claude/skill/qa-testing"
+      ],
+      "destination": ".claude/skills/qa-testing/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/qa-testing",
+      "sources": [
+        "antigravity/skill/qa-testing"
+      ],
+      "destination": ".antigravity/skills/qa-testing/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/qa-testing",
+      "sources": [
+        "codex/skill/qa-testing"
+      ],
+      "destination": ".codex/skills/qa-testing/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/qa-regression",
+      "sources": [
+        "skills/qa-regression"
+      ],
+      "destination": ".mt-agent-devkit/skills/qa-regression/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/qa-regression",
+      "sources": [
+        "claude/skill/qa-regression"
+      ],
+      "destination": ".claude/skills/qa-regression/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/qa-regression",
+      "sources": [
+        "antigravity/skill/qa-regression"
+      ],
+      "destination": ".antigravity/skills/qa-regression/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/qa-regression",
+      "sources": [
+        "codex/skill/qa-regression"
+      ],
+      "destination": ".codex/skills/qa-regression/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/qa-hotfix",
+      "sources": [
+        "skills/qa-hotfix"
+      ],
+      "destination": ".mt-agent-devkit/skills/qa-hotfix/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/qa-hotfix",
+      "sources": [
+        "claude/skill/qa-hotfix"
+      ],
+      "destination": ".claude/skills/qa-hotfix/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/qa-hotfix",
+      "sources": [
+        "antigravity/skill/qa-hotfix"
+      ],
+      "destination": ".antigravity/skills/qa-hotfix/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/qa-hotfix",
+      "sources": [
+        "codex/skill/qa-hotfix"
+      ],
+      "destination": ".codex/skills/qa-hotfix/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [

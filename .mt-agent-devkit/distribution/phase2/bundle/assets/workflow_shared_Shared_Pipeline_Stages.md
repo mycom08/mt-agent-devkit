@@ -394,11 +394,11 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Behavioral path (`Type: behavioral`)
 
 5. **Spawn** QA agent (**policy: standard**); save its `session_handle` as `qa_session`
-6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules_Bootstrap.md`
+6. QA reads its validated manifest: `qa_instructions.md`, the Common skills and `qa-core`, `QA_Memory.md`, then `qa-validate` and `qa-testing`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
-   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of a full environment re-verification; escalate to full re-verification only if there's a specific reason to distrust the evidence. Skip the test-scenario document per `QA_Rules_Bootstrap.md §4`'s verification-only exception.
+   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of a full environment re-verification; escalate to full re-verification only if there's a specific reason to distrust the evidence. Skip the test-scenario document per the verification-only exception in `qa-testing`.
 8. **If story AC issues found** → resume Implementer via the selected adapter's resume operation to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via the selected adapter's resume operation to `qa_session`** to revalidate (spawn new if expired)
-9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (see QA Rules §8–§9)
+9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (`qa-regression`; the pre-PR gate for QA as implementer is `pre-pr-gate`)
    - **If automation fails** → QA reports regression failures:
      - **GitHub mode:** as a story comment
      - **Strict mode:** append to story MD `## Comments`

@@ -634,11 +634,9 @@ class CommonSkillsTests(unittest.TestCase):
 
     def test_undistributed_skills_are_exempt_only_from_distribution_checks(self):
         # ST-000310 ships every common and Developer skill except change-metadata (internal only, B5);
-        # ST-000329 ships the Technical Lead skills too; the QA skills stay internal until ST-000332.
-        self.assertEqual(frozenset({"change-metadata"} | set(validator.QA_SKILLS)), validator.UNDISTRIBUTED_SKILLS)
+        # ST-000329 ships the Technical Lead skills and ST-000332 the QA skills too.
+        self.assertEqual(frozenset({"change-metadata"}), validator.UNDISTRIBUTED_SKILLS)
         self.assertFalse((ROOT / validator.SKILL_TEMPLATES / "change-metadata").exists())
-        for name in validator.QA_SKILLS:
-            self.assertFalse((ROOT / validator.SKILL_TEMPLATES / name).exists(), name)
         self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
         inventory = json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]
         broken = [e for e in inventory if e["source"] != ".claude/skills/retro/SKILL.md"]
@@ -1137,7 +1135,7 @@ class TlSkillsTests(unittest.TestCase):
 
 
 class QaSkillsTests(unittest.TestCase):
-    """ST-000331: five internal QA skills replace the internal QA rules files; targets keep theirs until ST-000332."""
+    """ST-000331/ST-000332: five QA skills replace the QA rules files internally and in the registry; the legacy target templates ship, unused, until ST-000333."""
     RETIRED = tuple(f".mt-agent-devkit/rules/{n}.md" for n in ("QA_Rules_Bootstrap", "QA_Rules_Read_On_Demand", "Story_Standard_QA"))
     fixture = PoSkillsTests.fixture
     citations = PoSkillsTests.citations
@@ -1159,12 +1157,14 @@ class QaSkillsTests(unittest.TestCase):
                     self.assertEqual(("skill", f".mt-agent-devkit/skills/{name}/SKILL.md"), (entry["renderer"], entry["destination"]))
                     self.assertEqual(wrappers.render(entry), (ROOT / entry["source"]).read_text(encoding="utf-8"))
         self.assertEqual([], validator.skill_reference_errors(ROOT))
-        # Internal only until ST-000332: no Phase 2 template and no bundle entry.
-        self.assertEqual(set(validator.QA_SKILLS), set(validator.QA_SKILLS) & validator.UNDISTRIBUTED_SKILLS)
-        self.assertEqual(set(), {p.parent.name for p in (ROOT / validator.SKILL_TEMPLATES).glob("qa-*/SKILL_template.md")})
-        manifest = (ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8")
+        # ST-000332: every QA skill ships as a Phase 2 template with the internal frontmatter and budget.
+        self.assertFalse(frozenset(validator.QA_SKILLS) & validator.UNDISTRIBUTED_SKILLS)
+        self.assertEqual(set(validator.QA_SKILLS), {p.parent.name for p in (ROOT / validator.SKILL_TEMPLATES).glob("qa-*/SKILL_template.md")})
+        self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
         for name in validator.QA_SKILLS:
-            self.assertNotIn(f"/skills/{name}/", manifest)
+            text = (ROOT / validator.SKILL_TEMPLATES / name / "SKILL_template.md").read_text(encoding="utf-8")
+            self.assertLessEqual(len(text.encode("utf-8")), 1600 if name == "qa-core" else 4000, name)
+            self.assertNotIn("change-metadata", text, name)
 
     def test_ownership_map_section_15_maps_every_qa_rule(self):
         text = (ROOT / "docs/feature/role-skills/Dev_Skills_Ownership_Map.md").read_text(encoding="utf-8")
@@ -1249,9 +1249,9 @@ class QaSkillsTests(unittest.TestCase):
         rows = json.loads((ROOT / "docs/reviews/ST-000264_Common_Ownership.json").read_text(encoding="utf-8"))["rows"]
         self.assertFalse([row for row in rows if row["source"] in self.RETIRED])
 
-    def test_retired_citation_validator_rejects_qa_files_internally_only(self):
-        # ST-000331: internal corpus and the registry outside layouts.target are in scope; the Phase 2 templates,
-        # bundle assets and target alternatives keep the QA files until ST-000332. History lines are not citations.
+    def test_retired_citation_validator_rejects_qa_files_in_every_registry_layout(self):
+        # ST-000332: the internal corpus and every registry layout are in scope; the Phase 2 templates and
+        # bundle assets keep the QA files until ST-000333. History lines are not citations.
         self.assertEqual([], self.citations.findings(ROOT))
         phase2 = ".mt-agent-devkit/distribution/phase2"
         root = self.fixture(".mt-agent-devkit/rules/Agent_Common_Core.md", ".mt-agent-devkit/contracts/read-routing.json", ".claude/skills/qa-core/SKILL.md",
@@ -1262,23 +1262,91 @@ class QaSkillsTests(unittest.TestCase):
                                (".claude/skills/qa-core/SKILL.md", "Story_Standard_QA §6")):
             path = root / relative
             path.write_text(path.read_text(encoding="utf-8") + "\n" + line + "\n" + history, encoding="utf-8")
-        # Shipped target files and the target alternatives still name the QA files without error.
+        # Shipped target files still name the QA files without error.
         for relative in (phase2 + "/templates/rules/Story_Standard_template.md", phase2 + "/bundle/assets/orchestrator_shared"):
             path = root / relative
             path.write_text(path.read_text(encoding="utf-8") + "\nSee `QA_Rules_Bootstrap.md` and QA Bootstrap §4.\n", encoding="utf-8")
         registry = root / ".mt-agent-devkit/contracts/read-routing.json"
         data = json.loads(registry.read_text(encoding="utf-8"))
-        standard = next(x for x in data["roles"]["QA"] if x["id"] == "standard")
-        self.assertEqual(".mt-agent-devkit/rules/Story_Standard_QA.md", standard["layouts"]["target"]["source"])
         found = self.citations.findings(root)
         self.assertEqual(3, len(found), found)
         self.assertTrue(any("Agent_Common_Core.md" in f for f in found))
         self.assertTrue(any("qa-core/SKILL.md" in f for f in found))
         self.assertFalse(any("read-routing.json" in f or "orchestrator_shared" in f or "Story_Standard_template" in f for f in found))
-        # An internal alternative, outside layouts.target, is rejected.
+        # ST-000332: an alternative in the registry is a stale route in any layout.
+        data["tasks"]["qa"]["reads"][0]["source"] = ".mt-agent-devkit/skills/qa-validate/SKILL.md"
+        data["tasks"]["qa"]["reads"][0]["layouts"] = {"target": {"source": ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"}}
+        registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        self.assertTrue(any("read-routing.json" in f for f in self.citations.findings(root)))
+        data["tasks"]["qa"]["reads"][0].pop("layouts")
         data["tasks"]["qa"]["reads"][0]["source"] = ".mt-agent-devkit/rules/QA_Rules_Bootstrap.md"
         registry.write_text(json.dumps(data, indent=2), encoding="utf-8")
         self.assertTrue(any("read-routing.json" in f for f in self.citations.findings(root)))
+
+
+class QaDistributionTests(unittest.TestCase):
+    """ST-000332: the qa-* skills ship to targets; the target QA rules text lives in the skill templates."""
+    TEMPLATES = ROOT / ".mt-agent-devkit/distribution/phase2/templates"
+
+    def template(self, name):
+        return (self.TEMPLATES / "skills" / name / "SKILL_template.md").read_text(encoding="utf-8")
+
+    def test_bundle_ships_each_qa_skill_with_a_wrapper_per_provider(self):
+        manifest = json.loads((ROOT / ".mt-agent-devkit/distribution/phase2/bundle/deployment.json").read_text(encoding="utf-8"))
+        shipped = {item["destination"]: item for item in manifest["files"] if item["phase"] != "retirement"}
+        for name in validator.QA_SKILLS:
+            with self.subTest(skill=name):
+                item = shipped[f".mt-agent-devkit/skills/{name}/SKILL.md"]
+                self.assertEqual(("shared", "managed", list(validator.PROVIDERS)), (item["owner"], item["ownership"], item["providers"]))
+                for provider in validator.PROVIDERS:
+                    self.assertEqual([provider], shipped[f".{provider}/skills/{name}/SKILL.md"]["providers"])
+
+    def test_target_qa_rules_have_their_text_in_the_named_skill_template(self):
+        rows = {  # old target QA section -> (skill, distinctive phrase)
+            "Story Standard QA 1, 7; Bootstrap 3": ("qa-core", "Never tick AC (PO does at closure)"),
+            "Story Standard QA 5 API spec first": ("qa-validate", "Verify the API spec (`docs/api/`)"),
+            "Bootstrap 2 locating work": ("qa-validate", "Do not wait for the PR to merge"),
+            "Bootstrap 7 post-pass commit": ("qa-validate", "Add test scenario and script for ST-XXXXXX"),
+            "Bootstrap 4 scenario first": ("qa-testing", "do not begin testing without it"),
+            "Bootstrap 4 coverage audit": ("qa-testing", "named test whose primary purpose"),
+            "Bootstrap 4 real fixture": ("qa-testing", "captured real-world fixture"),
+            "Bootstrap 4 run twice": ("qa-testing", "re-run the scenario in isolation"),
+            "Bootstrap 4 integration tests": ("qa-testing", "API-contract-only story"),
+            "Bootstrap 4 script failures": ("qa-testing", "Never work around it"),
+            "Bootstrap 4 spec first": ("qa-testing", "never from implementation code"),
+            "Bootstrap 4 API testing": ("qa-testing", "ST-XXXXXX_API_Test.sh"),
+            "Bootstrap 4 credentials and auth": ("qa-testing", "base64-encoded, never hardcoded"),
+            "Bootstrap 4 failure policy": ("qa-testing", "Any failure blocks sign-off"),
+            "Bootstrap 4 no disabled tests": ("qa-testing", "create a backlog story"),
+            "Bootstrap 4 logging and UI prototype": ("qa-testing", "UI_Prototype_Rules.md"),
+            "Bootstrap 4 field removal": ("qa-testing", "omit the field (succeeds)"),
+            "Bootstrap 8 automation run": ("qa-regression", "{automation-suite-command}"),
+            "Bootstrap 8 no-skip": ("qa-regression", "No-skip rule"),
+            "Bootstrap 8 CI-equivalent": ("qa-regression", "CI-equivalent exception"),
+            "On-Demand 3 hotfix": ("qa-hotfix", "re-test** every affected AC against the API spec"),
+        }
+        for row, (skill, phrase) in rows.items():
+            with self.subTest(row=row):
+                self.assertIn(phrase, self.template(skill))
+
+    def test_dropped_contradictions_stay_dropped_in_targets(self):
+        for name in validator.QA_SKILLS:
+            text = self.template(name)
+            self.assertNotIn("add `status:done`", text, name)
+            self.assertNotIn("dev branch is merged", text, name)
+
+    def test_qa_instructions_template_carries_the_load_map_not_the_rules_routing(self):
+        instructions = (self.TEMPLATES / "instructions/qa_instructions_template.md").read_text(encoding="utf-8")
+        self.assertIn("## Load Map", instructions)
+        for skill in ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix", "pre-pr-gate"):
+            self.assertIn(f"`{skill}`", instructions)
+        for gone in ("## Selected Common Routing", "Agent_Common_Bootstrap.md` in full", "QA_Rules_", "Story_Standard_QA", "change-metadata"):
+            self.assertNotIn(gone, instructions)
+        core = self.template("qa-core")
+        load_map = instructions.split("## Load Map", 1)[1].split("**Resumed sessions:**", 1)[0]
+        for row in [l for l in load_map.splitlines() if l.startswith("| ") and "At spawn" not in l and "| When |" not in l]:
+            for skill in re.findall(r"`([a-z-]+)`", row.split("|")[2]):
+                self.assertIn(f"`{skill}`", core, row)
 
 
 class TlDistributionTests(unittest.TestCase):
