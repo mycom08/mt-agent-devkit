@@ -20,11 +20,17 @@ class CommonCapabilitiesTests(unittest.TestCase):
 
     def setUp(self):
         existing.RoutingTests.setUp(self)
-        # ST-000309 and ST-000328: the Developer's and Technical Lead's Common is skill-based and
-        # skips this route, so the capability contracts use QA as their sample two-tier role.
+        # ST-000309, ST-000328 and ST-000331: the Developer's, Technical Lead's and QA's Common is skill-based
+        # and skips this route. The capability contracts keep QA as their sample two-tier role through a
+        # fixture registry without QA's skill overrides (the legacy full-file route), so the Core route
+        # stays covered; the real QA skill route has its own test below.
         self.request['role'] = 'QA'
         shutil.copytree(ROOT / '.mt-agent-devkit/rules', self.root / '.mt-agent-devkit/rules', dirs_exist_ok=True)
         self.registry = copy.deepcopy(REGISTRY)
+        for table in ('bootstrap', 'common', 'role_sources'):
+            self.registry[table].pop('QA')
+        self.registry['roles']['QA'] = [dict(id='standard', source='.mt-agent-devkit/rules/Story_Standard_QA.md', coverage={'kind': 'full'}, reason='standard', after=['record'])]
+        self.write('.mt-agent-devkit/rules/Story_Standard_QA.md', '# Fixture\n')
         self.registry['common_capabilities']['verified_providers'] = ['codex']
         for role in ('Developer', 'Technical_Lead', 'QA'):
             self.write(self.bound['RUNTIME_ROOT'] + '/memory/' + role + '_Memory.md', '# Memory\n\n## Standing Checks\nAlways preserve independent gates.\n\n## Keyword Index\nNone yet.\n\n## Troubleshooting Facts\nKnown fix.\n')
@@ -122,7 +128,7 @@ class CommonCapabilitiesTests(unittest.TestCase):
                 self.assertIn('record', selected)
                 self.assertFalse({'standing_checks', 'troubleshooting_facts'} & set(selected))
                 self.assertFalse([x['source'] for x in result['reads'] if '/rules/Agent_Common_' in x['source']])
-        # QA under the same registry still takes the Core route.
+        # The fixture QA (no skill overrides) still takes the Core route.
         self.assertEqual(next(x for x in self.candidate()['reads'] if x['id'] == 'common')['source'], '.mt-agent-devkit/rules/Agent_Common_Core.md')
 
     def test_technical_lead_common_override_skips_capability_routes(self):
@@ -137,6 +143,23 @@ class CommonCapabilitiesTests(unittest.TestCase):
                 self.assertNotIn('standard', selected)
                 self.assertFalse({'standing_checks', 'troubleshooting_facts'} & set(selected))
                 self.assertFalse([x['source'] for x in result['reads'] if '/rules/Agent_Common_' in x['source']])
+
+    def test_qa_common_override_skips_capability_routes(self):
+        # ST-000331: the real registry routes QA through skills even for a verified provider.
+        registry = copy.deepcopy(REGISTRY)
+        registry['common_capabilities']['verified_providers'] = ['codex']
+        for triggers in ([], ['tooling_failure', 'credential_gate', 'retro_required', 'runtime_handoff', 'completion']):
+            with self.subTest(triggers=triggers):
+                request = copy.deepcopy(self.request)
+                request.update(role='QA', task='qa', triggers=triggers)
+                selected = {x['id']: x for x in m.build(self.root, request, registry=registry)['reads']}
+                self.assertEqual(selected['common']['source'], '.mt-agent-devkit/skills/pre-work/SKILL.md')
+                self.assertEqual(selected['bootstrap']['source'], '.mt-agent-devkit/skills/qa-core/SKILL.md')
+                self.assertEqual(selected['memory']['coverage'], {'kind': 'full'})
+                self.assertIn('record', selected)
+                self.assertNotIn('standard', selected)
+                self.assertFalse({'standing_checks', 'troubleshooting_facts'} & set(selected))
+                self.assertFalse([x['source'] for x in selected.values() if '/rules/Agent_Common_' in x['source']])
 
     def test_route_lookups_block_with_a_reason(self):
         request = copy.deepcopy(self.request)

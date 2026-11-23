@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14; ST-000331 (QA, internal) adds §15.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -482,9 +482,73 @@ Each was in a legacy target TL file and in no `tl-*` skill. Each was resolved be
 
 The internal skills stay free of the three rules; `TlSkillsTests` pins both sides.
 
+## 15. QA Files to QA Skills (ST-000331)
+
+The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_Standard_QA.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Five skills hold every QA-only rule: `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `qa-hotfix`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 QA templates keep their files until ST-000332, which ships the skills to targets; the QA skills are `UNDISTRIBUTED_SKILLS` until then. Rows marked **dropped** are the three drops TL confirmed on PR 342.
+
+### 15a. QA Rules Bootstrap
+
+| Source rule | Owner | Change |
+|---|---|---|
+| §1 steps 1, 3, 4 (priming, Working Record, memory) | `pre-work` read order, `qa_instructions.md` Pre-Work Checklist | pointer |
+| §1 step 2 (read `Story_Standard_QA.md`) | `qa-core` (the standard is part of the bootstrap skill) | replaced |
+| §1 step 5 (read the issues filtered by `status:testing`) | `qa-validate` step 1 | step |
+| §2 locating work 1–4 (open the issue, find the linked PR, test on the dev branch before merge, comment for Dev when no PR is linked or the story is not in `status:testing`) | `qa-validate` steps 1–4 | step |
+| §3 acceptance contract (`Story_Standard.md §14`, verdicts, NOT VERIFIED, no pass while any AC is FAIL or NOT VERIFIED, authorized skips do not certify) | `qa-validate` step 5 | compacted, every clause kept |
+| §3 status flow; QA sign-off is the merge gate; verify AC on the dev branch | `qa-core` Role and Status | compacted |
+| §3 sign-off by comment (or story MD in strict mode) before merge; AC ticked by PO | `qa-validate` steps 7 and 9 | step |
+| §3 notify Dev to merge; closure at PO Stage 4; pointers to `Story_Standard.md §4` and Stage 3/4 | `qa-validate` step 11 | compacted |
+| §3 AC cannot be validated: blocker comment, stay in `status:testing` | `qa-validate` step 8 | step |
+| §4 scenario document first; location; happy path, error and edge cases | `qa-testing` Before Testing | verbatim |
+| §4 exceptions (CI/workflow-only run URL; verification-only) | `qa-testing` Before Testing | verbatim |
+| §4 template and workflow validation (placeholders, `_template` suffix, paths, GitHub and strict mode) | `qa-testing` Checks | compacted |
+| §4 shell script validation (`bash -n`, PowerShell, logic review) | `qa-testing` Checks | verbatim |
+| §4 `changes.json` validation (entry, format, `descriptions` clause list) | `qa-testing` Checks | compacted; the `change-metadata` section 2 pointer kept |
+| §4 UI prototype validation | `qa-testing` Checks | compacted |
+| §4 UI prototype note "this mirror stays in sync with the template per `Project_Priming_Read_On_Demand.md §15`" | none | **dropped**: it described the retired file |
+| §4 test failure policy (blocker comment tagging Dev, stay in testing, no sign-off) | `qa-testing` Failure Policy; `qa-validate` step 8 | verbatim |
+| §5 document placement | `project-docs`, required by `qa-testing` | pointer |
+| §6 findings and sign-off as issue comments | `comment`, named in the `qa-core` load map | pointer |
+| §7 post-pass commit (scenario document, message format, push, gate) | `qa-validate` step 10 | step |
+| §8 local-verify; regression steps 1–5; gate | `qa-regression` | verbatim; item 4 names the `pre-pr-gate` section 1 table |
+| §8 CI-equivalent exception | `qa-regression` | verbatim |
+| §9 pre-PR gate when QA implements | `pre-pr-gate`, named in the `qa-core` load map | pointer |
+| §10 live user instruction conflicts | `raise-question` §5, named in the `qa-core` load map | pointer |
+| §11 Working Record and blockers (tag Dev or TL) | `working-record`, `raise-question` §4, named in the `qa-core` load map | pointer |
+| §12 runtime-state handoff | `handoff`, named in the `qa-core` load map | pointer |
+| §13 troubleshooting protocol | `troubleshooting`, named in the `qa-core` load map | pointer |
+| §14 on-demand routing table | `qa_instructions.md` Load Map, repeated in `qa-core` | replaced |
+| Version history | none | **dropped**: history of the old file |
+
+### 15b. QA Rules Read On Demand and Story Standard QA
+
+| Source rule | Owner | Change |
+|---|---|---|
+| On-Demand §1 pre-PR gate when QA implements | `pre-pr-gate`, named in the `qa-core` load map | pointer |
+| On-Demand §2 live user instruction conflicts | `raise-question` §5, named in the `qa-core` load map | pointer |
+| On-Demand §3 hotfix steps 1–3 (report and tag Dev and TL; re-validate every affected AC after the fix PR; report and notify PO) | `qa-hotfix` | verbatim; adds the `dev-hotfix` note |
+| Story Standard QA §1 status table (Testing is QA's; Done is PO's) | `qa-core` Role and Status | compacted |
+| Story Standard QA §1 "QA moves story to `status:done` after merge is confirmed" | none | **dropped** (QA setting `status:done`): contradicts the same table's Done row, `Story_Standard.md §4` and Bootstrap §3 |
+| Story Standard QA §5 Testing steps 1–4 (read AC, validate each, per-AC comment without ticking, failed AC comment and Dev fix) | `qa-validate` steps 1, 5, 6, 8 | step |
+| Story Standard QA §5 acceptance prerequisite (`Story_Standard.md §14`, any FAIL or NOT VERIFIED keeps the story unresolved) | `qa-validate` steps 5 and 9 | compacted |
+| Story Standard QA §5 Testing to Done step 1 "confirm the dev branch is merged to main; if not, wait" | none | **dropped** (confirm dev branch merged before testing): contradicts testing on the dev branch before merge (Bootstrap §2) and the Stage 3 merge gate |
+| Story Standard QA §5 Testing to Done steps 2–3 (results in a comment; notify PO that all AC passed) | `qa-validate` steps 6 and 11 | step |
+| Story Standard QA §5 Testing to Done step 4 "remove `status:testing`, add `status:done`" | none | **dropped** (QA setting `status:done`): PO owns Done |
+| Story Standard QA §6 hotfix pointer; `qa_instructions.md` Post-Done Bug section | `qa-hotfix`, Load Map | pointer |
+| Story Standard QA §7 role boundaries and red flags | `qa-core` Role and Status | compacted, both red flags kept |
+| Story Standard QA §9 comment standard | `comment`; QA additions (one comment per story, one line per AC, cap exemption) in `qa-validate` step 6 | pointer; verbatim additions |
+| Story Standard QA §14 AC checkbox rules | `qa-validate` steps 5, 7, 11 | compacted |
+| `qa_instructions.md` Selected Common Routing | Load Map | replaced |
+| `qa_instructions.md` Project Memory paragraph | Pre-Work Checklist memory row, `agent-memory` | pointer |
+
+### 15c. Routing (internal layout)
+
+The internal QA route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `qa-core` through `bootstrap` (the `standard` row is disabled internally), `qa-validate` and `qa-testing` through the `qa` task, and the shared Common sections through `role_sources`, as for the Technical Lead. Two internal-only triggers deliver point-of-use skills: `regression_check` reads `qa-regression`, `post_done_bug` reads `qa-hotfix`. The registry keeps `layouts.target` alternatives (the `standard` row reads `Story_Standard_QA.md`, the two task rows are disabled) and has no `bootstrap`, `common` or `role_sources` entry for `target`, so installed targets read their QA files until ST-000332. `validate_retired_citations.py` rejects citations of the three files in the internal corpus and in the registry outside `layouts.target`; the Phase 2 templates and bundle assets stay exempt until then. `test_common_capabilities.py` keeps its Core-route contracts on a fixture registry without QA's overrides, plus a test that the real QA route skips it.
+
 ---
 
-**Document Version:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
+**Document Version:** 1.9 — ST-000331 (QA, internal) adds §15, the QA files
+**Previous:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
 **Previous:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets
 **Previous:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files
 **Previous:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files
