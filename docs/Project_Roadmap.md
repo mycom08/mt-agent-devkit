@@ -2,13 +2,13 @@
 
 **Readers:** Product Owner, Business Analyst, orchestrator. Implementers do not read this file; it is not part of Project Priming.
 **Owner:** Product Owner
-**Last updated:** 2026-11-16
+**Last updated:** 2026-11-23
 
 One line per topic, linking to the topic's own roadmap or umbrella issue. Never list stories here; a topic's story list lives in its own roadmap. No dates. A topic moves bucket when its state changes, and a new topic is added when work on it starts.
 
 ## Now
 
-- Role skills, remaining roles: Technical Lead (phase 4) and QA (phase 5) rules become `tl-*` and `qa-*` skills, shipped to targets, with the legacy rules files retired — [docs/feature/role-skills/](feature/role-skills/) (sprint-12)
+- None.
 
 ## Next
 
@@ -25,6 +25,7 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 ## Done
 
+- Role skills, remaining roles (sprint 12): Technical Lead and QA rules became `tl-*` and `qa-*` skills, shipped to targets, with the legacy rules files retired — [docs/feature/role-skills/](feature/role-skills/)
 - Project roadmap and sprint-end docs sync (sprint 11): a planner-only status doc replaces the Priming status text, and a sprint-end check keeps roadmaps and entrypoints current — [#238](https://github.com/mycom08/mt-agent-devkit/issues/238), [#283](https://github.com/mycom08/mt-agent-devkit/issues/283)
 - Role skills (sprint 10): Developer rules became `dev-*` and shared common skills, internally and in targets — [docs/feature/role-skills/](feature/role-skills/)
 - Multi-provider harness: shared `.mt-agent-devkit/` harness with Claude, Antigravity and Codex adapters and the Phase 2 bundle — [docs/feature/multi-provider-harness/](feature/multi-provider-harness/)
