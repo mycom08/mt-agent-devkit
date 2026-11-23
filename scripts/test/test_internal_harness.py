@@ -1166,6 +1166,20 @@ class QaSkillsTests(unittest.TestCase):
         for name in validator.QA_SKILLS:
             self.assertNotIn(f"/skills/{name}/", manifest)
 
+    def test_ownership_map_section_15_maps_every_qa_rule(self):
+        text = (ROOT / "docs/feature/role-skills/Dev_Skills_Ownership_Map.md").read_text(encoding="utf-8")
+        self.assertEqual(1, len(re.findall(r"^## 15\. ", text, re.M)))
+        section = text.split("## 15. ", 1)[1]
+        for part in ("Bootstrap", "On-Demand", "Story Standard QA"):
+            self.assertIn(part, section)
+        for number in range(1, 15):
+            self.assertRegex(section, rf"\| §{number}[ \u00a0,]", number)
+        for skill in validator.QA_SKILLS:
+            self.assertIn(f"`{skill}`", section)
+        self.assertEqual(6, section.count("**dropped**"))  # intro + five rows
+        for drop in ("QA setting `status:done`", "confirm dev branch merged before testing", "mirror stays in sync"):
+            self.assertIn(drop, section)
+
     def test_qa_hotfix_is_qa_only_and_names_dev_hotfix(self):
         hotfix = (ROOT / ".mt-agent-devkit/skills/qa-hotfix/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("QA-only", hotfix)
