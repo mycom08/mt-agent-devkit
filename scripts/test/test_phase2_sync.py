@@ -94,6 +94,12 @@ class SyncTests(SyncFixture):
         self.assertEqual(result["status"], "verified")
         self.assertEqual(sync.deployment.verify(self.target)["source"]["tag"], "v0.1.52")
 
+    def test_next_snapshot_keeps_snapshot_plus_newest_three_released(self):
+        data = {v: {"new": [], "modified": [], "removed": [], "descriptions": {}} for v in ("0.1.57", "0.1.56", "0.1.55", "0.1.54", "0.1.53")}
+        opened = next_snapshot(data, "0.1.58-SNAPSHOT")
+        self.assertEqual(list(opened), ["0.1.58-SNAPSHOT", "0.1.57", "0.1.56", "0.1.55"])
+        self.assertEqual(list(next_snapshot({"0.1.57": data["0.1.57"]}, "0.1.58-SNAPSHOT")), ["0.1.58-SNAPSHOT", "0.1.57"])
+
     def legacy(self, provider, version, text=None, bridge=False):
         agents = self.target / ("."+provider) / "agents"
         (agents/"rules").mkdir(parents=True, exist_ok=True)

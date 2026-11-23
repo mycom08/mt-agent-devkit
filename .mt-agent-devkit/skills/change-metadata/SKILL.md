@@ -27,7 +27,7 @@ description: Devkit change metadata, internal only - the changes.json entry and 
 }
 ```
 
-Older entries use different formats; ignore them and always use `new`/`modified` for any entry you write.
+`changes.json` keeps only the current snapshot plus the newest three released versions; the release workflow's `open_next_snapshot.py` drops older entries, so never rely on an old version key and cite `CHANGELOG.md` for history. Older entries use different formats; ignore them and always use `new`/`modified` for any entry you write.
 
 **`descriptions`:** one line per file, shown verbatim in `sync devkit`'s update plan: `[ST-NNNNNN] <short delta>`, one clause per story, joined with `; `. State only what changed, not why (the rationale lives in `CHANGELOG.md` and the commit). No `"New/Fix (ST-XXXXXX, no separate version bump):"` wrapper prose, no issue backstory, no `"same X mirrored under Y"` notes.
 

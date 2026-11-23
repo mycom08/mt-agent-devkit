@@ -147,4 +147,4 @@ Transition: a run demonstrably started under the prior contract may be explicitl
 
 ## Version
 
-**Version:** 2.3 (see `changes.json` for this file's change history)
+**Version:** 2.3 (see `CHANGELOG.md` for this file's change history)

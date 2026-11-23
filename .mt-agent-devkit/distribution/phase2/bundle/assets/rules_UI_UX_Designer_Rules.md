@@ -135,5 +135,5 @@ On any tooling/environment blocker (prototype won't start, mock backend won't ru
 
 ## Version
 
-**Version:** 1.2 (see `changes.json` for this file's change history) — not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
+**Version:** 1.2 (see `CHANGELOG.md` for this file's change history) — not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
 **Created:** 2026-07-20
