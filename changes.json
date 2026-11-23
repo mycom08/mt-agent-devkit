@@ -28,7 +28,7 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_TL_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000330] Stub re-check points to the tl-review skill, not the retired TL rules. [ST-000332] Stage 3 QA steps name qa-core, qa-validate, qa-testing and qa-regression, not the QA rules.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000330] Stub re-check points to the tl-review skill, not the retired TL rules. [ST-000332] Stage 3 QA steps name qa-core, qa-validate, qa-testing and qa-regression, not the QA rules. [ST-000322] New Model and Effort Overrides section states the agent_models precedence with one example.",
       ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000330] Retired TL files leave the rules lists; porting step names the tl-* skills. [ST-000333] Retired QA files leave the rules lists; porting step names the qa-* skills.",
       ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000330] Porting step names the tl-* skills replacing the retired TL files. [ST-000333] Porting step names the qa-* skills replacing the retired QA files.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills.",
@@ -38,7 +38,10 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000347] Version footer points to CHANGELOG.md for change history.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000347] Version footer points to CHANGELOG.md for change history.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Business_Analyst_Rules_template.md": "[ST-000347] Version footer points to CHANGELOG.md for change history.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000347] Version footer points to CHANGELOG.md for change history."
+      ".mt-agent-devkit/distribution/phase2/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000347] Version footer points to CHANGELOG.md for change history.",
+      ".mt-agent-devkit/distribution/phase2/templates/scripts/project_settings.py": "[ST-000322] New agent_models resolver: role and policy model and effort overrides, role over policy per field, five-tier precedence function.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-000322] Orchestrator resolves and pins agent_models once, falls back to the adapter policy for an unsupported model or effort.",
+      ".mt-agent-devkit/distribution/phase2/templates/workflows/Workflow_Guide_template.md": "[ST-000322] Key Files table lists the agent_models setting with one example."
     },
     "deployment": {
       "schema_version": 1,

@@ -1637,6 +1637,60 @@ class PoExecutionSettingTests(unittest.TestCase):
             self.assertIn(self.ACTOR + " owns the PO record and memory for that activity", self.read(relative), relative)
 
 
+class AgentModelsSettingTests(unittest.TestCase):
+    """ST-000322: the agent_models override survives sync and update, and the contracts describe it."""
+    PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"
+
+    def read(self, relative):
+        return (ROOT / relative).read_text(encoding="utf-8")
+
+    def test_init_creates_no_overrides_and_sync_update_keep_an_existing_block(self):
+        builder = validator.module("bundle_builder_322", ROOT / ".mt-agent-devkit/distribution/phase2/build_bundle.py")
+        deployment = validator.module("bundle_deployment_322", ROOT / ".mt-agent-devkit/distribution/phase2/deployment.py")
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder); bundle = base / "bundle"; builder.build(ROOT, bundle)
+            manifest = bundle / "deployment.json"
+            source = dict(kind="local", tag=None, commit="a" * 40, snapshot_version="0.1.55-SNAPSHOT", manifest_sha256=deployment.digest(manifest.read_bytes()))
+            target = base / "target"; target.mkdir()
+            bound = {"claude": {"PROVIDER_ROOT": ".claude", "RUNTIME_ROOT": ".claude/agents", "COMMAND_ROOT": ".claude/agents"}}
+            adaptations = {"CLAUDE.md": "# Fixture\n", ".mt-agent-devkit/context/Project_Priming.md": "# Fixture\n", ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "# Ignore\n"}
+            deployment.apply(target, deployment.plan(target, manifest, source, "github", "repo", bound, adaptations))
+            settings = target / ".mt-agent-devkit/project_settings.json"
+            self.assertNotIn("agent_models", json.loads(settings.read_text(encoding="utf-8")))
+            block = '{"po_execution": "subagent", "agent_models": {"Developer": {"model": "opus"}, "closure": {"effort": "low"}}}\n'
+            settings.write_text(block, encoding="utf-8")
+            for _ in range(2):  # the second pass is the sync or update re-run over an existing file
+                deployment.apply(target, deployment.plan(target, manifest, source, "github", "repo", bound, adaptations))
+                deployment.verify(target)
+                self.assertEqual(settings.read_text(encoding="utf-8"), block)
+            self.assertNotIn("agent_models", (target / "CLAUDE.md").read_text(encoding="utf-8"))
+
+    def test_orchestrator_pipeline_stages_and_guide_describe_the_setting(self):
+        for relative in (".mt-agent-devkit/instructions/orchestrator_instructions.md", self.PHASE2 + "shared/orchestrator_instructions_shared_template.md"):
+            with self.subTest(relative=relative):
+                text = self.read(relative)
+                for required in ("project_settings.py agent_models --role", "**Agent Models:**", "A resumed run uses its pinned value",
+                                 "explicit user instruction, role override, policy override, adapter policy, workflow default",
+                                 "an unsupported `effort` falls back the same way for that field only", "reported as not applied",
+                                 "record the model actually used in the spawn's telemetry row", "never reads or changes `CLAUDE.md` or `AGENTS.md`"):
+                    self.assertIn(required, text)
+        for relative in (".mt-agent-devkit/workflows/Shared_Pipeline_Stages.md", self.PHASE2 + "shared/workflows/Shared_Pipeline_Stages_Shared_template.md"):
+            text = self.read(relative)
+            self.assertIn("## Model and Effort Overrides", text, relative)
+            self.assertIn('{"agent_models": {"Developer": {"model": "opus"}', text, relative)
+        for relative in (".mt-agent-devkit/workflows/Workflow_Guide.md", self.PHASE2 + "workflows/Workflow_Guide_template.md"):
+            self.assertIn('{"agent_models": {"Developer": {"model": "opus"} } }', self.read(relative), relative)
+
+    def test_each_provider_adapter_states_fallback_and_not_applied(self):
+        for provider in (".claude", ".antigravity", ".codex"):
+            with self.subTest(provider=provider):
+                text = " ".join(self.read(provider + "/harness/Provider_Adapter.md").split())
+                self.assertIn("Project model overrides:", text)
+                self.assertIn("agent_models", text)
+                self.assertIn("unsupported", text)
+                self.assertIn("reported as not applied", text)
+
+
 class OrchestratorPoModeTests(unittest.TestCase):
     """ST-000292: every design section 5 row in the devkit workflows and their Phase 2 templates."""
     PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"

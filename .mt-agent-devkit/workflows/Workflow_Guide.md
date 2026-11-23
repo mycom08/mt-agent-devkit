@@ -102,4 +102,5 @@ backlog → ready → in-progress → review → testing → done
 | Agent roles and instruction files | `CLAUDE.md` §Agent Roster |
 | Product Owner procedures (one skill per PO activity) | `.mt-agent-devkit/skills/po-core/SKILL.md` and the other `po-*` skills under `.mt-agent-devkit/skills/` |
 | Who runs each PO activity (`po_execution: subagent` or `orchestrator`) | `.mt-agent-devkit/project_settings.json`; routing in `.mt-agent-devkit/instructions/orchestrator_instructions.md` §PO Touchpoints by `PO Execution` |
+| Model and effort per role or model policy (`agent_models`, for example `{"agent_models": {"Developer": {"model": "opus"} } }`) | `.mt-agent-devkit/project_settings.json`; precedence and fallback in `.mt-agent-devkit/instructions/orchestrator_instructions.md` §Agent model overrides |
 | CI/CD story validation | `.mt-agent-devkit/rules/CICD_Validation_Guide.md` |

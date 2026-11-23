@@ -37,6 +37,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000345] A legacy install stamped with any plain `X.Y.Z` version from 0.1.51 up still migrates to the shared layout when its bridge files match the current bridge; the bundle no longer derives the recognized versions from `changes.json`.
 - [ST-000346] The templates validator no longer requires every template to appear in `changes.json` history or every listed path to exist, so old `changes.json` versions can be removed; its format and deployment manifest checks stay, with fixtures fed through `--changes-json` and `--manifest-root`.
 - [ST-000347] `changes.json` now keeps only the new snapshot plus the newest three released versions: `open_next_snapshot.py` drops older entries on each release, the file was trimmed once, and the Phase 2 rules footers cite `CHANGELOG.md` for change history. A legacy sync client more than three releases behind falls back to the documented full scan.
+- [ST-000322] A project can set the model and effort per agent role or model policy in `.mt-agent-devkit/project_settings.json` under `agent_models`: `project_settings.py agent_models` resolves the override (role over policy per field), the orchestrator pins it at workflow start with the precedence user instruction, role, policy, adapter policy, workflow default, and each adapter states the fallback; `sync devkit` and `update project` leave the block unchanged.
 ### Bug Fixes
 
 ---
