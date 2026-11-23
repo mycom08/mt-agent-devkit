@@ -112,8 +112,6 @@ def build(root, destination):
     templates = implementation / "templates"
     # Bridge stamps reflect the newest release, not the surviving legacy layout.
     # Exact rendered bridge identities are part of the hash-authenticated bundle.
-    metadata = json.loads((root / "changes.json").read_text(encoding="utf-8-sig"))
-    bridge_versions = sorted({key.removesuffix("-SNAPSHOT") for key, value in metadata.items() if isinstance(value, dict) and "deployment" in value})
     bridges = {}
     for provider, cli, entrypoint in (("claude", "Claude Code", "CLAUDE.md"), ("antigravity", "Antigravity", "AGENTS.md")):
         bridges[provider] = {}
@@ -123,7 +121,7 @@ def build(root, destination):
             for token, value in (("AGENT_DIR_PREFIX", "." + provider), ("ROOT_FILE", entrypoint), ("AGENT_CLI_NAME", cli)):
                 content = content.replace("{{" + token + "}}", value)
             bridges[provider]["workflows/" + name + ".md"] = [hashlib.sha256(content.encode()).hexdigest()]
-    asset("bridge_provenance.json", (json.dumps({"versions": bridge_versions, "bridges": bridges}, indent=2) + "\n").encode(), "contract")
+    asset("bridge_provenance.json", (json.dumps({"bridges": bridges}, indent=2) + "\n").encode(), "contract")
     for folder in ("rules", "instructions"):
         for source in sorted((templates / folder).glob("*_template.md")):
             name = source.name.replace("_template", "")
