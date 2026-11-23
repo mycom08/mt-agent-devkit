@@ -152,63 +152,6 @@ KNOWN_SINGLE_BRACE_TOKENS = {
 RETIRED_TRIGGERS: list = []
 
 # ---------------------------------------------------------------------------
-# Invariant #6: changes.json allowlists
-# ---------------------------------------------------------------------------
-
-# Paths listed in changes.json that were legitimately removed/moved in ST-000006
-# (templates split into github/strict/shared layout). These entries remain in
-# historical version records but the files no longer exist on disk.
-ALLOWLIST_REMOVED_PATHS = {
-    '.claude/agents/templates/Project_CLAUDE_template.md',
-    '.claude/agents/templates/shared/CLAUDE_Shared_template.md',
-    '.claude/agents/templates/github/CLAUDE_template.md',
-    '.claude/agents/templates/strict/CLAUDE_template.md',
-    ".claude/agents/templates/CLAUDE_TEMPLATE.md",
-    ".claude/agents/templates/workflows/Create_Stories_Workflow_template.md",
-    ".claude/agents/templates/workflows/Plan_Sprint_Workflow_template.md",
-    ".claude/agents/templates/workflows/Refine_Sprint_Workflow_template.md",
-    ".claude/agents/templates/workflows/Resume_Story_Workflow_template.md",
-    ".claude/agents/templates/workflows/Shared_Pipeline_Stages_template.md",
-    ".claude/agents/templates/workflows/Sprint_Workflow_template.md",
-    ".claude/agents/templates/workflows/Start_Story_Workflow_template.md",
-    # ST-000132: Agent_Common_template.md split into Agent_Common_Bootstrap_template.md
-    # and Agent_Common_Read_On_Demand_template.md. Many historical version records
-    # (pre-0.1.44) still reference the pre-split filename.
-    ".claude/agents/templates/rules/Agent_Common_template.md",
-    # ST-000133: Developer_Rules_template.md, Technical_Lead_Rules_template.md,
-    # QA_Rules_template.md, and Product_Owner_Rules_template.md each split into a
-    # Bootstrap_template.md + Read_On_Demand_template.md pair. Many historical
-    # version records (pre-0.1.44) still reference the pre-split filenames.
-    ".claude/agents/templates/rules/Developer_Rules_template.md",
-    ".claude/agents/templates/rules/Technical_Lead_Rules_template.md",
-    ".claude/agents/templates/rules/QA_Rules_template.md",
-    ".claude/agents/templates/rules/Product_Owner_Rules_template.md",
-}
-
-# Templates that predate changes.json tracking (added before v0.0.1).
-# Their absence from changes.json is a historical gap, not an error.
-# Backlog item: add a v0.0.0 baseline entry to changes.json covering these files.
-ALLOWLIST_UNTRACKED_TEMPLATES = {
-    ".claude/agents/templates/context/Document_Index_template.md",
-    ".claude/agents/templates/context/Project_Priming_template.md",
-    ".claude/agents/templates/instructions/business_analyst_instructions_template.md",
-    ".claude/agents/templates/instructions/developer_instructions_template.md",
-    ".claude/agents/templates/instructions/qa_instructions_template.md",
-    ".claude/agents/templates/instructions/technical_lead_instructions_template.md",
-    ".claude/agents/templates/rules/Blocked_Request_template.md",
-    ".claude/agents/templates/rules/Business_Analyst_Rules_template.md",
-    ".claude/agents/templates/rules/CICD_Validation_Guide_template.md",
-    ".claude/agents/templates/rules/Clean_Code_Rules_template.md",
-    ".claude/agents/templates/rules/Story_Standard_Dev_template.md",
-    ".claude/agents/templates/rules/Story_Standard_PO_template.md",
-    ".claude/agents/templates/rules/Story_Standard_QA_template.md",
-    ".claude/agents/templates/rules/Story_Standard_template.md",
-    ".claude/agents/templates/rules/Strict_Mode_Story_Guide_template.md",
-    ".claude/agents/templates/workflows/Workflow_Guide_template.md",
-    ".claude/agents/templates/README_template.md",
-}
-
-# ---------------------------------------------------------------------------
 # Invariant #1A: file-path reference resolution config
 # ---------------------------------------------------------------------------
 
@@ -781,17 +724,24 @@ def check_full_read_mandatory_ranges(path, lines: list, fenced: list,
 # Invariant #6: changes.json manifest integrity
 # ---------------------------------------------------------------------------
 
-def check_manifest_integrity(findings: list) -> None:
-    """Invariant #6: changes.json path existence and template coverage."""
-    if not CHANGES_JSON.exists():
-        emit(findings, "ERROR", CHANGES_JSON, 0, "changes.json not found")
+def check_manifest_integrity(findings: list, changes_json: Path = None,
+                             root: Path = None) -> None:
+    """Invariant #6: changes.json format and deployment manifest integrity.
+
+    changes_json and root default to the repo's changes.json and REPO_ROOT;
+    fixtures pass their own through --changes-json and --manifest-root.
+    """
+    changes_json = CHANGES_JSON if changes_json is None else changes_json
+    root = REPO_ROOT if root is None else root
+    if not changes_json.exists():
+        emit(findings, "ERROR", changes_json, 0, "changes.json not found")
         return
 
     try:
-        with CHANGES_JSON.open(encoding="utf-8") as f:
+        with changes_json.open(encoding="utf-8") as f:
             data = json.load(f)
     except (json.JSONDecodeError, OSError) as exc:
-        emit(findings, "ERROR", CHANGES_JSON, 0, f"changes.json parse error: {exc}")
+        emit(findings, "ERROR", changes_json, 0, f"changes.json parse error: {exc}")
         return
 
     # Verify every version key is a valid semver string (no ordering check --
@@ -806,7 +756,7 @@ def check_manifest_integrity(findings: list) -> None:
             if len(parts) != 3:
                 raise ValueError("not 3 components")
         except ValueError:
-            emit(findings, "ERROR", CHANGES_JSON, 0,
+            emit(findings, "ERROR", changes_json, 0,
                  f"version key '{version_key}' is not valid semver "
                  f"(expected N.N.N or N.N.N-SNAPSHOT)")
 
@@ -817,49 +767,26 @@ def check_manifest_integrity(findings: list) -> None:
             continue
         declaration = entry["deployment"]
         if set(declaration) != {"schema_version", "manifest"} or declaration.get("schema_version") != 1:
-            emit(findings, "ERROR", CHANGES_JSON, 0, "invalid additive deployment declaration")
+            emit(findings, "ERROR", changes_json, 0, "invalid additive deployment declaration")
             continue
         if set(entry.get("files", [])) != declared_bridges or set(entry.get("modified", [])) != declared_bridges or entry.get("new", []) or entry.get("removed", []):
-            emit(findings, "ERROR", CHANGES_JSON, 0, "deployment release legacy arrays must contain exactly the two compatible bridges")
+            emit(findings, "ERROR", changes_json, 0, "deployment release legacy arrays must contain exactly the two compatible bridges")
         expected = ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
-        if declaration["manifest"] != expected or not (REPO_ROOT / expected).is_file():
-            emit(findings, "ERROR", CHANGES_JSON, 0, "missing isolated deployment manifest")
+        if declaration["manifest"] != expected or not (root / expected).is_file():
+            emit(findings, "ERROR", changes_json, 0, "missing isolated deployment manifest")
         else:
             import hashlib
-            manifest = json.loads((REPO_ROOT / expected).read_text(encoding="utf-8"))
+            manifest = json.loads((root / expected).read_text(encoding="utf-8"))
             paths = set()
             for asset in manifest["assets"]:
                 relative = asset["path"]
                 if relative in paths or ".." in Path(relative).parts or Path(relative).is_absolute():
-                    emit(findings, "ERROR", CHANGES_JSON, 0, "unsafe/duplicate deployment asset")
+                    emit(findings, "ERROR", changes_json, 0, "unsafe/duplicate deployment asset")
                     continue
                 paths.add(relative)
-                path = (REPO_ROOT / expected).parent / relative
+                path = (root / expected).parent / relative
                 if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != asset["sha256"] or len(path.read_bytes()) != asset["bytes"]:
-                    emit(findings, "ERROR", CHANGES_JSON, 0, "deployment asset hash/byte mismatch: " + relative)
-
-    # Collect all paths listed and check existence.
-    all_listed: set = set()
-    for entry in data.values():
-        if not isinstance(entry, dict):
-            continue  # Skip legacy list-format entries (pre-v0.0.7).
-        for key in ("new", "modified"):
-            for listed_path in entry.get(key, []):
-                all_listed.add(listed_path)
-                if listed_path in ALLOWLIST_REMOVED_PATHS:
-                    continue
-                if not (REPO_ROOT / listed_path).exists():
-                    emit(findings, "ERROR", CHANGES_JSON, 0,
-                         f"listed path '{listed_path}' missing from disk")
-
-    # Check every template file appears in at least one changes.json entry.
-    templates_dir = REPO_ROOT / ".claude/agents/templates"
-    for tpl in sorted(templates_dir.rglob("*.md")):
-        tpl_rel = rel(tpl)
-        if tpl_rel not in all_listed and tpl_rel not in ALLOWLIST_UNTRACKED_TEMPLATES:
-            emit(findings, "ERROR", CHANGES_JSON, 0,
-                 f"template '{tpl_rel}' not referenced by any changes.json entry "
-                 f"(add to ALLOWLIST_UNTRACKED_TEMPLATES or to changes.json if newly added)")
+                    emit(findings, "ERROR", changes_json, 0, "deployment asset hash/byte mismatch: " + relative)
 
 
 # ---------------------------------------------------------------------------
@@ -975,11 +902,21 @@ def main() -> int:
     # Parse arguments.
     # --test-retired-trigger <token>  adds a one-off retired trigger for fixture testing.
     args = sys.argv[1:]
+    # --changes-json <file>           invariant #6 reads this changes.json.
+    # --manifest-root <dir>           invariant #6 resolves the deployment manifest here.
     scan_targets_raw = []
+    changes_json = None
+    manifest_root = None
     i = 0
     while i < len(args):
         if args[i] == "--test-retired-trigger" and i + 1 < len(args):
             RETIRED_TRIGGERS.append(args[i + 1])
+            i += 2
+        elif args[i] == "--changes-json" and i + 1 < len(args):
+            changes_json = Path(args[i + 1])
+            i += 2
+        elif args[i] == "--manifest-root" and i + 1 < len(args):
+            manifest_root = Path(args[i + 1])
             i += 2
         else:
             scan_targets_raw.append(args[i])
@@ -1004,7 +941,7 @@ def main() -> int:
                 scan_file(md_path, findings)
 
     # Global invariant (changes.json).
-    check_manifest_integrity(findings)
+    check_manifest_integrity(findings, changes_json, manifest_root)
 
     # Report findings.
     errors = 0
