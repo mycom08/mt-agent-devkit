@@ -10,8 +10,8 @@
     {
       "id": "bridge_provenance.json",
       "path": "assets/bridge_provenance.json",
-      "sha256": "7792249cb9c53f853734a6397cde72133e27ead28fe449f8af876f6408e35f45",
-      "bytes": 735,
+      "sha256": "7962cc6876e3112fb3c4e7a70bf287a78c1b4aca6dc1c42ff96d4095299a1395",
+      "bytes": 603,
       "kind": "contract"
     },
     {
@@ -2271,8 +2271,8 @@
     {
       "id": "migration.py",
       "path": "assets/migration.py",
-      "sha256": "66b1314ef130ff0f9872909183f78b6ad717fd06ee60116bdcf5dcba674a7df0",
-      "bytes": 8635,
+      "sha256": "f6044ec6ca32cd1d0dd0845f654e30060a354ca56f45c6a1ef01024c81f081c4",
+      "bytes": 8968,
       "kind": "script"
     },
     {
@@ -2306,8 +2306,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "2df8331dd239256cd4c16c5c0622309d2952143114382f6a55bb42db568dd45e",
-      "bytes": 34279,
+      "sha256": "9a894e6381683a43655c29d6b7b1917061de202064fa0b3ea4e5006c53fa596f",
+      "bytes": 34017,
       "kind": "script"
     },
     {

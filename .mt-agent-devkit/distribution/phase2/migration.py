@@ -7,6 +7,14 @@ import deployment
 
 
 SUPPORTED = {"0.1.48", "0.1.49", "0.1.50"}
+# Oldest release whose stamp qualifies when the installed bridge matches the current identity.
+BRIDGE_MIN_VERSION = (0, 1, 51)
+
+
+def bridge_gated(version):
+    """True for a plain X.Y.Z stamp at or above the bridge minimum; no upper bound."""
+    match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", version or "")
+    return bool(match) and tuple(map(int, match.groups())) >= BRIDGE_MIN_VERSION
 
 
 def provenance(manifest_path=None):
@@ -16,17 +24,17 @@ def provenance(manifest_path=None):
         manifest_path = home.parent / "deployment.json" if home.name == "assets" else home / "bundle/deployment.json"
     manifest_path = Path(manifest_path)
     if not manifest_path.is_file():
-        return {"versions": [], "bridges": {}}
+        return {"bridges": {}}
     manifest = deployment.load(manifest_path)
     assets = [item for item in manifest["assets"] if item["id"] == "bridge_provenance.json"]
     if len(assets) != 1:
-        return {"versions": [], "bridges": {}}
+        return {"bridges": {}}
     asset = assets[0]
     content = deployment.safe(manifest_path.parent, asset["path"]).read_bytes()
     if len(content) != asset["bytes"] or deployment.digest(content) != asset["sha256"]:
         raise deployment.Conflict("bridge provenance asset identity mismatch")
     value = json.loads(content)
-    deployment.shape(value, ("versions", "bridges"))
+    deployment.shape(value, ("bridges",))
     return value
 
 
@@ -94,7 +102,7 @@ def inventory(target, providers, manifest_path=None):
         found[provider] = {"version": version, "stamp_missing": not stamp.exists(), "files": content, "compatible_bridge": bridge}
     if len(modes) > 1:
         raise deployment.Conflict("mixed legacy modes")
-    unsupported = {item["version"] for item in found.values() if item["version"] and item["version"] not in SUPPORTED and not (item["version"] in identities["versions"] and item["compatible_bridge"])}
+    unsupported = {item["version"] for item in found.values() if item["version"] and item["version"] not in SUPPORTED and not (bridge_gated(item["version"]) and item["compatible_bridge"])}
     if unsupported:
         exc = deployment.Conflict("unknown older layout: safe inventory only; version " + ",".join(sorted(unsupported)))
         exc.inventory = {"providers": found, "mode": next(iter(modes), None), "versions": sorted(versions)}

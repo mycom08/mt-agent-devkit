@@ -33,7 +33,8 @@
       ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000330] Porting step names the tl-* skills replacing the retired TL files. [ST-000333] Porting step names the qa-* skills replacing the retired QA files.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Read_On_Demand_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills."
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000333] Removed; installed copies retire behind the qa-* skills.",
+      ".mt-agent-devkit/distribution/phase2/migration.py": "[ST-000345] Legacy stamps from 0.1.51 up migrate when the bridge matches; no changes.json version list."
     },
     "deployment": {
       "schema_version": 1,

@@ -125,12 +125,37 @@ class SyncTests(SyncFixture):
         with self.assertRaisesRegex(deployment.Conflict, "unknown older layout"):
             migration.review_candidates(self.target, ["claude"], self.bundle/"deployment.json")
 
+    def test_bridge_stamp_range_has_no_changes_json_dependency(self):
+        trimmed = self.root / "trimmed"
+        trimmed.mkdir()
+        for item in ROOT.iterdir():
+            if item.name not in {"changes.json", ".git"}:
+                (trimmed / item.name).symlink_to(item)
+        changes = json.loads((ROOT / "changes.json").read_text(encoding="utf-8"))
+        (trimmed / "changes.json").write_text(json.dumps(dict(list(changes.items())[:3])), encoding="utf-8")
+        bundle = self.root / "trimmed_bundle"
+        build_bundle.build(trimmed, bundle)
+        self.assertEqual(list(json.loads((bundle / "assets/bridge_provenance.json").read_text())), ["bridges"])
+        for stamp in ("0.1.53", "0.1.51", "1.0.0"):
+            with self.subTest(stamp=stamp):
+                self.legacy("claude", stamp, bridge=True)
+                report, _ = migration.review_candidates(self.target, ["claude"], bundle / "deployment.json")
+                self.assertTrue(report["providers"]["claude"]["compatible_bridge"])
+
+    def test_stamp_outside_bridge_range_or_without_bridge_stops(self):
+        for stamp, bridge in (("0.1.47", True), ("0.1.51-rc1", True), ("v0.1.52", True), ("0.1", True), ("0.1.53", False)):
+            with self.subTest(stamp=stamp, bridge=bridge):
+                shutil.rmtree(self.target / ".claude", ignore_errors=True)
+                self.legacy("claude", stamp, bridge=bridge)
+                with self.assertRaisesRegex(deployment.Conflict, "unknown older layout"):
+                    migration.inventory(self.target, ["claude"], self.bundle/"deployment.json")
+
     def test_unknown_stamp_and_tampered_provenance_fail_closed(self):
-        self.legacy("claude", "9.9.9", bridge=True)
+        self.legacy("claude", "9.9.9", bridge=False)
         with self.assertRaisesRegex(deployment.Conflict, "unknown older layout"):
             migration.inventory(self.target, ["claude"], self.bundle/"deployment.json")
         (self.target/".claude/agents/devkit_version.txt").write_text("0.1.51")
-        (self.bundle/"assets/bridge_provenance.json").write_text('{"versions":["0.1.51"],"bridges":{}}')
+        (self.bundle/"assets/bridge_provenance.json").write_text('{"bridges":{}}')
         with self.assertRaisesRegex(deployment.Conflict, "provenance asset identity"):
             migration.inventory(self.target, ["claude"], self.bundle/"deployment.json")
 
