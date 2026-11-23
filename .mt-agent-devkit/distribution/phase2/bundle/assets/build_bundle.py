@@ -19,7 +19,9 @@ COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record"
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
 # Technical Lead skills (ST-000329); the TL rules templates were retired in ST-000330.
 TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
-SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS + TL_SKILLS
+# QA skills (ST-000332); the QA rules templates keep shipping, unused, until ST-000333.
+QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix")
+SHARED_SKILLS = ("agent-security", "comment") + PO_SKILLS + COMMON_SKILLS + DEV_SKILLS + TL_SKILLS + QA_SKILLS
 # Rules files whose templates left the bundle (ST-000290 PO, ST-000311 Developer, ST-000330 Technical Lead).
 # Each installed copy retires behind its own survivors, present in every plan: the
 # shared canonical skill IDs that own its rules (never a provider-suffixed

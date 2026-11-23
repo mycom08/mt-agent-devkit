@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14; ST-000331 (QA, internal) adds §15.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14; ST-000331 (QA, internal) adds §15; ST-000332 (QA, targets) adds §16.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -484,7 +484,7 @@ The internal skills stay free of the three rules; `TlSkillsTests` pins both side
 
 ## 15. QA Files to QA Skills (ST-000331)
 
-The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_Standard_QA.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Five skills hold every QA-only rule: `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `qa-hotfix`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 QA templates keep their files until ST-000332, which ships the skills to targets; the QA skills are `UNDISTRIBUTED_SKILLS` until then. Rows marked **dropped** are the three drops TL confirmed on PR 342.
+The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_Standard_QA.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Five skills hold every QA-only rule: `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `qa-hotfix`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 QA templates keep their files until ST-000333; ST-000332 ships the skills to targets (§16). Rows marked **dropped** are the three drops TL confirmed on PR 342.
 
 ### 15a. QA Rules Bootstrap
 
@@ -543,11 +543,45 @@ The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_St
 
 ### 15c. Routing (internal layout)
 
-The internal QA route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `qa-core` through `bootstrap` (the `standard` row is disabled internally), `qa-validate` and `qa-testing` through the `qa` task, and the shared Common sections through `role_sources`, as for the Technical Lead. Two internal-only triggers deliver point-of-use skills: `regression_check` reads `qa-regression`, `post_done_bug` reads `qa-hotfix`. The registry keeps `layouts.target` alternatives (the `standard` row reads `Story_Standard_QA.md`, the two task rows are disabled) and has no `bootstrap`, `common` or `role_sources` entry for `target`, so installed targets read their QA files until ST-000332. `validate_retired_citations.py` rejects citations of the three files in the internal corpus and in the registry outside `layouts.target`; the Phase 2 templates and bundle assets stay exempt until then. `test_common_capabilities.py` keeps its Core-route contracts on a fixture registry without QA's overrides, plus a test that the real QA route skips it.
+The internal QA route reads `pre-work`, `agent-security`, `token-efficiency`, `shell-rules` and `retro` through the registry `common` override, `qa-core` through `bootstrap` (the `standard` row is disabled internally), `qa-validate` and `qa-testing` through the `qa` task, and the shared Common sections through `role_sources`, as for the Technical Lead. Two internal-only triggers deliver point-of-use skills: `regression_check` reads `qa-regression`, `post_done_bug` reads `qa-hotfix`. The registry keeps `layouts.target` alternatives (the `standard` row reads `Story_Standard_QA.md`, the two task rows are disabled) and has no `bootstrap`, `common` or `role_sources` entry for `target`, so installed targets read their QA files until ST-000332 (§16). `validate_retired_citations.py` rejects citations of the three files in the internal corpus and in the registry outside `layouts.target`; the Phase 2 templates and bundle assets stay exempt until then. `test_common_capabilities.py` keeps its Core-route contracts on a fixture registry without QA's overrides, plus a test that the real QA route skips it.
+
+## 16. QA Skills in Targets (ST-000332)
+
+Each `qa-*` skill has a Phase 2 template at `.mt-agent-devkit/distribution/phase2/templates/skills/<name>/SKILL_template.md`, with the internal skill's frontmatter and budget, shipped as a shared managed canonical skill plus one wrapper per provider (`QA_SKILLS` in `build_bundle.py`). The legacy QA templates (`QA_Rules_Bootstrap_template.md`, `QA_Rules_Read_On_Demand_template.md`, `Story_Standard_QA_template.md`) ship, unread, until ST-000333 retires them behind these survivors.
+
+### 16a. Target layer differences
+
+The target text keeps the old target rules, so it differs from the internal skills where the target file differed from the internal one (design §3: each layer's skill is the only owner of that layer's text). The three drops of §15 stay dropped.
+
+| Skill | Layer difference in the Phase 2 template |
+|---|---|
+| `qa-core` | Results go in a comment (strict mode: the story file's `## Comments`); the load map drops nothing, since `change-metadata` was never in it |
+| `qa-validate` | Step 1 verifies the API spec (`docs/api/`) for every endpoint tested and tags TL when it is missing or inconsistent; step 5 tests against live code cross-referencing the spec; the post-pass commit adds the test script (`tests/feature/<feature_name>/scripts/`) and uses `test(<scope>): Add test scenario and script for ST-XXXXXX` |
+| `qa-testing` | The project testing rules replace the devkit's Markdown-only checks: `Testing_Guidelines.md`, coverage audit, real-fixture and substance checks, isolated re-run, field-removal branches, integration tests and their skip reasons, API test design from the spec, script naming, auth pre-flight and credential encoding, script failures, failure policy, no disabled tests, logging and UI prototype references; no `change-metadata` requirement |
+| `qa-regression` | The full automation suite (`{sandbox-start-command}`, `{automation-suite-command}`) with the no-skip rule and the CI-equivalent exception replaces the template and harness regression suites |
+| `qa-hotfix` | Re-test is against the API spec; the `dev-hotfix` note is kept |
+
+### 16b. Target rows to skills
+
+| Old target text | Owner | Change |
+|---|---|---|
+| Bootstrap §1-§3; Story Standard QA §1, §7, §14 | `qa-core`, `qa-validate` steps 1-9 | compacted, as §15a-§15b; the Story Standard QA drops stay dropped |
+| Bootstrap §4 | `qa-testing` | compacted: every rule kept, examples trimmed |
+| Bootstrap §7 | `qa-validate` step 10 | step |
+| Bootstrap §8 | `qa-regression` | verbatim rules, compacted |
+| Story Standard QA §5 steps 1-6 | `qa-validate` steps 1, 5, 6, 8; `qa-testing` | step |
+| On-Demand §3 | `qa-hotfix` | verbatim |
+| Bootstrap §5, §6, §9-§13; On-Demand §1-§2; Story Standard QA §9 | `project-docs`, `comment`, `pre-pr-gate`, `raise-question`, `working-record`, `handoff`, `troubleshooting` | pointer, named by the `qa-core` load map |
+| Bootstrap §14, `qa_instructions_template.md` routing | Load Map in the instructions template, repeated in `qa-core` | replaced |
+
+### 16c. Target routing
+
+The registry gives QA `bootstrap`, `common` and `role_sources` entries for `target` equal to the internal ones, and every `layouts.target` override that named a QA rules file is removed, so each row reads its skill in both layouts: the `standard` row (disabled in both layouts), `qa_validate` and `qa_testing`. `regression_check` and `post_done_bug` are no longer internal only. `validate_retired_citations.py` rejects the three QA names in every registry layout; the shipped templates and bundle assets stay exempt until ST-000333.
 
 ---
 
-**Document Version:** 1.9 — ST-000331 (QA, internal) adds §15, the QA files
+**Document Version:** 2.0 — ST-000332 (QA, targets) adds §16, the QA skills in targets
+**Previous:** 1.9 — ST-000331 (QA, internal) adds §15, the QA files
 **Previous:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
 **Previous:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets
 **Previous:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files

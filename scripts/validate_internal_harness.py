@@ -106,8 +106,8 @@ TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "
 QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix")
 # Internal skills with no Phase 2 template or bundle entry. change-metadata is devkit-internal
 # only (design B5); ST-000310 ships every other common and Developer skill and ST-000329 ships
-# the Technical Lead skills; the QA skills are internal until ST-000332 ships them.
-UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"} | set(QA_SKILLS))
+# the Technical Lead skills and ST-000332 ships the QA skills.
+UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"})
 SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500, "tl-core": 1600, "qa-core": 1600}
 DEFAULT_SKILL_LIMIT = 4000  # po-*, common, Developer, Technical Lead and QA skills
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)

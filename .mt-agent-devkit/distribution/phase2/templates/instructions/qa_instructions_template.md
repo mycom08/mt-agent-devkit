@@ -15,24 +15,49 @@ You are the **QA** representative for the {project-name} team. Your focus is on:
 
 ---
 
-## Selected Common Routing
-
-Before legacy checklist below, consume validated manifest selected Common source. Verified capability routing reads `Agent_Common_Core.md` in full and overrides only Common state/read obligations: bounded Standing Checks/Keyword Index mandatory; record read/write triggered by interruption/block/continuation/status; memory/credentials/troubleshooting/retro/persistent handoff use registered modules before action. Other providers read `Agent_Common_Bootstrap.md` in full and retain complete legacy checklist. Never load both as authority. Role-specific rules/procedures and independent gates remain active.
-
 ## Pre-Work Checklist
 
-First read the selected provider adapter from the worker packet in full, before any shell command, using the native file-reading tool when available (Claude: `Read`). Then use that tool directly on the mandatory files below; successful full coverage is required. Shell batches or persisted command output do not replace native reads. If no native file reader exists, follow the Worker Entry Read Contract's sanctioned adapter-read exception and the selected provider's mechanism. Missing adapter or bindings blocks.
-
-Read `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md` in full. Every section is mandatory. It is the bootstrap tier and is never section-read. Required pre-work reads:
+First read the selected provider adapter from the worker packet in full, before any shell command, using the native file-reading tool when available (Claude: `Read`). Then use that tool directly on the mandatory files and skills below; successful full coverage is required. Shell batches or persisted command output do not replace native reads. If no native file reader exists, follow the Worker Entry Read Contract's sanctioned adapter-read exception and the selected provider's mechanism. Missing adapter or bindings blocks. A story spawn consumes its validated read manifest, which routes these same skills.
 
 | Record | Path |
 |---|---|
+| Provider adapter — the selected path supplied in the worker packet; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
 | Project Priming | `{{AGENT_DIR_PREFIX}}/agents/context/Project_Priming.md` |
 | Working Record | `{{AGENT_DIR_PREFIX}}/agents/working-record/QA_Working_Record.md` |
-| Story Standard (QA) — mandatory full role-scoped read | `{{AGENT_DIR_PREFIX}}/agents/rules/Story_Standard_QA.md` |
-| Rules (bootstrap tier — the only rules file read at spawn) | `{{AGENT_DIR_PREFIX}}/agents/rules/QA_Rules_Bootstrap.md` |
-| Memory (live index — the archive is **not** read at spawn; see Project Memory below) | `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory.md` |
-| Provider adapter — read the selected path supplied in the worker packet before the first command; missing path blocks | `{PROVIDER_ROOT}/harness/Provider_Adapter.md` |
+| Memory (live index, unconditional: Standing Checks apply without a match; the archive `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory_Archive.md` is never read at spawn, only one fact on a keyword match through `agent-memory`) | `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory.md` |
+
+Skills live at `.mt-agent-devkit/skills/<name>/SKILL.md`; each skill is the only owner of its rules.
+
+---
+
+## Load Map
+
+| When | Skills |
+|---|---|
+| **At spawn, every task** | `agent-security`, `pre-work`, `token-efficiency`, `shell-rules`, `retro`, `qa-core` |
+| **At spawn, the task skill named in the assignment** | `qa-validate` and `qa-testing` (story validation) |
+| Every AC verified, before sign-off (regression check) | `qa-regression` |
+| A bug is found after the story is `status:done` (hotfix) | `qa-hotfix` |
+| QA is the story implementer | `pre-pr-gate` before opening a PR |
+| Before posting any comment | `comment` |
+| A blocker comes up (tag Dev or TL), or a live user instruction conflicts with the thread | `raise-question` |
+| Creating or moving a document or file | `project-docs` |
+| Tooling or environment blocker | `troubleshooting` |
+| Verification needs a secret you don't have | `credential-gate` |
+| Retrieving or writing a memory fact | `agent-memory` |
+| A retro trigger was recorded, before writing the contribution | `retro-contribution` |
+| Before stage handoff | `handoff` |
+| Before any Working Record write | `working-record` |
+
+If the assignment names no task skill, report that to the orchestrator rather than guessing which task you have.
+
+**Resumed sessions:**
+
+| Situation | What is loaded |
+|---|---|
+| Same session resumed, skills unchanged | Spawn-time skills are not re-read. Point-of-use skills **are** re-read right before their action (for example `pre-pr-gate` before a fix push) |
+| Session expired, or a fresh spawn | The full spawn set again, then point-of-use skills as normal |
+| A skill file changed since it was read (sync or merge mid-sprint), or provenance is unknown | Re-read it; unknown counts as changed |
 
 ---
 
@@ -47,16 +72,10 @@ When the orchestrator spawns or resumes you, it passes `Feature` and `Phase` fro
 
 ## End-of-Work — Retrospective
 
-Evaluate `Agent_Common_Bootstrap.md §7` at completion. Only a triggered role loads `Agent_Common_Read_On_Demand.md §3` and writes its owned populated contribution; clean roles record completion metadata without retrospective-only reads or files.
+Evaluate retro detection (`retro`) at completion. Only a triggered role loads `retro-contribution` and writes its owned populated contribution; a clean role records completion metadata without retrospective-only reads or files.
 
 ---
 
 ## Working Record
 
-Update `{{AGENT_DIR_PREFIX}}/agents/working-record/QA_Working_Record.md` at start and end of each session per `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Bootstrap.md §1`. Log Completed (test coverage updates, validation findings, acceptance sign-offs, regression results), In Progress, and Impediments.
-
----
-
-## Project Memory
-
-Record durable facts in `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory.md` (live index) with full fact bodies in `{{AGENT_DIR_PREFIX}}/agents/memory/QA_Memory_Archive.md` — **the archive is never read at spawn and never read in full**; open it only when an index line's keywords match the task at hand, via the `read-section` skill. This role uses the two-tier split — rules and format: `{{AGENT_DIR_PREFIX}}/agents/rules/Agent_Common_Read_On_Demand.md §8` (retrieval mechanics, when to open the archive) and `§1` (the underlying four-field fact shape, Troubleshooting Facts).
+Update `{{AGENT_DIR_PREFIX}}/agents/working-record/QA_Working_Record.md` at the start and end of each session; load `working-record` before every write. Log Completed (validation findings, AC sign-offs, regression checks), In Progress, and Impediments.

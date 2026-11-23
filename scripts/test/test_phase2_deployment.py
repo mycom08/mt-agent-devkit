@@ -443,14 +443,14 @@ class DeploymentTests(unittest.TestCase):
 
 
 class SkillInstallTests(unittest.TestCase):
-    """ST-000310/ST-000329: a fresh install for each provider receives the common, Developer and Technical Lead skills."""
+    """ST-000310/ST-000329/ST-000332: a fresh install for each provider receives the common, Developer, Technical Lead and QA skills."""
     PHASE2 = ROOT / ".mt-agent-devkit/distribution/phase2"
 
     def test_fresh_install_per_provider_receives_common_and_developer_skills(self):
         spec = importlib.util.spec_from_file_location("phase2_builder", self.PHASE2 / "build_bundle.py")
         builder = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(builder)
-        skills = builder.COMMON_SKILLS + builder.DEV_SKILLS + builder.TL_SKILLS
+        skills = builder.COMMON_SKILLS + builder.DEV_SKILLS + builder.TL_SKILLS + builder.QA_SKILLS
         self.assertNotIn("change-metadata", skills)
         with tempfile.TemporaryDirectory() as folder:
             base = Path(folder)
@@ -488,18 +488,24 @@ class SkillInstallTests(unittest.TestCase):
                     self.assertIn("## Load Map", tl)
                     self.assertNotIn("Technical_Lead_Rules_", tl)
                     self.assertNotIn("Story_Standard_TL", tl)
+                    # ST-000332: the QA instructions load the skills, not the QA rules files.
+                    qa = (target / ".mt-agent-devkit/instructions/qa_instructions.md").read_text(encoding="utf-8")
+                    self.assertIn("## Load Map", qa)
+                    self.assertNotIn("QA_Rules_", qa)
+                    self.assertNotIn("Story_Standard_QA", qa)
 
-    def test_sync_over_an_install_without_tl_skills_delivers_them(self):
+    def test_sync_over_an_install_without_tl_and_qa_skills_delivers_them(self):
         spec = importlib.util.spec_from_file_location("phase2_builder_sync", self.PHASE2 / "build_bundle.py")
         builder = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(builder)
-        tl_destinations = {".mt-agent-devkit/skills/" + n + "/SKILL.md" for n in builder.TL_SKILLS}
+        added = builder.TL_SKILLS + builder.QA_SKILLS
+        tl_destinations = {".mt-agent-devkit/skills/" + n + "/SKILL.md" for n in added}
         with tempfile.TemporaryDirectory() as folder:
             base = Path(folder)
             builder.build(ROOT, base / "bundle")
             full = json.loads((base / "bundle/deployment.json").read_text(encoding="utf-8"))
             old = json.loads(json.dumps(full))
-            old["files"] = [f for f in old["files"] if not any(f["destination"].endswith("/skills/" + n + "/SKILL.md") for n in builder.TL_SKILLS)]
+            old["files"] = [f for f in old["files"] if not any(f["destination"].endswith("/skills/" + n + "/SKILL.md") for n in added)]
             (base / "old").mkdir()
             shutil.copytree(base / "bundle/assets", base / "old/assets")
             (base / "old/deployment.json").write_text(json.dumps(old, indent=2), encoding="utf-8")
@@ -515,7 +521,7 @@ class SkillInstallTests(unittest.TestCase):
             second = {"kind": "local", "tag": None, "commit": "b" * 40, "snapshot_version": "0.1.58-SNAPSHOT", "manifest_sha256": digest(base / "bundle/deployment.json")}
             d.apply(target, d.plan(target, base / "bundle/deployment.json", second, "github", "repo", {"claude": bound}, adaptations))
             d.verify(target)
-            for name in builder.TL_SKILLS:
+            for name in added:
                 self.assertTrue((target / ".mt-agent-devkit/skills" / name / "SKILL.md").is_file(), name)
                 self.assertTrue((target / ".claude/skills" / name / "SKILL.md").is_file(), name)
 
