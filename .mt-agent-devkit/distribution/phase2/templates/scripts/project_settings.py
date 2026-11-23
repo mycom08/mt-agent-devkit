@@ -57,7 +57,6 @@ ALLOWED = {"po_execution": PO_EXECUTION_VALUES}
 AGENT_ROLES = ("Developer", "Technical Lead", "QA", "Product Owner", "Business Analyst", "UI/UX Designer")
 MODEL_POLICIES = ("implementation", "design-review", "standard", "closure")
 OVERRIDE_FIELDS = ("model", "effort")
-PRECEDENCE_TIERS = ("user", "role", "policy", "adapter", "workflow")
 
 
 def load(root: Path) -> tuple[dict, str | None]:

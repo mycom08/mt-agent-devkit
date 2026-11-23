@@ -41,7 +41,9 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000347] Version footer points to CHANGELOG.md for change history.",
       ".mt-agent-devkit/distribution/phase2/templates/scripts/project_settings.py": "[ST-000322] New agent_models resolver: role and policy model and effort overrides, role over policy per field, five-tier precedence function.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-000322] Orchestrator resolves and pins agent_models once, falls back to the adapter policy for an unsupported model or effort.",
-      ".mt-agent-devkit/distribution/phase2/templates/workflows/Workflow_Guide_template.md": "[ST-000322] Key Files table lists the agent_models setting with one example."
+      ".mt-agent-devkit/distribution/phase2/templates/workflows/Workflow_Guide_template.md": "[ST-000322] Key Files table lists the agent_models setting with one example.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000322] State block and write rule carry Agent Models forward.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000322] State block and write rule carry Agent Models forward."
     },
     "deployment": {
       "schema_version": 1,

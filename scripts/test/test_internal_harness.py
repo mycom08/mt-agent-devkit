@@ -1681,6 +1681,16 @@ class AgentModelsSettingTests(unittest.TestCase):
         for relative in (".mt-agent-devkit/workflows/Workflow_Guide.md", self.PHASE2 + "workflows/Workflow_Guide_template.md"):
             self.assertIn('{"agent_models": {"Developer": {"model": "opus"} } }', self.read(relative), relative)
 
+    def test_state_schemas_carry_agent_models_forward(self):
+        for relative in (".mt-agent-devkit/workflows/Sprint_Workflow.md", ".mt-agent-devkit/workflows/Refine_Sprint_Workflow.md",
+                         self.PHASE2 + "shared/workflows/Sprint_Workflow_Shared_template.md", self.PHASE2 + "shared/workflows/Refine_Sprint_Workflow_Shared_template.md"):
+            with self.subTest(relative=relative):
+                text = self.read(relative)
+                self.assertIn("**Agent Models:** <JSON object keyed", text)
+                self.assertIn("Set `Agent Models` the same way", text)
+                self.assertIn("carry forward unchanged on every", text)
+                self.assertIn("never re-read mid-run; a state file that predates the field resolves it once and then pins it, never silently meaning `none`", text)
+
     def test_each_provider_adapter_states_fallback_and_not_applied(self):
         for provider in (".claude", ".antigravity", ".codex"):
             with self.subTest(provider=provider):

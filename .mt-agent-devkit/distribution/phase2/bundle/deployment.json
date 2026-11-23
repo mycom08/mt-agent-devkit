@@ -1529,8 +1529,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "b2b7ad13df003939d20063455a3d9625b7db6258ce00e62fec16bcaff84dff72",
-      "bytes": 13866,
+      "sha256": "cb8990ba2cbf3ed1465dc78a792c30ed67d916431e45317ae9f1ca79252096be",
+      "bytes": 14295,
       "kind": "template"
     },
     {
@@ -1592,8 +1592,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "338f6a6cadc16fce3bf7718e3c3f9984b542d1aa5074c330ff6362b8fec78d32",
-      "bytes": 19384,
+      "sha256": "a1981061bc9cb7a828178fc25972a9aba4a08428becfd4b9c46a3da7f07e54bc",
+      "bytes": 19819,
       "kind": "template"
     },
     {
@@ -1676,8 +1676,8 @@
     {
       "id": "scripts/project_settings.py",
       "path": "assets/scripts_project_settings.py",
-      "sha256": "839458315d2308178c65a439bbc31b3c0af14728a4f07b8db18f7d6f9fc6bac0",
-      "bytes": 7785,
+      "sha256": "8bb6da341dad45325914d0d6e9c52e3f7654333e43ee4668dc38bd59b03976aa",
+      "bytes": 7716,
       "kind": "script"
     },
     {
