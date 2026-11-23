@@ -28,6 +28,14 @@ complexity and the current task requirements; do not translate Claude model name
 literally. Follow the spawn
 tool's fork/override restrictions; never assert an override that was rejected.
 
+Project model overrides: a resolved `agent_models` override (role over policy,
+see `orchestrator_instructions.md`) is the owner's explicit selection, so it
+authorizes the explicit selection above. A model this runtime does not expose,
+or an unsupported effort, falls back to the inherited value for that field and
+is reported. A field the spawn tool cannot set per spawn keeps the inherited
+value, is reported as not applied and is never claimed in telemetry, which
+records the model actually used.
+
 ## Shell, permissions, and CI
 
 Use `functions.exec` with exposed shell tools, observing configured sandbox and

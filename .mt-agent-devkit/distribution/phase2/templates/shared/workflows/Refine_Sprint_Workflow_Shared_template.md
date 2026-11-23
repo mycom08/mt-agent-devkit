@@ -32,6 +32,7 @@ The orchestrator maintains `{{AGENT_DIR_PREFIX}}/agents/tmp/refine_pipeline_stat
 **Stage:** <1 | 2 | 3 | 4>
 **Loop Count:** <per-story loop counts, e.g. "#125: 1, #126: 1">
 **PO Execution:** <subagent | orchestrator> (resolved once at workflow start; a resumed run keeps it)
+**Agent Models:** <JSON object keyed "<Role>/<policy>" | none> (resolved once at workflow start; a resumed run keeps it)
 **PO Skills:** <one entry per inline PO activity, e.g. "refine-stage2-c1: po-core, po-answer-questions, po-comment, comment", or empty>
 **PO Memory:** <read, or empty>
 **Sessions:**
@@ -44,7 +45,7 @@ The orchestrator maintains `{{AGENT_DIR_PREFIX}}/agents/tmp/refine_pipeline_stat
 **Observations:**
 ```
 
-**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each stage transition. Update `Sessions` on spawn only — never overwrite a session ID when resuming via SendMessage. Set `PO Execution` at Stage 1 entry per the orchestrator instructions and keep it unchanged on resume. In `orchestrator` mode, write `po_session: inline` and append `PO Skills` at each inline PO activity, and set `PO Memory: read` at the first one. Increment per-story loop count at the start of Stage 3. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow. Delete after workflow review is complete (see Stage 4).
+**Write rules:** Create at Stage 1 entry. Update `Stage` + `Updated` after each stage transition. Update `Sessions` on spawn only — never overwrite a session ID when resuming via SendMessage. Set `PO Execution` at Stage 1 entry per the orchestrator instructions and keep it unchanged on resume. Set `Agent Models` the same way, from `project_settings.py agent_models` per the orchestrator instructions: set at Stage 1 entry, carry forward unchanged on every update and resume, never re-read mid-run; a state file that predates the field resolves it once and then pins it, never silently meaning `none`. In `orchestrator` mode, write `po_session: inline` and append `PO Skills` at each inline PO activity, and set `PO Memory: read` at the first one. Increment per-story loop count at the start of Stage 3. Append a one-line bullet to `Observations:` whenever the orchestrator makes a judgment call not covered by this workflow. Delete after workflow review is complete (see Stage 4).
 
 ---
 

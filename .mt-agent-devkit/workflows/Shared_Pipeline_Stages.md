@@ -16,6 +16,12 @@ During work extend and validate for observable triggers before governed actions.
 
 ---
 
+## Model and Effort Overrides
+
+The model named at each spawn in these stages (a model policy, or a model name in a project that states one) is the workflow default. A project may override it in `.mt-agent-devkit/project_settings.json` under `agent_models`, keyed by role or by model policy (`implementation`, `design-review`, `standard`, `closure`); the orchestrator resolves it once at workflow start and pins it in the pipeline state (`orchestrator_instructions.md` §Agent model overrides). Example: `{"agent_models": {"Developer": {"model": "opus"}, "closure": {"model": "haiku", "effort": "low"} } }`. Per field, the first set value wins: explicit user instruction, role override, policy override, adapter policy, workflow default. Spawn and resume each worker with the pinned model and effort for its role and policy; a model the provider does not expose, or an unsupported effort, falls back to the adapter policy for that field and is reported. The telemetry row records the model actually used.
+
+---
+
 ## Task Ownership and Validation Delegation
 
 The orchestrator coordinates the assigned stages and enforces their gates. A TL

@@ -9,6 +9,12 @@ Used by [Sprint Workflow](Sprint_Workflow.md) and [Start Story Workflow](Start_S
 
 ---
 
+## Model and Effort Overrides
+
+The model named at each spawn in these stages (a model policy, or a model name in a project that states one) is the workflow default. A project may override it in `.mt-agent-devkit/project_settings.json` under `agent_models`, keyed by role or by model policy (`implementation`, `design-review`, `standard`, `closure`); the orchestrator resolves it once at workflow start and pins it in the pipeline state (`orchestrator_instructions.md` §Agent model overrides). Example: `{"agent_models": {"Developer": {"model": "opus"}, "closure": {"model": "haiku", "effort": "low"} } }`. Per field, the first set value wins: explicit user instruction, role override, policy override, adapter policy, workflow default. Spawn and resume each worker with the pinned model and effort for its role and policy; a model the provider does not expose, or an unsupported effort, falls back to the adapter policy for that field and is reported. The telemetry row records the model actually used.
+
+---
+
 ## Explicit Manifest Dispatch — Every Worker Assignment
 
 Before every story worker spawn or resume, build and validate a manifest with `.mt-agent-devkit/scripts/read_manifest.py` using the single `.mt-agent-devkit/contracts/read-routing.json`; follow `.mt-agent-devkit/contracts/Read_Manifest.md`. This applies to implementation, independent TL/Developer review, QA, PO closure, all fix/recheck resumes, and triggered specialist questions. Supply concrete provider/layout/bindings, role/task/stage/session identity, bounded canonical story/evidence inputs and new delta pointers. Select the registry task; do not maintain another startup list in this workflow. Unsupported or insufficient specialist context blocks rather than broadening startup.

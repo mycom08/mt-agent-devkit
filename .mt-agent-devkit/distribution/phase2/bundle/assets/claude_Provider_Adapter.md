@@ -18,6 +18,15 @@ review; `design-review` uses opus for TL architecture/review. `standard` uses
 sonnet; `closure` uses haiku for PO closure. Only choose models the active runtime
 actually exposes; no paid runtime is launched by this adapter's discovery check.
 
+Project model overrides: when the orchestrator passes a resolved `agent_models`
+override (role over policy, see `orchestrator_instructions.md`), it is the
+owner's explicit selection, so the `Agent` tool receives its `model` and `effort`.
+A model this runtime does not expose, or an unsupported `effort`, falls back to
+the policy mapping above for that field and the fallback is reported. A fork
+ignores the model, and a field the spawn tool cannot set per spawn keeps the
+runtime default and is reported as not applied. Telemetry records the model
+actually used, never the requested override.
+
 ## Tools, permissions, and CI waiting
 
 Use native `Read` directly on original paths for mandatory full-file instruction/rule reads. Read this selected adapter in full before any `Bash` command, including context loading or discovery. Shell `cat`/`sed`/Python batches and a `Read` of their persisted output do not satisfy those file-read gates. Follow up truncated `Read` responses until successful full coverage is returned. Auto permission mode does not change this read order or substitute tools; keep its configured permission checks intact.

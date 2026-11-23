@@ -29,6 +29,14 @@ settings. Use native shell/permissions and supported command completion APIs;
 never reuse Claude allow-lists or assume CI wakeups. Pending CI blocks advancement,
 failure routes to fixes, and zero-checks requires the shared evidence decision.
 
+Project model overrides: a resolved `agent_models` override (role over policy,
+see `orchestrator_instructions.md`) is the owner's explicit selection. Use it
+only for a model this runtime actually exposes; otherwise fall back to the
+policy above for that field and report the fallback, and the same for an
+unsupported effort. A field the spawn tool cannot set per spawn keeps the
+inherited value, is reported as not applied and is never claimed in telemetry,
+which records the model actually used.
+
 No native cumulative usage extraction or wakeup behavior is verified here. Use
 the shared telemetry collector's `harness` mode with only real reported counters,
 otherwise unavailable/null. State bindings and legacy memory retention follow

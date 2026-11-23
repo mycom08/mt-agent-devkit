@@ -1529,8 +1529,8 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "b2b7ad13df003939d20063455a3d9625b7db6258ce00e62fec16bcaff84dff72",
-      "bytes": 13866,
+      "sha256": "cb8990ba2cbf3ed1465dc78a792c30ed67d916431e45317ae9f1ca79252096be",
+      "bytes": 14295,
       "kind": "template"
     },
     {
@@ -1571,8 +1571,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "bef89f3816b9d2531bcdb511b718aad0bc9d633d291dea46379cb71d64588adb",
-      "bytes": 54333,
+      "sha256": "0fb622c7e2427457c101aa3b4d89df0cc72fa811929ae4c1e0bf624e0288bb49",
+      "bytes": 55343,
       "kind": "template"
     },
     {
@@ -1592,8 +1592,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "338f6a6cadc16fce3bf7718e3c3f9984b542d1aa5074c330ff6362b8fec78d32",
-      "bytes": 19384,
+      "sha256": "a1981061bc9cb7a828178fc25972a9aba4a08428becfd4b9c46a3da7f07e54bc",
+      "bytes": 19819,
       "kind": "template"
     },
     {
@@ -1634,8 +1634,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "5cb5e9c3c2189bca5d7569ffe866a2cd2477a6673c4d7e3f49a0eaadec191f18",
-      "bytes": 12597,
+      "sha256": "bbe28b9edb8febe2defce0e49fb6b2cd7de51516d6e22588aeb61965e1afca8f",
+      "bytes": 14657,
       "kind": "template"
     },
     {
@@ -1676,8 +1676,8 @@
     {
       "id": "scripts/project_settings.py",
       "path": "assets/scripts_project_settings.py",
-      "sha256": "42187f8d19ae8bed37294cc628da7281dfee92233dc854da8c34b671c674b699",
-      "bytes": 3318,
+      "sha256": "8bb6da341dad45325914d0d6e9c52e3f7654333e43ee4668dc38bd59b03976aa",
+      "bytes": 7716,
       "kind": "script"
     },
     {
@@ -1781,8 +1781,8 @@
     {
       "id": "claude/Provider_Adapter.md",
       "path": "assets/claude_Provider_Adapter.md",
-      "sha256": "36d6cf6729893e340e28010f7680fc0522abd3d72077bb31f6c5109651a40ae8",
-      "bytes": 5991,
+      "sha256": "b385aa0413e5a9fec9e9f3262001884e48de4f09bbf2b732d7a709265a088e1b",
+      "bytes": 6585,
       "kind": "adapter"
     },
     {
@@ -1970,8 +1970,8 @@
     {
       "id": "antigravity/Provider_Adapter.md",
       "path": "assets/antigravity_Provider_Adapter.md",
-      "sha256": "79e5b2364410b4cdba8b4163e4f94406862175d35911b588d4ca88682144021f",
-      "bytes": 3715,
+      "sha256": "b780385ffee1db3746055150c6fc68772ea91ad9c47ecbf0a095c4162bef67f5",
+      "bytes": 4213,
       "kind": "adapter"
     },
     {
@@ -2117,8 +2117,8 @@
     {
       "id": "codex/Provider_Adapter.md",
       "path": "assets/codex_Provider_Adapter.md",
-      "sha256": "217af4aafd5299330073c7562801f217626e8c970cd27a1c9f81c80941e85ff8",
-      "bytes": 4619,
+      "sha256": "c3224e674693c1269766d9b1fffb4fcb0e5abb968a60f859409a6c0caea47c68",
+      "bytes": 5119,
       "kind": "adapter"
     },
     {
@@ -2320,8 +2320,8 @@
     {
       "id": "Workflow_Guide",
       "path": "assets/Workflow_Guide",
-      "sha256": "d01c3d0a7918ed8c737d643a12b00a364bec32647462910eace5f98cc1914de7",
-      "bytes": 4555,
+      "sha256": "31fe8deffe082d95290375c9b9ee7a8ff178037d628b19145ab1093203faf72d",
+      "bytes": 4842,
       "kind": "template"
     },
     {
