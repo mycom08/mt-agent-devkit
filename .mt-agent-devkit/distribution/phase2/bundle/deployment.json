@@ -2285,15 +2285,15 @@
     {
       "id": "Read_Manifest.md",
       "path": "assets/Read_Manifest.md",
-      "sha256": "e5fffe6180be4527b4a9f01d4e6ce8288fe30fc0fbe6576522ccf1c93e858c7d",
-      "bytes": 13423,
+      "sha256": "aa9b862e460fd7a717d8c3f112b1ac96a94cf90a741d82955aedb9b7d3beba21",
+      "bytes": 13631,
       "kind": "contract"
     },
     {
       "id": "read-routing.json",
       "path": "assets/read-routing.json",
-      "sha256": "c5f76d8c77b4057a7f2c32d16e2270b4db576ad5bad2fc8866533e4b7c3738ae",
-      "bytes": 44168,
+      "sha256": "cf9d6c6d2524cdcb0c0a6c54f49f8de81d617e3072d6d00e8f7843a4eb51106f",
+      "bytes": 47809,
       "kind": "contract"
     },
     {

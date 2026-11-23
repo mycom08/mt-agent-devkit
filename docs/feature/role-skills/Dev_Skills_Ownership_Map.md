@@ -1,7 +1,7 @@
 # Developer Skills — Rule Ownership Map
 
 **Feature:** `role-skills`
-**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14.
+**Story:** ST-000307 (A1); ST-000308 (A2) adds §7; ST-000309 (B) adds §8; ST-000310 (C) adds §9; ST-000328 (TL, internal) adds §12; ST-000329 (TL, targets) adds §13; ST-000330 (TL, retirement) adds §14; ST-000331 (QA, internal) adds §15.
 **Design:** `Dev_Skills_Proposal.md` §3a, §6, §7, §8b, §11 (R3, R4, R5)
 **Date:** 2026-11-03
 
@@ -484,7 +484,8 @@ The internal skills stay free of the three rules; `TlSkillsTests` pins both side
 
 ---
 
-**Document Version:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
+**Document Version:** 1.9 — ST-000331 (QA, internal) adds §15, the QA files
+**Previous:** 1.8 — ST-000330 (TL retirement) adds §14, the target retirement of the Technical Lead files
 **Previous:** 1.7 — ST-000329 (TL targets) adds §13, the Technical Lead skills in targets
 **Previous:** 1.6 — ST-000328 (TL) adds §12, the Technical Lead files
 **Previous:** 1.5 — ST-000311 (D) adds §11, the target retirement of the Developer files

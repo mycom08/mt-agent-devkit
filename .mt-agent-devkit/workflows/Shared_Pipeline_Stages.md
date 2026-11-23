@@ -375,11 +375,11 @@ Append a bullet to `Observations:` for each item that did **not** happen:
 ### Behavioral path (`Type: behavioral`)
 
 5. **Spawn** QA agent (**model policy: standard**); save its `session_handle` as `qa_session`
-6. QA reads `qa_instructions.md` + `QA_Memory.md` + `QA_Rules_Bootstrap.md`
+6. QA reads its validated manifest: `qa_instructions.md`, the Common skills and `qa-core`, `QA_Memory.md`, then `qa-validate` and `qa-testing`
 7. QA validates story acceptance criteria, runs test scenarios, checks regression risk
-   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust it. Skip the test-scenario document per `QA_Rules_Bootstrap.md §4`'s verification-only exception.
+   - If Stage 1 reported `Outcome: verification-only` → read the implementer's cited evidence and perform **one** targeted spot-check instead of full re-verification; escalate only if there's a specific reason to distrust it. Skip the test-scenario document per the verification-only exception in `qa-testing`.
 8. **If story AC issues found** → resume Implementer via `the selected adapter's resume operation` to `impl_session` with QA findings (spawn new if expired); on Implementer completion **resume QA via `the selected adapter's resume operation` to `qa_session`** to revalidate (spawn new if expired)
-9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (see QA Rules §8–§9)
+9. **If story AC passed** → QA updates automation coverage for the story then runs the full automation suite to check for regressions (`qa-regression`; the pre-PR gate for QA as implementer is `pre-pr-gate`)
    - **If automation fails** → QA reports regression failures as a story comment → resume Implementer via `impl_session` to fix (spawn new if expired); on completion resume QA to revalidate (counts toward loop limit)
    - **If automation passes** → QA evaluates/completes its bound metadata under `Agent_Common_Bootstrap.md §7`, loading/writing only triggered contributions; orchestrator executes the **Merge Procedure** below
 10. On merge confirmed → proceed to Stage 4
