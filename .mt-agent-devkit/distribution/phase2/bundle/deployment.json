@@ -157,8 +157,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "1ce4f28e1481a3ee06a677711f83bd08a85d613f0d0e844a929527d9cdad0847",
-      "bytes": 31688,
+      "sha256": "45d9fd802bfd4d1c471dee506d052fcc2cd086d49e65d8e2f551823037acfd34",
+      "bytes": 31702,
       "kind": "template"
     },
     {
@@ -1592,8 +1592,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "85684a7cc25feff53acb9920cc79e933633fe09339da3885e888c4145015be66",
-      "bytes": 54227,
+      "sha256": "bef89f3816b9d2531bcdb511b718aad0bc9d633d291dea46379cb71d64588adb",
+      "bytes": 54333,
       "kind": "template"
     },
     {

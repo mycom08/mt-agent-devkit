@@ -17,7 +17,7 @@
       ".mt-agent-devkit/distribution/phase2/templates/skills/tl-anchor/SKILL_template.md": "[ST-000329] New target TL skill: the context-anchoring note after a session on an unfinished story.",
       ".mt-agent-devkit/distribution/phase2/templates/instructions/technical_lead_instructions_template.md": "[ST-000329] Technical Lead reads skills through a load map, not the TL rules files.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/pr-review/SKILL_template.md": "[ST-000329] TL approval authority names the tl-review skill.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000329] Testing-label note points to the tl-core skill. [ST-000330] Section 9 role-only additions point to pr-review, not the retired Story_Standard_TL.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000329] Testing-label note points to the tl-core skill. [ST-000330] Section 9 role-only additions point to pr-review, not the retired Story_Standard_TL. [ST-000332] Section 9 QA additions point to qa-validate, not Story_Standard_QA.",
       ".mt-agent-devkit/contracts/read-routing.json": "[ST-000329] Target-layout Technical Lead routing resolves to tl-core and the tl-* skills; the TL layouts.target overrides are removed. [ST-000332] Target-layout QA routing resolves to qa-core and the qa-* skills; the QA layouts.target overrides are removed.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/qa-core/SKILL_template.md": "[ST-000332] New target QA skill: role boundaries, status ownership, red flags and the skill load map.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/qa-validate/SKILL_template.md": "[ST-000332] New target QA skill: locating work, API spec check, per-AC verdicts, sign-off and the post-pass scenario and script commit.",
@@ -28,7 +28,7 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_TL_template.md": "[ST-000330] Removed; installed copies retire behind the tl-* skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000330] Stub re-check points to the tl-review skill, not the retired TL rules.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000330] Stub re-check points to the tl-review skill, not the retired TL rules. [ST-000332] Stage 3 QA steps name qa-core, qa-validate, qa-testing and qa-regression, not the QA rules.",
       ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000330] Retired TL files leave the rules lists; porting step names the tl-* skills.",
       ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000330] Porting step names the tl-* skills replacing the retired TL files."
     },
