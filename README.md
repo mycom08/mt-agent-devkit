@@ -16,7 +16,7 @@ A multi-provider agent devkit that installs shared AI Scrum instructions and spr
 | **Role-separated workflows** | Each agent has its own instructions, rules, memory, and working record |
 | **Story lifecycle management** | Tracks stories from `backlog` through `done` — via GitHub Issues (default) or local MD files (strict mode) |
 | **Sprint planning and refinement** | Plan and refine backlog stories before execution |
-| **Feature analysis** | BA-led elicitation and planning for new requirements |
+| **Feature analysis** | In a target project, `analyze requirements` turns a prompt or document into PO-approved requirement specs |
 | **Session continuity** | Agents resume mid-session; pipeline state survives restarts |
 | **Project initialization** | Scaffolds all agent files into any target project in one command |
 
@@ -75,23 +75,6 @@ Type these commands in your selected provider's chat **inside mt-agent-devkit**.
 workflow help
 ```
 Shows all available commands and a quick-start guide.
-
-### Analyze Requirement
-```
-analyze <brief description>
-```
-Elicits, analyses, and plans a requirement from scratch. Produces a `/result/analyst/` folder with documents and diagrams suitable for any development team:
-
-| File | For |
-|---|---|
-| `summary.md` | **Start here** — human-readable overview, architecture diagram, delivery plan, open items |
-| `architecture.md` | Component design, data handling, alternatives, diagrams |
-| `implementation_roadmap.md` | Phases, sprints, stories with AC, dependency graph, release criteria, risks |
-| `business_requirements.md` | Functional + non-functional requirements, constraints, assumptions |
-| `testing_plan.md` | Unit / integration / E2E strategy |
-| `spec.md` | Full formalised specification |
-| `elicitation_notes.md` | Full Q&A log from the interview |
-| `diagrams/*.puml` | PlantUML source files for workflow and sequence diagrams |
 
 ### Init Project
 ```

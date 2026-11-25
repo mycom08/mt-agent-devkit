@@ -56,7 +56,6 @@ For complex changes (new workflow stage, major template restructure, new devkit 
 
 | Command | What it does |
 |---------|-------------|
-| `analyze <requirement>` | Runs the Analyst pipeline — produces docs in `result/analyst/` |
 | `init project [path]` | Scaffolds the AI Scrum team into a target project |
 | `update project [path]` | Applies current local templates to an already-initialized project |
 | `workflow help` | Shows this devkit's available commands |

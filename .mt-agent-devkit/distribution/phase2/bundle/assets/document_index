@@ -43,6 +43,21 @@ Quick lookup for all project documents and external references. This is the sing
 | Feature: Test Reports | `tests/feature/<feature_name>/report/` |
 | Feature: Context Anchoring | `docs/feature/<feature_name>/questions/` |
 
+### Feature Analysis Docs
+
+Written by the `analyze requirements` workflow and the feature stages that follow it.
+
+| Document | Path Pattern |
+|---|---|
+| Product Brief | `docs/feature/<feature-slug>/Product_Brief.md` |
+| Requirement Specs | `docs/feature/<feature-slug>/requirements/SPEC-001_<Name>.md` |
+| Architecture Decision Records | `docs/feature/<feature-slug>/adr/ADR-001_<Decision>.md` |
+| UI/UX Design | `docs/feature/<feature-slug>/ui-ux/<Feature_Name>_Design.md` |
+| Feature Roadmap | `docs/feature/<feature-slug>/roadmap/Feature_Roadmap.md` |
+| Test Strategy | `docs/feature/<feature-slug>/testing/Test_Strategy.md` |
+| Test Designs | `docs/feature/<feature-slug>/testing/Test_Design_SPEC-001.md` |
+| Temporary analysis files (not in Git) | `docs/feature/<feature-slug>/tmp/` |
+
 ---
 
 ## External References

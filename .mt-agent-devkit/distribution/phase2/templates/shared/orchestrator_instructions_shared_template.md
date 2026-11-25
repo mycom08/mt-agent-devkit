@@ -24,6 +24,7 @@ Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps 
 | Touchpoint | `subagent` | `orchestrator` | Skills an inline activity may need |
 |---|---|---|---|
 | Create Stories | Inline (already) | Inline | `po-core`, `po-write-story` |
+| Analyze Requirements Stage 4 spec approval | Spawn/resume `po_session` | Inline | `po-core`, `gate-verdict`, `po-comment` |
 | Plan Sprint Stages 1, 2, 4 | Spawn/resume `po_session` | **Spawn/resume (forced)** | none (the spawned PO loads `po-plan-sprint`) |
 | Refine Sprint Stage 2 (after TL) | Spawn/resume | Inline; TL still answers first | `po-core`, `po-answer-questions`, `po-comment` (+ `po-write-story` when an AC changes) |
 | Refine Sprint Stage 4 | Resume | Inline | `po-core`, `po-promote-ready` |
@@ -98,6 +99,7 @@ Read the linked file before executing any workflow.
 | `plan next sprint` / `plan sprint` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Plan_Sprint_Workflow.md` |
 | `create stories` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Create_Stories_Workflow.md` |
 | `refine prototype` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Refine_Prototype_Workflow.md` |
+| `analyze requirements` / `analyze-requirements` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Analyze_Requirements_Workflow.md` |
 | `sync devkit` | `{{AGENT_DIR_PREFIX}}/agents/workflows/Sync_Devkit_Workflow.md` |
 
 Sprint and Start Story workflows share pipeline stages — see `{{AGENT_DIR_PREFIX}}/agents/workflows/Shared_Pipeline_Stages.md`.

@@ -66,7 +66,7 @@ The orchestrator maintains `{COMMAND_ROOT}/tmp/build_software_state.md` to suppo
 - **Populate `Docker Preference` once, at Stage 4 Entry, before any repo folder/agent work begins** (see Stage 4 Entry step 5) — a single shared answer for every repo in the build, not asked per-repo.
 
 **Resume rules (per stage):**
-- **Stage 1 — resumed:** Re-run Stage 1 from scratch. The `analyze` workflow manages its own state file (`analyst_workflow_state.md`) and will resume internally if that file exists. After Stage 1 completes, re-confirm with user before Stage 2.
+- **Stage 1 — resumed:** Re-run Stage 1 from scratch. The Analyst workflow manages its own state file (`analyst_workflow_state.md`) and will resume internally if that file exists. After Stage 1 completes, re-confirm with user before Stage 2.
 - **Stage 2 — resumed:** Check if `/result/build/repo_structure.md` already exists. If it does, skip Stage 2 execution and present the existing file to the user for re-confirmation before Stage 3. If it does not exist, run Stage 2 normally.
 - **Stage 3 — resumed:** Check if per-repo split files already exist under `/result/build/<repo-name>/`. If all expected repo folders exist (count from state file `Repo Count`), skip Stage 3. If any are missing, re-run Stage 3 for missing repos only.
 - **Stage 4 — resumed:** Read `Scaffolded Repos` from the state file first — any repo listed there is done, skip it, no filesystem check needed. Only fall back to a filesystem check (`git init`-initialized folder **and** `.antigravity/agents/docs/build_state.md` present) for repos that predate this field being tracked (an older, untracked `Scaffolded Repos` list) or when the state file itself needed reconstruction. If the GitHub Project already exists (URL in state file), skip `gh project create` and reuse the stored URL. Also check `Java Skeleton References`, `Java GroupId`, and `Java Build Tool`: if any Java-tech-stack repo in `repo_structure.md` has no `Java Skeleton References` entry yet, or `Java GroupId`/`Java Build Tool` is still empty, run Entry step 4 (Java Repo Consultation) before continuing, even if some repos are already scaffolded. Also check `Docker Preference`: if it's still empty, run Entry step 5 (Docker Consultation) before continuing. **Path B interrupted-wave case:** if a repo is **not yet** in `Scaffolded Repos` but its folder is `git init`-initialized **and** has a `.antigravity/agents/docs/build_state.md` (the same filesystem-fallback check above, extended to this case) — treat that repo's steps a–g as already done; do not re-run them. This is the state a wave can be left in if the pipeline crashes after some/all repos finish g but before that wave's step h (CI Bootstrap batch) / step i (wave append) complete. Resume the wave at step h: re-run the CI Bootstrap batch check for that wave's still-qualifying repos — safe even for a repo whose CI Bootstrap agent already completed before the crash, since step h's own guard (`full` **and** no existing `ci.yml`) skips an already-bootstrapped repo rather than double-running it. Then proceed to step i's wave append.
@@ -76,7 +76,7 @@ The orchestrator maintains `{COMMAND_ROOT}/tmp/build_software_state.md` to suppo
 
 ## Stage 1 — Analysis (Analyst Workflow)
 
-**Purpose:** Fully delegate to the existing `analyze` workflow to produce all analyst documents in `/result/analyst/`.
+**Purpose:** Fully delegate to the existing Analyst workflow to produce all analyst documents in `/result/analyst/`.
 
 ### Entry
 
@@ -88,7 +88,7 @@ The orchestrator maintains `{COMMAND_ROOT}/tmp/build_software_state.md` to suppo
 
 ### Execution
 
-3. Invoke the `analyze` workflow by reading `.antigravity/agents/workflows/Analyst_Workflow.md` and executing the full pipeline with the user's idea as the requirement context, **including its Stage 2d Review & Feedback Gate** — do not skip or shortcut Stage 2d just because it's being run under Build Software. All `/result/analyst/` documents are produced exactly as defined in that workflow — no modification.
+3. Invoke the Analyst workflow by reading `.antigravity/agents/workflows/Analyst_Workflow.md` and executing the full pipeline with the user's idea as the requirement context, **including its Stage 2d Review & Feedback Gate** — do not skip or shortcut Stage 2d just because it's being run under Build Software. All `/result/analyst/` documents are produced exactly as defined in that workflow — no modification.
 
    > Do not modify or shorten the Analyst_Workflow pipeline. All documents (`summary.md`, `architecture.md`, `implementation_roadmap.md`, `business_requirements.md`, `testing_plan.md`, `spec.md`, `elicitation_notes.md`, `diagrams/`) must be produced.
 
@@ -184,7 +184,7 @@ The orchestrator maintains `{COMMAND_ROOT}/tmp/build_software_state.md` to suppo
 
 **Purpose:** Split `implementation_roadmap.md` and `architecture.md` into per-repo files, and stage each repo's story list for Stage 5's mandatory roadmap drain (see Stage 5's "Roadmap story drain" step). Full summary docs are marked for copy to all repos.
 
-> **Design note (binding TL decision 2026-06-17):** Stage 3 spawns anonymous general-purpose agents with inline instructions — not the devkit's own TL or PO agents. Their instructions assume sprint story context. Parallel spawn pattern matches `analyze` workflow Stage 2a.
+> **Design note (binding TL decision 2026-06-17):** Stage 3 spawns anonymous general-purpose agents with inline instructions — not the devkit's own TL or PO agents. Their instructions assume sprint story context. Parallel spawn pattern matches the Analyst workflow Stage 2a.
 
 ### Preparation
 

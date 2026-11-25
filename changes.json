@@ -12,8 +12,13 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Business_Analyst_Rules_template.md": "[ST-000245] Requirement spec format: Given/When/Then, ambiguity flags, classified open questions.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/tl-design/SKILL_template.md": "[ST-000245] ADR format with mandatory NFR section and rejection examples.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/qa-test-docs/SKILL_template.md": "[ST-000245] New QA skill: test strategy and test design formats.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/gate-verdict/SKILL_template.md": "[ST-000245] New skill: document status header, approvers and gate verdicts.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/qa-core/SKILL_template.md": "[ST-000245] Load map routes test strategy and design to qa-test-docs."
+      ".mt-agent-devkit/distribution/phase2/templates/skills/gate-verdict/SKILL_template.md": "[ST-000245] New skill: document status header, approvers and gate verdicts; [ST-000246] Strict-mode verdicts go to tmp/State.md.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/qa-core/SKILL_template.md": "[ST-000245] Load map routes test strategy and design to qa-test-docs.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Analyze_Requirements_Workflow_Shared_template.md": "[ST-000246] New analyze requirements workflow: intake to PO-approved specs.",
+      ".mt-agent-devkit/distribution/phase2/templates/github/workflows/Analyze_Requirements_Workflow_template.md": "[ST-000246] New GitHub variant of the analyze requirements workflow.",
+      ".mt-agent-devkit/distribution/phase2/templates/strict/workflows/Analyze_Requirements_Workflow_template.md": "[ST-000246] New strict variant of the analyze requirements workflow.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-000246] Analyze requirements trigger row and PO spec approval touchpoint.",
+      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000246] Lists the feature analysis document folders."
     },
     "deployment": {
       "schema_version": 1,
