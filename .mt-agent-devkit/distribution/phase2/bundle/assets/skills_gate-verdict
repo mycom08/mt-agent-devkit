@@ -54,7 +54,7 @@ Revision: <commit SHA of the reviewed document>
 
 **GitHub mode:** write the verdict to a temporary body file and post it with `gh pr comment <PR-number> --body-file <file>` on the PR holding the document. Never use `gh pr review --approve`: agents share one account and GitHub blocks self-approval. Count a verdict only from an `OWNER`, `MEMBER` or `COLLABORATOR`. The approver then updates the header.
 
-**Strict mode:** no PR or GitHub calls. Append the same block, with the actor and UTC time, under `## Gate Verdicts` in `docs/feature/<feature-slug>/tmp/state.md` (no feature folder: the story file's `## Comments`). `Revision:` is the commit SHA, or `git hash-object <file>` for uncommitted content. The approver then updates the header. The same approvers and both-approvals rule apply.
+**Strict mode:** no PR or GitHub calls. Append the same block, with the actor and UTC time, under `## Gate Verdicts` in `docs/feature/<feature-slug>/tmp/State.md` (no feature folder: the story file's `## Comments`). `Revision:` is the commit SHA, or `git hash-object <file>` for uncommitted content. The approver then updates the header. The same approvers and both-approvals rule apply.
 
 Example of a completed test document header:
 

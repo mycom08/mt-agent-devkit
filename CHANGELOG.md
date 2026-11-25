@@ -29,6 +29,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 ### Changes
 
 - [ST-000245] Add shared formats for requirement specs, ADRs with mandatory NFRs, test documents and gate verdicts.
+- [ST-000246] Add the `analyze requirements` target workflow (intake to PO-approved specs) and retire the devkit's standalone `analyze` triggers; Analyst runs only inside `build software`.
 - [Docs] Maintainer docs and skills name the Phase 2 templates as the active source and describe the current `changes.json` convention.
 
 ### Bug Fixes

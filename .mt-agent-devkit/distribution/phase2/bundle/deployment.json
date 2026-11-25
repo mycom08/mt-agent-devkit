@@ -990,7 +990,7 @@
     {
       "id": "skills/gate-verdict",
       "path": "assets/skills_gate-verdict",
-      "sha256": "97b4559481ebced27d3be8549efea9927dad0dd3989fe350095bd1023a26b40b",
+      "sha256": "520f929bba0ad7738d591c9817e001784aaed74abb69c93169da4b0cbb92b1f2",
       "bytes": 3404,
       "kind": "template"
     },
@@ -1520,6 +1520,27 @@
       "kind": "adapter"
     },
     {
+      "id": "workflow_shared/Analyze_Requirements_Workflow.md",
+      "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
+      "sha256": "c8145f27105b3e5dc3ead72756cf61e47509a119eea41b9492c2a3b9db54526e",
+      "bytes": 12905,
+      "kind": "template"
+    },
+    {
+      "id": "workflow_github/Analyze_Requirements_Workflow.md",
+      "path": "assets/workflow_github_Analyze_Requirements_Workflow.md",
+      "sha256": "2da3be897d36441b491adc5c8e74b460c7eef319deaa664078e09242cff7f3f4",
+      "bytes": 374,
+      "kind": "template"
+    },
+    {
+      "id": "workflow_strict/Analyze_Requirements_Workflow.md",
+      "path": "assets/workflow_strict_Analyze_Requirements_Workflow.md",
+      "sha256": "b228093d5af48c7148f0e788deb35c34d2f793f23504567e36c2c524547bb966",
+      "bytes": 284,
+      "kind": "template"
+    },
+    {
       "id": "workflow_shared/Create_Stories_Workflow.md",
       "path": "assets/workflow_shared_Create_Stories_Workflow.md",
       "sha256": "292f51105af37e9687ac91f5235030d791859bfad9ba7ac03dace1a8410c7511",
@@ -1690,8 +1711,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "bbe28b9edb8febe2defce0e49fb6b2cd7de51516d6e22588aeb61965e1afca8f",
-      "bytes": 14657,
+      "sha256": "97e264bad552aef2364d1721ffd17f1f6724f006acb4c2803238a9c2f3d94e80",
+      "bytes": 14899,
       "kind": "template"
     },
     {
@@ -1767,8 +1788,8 @@
     {
       "id": "document_index",
       "path": "assets/document_index",
-      "sha256": "2f65c8ecffdad591eac8458d29203e7d5c13c1bb4fb8b0c81cd2fbf36d9ba479",
-      "bytes": 2153,
+      "sha256": "6c676266bda14e5aab95f8923bdb7dd44d1774abe1b139659315ed541aabe18b",
+      "bytes": 2945,
       "kind": "template"
     },
     {
@@ -7581,6 +7602,56 @@
       "required": true
     },
     {
+      "id": "workflow_github/Analyze_Requirements_Workflow.md",
+      "sources": [
+        "workflow_shared/Analyze_Requirements_Workflow.md",
+        "workflow_github/Analyze_Requirements_Workflow.md"
+      ],
+      "destination": ".mt-agent-devkit/workflows/Analyze_Requirements_Workflow.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "shared_mode",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "workflow_strict/Analyze_Requirements_Workflow.md",
+      "sources": [
+        "workflow_shared/Analyze_Requirements_Workflow.md",
+        "workflow_strict/Analyze_Requirements_Workflow.md"
+      ],
+      "destination": ".mt-agent-devkit/workflows/Analyze_Requirements_Workflow.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "shared_mode",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
       "id": "workflow_github/Create_Stories_Workflow.md",
       "sources": [
         "workflow_shared/Create_Stories_Workflow.md",
@@ -13371,6 +13442,86 @@
       "id": "retire/antigravity/repo/strict/instructions/ui_ux_designer_instructions.md/ui_ux_designer_instructions.md",
       "sources": [],
       "destination": ".antigravity/agents/ui_ux_designer_instructions.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/github/workflow_github/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+      "sources": [],
+      "destination": ".claude/agents/workflows/Analyze_Requirements_Workflow.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/workflow_github/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+      "sources": [],
+      "destination": ".antigravity/agents/workflows/Analyze_Requirements_Workflow.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/workflow_strict/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+      "sources": [],
+      "destination": ".claude/agents/workflows/Analyze_Requirements_Workflow.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/workflow_strict/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+      "sources": [],
+      "destination": ".antigravity/agents/workflows/Analyze_Requirements_Workflow.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
@@ -20195,6 +20346,38 @@
         "path": ".antigravity/agents/ui_ux_designer_instructions.md",
         "after_verified_ids": [
           "instructions/ui_ux_designer_instructions.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/workflow_github/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+        "path": ".claude/agents/workflows/Analyze_Requirements_Workflow.md",
+        "after_verified_ids": [
+          "workflow_github/Analyze_Requirements_Workflow.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/workflow_github/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+        "path": ".antigravity/agents/workflows/Analyze_Requirements_Workflow.md",
+        "after_verified_ids": [
+          "workflow_github/Analyze_Requirements_Workflow.md",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/workflow_strict/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+        "path": ".claude/agents/workflows/Analyze_Requirements_Workflow.md",
+        "after_verified_ids": [
+          "workflow_strict/Analyze_Requirements_Workflow.md",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/workflow_strict/Analyze_Requirements_Workflow.md/workflows/Analyze_Requirements_Workflow.md",
+        "path": ".antigravity/agents/workflows/Analyze_Requirements_Workflow.md",
+        "after_verified_ids": [
+          "workflow_strict/Analyze_Requirements_Workflow.md",
           "root_repo/AGENTS.md"
         ]
       },

@@ -1,8 +1,8 @@
 # Analyst Workflow
 
-Triggered by: `"analyze requirement: <brief description>"` or `"analyze <brief description>"` in the selected provider entrypoint
+Runs only as Stage 1 of the Build Software workflow; it has no trigger of its own.
 
-The text after the trigger keyword is the user's **initial requirement context**. If no context is provided, the orchestrator asks the user for a one-line description before starting.
+The idea Build Software passes in is the user's **initial requirement context**. If no context is provided, the orchestrator asks the user for a one-line description before starting.
 
 **Output folder:** `/result/analyst/`
 

@@ -187,7 +187,7 @@ Devkit-internal, like the trace convention above. **Never give this file to a sp
 **Blockers & Watch-outs** (own section, ≤ 5 lines): sprint-scoped conditions too transient for memory and too cross-cutting for one entry — carries forward across rewrites until resolved or sprint end, same as `Agent_Common_Bootstrap.md`.
 
 **When to update (rewrite the current entry in place, or start a new one for a new piece of work):**
-- **On workflow or stage completion** — after `analyze`, `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, PR/story refs).
+- **On workflow or stage completion** — after `init project`, `update project`, an `apply retros` batch, a `build software` stage, or a devkit sprint stage finishes, log what was done (deliverables, paths, PR/story refs).
 - **On explicit close** — if the user says "end session" or "wrap up", finalize the current entry before ending, even if no stage completed since the last write.
 
 **Trigger:** user says **"report working status"** (aliases: "status report", "daily status"). No agents are spawned — read the record directly and summarize the most recent entry to the user (include earlier retained entries only if asked for more history).
@@ -204,12 +204,11 @@ No agents are spawned. The orchestrator prints the following reference directly 
 
 ### mt-agent-devkit — Available Commands
 
-This devkit has three workflows of its own. All sprint execution workflows (`continue sprint`, `start story`, `plan sprint`, etc.) are injected into your target project by `init project` — they do not exist here.
+These are the devkit's own workflows. All sprint execution workflows (`continue sprint`, `start story`, `plan sprint`, etc.) are injected into your target project by `init project` — they do not exist here.
 
 | Command | Alias | What it does |
 |---|---|---|
 | `workflow help` | — | Show this reference |
-| `analyze <requirement>` | `analyze requirement: <text>` | Analyse a project idea from scratch — produces business, technical, and planning documents plus diagrams |
 | `init project [path]` | `init project` | Scaffold a complete AI Scrum team setup into a target project (prompts for mode) |
 | `update project [path]` | `update project` | Apply latest local devkit templates to an already-initialized target project (same logic as `sync devkit` but uses local files) |
 | `build software <idea>` | — | End-to-end workflow: analyze idea, plan repo structure, split docs per repo, initialise repos, and wire the AI Scrum team (Stages 1–3 available; Stages 4–5 in a future release) |
@@ -232,15 +231,11 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 ### Typical first-time flow — GitHub mode
 
 ```
-1. analyze <your idea>
-   └─ Produces: summary.md, architecture.md, implementation_roadmap.md,
-                business_requirements.md, testing_plan.md, diagrams/
-
-2. init project <path/to/your/project>
+1. init project <path/to/your/project>
    └─ Select: github
    └─ Injects: CLAUDE.md, agent instructions, rules, memory files, working records
 
-3. In your project — open Claude Code and use:
+2. In your project — open Claude Code and use:
    plan next sprint     → plan the first sprint (creates GitHub Issues)
    continue sprint      → run the full sprint pipeline
    start story ST-XXXXX → run a single story
@@ -250,14 +245,12 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 ### Typical first-time flow — Strict mode
 
 ```
-1. analyze <your idea>                   (optional)
-
-2. init project <path/to/your/project>
+1. init project <path/to/your/project>
    └─ Select: strict
    └─ Injects: CLAUDE.md (mode: strict), agent files (all gitignored)
    └─ Creates: .claude/agents/docs/ structure + story_counter.txt
 
-3. In your project — open Claude Code and use:
+2. In your project — open Claude Code and use:
    create stories       → create stories as local MD files
    plan next sprint     → plan sprint from local backlog
    continue sprint      → run the full sprint pipeline
@@ -268,7 +261,7 @@ This devkit has three workflows of its own. All sprint execution workflows (`con
 
 ---
 
-### What `analyze` produces
+### What the `build software` analysis stage produces
 
 Output is written to `/result/analyst/`. Start with `summary.md`.
 
@@ -338,10 +331,7 @@ Scaffolds these files into the target project. The exact structure depends on th
 
 ## Analyst Workflow
 
-Trigger: user says **"analyze requirement: \<brief description\>"** or **"analyze \<brief description\>"**
-
-The text after the trigger keyword is the initial requirement context. Example:
-> `analyze users should be able to define custom ABAC policies via a UI`
+No trigger of its own: it runs only as Stage 1 of `build software`.
 
 Output is written to `/result/analyst/`. Produces business, technical, and planning documents plus diagrams — suitable for any development team, not just teams using this devkit.
 
@@ -381,7 +371,7 @@ The text after the trigger keyword is the user's idea. If omitted, the workflow 
 
 End-to-end workflow that takes a software idea from raw description through to initialised repositories with a wired AI Scrum team:
 
-- **Stage 1** — Runs the full `analyze` workflow; produces all analyst documents in `/result/analyst/`
+- **Stage 1** — Runs the full Analyst workflow; produces all analyst documents in `/result/analyst/`
 - **Stage 2** — Orchestrator reads `architecture.md` and produces `/result/build/repo_structure.md` (repo decision + table)
 - **Stage 3** — Parallel agents split `implementation_roadmap.md` and `architecture.md` per repo; full summary docs copied to all repos
 - **Stages 4–5** — Repo initialisation and Scrum team wiring (implemented in ST-000003)
@@ -412,7 +402,7 @@ Trigger: user says **"audit agent files"**
 
 Devkit-internal maintainer workflow that scans the devkit's own agent instruction/rules/workflow corpus (`.claude/agents/templates/`, `.mt-agent-devkit/workflows/commands/`, `.mt-agent-devkit/`) for Tier A findings only: cross-file duplication (byte-identical and role-parallel), contradictions, and dead or orphaned references. Spawns a general-purpose subagent to perform the scan so the corpus text never enters the orchestrator's own context. Writes a single timestamped report and applies **only** user-approved findings — per-finding approval, never a whole-report accept — on a dedicated branch with a git-diff-scoped revert path.
 
-**Not an agent role.** There is no `auditor_instructions.md` and no roster entry — this workflow is reached purely through this trigger row, the same pattern `analyze` already uses.
+**Not an agent role.** There is no `auditor_instructions.md` and no roster entry — this workflow is reached purely through this trigger row, the same pattern `apply retros` already uses.
 
 Read `.mt-agent-devkit/workflows/commands/Audit_Agent_Files_Workflow.md` for the complete pipeline before executing.
 
