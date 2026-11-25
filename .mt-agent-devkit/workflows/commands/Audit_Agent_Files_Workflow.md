@@ -6,8 +6,6 @@ Triggered by: `"audit agent files"` in the devkit's `CLAUDE.md`.
 
 **This is a workflow, not an agent role.** There is no `auditor_instructions.md` and no roster entry — the scan is performed by an anonymous general-purpose subagent, spawned fresh on every run, the same pattern `Analyst_Workflow.md` and `Build_Software_Workflow.md`'s Java-skeleton/UI-prototype/CI-bootstrap generation steps already use. Do not add `audit agent files` or an "Auditor" role to `Story_Standard*`, the `po-*` skills, `Create_Stories_Workflow*`, `Sprint_Workflow*`, or the `CLAUDE.md` Agent Roster table — none of those enumerations apply to this workflow.
 
-**Scope note (this story, ST-000035):** this workflow is built and its apply/branch/revert mechanism is exercised by running it, but the devkit corpus's actual first real audit pass is a separate story (ST-000036). A run of this workflow today is expected to find few or zero findings above Tier A's thresholds; that is a property of the corpus, not a defect in the workflow.
-
 ---
 
 ## Report File
@@ -20,7 +18,7 @@ Bind `{COMMAND_ROOT}` using `command_root(provider, run_id, 'audit-agent-files')
 ```markdown
 # Audit Report — YYYYMMDD_HHMMSS
 **Devkit Version:** <VERSION contents at scan time>
-**Scanned:** <count> files across .claude/agents/templates and .mt-agent-devkit
+**Scanned:** <count> files across .mt-agent-devkit (including the active templates) and .claude/agents/workflows
 **Status:** pending-approval | applying | complete
 ```
 
@@ -72,15 +70,16 @@ Step 1 — read the detection spec in full before scanning anything:
 This file is the complete and only behavior spec for this scan: the four finding classes (D-n, RP-n, C-n, X-n), the duplication-matching normalization rules, the >=15-line + mandatory-read-list gate, the closed role-alias table, the N>=2/N>=3 thresholds, the three-condition contradiction test and its carve-outs, the <!-- audit:keep --> absolute exclusion, and the dead-reference resolution rule. Do not invent detection criteria beyond what that file states — if something is ambiguous under the spec, do not report it as a finding.
 
 Step 2 — scan these paths only:
-- .claude/agents/templates/   (EXCLUDING .claude/agents/templates/github/** and .claude/agents/templates/strict/** entirely — Audit_Rules.md §3 carve-out)
-- .claude/agents/workflows/
-- .mt-agent-devkit/     (EXCLUDING {RUNTIME_ROOT}/tmp/, {RUNTIME_ROOT}/working-record/, {RUNTIME_ROOT}/retros/, {COMMAND_ROOT}/internal/ — these are runtime/output paths, not corpus)
+- .mt-agent-devkit/   (includes the active target templates under distribution/phase2/templates/; EXCLUDING the compiled distribution/phase2/bundle/)
+- .claude/agents/workflows/   (EXCLUDING generated wrappers)
+Never scan .claude/agents/templates/ (frozen legacy) or runtime/output paths ({RUNTIME_ROOT}/, {COMMAND_ROOT}/internal/), and never propose a fix to a file there.
+In the target templates, a shared workflow (or the shared orchestrator instructions) plus its github/ or strict/ variant is ONE deployed file; apply Audit_Rules.md §3 to it.
 
 Step 3 — for each finding class, apply Audit_Rules.md's rules exactly:
-- D-n: byte-identical after whitespace-collapse only, >=15 contiguous lines, N>=2, target file already on the consuming agent's mandatory read list (Agent_Common_Bootstrap.md §1's Project Priming/Rules/Memory sequence plus that role's own Rules file's own "Mandatory Reading" section — not a conditional trigger pointer).
+- D-n: byte-identical after whitespace-collapse only, >=15 contiguous lines, N>=2, target file already on the consuming agent's mandatory read list as Audit_Rules.md §2 defines it (spawn-time load map and bootstrap read sequence — not a task skill or conditional trigger pointer).
 - RP-n: whitespace-collapse + closed role-alias substitution, uniform substitution within each instance, N>=3, same >=15-line + mandatory-read-list gate, never YAML frontmatter or "## Your Role" sections.
-- C-n: same-subject + both-unconditional + co-reachable, with every carve-out in Audit_Rules.md §3 applied (mode bifurcation, template-vs-working mirrors, role-scoped views, lifecycle phases, audit:keep). Report-only — do not propose an edit or pick a side.
-- X-n: dead file-path or section-anchor references (per Audit_Rules.md §4's three-root resolution), and orphaned files. State a proposed fix only when the intended target is unambiguous; otherwise propose removal and say so.
+- C-n: same-subject + both-unconditional + co-reachable, with every carve-out in Audit_Rules.md §3 applied (mode bifurcation, shared file plus variant, canonical-vs-template mirrors, role-scoped views, lifecycle phases, audit:keep). Report-only — do not propose an edit or pick a side.
+- X-n: dead file-path or section-anchor references (per Audit_Rules.md §4's resolution rule), and orphaned files. State a proposed fix only when the intended target is unambiguous; otherwise propose removal and say so.
 
 Step 4 — return your findings as a single compact Markdown block, grouped in this exact order, using this exact section-header and per-line format (this becomes the body of the report file — do not add commentary outside it):
 
@@ -105,7 +104,7 @@ Also report: total file count scanned (for the report header).
 Do not edit any file. Do not write the report file yourself — return the finding list as your final response; the orchestrator persists it. Report back your findings block plus the scanned-file count (max 5 bullets is not required here — return the full findings block verbatim, that is the deliverable).
 ```
 
-The subagent's return value is the finding list only — never the corpus text it read to produce it. This is the context-isolation mechanism: the orchestrator's own session never ingests ~300 KB of corpus Markdown, regardless of how large the devkit grows.
+The subagent's return value is the finding list only — never the corpus text it read to produce it. This is the context-isolation mechanism: the orchestrator's own session never ingests the corpus Markdown, regardless of how large the devkit grows.
 
 ---
 
@@ -141,16 +140,22 @@ Runs only when at least one `D-n`/`RP-n`/`X-n` finding was approved.
 2. **Create a dedicated branch**: `audit/apply-YYYYMMDDHHMMSS` (same timestamp as the report), branched from the current branch.
 3. **Capture baseline:** `git diff --stat` (expected empty — confirms a clean start on the new branch) and a baseline validator run:
    ```
-   python scripts/validate_templates.py .claude/agents/templates .mt-agent-devkit
+   python scripts/validate_templates.py .claude/agents/workflows .mt-agent-devkit
    ```
-   Explicit path arguments, not the bare default scan — this is the only way `working/` gets real per-file Invariant #1B/#2/#6 coverage; the bare default only scans `templates/`+`workflows/`. Record the baseline `[ERROR]`/`[KNOWN_ISSUE]` lines verbatim.
-4. **Apply each approved finding's edit** directly to the corpus files, per `Audit_Rules.md`'s proposed-edit description for that class (`D-n`/`RP-n`: canonical block in the target file, pointer left behind in the others; `X-n`: fix or remove the dead reference).
-5. **Capture post-edit state:** `git diff --stat` (now non-empty — this is the scoped file list for a possible revert) and a second validator run with the **same explicit paths** as step 3.
-6. **Compare validator runs.** Any `[ERROR]` line present after the batch that was not present in the baseline is a **new finding** — regardless of which file it's in or whether it looks related to this batch's edits.
-   - **New finding found → revert the whole batch.** `git checkout -- <every file listed in the post-edit git diff --stat>`. This restores those files to their pre-batch state. Do not attempt a partial keep — the whole batch reverts together, since a new validator finding cannot be reliably attributed to only one of the applied edits.
+   Explicit path arguments, not the bare default scan — the default does not scan the canonical files under `.mt-agent-devkit/`. Record the baseline `[ERROR]`/`[KNOWN_ISSUE]` lines verbatim.
+4. **Apply each approved finding's edit** to the source files, per `Audit_Rules.md`'s proposed-edit description for that class (`D-n`/`RP-n`: canonical block in the target file, pointer left behind in the others; `X-n`: fix or remove the dead reference). Never edit `.claude/agents/templates/`, `bundle/`, a generated wrapper or a generated block. Where an edited file has a canonical or template pair, follow the dual-update rule (`Project_Priming_Read_On_Demand.md §15`). If an edited skill feeds generated blocks, run `python .mt-agent-devkit/scripts/generate_common_blocks.py`.
+5. **Rebuild and check the deployment bundle** whenever the batch edited a bundle source (any active template, or another file `build_bundle.py` reads). A removed template also needs `git rm` of its bundle asset.
+   ```
+   python .mt-agent-devkit/distribution/phase2/build_bundle.py --root . --output .mt-agent-devkit/distribution/phase2/bundle
+   python .mt-agent-devkit/distribution/phase2/build_bundle.py --root . --output .mt-agent-devkit/distribution/phase2/bundle --check
+   ```
+6. **Record the batch as the `change-metadata` skill describes** (`.mt-agent-devkit/skills/change-metadata/SKILL.md`): one line per changed shipped file in `descriptions` of the current `-SNAPSHOT` entry, with `[Audit YYYYMMDD_HHMMSS]` in place of the story ID, appended with `; ` to any existing line, plus a `CHANGELOG.md` bullet under the current `Unreleased` heading. Leave `new`, `modified`, `removed` and `files` alone, never create a version key and never edit `VERSION`. Files that ship nothing are not listed in `changes.json`.
+7. **Capture post-edit state:** `git status --short` and `git diff --stat HEAD` (the file list that scopes a possible revert), and a second validator run with the **same explicit paths** as step 3.
+8. **Compare validator runs** by file and message, ignoring line numbers (edits shift them) and lines under `distribution/phase2/bundle/` (compiled output, covered by `--check`). Any `[ERROR]` that appears more often after the batch than in the baseline is a **new finding** — regardless of which file it's in or whether it looks related to this batch's edits. A failing `build_bundle.py --check` or `generate_common_blocks.py --check` counts the same way.
+   - **New finding → revert the whole batch**, including the bundle, `changes.json` and `CHANGELOG.md` edits: `git restore --staged --worktree <every tracked file from step 7>`, and delete only the untracked files this batch created. Do not attempt a partial keep — a new finding cannot be reliably attributed to one of the applied edits.
    - **No new finding → keep the batch.** Stage the changed files and commit them on the dedicated branch, message: `audit: apply <N> finding(s) from audit_report_YYYYMMDD_HHMMSS.md` listing the applied finding IDs in the body.
-7. **Update `changes.json` for any applied edit under `.claude/agents/templates/`** — target-project `update project`/`sync devkit` diff against `changes.json` by version, so a template fix left out of it is silently invisible to already-initialized projects. Add each touched template path to the `modified` array of the **current** `-SNAPSHOT` key in `changes.json` (the key named by the root `VERSION` file — the `release` workflow already created it) and append a one-line cause note to that path's `descriptions` entry (append to an existing description if the path already has one this version, e.g. from other same-version work) — the same fold-in pattern used for any other small fix landed against the current unreleased version. **Never create a new version key and never edit `VERSION` by hand** — `.github/workflows/release.yml` owns the version end to end. Edits confined to `.mt-agent-devkit/workflows/commands/` or `.mt-agent-devkit/` are devkit-internal and never touch `changes.json` (same rule `Apply_Retros_Workflow.md` and the `CLAUDE.md` Apply Retros section already state). Include this file in the same commit as step 6.
-8. **Git is the primary revert mechanism, not the validator verdict** — the validator comparison in step 6 is what *triggers* a revert decision, but the actual undo is `git checkout --`, scoped to exactly the files this batch touched (from step 5's diff --stat), never a wider `git reset`/`git clean`. If a revert happens after `changes.json` was already updated in step 7, `git checkout --` the `changes.json` edit too — it's part of the same batch and reverts with it.
+
+Git is the revert mechanism; the comparison in step 8 only triggers it. Scope the revert to exactly the files this batch touched, never a wider `git reset`/`git clean`.
 
 ---
 
@@ -164,7 +169,7 @@ Runs only when at least one `D-n`/`RP-n`/`X-n` finding was approved.
    Scanned:   N files
    Findings:  D-n: X | RP-n: X | C-n: X | X-n: X
    Applied:   M finding(s) — branch audit/apply-YYYYMMDDHHMMSS (or "none — no findings approved")
-   Reverted:  <finding IDs, if step 4's validator comparison caught a new finding — or "none">
+   Reverted:  <finding IDs, if Stage 4's validator comparison caught a new finding — or "none">
    C-n resolutions recorded: <count, or "none">
    ```
    If a branch was created and kept, tell the user it is ready for their own review/merge — this workflow does not merge it automatically.
@@ -178,8 +183,10 @@ Runs only when at least one `D-n`/`RP-n`/`X-n` finding was approved.
 - **Per-finding approval, never whole-report accept.** Stage 3 requires explicit selection; there is no single "approve everything" action that also covers `RP-n`.
 - **`RP-n` is always opt-in, individually.** This is a hard rule, not a suggestion — see Stage 3's approval semantics.
 - **`C-n` never produces a file edit.** Its "approval" is the user's stated resolution, recorded for the audit trail only.
-- **Dedicated branch, git-scoped revert.** Stage 4 never edits directly on the branch the workflow was invoked from; revert is always `git checkout -- <files>` scoped to the batch's own `git diff --stat`, never a broader destructive command.
-- **Validator gate uses explicit paths.** Always `python scripts/validate_templates.py .claude/agents/templates .mt-agent-devkit` in Stage 4 — the bare default scan omits `working/` and would silently drop the only real coverage this workflow's edits get there.
-- **Accepted gap, not fixed here:** `working/` coverage under the validator's Invariant #1A remains weaker than `templates/`/`workflows/` (see `Audit_Rules.md §4`) — git diff/revert is the actual safety net for that gap, not the validator verdict alone.
-- **`changes.json` update is mandatory for applied `templates/` edits, not optional.** Stage 4 step 7 — a kept batch that touches `.claude/agents/templates/` and skips `changes.json` is invisible to target-project `update project`/`sync devkit` runs, which diff by version. Fold into the current `-SNAPSHOT` key; never create a version key and never hand-edit `VERSION` — the `release` workflow owns it.
+- **Dedicated branch, git-scoped revert.** Stage 4 never edits directly on the branch the workflow was invoked from; revert is always scoped to the files the batch itself changed (Stage 4 step 8), never a broader destructive command.
+- **Validator gate uses explicit paths.** Always `python scripts/validate_templates.py .claude/agents/workflows .mt-agent-devkit` in Stage 4 — the bare default scan omits the canonical files under `.mt-agent-devkit/`.
+- **Accepted gap, not fixed here:** the validator's reference check is weaker than `X-n` detection (see `Audit_Rules.md §4`) — git diff/revert is the actual safety net for that gap, not the validator verdict alone.
+- **Rebuild and check the bundle** after editing any bundle source (Stage 4 step 5).
+- **Record shipped changes** as the `change-metadata` skill describes (Stage 4 step 6) — a shipped fix left out of `descriptions` is invisible in the target's `sync devkit` update plan.
+- **Frozen legacy is out of bounds.** No finding proposes, and no apply makes, an edit under `.claude/agents/templates/`.
 - **This is a workflow, not a role.** No `**Assigned:**` value, no roster row, no memory file, no working record. See the header note above for the full list of enumerations this workflow is deliberately absent from.

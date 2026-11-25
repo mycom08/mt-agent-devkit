@@ -28,6 +28,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000353] Apply Retros and Audit Agent Files now work on the active templates, rebuild the bundle and record changes correctly.
 - [ST-000249] `analyze requirements` now merges its docs PR, creates backlog and open-topic stories and runs correction rounds.
 - [ST-000245] Add shared formats for requirement specs, ADRs with mandatory NFRs, test documents and gate verdicts.
 - [ST-000246] Add the `analyze requirements` target workflow (intake to PO-approved specs) and retire the devkit's standalone `analyze` triggers; Analyst runs only inside `build software`.
