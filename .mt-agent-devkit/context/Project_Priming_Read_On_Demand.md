@@ -67,42 +67,28 @@ Sprint execution commands (`continue sprint`, `start story`, etc.) live in the *
 
 ## 15. How to Update a Template
 
-When a rule, workflow, or instruction file needs to change, update the source template in `.claude/agents/templates/` — never edit a target project's installed copy directly.
+When a rule, skill, workflow, or instruction file shipped to target projects needs to change, edit the active template in `.mt-agent-devkit/distribution/phase2/templates/` — never a target project's installed copy. `.claude/agents/templates/` is frozen legacy: change it only for a reviewed sync bridge. In this section, `templates/` means the active folder.
 
-> **Dual-update + drift check:** Many templates have a devkit working mirror under `.mt-agent-devkit/` (e.g. `templates/rules/Story_Standard_template.md` ↔ `working/rules/Story_Standard.md`). Update **both** copies in the same change. Before editing, diff the mirror against its template (`git diff --no-index <template> <mirror>`, or read them side by side) and flag any **pre-existing** divergence — fix it in scope or record it as a follow-up story, so the two copies don't silently drift.
+> **Dual-update + drift check:** Many templates have a devkit canonical copy under `.mt-agent-devkit/` (e.g. `templates/skills/tl-design/SKILL_template.md` ↔ `.mt-agent-devkit/skills/tl-design/SKILL.md`). Update **both** copies in the same change. Before editing, diff the two (`git diff --no-index <template> <canonical>`) and flag any **pre-existing** divergence — fix it in scope or record it as a follow-up story, so the two copies don't silently drift.
 >
 > **Carve-outs:**
-> - **Intentionally-diverged mirror:** If the working mirror was deliberately rewritten for a different operational context (e.g. the devkit runs GitHub-mode-only while the template is target-project-generic), the two copies are *not* expected to match. Do **not** force the mirror to mirror the template edit — instead note the divergence as intentional (in the PR description and retro) and update the mirror only where the change actually applies to the devkit's context.
-> - **No working mirror exists:** Some templates have no mirror under `.mt-agent-devkit/` (the file is absent, not merely diverged — e.g. `Strict_Mode_Story_Guide_template.md`, which the GitHub-mode devkit never installs for its own agents). In that case there is nothing to dual-update: note the absence and proceed; do **not** create a mirror the devkit does not use.
+> - **Intentionally-diverged copy:** If the canonical copy was deliberately rewritten for a different operational context (e.g. the devkit runs GitHub-mode-only while the template is target-project-generic), the two are *not* expected to match. Do **not** force them together — note the divergence as intentional (in the PR description and retro) and update the canonical copy only where the change actually applies to the devkit.
+> - **No canonical copy exists:** Some templates have none (e.g. `Strict_Mode_Story_Guide_template.md`, which the GitHub-mode devkit never installs for its own agents). Note the absence and proceed; do **not** create a copy the devkit does not use.
 
 **Steps (always in this order):**
 
-1. **Edit the template file** under `.claude/agents/templates/` (e.g., `.claude/agents/templates/rules/QA_Rules_Bootstrap_template.md`)
-2. **Never touch the version.** `.github/workflows/release.yml` owns `VERSION` end to end — at release time it strips the `-SNAPSHOT` suffix, stamps the `CHANGELOG.md` heading, renames the `changes.json` key, tags the release, then opens the next snapshot in all three files. Read `VERSION` to learn the current key; do not edit it, and do not create a `changes.json` version key.
-3. **Fold your files into the existing `-SNAPSHOT` entry** in `changes.json` — the top key, named by `VERSION` (e.g. `0.1.49-SNAPSHOT`). This file is ordered **newest-first (descending)**: the current first key is the version in progress and the last key is `0.0.1`. If a path already carries a `descriptions` clause from earlier work on the same unreleased version, **append** yours rather than replacing it:
-
-```json
-"0.1.49-SNAPSHOT": {
-  "new": [],
-  "modified": [
-    ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md"
-  ],
-  "descriptions": {
-    ".claude/agents/templates/rules/QA_Rules_Bootstrap_template.md": "Fix: one-line summary of what changed and why"
-  }
-}
-```
-
-Use `"new"` for files added for the first time; `"modified"` for files that already existed. Both can be non-empty in the same entry.
-
-> Target projects running `sync devkit` resolve the latest release from the highest `vX.Y.Z` tag, compare it against their installed version, and fetch only the files listed in every version entry between their current version and the latest. Keep the file's **newest-first (descending)** order — inserting out of order will cause `sync devkit` to skip or double-apply changes. `validate_templates.py` checks semver parseability only, never ordering direction, so a misplaced entry will not be caught by CI.
+1. **Edit the active template** under `.mt-agent-devkit/distribution/phase2/templates/`.
+2. **Rebuild the bundle** with `python .mt-agent-devkit/distribution/phase2/build_bundle.py --root . --output .mt-agent-devkit/distribution/phase2/bundle`, then run the same command with `--check`.
+3. **Never touch the version.** `.github/workflows/release.yml` owns `VERSION` end to end — do not edit it, and do not create a `changes.json` version key.
+4. **Record the change** in the current `-SNAPSHOT` entry of `changes.json` and add a `CHANGELOG.md` bullet, following the `change-metadata` skill.
 
 ### Adding a New Agent Role (Nth Role)
 
 Adding a role to the roster is a corpus-wide ripple, not a two-file change. Beyond the role's own instruction/rules template pair, check every existing enumeration of the current role list:
 
 - `Story_Standard_template.md` (+ PO variant) — `**Assigned:**` valid-values list
-- `Product_Owner_Rules_template.md` — roadmap `**Assigned:**` rule
+- `templates/skills/po-write-story/SKILL_template.md` — `**Assigned:**` rule
+- `build_bundle.py` — role and skill tuples
 - `Create_Stories_Workflow_Shared_template.md`, `Sprint_Workflow_Shared_template.md` — implementer-role enumerations
 - `Repo_Root_Shared_template.md` — Agent Roster table
 - Devkit-internal file-count tables/prose in `Init_Project_Workflow.md`, `Build_Software_Workflow.md`, `Update_Project_Workflow.md`, `Sync_Devkit_Workflow*` (both the "Applies to" and separate "Expected files — rules/" enumerations — these are two distinct lists, easy to update only one)
@@ -119,7 +105,7 @@ Porting an already-validated bootstrap/on-demand split (e.g. the devkit-team's o
 - **The two new files themselves** — same section boundary and numbering as the validated reference (bootstrap = unconditional-before-first-tool-call content; on-demand = everything else). Keep numbering gaps rather than renumbering when a section moves to the companion file — a stale citation should resolve to nothing, not silently to a different rule.
 - **Every citing file** — grep the *old* filename with `§` across both `templates/` and `working/` (`grep -rn "OldFile.md §"`) and re-point each hit at the correct tier file and (possibly shifted) section number.
 - **Workflow enumerations** — `init project` / `sync devkit` / `update project` workflow files and the scaffold scripts (`scaffold_mechanical.sh`/`.ps1`, both `.claude/` and `.antigravity/` surfaces) that list template files by name.
-- **`changes.json`** — new/renamed file entries (see the dual-update steps above).
+- **Bundle and `changes.json`** — rebuild and record new, renamed or retired files (see the steps above).
 - **`scripts/validate_templates.py`'s `SECTION_REF_ALIAS`** — if the old filename's stem was a valid alias target, confirm it still resolves (or is removed if the old file is deleted) and that the new files' stems are added if anything cites them.
 - **The `read-section` skill's own worked example** — if the example cites a file this change deletes or splits, repoint it to the correct successor file/section as part of the *same* change, not as an afterthought discovered later. Update both the template copy (`templates/skills/read-section/SKILL_template.md`) and the working copy (`.mt-agent-devkit/contracts/Read_Section.md`) together — they must not drift to two different examples.
 - **Numbering-gap prose vs. the validator:** `validate_templates.py`'s section-ref checker treats any bare `§N` substring as a citation needing a real heading — it cannot tell a real citation from prose *describing* an intentional gap. When documenting a gap in prose (e.g. in a `## Version` footer), write "section N", never "§N" — the glyph is what triggers the check.

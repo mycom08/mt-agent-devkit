@@ -220,6 +220,8 @@ above, plus a clean run on the retained real entries.
 
 Behavioral-test priority for Layer-3 (when the harness is built):
 
+Tier paths are relative to `.mt-agent-devkit/distribution/phase2/templates/`.
+
 ### Tier A — Behavioral test on change (highest risk)
 
 Changes to these files affect agent decision-making in every sprint:
@@ -227,14 +229,11 @@ Changes to these files affect agent decision-making in every sprint:
 | File | Why high risk |
 |---|---|
 | `rules/Story_Standard_template.md` | Source of truth for story lifecycle; all agents reference it |
-| `rules/Story_Standard_*_template.md` (5 role variants) | Role-specific view of the story lifecycle |
+| `rules/Story_Standard_UIUX_template.md` | UI/UX-specific view of the story lifecycle |
 | `rules/Agent_Common_Bootstrap_template.md` | Pre-work sequence (incl. Working Record) — read in full by all agents every spawn |
 | `rules/Agent_Common_Read_On_Demand_template.md` | Memory format, retro format, stage-transition commit, credential-gated verification — fetched section-by-section on demand |
 | `shared/workflows/Shared_Pipeline_Stages_Shared_template.md` | Pipeline stage logic — governs sprint execution |
-| `rules/Developer_Rules_template.md` | Dev implementation gate rules |
-| `rules/Technical_Lead_Rules_template.md` | TL review and design rules |
-| `rules/QA_Rules_template.md` | QA acceptance criteria rules |
-| `rules/Product_Owner_Rules_template.md` | PO story closure and AC rules |
+| `skills/{dev,tl,qa,po}-*/SKILL_template.md` | Developer, TL, QA and PO role rules |
 | `rules/Business_Analyst_Rules_template.md` | BA scope and requirements rules |
 
 ### Tier B — Walkthrough review on change (medium risk)
@@ -250,7 +249,7 @@ Changes to these files affect project setup or agent context:
 | `rules/CICD_Validation_Guide_template.md` | CI workflow validation procedure |
 | `rules/Blocked_Request_template.md` | Blocked story escalation procedure |
 | `rules/Retro_Rules_template.md` | Retrospective format |
-| `rules/Clean_Code_Rules_template.md` | Code quality standards |
+| `skills/clean-code/SKILL_template.md` | Code quality standards |
 
 ### Tier C — Static validation only (lowest risk)
 
@@ -339,8 +338,8 @@ and heading boundaries, and a three-space-indented code fence. Invariant #6
 ### CI gate
 
 `.github/workflows/validate-templates.yml` runs `python scripts/validate_templates.py`
-on every PR that touches `.claude/agents/templates/**` or
-`.claude/agents/workflows/**`. The PR may not be merged until the CI job passes.
+on every PR that touches a path in its `paths:` filter, including
+`.claude/agents/templates/**` and `.mt-agent-devkit/**`. The PR may not be merged until the CI job passes.
 
 ---
 

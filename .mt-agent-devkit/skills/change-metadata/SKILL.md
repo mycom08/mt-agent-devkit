@@ -13,21 +13,21 @@ description: Devkit change metadata, internal only - the changes.json entry and 
 2. Never add, edit or rename a version heading by hand. `VERSION` is owned by the release workflow and never hand-edited.
 3. If `CHANGELOG.md` does not exist, create it in the standard format (use any existing entry as the template). The first story touching the repo owns creating it; never skip this step.
 
-## 2. `changes.json` (template changes only)
+## 2. `changes.json` (changes target projects receive)
 
-`changes.json` tracks only template files deployed to target projects (under `.claude/agents/templates/`); devkit-internal files are excluded. A new version entry uses the `new`/`modified` key format:
+Target projects receive the deployment bundle built from `.mt-agent-devkit/distribution/phase2/templates/` and the other `build_bundle.py` sources. After changing a source, rebuild with `python .mt-agent-devkit/distribution/phase2/build_bundle.py --root . --output .mt-agent-devkit/distribution/phase2/bundle` and run it again with `--check`.
+
+Record each changed shipped file as one line in `descriptions` of the current `-SNAPSHOT` entry:
 
 ```json
-"X.Y.Z": {
-  "new": ["<relative-path-to-new-file>"],
-  "modified": ["<relative-path-to-modified-file>"],
-  "descriptions": {
-    "<relative-path>": "[ST-NNNNNN] <8-15 word plain-language delta>"
-  }
+"descriptions": {
+  "<relative-path>": "[ST-NNNNNN] <8-15 word plain-language delta>"
 }
 ```
 
-`changes.json` keeps only the current snapshot plus the newest three released versions; the release workflow's `open_next_snapshot.py` drops older entries, so never rely on an old version key and cite `CHANGELOG.md` for history. Older entries use different formats; ignore them and always use `new`/`modified` for any entry you write.
+Leave `new`, `modified`, `removed` and `files` alone: in an entry with a `deployment` declaration they hold exactly the two legacy sync bridges (`validate_templates.py` enforces this). Update `checksums` only when a bridge itself changes. Devkit-internal files that ship nothing are not listed.
+
+`changes.json` keeps only the current snapshot plus the newest three released versions; the release workflow's `open_next_snapshot.py` drops older entries, so never rely on an old version key and cite `CHANGELOG.md` for history. Older entries use different formats; ignore them.
 
 **`descriptions`:** one line per file, shown verbatim in `sync devkit`'s update plan: `[ST-NNNNNN] <short delta>`, one clause per story, joined with `; `. State only what changed, not why (the rationale lives in `CHANGELOG.md` and the commit). No `"New/Fix (ST-XXXXXX, no separate version bump):"` wrapper prose, no issue backstory, no `"same X mirrored under Y"` notes.
 
@@ -35,4 +35,4 @@ If another still-unreleased story already described the file, **append your own 
 
 ## 3. Template File Naming
 
-Files under `.claude/agents/templates/` take a descriptive name with the `_template` suffix (`Developer_Rules_template.md`, `Sprint_Workflow_template.md`). The suffix is stripped when the file is written to a target project.
+Files under `.mt-agent-devkit/distribution/phase2/templates/` take a descriptive name with the `_template` suffix (`Retro_Rules_template.md`, `Sprint_Workflow_template.md`). The suffix is stripped when the file is written to a target project.

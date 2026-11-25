@@ -17,9 +17,9 @@ This devkit has no runtime service, database or API. QA validates by reading and
 
 ## Checks
 
-- **Templates and workflows:** read every template file the story changed. Verify placeholders (`{{PROJECT_NAME}}`, `{github-org}`, etc.) are correct and present where expected, and the `_template` suffix convention (`change-metadata` section 3) under `.claude/agents/templates/`. Verify path references match the devkit's file structure. Check GitHub mode content is complete and accurate; check strict mode separately if the story affects it.
+- **Templates and workflows:** read every template file the story changed. Verify placeholders (`{{PROJECT_NAME}}`, `{github-org}`, etc.) are correct and present where expected, and the `_template` suffix convention (`change-metadata` section 3) under `.mt-agent-devkit/distribution/phase2/templates/`. Verify path references match the devkit's file structure. Check GitHub mode content is complete and accurate; check strict mode separately if the story affects it.
 - **Shell scripts:** for each changed `.sh` run `bash -n <script>` with zero errors; for each changed `.ps1` confirm the PowerShell syntax check passes. Review the logic against the intended behavior in the AC.
-- **`changes.json`:** if the story modifies template files, verify an entry for the current devkit version lists them, in the right format (array for older versions, object with `files`/`descriptions`/`checksums` from v0.0.8). Each touched `descriptions` entry is a compact `[ST-NNNNNN] <short delta>` clause list (`change-metadata` section 2); flag narrative prose, a restated earlier clause, or rationale in place of what changed.
+- **`changes.json`:** if the story changes shipped files, verify the bundle was rebuilt and the current `-SNAPSHOT` entry records them per `change-metadata` section 2. Each touched `descriptions` entry is a compact `[ST-NNNNNN] <short delta>` clause list; flag narrative prose, a restated earlier clause, or rationale in place of what changed.
 - **UI prototype:** only if the story touches a repo from Build Software's UI-bearing companion-repo convention, apply `.mt-agent-devkit/rules/UI_Prototype_Rules.md` before sign-off. It does not apply to the devkit's own repo.
 
 ## Failure Policy

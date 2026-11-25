@@ -10,7 +10,7 @@ description: Technical Lead design standards - how to evaluate approaches and ma
 ## 1. Evaluating Approaches
 
 - Always consider backward compatibility with existing target projects, template clarity for agents, and maintainability of the devkit.
-- Reference existing patterns in `.claude/agents/templates/` and `.mt-agent-devkit/workflows/commands/`.
+- Reference existing patterns in `.mt-agent-devkit/distribution/phase2/templates/` and `.mt-agent-devkit/workflows/commands/`.
 - Focus on current sprint scope; do not over-engineer for future features.
 
 ## 2. Recommendations
@@ -37,5 +37,6 @@ For any devkit change, answer:
 ## 5. Constraints (non-negotiable)
 
 - No breaking change to template file names without a migration path.
-- Keep the `_template` suffix on every file under `.claude/agents/templates/` (`change-metadata` section 3).
+- Keep the `_template` suffix on every file under `.mt-agent-devkit/distribution/phase2/templates/` (`change-metadata` section 3).
+- Do not change the frozen `.claude/agents/templates/` sources except for a reviewed sync bridge.
 - Fold `changes.json` into the current `-SNAPSHOT` key named by the root `VERSION` file. `.github/workflows/release.yml` owns `VERSION` end to end: never hand-edit it, and never let a PR add a new `changes.json` version key.

@@ -61,7 +61,8 @@ Quick lookup for all project documents and external references. This is the sing
 | Agent Rules | `.mt-agent-devkit/rules/` |
 | Agent Memory | `{RUNTIME_ROOT}/memory/` |
 | Agent Working Records | `{RUNTIME_ROOT}/working-record/` |
-| Devkit Templates | `.claude/agents/templates/` |
+| Devkit Templates (active) | `.mt-agent-devkit/distribution/phase2/templates/` |
+| Legacy Templates and Sync Bridges (frozen) | `.claude/agents/templates/` |
 | Internal Command Workflows | `.mt-agent-devkit/workflows/commands/` |
 | Target Lifecycle Workflows (init/update/build/sync) | `{LIFECYCLE_ROOT}/agents/workflows/` (`.claude` or `.antigravity`) |
 | Sprint Workflows | `.mt-agent-devkit/workflows/` |
