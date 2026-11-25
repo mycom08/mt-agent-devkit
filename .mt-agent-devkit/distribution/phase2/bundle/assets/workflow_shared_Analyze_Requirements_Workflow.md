@@ -273,7 +273,7 @@ A strategy kept blocked stops the workflow here.
 
 ## Completion
 
-The workflow is complete when the test strategy is `Approved`, every ADR and required test design is `Approved` or is recorded as blocked by a user decision, and, when `UI Design` is `required`, so is the feature design. Set `Stage: test-approved` only then. A blocked roadmap or test strategy never reaches this stage.
+The workflow is complete when the test strategy is `Approved`, every ADR and required test design is `Approved` or is recorded as blocked by a user decision, and `UI Design` is `not required`, or `required` with the feature design `Approved` or recorded as blocked by a user decision. Set `Stage: test-approved` only then. A blocked roadmap or test strategy never reaches this stage.
 
 Report the approved and blocked specs, ADRs and test designs, the feature design decision and status, the roadmap and strategy status, the branch and, in GitHub mode, the tracking story and PR. The same report applies when the workflow stops earlier. Leave the PR open as a draft and the tracking story open: do not merge either way, and create no backlog stories. In strict mode tell the user the local branch is theirs to merge.
 
@@ -283,10 +283,10 @@ Report the approved and blocked specs, ADRs and test designs, the feature design
 
 New input or a user answer that changes requirements after Stage 4:
 
-1. The BA updates the specs, and they return to PO approval (Stages 3 and 4).
+1. First set `Stage: specs` and `UI Design: undecided`, keeping `UI Design Status`, `UI Design Rounds` and `ui_ux_session`, so an interrupted run resumes the change. Then the BA updates the specs, and they return to PO approval (Stages 3 and 4).
 2. The TL updates the affected ADRs and roadmap, then QA the affected test documents, each through its stage and review.
 3. A content change resets that document's approval (`gate-verdict`). Unaffected documents stay `Approved`.
-4. Once the specs are settled again, also after `test-approved`, decide `UI Design` again (Stage 5U). When `required`, the designer writes or updates the design: approval resets only on a content change. When it turns `not required`, tell the user that an existing design file no longer applies.
+4. Once the specs are settled again, also after `test-approved`, decide `UI Design` again (Stage 5U). When `required`, in the same State write set an `approved` or `in-review` `UI Design Status` to `drafting`, then the designer writes or updates the design: approval resets only on a content change, and an unchanged `Approved` design returns to `approved`. When it turns `not required`, tell the user that an existing design file no longer applies.
 
 A revision caused by new input is not a change request. Round counts never reset.
 
