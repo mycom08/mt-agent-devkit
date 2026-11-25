@@ -12,7 +12,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.mt
 
 | Trigger | Fetch |
 |---|---|
-| **Editing any file under `.claude/agents/templates/`** — dual-update rule, `changes.json` fold-in shape and ordering (the version itself is never hand-edited). Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
+| **Editing any file under `.mt-agent-devkit/distribution/phase2/templates/`** — dual-update rule, bundle rebuild, `changes.json` fold-in shape (the version itself is never hand-edited). Also covers **adding a new agent role** and **splitting a shared rules/instructions file into bootstrap/on-demand tiers** — each has its own corpus-wide ripple checklist as a sub-section inside §15 | `§15` (How to Update a Template) |
 | You have been assigned a story | `§3` (Story Workflow) |
 | Starting a complex change — new workflow stage, major template restructure, new devkit command | `§4` (Design First Before Implementation) |
 | Creating or updating a project document | `§6` (Internal Project Documents) — a pointer to `context/Document_Index.md`, the single document path list |
@@ -44,7 +44,7 @@ Not loaded at spawn. When a trigger fires, fetch **only** that section from `.mt
 | BA | Business Analyst — aligns requirements, flags scope creep |
 | AC | Acceptance Criteria |
 | Devkit | mt-agent-devkit — this project |
-| Template | A `_template.md` file under `.claude/agents/templates/` used by `init project` |
+| Template | A `_template.md` file under `.mt-agent-devkit/distribution/phase2/templates/`, compiled into the deployment bundle that `init project` installs |
 | Target project | A project that has had `init project` run on it |
 | Workflow | An `.md` instruction file read by the orchestrator to run a pipeline |
 
@@ -64,12 +64,12 @@ Write format, access control, retention and the character cap are owned by `Agen
 |------|------|
 | Devkit orchestrator | Selected entrypoint: `AGENTS.md` or `CLAUDE.md` |
 | Devkit workflows | `.mt-agent-devkit/workflows/commands/` |
-| Templates (for target projects) | `.claude/agents/templates/` |
+| Templates (for target projects) | `.mt-agent-devkit/distribution/phase2/templates/` (active); `.claude/agents/templates/` is frozen legacy plus the sync bridges |
 | Shared agent sources | `.mt-agent-devkit/` |
 | Shared skills | `.mt-agent-devkit/skills/<name>/SKILL.md` (canonical); `.claude/`, `.antigravity/`, `.codex/` `skills/` hold generated discovery wrappers. PO procedures are the `po-*` skills |
 | Analyst output | `result/analyst/` |
 | Version | `VERSION` (`x.y.z-SNAPSHOT` on `main`) — owned by `.github/workflows/release.yml`, never hand-edited |
-| Change manifest | `changes.json` — tracks **template files deployed to target projects only** (under `.claude/agents/templates/`); devkit-internal workflows (`.mt-agent-devkit/workflows/commands/`) are excluded |
+| Change manifest | `changes.json` — deployment declaration for target projects; format owned by the `change-metadata` skill |
 
 ---
 
@@ -104,7 +104,7 @@ The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint
 
 ## 12. Architectural Patterns
 
-**Template injection:** `init project` reads from `.claude/agents/templates/`, adapts content, and writes to the target project's `.claude/agents/`.
+**Template injection:** `build_bundle.py` compiles `.mt-agent-devkit/distribution/phase2/templates/` into the deployment bundle; `init project`, `update project` and `sync devkit` install that bundle into the target through a shared lifecycle engine.
 
 **Version tracking:** `VERSION` + `changes.json` + released `vX.Y.Z` tags allow `sync devkit` (in target projects) to fetch only changed files from GitHub rather than re-installing everything. `sync devkit` resolves the latest release from the highest tag and reads that tag's `changes.json`; the release job stamps `VERSION`, the `CHANGELOG.md` heading, and the `changes.json` key together, so no agent ever edits a version by hand. (`version.txt` is a frozen `0.1.48` bridge artifact for installs predating the tag-based scheme — never bumped, never deleted.)
 
@@ -124,8 +124,8 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.8 — §13 is a pointer to `docs/Project_Roadmap.md`.
-**Previous:** 1.7 — §13 records Sprint 10 as closed and released; no active sprint.
-**Last Updated:** 2026-11-10
+**Document Version:** 1.9 — §1-§12 name the Phase 2 templates as the active source.
+**Previous:** 1.8 — §13 is a pointer to `docs/Project_Roadmap.md`.
+**Last Updated:** 2026-11-25
 **Audience:** Development team, architects, AI agents
 

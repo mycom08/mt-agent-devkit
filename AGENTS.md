@@ -32,9 +32,9 @@ do not trigger it. Spawned agents receive their own shared role paths directly.
 ## Project Overview
 
 mt-agent-devkit scaffolds an AI Scrum team into target projects. Internal harness
-sources live under `.mt-agent-devkit/`; target templates remain unchanged under
-`.claude/agents/templates/` until Phase 2. Existing init/update/build commands and
-provider-local scaffold helpers remain operational with the same target output.
+sources live under `.mt-agent-devkit/`; active target templates live under
+`.mt-agent-devkit/distribution/phase2/templates/`. `.claude/agents/templates/` is frozen
+legacy, changed only for reviewed sync bridges.
 
 **Devkit source:** https://github.com/mycom08/mt-agent-devkit
 

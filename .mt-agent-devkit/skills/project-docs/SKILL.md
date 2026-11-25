@@ -18,4 +18,4 @@ description: Project documents for every role - where a document goes (the docum
 
 - Use `Title_Case_With_Underscores` for every document file name, and for workflow and rules files (`Sprint_Workflow.md`, `Agent_Common_Bootstrap.md`).
 - Name a file after its primary purpose. No generic names.
-- Template files under `.claude/agents/templates/` follow `change-metadata`.
+- Template files under `.mt-agent-devkit/distribution/phase2/templates/` follow `change-metadata`.

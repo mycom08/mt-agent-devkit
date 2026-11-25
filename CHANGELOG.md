@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Docs] Maintainer docs and skills name the Phase 2 templates as the active source and describe the current `changes.json` convention.
+
 ### Bug Fixes
 
 ---

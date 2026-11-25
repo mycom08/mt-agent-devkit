@@ -355,7 +355,7 @@ Trigger: user says **"init project"** or **"init project [path]"**
 
 The optional `[path]` argument is the absolute path to the target project. If omitted, the workflow asks the user.
 
-Scaffolds a complete AI Scrum team setup into the target project by adapting `.claude/agents/templates/Project_Root_template.md` and all supporting agent files.
+Scaffolds a complete AI Scrum team setup into the target project from the deployment bundle built out of `.mt-agent-devkit/distribution/phase2/templates/`.
 
 Read `.mt-agent-devkit/workflows/commands/Target_Project_Deployment_Workflow.md` before target harness writes. Use the selected provider with the common lifecycle engine.
 
@@ -400,7 +400,7 @@ Maintainer workflow that scans community retro contribution Issues on `mycom08/m
 
 - Default scope is **all** open `retro:contribution` Issues. If a label is supplied, only Issues carrying both that label and `retro:contribution` are scanned.
 - Items are ordered most-worth-applying first: critical `[failure]` guardrails, then token/efficiency reductions, then workflow-correctness fixes, then recurring signals, then clarity tweaks.
-- Only template files under `.claude/agents/templates/` count toward `changes.json`; devkit-internal workflow edits do not.
+- `changes.json` records shipped files per the `change-metadata` skill; devkit-internal workflow edits are not listed.
 
 Read `.mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md` for the complete pipeline before executing.
 
