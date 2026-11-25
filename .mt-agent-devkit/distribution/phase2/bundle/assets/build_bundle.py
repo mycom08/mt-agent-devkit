@@ -176,6 +176,12 @@ def build(root, destination):
         entry("priming_" + profile, [aid], ".mt-agent-devkit/context/Project_Priming.md", profiles=(profile,), ownership="project_owned", renderer="approved_adaptation")
     index = asset("document_index", neutral((templates / "context/Document_Index_template.md").read_text(encoding="utf-8-sig")).encode())
     entry("document_index", [index], ".mt-agent-devkit/context/Document_Index.md", ownership="project_owned", renderer="approved_adaptation")
+    # Blank UX document templates (ST-000234). The project's own standard, copied
+    # from the first one, is project-owned and never listed in the manifest.
+    for name in ("UX_Quality_Standard", "Feature_Design"):
+        identifier = "templates/ux/" + name + ".md"
+        aid = asset(identifier, neutral((templates / "ux" / (name + "_template.md")).read_text(encoding="utf-8-sig")).encode())
+        entry(identifier, [aid], ".mt-agent-devkit/" + identifier)
     # Project roadmap (ST-000238): stock file created only when absent; an existing roadmap is never overwritten.
     # create_if_absent writes bytes verbatim, so the template carries no {{TOKENS}}.
     roadmap = asset("project_roadmap", (templates / "context/Project_Roadmap_template.md").read_bytes())

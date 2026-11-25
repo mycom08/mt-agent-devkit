@@ -22,6 +22,7 @@ Quick lookup for all project documents and external references. This is the sing
 | Technical Analysis | `docs/technical/Technical_Analysis.md` |
 | Architecture Overview | `docs/technical/Architecture.md` |
 | Development Standards | `docs/wiki/Development_Standards.md` |
+| UX Quality Standard | not registered |
 | Code Review Checklist | `docs/wiki/Code_Review_Checklist.md` |
 | Testing Guidelines | `docs/wiki/Testing_Guidelines.md` |
 

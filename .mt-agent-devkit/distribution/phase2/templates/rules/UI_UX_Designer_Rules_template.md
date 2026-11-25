@@ -133,7 +133,20 @@ On any tooling/environment blocker (prototype won't start, mock backend won't ru
 
 ---
 
+## 11. UX Document Types and Promotion Rule
+
+| Document type | Scope and lifetime | Blank template |
+|---|---|---|
+| Project UX standard | Long-lived, project-wide; one per project | `.mt-agent-devkit/templates/ux/UX_Quality_Standard.md` |
+| Feature design doc | Covers one feature; frozen once the feature ships | `.mt-agent-devkit/templates/ux/Feature_Design.md` |
+
+- The project's standard is project-owned (suggested path: `docs/wiki/UX_Quality_Standard.md`). Its path is registered in the "UX Quality Standard" row of `{{AGENT_DIR_PREFIX}}/agents/context/Document_Index.md`; "not registered" means the project has none.
+- A feature design doc references the standard and does not repeat it. A deviation from the standard states its reason and either updates the standard or stays local to that feature.
+- **Promotion rule:** at feature closure the UI/UX Designer proposes moving reusable pieces into the standard, and both TL and PO accept. A piece either of them rejects stays in the feature design doc. No workflow triggers this step.
+
+---
+
 ## Version
 
-**Version:** 1.2 (see `CHANGELOG.md` for this file's change history) — not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
+**Version:** 1.3 (see `CHANGELOG.md` for this file's change history) — not yet split into Bootstrap/Read-On-Demand tiers (tracked separately as issue #143).
 **Created:** 2026-07-20

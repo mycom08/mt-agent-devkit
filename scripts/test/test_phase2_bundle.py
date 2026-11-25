@@ -198,6 +198,32 @@ class BundleTests(unittest.TestCase):
             lifecycle.local(target, ROOT, "codex", "github", "repo", inputs, apply=True)
             for path, content in custom.items(): self.assertEqual((target/path).read_text(), content)
 
+    def test_ux_templates_install_and_update_keeps_project_standard_and_index(self):
+        import sys
+        sys.path.insert(0, str(ROOT / ".mt-agent-devkit/distribution/phase2"))
+        import lifecycle
+        index_template = ROOT / ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md"
+        self.assertIn("| UX Quality Standard | not registered |", index_template.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "target"
+            target.mkdir()
+            inputs = {"AGENTS.md": "# Project\n", ".mt-agent-devkit/context/Project_Priming.md": "# Context\n", ".mt-agent-devkit/context/Document_Index.md": "| UX Quality Standard | not registered |\n"}
+            lifecycle.local(target, ROOT, "codex", "github", "repo", inputs, apply=True)
+            for name in ("UX_Quality_Standard", "Feature_Design"):
+                installed = (target / ".mt-agent-devkit/templates/ux" / (name + ".md")).read_text(encoding="utf-8")
+                self.assertIn("**Promotion:**", installed)
+            index = target / ".mt-agent-devkit/context/Document_Index.md"
+            self.assertIn("| UX Quality Standard | not registered |", index.read_text(encoding="utf-8"))
+            standard = target / "docs/wiki/UX_Quality_Standard.md"
+            standard.parent.mkdir(parents=True, exist_ok=True)
+            standard.write_text("# Our standard\n", encoding="utf-8")
+            registered = "| UX Quality Standard | `docs/wiki/UX_Quality_Standard.md` |\n"
+            index.write_text(registered, encoding="utf-8")
+            update = {key: value for key, value in inputs.items() if key != ".mt-agent-devkit/context/Document_Index.md"}
+            lifecycle.local(target, ROOT, "codex", "github", "repo", update, apply=True)
+            self.assertEqual(standard.read_text(encoding="utf-8"), "# Our standard\n")
+            self.assertEqual(index.read_text(encoding="utf-8"), registered)
+
     def test_actual_shell_lifecycle_commands_and_idempotent_update(self):
         with tempfile.TemporaryDirectory() as folder:
             scratch = Path(folder)
