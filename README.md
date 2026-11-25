@@ -16,7 +16,7 @@ A multi-provider agent devkit that installs shared AI Scrum instructions and spr
 | **Role-separated workflows** | Each agent has its own instructions, rules, memory, and working record |
 | **Story lifecycle management** | Tracks stories from `backlog` through `done` — via GitHub Issues (default) or local MD files (strict mode) |
 | **Sprint planning and refinement** | Plan and refine backlog stories before execution |
-| **Feature analysis** | In a target project, `analyze requirements` turns a prompt or document into approved requirement specs, ADRs, a roadmap and test documents |
+| **Feature analysis** | In a target project, `analyze requirements` turns a prompt or document into approved requirement specs, ADRs, a UI/UX design for features with screens, a roadmap and test documents |
 | **Session continuity** | Agents resume mid-session; pipeline state survives restarts |
 | **Project initialization** | Scaffolds all agent files into any target project in one command |
 
