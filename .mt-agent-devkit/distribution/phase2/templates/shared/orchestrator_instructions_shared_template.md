@@ -24,7 +24,7 @@ Every PO touchpoint routes on the pinned `PO Execution` value. `subagent` keeps 
 | Touchpoint | `subagent` | `orchestrator` | Skills an inline activity may need |
 |---|---|---|---|
 | Create Stories | Inline (already) | Inline | `po-core`, `po-write-story` |
-| Analyze Requirements Stage 4 spec approval | Spawn/resume `po_session` | Inline | `po-core`, `gate-verdict`, `po-comment` |
+| Analyze Requirements document reviews (specs, ADRs, roadmap, test scope) | Spawn/resume `po_session` | Inline | `po-core`, `gate-verdict`, `po-comment` (+ `tl-design` for an ADR) |
 | Plan Sprint Stages 1, 2, 4 | Spawn/resume `po_session` | **Spawn/resume (forced)** | none (the spawned PO loads `po-plan-sprint`) |
 | Refine Sprint Stage 2 (after TL) | Spawn/resume | Inline; TL still answers first | `po-core`, `po-answer-questions`, `po-comment` (+ `po-write-story` when an AC changes) |
 | Refine Sprint Stage 4 | Resume | Inline | `po-core`, `po-promote-ready` |
