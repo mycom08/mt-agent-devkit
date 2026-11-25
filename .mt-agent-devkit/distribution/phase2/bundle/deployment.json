@@ -990,29 +990,29 @@
     {
       "id": "skills/gate-verdict",
       "path": "assets/skills_gate-verdict",
-      "sha256": "520f929bba0ad7738d591c9817e001784aaed74abb69c93169da4b0cbb92b1f2",
-      "bytes": 3404,
+      "sha256": "94d85c8b519d8a9d04fb918b833243b1d9ee326a3f60a0074ddc116bfa164393",
+      "bytes": 3540,
       "kind": "template"
     },
     {
       "id": "claude/skill/gate-verdict",
       "path": "assets/claude_skill_gate-verdict",
-      "sha256": "cf81e1419e6b506c03b04f65e0f9f719bf51b10ff7fb60bcefdf5ef941202ba8",
-      "bytes": 441,
+      "sha256": "2e0ab573d3d3417b9e5dfb0fde9f461309eba24e101a8bb84fa7ac9616c50ba1",
+      "bytes": 459,
       "kind": "adapter"
     },
     {
       "id": "antigravity/skill/gate-verdict",
       "path": "assets/antigravity_skill_gate-verdict",
-      "sha256": "cf81e1419e6b506c03b04f65e0f9f719bf51b10ff7fb60bcefdf5ef941202ba8",
-      "bytes": 441,
+      "sha256": "2e0ab573d3d3417b9e5dfb0fde9f461309eba24e101a8bb84fa7ac9616c50ba1",
+      "bytes": 459,
       "kind": "adapter"
     },
     {
       "id": "codex/skill/gate-verdict",
       "path": "assets/codex_skill_gate-verdict",
-      "sha256": "cf81e1419e6b506c03b04f65e0f9f719bf51b10ff7fb60bcefdf5ef941202ba8",
-      "bytes": 441,
+      "sha256": "2e0ab573d3d3417b9e5dfb0fde9f461309eba24e101a8bb84fa7ac9616c50ba1",
+      "bytes": 459,
       "kind": "adapter"
     },
     {
@@ -1522,15 +1522,15 @@
     {
       "id": "workflow_shared/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
-      "sha256": "5ed4961ca74bbbc5dec3118a805819460a92b4fceb6dc8cd739845d2a377e681",
-      "bytes": 13568,
+      "sha256": "24ffc7411274fcfd652a25b78623368c3be28b685f5259765e0fcaf87f4ffb0e",
+      "bytes": 20067,
       "kind": "template"
     },
     {
       "id": "workflow_github/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_github_Analyze_Requirements_Workflow.md",
-      "sha256": "2da3be897d36441b491adc5c8e74b460c7eef319deaa664078e09242cff7f3f4",
-      "bytes": 374,
+      "sha256": "888b915aa595767ff8b5177306d830c5a9585c96773f7c65085d32b84003f79b",
+      "bytes": 381,
       "kind": "template"
     },
     {
@@ -1711,8 +1711,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "97e264bad552aef2364d1721ffd17f1f6724f006acb4c2803238a9c2f3d94e80",
-      "bytes": 14899,
+      "sha256": "c1282381abd81b3113738b95d3ee245edd2c55845409b371f964c4244619b6ea",
+      "bytes": 14956,
       "kind": "template"
     },
     {

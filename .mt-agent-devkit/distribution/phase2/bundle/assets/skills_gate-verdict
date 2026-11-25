@@ -1,6 +1,6 @@
 ---
 name: gate-verdict
-description: Document approval gate for specs, ADRs and test documents - the Status header, approvers, the role-prefixed verdict format, GitHub and strict-mode posting and approval invalidation. Load before requesting, giving or recording a document approval, or editing an approved document.
+description: Document approval gate for specs, ADRs, feature roadmaps and test documents - the Status header, approvers, the role-prefixed verdict format, GitHub and strict-mode posting and approval invalidation. Load before requesting, giving or recording a document approval, or editing an approved document.
 ---
 
 # Gate Verdict
@@ -11,7 +11,7 @@ Gates documents only. Code review and QA sign-off keep their own gates.
 
 ## 1. Status Header
 
-Every requirement spec, ADR, test strategy and test design starts, below its title, with:
+Every requirement spec, ADR, feature roadmap, test strategy and test design starts, below its title, with:
 
 ```markdown
 Status: Draft | In Review | Changes Requested | Approved
@@ -32,6 +32,7 @@ An author never approves their own document.
 |---|---|---|---|
 | Requirement spec (`SPEC-NNN`) | BA | PO: product scope | a `BLOCKING-SPEC` question is unresolved |
 | ADR (`ADR-NNN`) | TL | PO: scope and alignment, with the TL recommendation recorded | the NFR section fails the `tl-design` rules |
+| Feature roadmap (`ROADMAP`) | TL | PO: scope, phases and priorities | a PO concern is unresolved |
 | Test strategy (`TEST-STRATEGY`), design (`TEST-DESIGN-NNN`) | QA | TL: technical coverage, and PO: scope | either approver has not approved |
 
 An unresolved `BLOCKING-FEATURE` question also stops the feature from advancing.
