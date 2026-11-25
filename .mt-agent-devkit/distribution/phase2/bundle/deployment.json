@@ -157,8 +157,8 @@
     {
       "id": "rules/UI_UX_Designer_Rules.md",
       "path": "assets/rules_UI_UX_Designer_Rules.md",
-      "sha256": "8018d4b0f27a527119f2e569ae0ce929640a093952a3b1ee692e360569eea116",
-      "bytes": 7849,
+      "sha256": "2237b3ea5a5793a982e24ae2a15ae6a54dcba3cbc67bacb4a705702e50a35e30",
+      "bytes": 8886,
       "kind": "template"
     },
     {
@@ -1788,8 +1788,22 @@
     {
       "id": "document_index",
       "path": "assets/document_index",
-      "sha256": "6c676266bda14e5aab95f8923bdb7dd44d1774abe1b139659315ed541aabe18b",
-      "bytes": 2945,
+      "sha256": "5a6788ac78a883b4bca7520cb460e37d20806d07e74cd72793f165d97a175dcc",
+      "bytes": 2986,
+      "kind": "template"
+    },
+    {
+      "id": "templates/ux/UX_Quality_Standard.md",
+      "path": "assets/templates_ux_UX_Quality_Standard.md",
+      "sha256": "2ebe29260792ba6415d808d0c8b84f7e30de7e6a7bd7db2216db5206be301aee",
+      "bytes": 4094,
+      "kind": "template"
+    },
+    {
+      "id": "templates/ux/Feature_Design.md",
+      "path": "assets/templates_ux_Feature_Design.md",
+      "sha256": "2825eaa1bd06df962d7f07a9ae64658553f3176554b32a901acf9368dca48e12",
+      "bytes": 2218,
       "kind": "template"
     },
     {
@@ -2383,8 +2397,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "05ce3c88e9b3f4bf5bf20bb0bc05e9dc6558099f6c2f837d73606c92d3c66100",
-      "bytes": 34049,
+      "sha256": "e5b215a7a826e7b126e90ed6d7bc1f8231d7d1e9d7cbf5bab55e48c790892bb5",
+      "bytes": 34514,
       "kind": "script"
     },
     {
@@ -8328,6 +8342,56 @@
         "codex"
       ],
       "renderer": "approved_adaptation",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "templates/ux/UX_Quality_Standard.md",
+      "sources": [
+        "templates/ux/UX_Quality_Standard.md"
+      ],
+      "destination": ".mt-agent-devkit/templates/ux/UX_Quality_Standard.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "templates/ux/Feature_Design.md",
+      "sources": [
+        "templates/ux/Feature_Design.md"
+      ],
+      "destination": ".mt-agent-devkit/templates/ux/Feature_Design.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
       "legacy_paths": [],
       "phase": "content",
       "required": true

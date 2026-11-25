@@ -18,7 +18,10 @@
       ".mt-agent-devkit/distribution/phase2/templates/github/workflows/Analyze_Requirements_Workflow_template.md": "[ST-000246] New GitHub variant of the analyze requirements workflow.",
       ".mt-agent-devkit/distribution/phase2/templates/strict/workflows/Analyze_Requirements_Workflow_template.md": "[ST-000246] New strict variant of the analyze requirements workflow.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-000246] Analyze requirements trigger row and PO spec approval touchpoint.",
-      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000246] Lists the feature analysis document folders."
+      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000246] Lists the feature analysis document folders.; [ST-000234] Adds the UX Quality Standard row, not registered.",
+      ".mt-agent-devkit/distribution/phase2/templates/ux/UX_Quality_Standard_template.md": "[ST-000234] New blank project UX standard template.",
+      ".mt-agent-devkit/distribution/phase2/templates/ux/Feature_Design_template.md": "[ST-000234] New blank feature UI/UX design doc template.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000234] Defines UX document types and the promotion rule."
     },
     "deployment": {
       "schema_version": 1,
