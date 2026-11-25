@@ -232,7 +232,7 @@ Read the "UX Quality Standard" row of `{{AGENT_DIR_PREFIX}}/agents/context/Docum
 ### Sequencing
 
 - Spawn the designer and the TL without waiting for each other. Commit only the files of the document going to review, never another author's unfinished file.
-- The design never gates the roadmap or QA: Stages 6 and 7 do not wait for it and do not take it as input. Only Completion waits.
+- The design never gates the roadmap or QA: Stages 6 and 7 do not wait for it and do not take it as input. Only the Document Gate waits.
 - A design kept blocked never stops the workflow.
 
 ---
@@ -342,7 +342,7 @@ Create one per document that carries a `Blocked:` line, also when no candidate w
 | Field | Value |
 |---|---|
 | Title | `[ST-XXXXXX][<feature-slug>] Open topic: <document ID>` (strict mode: the story format heading) |
-| Labels (GitHub mode) | Exactly `status:blocked`, `analysis-open-topic`, `feature:<feature-slug>`. No sprint or phase label |
+| Labels (GitHub mode) | Exactly `status:blocked`, `analysis-open-topic`, `feature:<feature-slug>`. Create missing labels. No sprint or phase label |
 | Status (strict mode) | `**Status:** blocked`, no `**Sprint:**` line |
 
 ```markdown
