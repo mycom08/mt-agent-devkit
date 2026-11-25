@@ -100,16 +100,19 @@ PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-road
              "po-plan-sprint", "po-answer-questions", "po-promote-ready", "po-verify-close", "po-validate-ac")
 COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record", "agent-memory", "troubleshooting",
                  "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
-                 "git-workflow", "change-metadata", "pre-pr-gate", "pr-review", "clean-code")
+                 "git-workflow", "change-metadata", "pre-pr-gate", "pr-review", "clean-code", "gate-verdict")
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
 TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
-QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix")
+QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix", "qa-test-docs")
 # Internal skills with no Phase 2 template or bundle entry. change-metadata is devkit-internal
 # only (design B5); ST-000310 ships every other common and Developer skill and ST-000329 ships
 # the Technical Lead skills and ST-000332 ships the QA skills.
 UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"})
 SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500, "tl-core": 1600, "qa-core": 1600}
 DEFAULT_SKILL_LIMIT = 4000  # po-*, common, Developer, Technical Lead and QA skills
+# Ends at the next numbered section: the unnumbered headings inside the ADR example stay in.
+ADR_SECTION = re.compile(r"^## \d+\. ADR Format$(.*?)(?=^## \d+\. |\Z)", re.M | re.S)
+ADR_NFR_HEADINGS = ("Performance impact", "Scalability", "Security", "Reliability", "Observability")
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
 SKILL_MENTION = re.compile(r"`((?:po|agent|dev|tl|qa)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS) + r")`")
 
@@ -262,6 +265,17 @@ def skill_template_errors(root, wrappers) -> list[str]:
     return errors
 
 
+def adr_format_errors(root) -> list[str]:
+    """The shipped tl-design ADR format section carries every mandatory NFR heading."""
+    relative = f"{SKILL_TEMPLATES}/tl-design/SKILL_template.md"
+    path = root / relative
+    section = ADR_SECTION.search(path.read_text(encoding="utf-8")) if path.is_file() else None
+    if not section:
+        return [f"missing ADR format section: {relative}"]
+    headings = set(re.findall(r"^### (.+?)\s*$", section.group(1), re.M))
+    return [f"ADR format lacks NFR heading '{name}': {relative}" for name in ADR_NFR_HEADINGS if name not in headings]
+
+
 def orchestrator_security_errors(root) -> list[str]:
     """The orchestrator loads agent-security (and Shell Safety) before any issue/PR read or workflow route."""
     errors = []
@@ -321,6 +335,7 @@ def validate(root=ROOT, migration_preservation=False) -> list[str]:
     errors.extend(orchestrator_security_errors(root))
     errors.extend(skill_reference_errors(root))
     errors.extend(skill_template_errors(root, wrappers))
+    errors.extend(adr_format_errors(root))
     citations = module("retired_citations", root / "scripts/validate_retired_citations.py")
     errors.extend(citations.findings(root))
     for entry in entries:

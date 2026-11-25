@@ -53,3 +53,36 @@ For any feature change, address:
 - Storage schema design.
 - Implementation roadmap with risk assessment.
 - Performance considerations and benchmarking approach.
+
+## 7. ADR Format
+
+TL authors, one decision per ADR (`ADR-NNN`). PO approves scope and alignment, with the TL recommendation recorded. Header and verdicts: `gate-verdict`.
+
+```markdown
+# ADR-NNN: <decision>
+Status: Draft
+Approved-by:
+Approved-at:
+## Context
+Problem, constraints, linked specs.
+## Decision
+The choice and the TL recommendation.
+## Alternatives and Trade-offs
+Each option: gain, cost, why rejected.
+## Consequences
+Follow-up work, risks, migration.
+## Non-Functional Requirements
+### Performance impact
+### Scalability
+### Security
+### Reliability
+### Observability
+```
+
+State each NFR's effect and handling. An ADR without all five cannot be approved. Reject:
+
+- `Security: TBD` ("TBD")
+- `Reliability:` left empty (blank)
+- `Scalability: N/A` (no reason)
+
+Accept `N/A - build-time script, no runtime load`.

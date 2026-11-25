@@ -525,8 +525,8 @@ class CommonSkillsTests(unittest.TestCase):
         self.assertIn(old, text)
         path.write_text(text.replace(old, new, 1), encoding="utf-8")
 
-    def test_seventeen_skills_frontmatter_budget_requires_and_wrappers(self):
-        self.assertEqual(17, len(validator.COMMON_SKILLS))
+    def test_eighteen_skills_frontmatter_budget_requires_and_wrappers(self):
+        self.assertEqual(18, len(validator.COMMON_SKILLS))
         inventory = {e["source"]: e for e in json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text())["files"]}
         for name in validator.COMMON_SKILLS:
             with self.subTest(skill=name):
@@ -1143,8 +1143,8 @@ class QaSkillsTests(unittest.TestCase):
     def inventory(self):
         return json.loads((ROOT / ".mt-agent-devkit/contracts/migration-inventory.json").read_text(encoding="utf-8"))
 
-    def test_five_skills_frontmatter_budgets_requires_and_wrappers(self):
-        self.assertEqual(("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix"), validator.QA_SKILLS)
+    def test_six_skills_frontmatter_budgets_requires_and_wrappers(self):
+        self.assertEqual(("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix", "qa-test-docs"), validator.QA_SKILLS)
         inventory = {e["source"]: e for e in self.inventory()["files"]}
         for name in validator.QA_SKILLS:
             with self.subTest(skill=name):
@@ -1529,6 +1529,45 @@ class Phase2SkillTemplatesTests(unittest.TestCase):
         self.assertIn("## Load Map", instructions)
         for gone in ("## Selected Common Routing", "Agent_Common_Bootstrap.md` in full", "Developer_Rules_", "change-metadata"):
             self.assertNotIn(gone, instructions)
+
+
+class AdrFormatInvariantTests(unittest.TestCase):
+    """ST-000245: the shipped tl-design ADR format keeps all five NFR headings."""
+    RELATIVE = f"{validator.SKILL_TEMPLATES}/tl-design/SKILL_template.md"
+
+    def errors_for(self, text):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / self.RELATIVE
+            path.parent.mkdir(parents=True)
+            path.write_text(text, encoding="utf-8")
+            return validator.adr_format_errors(Path(folder))
+
+    def shipped(self):
+        return (ROOT / self.RELATIVE).read_text(encoding="utf-8")
+
+    def test_shipped_section_passes(self):
+        self.assertEqual([], self.errors_for(self.shipped()))
+
+    def test_each_missing_nfr_heading_fails(self):
+        for name in ("Performance impact", "Scalability", "Security", "Reliability", "Observability"):
+            with self.subTest(heading=name):
+                heading = f"### {name}\n"
+                self.assertIn(heading, self.shipped())
+                self.assertEqual([f"ADR format lacks NFR heading '{name}': {self.RELATIVE}"],
+                                 self.errors_for(self.shipped().replace(heading, "")))
+
+    def test_heading_outside_the_section_does_not_count(self):
+        moved = self.shipped().replace("### Security\n", "") + "\n## 8. Other\n\n### Security\n"
+        self.assertEqual([f"ADR format lacks NFR heading 'Security': {self.RELATIVE}"], self.errors_for(moved))
+
+    def test_missing_section_fails(self):
+        self.assertEqual([f"missing ADR format section: {self.RELATIVE}"],
+                         self.errors_for(self.shipped().replace("ADR Format", "Other")))
+
+    def test_canonical_section_matches_the_shipped_one(self):
+        canonical = (ROOT / ".mt-agent-devkit/skills/tl-design/SKILL.md").read_text(encoding="utf-8")
+        self.assertEqual(validator.ADR_SECTION.search(self.shipped()).group(1),
+                         validator.ADR_SECTION.search(canonical).group(1))
 
 
 class Phase2OtherRolesPointerTests(unittest.TestCase):

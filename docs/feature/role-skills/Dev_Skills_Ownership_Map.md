@@ -486,6 +486,8 @@ The internal skills stay free of the three rules; `TlSkillsTests` pins both side
 
 The internal `QA_Rules_Bootstrap.md`, `QA_Rules_Read_On_Demand.md` and `Story_Standard_QA.md` are deleted with their wrappers (`retired` entries in `migration-inventory.json`). Five skills hold every QA-only rule: `qa-core`, `qa-validate`, `qa-testing`, `qa-regression`, `qa-hotfix`. Rules a common skill already owns stay there (§4 and §7a). The Phase 2 QA templates kept their files until ST-000333 retired them (§17); ST-000332 ships the skills to targets (§16). Rows marked **dropped** are the three drops TL confirmed on PR 342.
 
+`qa-test-docs` (ST-000245) joined the QA skills later: it holds new test strategy and test design formats and no rule folded from these files.
+
 ### 15a. QA Rules Bootstrap
 
 | Source rule | Owner | Change |

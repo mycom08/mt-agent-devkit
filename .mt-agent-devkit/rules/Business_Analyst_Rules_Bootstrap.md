@@ -44,6 +44,7 @@ On any tooling/environment blocker, follow the `troubleshooting` skill's check-m
 | Trigger | Fetch |
 |---|---|
 | Orchestrator assigns BA as story implementer | The `pre-pr-gate` skill (`Business_Analyst_Rules_Read_On_Demand.md §1` points to it) |
+| Writing or revising a requirement spec | `Business_Analyst_Rules_Read_On_Demand.md §7` (Requirement Spec Format) |
 
 > Triggers shared by all six roles that are not restated here — writing a memory fact, the end-of-work retro, credential-gated verification, stage-transition commit, troubleshooting — are routed by `Agent_Common_Bootstrap.md §5` and §4–§5 above.
 
@@ -51,7 +52,8 @@ On any tooling/environment blocker, follow the `troubleshooting` skill's check-m
 
 ## Version
 
-**Version:** 2.1 — §3–§6 point to the common skills (`comment`, `handoff`, `troubleshooting`, `pre-pr-gate`) instead of restating them (ST-000308).
+**Version:** 2.2 — §6 routes requirement spec writing to the on-demand spec format (ST-000245).
+**Previous:** 2.1 — §3–§6 point to the common skills (`comment`, `handoff`, `troubleshooting`, `pre-pr-gate`) instead of restating them (ST-000308).
 **Previous:** 2.0 — Split into `Business_Analyst_Rules_Bootstrap.md` (this file) + `Business_Analyst_Rules_Read_On_Demand.md`, matching the Dev/TL/QA/PO bootstrap/on-demand convention. §2 (Pre-PR Gate, when acting as Implementer — rare, BA is not usually the story implementer) moved to the on-demand file; §1/§3–§5 stayed, being needed at spawn regardless of task. Added §6 routing table. `§2`'s number is retired, not reused.
 **Previous:** 1.0 — Initial devkit-specific version
 **Created:** 2026-06-16

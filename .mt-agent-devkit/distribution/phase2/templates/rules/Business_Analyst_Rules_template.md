@@ -42,7 +42,47 @@ On any tooling/environment blocker (tests won't run, sandbox won't start, automa
 
 ---
 
+## 6. Requirement Spec Format
+
+One spec per capability, document ID `SPEC-NNN`. BA authors; PO approves product scope. Header and verdicts: the `gate-verdict` skill (`.mt-agent-devkit/skills/gate-verdict/SKILL.md`).
+
+```markdown
+# SPEC-NNN: <title>
+Status: Draft
+Approved-by:
+Approved-at:
+
+## Purpose
+The problem and the outcome wanted.
+## Scope
+In scope: ...
+Out of scope: ...
+## Actors and Functional Requirements
+- FR-1: <actor> <observable behavior> (source: <user input or document>)
+## Acceptance Criteria
+- AC-1 (FR-1): Given <state>, When <action>, Then <observable result>
+## Constraints and Non-Functional Requirements
+Limits the solution must respect, each measurable where possible.
+## Dependencies
+Systems, specs, data or decisions this spec relies on.
+## Open Questions
+| ID | Question | Class | Owner | Resolution |
+|---|---|---|---|---|
+| Q-1 | <question> | BLOCKING-FEATURE or BLOCKING-SPEC | <who answers> | <empty until answered> |
+```
+
+Writing rules:
+
+- **Testable acceptance criteria:** every functional requirement has at least one Given/When/Then criterion with a result that can pass or fail, including the error cases.
+- **Flag ambiguous language:** mark unmeasured or open-ended wording ("fast", "easy", "secure", "appropriate", "etc.", "should support") as `[AMBIGUOUS: <what is missing>]` and raise it as an open question.
+- **Never invent requirements:** every requirement traces to its source. A gap, assumption or suggestion is an open question until the answer confirms it.
+- **List every open question** and classify it, with an owner. Keep answered ones with their resolution.
+  - `BLOCKING-FEATURE`: the answer can change the feature as a whole (goal, users, scope, platform). The feature cannot advance until it is resolved.
+  - `BLOCKING-SPEC`: the answer affects only this spec. This spec cannot be approved; other specs proceed.
+
+---
+
 ## Version
 
-**Version:** 1.2 (see `CHANGELOG.md` for this file's change history)
+**Version:** 1.3 (see `CHANGELOG.md` for this file's change history)
 **Created:** 2026-05-25

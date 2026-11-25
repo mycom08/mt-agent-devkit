@@ -689,7 +689,7 @@ class QaSkillRoutingTests(unittest.TestCase):
             definition=next(x for x in REGISTRY['tasks']['qa']['reads'] if x['id']==entry_id)
             self.assertEqual((definition['source'],'layouts' in definition),(SKILL(skill),False),entry_id)
         shipped=ROOT/'.mt-agent-devkit/distribution/phase2/templates/skills'
-        self.assertEqual(sorted(p.parent.name for p in shipped.glob('qa-*/SKILL_template.md')),sorted(['qa-core','qa-validate','qa-testing','qa-regression','qa-hotfix']))
+        self.assertEqual(sorted(p.parent.name for p in shipped.glob('qa-*/SKILL_template.md')),sorted(['qa-core','qa-validate','qa-testing','qa-regression','qa-hotfix','qa-test-docs']))
 
 
 # Point-of-use skills each installed target Developer trigger must add (ST-000310).

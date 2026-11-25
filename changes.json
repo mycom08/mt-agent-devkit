@@ -8,7 +8,12 @@
     "removed": [],
     "descriptions": {
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately."
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Business_Analyst_Rules_template.md": "[ST-000245] Requirement spec format: Given/When/Then, ambiguity flags, classified open questions.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/tl-design/SKILL_template.md": "[ST-000245] ADR format with mandatory NFR section and rejection examples.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/qa-test-docs/SKILL_template.md": "[ST-000245] New QA skill: test strategy and test design formats.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/gate-verdict/SKILL_template.md": "[ST-000245] New skill: document status header, approvers and gate verdicts.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/qa-core/SKILL_template.md": "[ST-000245] Load map routes test strategy and design to qa-test-docs."
     },
     "deployment": {
       "schema_version": 1,

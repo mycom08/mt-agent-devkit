@@ -40,3 +40,36 @@ For any devkit change, answer:
 - Keep the `_template` suffix on every file under `.mt-agent-devkit/distribution/phase2/templates/` (`change-metadata` section 3).
 - Do not change the frozen `.claude/agents/templates/` sources except for a reviewed sync bridge.
 - Fold `changes.json` into the current `-SNAPSHOT` key named by the root `VERSION` file. `.github/workflows/release.yml` owns `VERSION` end to end: never hand-edit it, and never let a PR add a new `changes.json` version key.
+
+## 6. ADR Format
+
+TL authors, one decision per ADR (`ADR-NNN`). PO approves scope and alignment, with the TL recommendation recorded. Header and verdicts: `gate-verdict`.
+
+```markdown
+# ADR-NNN: <decision>
+Status: Draft
+Approved-by:
+Approved-at:
+## Context
+Problem, constraints, linked specs.
+## Decision
+The choice and the TL recommendation.
+## Alternatives and Trade-offs
+Each option: gain, cost, why rejected.
+## Consequences
+Follow-up work, risks, migration.
+## Non-Functional Requirements
+### Performance impact
+### Scalability
+### Security
+### Reliability
+### Observability
+```
+
+State each NFR's effect and handling. An ADR without all five cannot be approved. Reject:
+
+- `Security: TBD` ("TBD")
+- `Reliability:` left empty (blank)
+- `Scalability: N/A` (no reason)
+
+Accept `N/A - build-time script, no runtime load`.
