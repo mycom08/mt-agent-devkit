@@ -118,11 +118,7 @@ This requirement mirrors the Privacy Rule in `Retro_Rules.md` that applies to al
 List incoming contributions with `gh issue list --repo mycom08/mt-agent-devkit --label "retro:contribution" --state open`, or run the `apply retros` devkit workflow to scan and triage them automatically. Open each contribution Issue (titled `Community Retro Contribution — Sprint N (YYYY-MM-DD)`). Skim the **Signal Items** sections first. For each signal item:
 
 1. Check it passes the privacy rule (no project-specific references).
-2. Assign it to a source file: which devkit file would need to change to address this signal?
-   - `[context]` signals → usually `Project_Priming.md` or a memory file
-   - `[instruction]` signals → usually an agent instruction file (e.g., `developer_instructions.md`)
-   - `[workflow]` signals → usually a workflow file (e.g., `Sprint_Workflow.md`) or `Agent_Common.md`
-   - `[failure]` signals → usually a rules file (e.g., `Developer_Rules.md`) or an instruction file
+2. Assign it to an owner file with the routing table in **`.mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md`, Stage 2**, which covers the active templates and role skills.
 3. Note which signals appear in **multiple export files** — recurring signals are higher priority than one-off observations.
 
 ### Step 2 — Evaluate signal strength
@@ -141,17 +137,17 @@ For `[failure]` signals, apply a lower threshold: a single clear failure pattern
 
 For each approved template change:
 
-1. Edit the relevant file under `.claude/agents/templates/` (or the devkit workflow file if it is a workflow signal).
-2. Record the change by following **`.claude/agents/workflows/Apply_Retros_Workflow.md`, Stage 5** — the `changes.json` fold-in and the `CHANGELOG.md` bullet.
+1. Edit the owner under `.mt-agent-devkit/distribution/phase2/templates/` (or the devkit workflow file if it is a devkit-internal signal). `.claude/agents/templates/` is frozen legacy and changes only for a reviewed sync bridge.
+2. Rebuild the bundle, record the change and run the checks by following **`.mt-agent-devkit/workflows/commands/Apply_Retros_Workflow.md`, Stages 4 and 5**, with the checks at the start of Stage 6.
 3. Open a PR and tag a second maintainer for review.
 
-> **Follow that workflow rather than a copy of it here.** These steps were previously restated in this file and drifted: they still instructed a manual `version.txt` bump for two releases after the release job took ownership of the version. Stage 5 is the single source of truth for how a change is recorded — this section deliberately points at it instead of repeating it. If you find yourself wanting to spell the steps out again, fix Stage 5.
+> **Follow that workflow rather than a copy of it here.** These steps were previously restated in this file and drifted: they still instructed a manual `version.txt` bump for two releases after the release job took ownership of the version. The workflow is the single source of truth for how a change is applied and recorded — this section deliberately points at it instead of repeating it. If you find yourself wanting to spell the steps out again, fix the workflow.
 
-The one thing worth knowing before you open Stage 5: the version is **never** edited by hand. `.github/workflows/release.yml` owns `VERSION`, and your change folds into the current `-SNAPSHOT` entry that already exists.
+The one thing worth knowing before you record a change: the version is **never** edited by hand. `.github/workflows/release.yml` owns `VERSION`, and your change folds into the current `-SNAPSHOT` entry that already exists.
 
 ### Step 4 — Archive the export and close the Issue
 
-After processing, save the export content to `community-retros/archive/sprint-<N>_<YYYY-MM-DD>.md` (commit it in the same PR as the template fix), then close the contribution Issue with a comment linking the PR. Do not delete the archived file — it is the audit trail.
+Only after the applicable checks pass, save the export content to `community-retros/archive/sprint-<N>_<YYYY-MM-DD>.md` (commit it in the same PR as the template fix), then close the contribution Issue with a comment linking the PR. Do not delete the archived file — it is the audit trail.
 
 ---
 
