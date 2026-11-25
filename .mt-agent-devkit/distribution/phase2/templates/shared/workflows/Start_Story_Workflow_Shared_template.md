@@ -13,6 +13,8 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 ## Stage Entry Check (run before anything else)
 
+**Analysis open topics (check first):** a story body (strict mode: story file) with an `**Analysis Open Topic:** <feature-slug> :: <document ID>` line is never started. Change nothing and tell the user to run `analyze requirements <feature-slug>` with the answer.
+
 **If `Mode: github`** — read the story's current GitHub label and route:
 
 | Story label | Entry point |

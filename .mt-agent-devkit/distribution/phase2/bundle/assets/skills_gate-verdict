@@ -22,7 +22,8 @@ Approved-at:
 - Keep one status value. The author sets `Draft`, then `In Review` when asking for approval.
 - `Draft`, `In Review` and `Changes Requested`: both approval fields stay empty.
 - `Approved`: `Approved-by` names each approving role, actor and verdict or revision reference; `Approved-at` is a UTC timestamp (`2026-01-31T14:05:00Z`).
-- Any content change to an `Approved` document resets it to `Draft` and clears both fields, in the same commit. Editing only these three lines is not a content change.
+- Any content change to an `Approved` document resets it to `Draft` and clears both fields, in the same commit. Editing only these three lines, or adding or removing a `Blocked:` line, is not a content change.
+- A document kept blocked by a user decision carries `Blocked: <reason>` directly below `Approved-at:`, written and removed by the orchestrator. It is never approval.
 
 ## 2. Who Approves
 

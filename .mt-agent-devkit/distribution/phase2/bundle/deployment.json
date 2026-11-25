@@ -990,8 +990,8 @@
     {
       "id": "skills/gate-verdict",
       "path": "assets/skills_gate-verdict",
-      "sha256": "6699f31042ed06a9fb58bdf46adb3c591ac1f1bb966de64fdcd7099a7e869cf5",
-      "bytes": 3707,
+      "sha256": "f3cc8f9a851ec2cf2e2b51d0456afd2757ad4e555c0a02697203b0f6861f3038",
+      "bytes": 3916,
       "kind": "template"
     },
     {
@@ -1522,22 +1522,22 @@
     {
       "id": "workflow_shared/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
-      "sha256": "f8d68e30fd4ea7a87b3678891860a5fc70c132cc6829d2899dddc8467a49c4b8",
-      "bytes": 24032,
+      "sha256": "a158b87cd9de9d96e2752fa1f824ced81b3b1cbce2cd09a0e8f2d2dc6a02f9f4",
+      "bytes": 34798,
       "kind": "template"
     },
     {
       "id": "workflow_github/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_github_Analyze_Requirements_Workflow.md",
-      "sha256": "888b915aa595767ff8b5177306d830c5a9585c96773f7c65085d32b84003f79b",
-      "bytes": 381,
+      "sha256": "33231bdf73ec72a36e4db21b971511e7e18667b53e5b5b956839afb8760a4255",
+      "bytes": 498,
       "kind": "template"
     },
     {
       "id": "workflow_strict/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_strict_Analyze_Requirements_Workflow.md",
-      "sha256": "b228093d5af48c7148f0e788deb35c34d2f793f23504567e36c2c524547bb966",
-      "bytes": 284,
+      "sha256": "900cde5a2cad0a11f919fc2b0f4a16303a6eac1264bb1e3932b28aa47274f5ac",
+      "bytes": 364,
       "kind": "template"
     },
     {
@@ -1564,8 +1564,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "5cde709c3b5a4a4fc815d89fa4f9e5c38a3565807fd7f0f4e38ef64ef3042eb0",
-      "bytes": 13723,
+      "sha256": "a12a2ba7c04e525238c4bc30c7d2caa7c959f3be8fac5ddaa56dfc2a335debe3",
+      "bytes": 13780,
       "kind": "template"
     },
     {
@@ -1627,8 +1627,8 @@
     {
       "id": "workflow_shared/Resume_Story_Workflow.md",
       "path": "assets/workflow_shared_Resume_Story_Workflow.md",
-      "sha256": "73016082a72f504208346583dc339bc9d2b7b07647f4ecf7eef991f4f3afada7",
-      "bytes": 2860,
+      "sha256": "c4a06c6907d2989f567f77d679f6778fcfbb1f3b585b59ee1ef50c023871df5e",
+      "bytes": 3128,
       "kind": "template"
     },
     {
@@ -1690,8 +1690,8 @@
     {
       "id": "workflow_shared/Start_Story_Workflow.md",
       "path": "assets/workflow_shared_Start_Story_Workflow.md",
-      "sha256": "9242e735b87be9c1808e519bb4e747ae6332e28f455ae9285ed3964319ee8b00",
-      "bytes": 4187,
+      "sha256": "ca198d94ae1905242cd520d7bf08823fb02b33ab19320308558b75d667cd332c",
+      "bytes": 4452,
       "kind": "template"
     },
     {
@@ -1711,8 +1711,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "4c2810065afcac6ab90293834f19bc2570d54c46dfffa79f2791bd013eea8832",
-      "bytes": 14972,
+      "sha256": "fef5199d8704c8b27526456b5aa36b6326914b288714ef1a1ad8a51bdb7de77f",
+      "bytes": 15114,
       "kind": "template"
     },
     {
