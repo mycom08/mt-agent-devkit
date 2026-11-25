@@ -4563,6 +4563,102 @@
       "consumer_contract": [
         "native provider discovery"
       ]
+    },
+    {
+      "source": ".claude/skills/gate-verdict/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/gate-verdict/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/tl-design/SKILL.md",
+        ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000245); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/gate-verdict/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/gate-verdict/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/tl-design/SKILL.md",
+        ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000245); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/gate-verdict/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/gate-verdict/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/tl-design/SKILL.md",
+        ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+        ".mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md"
+      ],
+      "reason": "Post-baseline common skill (ST-000245); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".claude/skills/qa-test-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/qa-core/SKILL.md"
+      ],
+      "reason": "Post-baseline QA skill (ST-000245); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/qa-test-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/qa-core/SKILL.md"
+      ],
+      "reason": "Post-baseline QA skill (ST-000245); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/qa-test-docs/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/qa-core/SKILL.md"
+      ],
+      "reason": "Post-baseline QA skill (ST-000245); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
     }
   ],
   "retired": [

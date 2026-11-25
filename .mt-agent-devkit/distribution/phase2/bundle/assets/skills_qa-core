@@ -15,6 +15,7 @@ Validate AC, report results in a comment (strict mode: the story file's `## Comm
 
 No task skill in the assignment: report it, never guess. Load right before the action, also when resumed:
 
+- test strategy or design: `qa-test-docs`
 - validation: `qa-validate`, `qa-testing`; regression check: `qa-regression`; post-Done bug: `qa-hotfix`
 - QA as implementer: `pre-pr-gate`; live instruction conflict, blocker (tag Dev or TL): `raise-question`
 - comment: `comment`; document: `project-docs`

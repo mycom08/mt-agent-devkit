@@ -101,8 +101,8 @@
     {
       "id": "rules/Business_Analyst_Rules.md",
       "path": "assets/rules_Business_Analyst_Rules.md",
-      "sha256": "e93a7f97ad995de509bc2b11ce9d943a17b6e7a5f9fd85d320b6e8a735923788",
-      "bytes": 2103,
+      "sha256": "20df02df02e5cf751d0693372cec0b61db0f203eacc81b2d7e45a207e349a99b",
+      "bytes": 3977,
       "kind": "template"
     },
     {
@@ -988,6 +988,34 @@
       "kind": "adapter"
     },
     {
+      "id": "skills/gate-verdict",
+      "path": "assets/skills_gate-verdict",
+      "sha256": "97b4559481ebced27d3be8549efea9927dad0dd3989fe350095bd1023a26b40b",
+      "bytes": 3404,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/gate-verdict",
+      "path": "assets/claude_skill_gate-verdict",
+      "sha256": "cf81e1419e6b506c03b04f65e0f9f719bf51b10ff7fb60bcefdf5ef941202ba8",
+      "bytes": 441,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/gate-verdict",
+      "path": "assets/antigravity_skill_gate-verdict",
+      "sha256": "cf81e1419e6b506c03b04f65e0f9f719bf51b10ff7fb60bcefdf5ef941202ba8",
+      "bytes": 441,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/gate-verdict",
+      "path": "assets/codex_skill_gate-verdict",
+      "sha256": "cf81e1419e6b506c03b04f65e0f9f719bf51b10ff7fb60bcefdf5ef941202ba8",
+      "bytes": 441,
+      "kind": "adapter"
+    },
+    {
       "id": "skills/dev-core",
       "path": "assets/skills_dev-core",
       "sha256": "de7380fdb90435ba7958b7f459396d19c1e52e7650096f0ccffc91dff435d91e",
@@ -1186,8 +1214,8 @@
     {
       "id": "skills/tl-design",
       "path": "assets/skills_tl-design",
-      "sha256": "5df052a57a10d45f21b9d7a77638e5398e0e58e28e7076e2ad6ed6aed27bef2f",
-      "bytes": 2005,
+      "sha256": "c5d89307a347fcee5cb456ce13e7f45a1e6415b88a36ff80518006e279589d91",
+      "bytes": 2829,
       "kind": "template"
     },
     {
@@ -1326,8 +1354,8 @@
     {
       "id": "skills/qa-core",
       "path": "assets/skills_qa-core",
-      "sha256": "937d67c3160d1d09ed39d7bd3f7cb7f998921db31999af2d7a499a6eb7146db1",
-      "bytes": 1361,
+      "sha256": "0fabf34b33ab0371e150e5d414820eb9f77505a1a10f6035c72f7bc22486f256",
+      "bytes": 1403,
       "kind": "template"
     },
     {
@@ -1461,6 +1489,34 @@
       "path": "assets/codex_skill_qa-hotfix",
       "sha256": "8d1cfacd33ab30ccf2494a6cd9734604e212407879d99978acc420d83f93b058",
       "bytes": 362,
+      "kind": "adapter"
+    },
+    {
+      "id": "skills/qa-test-docs",
+      "path": "assets/skills_qa-test-docs",
+      "sha256": "46e09676fac24cef9154742df4527bf245811e333634332b789c7e31592d17eb",
+      "bytes": 2266,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/qa-test-docs",
+      "path": "assets/claude_skill_qa-test-docs",
+      "sha256": "f0a81b529043f5210adaf06180296b886ef42456168ee8a68b89b16ef98467ac",
+      "bytes": 369,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/qa-test-docs",
+      "path": "assets/antigravity_skill_qa-test-docs",
+      "sha256": "f0a81b529043f5210adaf06180296b886ef42456168ee8a68b89b16ef98467ac",
+      "bytes": 369,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/qa-test-docs",
+      "path": "assets/codex_skill_qa-test-docs",
+      "sha256": "f0a81b529043f5210adaf06180296b886ef42456168ee8a68b89b16ef98467ac",
+      "bytes": 369,
       "kind": "adapter"
     },
     {
@@ -2306,8 +2362,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "9a894e6381683a43655c29d6b7b1917061de202064fa0b3ea4e5006c53fa596f",
-      "bytes": 34017,
+      "sha256": "05ce3c88e9b3f4bf5bf20bb0bc05e9dc6558099f6c2f837d73606c92d3c66100",
+      "bytes": 34049,
       "kind": "script"
     },
     {
@@ -5739,6 +5795,100 @@
       "required": true
     },
     {
+      "id": "skills/gate-verdict",
+      "sources": [
+        "skills/gate-verdict"
+      ],
+      "destination": ".mt-agent-devkit/skills/gate-verdict/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/gate-verdict",
+      "sources": [
+        "claude/skill/gate-verdict"
+      ],
+      "destination": ".claude/skills/gate-verdict/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/gate-verdict",
+      "sources": [
+        "antigravity/skill/gate-verdict"
+      ],
+      "destination": ".antigravity/skills/gate-verdict/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/gate-verdict",
+      "sources": [
+        "codex/skill/gate-verdict"
+      ],
+      "destination": ".codex/skills/gate-verdict/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
       "id": "skills/dev-core",
       "sources": [
         "skills/dev-core"
@@ -7319,6 +7469,100 @@
         "codex/skill/qa-hotfix"
       ],
       "destination": ".codex/skills/qa-hotfix/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/qa-test-docs",
+      "sources": [
+        "skills/qa-test-docs"
+      ],
+      "destination": ".mt-agent-devkit/skills/qa-test-docs/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/qa-test-docs",
+      "sources": [
+        "claude/skill/qa-test-docs"
+      ],
+      "destination": ".claude/skills/qa-test-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/qa-test-docs",
+      "sources": [
+        "antigravity/skill/qa-test-docs"
+      ],
+      "destination": ".antigravity/skills/qa-test-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/qa-test-docs",
+      "sources": [
+        "codex/skill/qa-test-docs"
+      ],
+      "destination": ".codex/skills/qa-test-docs/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [
