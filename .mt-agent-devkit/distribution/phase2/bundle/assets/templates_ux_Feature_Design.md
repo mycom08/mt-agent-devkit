@@ -1,5 +1,9 @@
 # UI/UX Design — {feature name}
 
+Status: Draft
+Approved-by:
+Approved-at:
+
 **Doc type:** feature design doc (one feature, frozen once it ships). **Promotion:** at feature closure the UI/UX Designer proposes reusable pieces for the project UX standard, and both TL and PO accept.
 
 How to use: copy this blank template to `docs/feature/<feature-slug>/ui-ux/<Feature_Name>_Design.md` and fill every section. Write "None" where a section does not apply.

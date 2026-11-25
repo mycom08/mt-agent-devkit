@@ -31,6 +31,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000245] Add shared formats for requirement specs, ADRs with mandatory NFRs, test documents and gate verdicts.
 - [ST-000246] Add the `analyze requirements` target workflow (intake to PO-approved specs) and retire the devkit's standalone `analyze` triggers; Analyst runs only inside `build software`.
 - [ST-000247] Extend `analyze requirements` with PO-approved ADRs and roadmap and TL/PO-approved test strategy and designs.
+- [ST-000248] Add a PO-approved feature UI/UX design step to `analyze requirements` for features with screens, built on the project UX standard or the shipped one.
 - [ST-000234] Add blank UX quality standard and feature design doc templates, the promotion rule and a "UX Quality Standard" document index row.
 - [Docs] Maintainer docs and skills name the Phase 2 templates as the active source and describe the current `changes.json` convention.
 

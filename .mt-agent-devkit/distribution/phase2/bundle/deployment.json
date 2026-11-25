@@ -990,29 +990,29 @@
     {
       "id": "skills/gate-verdict",
       "path": "assets/skills_gate-verdict",
-      "sha256": "94d85c8b519d8a9d04fb918b833243b1d9ee326a3f60a0074ddc116bfa164393",
-      "bytes": 3540,
+      "sha256": "6699f31042ed06a9fb58bdf46adb3c591ac1f1bb966de64fdcd7099a7e869cf5",
+      "bytes": 3707,
       "kind": "template"
     },
     {
       "id": "claude/skill/gate-verdict",
       "path": "assets/claude_skill_gate-verdict",
-      "sha256": "2e0ab573d3d3417b9e5dfb0fde9f461309eba24e101a8bb84fa7ac9616c50ba1",
-      "bytes": 459,
+      "sha256": "430685b30ce433e7f3e651d56d0dfd75f2181e33533024190fb75b8777e5a968",
+      "bytes": 482,
       "kind": "adapter"
     },
     {
       "id": "antigravity/skill/gate-verdict",
       "path": "assets/antigravity_skill_gate-verdict",
-      "sha256": "2e0ab573d3d3417b9e5dfb0fde9f461309eba24e101a8bb84fa7ac9616c50ba1",
-      "bytes": 459,
+      "sha256": "430685b30ce433e7f3e651d56d0dfd75f2181e33533024190fb75b8777e5a968",
+      "bytes": 482,
       "kind": "adapter"
     },
     {
       "id": "codex/skill/gate-verdict",
       "path": "assets/codex_skill_gate-verdict",
-      "sha256": "2e0ab573d3d3417b9e5dfb0fde9f461309eba24e101a8bb84fa7ac9616c50ba1",
-      "bytes": 459,
+      "sha256": "430685b30ce433e7f3e651d56d0dfd75f2181e33533024190fb75b8777e5a968",
+      "bytes": 482,
       "kind": "adapter"
     },
     {
@@ -1522,8 +1522,8 @@
     {
       "id": "workflow_shared/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
-      "sha256": "24ffc7411274fcfd652a25b78623368c3be28b685f5259765e0fcaf87f4ffb0e",
-      "bytes": 20067,
+      "sha256": "f8d68e30fd4ea7a87b3678891860a5fc70c132cc6829d2899dddc8467a49c4b8",
+      "bytes": 24032,
       "kind": "template"
     },
     {
@@ -1711,8 +1711,8 @@
     {
       "id": "orchestrator_shared",
       "path": "assets/orchestrator_shared",
-      "sha256": "c1282381abd81b3113738b95d3ee245edd2c55845409b371f964c4244619b6ea",
-      "bytes": 14956,
+      "sha256": "4c2810065afcac6ab90293834f19bc2570d54c46dfffa79f2791bd013eea8832",
+      "bytes": 14972,
       "kind": "template"
     },
     {
@@ -1802,8 +1802,8 @@
     {
       "id": "templates/ux/Feature_Design.md",
       "path": "assets/templates_ux_Feature_Design.md",
-      "sha256": "2825eaa1bd06df962d7f07a9ae64658553f3176554b32a901acf9368dca48e12",
-      "bytes": 2218,
+      "sha256": "c738d16c66ae7d00f2060bc8a2b289093d78b14abdafd31a64004d020e8f8f58",
+      "bytes": 2259,
       "kind": "template"
     },
     {
