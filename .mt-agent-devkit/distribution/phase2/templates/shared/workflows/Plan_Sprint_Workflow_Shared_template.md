@@ -33,7 +33,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
        - `gh issue list --label "status:testing" --state open`
 
        Any story returned by at least one query is in the current sprint. If the union is empty, fall back to `gh issue list --state closed --label "status:done" --limit 1 --json number,title,labels` and read the `sprint-N` label from the most recent done story.
-     - **Strict mode:** glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, filter for `**Status:**` values of `in-progress`, `review`, or `testing` to find the active sprint; if none found, filter for `**Status:** done` and read the `**Sprint:**` field from the most recently created story (highest ID) — that is the current sprint N
+     - **Strict mode:** glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, filter for `**Status:**` values of `in-progress`, `review`, or `testing` to find the active sprint; if none found, filter for `**Status:** done`, ignoring files with an `**Analysis Open Topic:**` line, and read the `**Sprint:**` field from the most recently created story (highest ID) — that is the current sprint N
 4. Confirm every story in the current sprint has `status:done`:
    - **GitHub mode:** check GitHub Issues
    - **Strict mode:** read all story MD files for the identified sprint and confirm all have `**Status:** done`

@@ -3,9 +3,9 @@
 <!-- SHARED-START -->
 # Analyze Requirements Workflow
 
-Triggered by: `"analyze requirements"` or `"analyze-requirements"` in {ENTRYPOINT}, followed by a prompt, a document path, or the slug of a started feature.
+Triggered by: `"analyze requirements"` or `"analyze-requirements"` in {ENTRYPOINT}, followed by a prompt, a document path, or the slug of a started feature (with an answer to an open topic: Correction Round).
 
-Turns raw input into approved requirement specs, ADRs, a feature UI/UX design (features with screens), a roadmap and test documents under `docs/feature/<feature-slug>/`. The workflow ends there: it creates no backlog stories.
+Turns raw input into approved requirement specs, ADRs, a feature UI/UX design (features with screens), a roadmap and test documents under `docs/feature/<feature-slug>/`, then into backlog stories (Stage 8).
 
 ```
 docs/feature/<feature-slug>/
@@ -30,6 +30,7 @@ docs/feature/<feature-slug>/
 - Every temporary file (state, questions, drafts, comment bodies) goes under `docs/feature/<feature-slug>/tmp/`. Before that folder exists, use a temporary directory outside the repository. Never commit `tmp/`.
 - **Local exclude:** the feature `.gitignore` exists only on the analysis branch until it is merged, while `tmp/` stays in the working tree on every branch. So each clone also lists `/docs/feature/<feature-slug>/tmp/` in its exclude file (`git rev-parse --git-path info/exclude`; create the file if missing, add the line only when absent). That file is never committed, and without the line `tmp/` shows as untracked on other branches and blocks later branch preflights.
 - **Strict mode:** no `gh` or other GitHub calls at any stage. Commit on the local analysis branch and never push; the user controls the merge.
+- **Only Stage 8 creates stories from the feature roadmap.** The `po-roadmap-drain` skill and the Plan Sprint roadmap backstop do not apply to it, so keep it in `roadmap/`, never `plan/`.
 - Follow the orchestrator instructions for the security baseline, `PO Execution`, `Agent Models` and session reuse.
 - **Spawns:** pass the role's instruction file from the Agent Roster in {ENTRYPOINT}, the selected provider adapter and bindings, the Worker Entry Read Contract (`Shared_Pipeline_Stages.md`), the feature folder, the stage and the skills named below. This is not a story pipeline, so no read manifest is built. A role missing from the roster stops the workflow.
 
@@ -37,7 +38,7 @@ docs/feature/<feature-slug>/
 
 ## Stage 0 — Intake
 
-When the user names the slug of a started feature and gives no new input, go straight to 0.3.
+When the user names the slug of a started feature and gives no new input, or answers an open topic, go straight to 0.3.
 
 ### 0.1 Read the input
 
@@ -62,8 +63,9 @@ Check these before writing anything:
 | Found | Action |
 |---|---|
 | `docs/feature/<feature-slug>/tmp/State.md` | **Resume** (see Resume) |
-| The feature folder without `tmp/State.md` (`tmp/` is ignored, so a fresh clone has none) | Ask the user how to proceed |
-| No folder, but a local or remote analysis branch for the slug, or (GitHub mode) an issue labelled `analysis-tracking` and `feature:<feature-slug>` | Ask the user how to proceed |
+| The feature folder without `tmp/State.md`, and its stories were already due: the latest docs PR is `MERGED` (strict mode: backlog or open-topic stories exist for the feature) | Rebuild `tmp/State.md` (Resume), then **Resume** |
+| Any other feature folder without `tmp/State.md` (`tmp/` is ignored, so a fresh clone has none) | Ask the user how to proceed |
+| No folder, but a local or remote analysis branch for the slug, or (GitHub mode) an issue, open or closed, labelled `analysis-tracking` and `feature:<feature-slug>` | Ask the user how to proceed |
 | Nothing | Continue. With no input given, ask for it (0.1) |
 
 When asking, offer: another slug, continue the existing analysis (add the local exclude line when missing, reuse its branch, story and PR, and rebuild `tmp/State.md` from them), or stop. **Never overwrite an existing file** in the folder.
@@ -92,7 +94,7 @@ The tracking story never gets a `status:*` or `sprint-N` label, so sprint planni
 2. Write `docs/feature/<feature-slug>/.gitignore` containing `tmp/`. An existing `.gitignore` only gains the `tmp/` line when it is missing. Add the local exclude line (Workflow Rules) too.
 3. Write `tmp/State.md` (format below) and save the input text to `tmp/Input.md`.
 4. Commit the `.gitignore`.
-5. **GitHub mode:** push the branch and open the feature's one docs PR with `gh pr create --draft --base <default-branch>`. The body names the tracking story; it never says `Closes`. Every document change for this feature goes through this PR.
+5. **GitHub mode:** push the branch and open the round's one docs PR with `gh pr create --draft --base <default-branch>`. The body names the tracking story; it never says `Closes`. Every document change of this round goes through this PR; a later Correction Round opens its own.
 
 ---
 
@@ -171,6 +173,8 @@ The orchestrator confirms that each verdict is recorded and matches the header, 
 | Test document revision rounds (TL or PO requests), counted per document | 2 | Do not request another revision: escalate that document |
 
 **Escalate:** show the user the open questions or change requests and let them decide: give direction for one more pass, keep the document blocked, drop it (specs only: the BA removes the file), or stop. A feature-level question can only be answered or stop the workflow. Record the decision in `tmp/State.md` and on the tracking story (GitHub mode). No decision makes a document `Approved`: only its approvers' verdicts do.
+
+**Blocked line:** when the user decides to keep a document blocked, the orchestrator writes `Blocked: <reason>` directly below its `Approved-at:` line and commits it (GitHub mode: and pushes); it removes the line when the document is unblocked (`gate-verdict`). A blocked document keeps its non-`Approved` status.
 
 ### Spec gate
 
@@ -252,7 +256,9 @@ Approved-at:
 ```
 
 - `Blocked Items` lists every blocked spec and every blocked ADR with what blocks it, or `None`. Assume no decision for a blocked ADR, and plan no story candidate on a blocked item.
-- The roadmap creates no stories and triggers no story draining: candidates stay text, no issue or story file is created, and the `po-roadmap-drain` skill is not run. Keep the file in `roadmap/`, never `plan/`.
+- This stage creates no stories and triggers no story draining: candidates stay text until Stage 8, and the `po-roadmap-drain` skill is not run. Keep the file in `roadmap/`, never `plan/`.
+- Candidate titles are unique within a phase.
+- **Existing stories:** when the feature already has backlog stories, give the TL their titles, phases and states. A candidate that has a story keeps its phase and title text exactly. A formerly blocked item gets its candidates once it is unblocked.
 
 The PO approves the roadmap or raises concerns with the TL (Document Review). Continue only when it is `Approved`. A roadmap kept blocked stops the workflow here.
 
@@ -271,17 +277,145 @@ A strategy kept blocked stops the workflow here.
 
 ---
 
+## Document Gate
+
+The documents are complete when the roadmap and the test strategy are `Approved`, every spec, ADR and required test design is `Approved` or is recorded as blocked by a user decision, and `UI Design` is `not required`, or `required` with the feature design `Approved` or recorded as blocked by a user decision. Set `Stage: test-approved` only then, and continue to Stage 8. A blocked roadmap or test strategy never reaches this stage.
+
+---
+
+## Stage 8 — Backlog Stories
+
+Start only from `test-approved`. Set `Stage: stories`. Every step is safe to repeat: look for what already exists before creating or posting.
+
+Order: merge, backlog stories, open-topic stories, tracking comment, close resolved topics, close the tracking story.
+
+### 8.1 Merge the round's docs PR (GitHub mode)
+
+The PR is the one recorded in `tmp/State.md` for this round. When it is already `MERGED`, go to step 6. When it was closed without merging, stop and report.
+
+1. Confirm the Document Gate still holds, every local commit is pushed and every file in `gh pr diff <PR-number> --name-only` is inside `docs/feature/<feature-slug>/`. Otherwise stop and report.
+2. Each `Approved` document this PR changes must be unchanged since the `Revision:` of each of its verdicts, ignoring the status header and `Blocked:` lines. A changed one loses its approval (`gate-verdict`) and returns to its review.
+3. Run `gh pr ready <PR-number>`.
+4. Read CI by the CI-check gate of the Merge Procedure in `Shared_Pipeline_Stages.md`: all its states, the zero-check evidence gate and the audit comment. Pending or failed CI never merges.
+5. Run `gh pr merge <PR-number> --merge`. A refused merge stops the workflow: report it.
+6. Confirm the PR is `MERGED`, then check out and pull the default branch. Only this `MERGED` state counts, and nothing later needs the analysis branch.
+
+Blocked documents merge as they are, still carrying their `Blocked:` line. **Strict mode:** there is no merge; stay on the analysis branch.
+
+### 8.2 Backlog stories (PO)
+
+This is the Analyze Requirements stories row of the PO touchpoint table in the orchestrator instructions. `PO Execution: subagent`: spawn or resume the Product Owner (**policy: standard**; save `po_session`), naming the `po-core`, `po-write-story` and `comment` skills. `orchestrator`: write inline with the same skills. Pass the roadmap, specs, ADRs, test documents, the blocked documents with their reasons, the tracking story and the recorded default branch.
+
+**Eligible candidates.** Skip a roadmap candidate when any of these holds, and record the blocking document:
+
+- one of its `Specs and ADRs` is blocked;
+- a required test design for one of its specs is blocked;
+- the feature design is blocked and one of its specs touches a screen;
+- it depends on a skipped candidate.
+
+**No duplicates.** Each backlog story body holds this marker line from the moment it is created:
+
+```
+**Roadmap Source:** docs/feature/<feature-slug>/roadmap/Feature_Roadmap.md :: Phase N :: <candidate title>
+```
+
+Before creating, list the feature's existing stories in every status (GitHub mode: `gh issue list --label "feature:<feature-slug>" --state all --limit 500 --json number,title,body`; strict mode: the files in `{RUNTIME_ROOT}/docs/stories/`).
+
+- A candidate whose marker is an exact, full line in a story already has its story: do not create another. Repair its title when the `ST-` ID is missing.
+- A story with a marker for this roadmap that matches no candidate is reported to the user before anything is created; wait for the answer.
+
+**Create** one story per remaining eligible candidate, dependencies first, following `po-write-story` (strict mode: the story format and counter of `Create_Stories_Workflow.md` Step 4, without its questions):
+
+| Field | Value |
+|---|---|
+| Labels (GitHub mode) | `status:backlog`, `feature:<feature-slug>`, `phase-N`. Create missing labels. No sprint label, never `analysis-tracking` |
+| Status (strict mode) | `**Status:** backlog`, no `**Sprint:**` line |
+| Header lines | `**Feature:** <feature-slug>`, `**Phase:** N`, `**Roadmap Phase:** Phase N — <theme>`, the marker, draft `**Story Points:**` (strict mode: `**Points:**`), `**Priority:**`, `**Assigned:**`, `**Depends on:**` when it applies |
+| Base | `**Base Branch:**` (strict mode: `**Project Base Branch:**`) = the recorded default branch |
+| Content | User story and AC taken from the linked specs, nothing invented |
+| Links | The spec and ADR paths, and `**Tracking Story:** ST-XXXXXX` (strict mode: the roadmap path instead) |
+
+### 8.3 Open-topic stories
+
+Create one per document that carries a `Blocked:` line, also when no candidate waits for it. Reuse and update an open one with the same topic line; never create a second.
+
+| Field | Value |
+|---|---|
+| Title | `[ST-XXXXXX][<feature-slug>] Open topic: <document ID>` (strict mode: the story format heading) |
+| Labels (GitHub mode) | Exactly `status:blocked`, `analysis-open-topic`, `feature:<feature-slug>`. No sprint or phase label |
+| Status (strict mode) | `**Status:** blocked`, no `**Sprint:**` line |
+
+```markdown
+**Analysis Open Topic:** <feature-slug> :: <document ID>
+**Document:** <path>
+**Reason:** <the Blocked line reason>
+**Tracking Story:** <ST-XXXXXX | none>
+**Assigned:** <author role of the document>
+
+## Question
+<what the user must answer to unblock it>
+
+## Waiting Candidates
+- Phase N :: <candidate title>   (or None)
+
+## Acceptance Criteria
+- The document is Approved and merged, or the user drops the spec.
+```
+
+AC are plain bullets without checkboxes. The body has no `**Roadmap Source:**` line, base branch or points. An open-topic story is never sprint work.
+
+### 8.4 Report on the tracking story
+
+Post one `[Orchestrator]` comment for the round listing the created stories, the skipped candidates with the blocking document, the blocked items that have no candidate and the open-topic stories. Strict mode: write the same list to `tmp/State.md` and report it.
+
+**Affected stories:** list every story created before this round whose linked document changed in content since `Round Start`. Report them to the user in the same comment. Never edit them.
+
+### 8.5 Close
+
+1. **Resolved topics:** a topic is resolved when its document is `Approved` (GitHub mode: and merged), or the user dropped the spec. GitHub mode: remove `status:blocked`, close the issue with a comment naming the outcome, and never add `status:done`. Strict mode: set `**Status:** done`. A document still blocked keeps its story open.
+2. **Tracking story:** close it only when no open-topic story remains open for the feature. It is never reopened.
+3. Set `Stage: done`.
+
+---
+
 ## Completion
 
-The workflow is complete when the test strategy is `Approved`, every ADR and required test design is `Approved` or is recorded as blocked by a user decision, and `UI Design` is `not required`, or `required` with the feature design `Approved` or recorded as blocked by a user decision. Set `Stage: test-approved` only then. A blocked roadmap or test strategy never reaches this stage.
+Report the approved and blocked specs, ADRs and test designs, the feature design decision and status, the roadmap and strategy status, the branch, the stories created, skipped and open and, in GitHub mode, the tracking story and PR.
 
-Report the approved and blocked specs, ADRs and test designs, the feature design decision and status, the roadmap and strategy status, the branch and, in GitHub mode, the tracking story and PR. The same report applies when the workflow stops earlier. Leave the PR open as a draft and the tracking story open: do not merge either way, and create no backlog stories. In strict mode tell the user the local branch is theirs to merge.
+- After Stage 8: tell the user to run `plan next sprint none`. With open topics, also tell them to run `analyze requirements <feature-slug>` with the answer. Strict mode: the local branch is theirs to merge, before any of these stories is started.
+- A stop before Stage 8 uses the same report. Leave the PR open as a draft and the tracking story open: do not merge, and create no stories.
+
+---
+
+## Correction Round
+
+Takes the feature slug, an open topic and the user's answer. It runs on a feature at `Stage: done`.
+
+1. The open topics are the open issues labelled `analysis-open-topic` and `feature:<feature-slug>` (strict mode: story files with the topic line for this slug and `**Status:** blocked`).
+2. No answer, or an answer that does not clearly belong to one topic: list the topics and ask. Answers to several topics may share one round.
+3. Any other new input on a `done` feature stops: report that only answers to open topics are handled. With no open topic there is nothing to redo.
+4. **Branch:** `N` is the previous round plus one (the first correction round is 2).
+   - GitHub mode: check out and pull the default branch, require a clean tree, then run the branch preflight `inspect` and `create` (Stage 0.4 and 0.6 flags) for `ST-XXXXXX/analysis-<feature-slug>-rN`, with the tracking story ID.
+   - Strict mode: when the previous analysis branch is not merged, continue on it, because the default branch lacks the documents. Otherwise preflight and create `analysis/<feature-slug>-rN` from the synced default branch.
+5. Write `Round`, `Branch`, `Base`, `Round Start` (the current commit SHA) and `PR: none` to `tmp/State.md`, and set `Stage` to the re-entry stage. Record the answer in `tmp/Questions.md` (GitHub mode: also on the tracking story).
+6. Remove the `Blocked:` line of each answered document. Re-enter at its stage:
+
+| Document | Re-entry |
+|---|---|
+| Spec | Stage 3, through Changed Requirements. A drop: the BA removes the spec |
+| ADR | `Stage: adr` (Stage 5) |
+| Feature design | `UI Design Status: drafting` (Stage 5U); alone, `Stage: testing` |
+| Test design | `Stage: testing` (Stage 7) |
+
+7. **GitHub mode:** after the first document commit, push, open the round's draft PR (as in Stage 0.6, never `Closes`) and record it.
+8. Only affected documents change and are approved again, in the normal stage order: the TL updates the roadmap where candidates change, and QA the affected test documents. Unblocking grants one more pass where a loop cap was reached; the ADR NFR check is never waived.
+9. A document the user keeps blocked gets its `Blocked:` line back, and Stage 8.3 updates the same open-topic story. Finish through the Document Gate and Stage 8, which creates only the missing stories.
 
 ---
 
 ## Changed Requirements
 
-New input or a user answer that changes requirements after Stage 4:
+New input or a user answer that changes requirements after Stage 4 (a `done` feature takes only Correction Round answers):
 
 1. First set `Stage: specs` and `UI Design: undecided`, keeping `UI Design Status`, `UI Design Rounds` and `ui_ux_session`, so an interrupted run resumes the change. Then the BA updates the specs, and they return to PO approval (Stages 3 and 4).
 2. The TL updates the affected ADRs and roadmap, then QA the affected test documents, each through its stage and review.
@@ -307,7 +441,9 @@ A revision caused by new input is not a change request. Round counts never reset
 # Analyze Requirements State
 **Feature:** <feature-slug>
 **Mode:** <github | strict>
-**Stage:** <intake | quick-check | brief | specs | review | specs-approved | adr | roadmap | testing | test-approved>
+**Stage:** <intake | quick-check | brief | specs | review | specs-approved | adr | roadmap | testing | test-approved | stories | done>
+**Round:** <1, then one more per correction round>
+**Round Start:** <commit SHA; correction rounds only>
 **Intake Questions:** <count, at most 5>
 **BA Question Rounds:** <count, cap 2>
 **PO Change Rounds:** <per spec, e.g. "SPEC-001: 1", or none>
@@ -321,7 +457,7 @@ A revision caused by new input is not a change request. Round counts never reset
 **Story:** <ST-XXXXXX | none (strict)>
 **Branch:** <analysis branch>
 **Base:** <default branch and full Base SHA>
-**PR:** <number | none (strict)>
+**PR:** <this round's number | none (not opened yet, or strict)>
 **Security Skill:** agent-security
 **PO Execution:** <subagent | orchestrator>
 **Agent Models:** <JSON object keyed "<Role>/<policy>" | none>
@@ -345,11 +481,12 @@ Write it after each stage change and each answer. Every rewrite preserves `## Ga
 ## Resume
 
 1. Read `tmp/State.md`. Use its stage, counts, story, branch, PR, sessions and pinned `PO Execution`, `Agent Models` and `Security Skill`; do not resolve the pinned settings again, and re-read the security skill if the session no longer holds it.
-2. Add the local exclude line (Workflow Rules) when missing, then check out the recorded branch. Uncommitted changes outside this feature folder, or a missing branch, stop the workflow: report and ask.
+2. Add the local exclude line (Workflow Rules) when missing, then check out the recorded branch. At `stories` with the round's PR `MERGED`, and at `done`, check out and pull the default branch instead: the analysis branch may be deleted. Uncommitted changes outside this feature folder, or a missing branch that is still needed, stop the workflow: report and ask.
 3. Do not repeat the preflight, story, branch or PR steps that already succeeded. Reuse them.
-4. Continue at the recorded stage. Round counts never reset. `specs-approved` continues at Stage 5 when at least one spec is `Approved`, otherwise there is nothing to redo; `test-approved` means there is nothing to redo.
-   The feature design resumes separately: with the Spec gate passed and `Stage` not `test-approved`, decide an `undecided` `UI Design`, and continue a `required` design that is neither `approved` nor `blocked`, also after an early stop.
-5. A state file from an earlier run may lack fields: read a missing count as zero, a missing session or list as empty, a missing `UI Design` as `undecided` and a missing `UI Design Status` as `none`. Pinned settings are still not resolved again; a role with no pinned `Agent Models` entry uses the adapter default.
+4. Continue at the recorded stage. Round counts never reset. `specs-approved` continues at Stage 5 when at least one spec is `Approved`, otherwise there is nothing to redo; `test-approved` continues at Stage 8; `stories` repeats Stage 8; `done` takes only an answer to an open topic (Correction Round).
+   The feature design resumes separately: with the Spec gate passed and `Stage` not `test-approved`, `stories` or `done`, decide an `undecided` `UI Design`, and continue a `required` design that is neither `approved` nor `blocked`, also after an early stop.
+5. A state file from an earlier run may lack fields: read a missing count as zero, a missing session or list as empty, a missing `UI Design` as `undecided` and a missing `UI Design Status` as `none`. Pinned settings are still not resolved again; a role with no pinned `Agent Models` entry uses the adapter default. A missing `Round` reads as 1.
+6. **No `tmp/State.md`, stories already due** (Stage 0.3): rebuild it with `Stage: stories`, the tracking story, the latest docs PR and its round, and the default branch; resolve the pinned settings afresh. Stage 8 repeats safely and ends at `done`.
 
-A new input given for an existing feature is added to `tmp/Input.md` after the user confirms it, and goes to the BA as an update to the specs (after Stage 4: Changed Requirements). It never replaces the brief or a spec silently.
+A new input given for an existing feature is added to `tmp/Input.md` after the user confirms it, and goes to the BA as an update to the specs (after Stage 4: Changed Requirements). It never replaces the brief or a spec silently. A `done` feature takes only Correction Round answers.
 <!-- SHARED-END -->
