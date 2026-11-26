@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Bounded retrospective completion evidence; never writes retrospective files."""
 import argparse
+import importlib.util
 import json
 from pathlib import Path, PurePosixPath
 import re
 import os
+import sys
 import tempfile
 
 PROVIDERS = {"claude", "antigravity", "codex"}
@@ -35,13 +37,17 @@ def confined(root, relative):
     return candidate
 
 
+def wait_helper():
+    """The sibling wait helper owns the runtime binding rule both helpers follow."""
+    sys.dont_write_bytecode = True  # leave no cache files in the installed project
+    spec = importlib.util.spec_from_file_location("wait_work", Path(__file__).with_name("wait_work.py"))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def runtime_root(target, provider, runtime):
-    if provider not in PROVIDERS or runtime not in {f".{provider}/agents", f".{provider}/agents/working"}:
-        raise ValueError("foreign or unresolved provider runtime binding")
-    root = confined(Path(target).resolve(), runtime)
-    if root.is_symlink() or any(p.is_symlink() for p in root.parents if p != Path(target).resolve()):
-        raise ValueError("redirected runtime root rejected")
-    return root
+    return Path(target).resolve() / wait_helper().bound_runtime(target, provider, runtime)
 
 
 def identity(value, provider):

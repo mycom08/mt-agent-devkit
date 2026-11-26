@@ -14,11 +14,19 @@ r = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(r)
 
 
+def bind(target, provider, runtime, provider_root=None):
+    harness = Path(target) / ('.' + provider) / 'harness'
+    harness.mkdir(parents=True, exist_ok=True)
+    value = dict(PROVIDER_ROOT=provider_root or '.' + provider, RUNTIME_ROOT=runtime, COMMAND_ROOT=runtime)
+    (harness / 'state-paths.json').write_text(json.dumps(value), encoding='utf-8')
+
+
 class CompletionTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.target = Path(self.temp.name)
+        bind(self.target, 'codex', '.codex/agents')
         self.root = r.runtime_root(self.target, 'codex', '.codex/agents')
         self.identity = dict(provider='codex', run='run1', story='ST-000253', stage='1', role='Developer')
 
@@ -146,6 +154,65 @@ class CompletionTests(unittest.TestCase):
         result = subprocess.run(base + ['--state', 'required'], capture_output=True, text=True)
         self.assertEqual(result.returncode, 2)
         self.assertEqual(json.loads(path.read_text())['state'], 'clean')
+
+    def assert_rejected(self, runtime, target=None, provider='codex'):
+        with self.assertRaisesRegex(ValueError, 'accepted runtime root forms: .*relative to the project root or as the absolute path'):
+            r.runtime_root(target or self.target, provider, runtime)
+
+    def test_relative_and_absolute_forms_of_the_installed_binding_are_accepted(self):
+        expected = self.target.resolve() / '.codex/agents'
+        for runtime in ['.codex/agents', str(self.target / '.codex/agents'), str(expected)]:
+            with self.subTest(runtime=runtime):
+                self.assertEqual(r.runtime_root(self.target, 'codex', runtime), expected)
+        bind(self.target, 'claude', '.claude/agents/working')
+        working = str(self.target / '.claude/agents/working')
+        self.assertEqual(r.runtime_root(self.target, 'claude', working), self.target.resolve() / '.claude/agents/working')
+
+    def test_project_reached_through_a_symlinked_parent_is_accepted(self):
+        with tempfile.TemporaryDirectory() as folder:
+            alias = Path(folder) / 'alias'
+            alias.symlink_to(self.target, target_is_directory=True)
+            for runtime in [alias / '.codex/agents', self.target.resolve() / '.codex/agents']:
+                with self.subTest(runtime=runtime):
+                    self.assertEqual(r.runtime_root(alias, 'codex', str(runtime)), self.target.resolve() / '.codex/agents')
+
+    def test_other_outside_and_escaping_roots_are_rejected_naming_the_forms(self):
+        for runtime in ['.codex/agents/working', str(self.target / '.codex/agents/working'), '/nonexistent/.codex/agents',
+                        '.codex/agents/../agents', str(self.target) + '/.codex/agents/../agents', str(self.target), '../.codex/agents',
+                        'C:\\project\\.codex\\agents', '']:
+            with self.subTest(runtime=runtime):
+                self.assert_rejected(runtime)
+
+    def test_missing_or_foreign_binding_is_rejected_naming_the_forms(self):
+        self.assert_rejected('.claude/agents', provider='claude')
+        for runtime, provider_root in [('.claude/agents', None), ('.codex/agents', '.claude'), ('.codex/agents/../../outside', None)]:
+            with self.subTest(runtime=runtime, provider_root=provider_root):
+                bind(self.target, 'codex', runtime, provider_root)
+                self.assert_rejected(runtime)
+
+    def test_runtime_root_redirected_through_an_inner_link_is_rejected(self):
+        elsewhere = self.target / 'elsewhere'
+        elsewhere.mkdir()
+        for destination in [elsewhere, self.target / 'missing']:
+            with self.subTest(destination=destination.name):
+                link = self.target / '.codex/agents'
+                link.symlink_to(destination, target_is_directory=True)
+                for runtime in ['.codex/agents', str(link)]:
+                    self.assert_rejected(runtime)
+                link.unlink()
+
+    def test_cli_accepts_absolute_runtime_root_and_names_forms_on_rejection(self):
+        base = [sys.executable, str(SCRIPT), 'record', '--target', str(self.target), '--provider', 'codex', '--run', 'run1', '--story', 'ST-000253', '--stage', '1', '--role', 'Developer', '--state', 'clean', '--runtime-root']
+        result = subprocess.run(base + [str(self.target / '.codex/agents')], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(r.record_path(self.target / '.codex/agents', self.identity).is_file())
+        result = subprocess.run(base + ['/nonexistent/.codex/agents'], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("accepted runtime root forms: '.codex/agents'", result.stderr)
+
+    def test_shipped_helper_matches_internal_helper(self):
+        template = ROOT / '.mt-agent-devkit/distribution/phase2/templates/scripts/retro_completion.py'
+        self.assertEqual(template.read_bytes(), SCRIPT.read_bytes())
 
     def test_neutral_bootstrap_rewrite_preserves_following_detection_policy(self):
         from scripts.test.test_phase2_bundle import builder

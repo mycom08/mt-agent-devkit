@@ -241,6 +241,37 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(w.aggregate([], [], ["missing"]), ("PENDING", ["missing"]))
 
 
+class RuntimeRootTests(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.target = Path(temp.name)
+        harness = self.target / ".claude/harness"
+        harness.mkdir(parents=True)
+        (harness / "state-paths.json").write_text(json.dumps({"PROVIDER_ROOT": ".claude", "RUNTIME_ROOT": ".claude/agents/working"}), encoding="utf-8")
+
+    def directory(self, runtime):
+        return w.run_directory(self.target, "claude", runtime, "id1", "local")
+
+    def test_absolute_and_relative_forms_name_the_same_wait_identity(self):
+        relative = self.directory(".claude/agents/working")
+        self.assertEqual(self.directory(str(self.target / ".claude/agents/working")), relative)
+        self.assertEqual(self.directory(str(self.target.resolve() / ".claude/agents/working")), relative)
+
+    def test_other_roots_and_inner_links_are_rejected_naming_the_forms(self):
+        forms = "accepted runtime root forms: '.claude/agents/working' from .claude/harness/state-paths.json"
+        for runtime in (".claude/agents", str(self.target / ".claude/agents"), "/nonexistent/.claude/agents/working"):
+            with self.assertRaises(w.WaitError) as caught:
+                self.directory(runtime)
+            self.assertIn(forms, str(caught.exception), runtime)
+        (self.target / "elsewhere").mkdir()
+        (self.target / ".claude/agents").symlink_to(self.target / "elsewhere", target_is_directory=True)
+        for runtime in (".claude/agents/working", str(self.target / ".claude/agents/working")):
+            with self.assertRaises(w.WaitError) as caught:
+                self.directory(runtime)
+            self.assertIn(forms, str(caught.exception), runtime)
+
+
 def lookup_name(args):
     if args[:2] == ["api", "graphql"]:
         return "protection"

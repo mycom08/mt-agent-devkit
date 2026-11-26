@@ -17,15 +17,15 @@
     {
       "id": "rules/Agent_Common_Bootstrap.md",
       "path": "assets/rules_Agent_Common_Bootstrap.md",
-      "sha256": "e19aa7c9ba3113f1905e6a5817a2c106af827b7b191783eb092fc3972782680c",
-      "bytes": 18867,
+      "sha256": "f95e00f6e67bf778b8442eea84fee8ec6ba7133001cef1da80c19d728cb053de",
+      "bytes": 18950,
       "kind": "template"
     },
     {
       "id": "rules/Agent_Common_Core.md",
       "path": "assets/rules_Agent_Common_Core.md",
-      "sha256": "bc50eae4c7f378ea7ac5796f820857e4cea15a0db284c40a7a45e3daae0d4ff4",
-      "bytes": 13529,
+      "sha256": "dcb5b519e39aa560731cd191f95e63567150b33bc23993d50fd9cd5407802125",
+      "bytes": 13612,
       "kind": "template"
     },
     {
@@ -738,8 +738,8 @@
     {
       "id": "skills/retro",
       "path": "assets/skills_retro",
-      "sha256": "4820e7c5055ea9b28f920dd8f6717c3cd2a63bed3238c8646671a0caea2c5490",
-      "bytes": 3912,
+      "sha256": "32cb52576ac2858528a899bcee199082180acb949093cb8a22cb3c63a3db97ec",
+      "bytes": 3995,
       "kind": "template"
     },
     {
@@ -1760,8 +1760,8 @@
     {
       "id": "scripts/retro_completion.py",
       "path": "assets/scripts_retro_completion.py",
-      "sha256": "1fe1da4c70efe1233c83b80168c72722edc873a978a967dcd6365ca6e23c7edd",
-      "bytes": 9778,
+      "sha256": "0139ae92b62ea46e7e12a438ae6e13988ca17b62a47b1d882742b82e98ea0fe0",
+      "bytes": 9888,
       "kind": "script"
     },
     {
@@ -2453,8 +2453,8 @@
     {
       "id": "wait_work.py",
       "path": "assets/wait_work.py",
-      "sha256": "947cc552c8014a45517ce176da89a8c3bd077b76c30c8a7b0a889eb40e28d602",
-      "bytes": 20239,
+      "sha256": "2e1db54a74ff5390252a6f1f85679f275311e8af9b7fa2a935574f5b009e7b87",
+      "bytes": 21542,
       "kind": "script"
     },
     {

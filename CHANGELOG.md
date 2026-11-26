@@ -41,6 +41,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000371] Retro completion and wait helpers accept the installed runtime folder as a relative or absolute path and name the accepted forms on rejection.
 - [ST-000372] Branch preflight no longer blocks on an `Agent:` commit message; it judges runtime files by path, now including `agents/working/` memory, records, tmp and reports.
 - [ST-000354] Plan Sprint and `po-plan-sprint` now stop on unfinished or already planned sprints, query the whole backlog and drop the GitHub mode Sprint Overview file.
 - [ST-000334] In GitHub mode, Plan Sprint and Refine Sprint work from issues and labels without `Product_Backlog.md` or a feature `plan/` folder, so any feature, including an analysed one, can be planned by name.
