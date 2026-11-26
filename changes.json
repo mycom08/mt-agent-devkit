@@ -1,4 +1,28 @@
 {
+  "0.1.60-SNAPSHOT": {
+    "new": [],
+    "modified": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
+    ],
+    "removed": [],
+    "descriptions": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately."
+    },
+    "deployment": {
+      "schema_version": 1,
+      "manifest": ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
+    },
+    "files": [
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
+    ],
+    "checksums": {
+      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "09bf8a1124b9595fdf162b6b934e5886b7c52d73eddd66102d2441b3bd5f61b4",
+      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "e3e2f094ebff7c01dc6d865500d77e850f68f6c099ad1f39f9446c2d5069937a"
+    }
+  },
   "0.1.59": {
     "new": [],
     "modified": [
@@ -136,97 +160,6 @@
       ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000238] Add the Project Roadmap row.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000283] Sprint end gains an orchestrator-direct Docs Sync step before Cleanup.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Audit_Rules_template.md": "[ST-000283] Protected-path note names the Docs Sync entrypoint exception."
-    },
-    "deployment": {
-      "schema_version": 1,
-      "manifest": ".mt-agent-devkit/distribution/phase2/bundle/deployment.json"
-    },
-    "files": [
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
-    ],
-    "checksums": {
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "09bf8a1124b9595fdf162b6b934e5886b7c52d73eddd66102d2441b3bd5f61b4",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "e3e2f094ebff7c01dc6d865500d77e850f68f6c099ad1f39f9446c2d5069937a"
-    }
-  },
-  "0.1.56": {
-    "new": [],
-    "modified": [
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md"
-    ],
-    "removed": [],
-    "descriptions": {
-      ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
-      ".mt-agent-devkit/skills/comment/SKILL.md": "[ST-000304] New shared comment skill: template, writing rules, prefix bans, Commenter gate for every role.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/comment/SKILL_template.md": "[ST-000304] New target copy of the shared comment skill.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-comment/SKILL_template.md": "[ST-000304] Slimmed to PO-only rules; requires the comment skill. [ST-000303] Numbered pre-post steps, word count first; Working Record timing pointer. [ST-000312] Same-pass body update rule points to comment.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000304] Section 9 and the Commenter gate point to the comment skill. [ST-000312] Implementer pre-PR checks and the Developer CI-paste note point to pre-pr-gate and pr-review.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_TL_template.md": "[ST-000304] Section 9 keeps only TL inline-review and CI-paste notes. [ST-000312] Review comments and the CI paste point to pr-review.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_QA_template.md": "[ST-000304] Section 9 keeps only the per-AC report and cap exemption.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_Dev_template.md": "[ST-000304] Section 9 points to the comment skill and Dev notes. [ST-000311] Removed; installed copies retire behind the dev-* and common skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_UIUX_template.md": "[ST-000304] Section 9 points to the comment skill.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Read_On_Demand_template.md": "[ST-000304] Section 15 reduced to Dev-only comment notes. [ST-000311] Removed; installed copies retire behind the dev-* and common skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Developer_Rules_Bootstrap_template.md": "[ST-000304] Comment routing row loads the comment skill first. [ST-000311] Removed; installed copies retire behind the dev-* and common skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Business_Analyst_Rules_template.md": "[ST-000304] Comment rule names the comment skill. [ST-000312] Pre-PR gate, comment threading, handoff and troubleshooting point to the common skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Strict_Mode_Story_Guide_template.md": "[ST-000304] Comment entries follow the comment skill instead of a restated standard.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000304] Refinement question comment uses the comment skill format; PO Skills example lists comment. [ST-000303] Inline PO skills load at their point of use.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000304] Stage 4 PO Skills entry lists comment. [ST-000303] Inline PO skills load at their point of use. [ST-000312] Stub re-check names the pr-review CI gate.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000304] PO Skills example lists comment.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/orchestrator_instructions_shared_template.md": "[ST-000304] PO Skills example lists comment. [ST-000303] Inline PO skills load at point of use; Working Record start and end.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Read_On_Demand_template.md": "[ST-000304] Commenter gate citation names the comment skill. [ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Memory_template.md": "[ST-000304] Commenter gate citation names the comment skill. [ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-promote-ready/SKILL_template.md": "[ST-000303] Numbered readiness steps: AC-versus-approach diff and Depends on check.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-write-story/SKILL_template.md": "[ST-000303] AC states the testable requirement only, no rationale.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-core/SKILL_template.md": "[ST-000303] Working Record updated at start and end of each PO activity. [ST-000312] PO Records point to working-record and agent-memory; scope docs via Document_Index.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/pre-work/SKILL_template.md": "[ST-000310] New target skill: read order, native-reader gate, bindings, priming, record, rules, memory.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/token-efficiency/SKILL_template.md": "[ST-000310] New target skill: tool-call conventions: shell edits, narrow gh queries, batching, section reads.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/shell-rules/SKILL_template.md": "[ST-000310] New target skill: adapter-first shell choice, temporary body files, mutation safety.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/working-record/SKILL_template.md": "[ST-000310] New target skill: snapshot format, retention, project-set character cap, Blockers & Watch-outs.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/agent-memory/SKILL_template.md": "[ST-000310] New target skill: fact rules, project-set memory cap, Stored Facts shape, two-tier memory.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/troubleshooting/SKILL_template.md": "[ST-000310] New target skill: recorded fixes first, then diagnose and record the fix.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/credential-gate/SKILL_template.md": "[ST-000310] New target skill: missing secret means stop and report, never a dummy value.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/retro/SKILL_template.md": "[ST-000310] New target skill: retro trigger detection, recording and the completion check.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/retro-contribution/SKILL_template.md": "[ST-000310] New target skill: writing a triggered retro contribution; orchestrator retro bookkeeping.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/handoff/SKILL_template.md": "[ST-000310] New target skill: runtime state stays local and uncommitted before stage completion.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/raise-question/SKILL_template.md": "[ST-000310] New target skill: question owners, pre-start gate, consultation report, blockers, live conflicts.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/project-docs/SKILL_template.md": "[ST-000310] New target skill: document placement through the document index and file naming.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/git-workflow/SKILL_template.md": "[ST-000310] New target skill: branch preflight, commits, [skip ci] by path filter, PR, merge sync.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/pre-pr-gate/SKILL_template.md": "[ST-000310] New target skill: target check table, aggregate command, production build, rename sweep, pre-merge list.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/pr-review/SKILL_template.md": "[ST-000310] New target skill: peer review: diff, CI on the current head, criteria, verdict via gh pr comment.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/clean-code/SKILL_template.md": "[ST-000310] New target skill: Development Standard, source naming, helper scope, caller trace, clean code rules.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-core/SKILL_template.md": "[ST-000310] New target skill: Developer role, status ownership, story files and the skill load map.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-implement/SKILL_template.md": "[ST-000310] New target skill: Developer pre-start steps, design-first, standards, spec-first, branch start.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-deliver/SKILL_template.md": "[ST-000310] New target skill: Developer PR-opened comment, status moves, fix rounds, Testing handoff.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-verify/SKILL_template.md": "[ST-000310] New target skill: technical doc divergence, touched-endpoint and sandbox verification.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-refine/SKILL_template.md": "[ST-000310] New target skill: Developer sprint refinement: open points, question or cleared note per story.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-hotfix/SKILL_template.md": "[ST-000310] New target skill: Developer post-Done fix branch, PR to the feature branch, QA re-test.",
-      ".mt-agent-devkit/distribution/phase2/templates/instructions/developer_instructions_template.md": "[ST-000310] Developer reads skills through a load map, not the rules files.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Shell_Safety_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Working_Record_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Retro_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Troubleshooting_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Credential_Gate_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Stage_Transition_template.md": "[ST-000310] Absorbed sections are generated copies of the common skill templates.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Bootstrap_template.md": "[ST-000312] Review, commits, documents, comments, records and pre-PR point to the common skills; clean-code replaces Clean_Code_Rules.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Technical_Lead_Rules_Read_On_Demand_template.md": "[ST-000312] Implementer branch/PR and pre-PR gate point to git-workflow and the stricter pre-pr-gate.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Bootstrap_template.md": "[ST-000312] Placement, comments, pre-PR, live conflicts and records point to the common skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/QA_Rules_Read_On_Demand_template.md": "[ST-000312] Pre-PR gate and live conflicts point to pre-pr-gate and raise-question.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/UI_UX_Designer_Rules_template.md": "[ST-000312] Questions, consultation, branch, commits, placement and records point to the common skills.",
-      ".mt-agent-devkit/distribution/phase2/templates/instructions/business_analyst_instructions_template.md": "[ST-000312] Document placement points to project-docs.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-answer-questions/SKILL_template.md": "[ST-000312] AC body sync rule points to comment.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-plan-docs/SKILL_template.md": "[ST-000312] Placement and naming come from project-docs.",
-      ".mt-agent-devkit/distribution/phase2/templates/context/Project_Priming_template.md": "[ST-000312] Section 6 points to Document_Index, the single document path list.",
-      ".mt-agent-devkit/distribution/phase2/templates/context/Document_Index_template.md": "[ST-000312] Single document path list; absorbs the Priming section 6 paths.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Clean_Code_Rules_template.md": "[ST-000311] Removed; installed copies retire behind the clean-code skill.",
-      ".mt-agent-devkit/distribution/phase2/templates/workflows/Sync_Devkit_Workflow_template.md": "[ST-000311] Retired Developer files leave the rules lists; porting step names their skills.",
-      ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000311] Porting step names the skills replacing the retired Developer files.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Prototype_Workflow_Shared_template.md": "[ST-000311] Prototype commit note points to git-workflow, not the retired Developer rules.",
-      ".mt-agent-devkit/contracts/read-routing.json": "[ST-000311] Target Developer rows read their skills directly; retired file sources and keys removed."
     },
     "deployment": {
       "schema_version": 1,
