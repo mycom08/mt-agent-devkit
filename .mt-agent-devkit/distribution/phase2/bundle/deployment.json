@@ -1718,8 +1718,8 @@
     {
       "id": "orchestrator_github",
       "path": "assets/orchestrator_github",
-      "sha256": "9cd6492459764b9c714be599e43b674a778b9c11c18be816cedd5866694e3014",
-      "bytes": 1185,
+      "sha256": "ad2aa1dfb52b74bb801b564273190bfdd07b0af87ee97a0ea53fa129fbb04b7a",
+      "bytes": 1469,
       "kind": "template"
     },
     {

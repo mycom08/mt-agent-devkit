@@ -41,7 +41,7 @@
       ".mt-agent-devkit/distribution/phase2/templates/rules/Blocked_Request_template.md": "[ST-000370] Issue commands no longer need a repository placeholder.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/pr-review/SKILL_template.md": "[ST-000370] Diff command no longer needs a repository placeholder.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000370] PR and check commands act on the default repository.",
-      ".mt-agent-devkit/distribution/phase2/templates/github/orchestrator_instructions_template.md": "[ST-000370] GitHub-mode workflow start sets the project's default repository.",
+      ".mt-agent-devkit/distribution/phase2/templates/github/orchestrator_instructions_template.md": "[ST-000370] GitHub-mode workflow start sets or checks the default repository.",
       ".mt-agent-devkit/distribution/phase2/build_bundle.py": "[ST-000370] Build fails on a repository placeholder in installed files."
     },
     "deployment": {

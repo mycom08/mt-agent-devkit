@@ -72,6 +72,8 @@ class BundleTests(unittest.TestCase):
             for mode, expected in (("github", True), ("strict", False)):
                 appendix = paths["orchestrator_" + mode].read_text(encoding="utf-8")
                 self.assertEqual("gh repo set-default" in appendix, expected, mode)
+                # An existing default naming another repository must never pass silently.
+                self.assertEqual("When they differ" in appendix and "Never overwrite" in appendix, expected, mode)
 
     def test_real_bundle_six_layouts_and_minimal_root_profile(self):
         with tempfile.TemporaryDirectory() as folder:
