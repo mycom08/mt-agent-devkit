@@ -36,7 +36,7 @@ Quick lookup for all project documents and external references. This is the sing
 
 | Document | Path Pattern |
 |---|---|
-| Sprint Overviews | `docs/sprints/Sprint_N_Overview.md` |
+| Sprint Overviews (strict mode only) | `docs/sprints/Sprint_N_Overview.md` |
 | Feature Docs | `docs/feature/<feature_name>/` |
 | Feature: Technical Implementation | `docs/feature/<feature_name>/<Feature_Name>_Technical_Implementation.md` |
 | Feature: Test Scenarios | `docs/feature/<feature_name>/test-scenarios/` (one file per story) |

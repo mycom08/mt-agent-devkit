@@ -20,12 +20,18 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 ## Steps
 
-1. **Verify the current sprint is done.** Feature sprint: find the `🔄 In Progress` sprint in `docs/feature/<feature_name>/plan/Product_Backlog.md`, read its `Sprint_N_Overview.md`, and confirm every story is `status:done`; if `Sprint_{N+1}_Overview.md` already exists, report and stop. Non-feature sprint: `gh issue list --label "status:in-progress" --label "status:review" --label "status:testing" --state open`. Any story not done: report its ID and stop.
-2. **Select stories.** Feature sprint: read the `*Roadmap*.md` and backlog; respect dependency order (no story whose dependency is not done). Non-feature: `gh issue list --label "status:backlog" --state open`, ordered `Must-Have`, `Should-Have`, `Nice-to-Have`. Note ID, title, points, priority and assigned role.
+1. **Verify the current sprint is done and the next one is not planned.** Any failure: report the story IDs and stop.
+   - **GitHub mode:**
+     1. In-flight: three separate queries, `gh issue list --label "<status>" --state open --limit 1000 --json number,title,labels` for `status:in-progress`, `status:review` and `status:testing` (repeated `--label` flags require all). Any result is unfinished.
+     2. Sprint N: feature sprint, the `🔄 In Progress` sprint in `docs/feature/<feature_name>/plan/Product_Backlog.md`. Non-feature: the highest `sprint-N` label, compared numerically, over those results and `gh issue list --label "status:done" --state all --limit 1000 --json labels`; none means N = 0.
+     3. Done: every issue from `gh issue list --label "sprint-N" --state open --limit 1000 --json number,title,labels` carries `status:done`.
+     4. Guard: any result from `gh issue list --label "sprint-{N+1}" --state open --limit 1` means it is already planned.
+   - **Strict mode:** feature sprint: find the `🔄 In Progress` sprint in that `Product_Backlog.md`, read its `Sprint_N_Overview.md`, and confirm every story is `status:done`; if `Sprint_{N+1}_Overview.md` already exists, report and stop. Non-feature: workflow Stage 1.
+2. **Select stories.** Feature sprint: read the `*Roadmap*.md` and backlog; respect dependency order (no story whose dependency is not done). Non-feature: GitHub mode `gh issue list --label "status:backlog" --state open --limit 1000`, strict mode workflow Stage 2; order `Must-Have`, `Should-Have`, `Nice-to-Have`. Note ID, title, points, priority and role.
 3. **Open questions:** AC clear and testable? Design (TL), requirements (BA), feasibility (Dev), testability (QA)? If any, create `{RUNTIME_ROOT}/tmp/PO_questions.md` in the workflow's format and report who must answer.
 4. **Review answers:** verify every `A:` field is complete; if anything is unclear, report rather than guess.
 5. **Write sprint artifacts:**
-   1. Feature sprint: create `Sprint_{N+1}_Overview.md` in the existing format and add the sprint to `Product_Backlog.md` as `🔲 Planned`; commit per `po-plan-docs`. Non-feature: labels are the only artifact.
+   1. Feature sprint: add the sprint to `Product_Backlog.md` as `🔲 Planned`; strict mode also creates `Sprint_{N+1}_Overview.md` in the existing format; commit per `po-plan-docs`. Non-feature: GitHub mode labels are the only artifact; strict mode follows workflow Stage 4.
    2. Stories without a record: create them per `po-write-story`.
    3. Existing stories: add `sprint-N` if missing; **never change `status:backlog` to `status:ready`**.
    4. Delete `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists.
