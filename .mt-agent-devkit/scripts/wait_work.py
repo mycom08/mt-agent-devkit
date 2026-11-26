@@ -47,22 +47,50 @@ def safe(root, relative):
     for component in (path, *path.parents):
         if component == root.parent:
             break
-        if component.exists() and (component.is_symlink() or getattr(component.stat(), "st_file_attributes", 0) & 0x400):
+        if component.is_symlink() or component.exists() and getattr(component.stat(), "st_file_attributes", 0) & 0x400:
             raise WaitError("redirected runtime path")
     if not path.resolve().is_relative_to(root):
         raise WaitError("runtime escape")
     return path
 
 
+def project_relative(root, path):
+    """Rewrite a native absolute path inside the project as project-relative, without following inner links."""
+    if not Path(path).is_absolute():
+        return path
+    for base in (Path(root).absolute(), Path(root).resolve()):
+        if Path(path).is_relative_to(base):
+            return Path(path).relative_to(base).as_posix()
+    return path
+
+
+def bound_runtime(root, provider, runtime):
+    """Accept only the provider's installed runtime binding; return its project-relative form."""
+    if provider not in PROVIDERS:
+        raise WaitError("invalid provider identity")
+    source = "." + provider + "/harness/state-paths.json"
+    expected = None
+    try:
+        binding = load(safe(root, source))
+        expected = binding.get("RUNTIME_ROOT")
+        prefix = "." + provider + "/agents"
+        if binding.get("PROVIDER_ROOT") != "." + provider or not isinstance(expected, str) or expected != prefix and not expected.startswith(prefix + "/"):
+            expected = None
+            raise WaitError("foreign runtime binding")
+        if project_relative(root, runtime) != expected:
+            raise WaitError("foreign or unbound runtime root")
+        safe(root, expected)
+    except (WaitError, AttributeError) as exc:
+        reason = str(exc) if isinstance(exc, WaitError) else "missing or invalid identity/bindings"
+        folder = "'" + expected + "'" if expected else "the installed RUNTIME_ROOT"
+        raise WaitError(reason + "; accepted runtime root forms: " + folder + " from " + source + ", relative to the project root or as the absolute path to that folder") from exc
+    return expected
+
+
 def run_directory(root, provider, runtime, identity, kind):
     if provider not in PROVIDERS or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", identity or ""):
         raise WaitError("invalid provider or run identity")
-    binding = load(safe(root, "." + provider + "/harness/state-paths.json"))
-    if binding.get("PROVIDER_ROOT") != "." + provider or binding.get("RUNTIME_ROOT") != runtime:
-        raise WaitError("foreign or unbound runtime")
-    expected_prefix = "." + provider + "/agents"
-    if runtime != expected_prefix and not runtime.startswith(expected_prefix + "/"):
-        raise WaitError("foreign runtime")
+    runtime = bound_runtime(root, provider, runtime)
     return safe(root, runtime + "/tmp/waits/" + kind + "/" + identity)
 
 
