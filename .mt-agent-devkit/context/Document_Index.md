@@ -21,6 +21,7 @@ Quick lookup for all project documents and external references. This is the sing
 | Technical Analysis | `docs/technical/Technical_Analysis.md` |
 | Architecture Overview | `docs/technical/Architecture.md` |
 | Codex Internal Orchestration Policy | `.codex/harness/Orchestration_Policy.md` |
+| Workflow Test Guide (testbed runs) | `docs/Workflow_Test_Guide.md` |
 
 ### Reviews and Improvement Guides
 
