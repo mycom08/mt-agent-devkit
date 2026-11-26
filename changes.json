@@ -29,14 +29,20 @@
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Sprint_Workflow_Shared_template.md": "[ST-000354] Docs Sync reads Sprint Overview in strict mode only.; [ST-000361] Checks for open analysis topics before continuing the sprint.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/po-plan-sprint/SKILL_template.md": "[ST-000354] GitHub mode current-sprint check, next-sprint guard, no Sprint Overview.; [ST-000334] Feature selection by label; no backlog file in GitHub mode.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/po-plan-docs/SKILL_template.md": "[ST-000354] Sprint Overviews are plan files in strict mode only.; [ST-000334] Product Backlog is a strict mode plan file only.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-refine/SKILL_template.md": "[ST-000334] GitHub mode finds the target sprint from labels only.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/dev-refine/SKILL_template.md": "[ST-000334] GitHub mode finds the target sprint from labels only.; [ST-000370] Issue list commands no longer need a repository placeholder.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000334] GitHub mode finds the target sprint from labels only.",
       ".mt-agent-devkit/distribution/phase2/templates/scripts/branch_preflight.py": "[ST-000372] Judges agent state by file paths only, not commit message prefix.",
       ".mt-agent-devkit/distribution/phase2/templates/scripts/retro_completion.py": "[ST-000371] Follows the installed runtime binding; accepts relative or absolute roots.",
       ".mt-agent-devkit/scripts/wait_work.py": "[ST-000371] Accepts absolute runtime roots; rejections name the accepted forms.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/retro/SKILL_template.md": "[ST-000371] States the accepted runtime root forms.",
       ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Core_template.md": "[ST-000371] Retro block states the accepted runtime root forms.",
-      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000371] Retro block states the accepted runtime root forms."
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Agent_Common_Bootstrap_template.md": "[ST-000371] Retro block states the accepted runtime root forms.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Story_Standard_template.md": "[ST-000370] Repository placeholders removed; Location states the repository rule.",
+      ".mt-agent-devkit/distribution/phase2/templates/rules/Blocked_Request_template.md": "[ST-000370] Issue commands no longer need a repository placeholder.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/pr-review/SKILL_template.md": "[ST-000370] Diff command no longer needs a repository placeholder.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Shared_Pipeline_Stages_Shared_template.md": "[ST-000370] PR and check commands act on the default repository.",
+      ".mt-agent-devkit/distribution/phase2/templates/github/orchestrator_instructions_template.md": "[ST-000370] GitHub-mode workflow start sets the project's default repository.",
+      ".mt-agent-devkit/distribution/phase2/build_bundle.py": "[ST-000370] Build fails on a repository placeholder in installed files."
     },
     "deployment": {
       "schema_version": 1,

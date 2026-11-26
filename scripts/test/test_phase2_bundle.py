@@ -42,6 +42,37 @@ class BundleTests(unittest.TestCase):
                 self.assertFalse(validator._resolve_file_ref(
                     ".claude/agents/templates/rules/Story_Standard_template.md", source))
 
+    def test_build_rejects_repository_placeholder_in_installed_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder) / "root"
+            shutil.copytree(ROOT / ".mt-agent-devkit", root / ".mt-agent-devkit",
+                            ignore=shutil.ignore_patterns("bundle", "__pycache__"))
+            for hidden in (".claude", ".antigravity", ".codex"):
+                shutil.copytree(ROOT / hidden / "harness", root / hidden / "harness")
+            shutil.copytree(ROOT / ".claude/agents/templates", root / ".claude/agents/templates")
+            templates = root / ".mt-agent-devkit/distribution/phase2/templates"
+            cases = (("rules/Blocked_Request_template.md", "{github-org}"),
+                     ("skills/pr-review/SKILL_template.md", "{repo-name}"),
+                     ("github/workflows/Shared_Pipeline_Stages_template.md", "{github-org}"))
+            for name, placeholder in cases:
+                with self.subTest(name=name):
+                    source = templates / name
+                    original = source.read_bytes()
+                    source.write_bytes(original + ("\ngh pr view --repo " + placeholder + "\n").encode())
+                    with self.assertRaisesRegex(ValueError, "repository placeholder"):
+                        builder.build(root, Path(folder) / "bundle")
+                    source.write_bytes(original)
+            builder.build(root, Path(folder) / "bundle")
+
+    def test_repository_guard_installs_in_github_mode_only(self):
+        with tempfile.TemporaryDirectory() as folder:
+            bundle = Path(folder)
+            manifest = builder.build(ROOT, bundle)
+            paths = {item["id"]: bundle / item["path"] for item in manifest["assets"]}
+            for mode, expected in (("github", True), ("strict", False)):
+                appendix = paths["orchestrator_" + mode].read_text(encoding="utf-8")
+                self.assertEqual("gh repo set-default" in appendix, expected, mode)
+
     def test_real_bundle_six_layouts_and_minimal_root_profile(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

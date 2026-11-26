@@ -56,6 +56,9 @@ RETIRED_SURVIVORS = {
 RETIRED_RULES = tuple(RETIRED_SURVIVORS)
 # Defaults written once into a target's project-owned settings file.
 PROJECT_SETTINGS_DEFAULTS = {"po_execution": "subagent"}
+# The installer substitutes no repository name, so an agent would run it literally.
+REPOSITORY_PLACEHOLDER = re.compile(r"\{(github-org|repo-name)\}")
+INSTRUCTION_FOLDERS = ("/rules/", "/skills/", "/workflows/", "/instructions/")
 
 
 def neutral(text):
@@ -88,6 +91,16 @@ def neutral(text):
             line = "- Collect sanitized stage telemetry through the selected provider adapter; unavailable usage remains null. Do not estimate usage or import another provider's transcripts."
         lines.append(line)
     return "\n".join(lines) + "\n"
+
+
+def reject_repository_placeholders(destination, assets, files):
+    paths = {item["id"]: destination / item["path"] for item in assets}
+    leaked = sorted({item["destination"] for item in files
+                     if any(folder in item["destination"] for folder in INSTRUCTION_FOLDERS)
+                     and any(REPOSITORY_PLACEHOLDER.search(paths[source].read_text(encoding="utf-8"))
+                             for source in item["sources"])})
+    if leaked:
+        raise ValueError("repository placeholder in installed files: " + ", ".join(leaked))
 
 
 def build(root, destination):
@@ -313,6 +326,7 @@ def build(root, destination):
                 legacy = "." + provider + "/agents/rules/" + name
                 entry(identifier, [], legacy, owner="selected_provider", providers=(provider,), modes=(mode,), phase="retirement", required=False)
                 retirements.append({"logical_id": identifier, "path": legacy, "after_verified_ids": list(kept)})
+    reject_repository_placeholders(destination, assets, files)
     manifest = {"schema_version": 1, "layout_version": 2, "minimum_python": "3.10", "profiles": ["repo", "project_root"], "assets": assets, "files": files, "legacy_support": {"versions": ["0.1.48", "0.1.49", "0.1.50"], "providers": ["claude", "antigravity"], "modes": ["github", "strict"], "retirements": retirements}}
     (destination / "deployment.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest

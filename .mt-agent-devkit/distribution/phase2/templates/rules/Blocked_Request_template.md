@@ -10,7 +10,7 @@ When you hit an external blocker during Stage 1 or Stage 2:
 
 Run these checks in order and stop at the first match:
 
-1. **GitHub assignees** — `gh issue view <number> --repo {github-org}/{repo-name} --json assignees --jq '[.assignees[].login] | join(", @")'`
+1. **GitHub assignees** — `gh issue view <number> --json assignees --jq '[.assignees[].login] | join(", @")'`
    - If one or more assignees are returned → use them as `@<login>`
 2. **Story body** — scan the issue body for any GitHub @mentions or named individuals
    - If found → use that name/handle
@@ -20,8 +20,8 @@ Run these checks in order and stop at the first match:
 
 1. Fill in the template below — story ID, resolved `Waiting on` value, what's confirmed, what's missing
 2. Write the filled-in comment to `{{AGENT_DIR_PREFIX}}/agents/tmp/blocked_<story-id>.md`
-3. Post it: `gh issue comment <number> --repo {github-org}/{repo-name} --body-file {{AGENT_DIR_PREFIX}}/agents/tmp/blocked_<story-id>.md`
-4. Change the story label: `gh issue edit <number> --repo {github-org}/{repo-name} --remove-label "status:ready" --add-label "status:blocked"`
+3. Post it: `gh issue comment <number> --body-file {{AGENT_DIR_PREFIX}}/agents/tmp/blocked_<story-id>.md`
+4. Change the story label: `gh issue edit <number> --remove-label "status:ready" --add-label "status:blocked"`
 5. Return to the orchestrator: `"Blocked — awaiting external input. Comment posted on issue #<number>."`
 
 The orchestrator stops the pipeline and notifies the user.

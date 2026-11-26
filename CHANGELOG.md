@@ -41,6 +41,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000370] Installed `gh` commands no longer need a repository placeholder; workflow start sets the default repository when there are several GitHub remotes, and the bundle build rejects placeholders.
 - [ST-000371] Retro completion and wait helpers accept the installed runtime folder as a relative or absolute path and name the accepted forms on rejection.
 - [ST-000372] Branch preflight no longer blocks on an `Agent:` commit message; it judges runtime files by path, now including `agents/working/` memory, records, tmp and reports.
 - [ST-000354] Plan Sprint and `po-plan-sprint` now stop on unfinished or already planned sprints, query the whole backlog and drop the GitHub mode Sprint Overview file.

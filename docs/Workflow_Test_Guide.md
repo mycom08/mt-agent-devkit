@@ -16,7 +16,7 @@ How to run a devkit workflow against a real target project. For template and dep
 
 Clone the testbed into a temporary directory and create the run branch. Install from the local devkit checkout, not `sync devkit`, which installs the last release. Follow `.mt-agent-devkit/workflows/commands/Target_Project_Deployment_Workflow.md`.
 
-Fill `{github-org}` and `{repo-name}` through the adaptations file: `init` leaves them in several installed rules and skills and does not warn. Check with `grep -rE '\{github-org\}|\{repo-name\}'`, then commit and push.
+Commit and push the installed files. No repository name needs filling in.
 
 ## 3. Drive the session
 
