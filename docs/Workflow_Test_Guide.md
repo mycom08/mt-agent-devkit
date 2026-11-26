@@ -2,7 +2,7 @@
 
 How to run a devkit workflow against a real target project. For template and deployment tests see [Template Test Strategy](Template_Test_Strategy.md).
 
-**Ask the user before every run.** Knowing about the testbed is not permission. Agree the spend cap, the permissions and which commands will run.
+**Ask the user before every run.** Knowing about the testbed is not permission. Agree the spend cap, the permission mode and which commands will run.
 
 ## 1. Testbed
 
@@ -30,12 +30,15 @@ claude -p "<command>" --model sonnet --setting-sources project --strict-mcp-conf
   --output-format json --allowedTools <list> --disallowedTools <list>
 ```
 
-- Allowed in T001: Read, Glob, Grep, Skill, Agent, SendMessage, TodoWrite and Bash for `git`, `gh`, `python3`, `ls`, `mkdir`, `wc`, `node --test`, `npm test`. A sprint run needs more for implementation.
+- Permission mode: `acceptEdits` with an allow-list is enough for `analyze requirements`, `plan next sprint` and most of `refine sprint`. A story run must write under `.claude/agents/`, which headless sessions refuse in that mode even with an allow rule. T001 used `--permission-mode auto` for it, chosen by the user. Never choose a wider mode yourself.
+- Allowed in T001: Read, Glob, Grep, Skill, Agent, SendMessage, TodoWrite and Bash for `git`, `gh`, `python3`, `ls`, `mkdir`, `wc`, `node --test`, `npm test`. In auto mode Claude Code decides what runs; keep the disallow list and the `gh` wrapper.
 - Disallow repository create, edit and delete, force push and web access.
 - Put a `gh` wrapper first on `PATH` that refuses other repositories. It only catches mistakes: `git`, `gh` and `python3` can bypass it and the session has the host's `gh` login. A hard boundary needs a token limited to the testbed.
 - `total_cost_usd` is the session total, not the turn. `--max-budget-usd` applies to one invocation, so pass what is left of the cap.
-- Writes under `.claude/agents/` are refused headless, so agent records and retrospectives are not exercised. A clone-local exclude edit may also be refused; add the line yourself and note it.
-- Long turns run in the background. After a usage limit, resume the same session and tell it not to repeat completed steps.
+- In `acceptEdits` mode, agent records and retrospectives are not exercised. A clone-local exclude edit may also be refused; add the line yourself and note it.
+- Until [#372](https://github.com/mycom08/mt-agent-devkit/issues/372) is fixed, `start story` blocks after planning when the base's latest commit starts with `Agent:`. T001 added an empty commit on the run branch; record that you did.
+- `refine sprint` and `continue sprint` take every story in scope. To limit them, remove `sprint-N` from the other stories and restore it afterwards.
+- Long turns run in the background. A stopped turn reports no cost. After a usage limit, resume the same session and tell it not to repeat completed steps.
 
 ## 4. Check the result
 
@@ -54,8 +57,13 @@ Close the run's open issues and PRs once nothing else will test against them; ke
 
 ## 7. Proven so far
 
-| Run | Covered | Cost |
-|---|---|---|
-| T001 | `analyze requirements`, GitHub mode, to merged docs PR and backlog stories | $5.61 |
+Run T001, GitHub mode, Claude provider, orchestrator model sonnet:
 
-Not yet run this way: sprint commands, `start story`, strict mode, open-topic and correction rounds, other providers.
+| Command | Result | Cost |
+|---|---|---|
+| `analyze requirements` | Merged docs PR and three backlog stories | $5.61 |
+| `plan next sprint <feature>`, run twice | Planned by feature label; second run stopped | $0.99 |
+| `refine sprint`, one story | Question raised and answered; `status:ready` | $1.11 |
+| `start story` | Built, reviewed, QA validated, merged and closed | $3.04 |
+
+Not yet run this way: `continue sprint`, strict mode, open-topic and correction rounds, blocked documents, fix rounds, dependent stories, other providers. Findings are in the testbed run record.
