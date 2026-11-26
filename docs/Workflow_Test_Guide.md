@@ -53,7 +53,17 @@ Do not accept the session's summary. Read the files, issues, PRs and comments an
 
 ## 6. Cleanup
 
-Close the run's open issues and PRs once nothing else will test against them; keep the labels. Sprint numbers are repo-wide: remove `sprint-N` labels from older runs when a run must start at `sprint-1`.
+Clean up before the next run: issues and sprint labels are repo-wide, so an open story left in a sprint makes the next run's planning stop on an unfinished sprint. Keep a run's open items only while something else will test against them (for example `continue sprint` on its remaining stories).
+
+1. Close the run's unfinished stories as not planned and remove their `sprint-N` label.
+2. Close the run record issue and any other open issue or PR from the run.
+3. Delete the run's leftover story and analysis branches.
+4. Set the default branch back to `main`.
+5. Check that no issue or PR is open: `gh issue list` and `gh pr list` on the testbed.
+
+Keep the `test-run/<run-id>` branch, merged PRs, closed issues and labels as the run's history. Done stories keep `sprint-N`, so a later run starts at the next number; remove those labels too when a run must start at `sprint-1`.
+
+A local clone may be kept for a later run. Before reusing it, discard uncommitted files, update from `main` and install again.
 
 ## 7. Proven so far
 
