@@ -35,6 +35,18 @@ RUNTIME_PREFIXES = (
     ".claude/agents/retros/",
     ".claude/agents/tmp/",
     ".claude/agents/internal/",
+    ".claude/agents/working/memory/",
+    ".claude/agents/working/working-record/",
+    ".claude/agents/working/tmp/",
+    ".claude/agents/working/reports/",
+    ".antigravity/agents/working/memory/",
+    ".antigravity/agents/working/working-record/",
+    ".antigravity/agents/working/tmp/",
+    ".antigravity/agents/working/reports/",
+    ".codex/agents/working/memory/",
+    ".codex/agents/working/working-record/",
+    ".codex/agents/working/tmp/",
+    ".codex/agents/working/reports/",
 )
 
 
@@ -194,13 +206,9 @@ def inspect(mode: str, base: str, story_branch: str) -> Result:
         ahead, behind = counts
         result.ahead_behind = f"{ahead}/{behind}"
         result.unpushed = ahead
-        ahead_agent = False
         if ahead != "0":
-            ahead_messages = git("log", "--format=%B%x00", f"{remote_ref}..HEAD", check=False)
-            ahead_agent = any(display(message).startswith("Agent:") for message in nul_items(ahead_messages))
             ahead_paths = nul_items(git("diff", "--name-only", "-z", f"{remote_ref}..HEAD", check=False))
-            ahead_agent = ahead_agent or any(is_runtime_path(path) for path in ahead_paths)
-            if ahead_agent:
+            if any(is_runtime_path(path) for path in ahead_paths):
                 result.agent_state = "yes"
         if behind != "0" and ahead != "0":
             return result.block("base diverges from upstream")
@@ -210,13 +218,9 @@ def inspect(mode: str, base: str, story_branch: str) -> Result:
             return result.block("base is ahead of upstream", bounded_commits(f"{remote_ref}..HEAD"))
     tree_paths = nul_items(git("ls-tree", "-rz", "--name-only", "-r", result.base_sha))
     contaminated = [display(path) for path in tree_paths if is_runtime_path(path)]
-    message = display(git("log", "-1", "--format=%B", result.base_sha))
-    if contaminated or message.startswith("Agent:"):
+    if contaminated:
         result.agent_state = "yes"
-        evidence = contaminated[:MAX_PATHS]
-        if message.startswith("Agent:"):
-            evidence.append(message[:160])
-        return result.block("verified base contains agent runtime state", evidence)
+        return result.block("verified base contains agent runtime state", contaminated[:MAX_PATHS])
     if ref_sha(f"refs/heads/{story_branch}") or (mode == "github" and remote_ref and ref_sha(f"refs/remotes/{upstream_for(base)[0]}/{story_branch}")):
         return result.block("story branch already exists")
     return result

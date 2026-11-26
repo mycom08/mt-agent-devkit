@@ -472,8 +472,8 @@ Run these checks before creating the story branch and before the first file writ
    update without the workflow's explicit authority.
 8. Check commits reachable from the local base but not the remote base. If any exist,
    stop and report them.
-9. Search those unexpected commits and the base tip for agent-only paths or `Agent:`
-   memory commit messages. Any hit blocks branch creation.
+9. Search those unexpected commits and the base tree for agent runtime paths. Any hit
+   blocks branch creation. Commit messages are not judged (ST-000372).
 10. Create the story branch from the verified base SHA.
 11. Confirm `HEAD` is the expected new branch and its parent/base SHA is the recorded
     verified base.
