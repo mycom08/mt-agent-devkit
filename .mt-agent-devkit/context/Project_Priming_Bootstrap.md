@@ -94,11 +94,10 @@ Not applicable — this project has no API.
 
 ## 11. Current State
 
-The devkit injects a complete AI Scrum team (5 agents, 15+ rules files, 9 sprint workflow files, 2 version-check scripts) into any target project. Two modes: `github` (full GitHub integration) and `strict` (local-only, no GitHub required).
+The devkit injects a complete AI Scrum team (6 agent roles with their rules, skills, sprint workflows and scripts) into any target project. Two modes: `github` (full GitHub integration) and `strict` (local-only, no GitHub required).
 
 **Known limitations:**
-- ❌ No automated test suite for verifying template correctness
-- ❌ Sprint workflow commands not yet wired into the devkit's own CLAUDE.md
+- ❌ Template tests are partial: the full `init`/`update` workflow matrix and agent behavior are not automated (`docs/Template_Test_Strategy.md`)
 
 ---
 
@@ -124,8 +123,8 @@ Not applicable — no Docker or sandbox environment.
 
 ---
 
-**Document Version:** 1.9 — §1-§12 name the Phase 2 templates as the active source.
-**Previous:** 1.8 — §13 is a pointer to `docs/Project_Roadmap.md`.
-**Last Updated:** 2026-11-25
+**Document Version:** 1.10 — §11 team size and known limitations corrected.
+**Previous:** 1.9 — §1-§12 name the Phase 2 templates as the active source.
+**Last Updated:** 2026-11-26
 **Audience:** Development team, architects, AI agents
 

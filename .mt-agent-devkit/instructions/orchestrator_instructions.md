@@ -204,7 +204,7 @@ No agents are spawned. The orchestrator prints the following reference directly 
 
 ### mt-agent-devkit — Available Commands
 
-These are the devkit's own workflows. All sprint execution workflows (`continue sprint`, `start story`, `plan sprint`, etc.) are injected into your target project by `init project` — they do not exist here.
+These are the devkit's own workflows. The devkit also runs its own sprint workflows (`continue sprint`, `start story`, `plan next sprint`, etc.; see Sprint Workflows (Devkit)). `init project` injects target versions into your project.
 
 | Command | Alias | What it does |
 |---|---|---|

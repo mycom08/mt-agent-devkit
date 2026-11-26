@@ -24,7 +24,7 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | Ready | PO | After assigning to implementer |
 | In Progress | Implementer | Work branch created |
 | Review | Implementer | PR created, reviewer requested |
-| Testing | QA | After TL approval and merge |
+| Testing | TL | After TL approval, before merge (merge only after QA passes) |
 | Done | PO | After all AC verified and ticked |
 
 **Collaboration rules:**
@@ -58,9 +58,12 @@ For complex changes (new workflow stage, major template restructure, new devkit 
 |---------|-------------|
 | `init project [path]` | Scaffolds the AI Scrum team into a target project |
 | `update project [path]` | Applies current local templates to an already-initialized project |
+| `build software <idea>` | Analyzes an idea, plans the repo structure and wires the team (Stages 1–3) |
+| `apply retros [label]` | Applies community retro contributions to the templates |
+| `audit agent files` | Audits the devkit's own agent files for duplication, contradictions and dead references |
 | `workflow help` | Shows this devkit's available commands |
 
-Sprint execution commands (`continue sprint`, `start story`, etc.) live in the **target project** CLAUDE.md, not here.
+The devkit also runs its own sprint workflows (`continue sprint`, `start story`, `refine sprint`, `plan next sprint`, `create stories`, `resume story`). Trigger routing: "Sprint Workflows (Devkit)" in `.mt-agent-devkit/instructions/orchestrator_instructions.md`.
 
 ---
 
@@ -132,7 +135,8 @@ Replacing a role's rules files with canonical skills (ST-000288: the PO rules be
 
 ---
 
-**Document Version:** 1.1 — §15a de-numbered to an unnumbered `### Adding a New Agent Role (Nth Role)` sub-heading of §15: it was never wanted without §15, and as a flat `## 15a.` it bounded a §15 extraction and forced a second fetch. Preamble trimmed to drop the section inventory duplicated from the bootstrap file.
+**Document Version:** 1.2 — §3 Testing ownership and §10 command list corrected.
+**Previous:** 1.1 — §15a de-numbered to an unnumbered `### Adding a New Agent Role (Nth Role)` sub-heading of §15: it was never wanted without §15, and as a flat `## 15a.` it bounded a §15 extraction and forced a second fetch. Preamble trimmed to drop the section inventory duplicated from the bootstrap file.
 **Previous:** 1.0 — created 2026-08-21, split out of `Project_Priming.md` v1.1 (devkit's own team only).
 **Audience:** Development team, architects, AI agents
 
