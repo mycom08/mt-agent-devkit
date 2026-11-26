@@ -8,6 +8,7 @@ agent-in-the-loop regression testing
 **Related documents:**
 
 - [Template Test Strategy](./Template_Test_Strategy.md)
+- [Workflow Test Guide](./Workflow_Test_Guide.md) (running a workflow on the testbed)
 - [Stage-Specific Read Profiles Proposal](./reviews/Stage_Specific_Read_Profiles_Proposal.md)
 - [Agent Harness Token Efficiency Analysis](./reviews/Agent_Harness_Token_Efficiency_Analysis.md)
 

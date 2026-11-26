@@ -119,12 +119,12 @@ Current project status (Now / Next / Later / Done) lives in `docs/Project_Roadma
 
 ## 14. Local Sandbox Environment
 
-Not applicable — no Docker or sandbox environment.
+No Docker or local sandbox. To run a workflow against a real target project, read `docs/Workflow_Test_Guide.md` first and ask the user before any run.
 
 ---
 
-**Document Version:** 1.10 — §11 team size and known limitations corrected.
-**Previous:** 1.9 — §1-§12 name the Phase 2 templates as the active source.
+**Document Version:** 1.11 — §14 points to the workflow test guide.
+**Previous:** 1.10 — §11 team size and known limitations corrected.
 **Last Updated:** 2026-11-26
 **Audience:** Development team, architects, AI agents
 

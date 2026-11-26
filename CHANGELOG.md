@@ -28,6 +28,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [Docs] Add the workflow test guide for the private testbed and point agents to it.
 - [ST-000361] `plan sprint` and `continue sprint` now remind about open analysis topics, ask for an answer and run the correction round when it is safe.
 - [ST-000353] Apply Retros and Audit Agent Files now work on the active templates, rebuild the bundle and record changes correctly.
 - [ST-000249] `analyze requirements` now merges its docs PR, creates backlog and open-topic stories and runs correction rounds.
