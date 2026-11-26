@@ -39,6 +39,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Bug Fixes
 
+- [ST-000354] Plan Sprint and `po-plan-sprint` now stop on unfinished or already planned sprints, query the whole backlog and drop the GitHub mode Sprint Overview file.
+
 ---
 
 ## [0.1.58] - 2026-11-23

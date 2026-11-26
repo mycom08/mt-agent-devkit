@@ -20,14 +20,17 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 ## Steps
 
-1. **Verify the current sprint is done:** `gh issue list --repo mycom08/mt-agent-devkit --label "status:in-progress" --label "status:review" --label "status:testing" --state open`. Any story not done: report its ID to the orchestrator and stop.
-2. **Select stories:** `gh issue list --repo mycom08/mt-agent-devkit --label "status:backlog" --state open`; order `Must-Have`, then `Should-Have`, then `Nice-to-Have`.
+1. **Verify the current sprint is done and the next one is not planned** (`--repo mycom08/mt-agent-devkit` on every query). Any failure: report the story IDs to the orchestrator and stop.
+   1. In-flight: three separate queries, `gh issue list --label "<status>" --state open --limit 1000 --json number,title,labels` for `status:in-progress`, `status:review` and `status:testing` (repeated `--label` flags require all labels on one issue). Any result is unfinished.
+   2. Sprint N: feature sprint, the `🔄 In Progress` sprint in `docs/feature/<feature_name>/plan/Product_Backlog.md`. Non-feature: the highest `sprint-N` label, compared numerically, over the in-flight results and `gh issue list --label "status:done" --state all --limit 1000 --json labels`; none means N = 0.
+   3. Done: every issue from `gh issue list --label "sprint-N" --state open --limit 1000 --json number,title,labels` carries `status:done`.
+   4. Guard: any result from `gh issue list --label "sprint-{N+1}" --state open --limit 1` means the next sprint is already planned.
+2. **Select stories:** `gh issue list --repo mycom08/mt-agent-devkit --label "status:backlog" --state open --limit 1000`; order `Must-Have`, then `Should-Have`, then `Nice-to-Have`.
 3. **Open questions:** for each selected story, check that AC is clear and testable. If questions exist, create `{RUNTIME_ROOT}/tmp/PO_questions.md` and report to the orchestrator.
 4. **Review answers:** after the orchestrator confirms answers are filled in, verify every `A:` field is complete before proceeding.
 5. **Write sprint artifacts:**
-   1. Create `docs/sprints/Sprint_{N+1}_Overview.md`.
-   2. Update `docs/plan/Product_Backlog.md`; commit each plan file per `po-plan-docs`.
-   3. Stories without GitHub Issues: create them per `po-write-story` with `--body-file`; labels `status:backlog` + `sprint-N`.
-   4. Stories that already have issues: add `sprint-N` if missing; **do not change `status:backlog` to `status:ready`**.
-   5. Delete `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists.
-   6. Update your Working Record (`po-core`).
+   1. Update `docs/plan/Product_Backlog.md`; commit each plan file per `po-plan-docs`.
+   2. Stories without GitHub Issues: create them per `po-write-story` with `--body-file`; labels `status:backlog` + `sprint-N`.
+   3. Stories that already have issues: add `sprint-N` if missing; **do not change `status:backlog` to `status:ready`**.
+   4. Delete `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists.
+   5. Update your Working Record (`po-core`).

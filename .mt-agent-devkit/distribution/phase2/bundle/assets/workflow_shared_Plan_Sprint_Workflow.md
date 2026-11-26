@@ -25,20 +25,22 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 1. **Spawn** Product Owner agent (**policy: standard**); save its `session_handle` as `po_session`; pass `feature_name` and name the `po-plan-sprint` skill in the assignment (**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline; see the PO touchpoint table in the orchestrator instructions)
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory) and loads the `po-core` and `po-plan-sprint` skills (`.mt-agent-devkit/skills/po-plan-sprint/SKILL.md`), plus the skills `po-plan-sprint` requires
 3. PO checks the active sprint:
-   - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; read its `Sprint_N_Overview.md`
+   - **Feature sprint** (`feature_name` is set): read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; its number is N. **Strict mode:** also read its `Sprint_N_Overview.md`
    - **Non-feature sprint** (`feature_name: none`):
-     - **GitHub mode:** run three separate queries and union the results to identify in-flight stories:
-       - `gh issue list --label "status:in-progress" --state open`
-       - `gh issue list --label "status:review" --state open`
-       - `gh issue list --label "status:testing" --state open`
+     - **GitHub mode:** run three separate queries and union the results to identify in-flight stories (repeated `--label` flags in one query would require every label on the same issue):
+       - `gh issue list --label "status:in-progress" --state open --limit 1000 --json number,title,labels`
+       - `gh issue list --label "status:review" --state open --limit 1000 --json number,title,labels`
+       - `gh issue list --label "status:testing" --state open --limit 1000 --json number,title,labels`
 
-       Any story returned by at least one query is in the current sprint. If the union is empty, fall back to `gh issue list --state closed --label "status:done" --limit 1 --json number,title,labels` and read the `sprint-N` label from the most recent done story.
+       Any story returned by at least one query is unfinished work. N is the highest `sprint-N` label, compared numerically, over those results and every done story (`gh issue list --label "status:done" --state all --limit 1000 --json labels`); no such label means N = 0. To get a result set's highest number, add `--jq '[.[].labels[].name | select(test("^sprint-[0-9]+$")) | ltrimstr("sprint-") | tonumber] | max // 0'` to its query.
      - **Strict mode:** glob `{RUNTIME_ROOT}/docs/stories/*.md`, filter for `**Status:**` values of `in-progress`, `review`, or `testing` to find the active sprint; if none found, filter for `**Status:** done`, ignoring files with an `**Analysis Open Topic:**` line, and read the `**Sprint:**` field from the most recently created story (highest ID) — that is the current sprint N
-4. Confirm every story in the current sprint has `status:done`:
-   - **GitHub mode:** check GitHub Issues
+4. Confirm the current sprint is done:
+   - **GitHub mode:** no in-flight story from step 3, and every issue returned by `gh issue list --label "sprint-N" --state open --limit 1000 --json number,title,labels` carries `status:done`
    - **Strict mode:** read all story MD files for the identified sprint and confirm all have `**Status:** done`
 5. **If NOT done** → PO reports which stories are still open; orchestrator notifies user and **stops**
-6. **One-Sprint-at-a-Time Guard** (feature sprint only): check whether `Sprint_{N+1}_Overview.md` already exists in `docs/feature/<feature_name>/plan/`. If it does → orchestrator notifies user and **stops**
+6. **One-Sprint-at-a-Time Guard:**
+   - **GitHub mode** (every sprint): run `gh issue list --label "sprint-{N+1}" --state open --limit 1`. Any result means the next sprint is already planned → orchestrator notifies user and **stops**
+   - **Strict mode** (feature sprint only): check whether `Sprint_{N+1}_Overview.md` already exists in `docs/feature/<feature_name>/plan/`. If it does → orchestrator notifies user and **stops**
 7. **Roadmap reconciliation backstop** (feature sprint only; lightweight — this is the sprint-planning safety net for AC4, not the primary drain mechanism). If `feature_name` is set, glob `docs/feature/<feature_name>/plan/*Roadmap*.md`. If a roadmap file exists, for every story it defines, check whether a tracked issue/story already carries that story's `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>` marker (see the `po-roadmap-drain` skill). The check must confirm the marker exists **anywhere in the tracker, in any status** — a story that was correctly drained and has since moved past `status:backlog` (`ready`/`in-progress`/`done`) is still tracked, not drift:
    - **GitHub mode:** `gh issue list --state all --search "\"<marker>\" in:body" --json number,body` per story — no `--label`/`--state open` filter (a status filter here would report every already-progressed story as false drift). Search is a candidate filter, not a verdict: GitHub's phrase search matches a contiguous token subsequence, not an exact line, so a story whose title is a prefix of another drained story's title can return a false match. For each candidate, confirm the marker appears as an **exact, full line** in that issue's body before treating the story as tracked — an empty result, or a candidate set where none survives the exact-line check, means it's untracked.
    - **Strict mode:** grep `{RUNTIME_ROOT}/docs/stories/*.md` for each story's marker line using a whole-line match (e.g. `grep -Fxq "<marker>"` per file, not a plain substring grep, which has the same prefix-title false-positive risk) — no match means it's untracked.
@@ -56,7 +58,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 2. PO locates planning inputs based on context:
    - **Feature sprint**: glob `docs/feature/<feature_name>/plan/*Roadmap*.md` to find the roadmap file; read `docs/feature/<feature_name>/plan/Product_Backlog.md` for all `status:backlog` items
    - **Non-feature sprint**:
-     - **GitHub mode:** run `gh issue list --label "status:backlog" --state open` as the backlog source
+     - **GitHub mode:** run `gh issue list --label "status:backlog" --state open --limit 1000` as the backlog source
      - **Strict mode:** glob `{RUNTIME_ROOT}/docs/stories/*.md`, filter by `**Status:** backlog`; sort by story ID (ascending)
 2a. **Roadmap check (feature and non-feature sprints):** PO reads `docs/Project_Roadmap.md` and confirms its Now / Next / Later buckets match the sprint being planned. When a topic changes bucket or a new topic appears, PO edits that topic's one line and `Last updated`, committing straight to the base branch in github mode (per `po-plan-docs`) and locally on `sprint-N-dev` in strict mode. When the file is missing, report it and skip.
 3. PO selects stories up to **60 points** capacity:
@@ -102,10 +104,10 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 2. PO reviews all answers in `PO_questions.md`; if anything is still unclear → orchestrator notifies user and **stops**
 3. PO writes sprint artifacts based on context:
    - **Feature sprint**:
-     - Create `docs/feature/<feature_name>/plan/Sprint_{N+1}_Overview.md` (follow existing Sprint Overview format)
+     - **Strict mode only:** create `docs/feature/<feature_name>/plan/Sprint_{N+1}_Overview.md` (follow existing Sprint Overview format)
      - Update `docs/feature/<feature_name>/plan/Product_Backlog.md`: add new sprint section; mark sprint status as `🔲 Planned`
    - **Non-feature sprint**:
-     - **GitHub mode:** GitHub issue labels are the only artifact — no Sprint Overview file needed
+     - **GitHub mode:** GitHub issue labels are the only artifact
      - **Strict mode:** create `{RUNTIME_ROOT}/docs/sprints/sprint_N_overview.md` listing selected story IDs, titles, points, and total capacity used
 4. PO creates stories for any backlog items that do not yet have a story record. Before creating one, obtain the exact existing base branch from the approved sprint plan or ask the user; never infer it from checkout:
    - **GitHub mode:** create GitHub Issues following the `po-write-story` skill with immutable `**Base Branch:** <selected branch>` inside every issue body; use `--body-file` pattern per `Agent_Common_Bootstrap.md §6`; create `sprint-N` label first if it does not exist; apply labels:
@@ -126,14 +128,14 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 ## Pipeline Rules
 
 - **Stage 0 first** — sprint context must be resolved before any agent is spawned
-- **One sprint at a time** — guard check in Stage 1 (feature sprints only); stop if next-sprint draft already exists
+- **One sprint at a time** — guard check in Stage 1 (GitHub mode: every sprint; strict mode: feature sprints only); stop if the next sprint is already planned
 - **Session reuse** — always resume an existing session before spawning
 - **Forced PO spawn** — Stages 1, 2 and 4 spawn/resume a real PO session (`po_session`) whatever the pinned `PO Execution` value; `orchestrator` mode never runs planning inline
 - **Parallel agents** — when multiple agents must answer questions, spawn/resume them in a single message simultaneously
 - **Dependency order** — if a roadmap exists, respect its dependency graph; if no roadmap, order by priority label (`Must-Have` → `Should-Have` → `Nice-to-Have`)
 - **Loop limit** — max 3 question-answer cycles before escalating to user
 - **Completion reports** — each agent returns max 5 bullets; details go in Working Records. Agents may append an optional `**Observations:**` section for workflow friction (unclear instructions, rule gaps, uncovered edge cases); orchestrator appends each item to `plan_observations.md`, prefixed with the agent role
-- **Stop conditions** — current sprint not done; next-sprint draft already exists; questions unresolved after 3 cycles; scope decision requires user judgment
+- **Stop conditions** — current sprint not done; next sprint already planned; questions unresolved after 3 cycles; scope decision requires user judgment
 - **Roadmap reconciliation backstop** — Stage 1 step 7 (feature sprints only) checks every story the roadmap defines against tracked issues/stories via the `**Roadmap Source:**` marker, before Stage 2 selects candidates. This is a lightweight drift-catcher, not the primary drain mechanism — that happens at roadmap authoring time, see the `po-roadmap-drain` skill. On drift, PO drains the missing stories on the spot rather than blocking the plan.
 - **Observations** — whenever the orchestrator makes a judgment call not covered by this workflow, append a one-line bullet to `{RUNTIME_ROOT}/tmp/plan_observations.md` (create the file if it does not exist). These are reviewed at the end of Stage 4.
 <!-- SHARED-END -->
