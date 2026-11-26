@@ -13,12 +13,19 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
-HELPER_PATH = ROOT / ".claude" / "agents" / "templates" / "scripts" / "branch_preflight.py"
+SHIPPED_HELPER = ".mt-agent-devkit/distribution/phase2/templates/scripts/branch_preflight.py"
+HELPER_PATH = ROOT / SHIPPED_HELPER
 SPEC = importlib.util.spec_from_file_location("branch_preflight", HELPER_PATH)
 assert SPEC and SPEC.loader
 preflight = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = preflight
 SPEC.loader.exec_module(preflight)
+
+WORKING_RUNTIME_DIRS = tuple(
+    f".{provider}/agents/working/{folder}/"
+    for provider in ("claude", "antigravity", "codex")
+    for folder in ("memory", "working-record", "tmp", "reports")
+)
 
 SECTION_SPEC = importlib.util.spec_from_file_location("internal_sections", ROOT / ".mt-agent-devkit/scripts/read_section.py")
 internal_sections = importlib.util.module_from_spec(SECTION_SPEC)
@@ -114,11 +121,51 @@ class PreflightTests(unittest.TestCase):
         self.assertLessEqual(len(result.evidence or []), 3)
         self.assert_blocked_no_mutation(refs, status, result)
 
-    def test_ahead_agent_commit_reports_agent_state_before_ahead_block(self) -> None:
-        run(self.local, "git", "commit", "--allow-empty", "-m", "Agent: runtime handoff")
+    def commit_file(self, relative: str, message: str) -> None:
+        target = self.local / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("content\n", encoding="utf-8")
+        run(self.local, "git", "add", "-f", relative)
+        run(self.local, "git", "commit", "-m", message)
+
+    def test_plan_document_commit_on_base_passes_in_both_modes(self) -> None:
+        self.commit_file("docs/Project_Roadmap.md", "Agent: Update project roadmap")
+        run(self.local, "git", "push")
+        for mode in ("github", "strict"):
+            with self.subTest(mode=mode):
+                result = self.inspect(mode)
+                self.assertTrue(result.passed, result.render())
+                self.assertEqual("no", result.agent_state)
+
+    def test_unpushed_plan_document_commit_blocks_as_ahead_without_agent_state(self) -> None:
+        self.commit_file("docs/Project_Roadmap.md", "Agent: Update project roadmap")
         result = self.inspect()
         self.assertEqual("base is ahead of upstream", result.reason)
-        self.assertEqual("yes", result.agent_state)
+        self.assertEqual("no", result.agent_state)
+
+    def test_unpushed_working_runtime_files_report_agent_state(self) -> None:
+        for directory in WORKING_RUNTIME_DIRS:
+            with self.subTest(directory=directory):
+                self.commit_file(directory + "state.md", "ordinary subject")
+                result = self.inspect()
+                self.assertEqual("base is ahead of upstream", result.reason)
+                self.assertEqual("yes", result.agent_state)
+                run(self.local, "git", "reset", "--hard", "origin/main")
+
+    def test_base_with_working_runtime_files_blocks(self) -> None:
+        for directory in WORKING_RUNTIME_DIRS:
+            with self.subTest(directory=directory):
+                self.commit_file(directory + "state.md", "ordinary subject")
+                result = self.inspect("strict")
+                self.assertEqual("verified base contains agent runtime state", result.reason)
+                self.assertEqual("yes", result.agent_state)
+                self.assertEqual([directory + "state.md"], result.evidence)
+                run(self.local, "git", "reset", "--hard", "origin/main")
+
+    def test_tracked_working_sources_outside_runtime_folders_pass(self) -> None:
+        for relative in (".claude/agents/working/rules/Rule.md", ".antigravity/agents/working/retros/ST_retro.md"):
+            self.commit_file(relative, "tracked working source")
+        self.assertTrue(self.inspect("strict").passed)
 
     def test_b06_diverged_blocks(self) -> None:
         (self.local / "local.txt").write_text("local\n", encoding="utf-8")
@@ -321,7 +368,7 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertIn("Interrupted Stage 1 recovery check", strict)
 
     def test_devkit_working_preflight_wrappers_preserve_helper_contract(self) -> None:
-        source = (ROOT / ".claude/agents/templates/scripts/branch_preflight.py").read_text(encoding="utf-8")
+        source = HELPER_PATH.read_text(encoding="utf-8")
         internal = (ROOT / ".mt-agent-devkit/scripts/branch_preflight.py").read_text(encoding="utf-8")
         for provider in ("claude", "antigravity", "codex"):
             internal = internal.replace(f'    ".{provider}/agents/runtime/",\n', "")
@@ -335,6 +382,18 @@ class WorkflowContractTests(unittest.TestCase):
                 self.assertEqual(0, result.returncode, result.stderr)
                 self.assertIn("--expected-base-sha", result.stdout)
                 self.assertIn("--expected-remote-sha", result.stdout)
+
+    def test_every_shipped_and_internal_copy_judges_paths_not_commit_messages(self) -> None:
+        for relative in (
+            ".mt-agent-devkit/scripts/branch_preflight.py",
+            SHIPPED_HELPER,
+            ".mt-agent-devkit/distribution/phase2/bundle/assets/scripts_branch_preflight.py",
+        ):
+            with self.subTest(path=relative):
+                source = (ROOT / relative).read_text(encoding="utf-8")
+                self.assertNotIn('"Agent:"', source)
+                for directory in WORKING_RUNTIME_DIRS:
+                    self.assertIn(f'"{directory}",', source)
 
     def test_story_base_is_inspected_before_reproduction_or_stage_zero(self) -> None:
         paths = (

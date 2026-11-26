@@ -36,7 +36,6 @@ claude -p "<command>" --model sonnet --setting-sources project --strict-mcp-conf
 - Put a `gh` wrapper first on `PATH` that refuses other repositories. It only catches mistakes: `git`, `gh` and `python3` can bypass it and the session has the host's `gh` login. A hard boundary needs a token limited to the testbed.
 - `total_cost_usd` is the session total, not the turn. `--max-budget-usd` applies to one invocation, so pass what is left of the cap.
 - In `acceptEdits` mode, agent records and retrospectives are not exercised. A clone-local exclude edit may also be refused; add the line yourself and note it.
-- Until [#372](https://github.com/mycom08/mt-agent-devkit/issues/372) is fixed, `start story` blocks after planning when the base's latest commit starts with `Agent:`. T001 added an empty commit on the run branch; record that you did.
 - `refine sprint` and `continue sprint` take every story in scope. To limit them, remove `sprint-N` from the other stories and restore it afterwards.
 - Long turns run in the background. A stopped turn reports no cost. After a usage limit, resume the same session and tell it not to repeat completed steps.
 

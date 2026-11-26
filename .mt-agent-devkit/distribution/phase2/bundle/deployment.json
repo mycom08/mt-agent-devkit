@@ -1732,8 +1732,8 @@
     {
       "id": "scripts/branch_preflight.py",
       "path": "assets/scripts_branch_preflight.py",
-      "sha256": "c1f2141f8d7d24102a750dd650893599ec72697494f62b327a4e1eff02c80f0f",
-      "bytes": 10759,
+      "sha256": "d34c1cc48e3afbfa5848dfd1ab734edf675e321feede34e74eaafd27fd22a3d3",
+      "bytes": 10747,
       "kind": "script"
     },
     {
