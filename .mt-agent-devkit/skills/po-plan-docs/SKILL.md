@@ -9,7 +9,7 @@ description: Product Owner plan documents - committing and pushing each plan-fil
 
 ## Plan Commit (mandatory after any plan update)
 
-After creating or updating any project plan file (Product Backlog), in github mode:
+After creating or updating any project plan file (Implementation Roadmap, any file under `docs/feature/<feature_name>/plan/`), in github mode:
 
 - Commit message: `Agent: <short description>`, total length under 50 characters.
 - Commit each plan file update as soon as it is written; do not batch.

@@ -382,7 +382,7 @@ Post one `[Orchestrator]` comment for the round listing the created stories, the
 
 Report the approved and blocked specs, ADRs and test designs, the feature design decision and status, the roadmap and strategy status, the branch, the stories created, skipped and open and, in GitHub mode, the tracking story and PR.
 
-- After Stage 8: tell the user to run `plan next sprint none`. With open topics, also tell them to run `analyze requirements <feature-slug>` with the answer. Strict mode: the local branch is theirs to merge, before any of these stories is started.
+- After Stage 8: tell the user to run `plan next sprint <feature-slug>` (GitHub mode) or `plan next sprint none` (strict mode). With open topics, also tell them to run `analyze requirements <feature-slug>` with the answer. Strict mode: the local branch is theirs to merge, before any of these stories is started.
 - A stop before Stage 8 uses the same report. Leave the PR open as a draft and the tracking story open: do not merge, and create no stories.
 
 ---

@@ -11,7 +11,9 @@ Task skill, only when the orchestrator asks for a Sprint Refinement. The orchest
 
 ## 1. Fetch Target Stories
 
-1. Read `docs/feature/{feature-name}/plan/Product_Backlog.md`: find the sprint marked `🔲 Planned` and note its sprint label (e.g. `sprint-5`).
+1. Find the target sprint label (e.g. `sprint-5`).
+   - **GitHub mode:** the highest sprint over open backlog issues: `gh issue list --repo {github-org}/{repo-name} --state open --label "status:backlog" --limit 1000 --json labels --jq '[.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`.
+   - **Strict mode:** read `docs/feature/{feature-name}/plan/Product_Backlog.md` and take the sprint marked `🔲 Planned`.
 2. Run `gh issue list --repo {github-org}/{repo-name} --label "sprint-N" --label "status:backlog" --state open`.
 3. For each returned issue, read the full body: User Story, AC, Technical Scope, API Spec Reference.
 
