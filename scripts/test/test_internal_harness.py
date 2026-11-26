@@ -1511,7 +1511,7 @@ class Phase2SkillTemplatesTests(unittest.TestCase):
             "11 live conflicts": ("raise-question", "the live instruction takes precedence"),
             "8 document placement": ("project-docs", "Document_Index.md"),
             "9 peer review": ("pr-review", "Stub/TODO re-check"),
-            "12 developer as reviewer": ("pr-review", "gh pr diff <number> --repo {github-org}/{repo-name}"),
+            "12 developer as reviewer": ("pr-review", "gh pr diff <number>`"),
             "13 hotfix": ("dev-hotfix", "fix/ST-XXXXXX/short-description"),
             "14 refine": ("dev-refine", "Step-positioning check"),
             "15 comment CI paste": ("pr-review", "gh pr checks <PR-number>"),

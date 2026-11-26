@@ -94,8 +94,8 @@
     {
       "id": "rules/Blocked_Request.md",
       "path": "assets/rules_Blocked_Request.md",
-      "sha256": "dcab57e2f72d7d33ee4f290458fbcf8659b90040706b6f179b77fc5000122b77",
-      "bytes": 2459,
+      "sha256": "b5ee627a4a6546bc5515349911092b521f46223ed1d7d529616be22c61804136",
+      "bytes": 2363,
       "kind": "template"
     },
     {
@@ -136,8 +136,8 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "45d9fd802bfd4d1c471dee506d052fcc2cd086d49e65d8e2f551823037acfd34",
-      "bytes": 31702,
+      "sha256": "ac272e01aae1bd75ffc373f07bd059350071a6f57ceefec324f8be195bc20c00",
+      "bytes": 31677,
       "kind": "template"
     },
     {
@@ -934,8 +934,8 @@
     {
       "id": "skills/pr-review",
       "path": "assets/skills_pr-review",
-      "sha256": "58611d731c65f75cfb68fd63fdf2930d536baa7d0dd42280402822a3fb6ae196",
-      "bytes": 3425,
+      "sha256": "72dabc439e6d8d059104c43f8c0f439353a66c4019fb580179b023d3235d6f87",
+      "bytes": 3393,
       "kind": "template"
     },
     {
@@ -1130,8 +1130,8 @@
     {
       "id": "skills/dev-refine",
       "path": "assets/skills_dev-refine",
-      "sha256": "65a014ae2b65e0557e7bbe07cfdc1c682798e54b8a368ae58a2e1a33ec8f8135",
-      "bytes": 3032,
+      "sha256": "3e47ebbd6f3010bd4bb3bb2e6d6ed1d0e2761edbd6079f681cfc2c2775bc1a27",
+      "bytes": 2968,
       "kind": "template"
     },
     {
@@ -1648,8 +1648,8 @@
     {
       "id": "workflow_shared/Shared_Pipeline_Stages.md",
       "path": "assets/workflow_shared_Shared_Pipeline_Stages.md",
-      "sha256": "0fb622c7e2427457c101aa3b4d89df0cc72fa811929ae4c1e0bf624e0288bb49",
-      "bytes": 55343,
+      "sha256": "c42af888a0ceab54295f0702f0afaed17b0cc032d987404d882f0427a73ada72",
+      "bytes": 55255,
       "kind": "template"
     },
     {
@@ -1718,8 +1718,8 @@
     {
       "id": "orchestrator_github",
       "path": "assets/orchestrator_github",
-      "sha256": "758d5ec51f7cb9a0a7d25168f2de5bd7318f03faaa49d8993cf1c2836cb9f23b",
-      "bytes": 339,
+      "sha256": "ad2aa1dfb52b74bb801b564273190bfdd07b0af87ee97a0ea53fa129fbb04b7a",
+      "bytes": 1469,
       "kind": "template"
     },
     {
@@ -2397,8 +2397,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "e5b215a7a826e7b126e90ed6d7bc1f8231d7d1e9d7cbf5bab55e48c790892bb5",
-      "bytes": 34514,
+      "sha256": "e2c688caaf0abc5dddeb14e70bfaad374bb43987234dac024e7e9f16a22a4464",
+      "bytes": 35368,
       "kind": "script"
     },
     {

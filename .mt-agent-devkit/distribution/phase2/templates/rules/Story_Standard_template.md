@@ -1,7 +1,7 @@
 # Story Standard
 
 **Applies to:** All agents (Developer, TL, QA, PO, BA, UI/UX Designer)
-**Location:** GitHub Issues in repository `{github-org}/{repo-name}`
+**Location:** GitHub Issues in this project's repository: the one on the remote the base branch tracks (`branch.<base>.remote`, else `origin`)
 **Issue title format:** `[ST-XXXXXX][FEATURE] Story Title`
 
 ---
@@ -388,7 +388,7 @@ Applies to every role, on every issue comment: run the Commenter gate in the `co
 
 ## 13. Story Creation Template
 
-When creating a new story, **create a GitHub Issue** in `{github-org}/{repo-name}` with:
+When creating a new story, **create a GitHub Issue** in this project's repository (see **Location** at the top) with:
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`
 **Labels (feature story):** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`
@@ -513,13 +513,13 @@ This applies to both Bash and PowerShell tool calls.
 
 For short, single-line bodies with no backticks:
 ```bash
-gh issue comment <number> --repo {github-org}/{repo-name} --body "Simple text"
+gh issue comment <number> --body "Simple text"
 ```
 
 For multi-line or backtick-containing Markdown, write to a temp file first using the Write tool, then reference it:
 ```bash
-gh issue comment <number> --repo {github-org}/{repo-name} --body-file /tmp/comment.md
-gh issue edit <number> --repo {github-org}/{repo-name} --body-file /tmp/body.md
+gh issue comment <number> --body-file /tmp/comment.md
+gh issue edit <number> --body-file /tmp/body.md
 ```
 
 Delete the temp file immediately after the `gh` call completes — do not leave stale files in `/tmp/` or `{{AGENT_DIR_PREFIX}}/agents/tmp/`.
@@ -527,7 +527,7 @@ Delete the temp file immediately after the `gh` call completes — do not leave 
 ### Changing Labels
 
 ```bash
-gh issue edit <number> --repo {github-org}/{repo-name} --add-label "status:done" --remove-label "status:testing"
+gh issue edit <number> --add-label "status:done" --remove-label "status:testing"
 ```
 
 ---

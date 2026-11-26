@@ -12,7 +12,7 @@ TL keeps its approval authority (the review gate, design compliance, the Reviewe
 ## Steps
 
 1. **Locate the work.** Open the story issue and find the PR in its Deliverables or linked pull requests. If none is linked, ask the implementer to link it first.
-2. **Read the diff:** `gh pr diff <number> --repo {github-org}/{repo-name}`.
+2. **Read the diff:** `gh pr diff <number>`.
 3. **CI gate (before any verdict).**
    - Pending CI routes to `.mt-agent-devkit/contracts/Wait_Work.md` (ci-watch); keep its wait ID and native command/session identity. PENDING never advances review or merge; FAIL/cancel/timeout routes to fixes. NO RUN uses the explicit zero-check evidence gate, never automatic PASS. After waiting, revalidate the exact head and approval scope.
    - Every check has **finished** and none **failed**.
