@@ -9,6 +9,17 @@ Triggered by: `"plan next sprint [feature-name]"` or `"/plan-sprint [feature-nam
 
 ---
 
+## Open Topic Check (run first)
+
+Before Stage 0, look for open analysis topics:
+
+- **GitHub mode:** `gh issue list --label "analysis-open-topic" --state open --limit 1000 --json number,title,body,comments`
+- **Strict mode:** the files in `{{AGENT_DIR_PREFIX}}/agents/docs/stories/` with an `**Analysis Open Topic:**` line and `**Status:** blocked`.
+
+None: continue; nothing else changes. One or more: run the Open Topic Reminder section of `{{AGENT_DIR_PREFIX}}/agents/workflows/Analyze_Requirements_Workflow.md`, and continue only when it says so.
+
+---
+
 ## Stage 0 — Sprint Context
 
 Before spawning any agent, the orchestrator resolves the sprint context.
@@ -126,7 +137,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 ## Pipeline Rules
 
-- **Stage 0 first** — sprint context must be resolved before any agent is spawned
+- **Stage 0 first** — after the Open Topic Check, sprint context must be resolved before any planning agent is spawned
 - **One sprint at a time** — guard check in Stage 1 (GitHub mode: every sprint; strict mode: feature sprints only); stop if the next sprint is already planned
 - **Session reuse** — always resume an existing session before spawning
 - **Forced PO spawn** — Stages 1, 2 and 4 spawn/resume a real PO session (`po_session`) whatever the pinned `PO Execution` value; `orchestrator` mode never runs planning inline

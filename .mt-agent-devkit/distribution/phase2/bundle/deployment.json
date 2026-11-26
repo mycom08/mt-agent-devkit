@@ -1522,8 +1522,8 @@
     {
       "id": "workflow_shared/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
-      "sha256": "fa56298b8d482d21213ef1f5bcb8f35981327f3d1622d74b28d170c410be9cb9",
-      "bytes": 34863,
+      "sha256": "80d1a9d64ba25156d68abfebe7b7a09f7d74adf2f689f6dab3f914c8f1827d12",
+      "bytes": 37273,
       "kind": "template"
     },
     {
@@ -1564,8 +1564,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "fb1a1d3030b5d81dca6cc694245f1208f4222c0030d7fccccfc64a7b86576bf1",
-      "bytes": 16003,
+      "sha256": "226f21514e265dedf7ad653eb62c618d339ba36af82b20a00982b1a768d6aeee",
+      "bytes": 16571,
       "kind": "template"
     },
     {
@@ -1669,8 +1669,8 @@
     {
       "id": "workflow_shared/Sprint_Workflow.md",
       "path": "assets/workflow_shared_Sprint_Workflow.md",
-      "sha256": "862368ca8365e36d1bc75081c38fe1db809eb446258d941466f914e3bca5d372",
-      "bytes": 19842,
+      "sha256": "2c7cfdb9bafdc45a858a88b915326162d89c4eb81e35cb51a4ae0d17cd978108",
+      "bytes": 20456,
       "kind": "template"
     },
     {

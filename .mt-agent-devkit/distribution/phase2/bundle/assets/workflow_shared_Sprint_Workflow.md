@@ -11,11 +11,22 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 ---
 
+## Open Topic Check (run first)
+
+Before anything else, including a resumed run and any strict-mode pre-flight, look for open analysis topics:
+
+- **GitHub mode:** `gh issue list --label "analysis-open-topic" --state open --limit 1000 --json number,title,body,comments`
+- **Strict mode:** the files in `{RUNTIME_ROOT}/docs/stories/` with an `**Analysis Open Topic:**` line and `**Status:** blocked`.
+
+None: continue; nothing else changes. One or more: run the Open Topic Reminder section of `.mt-agent-devkit/workflows/Analyze_Requirements_Workflow.md`, and continue only when it says so.
+
+---
+
 ## Pipeline State
 
 The orchestrator maintains `{RUNTIME_ROOT}/tmp/sprint_pipeline_state.md` to support resumption after unexpected termination.
 
-**On pipeline start — always check this file first:**
+**On pipeline start, after the Open Topic Check — check this file first:**
 - If the file **exists** → read it and resume from the recorded story and stage
 - If the file **does not exist** → start the next `status:ready` story at Story Base Preflight, then Bug Reproduction Pre-Flight, then Stage 0
 
