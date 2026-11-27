@@ -2,13 +2,12 @@
 
 **Readers:** Product Owner, Business Analyst, orchestrator. Implementers do not read this file; it is not part of Project Priming.
 **Owner:** Product Owner
-**Last updated:** 2026-11-26
+**Last updated:** 2026-11-27
 
 One line per topic, linking to the topic's own roadmap or umbrella issue. Never list stories here; a topic's story list lives in its own roadmap. No dates. A topic moves bucket when its state changes, and a new topic is added when work on it starts.
 
 ## Now
 
-- Analyze Requirements workflow for target projects: intake to approved specs, ADRs, roadmap, design and backlog stories — [#244](https://github.com/mycom08/mt-agent-devkit/issues/244)
 - UX foundation: project UX standard, feature design docs and pipeline enforcement for UI stories — [#233](https://github.com/mycom08/mt-agent-devkit/issues/233)
 
 ## Next
@@ -24,6 +23,7 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 ## Done
 
+- Analyze Requirements workflow for target projects: intake to approved specs, ADRs, roadmap, design and backlog stories; accepted on a partial real run, with PDF or Word input, strict mode, resume, open topics, correction rounds and blocked documents not verified — [#244](https://github.com/mycom08/mt-agent-devkit/issues/244)
 - Workflow test-run fixes (sprint 15): branch preflight judges the base by paths, the retro completion helper follows the installed runtime binding, and installed commands need no repository placeholder — [#372](https://github.com/mycom08/mt-agent-devkit/issues/372), [#371](https://github.com/mycom08/mt-agent-devkit/issues/371), [#370](https://github.com/mycom08/mt-agent-devkit/issues/370)
 - Project-owned model and effort override (sprint 13): `agent_models` in `project_settings.json` overrides model and effort per role or policy, pinned per run and preserved by sync — [#322](https://github.com/mycom08/mt-agent-devkit/issues/322)
 - Release metadata trim (sprint 13): `changes.json` keeps only the snapshot and the newest three released versions; legacy stamps from 0.1.51 still migrate and the coverage validator checks are retired — [#345](https://github.com/mycom08/mt-agent-devkit/issues/345), [#346](https://github.com/mycom08/mt-agent-devkit/issues/346), [#347](https://github.com/mycom08/mt-agent-devkit/issues/347)
