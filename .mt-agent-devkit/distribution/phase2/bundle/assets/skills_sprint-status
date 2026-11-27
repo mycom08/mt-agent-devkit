@@ -1,6 +1,6 @@
 ---
 name: sprint-status
-description: Sprint-state checks - in-flight stories, current sprint number, whether that sprint is done, whether the next one is already planned, and the refinement target sprint. Load before checking sprint state or picking a sprint to refine.
+description: Sprint-state checks - in-flight stories, current sprint number, whether that sprint is done, whether the next one is already planned, the refinement target sprint and the sprint-label rules. Load before checking sprint state or picking a sprint to refine.
 ---
 
 # Sprint Status
@@ -36,3 +36,12 @@ The only owner of these checks. Use the project's mode. `feature_name` is the sp
 - **GitHub mode** (feature or not): the highest sprint over open `status:open` issues: `gh issue list --state open --label "status:open" --limit 1000 --json labels --jq '[.[].labels[].name | select(test("^sprint-[0-9]+$"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`. Sprint numbers are one repo-wide sequence. Do not use `gh label list`: it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.
 - **Strict mode, feature sprint:** the sprint marked `🔲 Planned` in `<plan>Product_Backlog.md`.
 - **Strict mode, non-feature sprint:** over the `**Sprint:**` values of all story files, the highest sprint number with at least one `**Status:** open` story.
+
+## 6. Sprint-Label Violations
+
+A `backlog` story carries no sprint; `open`, `ready`, `in-progress`, `review`, `testing`, `hotfix` and `blocked` stories carry exactly one. Skip `done`, `on-hold` and open-topic stories (`analysis-open-topic` label; strict: `**Analysis Open Topic:**` line).
+
+- **GitHub mode:** apply to each line of `gh issue list --state open --limit 1000 --json number,title,labels --jq '.[] | "#\(.number) \(.title): \([.labels[].name] | join(", "))"'`.
+- **Strict mode:** apply to each story file's `**Status:**` and `**Sprint:**`.
+
+Report each violation; change nothing.

@@ -20,7 +20,8 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 ## Steps
 
-1. **Verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report story IDs, stop.
+1. **Check sprint labels first** (`sprint-status` section 6). Violations: report all, wait for the user's choice to continue; change nothing unconfirmed.
+   **Then verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report story IDs, stop.
 2. **Select stories**; note ID, title, points, priority, role.
    - **GitHub mode:** `gh issue list --label "status:backlog" --state open --limit 1000`; a feature adds `--label "feature:<feature_name>"`. No feature match and no `plan/` roadmap: report and stop. Order: `plan/` roadmap graph; feature without one: `phase-N`, `**Depends on:**` (done or same sprint), priority.
    - **Strict mode:** feature: read `*Roadmap*.md` and backlog; no story whose dependency is not done. Non-feature: workflow Stage 2.

@@ -1,6 +1,6 @@
 ---
 name: sprint-status
-description: Sprint-state checks - in-flight stories, current sprint number, whether that sprint is done, whether the next one is already planned, and the refinement target sprint. Load before checking sprint state or picking a sprint to refine.
+description: Sprint-state checks - in-flight stories, current sprint number, whether that sprint is done, whether the next one is already planned, the refinement target sprint and the sprint-label rules. Load before checking sprint state or picking a sprint to refine.
 ---
 
 # Sprint Status
@@ -28,3 +28,11 @@ Any result from `gh issue list --label "sprint-{N+1}" --state open --limit 1` me
 ## 5. Refinement Target Sprint
 
 The target is the highest sprint over open `status:open` issues: `gh issue list --state open --label "status:open" --limit 1000 --json labels --jq '[.[].labels[].name | select(test("^sprint-[0-9]+$"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`. Do not use `gh label list`: it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.
+
+## 6. Sprint-Label Violations
+
+A `backlog` story carries no sprint; `open`, `ready`, `in-progress`, `review`, `testing`, `hotfix` and `blocked` stories carry exactly one. Skip `done`, `on-hold` and open-topic stories (`analysis-open-topic`).
+
+Apply the rule to each line of `gh issue list --state open --limit 1000 --json number,title,labels --jq '.[] | "#\(.number) \(.title): \([.labels[].name] | join(", "))"'`.
+
+Report each violation (ID, labels); change no label.
