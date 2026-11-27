@@ -21,8 +21,13 @@ LOCK = ".mt-agent-devkit-migration.lock"
 # Antigravity's hook file. The manifest declares it as a `copy`, which installed
 # engines older than its merge can still plan; this engine merges it instead.
 AGENT_HOOKS = ".agents/hooks.json"
-# One `||` step that runs the shared comment hook script with a Python launcher.
-GH_POSTS_RUN = re.compile(r"""(?:python3?|py(?: -3)?) +(["']?)(?:[^"'|;&]*/)?\.mt-agent-devkit/scripts/check_gh_posts\.py\1(?: +[\w=-]+)*""")
+# Every comment-hook command the devkit has written. Only an exact match is the
+# devkit's to replace: any other command, even one running the same script, is the
+# project's. A release that changes the command adds the new one and keeps these.
+GH_POSTS_COMMANDS = (
+    'python3 "$CLAUDE_PROJECT_DIR/.mt-agent-devkit/scripts/check_gh_posts.py" claude || python "$CLAUDE_PROJECT_DIR/.mt-agent-devkit/scripts/check_gh_posts.py" claude || exit 0',
+    'python3 "../.mt-agent-devkit/scripts/check_gh_posts.py" antigravity || python "../.mt-agent-devkit/scripts/check_gh_posts.py" antigravity || exit 0',
+)
 
 
 class Conflict(ValueError):
@@ -115,18 +120,12 @@ def managed_sections(project, template):
     return project + ("\n\n" if project else "") + start + "\n" + template.strip() + "\n" + end + "\n"
 
 
-def runs_gh_posts_hook(hook):
-    """Only a command that does nothing but run the hook is the devkit's to replace."""
-    steps = [step.strip() for step in str(hook.get("command", "")).replace("\\", "/").split("||")]
-    return steps[0] != "exit 0" and all(step == "exit 0" or GH_POSTS_RUN.fullmatch(step) for step in steps)
-
-
 def without_gh_posts_hook(groups):
-    """Drop earlier renderings of the comment hook; every other hook stays."""
+    """Drop the devkit's own comment-hook entries; every other hook stays."""
     kept = []
     for group in groups:
         hooks = group.get("hooks", [])
-        others = [hook for hook in hooks if not runs_gh_posts_hook(hook)]
+        others = [hook for hook in hooks if hook.get("command") not in GH_POSTS_COMMANDS]
         if len(others) == len(hooks):
             kept.append(group)
         elif others:

@@ -357,28 +357,53 @@ class InstallAndSync(unittest.TestCase):
         again = self.install()
         self.assertEqual({op["action"] for op in again["operations"]}, {"preserve"})
 
-    def test_earlier_renderings_are_replaced_and_enabled_choice_stays(self):
-        stale = {"type": "command", "command": "python .mt-agent-devkit/scripts/check_gh_posts.py"}
-        self.put(".claude/settings.json", {"hooks": {"PreToolUse": [{"matcher": "Bash", "hooks": [stale, *self.OWN["hooks"]]}]}})
-        self.put(".agents/hooks.json", {"mine": {"PreToolUse": [{"matcher": "run_command", "hooks": [stale]}]},
+    def devkit_entries(self):
+        return [json.loads((ROOT / ".claude/settings.json").read_text())["hooks"]["PreToolUse"][0]["hooks"][0],
+                json.loads((ROOT / ".agents/hooks.json").read_text())["mt-agent-devkit-gh-posts"]["PreToolUse"][0]["hooks"][0]]
+
+    def test_every_shipped_command_is_one_the_merge_recognises(self):
+        shipped = {entry["command"] for entry in self.devkit_entries()}
+        self.assertEqual(shipped, set(self.engine.GH_POSTS_COMMANDS))
+
+    def test_devkit_entries_are_replaced_and_enabled_choice_stays(self):
+        claude, antigravity = self.devkit_entries()
+        self.put(".claude/settings.json", {"hooks": {"PreToolUse": [
+            {"matcher": "Bash", "hooks": [claude, *self.OWN["hooks"]]}, {"matcher": "Bash", "hooks": [claude]}]}})
+        self.put(".agents/hooks.json", {"mine": {"PreToolUse": [{"matcher": "run_command", "hooks": [antigravity]}]},
                                         "mt-agent-devkit-gh-posts": {"enabled": False, "PreToolUse": []}})
         self.install()
-        self.assertEqual([c for c in self.claude_commands() if "check_gh_posts" in c], self.claude_commands()[-1:])
-        self.assertIn("./project-hook.sh", self.claude_commands())
+        self.assertEqual(self.claude_commands(), ["./project-hook.sh", claude["command"]])
         hooks = self.read(".agents/hooks.json")
         self.assertEqual(list(hooks), ["mt-agent-devkit-gh-posts"])
         self.assertFalse(hooks["mt-agent-devkit-gh-posts"]["enabled"])
         self.assertTrue(hooks["mt-agent-devkit-gh-posts"]["PreToolUse"])
 
-    def test_project_hooks_that_only_mention_the_script_are_kept(self):
+    def project_commands(self):
+        """Commands naming the script that the devkit never wrote."""
         script = ".mt-agent-devkit/scripts/check_gh_posts.py"
-        own = [{"type": "command", "command": command} for command in (
-            "echo see " + script, "./wrap.sh " + script, "python3 " + script + " && ./audit.sh",
-            "python3 tools/check_gh_posts.py", "exit 0")]
-        earlier = [{"type": "command", "command": command} for command in (
-            "python3 " + script + " --provider claude || exit 0",
-            'py -3 "C:\\work\\app\\.mt-agent-devkit\\scripts\\check_gh_posts.py"')]
-        self.assertEqual(self.engine.without_gh_posts_hook([{"hooks": own + earlier}]), [{"hooks": own}])
+        devkit = [entry["command"] for entry in self.devkit_entries()]
+        mentions = ["echo see " + script, "cat " + script, "exit 0", "./wrap.sh " + script,
+                    "python3 tools/audit.py ../" + script, "python3 tools/audit.py " + script + " || exit 0",
+                    'python3 tools/audit.py "../' + script + '"', "node lint.js /srv/app/" + script,
+                    "bash run.sh python3 " + script, "timeout 5 python3 " + script, "AUDIT=1 python3 " + script,
+                    "python3 -m trace " + script, "python3 -X dev " + script, "python3 tools/check_gh_posts.py",
+                    "python3 " + script + " && ./audit.sh", "./audit.sh; python3 " + script,
+                    "python3 " + script + " | tee hook.log"]
+        own_runs = ["python " + script, "python3 " + script + " --provider claude || exit 0",
+                    'python3 "/home/my dir/' + script + '"',
+                    'py -3 "C:\\work\\app\\.mt-agent-devkit\\scripts\\check_gh_posts.py"']
+        edited = [change for command in devkit for change in (
+            command.replace(" || exit 0", ""), command + " && ./audit.sh", command.replace("python3 ", "py -3 "))]
+        return mentions + own_runs + edited
+
+    def test_project_hooks_that_only_mention_the_script_are_kept(self):
+        own = [{"type": "command", "command": command} for command in self.project_commands()]
+        self.put(".claude/settings.json", {"hooks": {"PreToolUse": [{"matcher": "Bash", "hooks": own}]}})
+        self.put(".agents/hooks.json", {"mine": {"PreToolUse": [{"matcher": "run_command", "hooks": own}]}})
+        self.install()
+        self.assertEqual(self.claude_commands()[:-1], [hook["command"] for hook in own])
+        self.assertEqual(self.read(".agents/hooks.json")["mine"]["PreToolUse"][0]["hooks"], own)
+        self.assertHookInstalled()
 
     def test_a_local_script_of_the_same_name_is_never_overwritten(self):
         self.put(".mt-agent-devkit/scripts/check_gh_posts.py", "# project's own\n")
