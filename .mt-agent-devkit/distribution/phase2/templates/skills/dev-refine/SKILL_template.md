@@ -1,6 +1,6 @@
 ---
 name: dev-refine
-description: Developer sprint refinement task - fetch the sprint's backlog stories, find open points per story, post one question comment or an explicit cleared note per story, then review answers and confirm readiness. Load at spawn when the orchestrator asks for a Sprint Refinement.
+description: Developer sprint refinement task - fetch the sprint's open stories, find open points per story, post one question comment or an explicit cleared note per story, then review answers and confirm readiness. Load at spawn when the orchestrator asks for a Sprint Refinement.
 ---
 
 # Dev Refine
@@ -12,7 +12,7 @@ Task skill, only when the orchestrator asks for a Sprint Refinement. The orchest
 ## 1. Fetch Target Stories
 
 1. Find the target sprint label, e.g. `sprint-5` (`sprint-status` section 5).
-2. Run `gh issue list --label "sprint-N" --label "status:backlog" --state open`.
+2. Run `gh issue list --label "sprint-N" --label "status:open" --state open`.
 3. For each returned issue, read the full body: User Story, AC, Technical Scope, API Spec Reference.
 
 ## 2. Identify Open Points per Story
@@ -26,7 +26,7 @@ Task skill, only when the orchestrator asks for a Sprint Refinement. The orchest
 ## 3. Post Comments
 
 1. **Open points:** post **one** issue comment per story in the `comment` format, technical questions under a `**TL**` heading and scope/AC questions under a `**PO**` heading, `**Thread Status:** Open`. Never split one story's questions across comments.
-2. **No open points:** post an explicit **cleared note**: one comment stating the story was reviewed and no open points were found, `**Thread Status:** Resolved`, no agent tagged. Never leave a clear story silent: Stage 4 promotes on the presence of a comment, so a silent story stays `status:backlog`.
+2. **No open points:** post an explicit **cleared note**: one comment stating the story was reviewed and no open points were found, `**Thread Status:** Resolved`, no agent tagged. Never leave a clear story silent: Stage 4 promotes on the presence of a comment, so a silent story stays `status:open`.
 
 ## 4. Review Answers and Confirm
 

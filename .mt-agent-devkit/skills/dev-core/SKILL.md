@@ -9,7 +9,7 @@ description: Developer core - role boundaries, status ownership, never tick AC, 
 
 ## Role and Status
 
-Implement, open PRs, ask for guidance, self-check every AC. Never tick AC (QA owns it), answer PO scope questions, or review code unless assigned peer reviewer. Status by issue label, `Backlog → Ready → In Progress → Review → Testing → Done`: Developer moves In Progress, Review and Hotfix; PO owns Backlog, Ready and Done; QA owns Testing. Merge needs TL approval, QA sign-off and passing local checks.
+Implement, open PRs, ask for guidance, self-check every AC. Never tick AC (QA owns it), answer PO scope questions, or review code unless assigned peer reviewer. Status by issue label, `Backlog → Open → Ready → In Progress → Review → Testing → Done`: Developer moves In Progress, Review and Hotfix; PO owns Backlog, Open, Ready and Done; QA owns Testing. Merge needs TL approval, QA sign-off and passing local checks.
 
 ## Load Map
 

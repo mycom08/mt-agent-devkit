@@ -58,7 +58,7 @@ Also ask once: **"Which existing branch is the immutable base for these stories?
 **If `Mode: github`:**
 
 For each confirmed story, create a GitHub Issue following the `po-write-story` skill (story ID, title, labels and body template):
-- Labels: `status:backlog`, `feature:<name>` (if feature), `phase-N` (if feature), `sprint-N` (if sprint assigned)
+- Labels: `status:open` + `sprint-N` (if sprint assigned; create a missing label first), otherwise `status:backlog` with no `sprint-N`; `feature:<name>`, `phase-N` (if feature)
 - Use `--body-file` pattern (see `Agent_Common_Bootstrap.md` §6)
 - Report created issue URLs to the user
 
@@ -68,9 +68,9 @@ For each confirmed story:
 1. Read `{RUNTIME_ROOT}/docs/story_counter.txt`, increment by 1, write back — derive the new `ST-XXXXXX` ID
 2. Ask the user (once, not per story): **"Does your project use an external story ID system (e.g. Jira, Linear)? If yes, provide the external ID for each story now, or leave blank to skip."**
 3. Write `{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md` using the format from `Strict_Mode_Story_Guide.md` §Story MD Format:
-   - `**Status:** backlog`
+   - `**Status:** open` if the user provided a sprint, otherwise `**Status:** backlog`
    - `**External ID:**` — set if provided, omit the line if blank
-   - `**Sprint:**` — set if user provided a sprint, omit the line if blank
+   - `**Sprint:**` — set if user provided a sprint, omit the line if blank (a `backlog` story carries no sprint)
    - `**Feature:**` / `**Phase:**` — set from Step 3
    - `**Project Base Branch:**` — required immutable project/sprint source selected above
    - `**Base Branch:**` — `sprint-N-dev`, written only after strict pre-flight verifies it as this story's execution base

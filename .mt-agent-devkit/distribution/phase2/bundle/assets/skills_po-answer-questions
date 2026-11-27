@@ -16,6 +16,16 @@ Applies to refine-sprint Stage 2, a mid-implementation question whose owner is P
 3. Your decisions are binding. A changed or clarified AC goes into the body in the same pass (`comment` owns that rule), written through `po-write-story`: `--body-file` in github mode; in strict mode edit the AC in the story file and add a comment entry noting the change.
 4. When all your questions in a story are answered, note it.
 
+## Sprint Labels
+
+- `status:backlog` means the story is in no sprint and carries no `sprint-N`. `open`, `ready`, `in-progress`, `review`, `testing`, `hotfix` and `blocked` stories carry exactly one; `done` keeps its own; `on-hold` is not constrained.
+- A story created into a sprint gets `status:open` + `sprint-N`; any other gets `status:backlog` and none.
+- Deferring a story removes its `sprint-N` and returns it to `status:backlog`. Moving it replaces the old `sprint-N` with the new one (a `status:backlog` story becomes `status:open`).
+- A story split at refinement gives each new story its parent's `sprint-N` and status.
+- An Analysis open-topic story is never in a sprint and carries no `sprint-N`.
+- Strict mode uses the same values in `**Status:**`, with the `**Sprint:**` line in place of the label.
+- GitHub mode: create a missing `status:open` or `sprint-N` label before applying it: `gh label create "status:open" --color c2e0c6 --description "Story is planned, not yet refined"`.
+
 ## AC Synchronisation (mandatory before `status:ready`)
 
 If TL refinement answers override or supersede any AC wording, update the story body to the binding decision before the story is promoted. Never leave the AC contradicting the decided approach: the implementer reads the AC, not the thread.

@@ -33,6 +33,6 @@ The only owner of these checks. Use the project's mode. `feature_name` is the sp
 
 ## 5. Refinement Target Sprint
 
-- **GitHub mode** (feature or not): the highest sprint over open backlog issues: `gh issue list --state open --label "status:backlog" --limit 1000 --json labels --jq '[.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`. Sprint numbers are one repo-wide sequence. Do not use `gh label list`: it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.
+- **GitHub mode** (feature or not): the highest sprint over open `status:open` issues: `gh issue list --state open --label "status:open" --limit 1000 --json labels --jq '[.[].labels[].name | select(test("^sprint-[0-9]+$"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`. Sprint numbers are one repo-wide sequence. Do not use `gh label list`: it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.
 - **Strict mode, feature sprint:** the sprint marked `🔲 Planned` in `<plan>Product_Backlog.md`.
-- **Strict mode, non-feature sprint:** over the `**Sprint:**` values of all story files, the highest sprint number with at least one `**Status:** backlog` story.
+- **Strict mode, non-feature sprint:** over the `**Sprint:**` values of all story files, the highest sprint number with at least one `**Status:** open` story.

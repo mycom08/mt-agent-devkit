@@ -9,7 +9,7 @@ description: Product Owner Plan Next Sprint procedure - verify the current sprin
 
 Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules before starting; the orchestrator always passes `feature_name`.
 
-> **Plan sprint never promotes to `status:ready`.** Every planned story stays `status:backlog`. Promotion belongs only to `refine sprint` Stage 4, after implementers confirm all questions are resolved (`po-promote-ready`).
+> **Plan sprint never promotes to `status:ready`.** Every planned story becomes `status:open`. Promotion belongs only to `refine sprint` Stage 4, after implementers confirm all questions are resolved (`po-promote-ready`).
 
 ## Ceremonies and Decisions
 
@@ -27,7 +27,7 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 4. **Review answers:** after the orchestrator confirms answers are filled in, verify every `A:` field is complete before proceeding.
 5. **Write sprint artifacts:**
    1. Labels are the only sprint artifact; write no backlog file.
-   2. Stories without GitHub Issues: create them per `po-write-story` with `--body-file`; labels `status:backlog` + `sprint-N` (+ `feature:<feature_name>`, `phase-N`). Never for a feature without a `plan/` roadmap: only Analyze Requirements Stage 8 creates analysed stories.
-   3. Stories that already have issues: add `sprint-N` if missing; **do not change `status:backlog` to `status:ready`**.
+   2. Stories without GitHub Issues: create them per `po-write-story` with `--body-file`; labels `status:open` + `sprint-N` (+ `feature:<feature_name>`, `phase-N`). Never for a feature without a `plan/` roadmap: only Analyze Requirements Stage 8 creates analysed stories.
+   3. Stories that already have issues: add `sprint-N` if missing and replace `status:backlog` with `status:open`; **never set `status:ready`**.
    4. Delete `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists.
    5. Update your Working Record (`po-core`).

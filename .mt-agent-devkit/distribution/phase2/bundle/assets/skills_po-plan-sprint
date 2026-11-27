@@ -9,7 +9,7 @@ description: Product Owner Plan Next Sprint procedure - verify the current sprin
 
 Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules and sprint capacity first. The orchestrator passes `feature_name` (a feature, or `none`).
 
-> **Plan sprint never promotes to `status:ready`.** Every planned story stays `status:backlog`. Only `refine sprint` Stage 4 promotes (`po-promote-ready`).
+> **Plan sprint never promotes to `status:ready`.** Every planned story becomes `status:open`. Only `refine sprint` Stage 4 promotes (`po-promote-ready`).
 
 ## Ceremonies and Decisions
 
@@ -30,6 +30,6 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 5. **Write sprint artifacts:**
    1. GitHub mode: labels only. Strict mode: feature adds the sprint to `Product_Backlog.md` as `🔲 Planned`, creates `Sprint_{N+1}_Overview.md` in the existing format, commits per `po-plan-docs`; non-feature: workflow Stage 4.
    2. Stories without a record: create them per `po-write-story`; never for a GitHub-mode feature without a `plan/` roadmap.
-   3. Existing stories: add `sprint-N` if missing; **never change `status:backlog` to `status:ready`**.
+   3. Existing stories: add `sprint-N` and set `status:open` (replacing `status:backlog`); **never set `status:ready`**.
    4. Delete `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists.
    5. Update your Working Record (`po-core`).

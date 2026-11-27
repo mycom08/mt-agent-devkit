@@ -227,7 +227,7 @@ Unblocks a story after you have provided the missing information. Validates all 
 ## Story status flow
 
 ```
-backlog → ready → in-progress → review → testing → done
+backlog → open → ready → in-progress → review → testing → done
                                           ↑
                                blocked (waiting on input)
                                resolved via "resume story ST-XXXXXX"

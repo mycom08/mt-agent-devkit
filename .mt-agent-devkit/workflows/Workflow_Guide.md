@@ -82,10 +82,20 @@ Step 4 — continue sprint
 
 ---
 
+## One-off Migration: `status:open`
+
+Run once after upgrading, when planned stories still carry the backlog status. Ask the orchestrator to run it; nothing changes until you confirm.
+
+1. List the open `status:backlog` issues that carry a `sprint-N` label: `gh issue list --state open --label "status:backlog" --limit 1000 --json number,title,labels --repo mycom08/mt-agent-devkit --jq '.[] | select(any(.labels[].name; test("^sprint-[0-9]+$"))) | "#\(.number) \(.title) [\([.labels[].name] | join(", "))]"'`
+2. Show the list to the user and ask for confirmation. An empty list or no confirmation: change nothing and stop.
+3. Only after the user confirms, create `status:open` if missing (`gh label create "status:open" --color c2e0c6 --description "Story is planned, not yet refined" --repo mycom08/mt-agent-devkit`), then for each listed issue run `gh issue edit <number> --remove-label "status:backlog" --add-label "status:open" --repo mycom08/mt-agent-devkit`.
+
+---
+
 ## Story Status Flow
 
 ```
-backlog → ready → in-progress → review → testing → done
+backlog → open → ready → in-progress → review → testing → done
                                           ↑
                                blocked (waiting on input)
                                resolved via "resume story ST-XXXXXX"

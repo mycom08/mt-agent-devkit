@@ -12,7 +12,7 @@ Read this before your first `gh issue create` or `gh issue edit --body-file` of 
 ## Story ID, Title and Labels (github mode)
 
 - Stories are GitHub Issues in `mycom08/mt-agent-devkit`. The story ID is `ST-` plus the issue number zero-padded to six digits (issue #290 → `ST-000290`). Create the issue first, then set the title `[ST-XXXXXX][DEVKIT] Clear Title` with `gh issue edit`, and use the same ID in **Depends on:** lines.
-- Labels: `status:backlog` + `sprint-N`; a bug/defect story adds `bug`. No milestones. The GitHub Assignee (a user account) is optional and distinct from `**Assigned:**`.
+- Labels: into a sprint, `status:open` + `sprint-N`; otherwise `status:backlog` and no `sprint-N`; a missing label is created first (`po-answer-questions` Sprint Labels). A bug/defect story adds `bug`. No milestones. The GitHub Assignee (a user account) is optional and distinct from `**Assigned:**`.
 
 ## Content Rules
 

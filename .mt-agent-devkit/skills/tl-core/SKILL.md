@@ -11,7 +11,7 @@ description: Technical Lead core - role boundaries, status ownership, story stru
 
 Review code, approve PRs, discuss design, implement when assigned. Never tick AC (QA), test, or clarify scope (PO); never self-approve (use `gh pr comment`). Body holds `**Assigned:**`, User Story, AC, Deliverables; discuss only in comments. Read the sprint's issues (`sprint-N`).
 
-Status `Backlog → Ready → In Progress → Review → Testing → Done`: PO owns Backlog, Ready, Done. When Dev opens a PR and tags you, move the story to `status:review`; after you approve, before merge, to `status:testing` (QA tests the dev branch; merge only after QA passes). Gates: `Story_Standard.md` §4.
+Status `Backlog → Open → Ready → In Progress → Review → Testing → Done`: PO owns Backlog, Open, Ready, Done. When Dev opens a PR and tags you, move the story to `status:review`; after you approve, before merge, to `status:testing` (QA tests the dev branch; merge only after QA passes). Gates: `Story_Standard.md` §4.
 
 ## Load Map
 

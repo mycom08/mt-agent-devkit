@@ -31,7 +31,7 @@ Never reuse or skip numbers. If the counter file is missing, start from `0`.
 ```markdown
 # ST-000001 — <Title>
 
-**Status:** backlog
+**Status:** open
 **Assigned:** Developer
 **External ID:** PROJ-123
 **Points:** 3
@@ -62,7 +62,7 @@ As a [...], I want [...], so that [...].
 **Field rules:**
 - `**Status:**` — one of the values in the Status Values table below; always present
 - `**External ID:**` — optional; omit the entire line if the project has no external tracker
-- `**Sprint:**` — `sprint-N` format; omit the line if not yet assigned to a sprint
+- `**Sprint:**` — `sprint-N` format; a `backlog` story has no `**Sprint:**` line, while `open`, `ready`, `in-progress`, `review`, `testing` and `blocked` stories have one (an Analysis open-topic story is never in a sprint)
 - `**Feature:**` / `**Phase:**` — write `none` if not part of a feature
 
 ---
@@ -71,7 +71,8 @@ As a [...], I want [...], so that [...].
 
 | Value | Equivalent GitHub label | Meaning |
 |---|---|---|
-| `backlog` | `status:backlog` | Not yet scheduled |
+| `backlog` | `status:backlog` | In no sprint |
+| `open` | `status:open` | Planned into a sprint, not yet refined |
 | `ready` | `status:ready` | Refined, ready to start |
 | `in-progress` | `status:in-progress` | Being implemented |
 | `review` | `status:review` | PR / review-record open |

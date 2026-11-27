@@ -11,7 +11,7 @@ description: Git workflow for every implementer - branch preflight inspect and c
 
 1. Use the immutable `Base Branch` and full Base/Remote Base SHAs from Story Base Preflight `inspect`. Run `python .mt-agent-devkit/scripts/branch_preflight.py create` before any story status or product write; never create a branch directly. Per-story pipeline state may be recorded after `inspect` PASS.
 2. A BLOCKED preflight stops for direction: no stash, reset, rebase or repair.
-3. Only after a successful `create`: verify the helper reports the requested branch at the recorded full SHA, record the Story Branch, then move the story to `in-progress` (remove `status:ready` or `status:backlog`).
+3. Only after a successful `create`: verify the helper reports the requested branch at the recorded full SHA, record the Story Branch, then move the story to `in-progress` (remove the previous `status:*` label).
 4. Branch name: `ST-XXXXXX/short-description`, off the story's Base Branch (the feature branch).
 
 ## 2. Commit
