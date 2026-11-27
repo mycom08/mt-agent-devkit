@@ -20,6 +20,8 @@ def ignores(target, bound, mode, adaptations, resolutions):
     required = [".mt-agent-devkit-migration.lock", ".mt-agent-devkit-migration.lock.recovering"]
     if mode == "strict":
         required += [".mt-agent-devkit/"] + [values["PROVIDER_ROOT"] + "/" for values in bound.values()]
+        if "antigravity" in bound:
+            required.append(deployment.AGENT_HOOKS)
     else:
         required += [values["RUNTIME_ROOT"] + "/" + folder + "/" for values in bound.values() for folder in ("memory", "working-record", "retros", "tmp", "internal", "docs")]
     existing = set(content.splitlines())

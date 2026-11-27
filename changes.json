@@ -33,7 +33,11 @@
       ".mt-agent-devkit/distribution/phase2/templates/workflows/Workflow_Guide_template.md": "[ST-000368] Adds open status and the confirmed one-off status:open migration.; [ST-000336] Documents the sprint_capacity project setting.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/po-answer-questions/SKILL_template.md": "[ST-000368] Sprint-label rules for creation, deferral, moves and splits.",
       ".mt-agent-devkit/distribution/phase2/templates/scripts/project_settings.py": "[ST-000336] Resolves the new sprint_capacity setting, default 60.",
-      ".mt-agent-devkit/distribution/phase2/build_bundle.py": "[ST-000336] New projects get sprint_capacity in project_settings.json."
+      ".mt-agent-devkit/distribution/phase2/build_bundle.py": "[ST-000336] New projects get sprint_capacity in project_settings.json.; [ST-000257] Ships the comment hook and its Claude and Antigravity hook entries.",
+      ".mt-agent-devkit/scripts/check_gh_posts.py": "[ST-000257] New shared hook enforcing GitHub comment rules for Claude and Antigravity.",
+      ".mt-agent-devkit/distribution/phase2/deployment.py": "[ST-000257] Merges the comment hook into existing Claude and Antigravity hook settings.",
+      ".mt-agent-devkit/distribution/phase2/lifecycle.py": "[ST-000257] Strict mode also ignores the Antigravity hook file.",
+      ".mt-agent-devkit/distribution/phase2/Sync_Devkit_Workflow_template.md": "[ST-000257] Plans once more when sync replaced the deployment engine."
     },
     "deployment": {
       "schema_version": 1,

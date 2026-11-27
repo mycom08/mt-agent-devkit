@@ -10,6 +10,8 @@ on:
       - ".claude/agents/workflows/**"
       - ".mt-agent-devkit/**"
       - ".claude/harness/**"
+      - ".claude/settings.json"
+      - ".agents/**"
       - ".antigravity/harness/**"
       - ".codex/harness/**"
       - ".claude/agents/working/**"

@@ -18,6 +18,10 @@ import uuid
 PROVIDERS = {"claude", "antigravity", "codex"}
 RECEIPT = ".mt-agent-devkit/install-receipt.json"
 LOCK = ".mt-agent-devkit-migration.lock"
+# Antigravity's hook file. The manifest declares it as a `copy`, which installed
+# engines older than its merge can still plan; this engine merges it instead.
+AGENT_HOOKS = ".agents/hooks.json"
+GH_POSTS_HOOK = "mt-agent-devkit/scripts/check_gh_posts.py"
 
 
 class Conflict(ValueError):
@@ -110,6 +114,45 @@ def managed_sections(project, template):
     return project + ("\n\n" if project else "") + start + "\n" + template.strip() + "\n" + end + "\n"
 
 
+def runs_gh_posts_hook(hook):
+    return GH_POSTS_HOOK in str(hook.get("command", "")).replace("\\", "/")
+
+
+def without_gh_posts_hook(groups):
+    """Drop earlier renderings of the comment hook; every other hook stays."""
+    kept = []
+    for group in groups:
+        hooks = group.get("hooks", [])
+        others = [hook for hook in hooks if not runs_gh_posts_hook(hook)]
+        if len(others) == len(hooks):
+            kept.append(group)
+        elif others:
+            kept.append({**group, "hooks": others})
+    return kept
+
+
+def agent_hooks(existing, required):
+    """Merge by hook name; a project's other hooks and its `enabled` choice stay."""
+    result = json.loads(existing) if existing else {}
+    required = json.loads(required)
+    if not isinstance(result, dict) or not all(isinstance(hook, dict) for hook in result.values()):
+        raise Conflict("invalid hook file: " + AGENT_HOOKS)
+    for name, hook in list(result.items()):
+        if name in required or "PreToolUse" not in hook:
+            continue
+        groups = without_gh_posts_hook(hook["PreToolUse"])
+        if groups != hook["PreToolUse"]:
+            hook["PreToolUse"] = groups
+            if not groups:
+                del hook["PreToolUse"]
+                if not set(hook) - {"enabled"}:
+                    del result[name]
+    for name, hook in required.items():
+        previous = result.get(name, {})
+        result[name] = {**hook, **({"enabled": previous["enabled"]} if "enabled" in previous else {})}
+    return json.dumps(result, indent=2) + "\n"
+
+
 def provider_settings(existing, required):
     """Merge known Claude surfaces; retain unrelated settings and deny rules."""
     result = json.loads(existing) if existing else {}
@@ -128,7 +171,14 @@ def provider_settings(existing, required):
     sessions[:] = [session for session in sessions if session["hooks"] or "hooks" not in session]
     wanted = required["hooks"]["SessionStart"][0]
     if not any(wanted == session for session in sessions): sessions.append(wanted)
+    if "PreToolUse" in required["hooks"]:
+        groups = without_gh_posts_hook(result["hooks"].get("PreToolUse", []))
+        result["hooks"]["PreToolUse"] = groups + required["hooks"]["PreToolUse"]
     return json.dumps(result, indent=2) + "\n"
+
+
+# Renderers that fold devkit entries into a file the project also writes.
+MERGE_RENDERERS = {"provider_settings": provider_settings, "agent_hooks": agent_hooks}
 
 
 def inspect(target):
@@ -233,6 +283,8 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
             contents = [assets[s] for s in item["sources"]]
             content = b"".join(contents)
             renderer = item["renderer"]
+            if item["ownership"] == "provider_config" and destination == AGENT_HOOKS:
+                renderer = "agent_hooks"
             if renderer == "shared_mode":
                 if len(contents) != 2:
                     raise Conflict("shared_mode requires shared and mode inputs")
@@ -245,10 +297,10 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
                 content = substituted(text, values).encode()
             if renderer == "tokens":
                 content = substituted(content.decode("utf-8"), values).encode()
-            elif renderer == "provider_settings":
+            elif renderer in MERGE_RENDERERS:
                 existing = safe(target, destination)
                 project_settings = adaptations.get(destination, existing.read_text(encoding="utf-8-sig") if existing.exists() else None)
-                content = provider_settings(project_settings, substituted(content.decode("utf-8-sig"), values)).encode()
+                content = MERGE_RENDERERS[renderer](project_settings, substituted(content.decode("utf-8-sig"), values)).encode()
             elif renderer == "managed_sections":
                 existing = safe(target, destination)
                 project = adaptations.get(destination, existing.read_text(encoding="utf-8-sig") if existing.exists() else "")
@@ -266,14 +318,14 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
             elif renderer not in ("copy", "create_if_absent", "shared_mode"):
                 raise Conflict("renderer not implemented: " + renderer)
             stock_hash = digest(content)
-            if renderer not in ("managed_sections", "provider_settings") and destination in adaptations and item["ownership"] in ("managed", "project_adapted", "provider_config"):
+            if renderer not in ("managed_sections", *MERGE_RENDERERS) and destination in adaptations and item["ownership"] in ("managed", "project_adapted", "provider_config"):
                 content = substituted(adaptations[destination], values).encode()
             baseline = baselines.get(destination, {})
             # A retirement has no new content to compare; its customised-file gate
             # is the porting conflict raised before planning plus the exact resolution below.
             # A create_if_absent file is the project's once created (e.g. project
             # settings): any existing content is preserved below, never reviewed.
-            if baseline.get("adapted") and destination not in adaptations and item["phase"] != "retirement" and renderer not in ("managed_sections", "approved_adaptation", "provider_settings", "create_if_absent"):
+            if baseline.get("adapted") and destination not in adaptations and item["phase"] != "retirement" and renderer not in ("managed_sections", "approved_adaptation", "create_if_absent", *MERGE_RENDERERS):
                 if baseline.get("stock_sha256") != stock_hash:
                     raise Conflict("review adapted content against changed source: " + destination)
                 if filehash(safe(target, destination)) != baseline["rendered_sha256"]:
@@ -305,7 +357,7 @@ def plan(target, manifest_path, source, mode, profile, provider_bindings, adapta
                 action, content, after = "preserve", path.read_bytes(), before
             elif before == after:
                 action = "preserve"
-            elif renderer == "provider_settings":
+            elif renderer in MERGE_RENDERERS:
                 action = "replace" if before else "create"
             elif before is not None and (known.get(destination) != before or (baseline and "stock_sha256" not in baseline)):
                 resolution = resolutions.get(destination)

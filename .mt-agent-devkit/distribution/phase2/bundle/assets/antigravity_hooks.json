@@ -1,0 +1,16 @@
+{
+  "mt-agent-devkit-gh-posts": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"../.mt-agent-devkit/scripts/check_gh_posts.py\" antigravity || python \"../.mt-agent-devkit/scripts/check_gh_posts.py\" antigravity || exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

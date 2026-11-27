@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.mt-agent-devkit/scripts/check_gh_posts.py\" claude || python \"$CLAUDE_PROJECT_DIR/.mt-agent-devkit/scripts/check_gh_posts.py\" claude || exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
