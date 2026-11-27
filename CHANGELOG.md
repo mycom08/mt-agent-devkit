@@ -32,7 +32,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 - [ST-000335] Sprint-state checks moved into a shared `sprint-status` skill used by Plan Sprint, Refine Sprint, Analyze Requirements, `po-plan-sprint` and `dev-refine`; this repo's Refine Sprint now picks the sprint like the shipped one.
 - [ST-000379] Plan Sprint checks sprint-label rules before planning, reports violations and asks before continuing.
 - [ST-000336] Sprint capacity is now the `sprint_capacity` setting in the project-owned `.mt-agent-devkit/project_settings.json` (default 60). A project that overrode capacity in a workflow or skill loses that text on sync: set the value in the settings file.
-- [ST-000257] Add a pre-tool hook for Claude and Antigravity that blocks or warns on GitHub comments breaking the comment rules; after upgrading, run `sync devkit` a second time so the Claude hook entry is installed.
+- [ST-000257] Add a pre-tool hook for Claude and Antigravity that blocks or warns on GitHub comments breaking the comment rules; after upgrading, run `sync devkit` a second time to finish installing the hook; if the first run stops on your own `.agents/hooks.json`, pass its exact current text as that path's adaptation, then run both syncs.
 
 ### Bug Fixes
 

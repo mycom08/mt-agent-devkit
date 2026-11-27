@@ -465,21 +465,26 @@ def find_posts(command_line, cwd, powershell):
 FENCE = re.compile(r"^[ \t>]*(`{3,}|~{3,})[ \t]*([^`\n]*)$")
 OUTPUT_LANGUAGES = {"console", "shell-session", "sh-session", "terminal", "output", "log"}
 UNTYPED_LANGUAGES = {"", "text", "txt", "plaintext", "bash", "sh", "shell", "powershell", "pwsh", "ps1"}
+# A script line that only talks about a result: a comment or a print statement.
+NOT_SCRIPT_TALK = r"^(?![ \t]*(?:#|echo\b|printf\b|Write-Host\b|Write-Output\b)).*?"
+# Each entry matches the wording a tool prints, never a statement a script contains.
 OUTPUT_SIGNS = re.compile("|".join((
     r"^\s*\$ \S",
     r"^\s*PS [A-Z]:\\[^>]*> ",
     r"^Ran \d+ tests? in ",
     r"^OK( \(.*\))?$",
-    r"^FAILED\b",
-    r"^(PASS|FAIL|PASSED|ERROR|ok|not ok)\b[ \t:]",
+    r"^FAILED($| \(|:| \S+::)",
+    r"^(PASS|FAIL|PASSED|ERROR)\b(?![ \t]*[=\"'$(])[ \t:]",
+    r"^(not )?ok \d+\b",
+    r"^ok[ \t]+\S+[ \t]+(\(cached\)|[\d.]+s\b)",
     r"^\s*\[(PASS|FAIL|ERROR|OK|WARN)\]",
     r"^\s*(---|===) (PASS|FAIL|RUN)\b",
-    r"\b\d+ (passed|failed|passing|failing)\b",
+    NOT_SCRIPT_TALK + r"\b\d+ (passed|failed|passing|failing)\b",
     r"^\s*(Tests?|Test Suites|Results):\s+\d+",
     r"^Traceback \(most recent call last\)",
     r"^npm (ERR!|error) ",
-    r"\bexit(ed with)?( code| status)?[ :]+\d+\b",
-    r"\bBUILD (SUCCESS|FAILURE|FAILED)",
+    NOT_SCRIPT_TALK + r"\b(?:[Ee]xit(?:ed with)? (?:code|status)|[Ee]xited with)[ :=]+\d+\b",
+    r"^(\[[A-Z]+\] )?BUILD (SUCCESS|FAILURE|FAILED)",
     r"^(Preflight|Outcome): (PASS|FAIL|BLOCKED)",
     r"\berror TS\d+:",
     r"^(fatal|error): ",

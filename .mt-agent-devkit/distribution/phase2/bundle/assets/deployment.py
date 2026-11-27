@@ -21,7 +21,8 @@ LOCK = ".mt-agent-devkit-migration.lock"
 # Antigravity's hook file. The manifest declares it as a `copy`, which installed
 # engines older than its merge can still plan; this engine merges it instead.
 AGENT_HOOKS = ".agents/hooks.json"
-GH_POSTS_HOOK = "mt-agent-devkit/scripts/check_gh_posts.py"
+# One `||` step that runs the shared comment hook script with a Python launcher.
+GH_POSTS_RUN = re.compile(r"""(?:python3?|py(?: -3)?) +(["']?)(?:[^"'|;&]*/)?\.mt-agent-devkit/scripts/check_gh_posts\.py\1(?: +[\w=-]+)*""")
 
 
 class Conflict(ValueError):
@@ -115,7 +116,9 @@ def managed_sections(project, template):
 
 
 def runs_gh_posts_hook(hook):
-    return GH_POSTS_HOOK in str(hook.get("command", "")).replace("\\", "/")
+    """Only a command that does nothing but run the hook is the devkit's to replace."""
+    steps = [step.strip() for step in str(hook.get("command", "")).replace("\\", "/").split("||")]
+    return steps[0] != "exit 0" and all(step == "exit 0" or GH_POSTS_RUN.fullmatch(step) for step in steps)
 
 
 def without_gh_posts_hook(groups):

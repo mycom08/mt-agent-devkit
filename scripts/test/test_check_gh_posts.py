@@ -96,6 +96,23 @@ class BlockingRules(HookCase):
             with self.subTest(block=block):
                 self.assertIsNone(self.body(block))
 
+    def test_script_code_is_not_output(self):
+        for language, script in (
+                ("bash", 'if [ -z "$x" ]; then\n  exit 1\nfi'), ("sh", "python3 hook.py || exit 0"),
+                ("powershell", "if ($x) { exit 1 }"), ("", "exit 2"), ("", "git pull || exit 1"),
+                ("bash", 'FAILED=0\nok "done"\nFAIL "no input"'), ("bash", "# exit code 2 blocks\n# 3 failed jobs retry"),
+                ("bash", 'echo "1 failed"\necho "exit code 1"\necho "BUILD FAILED"')):
+            with self.subTest(script=script):
+                self.assertIsNone(self.body(fenced(script, language)))
+
+    def test_exit_and_result_wording_is_still_output(self):
+        for line in ("Error: exit code 1", "exit status 2", "Process exited with 3", "Exit code: 1",
+                     "The command exited with code 127", 'Command "npm test" failed with exit code 1',
+                     "FAILED tests/a.py::test_x - boom", "not ok 2 - merge", "ok  \texample.com/pkg\t0.31s",
+                     "[INFO] BUILD SUCCESS", "3 passed, 1 failed"):
+            with self.subTest(line=line):
+                self.assertDenied(self.body(fenced(line)), "output")
+
     def test_checks_table_is_exempt_only_in_pr_comments(self):
         spaced = "Layer-1 invariant check  pass  58s  https://github.com/o/r/runs/1"
         terminal = "All checks were successful\n0 failing, 1 successful\n\n✓  Layer-1  58s  https://x"
@@ -295,13 +312,13 @@ class InstallAndSync(unittest.TestCase):
     def read(self, relative):
         return json.loads((self.target / relative).read_text(encoding="utf-8"))
 
-    def install(self, engine=None, profile="repo"):
+    def install(self, engine=None, profile="repo", extra=None):
         engine = engine or self.engine
         source = {"kind": "local", "tag": None, "commit": "0" * 40, "snapshot_version": "0.0.0",
                   "manifest_sha256": engine.digest(self.manifest.read_bytes())}
         adaptations = {name: "# Fixture\n**Mode:** github\n" for name in ("CLAUDE.md", "AGENTS.md")}
         adaptations.update({".mt-agent-devkit/context/Project_Priming.md": "# Context\n",
-                            ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "x\n"})
+                            ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "x\n", **(extra or {})})
         plan = engine.plan(self.target, self.manifest, source, "github", profile, self.BOUND, adaptations)
         engine.apply(self.target, plan)
         engine.verify(self.target)
@@ -353,22 +370,48 @@ class InstallAndSync(unittest.TestCase):
         self.assertFalse(hooks["mt-agent-devkit-gh-posts"]["enabled"])
         self.assertTrue(hooks["mt-agent-devkit-gh-posts"]["PreToolUse"])
 
+    def test_project_hooks_that_only_mention_the_script_are_kept(self):
+        script = ".mt-agent-devkit/scripts/check_gh_posts.py"
+        own = [{"type": "command", "command": command} for command in (
+            "echo see " + script, "./wrap.sh " + script, "python3 " + script + " && ./audit.sh",
+            "python3 tools/check_gh_posts.py", "exit 0")]
+        earlier = [{"type": "command", "command": command} for command in (
+            "python3 " + script + " --provider claude || exit 0",
+            'py -3 "C:\\work\\app\\.mt-agent-devkit\\scripts\\check_gh_posts.py"')]
+        self.assertEqual(self.engine.without_gh_posts_hook([{"hooks": own + earlier}]), [{"hooks": own}])
+
     def test_a_local_script_of_the_same_name_is_never_overwritten(self):
         self.put(".mt-agent-devkit/scripts/check_gh_posts.py", "# project's own\n")
         with self.assertRaisesRegex(self.engine.Conflict, "check_gh_posts"):
             self.install()
 
-    def test_older_installed_engine_syncs_and_the_new_engine_adds_the_claude_hook(self):
+    def old_engine(self):
         old = self.scratch / "old_deployment.py"
         old.write_bytes(subprocess.run(["git", "show", self.OLD_ENGINE_COMMIT + ":.mt-agent-devkit/distribution/phase2/deployment.py"],
                                        cwd=ROOT, capture_output=True, check=True).stdout)
+        return old
+
+    def test_older_installed_engine_syncs_and_the_new_engine_adds_the_claude_hook(self):
         self.put(".claude/settings.json", {"hooks": {"PreToolUse": [self.OWN]}})
-        self.install(load_module("old_hook_engine", old))
+        self.install(load_module("old_hook_engine", self.old_engine()))
         self.assertEqual(self.claude_commands(), ["./project-hook.sh"])
         self.assertIn("mt-agent-devkit-gh-posts", self.read(".agents/hooks.json"))
         self.install()
         self.assertHookInstalled()
         self.assertIn("./project-hook.sh", self.claude_commands())
+
+    def test_older_engine_stops_on_an_existing_hook_file_until_it_is_adapted(self):
+        """The documented upgrade path for a target that already has `.agents/hooks.json`."""
+        old = load_module("old_hook_engine_adapted", self.old_engine())
+        own = json.dumps({"project-hook": {"PreToolUse": [self.OWN]}}, indent=4) + "\n"
+        self.put(".agents/hooks.json", own)
+        with self.assertRaisesRegex(old.Conflict, "divergent or unknown baseline: .agents/hooks.json"):
+            self.install(old)
+        self.install(old, extra={".agents/hooks.json": own})
+        self.assertEqual((self.target / ".agents/hooks.json").read_text(encoding="utf-8"), own)
+        self.install()
+        self.assertHookInstalled()
+        self.assertEqual(self.read(".agents/hooks.json")["project-hook"], {"PreToolUse": [self.OWN]})
 
     def test_strict_mode_ignores_the_antigravity_hook_file(self):
         sys.path.insert(0, str(ROOT / ".mt-agent-devkit/distribution/phase2"))

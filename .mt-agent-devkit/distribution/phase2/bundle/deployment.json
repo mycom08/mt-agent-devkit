@@ -1851,8 +1851,8 @@
     {
       "id": "Sync_Devkit_Project_Workflow",
       "path": "assets/Sync_Devkit_Project_Workflow",
-      "sha256": "420643f8b69ce41cc0bdf136b58e05ac583924e12f28416fc5572c8e5cdcf55b",
-      "bytes": 4343,
+      "sha256": "cb097c0a85e5cb9ff3850f824f34e4856a4d7bdbab4e409b3db8ef7a3a385f02",
+      "bytes": 4828,
       "kind": "template"
     },
     {
@@ -2376,8 +2376,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "2282ccffdc0ba04cc6482d014471da33f4803e87a8979f36886e2d8c660789f4",
-      "bytes": 39746,
+      "sha256": "4201a6581e30c55dc1cd133c0d0950b5797f3cebce257c17b96c11cf3777c98c",
+      "bytes": 40128,
       "kind": "script"
     },
     {
@@ -2439,8 +2439,8 @@
     {
       "id": "Sync_Devkit_Workflow",
       "path": "assets/Sync_Devkit_Workflow",
-      "sha256": "420643f8b69ce41cc0bdf136b58e05ac583924e12f28416fc5572c8e5cdcf55b",
-      "bytes": 4343,
+      "sha256": "cb097c0a85e5cb9ff3850f824f34e4856a4d7bdbab4e409b3db8ef7a3a385f02",
+      "bytes": 4828,
       "kind": "template"
     },
     {
@@ -2509,8 +2509,8 @@
     {
       "id": "check_gh_posts.py",
       "path": "assets/check_gh_posts.py",
-      "sha256": "c8c9f05617be1379bf17982b7a5de50629a0405baae6aa217769b27e6cb3c65f",
-      "bytes": 25773,
+      "sha256": "a1dba0c50bbd9b62e8bd28702298c30c383a57236c385746b068f2d1b8017b14",
+      "bytes": 26193,
       "kind": "script"
     },
     {
