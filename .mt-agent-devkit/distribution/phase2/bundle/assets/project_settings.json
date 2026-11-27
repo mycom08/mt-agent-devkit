@@ -1,3 +1,4 @@
 {
-  "po_execution": "subagent"
+  "po_execution": "subagent",
+  "sprint_capacity": 60
 }

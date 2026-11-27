@@ -57,7 +57,7 @@ RETIRED_SURVIVORS = {
 }
 RETIRED_RULES = tuple(RETIRED_SURVIVORS)
 # Defaults written once into a target's project-owned settings file.
-PROJECT_SETTINGS_DEFAULTS = {"po_execution": "subagent"}
+PROJECT_SETTINGS_DEFAULTS = {"po_execution": "subagent", "sprint_capacity": 60}
 # The installer substitutes no repository name, so an agent would run it literally.
 REPOSITORY_PLACEHOLDER = re.compile(r"\{(github-org|repo-name)\}")
 INSTRUCTION_FOLDERS = ("/rules/", "/skills/", "/workflows/", "/instructions/")

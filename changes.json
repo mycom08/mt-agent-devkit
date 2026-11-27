@@ -10,9 +10,9 @@
       ".claude/agents/templates/workflows/Sync_Devkit_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
       ".claude/agents/templates/workflows/Sync_Devkit_Project_Workflow_template.md": "Compatible legacy sync bridge; shared payload declared separately.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/sprint-status/SKILL_template.md": "[ST-000335] New skill: the sprint-state checks for GitHub and strict mode.; [ST-000368] Refinement target sprint reads status:open.; [ST-000379] Adds sprint-label violation rules for GitHub and strict mode.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-plan-sprint/SKILL_template.md": "[ST-000335] Sprint verification now uses the sprint-status skill.; [ST-000368] Planned stories get status:open.; [ST-000379] PO checks sprint labels before planning.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/po-plan-sprint/SKILL_template.md": "[ST-000335] Sprint verification now uses the sprint-status skill.; [ST-000368] Planned stories get status:open.; [ST-000379] PO checks sprint labels before planning.; [ST-000336] PO selects within the passed sprint_capacity.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/dev-refine/SKILL_template.md": "[ST-000335] Target sprint now comes from the sprint-status skill.; [ST-000368] Refinement fetches status:open stories.",
-      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000335] Sprint verification and next-sprint guard use the sprint-status skill.; [ST-000368] Planning sets status:open, or **Status:** open.; [ST-000379] Reports sprint-label violations and asks before continuing planning.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000335] Sprint verification and next-sprint guard use the sprint-status skill.; [ST-000368] Planning sets status:open, or **Status:** open.; [ST-000379] Reports sprint-label violations and asks before continuing planning.; [ST-000336] Capacity comes from the sprint_capacity project setting.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000335] Sprint identification uses the sprint-status skill.; [ST-000368] Refinement moves open stories to ready.",
       ".mt-agent-devkit/distribution/phase2/templates/github/workflows/Refine_Sprint_Workflow_template.md": "[ST-000335] Header comment points to the sprint-status skill.; [ST-000368] Header comments name status:open.",
       ".mt-agent-devkit/distribution/phase2/templates/strict/workflows/Refine_Sprint_Workflow_template.md": "[ST-000335] Header comment points to the sprint-status skill.",
@@ -30,8 +30,10 @@
       ".mt-agent-devkit/distribution/phase2/templates/skills/qa-core/SKILL_template.md": "[ST-000368] Status flow includes Open.",
       ".mt-agent-devkit/distribution/phase2/templates/skills/tl-core/SKILL_template.md": "[ST-000368] Status flow includes Open.",
       ".mt-agent-devkit/distribution/phase2/templates/strict/workflows/Plan_Sprint_Workflow_template.md": "[ST-000368] Header comment: new stories are open.",
-      ".mt-agent-devkit/distribution/phase2/templates/workflows/Workflow_Guide_template.md": "[ST-000368] Adds open status and the confirmed one-off status:open migration.",
-      ".mt-agent-devkit/distribution/phase2/templates/skills/po-answer-questions/SKILL_template.md": "[ST-000368] Sprint-label rules for creation, deferral, moves and splits."
+      ".mt-agent-devkit/distribution/phase2/templates/workflows/Workflow_Guide_template.md": "[ST-000368] Adds open status and the confirmed one-off status:open migration.; [ST-000336] Documents the sprint_capacity project setting.",
+      ".mt-agent-devkit/distribution/phase2/templates/skills/po-answer-questions/SKILL_template.md": "[ST-000368] Sprint-label rules for creation, deferral, moves and splits.",
+      ".mt-agent-devkit/distribution/phase2/templates/scripts/project_settings.py": "[ST-000336] Resolves the new sprint_capacity setting, default 60.",
+      ".mt-agent-devkit/distribution/phase2/build_bundle.py": "[ST-000336] New projects get sprint_capacity in project_settings.json."
     },
     "deployment": {
       "schema_version": 1,
