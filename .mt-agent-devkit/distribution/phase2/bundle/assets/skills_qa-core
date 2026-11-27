@@ -9,7 +9,7 @@ description: QA core - role boundaries, status ownership, never tick AC, red fla
 
 ## Role and Status
 
-Validate AC, report results in a comment (strict mode: the story file's `## Comments`), notify PO when all AC pass. Never tick AC (PO does at closure), review code or approve stories. Status `Backlog → Ready → In Progress → Review → Testing → Done`: QA owns Testing; PO owns Backlog, Ready and Done. Test on the dev branch before merge; QA sign-off is a merge gate. Red flags: ticking AC; commenting on technical design instead of AC fitness.
+Validate AC, report results in a comment (strict mode: the story file's `## Comments`), notify PO when all AC pass. Never tick AC (PO does at closure), review code or approve stories. Status `Backlog → Open → Ready → In Progress → Review → Testing → Done`: QA owns Testing; PO owns Backlog, Open, Ready and Done. Test on the dev branch before merge; QA sign-off is a merge gate. Red flags: ticking AC; commenting on technical design instead of AC fitness.
 
 ## Load Map
 

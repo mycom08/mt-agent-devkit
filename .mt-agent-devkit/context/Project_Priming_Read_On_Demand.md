@@ -13,15 +13,16 @@ Stories are **GitHub Issues** in `mycom08/mt-agent-devkit` (title format: `[ST-X
 **Status flow:**
 
 ```
-Backlog → Ready → In Progress → Review → Testing → Done
+Backlog → Open → Ready → In Progress → Review → Testing → Done
                                                      ↓ (if bug found after Done)
                                                   Hotfix → Review → Testing → Done
 ```
 
 | Status | Who Moves It | When |
 |--------|-------------|------|
-| Backlog | PO | After story creation |
-| Ready | PO | After assigning to implementer |
+| Backlog | PO | Story in no sprint |
+| Open | PO | Planned into a sprint, not yet refined |
+| Ready | PO | After refinement |
 | In Progress | Implementer | Work branch created |
 | Review | Implementer | PR created, reviewer requested |
 | Testing | TL | After TL approval, before merge (merge only after QA passes) |

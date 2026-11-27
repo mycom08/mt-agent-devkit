@@ -136,15 +136,15 @@
     {
       "id": "rules/Story_Standard.md",
       "path": "assets/rules_Story_Standard.md",
-      "sha256": "ac272e01aae1bd75ffc373f07bd059350071a6f57ceefec324f8be195bc20c00",
-      "bytes": 31677,
+      "sha256": "41ad8c7c9f12064ff6c87d3be14e76e6ae83e3a72a6ec826e3e8d437ff7be622",
+      "bytes": 32043,
       "kind": "template"
     },
     {
       "id": "rules/Strict_Mode_Story_Guide.md",
       "path": "assets/rules_Strict_Mode_Story_Guide.md",
-      "sha256": "49d290f2060a49f75f1153c1bc88f51901485b9de71f9c2315f019a20a5a339e",
-      "bytes": 8887,
+      "sha256": "b8835004cac57a60b8806f7542e6623a06f76b6a87b8f077afdf6b6625a46523",
+      "bytes": 9087,
       "kind": "template"
     },
     {
@@ -157,8 +157,8 @@
     {
       "id": "rules/UI_UX_Designer_Rules.md",
       "path": "assets/rules_UI_UX_Designer_Rules.md",
-      "sha256": "2237b3ea5a5793a982e24ae2a15ae6a54dcba3cbc67bacb4a705702e50a35e30",
-      "bytes": 8886,
+      "sha256": "d1cf8a39864e2b6d901fb6f0a4fb4d4545f73a9ca62ca3098e9f0be2203d7fcc",
+      "bytes": 8895,
       "kind": "template"
     },
     {
@@ -346,8 +346,8 @@
     {
       "id": "skills/po-write-story",
       "path": "assets/skills_po-write-story",
-      "sha256": "45694005e9ae112d8fc5829ab80044cf28b7b7764c573d69a50d86d771712a23",
-      "bytes": 3366,
+      "sha256": "14cb274931b9b662fc2e27bf5b993ac582b31361edb4b444f1ed30b7feff3497",
+      "bytes": 3428,
       "kind": "template"
     },
     {
@@ -402,8 +402,8 @@
     {
       "id": "skills/po-plan-sprint",
       "path": "assets/skills_po-plan-sprint",
-      "sha256": "35adb80a40f7c66567c31c72991ff2a2b18e049116eea191a1067b0decc09bb3",
-      "bytes": 2994,
+      "sha256": "e7f6343a86952e35468ca6073000641fabfb87f20d5dba4424d2bb08d0bc54fa",
+      "bytes": 3010,
       "kind": "template"
     },
     {
@@ -430,8 +430,8 @@
     {
       "id": "skills/po-answer-questions",
       "path": "assets/skills_po-answer-questions",
-      "sha256": "03e7cde7b341a925e47c6329b220021f868f39baf9153707f4b0a6b566c05901",
-      "bytes": 2437,
+      "sha256": "9b71876f6d34716a6e093c9c2df3748c9b65e8c49c2480d6596c0111404cb4f8",
+      "bytes": 3434,
       "kind": "template"
     },
     {
@@ -458,29 +458,29 @@
     {
       "id": "skills/po-promote-ready",
       "path": "assets/skills_po-promote-ready",
-      "sha256": "380146b37df00dd76e76a80b5b2529416c8c42e515363f0c4187c5888cbf9b4f",
-      "bytes": 3027,
+      "sha256": "f2d9df5676be0572b0d775ecad6293428b539ae5ea03f66325e10075f45b469a",
+      "bytes": 3144,
       "kind": "template"
     },
     {
       "id": "claude/skill/po-promote-ready",
       "path": "assets/claude_skill_po-promote-ready",
-      "sha256": "23d0315360e43d6952d8632fcc94a3b3cce29d3d5731737e95a27da575d57e88",
-      "bytes": 341,
+      "sha256": "f8ab8bbb0453fef7de6945860d61f5f5d200025c7910e5619d16f9cbe975c256",
+      "bytes": 338,
       "kind": "adapter"
     },
     {
       "id": "antigravity/skill/po-promote-ready",
       "path": "assets/antigravity_skill_po-promote-ready",
-      "sha256": "23d0315360e43d6952d8632fcc94a3b3cce29d3d5731737e95a27da575d57e88",
-      "bytes": 341,
+      "sha256": "f8ab8bbb0453fef7de6945860d61f5f5d200025c7910e5619d16f9cbe975c256",
+      "bytes": 338,
       "kind": "adapter"
     },
     {
       "id": "codex/skill/po-promote-ready",
       "path": "assets/codex_skill_po-promote-ready",
-      "sha256": "23d0315360e43d6952d8632fcc94a3b3cce29d3d5731737e95a27da575d57e88",
-      "bytes": 341,
+      "sha256": "f8ab8bbb0453fef7de6945860d61f5f5d200025c7910e5619d16f9cbe975c256",
+      "bytes": 338,
       "kind": "adapter"
     },
     {
@@ -878,8 +878,8 @@
     {
       "id": "skills/git-workflow",
       "path": "assets/skills_git-workflow",
-      "sha256": "a009ea337d3312cd263c2c1e66f4bd419f74cc85fe317c676c91821df731bc9f",
-      "bytes": 3465,
+      "sha256": "114ae1bea2326dd347c674b95bf9de6a4c57b221510bb3d655dd105546c9a9e1",
+      "bytes": 3460,
       "kind": "template"
     },
     {
@@ -1018,8 +1018,8 @@
     {
       "id": "skills/dev-core",
       "path": "assets/skills_dev-core",
-      "sha256": "de7380fdb90435ba7958b7f459396d19c1e52e7650096f0ccffc91dff435d91e",
-      "bytes": 1480,
+      "sha256": "d54e871a26a6c0f399bd39c1ea06b733efebd0b43cb5bf6dcc3aba1a67b65d4c",
+      "bytes": 1495,
       "kind": "template"
     },
     {
@@ -1130,29 +1130,29 @@
     {
       "id": "skills/dev-refine",
       "path": "assets/skills_dev-refine",
-      "sha256": "030b93c2648e0f4b1aad32570cda786ec29ca757d174ddb74b52c24488dd3a67",
-      "bytes": 2647,
+      "sha256": "a6f286d82e19d16f11bb5867141944c83bfa5a69537cd377d065b9a71d3624d9",
+      "bytes": 2638,
       "kind": "template"
     },
     {
       "id": "claude/skill/dev-refine",
       "path": "assets/claude_skill_dev-refine",
-      "sha256": "18c39410f6aa16eb4975b2ce1361100baa0e5f5b89ef319f78e4edf219a83299",
-      "bytes": 430,
+      "sha256": "2bd3b072cf6818eda82dad18130d5b9d1f972f8f3fb4035c0cbfb186e46db147",
+      "bytes": 427,
       "kind": "adapter"
     },
     {
       "id": "antigravity/skill/dev-refine",
       "path": "assets/antigravity_skill_dev-refine",
-      "sha256": "18c39410f6aa16eb4975b2ce1361100baa0e5f5b89ef319f78e4edf219a83299",
-      "bytes": 430,
+      "sha256": "2bd3b072cf6818eda82dad18130d5b9d1f972f8f3fb4035c0cbfb186e46db147",
+      "bytes": 427,
       "kind": "adapter"
     },
     {
       "id": "codex/skill/dev-refine",
       "path": "assets/codex_skill_dev-refine",
-      "sha256": "18c39410f6aa16eb4975b2ce1361100baa0e5f5b89ef319f78e4edf219a83299",
-      "bytes": 430,
+      "sha256": "2bd3b072cf6818eda82dad18130d5b9d1f972f8f3fb4035c0cbfb186e46db147",
+      "bytes": 427,
       "kind": "adapter"
     },
     {
@@ -1186,8 +1186,8 @@
     {
       "id": "skills/tl-core",
       "path": "assets/skills_tl-core",
-      "sha256": "2a632e58ff10a614ee4b391e520252a67bb63e2e856bc26b03ae424e6da5b4e7",
-      "bytes": 1596,
+      "sha256": "8eac10ce12048433162598060b2b610f7b339cb0b1777646924b8f56e1b7ea5f",
+      "bytes": 1600,
       "kind": "template"
     },
     {
@@ -1354,8 +1354,8 @@
     {
       "id": "skills/qa-core",
       "path": "assets/skills_qa-core",
-      "sha256": "0fabf34b33ab0371e150e5d414820eb9f77505a1a10f6035c72f7bc22486f256",
-      "bytes": 1403,
+      "sha256": "7b83d96375619a71ca75748654c8749c078288159c24e82ed8e73734a584a05f",
+      "bytes": 1418,
       "kind": "template"
     },
     {
@@ -1522,8 +1522,8 @@
     {
       "id": "skills/sprint-status",
       "path": "assets/skills_sprint-status",
-      "sha256": "40eb6bcb4f3dea422f56f8a03988a5682d18466feb9b40901d78c31f1d9471f2",
-      "bytes": 3263,
+      "sha256": "af3280324c508d4d88cae38df43bd252d838860b1ad7cca2f677cc0a0a0cd14a",
+      "bytes": 3265,
       "kind": "template"
     },
     {
@@ -1571,8 +1571,8 @@
     {
       "id": "workflow_shared/Create_Stories_Workflow.md",
       "path": "assets/workflow_shared_Create_Stories_Workflow.md",
-      "sha256": "292f51105af37e9687ac91f5235030d791859bfad9ba7ac03dace1a8410c7511",
-      "bytes": 6681,
+      "sha256": "ef332e5359786d2c64399b2910d6b23dd5403886f76968fd508c1bef6225a279",
+      "bytes": 6841,
       "kind": "template"
     },
     {
@@ -1592,8 +1592,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "ddf920f5b1eac63c5b979e730431fb385b6230918a79c3d5fb7303fc812c9470",
-      "bytes": 14532,
+      "sha256": "eadad558d90b8f5fdcddeeea1bd78360e5b9689087ff699a35a7686e655f4234",
+      "bytes": 14737,
       "kind": "template"
     },
     {
@@ -1606,8 +1606,8 @@
     {
       "id": "workflow_strict/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_strict_Plan_Sprint_Workflow.md",
-      "sha256": "424e497db9c5d6c379ea7a6bff3258064741339ef430a1f52d9cfabacf14bc98",
-      "bytes": 398,
+      "sha256": "51bb3677aaf7cc09b71e30b1cf46f41b972680e72480e8e967e0f1201341e5b5",
+      "bytes": 395,
       "kind": "template"
     },
     {
@@ -1634,15 +1634,15 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "69b470bf0b27fed003903e3bfec0f661bd541a5931201a8fcba73cdc79a4c596",
-      "bytes": 13668,
+      "sha256": "b4ca9cdfab58d3df8936963e83b1731a05e0f87e220ef17eadf5cf28441915da",
+      "bytes": 13650,
       "kind": "template"
     },
     {
       "id": "workflow_github/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_github_Refine_Sprint_Workflow.md",
-      "sha256": "05fd54a6bbe8a79c9464be58bfae6e35d9bd731e873dcc7f6f6ae683acfac569",
-      "bytes": 442,
+      "sha256": "e6dd893cbb46b217b7b2a6638b988a51ee64304cc3fa1edd1f37e6276719fe5b",
+      "bytes": 436,
       "kind": "template"
     },
     {
@@ -1718,8 +1718,8 @@
     {
       "id": "workflow_shared/Start_Story_Workflow.md",
       "path": "assets/workflow_shared_Start_Story_Workflow.md",
-      "sha256": "ca198d94ae1905242cd520d7bf08823fb02b33ab19320308558b75d667cd332c",
-      "bytes": 4452,
+      "sha256": "6e9ce75dc155862b011d8d3db37380c15cc794e53e977c9cc507cd6331c6502a",
+      "bytes": 4582,
       "kind": "template"
     },
     {
@@ -1802,8 +1802,8 @@
     {
       "id": "priming_repo",
       "path": "assets/priming_repo",
-      "sha256": "0457ecf26e0172e2b994b4b0a3cd36d290763ce2bcff659c67b2ceca12b29e72",
-      "bytes": 7808,
+      "sha256": "186b5313b7b8c267697d66ce6da7445a1749b67c7d4bbade931367575ab0d49e",
+      "bytes": 7858,
       "kind": "template"
     },
     {
@@ -2439,8 +2439,8 @@
     {
       "id": "Workflow_Guide",
       "path": "assets/Workflow_Guide",
-      "sha256": "31fe8deffe082d95290375c9b9ee7a8ff178037d628b19145ab1093203faf72d",
-      "bytes": 4842,
+      "sha256": "d6cbd60d340128ed757f14a562e51bb45473080349776bcff78ba799ad2711c5",
+      "bytes": 5914,
       "kind": "template"
     },
     {

@@ -37,15 +37,16 @@
 **Status flow:**
 
 ```
-Backlog → Ready → In Progress → Review → Testing → Done
+Backlog → Open → Ready → In Progress → Review → Testing → Done
                                                      ↓ (if bug found after Done)
                                                   Hotfix → Review → Testing → Done
 ```
 
 | Status | Who Moves It | When |
 |--------|-------------|------|
-| Backlog | PO | After story creation |
-| Ready | PO | After assigning to Developer |
+| Backlog | PO | Story in no sprint |
+| Open | PO | Planned into a sprint, not yet refined |
+| Ready | PO | After refinement |
 | In Progress | Developer | Dev branch created |
 | Review | Developer | PR created, TL review requested |
 | Testing | QA | After TL approval and merge |

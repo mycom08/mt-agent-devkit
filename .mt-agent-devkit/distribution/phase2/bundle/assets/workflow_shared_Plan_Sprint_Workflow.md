@@ -104,14 +104,14 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 1. **Resume** PO via `po_session` (spawn new if session expired)
 2. PO reviews all answers in `PO_questions.md`; if anything is still unclear → orchestrator notifies user and **stops**
 3. PO writes sprint artifacts based on context:
-   - **GitHub mode:** GitHub issue labels are the only artifact, with or without a feature: add `sprint-N` (create the label first if missing) to every selected issue; status stays `status:backlog`
-   - **Strict mode, feature sprint:** create `docs/feature/<feature_name>/plan/Sprint_{N+1}_Overview.md` (follow existing Sprint Overview format); update `docs/feature/<feature_name>/plan/Product_Backlog.md`: add new sprint section; mark sprint status as `🔲 Planned`
-   - **Strict mode, non-feature sprint:** create `{RUNTIME_ROOT}/docs/sprints/sprint_N_overview.md` listing selected story IDs, titles, points, and total capacity used
+   - **GitHub mode:** GitHub issue labels are the only artifact, with or without a feature: add `sprint-N` (create the label first if missing) to every selected issue, and replace `status:backlog` with `status:open` (create the label first if missing)
+   - **Strict mode, feature sprint:** create `docs/feature/<feature_name>/plan/Sprint_{N+1}_Overview.md` (follow existing Sprint Overview format); update `docs/feature/<feature_name>/plan/Product_Backlog.md`: add new sprint section; mark sprint status as `🔲 Planned`; set `**Status:** open` and `**Sprint:** sprint-N` in every selected story file
+   - **Strict mode, non-feature sprint:** create `{RUNTIME_ROOT}/docs/sprints/sprint_N_overview.md` listing selected story IDs, titles, points, and total capacity used; set `**Status:** open` and `**Sprint:** sprint-N` in every selected story file
 4. PO creates stories for any backlog items that do not yet have a story record. **GitHub mode:** a feature without a `plan/` roadmap gets none here: only Analyze Requirements Stage 8 creates an analysed feature's stories. Before creating one, obtain the exact existing base branch from the approved sprint plan or ask the user; never infer it from checkout:
    - **GitHub mode:** create GitHub Issues following the `po-write-story` skill with immutable `**Base Branch:** <selected branch>` inside every issue body; use `--body-file` pattern per `Agent_Common_Bootstrap.md §6`; create `sprint-N` label first if it does not exist; apply labels:
-     - **Feature story:** `status:backlog` + `feature:<feature_name>` + `phase-N` + `sprint-N`
-     - **Non-feature story:** `status:backlog` + `sprint-N`
-   - **Strict mode:** for each new story, increment `story_counter.txt`, write `{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md` with `**Status:** backlog`, `**Sprint:** sprint-N`, `**Feature:**`, `**Phase:**`, and immutable `**Project Base Branch:** <selected branch>` fields set; the execution `**Base Branch:** sprint-N-dev` is recorded only after strict pre-flight verifies it; report file paths to PO
+     - **Feature story:** `status:open` + `feature:<feature_name>` + `phase-N` + `sprint-N`
+     - **Non-feature story:** `status:open` + `sprint-N`
+   - **Strict mode:** for each new story, increment `story_counter.txt`, write `{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md` with `**Status:** open`, `**Sprint:** sprint-N`, `**Feature:**`, `**Phase:**`, and immutable `**Project Base Branch:** <selected branch>` fields set; the execution `**Base Branch:** sprint-N-dev` is recorded only after strict pre-flight verifies it; report file paths to PO
    - **Roadmap-sourced stories:** when a story is drafted from a roadmap doc, echo the roadmap's phase number as a separate `**Roadmap Phase:** Phase N — <theme>` line in the body. The roadmap phase is a global, cross-repo thematic sequence; the `sprint-N` label is this repo's own local execution counter (starting at 1) — the two are independent numbering systems and must not be conflated
 5. PO deletes `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists
 6. PO updates Working Record

@@ -41,7 +41,7 @@ Once all blocking questions are resolved, create the branch and move the story t
 
 ## 3. Story Status Management
 
-Story status: `Backlog → Ready → In Progress → Review → Testing → Done`
+Story status: `Backlog → Open → Ready → In Progress → Review → Testing → Done`
 
 - Update story status by changing the GitHub Issue label at each stage.
 - Cannot merge without: TL approval + local checks passing.

@@ -13,7 +13,7 @@ Read this before your first story create or body edit of the session. In github 
 
 - **GitHub mode:** stories are GitHub Issues in this project's repository. The ID is `ST-` plus the issue number zero-padded to six digits (issue #290 → `ST-000290`). Create the issue first, then set the title `[ST-XXXXXX][FEATURE] Clear Title` with `gh issue edit`, and use the same ID in **Depends on:** lines.
 - **Strict mode:** follow `Create_Stories_Workflow.md` Step 4 (story counter, `{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md`).
-- Labels: feature story `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`; other stories `status:backlog`, `sprint-N`. Omit `sprint-N` until assigned. Any defect, regression or infrastructure failure adds `bug`. No milestones. The GitHub Assignee is optional and distinct from `**Assigned:**`.
+- Labels: into a sprint, `status:open` + `sprint-N`; otherwise `status:backlog` and no `sprint-N`; a missing label is created first (`po-answer-questions` Sprint Labels). A feature story adds `feature:<name>`, `phase-N`. Any defect, regression or infrastructure failure adds `bug`. No milestones. The GitHub Assignee is optional and distinct from `**Assigned:**`.
 
 ## Content Rules
 

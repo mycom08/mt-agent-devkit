@@ -6,7 +6,7 @@ Triggered by: `"refine sprint"` or `"/refine-sprint"` in the selected provider e
 The orchestrator loads the `sprint-status` skill (`.mt-agent-devkit/skills/sprint-status/SKILL.md`) and takes the target sprint from its section 5.
 
 **Story fetch:**
-`gh issue list --label "sprint-N" --label "status:backlog" --state open`
+`gh issue list --label "sprint-N" --label "status:open" --state open`
 
 ---
 
@@ -53,7 +53,7 @@ The orchestrator maintains `{RUNTIME_ROOT}/tmp/refine_pipeline_state.md` to supp
    - **Unit-test AC check:** If the story introduces new service-layer methods or functions, confirm an explicit unit-test AC is present (e.g., "Unit tests added for all new service methods"). If missing, flag as an open question to PO.
    - **Step-positioning check:** If an AC describes a position in a multi-step sequence using only outer boundaries (e.g., "after X and before Z"), and the sequence has intermediate steps not named in the AC, flag as an open question to PO — boundary-only positioning is ambiguous when middle steps exist.
 6. For each story with open points, the agent records questions: post **one GitHub issue comment** following the `comment` skill's format; technical/design questions → tag **TL**; scope/AC questions → tag **PO**; a single comment per story may contain questions for both agents
-7. For each story with **no** open points, the agent still posts an explicit **cleared note** — one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent: Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:backlog`" branch and is never promoted.
+7. For each story with **no** open points, the agent still posts an explicit **cleared note** — one GitHub issue comment stating the story was reviewed and no open points were found, with `**Thread Status:** Resolved` and no agent tagged. Do not leave a clear story silent: Stage 4 promotes on the presence of a comment, so a silently-clear story matches Stage 4's "no final comment → leave as `status:open`" branch and is never promoted.
 8. Each agent reports to orchestrator: which stories have comments filed (agents tagged), which stories are already clear
 9. Orchestrator collects all agent reports → updates state file (`Stage: 2`) → proceeds to Stage 2
 
@@ -103,11 +103,11 @@ After all implementer agents report back, check: **did every agent report all th
 
 1. **`PO Execution: subagent`:** resume the PO agent via `po_session` from state file (spawn new if expired); name the `po-promote-ready` skill in the assignment. **`PO Execution: orchestrator`:** the orchestrator performs steps 2–3 inline as PO: load `po-core` and `po-promote-ready`, each at its point of use, record them in `PO Skills`, set `po_session: inline`, and write one `orchestrator_inline` telemetry row (`story_id` the sprint label, stage `refine-stage4`). The All-Clear Shortcut lands here too
 2. PO checks each story in the target sprint independently (`po-promote-ready` readiness test):
-   - Implementer posted a final "all clear" comment → update story status to `ready`: remove `status:backlog`, add `status:ready`. This covers **both** paths: the Stage 3 resolution comment on a story that had questions, and the Stage 1 step 7 cleared note on a story that never had any.
-   - No comment at all, or questions still open → leave as `status:backlog` (no change)
+   - Implementer posted a final "all clear" comment → update story status to `ready`: remove `status:open`, add `status:ready`. This covers **both** paths: the Stage 3 resolution comment on a story that had questions, and the Stage 1 step 7 cleared note on a story that never had any.
+   - No comment at all, or questions still open → leave as `status:open` (no change)
 3. PO reports summary (max 5-bullet):
    - Stories moved to `status:ready` (IDs + titles)
-   - Stories still `status:backlog` (IDs + reason)
+   - Stories still `status:open` (IDs + reason)
 4. Orchestrator reports PO summary to user
 5. **Workflow review:** read `Observations:` from the state file
    - If **non-empty**: present each observation as a proposed improvement to the user; apply approved changes to this workflow file

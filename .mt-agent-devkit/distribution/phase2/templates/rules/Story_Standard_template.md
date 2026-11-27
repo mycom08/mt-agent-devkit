@@ -9,15 +9,16 @@
 ## 1. Story Status Workflow
 
 ```
-Backlog → Ready → In Progress → Review → Testing → Done
+Backlog → Open → Ready → In Progress → Review → Testing → Done
                                                      ↓ (if bug found after Done)
                                                   Hotfix → Review → Testing → Done
 ```
 
 | Status | Meaning | Who Changes | When | GitHub Label |
 |--------|---------|-------------|------|--------------|
-| **Backlog** | Story planned; assignee must be set at creation | PO | After creation | `status:backlog` |
-| **Ready** | Assigned, ready to start | PO | After assigning story to Developer | `status:ready` |
+| **Backlog** | In no sprint; assignee must be set at creation | PO | Created without a sprint, or deferred | `status:backlog` |
+| **Open** | Planned into a sprint, not yet refined | PO | Sprint planning, or creation into a sprint | `status:open` |
+| **Ready** | Refined, ready to start | PO | After refinement | `status:ready` |
 | **In Progress** | Active development | Developer | Dev branch created | `status:in-progress` |
 | **Review** | Dev complete, awaiting TL code review | Developer | After creating PR | `status:review` |
 | **Testing** | Code approved, QA testing | TL | After TL PR approval | `status:testing` |
@@ -25,6 +26,8 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | **Hotfix** | Bug found after Done; fix in progress | Developer | After hotfix branch created | `status:hotfix` |
 
 **Status is tracked via GitHub Issue labels.** When changing status, remove the old label and add the new one.
+
+**Sprint labels:** a `status:backlog` story carries no `sprint-N`; open, ready, in-progress, review, testing, hotfix and blocked stories carry exactly one; done stories keep theirs; on-hold stories are not constrained. Deferring, moving and splitting: the `po-answer-questions` skill, Sprint Labels.
 
 ---
 
@@ -391,12 +394,12 @@ Applies to every role, on every issue comment: run the Commenter gate in the `co
 When creating a new story, **create a GitHub Issue** in this project's repository (see **Location** at the top) with:
 
 **Issue title:** `[ST-XXXXXX][FEATURE] Clear Title`
-**Labels (feature story):** `status:backlog`, `feature:<name>`, `phase-N`, `sprint-N`
+**Labels (feature story):** `status:open`, `feature:<name>`, `phase-N`, `sprint-N`
 **Body field:** `**Base Branch:** <existing branch selected during story creation>` — immutable; required before `status:ready` or execution.
-**Labels (non-feature story):** `status:backlog`, `sprint-N`
+**Labels (non-feature story):** `status:open`, `sprint-N`
 **GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 
-> Omit the sprint label if no sprint is assigned yet. Use `feature:` and `phase-` labels only when the story belongs to a named feature — sprint and backlog stories that are not part of a feature carry only `status:backlog` and `sprint-N`.
+> A story with no sprint yet gets `status:backlog` instead of `status:open`, and no sprint label. Use `feature:` and `phase-` labels only when the story belongs to a named feature.
 
 **Issue body:**
 

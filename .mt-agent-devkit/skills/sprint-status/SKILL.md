@@ -27,4 +27,4 @@ Any result from `gh issue list --label "sprint-{N+1}" --state open --limit 1` me
 
 ## 5. Refinement Target Sprint
 
-The target is the highest sprint over open backlog issues: `gh issue list --state open --label "status:backlog" --limit 1000 --json labels --jq '[.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`. Do not use `gh label list`: it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.
+The target is the highest sprint over open `status:open` issues: `gh issue list --state open --label "status:open" --limit 1000 --json labels --jq '[.[].labels[].name | select(test("^sprint-[0-9]+$"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`. Do not use `gh label list`: it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.

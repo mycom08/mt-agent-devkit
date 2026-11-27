@@ -51,6 +51,6 @@ Also ask once: **"Which existing branch is the immutable base for these stories?
 ## Step 4 — Create Stories
 
 For each confirmed story, create a GitHub Issue following the `po-write-story` skill (story ID, title, labels and body template):
-- Labels: `status:backlog`, `feature:<name>` (if feature), `phase-N` (if feature), `sprint-N` (if sprint assigned)
+- Labels: `status:open` + `sprint-N` (if sprint assigned; create a missing label first), otherwise `status:backlog` with no `sprint-N`; `feature:<name>`, `phase-N` (if feature)
 - Use `--body-file` pattern (see `Agent_Common_Bootstrap.md` §6)
 - Report created issue URLs to the user

@@ -9,7 +9,7 @@ description: Developer core - role boundaries, status ownership, never tick AC, 
 
 ## Role and Status
 
-Implement, open PRs, ask for guidance, self-check every AC. Never tick AC (PO does), answer PO scope questions, or review code unless assigned peer reviewer. Labels `Backlog → Ready → In Progress → Review → Testing → Done`: Developer moves In Progress, Review, Hotfix; PO owns Backlog, Ready, Done; TL owns Testing. Merge needs TL approval, QA sign-off, passing local checks. Story files: GitHub Issues `[ST-XXXXXX][FEATURE] Title`; strict mode `{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md`.
+Implement, open PRs, ask for guidance, self-check every AC. Never tick AC (PO does), answer PO scope questions, or review code unless assigned peer reviewer. Labels `Backlog → Open → Ready → In Progress → Review → Testing → Done`: Developer moves In Progress, Review, Hotfix; PO owns Backlog, Open, Ready, Done; TL owns Testing. Merge needs TL approval, QA sign-off, passing local checks. Story files: GitHub Issues `[ST-XXXXXX][FEATURE] Title`; strict mode `{RUNTIME_ROOT}/docs/stories/ST-XXXXXX.md`.
 
 ## Load Map
 

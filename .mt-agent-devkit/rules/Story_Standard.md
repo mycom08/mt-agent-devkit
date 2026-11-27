@@ -9,15 +9,16 @@
 ## 1. Story Status Workflow
 
 ```
-Backlog → Ready → In Progress → Review → Testing → Done
+Backlog → Open → Ready → In Progress → Review → Testing → Done
                                                      ↓ (if bug found after Done)
                                                   Hotfix → Review → Testing → Done
 ```
 
 | Status | Meaning | Who Changes | When | GitHub Label |
 |--------|---------|-------------|------|--------------|
-| **Backlog** | Story planned; assignee must be set at creation | PO | After creation | `status:backlog` |
-| **Ready** | Assigned, ready to start | PO | After assigning story to implementer | `status:ready` |
+| **Backlog** | In no sprint; assignee must be set at creation | PO | Created without a sprint, or deferred | `status:backlog` |
+| **Open** | Planned into a sprint, not yet refined | PO | Sprint planning, or creation into a sprint | `status:open` |
+| **Ready** | Refined, ready to start | PO | After refinement | `status:ready` |
 | **In Progress** | Active development | Implementer | Dev branch created | `status:in-progress` |
 | **Review** | Dev complete, awaiting TL code review | Implementer | After creating PR | `status:review` |
 | **Testing** | Code approved, QA testing | TL | After TL PR approval | `status:testing` |
@@ -25,6 +26,8 @@ Backlog → Ready → In Progress → Review → Testing → Done
 | **Hotfix** | Bug found after Done; fix in progress | Implementer | After hotfix branch created | `status:hotfix` |
 
 **Status is tracked via GitHub Issue labels.** When changing status, remove the old label and add the new one.
+
+**Sprint labels:** a `status:backlog` story carries no `sprint-N`; open, ready, in-progress, review, testing, hotfix and blocked stories carry exactly one; done stories keep theirs; on-hold stories are not constrained. Deferring, moving and splitting: the `po-answer-questions` skill, Sprint Labels.
 
 ---
 
@@ -246,7 +249,7 @@ Applies to every role, on every issue comment: run the Commenter gate in the `co
 When creating a new story, **create a GitHub Issue** in `mycom08/mt-agent-devkit` with:
 
 **Issue title:** `[ST-XXXXXX][DEVKIT] Clear Title`  
-**Labels:** `status:backlog`, `sprint-N`  
+**Labels:** into a sprint, `status:open`, `sprint-N`; otherwise `status:backlog` with no `sprint-N`  
 **Body field:** `**Base Branch:** <existing branch selected during story creation>` — immutable; required before `status:ready` or execution.
 **GitHub Assignee:** (Optional — a GitHub user account; may be left unset in agent-driven workflows)
 

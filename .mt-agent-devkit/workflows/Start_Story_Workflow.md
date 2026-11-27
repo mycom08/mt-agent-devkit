@@ -14,6 +14,7 @@ The orchestrator runs the [Shared Pipeline Stages](Shared_Pipeline_Stages.md) fo
 
 | Story label | Entry point |
 |---|---|
+| `status:backlog` or `status:open` | Stop — story is not refined yet; notify user (`plan next sprint`, then `refine sprint`) |
 | `status:ready` | Story Base Preflight, Bug Reproduction Pre-Flight, then Stage 0 — Implementer Routing |
 | `status:in-progress` | Resume the recorded story and stage from the pipeline state file; use the existing story branch and session. Do not rerun new-story `inspect` or `create`. If the state file is missing or names another story, stop for state recovery before any write. |
 | `status:review` | Stage 2 — Review |

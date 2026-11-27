@@ -83,9 +83,9 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 1. **Resume** PO via `po_session` (spawn new if session expired)
 2. PO reviews all answers in `PO_questions.md`; if anything is still unclear → orchestrator notifies user and **stops**
-3. PO writes sprint artifacts. GitHub issue labels are the only artifact, with or without a feature: add `sprint-N` (create the label first if missing) to every selected issue; status stays `status:backlog`
+3. PO writes sprint artifacts. GitHub issue labels are the only artifact, with or without a feature: add `sprint-N` (create the label first if missing) to every selected issue, and replace `status:backlog` with `status:open` (create the label first if missing)
 4. PO creates stories for any backlog items that do not yet have a story record. A feature without a `plan/` roadmap gets none here: only Analyze Requirements Stage 8 creates an analysed feature's stories. Obtain the exact existing base branch from the approved sprint plan or ask the user; never infer it from checkout:
-   - Create GitHub Issues following the `po-write-story` skill with immutable `**Base Branch:** <selected branch>` inside each body; labels: `status:backlog` + `feature:<feature_name>` (if feature) + `phase-N` (if feature) + `sprint-N`; create `sprint-N` label first if it does not exist; use `--body-file` pattern per `Agent_Common_Bootstrap.md §6`
+   - Create GitHub Issues following the `po-write-story` skill with immutable `**Base Branch:** <selected branch>` inside each body; labels: `status:open` + `feature:<feature_name>` (if feature) + `phase-N` (if feature) + `sprint-N`; create `sprint-N` label first if it does not exist; use `--body-file` pattern per `Agent_Common_Bootstrap.md §6`
    - **Roadmap-sourced stories:** echo the roadmap's phase as a `**Roadmap Phase:** Phase N — <theme>` line in the body — the roadmap phase (global thematic sequence) and the `sprint-N` label (this repo's local execution counter) are independent numbering systems
 5. PO deletes `{RUNTIME_ROOT}/tmp/PO_questions.md` if it exists
 6. PO updates Working Record
