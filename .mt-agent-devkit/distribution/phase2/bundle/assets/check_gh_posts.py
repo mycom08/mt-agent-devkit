@@ -6,6 +6,8 @@ Usage (hook JSON on stdin): check_gh_posts.py [claude|antigravity]
 Always exits 0: only a JSON `deny` blocks a command. Anything that cannot be
 parsed or read passes, because the hook enforces rules and is not a sandbox. The
 one exception: on a story branch, a `gh pr create` body that cannot be read is denied.
+A working directory the hook does not know is never guessed: nothing that depends
+on it is denied.
 Standard library only.
 """
 import json
@@ -50,6 +52,7 @@ class Command:
         self.herestring = None
         self.redirects = []       # (operator, Word)
         self.piped_from = piped_from
+        self.scope = ()           # the bash subshells it runs in, outermost first
 
 
 class ShellReader:
@@ -62,6 +65,18 @@ class ShellReader:
         self.commands = []
         self.variables = {}
         self.position = 0
+        self.scope = []
+        self.subshells = 0
+
+    def _enter_subshell(self):
+        # PowerShell parentheses keep a `Set-Location`; bash subshells drop a `cd`.
+        if not self.powershell:
+            self.subshells += 1
+            self.scope.append(self.subshells)
+
+    def _leave_subshell(self):
+        if not self.powershell and self.scope:
+            self.scope.pop()
 
     def read(self):
         self._read_commands(nested=False)
@@ -80,6 +95,7 @@ class ShellReader:
             previous = None
             if current.words or current.redirects or current.heredoc is not None:
                 self._remember_assignment(current)
+                current.scope = tuple(self.scope)
                 self.commands.append(current)
                 previous = current
             current = Command(previous if piped else None)
@@ -127,12 +143,14 @@ class ShellReader:
                 self.position += 1
                 depth += 1
                 finish()
+                self._enter_subshell()
             elif char == ")":
                 self.position += 1
                 if nested and depth == 0:
                     break
                 depth -= 1
                 finish()
+                self._leave_subshell()
             else:
                 word = self._read_word()
                 if redirect == "<<<":
@@ -277,7 +295,9 @@ class ShellReader:
     def _read_expansion(self):
         if self._peek("$("):
             self.position += 2
+            self._enter_subshell()
             inner = self._read_commands(nested=True)
+            self._leave_subshell()
             # `$(cat <<'EOF' ... EOF)` is the usual way to pass a multi-line body.
             if len(inner) == 1 and [word.text for word in inner[0].words] == ["cat"] and inner[0].heredoc is not None:
                 return inner[0].heredoc.rstrip("\n"), False
@@ -335,9 +355,18 @@ class Workspace:
     """The files a body can come from, as they will be when the command runs."""
 
     def __init__(self, cwd):
-        self.cwd = cwd
+        self.directories = {(): cwd}  # per subshell scope; None when unknown
+        self.scope = ()
+        self.unplaced = False     # a relative path could not be read for lack of a directory
         self.written = {}         # path -> text written earlier in this command, or None if unknown
         self.switched_to = None   # branch switched to earlier in this command, "" if unknown
+
+    @property
+    def cwd(self):
+        scope = self.scope
+        while scope not in self.directories:
+            scope = scope[:-1]
+        return self.directories[scope]
 
     def branch(self):
         """The branch the command will run on, or None when it cannot be known."""
@@ -353,14 +382,19 @@ class Workspace:
         return result.stdout.strip() or None
 
     def resolve(self, word):
-        if word.dynamic or not word.text or self.cwd is None and not os.path.isabs(word.text):
+        if word.dynamic or not word.text:
             return None
         path = os.path.expanduser(word.text)
-        return os.path.normpath(path if os.path.isabs(path) else os.path.join(self.cwd, path))
+        if not os.path.isabs(path):
+            if self.cwd is None:
+                return None
+            path = os.path.join(self.cwd, path)
+        return os.path.normpath(path)
 
     def read(self, word):
         path = self.resolve(word)
         if path is None:
+            self.unplaced = self.unplaced or bool(word.text) and not word.dynamic
             return None
         if path in self.written:
             return self.written[path]
@@ -374,8 +408,10 @@ class Workspace:
         words = program_words(command)
         name = program_name(words)
         arguments = [word for word in words[1:] if not word.text.startswith("-")]
-        if name in ("cd", "set-location", "pushd") and arguments:
-            self.cwd = self.resolve(arguments[0])
+        if name in ("cd", "set-location", "pushd", "popd", "pop-location", "push-location"):
+            # `popd`, `cd -` and a bare `cd` lead somewhere the command text does not say.
+            known = arguments and name not in ("popd", "pop-location")
+            self.directories[self.scope] = self.resolve(arguments[0]) if known else None
         if name == "git":
             self._track_branch([word.text for word in words[1:]])
         for operator, target in command.redirects:
@@ -501,7 +537,11 @@ def body_problems(flags, unknown, command, workspace):
     elif name == "--body":
         text, complete = value.text, not value.dynamic
     else:
+        workspace.unplaced = False
         text = piped_text(command, workspace) if value.text == "-" else workspace.read(value)
+        # The file may well be readable where the command runs, which is not known here.
+        if text is None and workspace.unplaced:
+            return []
         complete = text is not None
     if text is not None:
         prose, _ = split_fences(text)
@@ -594,6 +634,7 @@ def find_posts(command_line, cwd, powershell):
     workspace = Workspace(cwd)
     posts = []
     for command in ShellReader(command_line, powershell).read():
+        workspace.scope = command.scope
         post = parse_gh(command, workspace)
         if post:
             posts.append(post)
@@ -773,7 +814,9 @@ def respond(provider, raw):
         provider = provider or ("antigravity" if "toolCall" in payload else "claude")
         command, cwd, powershell = read_request(provider, payload)
         if "gh" in command:
-            denials, warnings = evaluate(find_posts(command, cwd or os.getcwd(), powershell))
+            # The hook's own directory is not the command's: Antigravity starts it in `.agents/`.
+            directory = cwd if isinstance(cwd, str) and os.path.isabs(cwd) else None
+            denials, warnings = evaluate(find_posts(command, directory, powershell))
     except Exception:  # fail open: a hook defect must never stop shell commands
         denials, warnings = [], []
     return reply(provider, denials, warnings)

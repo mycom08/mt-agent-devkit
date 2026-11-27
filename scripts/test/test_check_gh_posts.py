@@ -4,6 +4,7 @@ Every case feeds the hook input JSON; nothing is ever posted to GitHub.
 """
 import importlib.util
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -351,6 +352,57 @@ class PrCreateRules(PrCreateCase):
         self.assertIsNone(self.create(TITLE + " --body-file body.md"))
 
 
+    def test_a_cd_inside_a_subshell_or_substitution_stays_there(self):
+        (self.cwd / "sub").mkdir()
+        for prefix in ("(cd sub && ls); ", 'echo "$(cd sub && pwd)"; ', "x=$(cd sub; pwd); ", "( (cd sub) ); ",
+                       "pushd sub; popd; ", "cd sub && cd -; ", "cd; "):
+            with self.subTest(prefix=prefix):
+                self.assertIsNone(self.claude(prefix + "gh pr create " + TITLE + " -F body.md"))
+        self.assertDenied(self.claude("(cd /); gh pr create " + TITLE + " -F absent.md"), "cannot read body")
+        self.assertDenied(self.claude("(cd sub && gh pr create " + TITLE + " -F body.md)"), "cannot read body")
+        self.assertDenied(self.claude("(Set-Location sub); gh pr create " + TITLE + " -F body.md",
+                                      "PowerShell"), "cannot read body")
+
+
+class UnknownDirectory(PrCreateCase):
+    """A payload without a working directory, with the hook started in `.agents/`."""
+
+    def setUp(self):
+        super().setUp()
+        (self.cwd / ".agents").mkdir()
+
+    def ask(self, provider, command, cwd=None):
+        extra = {} if cwd is None else {"cwd" if provider == "claude" else "Cwd": cwd}
+        payload = ({"tool_name": "Bash", "tool_input": {"command": command}, **extra} if provider == "claude"
+                   else {"toolCall": {"args": {"CommandLine": command, **extra}}})
+        result = subprocess.run([sys.executable, str(SCRIPT), provider], input=json.dumps(payload),
+                                cwd=self.cwd / ".agents", capture_output=True, text=True, check=True)
+        return '"deny"' in result.stdout
+
+    def test_nothing_that_depends_on_the_directory_is_denied(self):
+        form = "gh pr create --base main " + TITLE + " --body-file .agents/working/tmp/ST-000012/pr_body.md"
+        head = "gh pr create --head ST-000012/x " + TITLE
+        for provider in ("claude", "antigravity"):
+            for cwd in (None, ".", ""):
+                for command in (form, "gh pr create --fill", "gh pr create --title wrong -F body.md",
+                                head + " -F body.md", head + " --body-file - < body.md",
+                                "cat body.md | " + head + " --body-file -", "cd sub && " + head + " -F body.md",
+                                "gh issue comment 1 --body-file body.md"):
+                    with self.subTest(provider=provider, cwd=cwd, command=command):
+                        self.assertFalse(self.ask(provider, command, cwd))
+
+    def test_what_the_command_itself_shows_is_still_denied(self):
+        head = "gh pr create --head ST-000012/x "
+        absent = (self.cwd / "absent.md").as_posix()
+        for provider in ("claude", "antigravity"):
+            for command in (head + "--fill", head + TITLE + ' --body "no link"', head + TITLE + ' --body "$VAR"',
+                            head + TITLE + ' --body "$(cat body.md)"', head + TITLE + " --body-file $VAR/body.md",
+                            head + TITLE + " -F " + absent,
+                            "cd " + self.cwd.as_posix() + " && gh pr create " + TITLE + " -F absent.md"):
+                with self.subTest(provider=provider, command=command):
+                    self.assertTrue(self.ask(provider, command))
+
+
 class StandardPrForm(PrCreateCase):
     """The one documented form, filled in as it says, passes on every supported provider."""
 
@@ -590,6 +642,33 @@ class InstallAndSync(unittest.TestCase):
         self.install()
         self.assertHookInstalled()
         self.assertEqual(self.read(".agents/hooks.json")["project-hook"], {"PreToolUse": [self.OWN]})
+
+    @unittest.skipUnless(shutil.which("sh") and sys.platform != "win32", "POSIX shell required")
+    def test_installed_commands_judge_the_pr_form_in_both_layouts(self):
+        commands = {"claude": None, "antigravity": None}
+        for profile in ("repo", "project_root"):
+            self.setUp()
+            self.install(profile=profile)
+            subprocess.run(["git", "init", "--quiet", str(self.target)], check=True)
+            subprocess.run(["git", "-C", str(self.target), "symbolic-ref", "HEAD", "refs/heads/ST-000012/x"], check=True)
+            commands["claude"] = self.claude_commands()[-1]
+            commands["antigravity"] = self.read(".agents/hooks.json")["mt-agent-devkit-gh-posts"]["PreToolUse"][0]["hooks"][0]["command"]
+            self.put(".agents/tmp/pr_body.md", "Closes #12\n")
+            command = 'gh pr create --title "[ST-000012][X] Add" --body-file .agents/tmp/pr_body.md'
+            for cwd in (None, str(self.target)):
+                for provider, start in (("claude", self.target), ("antigravity", self.target / ".agents")):
+                    payload = ({"tool_name": "Bash", "tool_input": {"command": command}, "cwd": cwd} if provider == "claude"
+                               else {"toolCall": {"args": {"CommandLine": command, "Cwd": cwd}}})
+                    with self.subTest(profile=profile, provider=provider, cwd=cwd):
+                        result = subprocess.run(["sh", "-c", commands[provider]], input=json.dumps(payload), cwd=start,
+                                                env={**os.environ, "CLAUDE_PROJECT_DIR": str(self.target)},
+                                                capture_output=True, text=True, check=True)
+                        self.assertNotIn('"deny"', result.stdout)
+                        wrong = json.dumps(payload).replace("[ST-000012]", "")
+                        result = subprocess.run(["sh", "-c", commands[provider]], input=wrong, cwd=start,
+                                                env={**os.environ, "CLAUDE_PROJECT_DIR": str(self.target)},
+                                                capture_output=True, text=True, check=True)
+                        self.assertEqual('"deny"' in result.stdout, cwd is not None, result.stdout)
 
     def test_strict_mode_ignores_the_antigravity_hook_file(self):
         sys.path.insert(0, str(ROOT / ".mt-agent-devkit/distribution/phase2"))
