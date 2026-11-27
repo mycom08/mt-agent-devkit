@@ -5,7 +5,7 @@ description: Product Owner Plan Next Sprint procedure - verify the current sprin
 
 # PO Plan Sprint
 
-**Requires:** `po-core`, `po-write-story`, `po-plan-docs`, `po-roadmap-drain` (only when a roadmap changes)
+**Requires:** `po-core`, `po-write-story`, `po-plan-docs`, `sprint-status`, `po-roadmap-drain` (only when a roadmap changes)
 
 Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules before starting; the orchestrator always passes `feature_name`.
 
@@ -20,11 +20,7 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 ## Steps
 
-1. **Verify the current sprint is done and the next one is not planned** (`--repo mycom08/mt-agent-devkit` on every query). Any failure: report the story IDs to the orchestrator and stop.
-   1. In-flight: three separate queries, `gh issue list --label "<status>" --state open --limit 1000 --json number,title,labels` for `status:in-progress`, `status:review` and `status:testing` (repeated `--label` flags require all labels on one issue). Any result is unfinished.
-   2. Sprint N, feature or not (repo-wide): the highest `sprint-N` label, compared numerically, over the in-flight results and `gh issue list --label "status:done" --state all --limit 1000 --json labels`; none means N = 0.
-   3. Done: every issue from `gh issue list --label "sprint-N" --state open --limit 1000 --json number,title,labels` carries `status:done`.
-   4. Guard: any result from `gh issue list --label "sprint-{N+1}" --state open --limit 1` means the next sprint is already planned.
+1. **Verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report the story IDs to the orchestrator and stop.
 2. **Select stories:** `gh issue list --repo mycom08/mt-agent-devkit --label "status:backlog" --state open --limit 1000`; a feature adds `--label "feature:<feature_name>"`. No feature match: a `plan/` roadmap continues from that roadmap; otherwise report and stop, planning nothing.
    - Order: a `plan/` roadmap's dependency graph; a feature without one by `phase-N`, then `**Depends on:**` (done or in the same sprint), then priority; else `Must-Have`, `Should-Have`, `Nice-to-Have`.
 3. **Open questions:** for each selected story, check that AC is clear and testable. If questions exist, create `{RUNTIME_ROOT}/tmp/PO_questions.md` and report to the orchestrator.

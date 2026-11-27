@@ -5,7 +5,7 @@ description: Product Owner Plan Next Sprint procedure - verify the current sprin
 
 # PO Plan Sprint
 
-**Requires:** `po-core`, `po-write-story`, `po-plan-docs`, `po-roadmap-drain` (only when a roadmap changes)
+**Requires:** `po-core`, `po-write-story`, `po-plan-docs`, `sprint-status`, `po-roadmap-drain` (only when a roadmap changes)
 
 Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules and sprint capacity first. The orchestrator passes `feature_name` (a feature, or `none`).
 
@@ -20,13 +20,7 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 ## Steps
 
-1. **Verify the current sprint is done and the next one is not planned.** Any failure: report story IDs, stop.
-   - **GitHub mode** (feature or not, repo-wide):
-     1. In-flight: separate queries, `gh issue list --label "<status>" --state open --limit 1000 --json number,title,labels` for `status:in-progress`, `status:review` and `status:testing` (repeated `--label` flags require all). Any result is unfinished.
-     2. Sprint N: the highest `sprint-N` label, compared numerically, over those results and `gh issue list --label "status:done" --state all --limit 1000 --json labels`; none means N = 0.
-     3. Done: every issue from `gh issue list --label "sprint-N" --state open --limit 1000 --json number,title,labels` carries `status:done`.
-     4. Guard: any result from `gh issue list --label "sprint-{N+1}" --state open --limit 1` means already planned.
-   - **Strict mode:** feature sprint: find the `🔄 In Progress` sprint in `docs/feature/<feature_name>/plan/Product_Backlog.md`, read its `Sprint_N_Overview.md`, confirm every story is `status:done`; if `Sprint_{N+1}_Overview.md` already exists, report and stop. Non-feature: workflow Stage 1.
+1. **Verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report story IDs, stop.
 2. **Select stories**; note ID, title, points, priority, role.
    - **GitHub mode:** `gh issue list --label "status:backlog" --state open --limit 1000`; a feature adds `--label "feature:<feature_name>"`. No feature match and no `plan/` roadmap: report and stop. Order: `plan/` roadmap graph; feature without one: `phase-N`, `**Depends on:**` (done or same sprint), priority.
    - **Strict mode:** feature: read `*Roadmap*.md` and backlog; no story whose dependency is not done. Non-feature: workflow Stage 2.

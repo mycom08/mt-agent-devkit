@@ -28,6 +28,8 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 ### Changes
 
+- [ST-000335] Sprint-state checks moved into a shared `sprint-status` skill used by Plan Sprint, Refine Sprint, `po-plan-sprint` and `dev-refine`; this repo's Refine Sprint now picks the sprint like the shipped one.
+
 ### Bug Fixes
 
 ---

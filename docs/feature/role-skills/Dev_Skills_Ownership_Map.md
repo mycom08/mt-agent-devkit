@@ -240,7 +240,7 @@ The internal `Developer_Rules_Bootstrap.md`, `Developer_Rules_Read_On_Demand.md`
 | On-Demand §7, §12, §13 | `raise-question` §4, §3, §5 | as §4 |
 | On-Demand §8 | `project-docs` | as §4 |
 | On-Demand §14, §16 review checklist, reviewer procedure, reviewer gate | `pr-review` steps 2–7 | as §4 |
-| On-Demand §15 Refine Sprint steps 1–4, step-positioning check, cleared note | `dev-refine` §1–§4 | verbatim steps |
+| On-Demand §15 Refine Sprint steps 1–4, step-positioning check, cleared note | `dev-refine` §1–§4 | verbatim steps; the target-sprint rule is in `sprint-status` (ST-000335) |
 | On-Demand §17 hotfix steps 1–4 | `dev-hotfix` steps 1–4 | verbatim; adds "run `pre-pr-gate`" from the Bootstrap §5 gate |
 | On-Demand §20 Dev-only comment notes | `comment` (same-pass), `pr-review` step 7 (CI paste) | pointer |
 | Target On-Demand §16 doc divergence (new internally) | `dev-verify` §1 | the target rule, now internal too |
@@ -291,7 +291,7 @@ Every common and Developer skill except `change-metadata` has a Phase 2 template
 | On-Demand §8 | `project-docs` | the `_template` naming rule omitted (B5) |
 | On-Demand §9, §12 | `pr-review` | step; `{github-org}/{repo-name}` kept |
 | On-Demand §13 | `dev-hotfix` | fix branch and PR target the feature branch |
-| On-Demand §14 | `dev-refine` | Product Backlog lookup and `docs/api/` check kept |
+| On-Demand §14 | `dev-refine` | `docs/api/` check kept; Product Backlog lookup moved to `sprint-status` (ST-000335) |
 | On-Demand §15 | `comment`; CI paste in `pr-review` step 7 | pointer |
 | On-Demand §16, §17, §18 | `dev-verify` §1, §2, §3 | verbatim steps |
 | `Clean_Code_Rules_template.md` chapters 1–12 | `clean-code` §2–§6 | compacted to one rule line per chapter |

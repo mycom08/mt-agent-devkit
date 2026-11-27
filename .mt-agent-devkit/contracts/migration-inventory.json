@@ -2723,6 +2723,60 @@
       ]
     },
     {
+      "source": ".claude/skills/sprint-status/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/sprint-status/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+        ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+        ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
+        ".mt-agent-devkit/workflows/Refine_Sprint_Workflow.md"
+      ],
+      "reason": "Post-baseline sprint-state skill (ST-000335); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".antigravity/skills/sprint-status/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/sprint-status/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+        ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+        ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
+        ".mt-agent-devkit/workflows/Refine_Sprint_Workflow.md"
+      ],
+      "reason": "Post-baseline sprint-state skill (ST-000335); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
+      "source": ".codex/skills/sprint-status/SKILL.md",
+      "source_revision": null,
+      "baseline_sha256": null,
+      "ownership": "generated-wrapper",
+      "renderer": "skill",
+      "destination": ".mt-agent-devkit/skills/sprint-status/SKILL.md",
+      "consumers": [
+        ".mt-agent-devkit/skills/po-plan-sprint/SKILL.md",
+        ".mt-agent-devkit/skills/dev-refine/SKILL.md",
+        ".mt-agent-devkit/workflows/Plan_Sprint_Workflow.md",
+        ".mt-agent-devkit/workflows/Refine_Sprint_Workflow.md"
+      ],
+      "reason": "Post-baseline sprint-state skill (ST-000335); provider discovery wrapper generated from the canonical skill frontmatter.",
+      "consumer_contract": [
+        "native provider discovery"
+      ]
+    },
+    {
       "source": ".claude/skills/po-plan-sprint/SKILL.md",
       "source_revision": null,
       "baseline_sha256": null,

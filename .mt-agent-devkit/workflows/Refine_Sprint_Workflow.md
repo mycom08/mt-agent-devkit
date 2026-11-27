@@ -2,8 +2,8 @@
 
 Triggered by: `"refine sprint"` or `"/refine-sprint"` in the selected provider entrypoint
 
-**Sprint identification (non-feature sprint):**
-Run `gh label list | grep "sprint-"` to list all sprint labels, then run `gh issue list --label "sprint-N" --label "status:backlog" --state open` for the highest-numbered sprint that returns open issues. That sprint is the target.
+**Sprint identification:**
+The orchestrator loads the `sprint-status` skill (`.mt-agent-devkit/skills/sprint-status/SKILL.md`) and takes the target sprint from its section 5.
 
 **Story fetch:**
 `gh issue list --label "sprint-N" --label "status:backlog" --state open`

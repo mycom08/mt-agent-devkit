@@ -35,22 +35,10 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 1. **Spawn** Product Owner agent (**model: sonnet**); save its `agentId` as `po_session`; pass `feature_name` and name the `po-plan-sprint` skill in the assignment (**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline; see the PO touchpoint table in the orchestrator instructions)
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory) and loads the `po-core` and `po-plan-sprint` skills (`.mt-agent-devkit/skills/po-plan-sprint/SKILL.md`), plus the skills `po-plan-sprint` requires
-3. PO checks the active sprint:
-   - **GitHub mode** (the same repo-wide check with or without a feature, from issue status and sprint labels): run three separate queries and union the results to identify in-flight stories (repeated `--label` flags in one query would require every label on the same issue):
-     - `gh issue list --label "status:in-progress" --state open --limit 1000 --json number,title,labels`
-     - `gh issue list --label "status:review" --state open --limit 1000 --json number,title,labels`
-     - `gh issue list --label "status:testing" --state open --limit 1000 --json number,title,labels`
-
-     Any story returned by at least one query is unfinished work. N is the highest `sprint-N` label, compared numerically, over those results and every done story (`gh issue list --label "status:done" --state all --limit 1000 --json labels`); no such label means N = 0. To get a result set's highest number, add `--jq '[.[].labels[].name | select(test("^sprint-[0-9]+$")) | ltrimstr("sprint-") | tonumber] | max // 0'` to its query.
-   - **Strict mode, feature sprint:** read `docs/feature/<feature_name>/plan/Product_Backlog.md` to identify the sprint marked `🔄 In Progress`; its number is N. Also read its `Sprint_N_Overview.md`
-   - **Strict mode, non-feature sprint:** glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, filter for `**Status:**` values of `in-progress`, `review`, or `testing` to find the active sprint; if none found, filter for `**Status:** done`, ignoring files with an `**Analysis Open Topic:**` line, and read the `**Sprint:**` field from the most recently created story (highest ID) — that is the current sprint N
-4. Confirm the current sprint is done:
-   - **GitHub mode:** no in-flight story from step 3, and every issue returned by `gh issue list --label "sprint-N" --state open --limit 1000 --json number,title,labels` carries `status:done`
-   - **Strict mode:** read all story MD files for the identified sprint and confirm all have `**Status:** done`
+3. PO checks the active sprint with the `sprint-status` skill (`.mt-agent-devkit/skills/sprint-status/SKILL.md`): in-flight stories (section 1) and the current sprint number N (section 2)
+4. Confirm the current sprint is done (`sprint-status` section 3)
 5. **If NOT done** → PO reports which stories are still open; orchestrator notifies user and **stops**
-6. **One-Sprint-at-a-Time Guard:**
-   - **GitHub mode** (every sprint): run `gh issue list --label "sprint-{N+1}" --state open --limit 1`. Any result means the next sprint is already planned → orchestrator notifies user and **stops**
-   - **Strict mode** (feature sprint only): check whether `Sprint_{N+1}_Overview.md` already exists in `docs/feature/<feature_name>/plan/`. If it does → orchestrator notifies user and **stops**
+6. **One-Sprint-at-a-Time Guard:** check whether the next sprint is already planned (`sprint-status` section 4). If it is → orchestrator notifies user and **stops**
 7. **Roadmap reconciliation backstop** (only a feature with a `plan/` roadmap; lightweight — this is the sprint-planning safety net for AC4, not the primary drain mechanism). If `feature_name` is set, glob `docs/feature/<feature_name>/plan/*Roadmap*.md`. If a roadmap file exists (a `roadmap/` roadmap from Analyze Requirements gets no backstop), for every story it defines, check whether a tracked issue/story already carries that story's `**Roadmap Source:** <roadmap-file> :: Phase N :: <story title>` marker (see the `po-roadmap-drain` skill). The check must confirm the marker exists **anywhere in the tracker, in any status** — a story that was correctly drained and has since moved past `status:backlog` (`ready`/`in-progress`/`done`) is still tracked, not drift:
    - **GitHub mode:** `gh issue list --state all --search "\"<marker>\" in:body" --json number,body` per story — no `--label`/`--state open` filter (a status filter here would report every already-progressed story as false drift). Search is a candidate filter, not a verdict: GitHub's phrase search matches a contiguous token subsequence, not an exact line, so a story whose title is a prefix of another drained story's title can return a false match. For each candidate, confirm the marker appears as an **exact, full line** in that issue's body before treating the story as tracked — an empty result, or a candidate set where none survives the exact-line check, means it's untracked.
    - **Strict mode:** grep `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md` for each story's marker line using a whole-line match (e.g. `grep -Fxq "<marker>"` per file, not a plain substring grep, which has the same prefix-title false-positive risk) — no match means it's untracked.
@@ -138,7 +126,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 ## Pipeline Rules
 
 - **Stage 0 first** — after the Open Topic Check, sprint context must be resolved before any planning agent is spawned
-- **One sprint at a time** — guard check in Stage 1 (GitHub mode: every sprint; strict mode: feature sprints only); stop if the next sprint is already planned
+- **One sprint at a time** — guard check in Stage 1 (`sprint-status` section 4); stop if the next sprint is already planned
 - **Session reuse** — always resume an existing session before spawning
 - **Forced PO spawn** — Stages 1, 2 and 4 spawn/resume a real PO session (`po_session`) whatever the pinned `PO Execution` value; `orchestrator` mode never runs planning inline
 - **Parallel agents** — when multiple agents must answer questions, spawn/resume them in a single message simultaneously
