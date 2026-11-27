@@ -8,6 +8,7 @@ One line per topic, linking to the topic's own roadmap or umbrella issue. Never 
 
 ## Now
 
+- Sprint-state and process fixes: shared sprint-state checks, a planned-story status, PR creation and project-set sprint capacity — [sprint-16 issues](https://github.com/mycom08/mt-agent-devkit/issues?q=label%3Asprint-16)
 - UX foundation: project UX standard, feature design docs and pipeline enforcement for UI stories — [#233](https://github.com/mycom08/mt-agent-devkit/issues/233)
 
 ## Next
