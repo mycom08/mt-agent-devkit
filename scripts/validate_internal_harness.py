@@ -101,6 +101,8 @@ PO_SKILLS = ("po-core", "po-comment", "po-plan-docs", "po-write-story", "po-road
 COMMON_SKILLS = ("pre-work", "token-efficiency", "shell-rules", "working-record", "agent-memory", "troubleshooting",
                  "credential-gate", "retro", "retro-contribution", "handoff", "raise-question", "project-docs",
                  "git-workflow", "change-metadata", "pre-pr-gate", "pr-review", "clean-code", "gate-verdict")
+# Checks shared by workflows and role skills (ST-000335).
+WORKFLOW_SKILLS = ("sprint-status",)
 DEV_SKILLS = ("dev-core", "dev-implement", "dev-deliver", "dev-verify", "dev-refine", "dev-hotfix")
 TL_SKILLS = ("tl-core", "tl-design", "tl-review", "tl-answer", "tl-implement", "tl-anchor")
 QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix", "qa-test-docs")
@@ -109,18 +111,18 @@ QA_SKILLS = ("qa-core", "qa-validate", "qa-testing", "qa-regression", "qa-hotfix
 # the Technical Lead skills and ST-000332 ships the QA skills.
 UNDISTRIBUTED_SKILLS = frozenset({"change-metadata"})
 SKILL_SIZE_LIMITS = {"po-core": 1500, "dev-core": 1500, "tl-core": 1600, "qa-core": 1600}
-DEFAULT_SKILL_LIMIT = 4000  # po-*, common, Developer, Technical Lead and QA skills
+DEFAULT_SKILL_LIMIT = 4000  # po-*, common, Developer, Technical Lead, QA and workflow skills
 # Ends at the next numbered section: the unnumbered headings inside the ADR example stay in.
 ADR_SECTION = re.compile(r"^## \d+\. ADR Format$(.*?)(?=^## \d+\. |\Z)", re.M | re.S)
 ADR_NFR_HEADINGS = ("Performance impact", "Scalability", "Security", "Reliability", "Observability")
 REQUIRES = re.compile(r"^\*\*Requires:\*\*(.*)$", re.M)
-SKILL_MENTION = re.compile(r"`((?:po|agent|dev|tl|qa)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS) + r")`")
+SKILL_MENTION = re.compile(r"`((?:po|agent|dev|tl|qa)-[a-z0-9-]+|comment|" + "|".join(re.escape(n) for n in COMMON_SKILLS + WORKFLOW_SKILLS) + r")`")
 
 
 def skill_size_limit(name: str):
     if name in SKILL_SIZE_LIMITS:
         return SKILL_SIZE_LIMITS[name]
-    return DEFAULT_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS or name in DEV_SKILLS or name in TL_SKILLS or name in QA_SKILLS else None
+    return DEFAULT_SKILL_LIMIT if name.startswith("po-") or name in COMMON_SKILLS or name in DEV_SKILLS or name in TL_SKILLS or name in QA_SKILLS or name in WORKFLOW_SKILLS else None
 
 
 def skill_errors(root, entries, wrappers) -> list[str]:
@@ -206,6 +208,9 @@ def skill_reference_errors(root) -> list[str]:
     for name in QA_SKILLS:
         if not (skills / name / "SKILL.md").is_file():
             errors.append(f"missing canonical QA skill: .mt-agent-devkit/skills/{name}/SKILL.md")
+    for name in WORKFLOW_SKILLS:
+        if not (skills / name / "SKILL.md").is_file():
+            errors.append(f"missing canonical workflow skill: .mt-agent-devkit/skills/{name}/SKILL.md")
     for canonical in sorted(skills.glob("*/SKILL.md")):
         name, text = canonical.parent.name, canonical.read_text(encoding="utf-8")
         relative = canonical.relative_to(root).as_posix()
@@ -221,6 +226,8 @@ def skill_reference_errors(root) -> list[str]:
             errors.append(f"Developer skill must name its required skills on one **Requires:** line: {relative}")
         if name in TL_SKILLS and len(requires) != 1:
             errors.append(f"Technical Lead skill must name its required skills on one **Requires:** line: {relative}")
+        if name in WORKFLOW_SKILLS and len(requires) != 1:
+            errors.append(f"workflow skill must name its required skills on one **Requires:** line: {relative}")
         if name in QA_SKILLS and len(requires) != 1:
             errors.append(f"QA skill must name its required skills on one **Requires:** line: {relative}")
         required = SKILL_MENTION.findall("\n".join(requires))

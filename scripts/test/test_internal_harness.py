@@ -1531,6 +1531,81 @@ class Phase2SkillTemplatesTests(unittest.TestCase):
             self.assertNotIn(gone, instructions)
 
 
+class SprintStatusSkillTests(unittest.TestCase):
+    """ST-000335: the sprint-state checks have one owner, the sprint-status skill."""
+    PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"
+    CONSUMERS = {"po-plan-sprint": "(`sprint-status` sections 1 to 4)", "dev-refine": "(`sprint-status` section 5)"}
+    # Fragments of the moved rules; each may appear only in the owner skill.
+    # Shipped only: this repo has no Analyze Requirements workflow.
+    ANALYZE = PHASE2 + "shared/workflows/Analyze_Requirements_Workflow_Shared_template.md"
+    IN_FLIGHT = ("status:in-progress", "status:review", "status:testing", "`in-progress`, `review`")
+    RULES = ("status:in-progress", "sprint-{N+1}", "ltrimstr(\"sprint-\")", "In Progress`", "Planned` in", "gh label list",
+             "Sprint_{N+1}_Overview.md` already", "highest `sprint-N`", "highest sprint number")
+
+    def read(self, relative):
+        return (ROOT / relative).read_text(encoding="utf-8")
+
+    def layers(self):
+        return ((".mt-agent-devkit/skills/{}/SKILL.md", ".mt-agent-devkit/workflows/"),
+                (self.PHASE2 + "skills/{}/SKILL_template.md", self.PHASE2 + "shared/workflows/"))
+
+    def workflow(self, folder, name):
+        return self.read(folder + name + ("_Shared_template.md" if "shared" in folder else ".md"))
+
+    def test_frontmatter_budgets_sections_and_wrappers(self):
+        inventory = {e["source"]: e for e in json.loads(self.read(".mt-agent-devkit/contracts/migration-inventory.json"))["files"]}
+        for skill, _ in self.layers():
+            text = self.read(skill.format("sprint-status"))
+            self.assertEqual("sprint-status", wrappers.skill_frontmatter(text)["name"])
+            self.assertLessEqual(len(text.encode("utf-8")), 4000)
+            self.assertEqual(["1", "2", "3", "4", "5"], re.findall(r"^## (\d)\. ", text, re.M))
+        self.assertLessEqual(len(self.read(self.PHASE2 + "skills/po-plan-sprint/SKILL_template.md").encode("utf-8")), 3200)
+        for provider in validator.PROVIDERS:
+            entry = inventory[f".{provider}/skills/sprint-status/SKILL.md"]
+            self.assertEqual(wrappers.render(entry), self.read(entry["source"]))
+        self.assertEqual([], validator.skill_reference_errors(ROOT))
+        self.assertEqual([], validator.skill_template_errors(ROOT, wrappers))
+
+    def test_shipped_skill_covers_both_modes_and_internal_is_github_only(self):
+        internal = self.read(".mt-agent-devkit/skills/sprint-status/SKILL.md")
+        shipped = self.read(self.PHASE2 + "skills/sprint-status/SKILL_template.md")
+        self.assertNotIn("trict", internal)
+        self.assertIn("--repo mycom08/mt-agent-devkit", internal)
+        self.assertNotIn("mycom08", shipped)
+        for phrase in ("Strict mode, feature sprint", "Strict mode, non-feature sprint", "**GitHub mode**",
+                       "Product_Backlog.md", "Analysis Open Topic"):
+            self.assertIn(phrase, shipped)
+
+    def test_consumers_use_the_skill_and_do_not_repeat_the_rules(self):
+        for skill, folder in self.layers():
+            texts = {}
+            for name, use in self.CONSUMERS.items():
+                texts[name] = self.read(skill.format(name))
+                self.assertIn("`sprint-status`", validator.REQUIRES.search(texts[name]).group(1), name)
+                self.assertIn(use, texts[name], name)
+            for name in ("Plan_Sprint_Workflow", "Refine_Sprint_Workflow"):
+                texts[name] = self.workflow(folder, name)
+                self.assertIn(".mt-agent-devkit/skills/sprint-status/SKILL.md", texts[name], name)
+            for name, text in texts.items():
+                for rule in self.RULES:
+                    self.assertNotIn(rule, text, f"{folder}{name}: {rule}")
+
+    def test_analyze_requirements_points_to_the_in_flight_check(self):
+        text = self.read(self.ANALYZE)
+        condition = next(line for line in text.splitlines() if "No story is mid-pipeline" in line)
+        self.assertIn("section 1 of the `sprint-status` skill", condition)
+        self.assertIn(".mt-agent-devkit/skills/sprint-status/SKILL.md", condition)
+        for rule in self.IN_FLIGHT:
+            self.assertNotIn(rule, text, rule)
+
+    def test_bundle_ships_the_skill_with_a_wrapper_per_provider(self):
+        manifest = json.loads(self.read(".mt-agent-devkit/distribution/phase2/bundle/deployment.json"))
+        live = {f["destination"] for f in manifest["files"] if f["phase"] != "retirement"}
+        self.assertIn(".mt-agent-devkit/skills/sprint-status/SKILL.md", live)
+        for provider in validator.PROVIDERS:
+            self.assertIn(f".{provider}/skills/sprint-status/SKILL.md", live)
+
+
 class AdrFormatInvariantTests(unittest.TestCase):
     """ST-000245: the shipped tl-design ADR format keeps all five NFR headings."""
     RELATIVE = f"{validator.SKILL_TEMPLATES}/tl-design/SKILL_template.md"

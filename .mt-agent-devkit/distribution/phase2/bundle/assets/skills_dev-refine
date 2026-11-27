@@ -5,15 +5,13 @@ description: Developer sprint refinement task - fetch the sprint's backlog stori
 
 # Dev Refine
 
-**Requires:** `dev-core`, `comment` (before every comment), `raise-question` (who owns each question), `working-record` (step 4.4)
+**Requires:** `dev-core`, `comment` (before every comment), `raise-question` (who owns each question), `sprint-status` (target sprint), `working-record` (step 4.4)
 
 Task skill, only when the orchestrator asks for a Sprint Refinement. The orchestrator-owned procedure is `Refine_Sprint_Workflow.md` Stages 1 and 3; this is the Developer's view of it.
 
 ## 1. Fetch Target Stories
 
-1. Find the target sprint label (e.g. `sprint-5`).
-   - **GitHub mode:** the highest sprint over open backlog issues: `gh issue list --state open --label "status:backlog" --limit 1000 --json labels --jq '[.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'`.
-   - **Strict mode:** read `docs/feature/{feature-name}/plan/Product_Backlog.md` and take the sprint marked `🔲 Planned`.
+1. Find the target sprint label, e.g. `sprint-5` (`sprint-status` section 5).
 2. Run `gh issue list --label "sprint-N" --label "status:backlog" --state open`.
 3. For each returned issue, read the full body: User Story, AC, Technical Scope, API Spec Reference.
 

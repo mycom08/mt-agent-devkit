@@ -402,8 +402,8 @@
     {
       "id": "skills/po-plan-sprint",
       "path": "assets/skills_po-plan-sprint",
-      "sha256": "948d3c9fa88d27d1e8577142f9244494017de91496a9778f8b2af6e820a30b7e",
-      "bytes": 3990,
+      "sha256": "35adb80a40f7c66567c31c72991ff2a2b18e049116eea191a1067b0decc09bb3",
+      "bytes": 2994,
       "kind": "template"
     },
     {
@@ -1130,8 +1130,8 @@
     {
       "id": "skills/dev-refine",
       "path": "assets/skills_dev-refine",
-      "sha256": "3e47ebbd6f3010bd4bb3bb2e6d6ed1d0e2761edbd6079f681cfc2c2775bc1a27",
-      "bytes": 2968,
+      "sha256": "030b93c2648e0f4b1aad32570cda786ec29ca757d174ddb74b52c24488dd3a67",
+      "bytes": 2647,
       "kind": "template"
     },
     {
@@ -1520,10 +1520,38 @@
       "kind": "adapter"
     },
     {
+      "id": "skills/sprint-status",
+      "path": "assets/skills_sprint-status",
+      "sha256": "40eb6bcb4f3dea422f56f8a03988a5682d18466feb9b40901d78c31f1d9471f2",
+      "bytes": 3263,
+      "kind": "template"
+    },
+    {
+      "id": "claude/skill/sprint-status",
+      "path": "assets/claude_skill_sprint-status",
+      "sha256": "2753182863bc097b250b48435e7d4b89afd5e78f0e70a880211243db2464e8f6",
+      "bytes": 396,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/skill/sprint-status",
+      "path": "assets/antigravity_skill_sprint-status",
+      "sha256": "2753182863bc097b250b48435e7d4b89afd5e78f0e70a880211243db2464e8f6",
+      "bytes": 396,
+      "kind": "adapter"
+    },
+    {
+      "id": "codex/skill/sprint-status",
+      "path": "assets/codex_skill_sprint-status",
+      "sha256": "2753182863bc097b250b48435e7d4b89afd5e78f0e70a880211243db2464e8f6",
+      "bytes": 396,
+      "kind": "adapter"
+    },
+    {
       "id": "workflow_shared/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
-      "sha256": "80d1a9d64ba25156d68abfebe7b7a09f7d74adf2f689f6dab3f914c8f1827d12",
-      "bytes": 37273,
+      "sha256": "465b51547070e3ce2dd18d17d5a68eb1163e45908f45cfcf80ed1da27a8cb864",
+      "bytes": 37206,
       "kind": "template"
     },
     {
@@ -1564,8 +1592,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "226f21514e265dedf7ad653eb62c618d339ba36af82b20a00982b1a768d6aeee",
-      "bytes": 16571,
+      "sha256": "ddf920f5b1eac63c5b979e730431fb385b6230918a79c3d5fb7303fc812c9470",
+      "bytes": 14532,
       "kind": "template"
     },
     {
@@ -1606,22 +1634,22 @@
     {
       "id": "workflow_shared/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Refine_Sprint_Workflow.md",
-      "sha256": "2ca84732e0d47adb191849ef3bdafc4c4c5ceb28c5796ca1606b111e29250c69",
-      "bytes": 14388,
+      "sha256": "69b470bf0b27fed003903e3bfec0f661bd541a5931201a8fcba73cdc79a4c596",
+      "bytes": 13668,
       "kind": "template"
     },
     {
       "id": "workflow_github/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_github_Refine_Sprint_Workflow.md",
-      "sha256": "40620e6e4068a31b2b918695dda8a24dcd3e4a45e1312a56eedd36d70aa0d4ba",
-      "bytes": 473,
+      "sha256": "05fd54a6bbe8a79c9464be58bfae6e35d9bd731e873dcc7f6f6ae683acfac569",
+      "bytes": 442,
       "kind": "template"
     },
     {
       "id": "workflow_strict/Refine_Sprint_Workflow.md",
       "path": "assets/workflow_strict_Refine_Sprint_Workflow.md",
-      "sha256": "1d3c3518cb46b4dc62c2293d2a567b00797e962f08299e1dea5925be802d2997",
-      "bytes": 451,
+      "sha256": "cb76634afadc24f628ed0103412afc2716fcb12501244dde4be1a54855ac83ed",
+      "bytes": 426,
       "kind": "template"
     },
     {
@@ -2397,8 +2425,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "e2c688caaf0abc5dddeb14e70bfaad374bb43987234dac024e7e9f16a22a4464",
-      "bytes": 35368,
+      "sha256": "c2b12bacc1f1e89fda34b2ca827492f2ac120f15701519171fec4c001645239e",
+      "bytes": 35481,
       "kind": "script"
     },
     {
@@ -7598,6 +7626,100 @@
         "codex/skill/qa-test-docs"
       ],
       "destination": ".codex/skills/qa-test-docs/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "skills/sprint-status",
+      "sources": [
+        "skills/sprint-status"
+      ],
+      "destination": ".mt-agent-devkit/skills/sprint-status/SKILL.md",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "claude/skill/sprint-status",
+      "sources": [
+        "claude/skill/sprint-status"
+      ],
+      "destination": ".claude/skills/sprint-status/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "antigravity/skill/sprint-status",
+      "sources": [
+        "antigravity/skill/sprint-status"
+      ],
+      "destination": ".antigravity/skills/sprint-status/SKILL.md",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
+      "id": "codex/skill/sprint-status",
+      "sources": [
+        "codex/skill/sprint-status"
+      ],
+      "destination": ".codex/skills/sprint-status/SKILL.md",
       "owner": "selected_provider",
       "ownership": "managed",
       "profiles": [

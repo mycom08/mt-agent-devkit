@@ -5,14 +5,15 @@ description: Developer sprint refinement task - fetch the sprint's backlog stori
 
 # Dev Refine
 
-**Requires:** `dev-core`, `comment` (before every comment), `raise-question` (who owns each question), `working-record` (step 4.4)
+**Requires:** `dev-core`, `comment` (before every comment), `raise-question` (who owns each question), `sprint-status` (target sprint), `working-record` (step 4.4)
 
 Task skill, only when the orchestrator asks for a Sprint Refinement.
 
 ## 1. Fetch Target Stories
 
-1. Run `gh issue list --repo mycom08/mt-agent-devkit --label "sprint-N" --label "status:backlog" --state open`.
-2. For each returned issue, read the full body: User Story, AC, Technical Scope.
+1. Find the target sprint label (`sprint-status` section 5).
+2. Run `gh issue list --repo mycom08/mt-agent-devkit --label "sprint-N" --label "status:backlog" --state open`.
+3. For each returned issue, read the full body: User Story, AC, Technical Scope.
 
 ## 2. Identify Open Points per Story
 

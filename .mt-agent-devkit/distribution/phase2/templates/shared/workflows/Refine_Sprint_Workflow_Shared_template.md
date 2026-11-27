@@ -6,9 +6,7 @@
 Triggered by: `"refine sprint"` or `"/refine-sprint"` in {{ROOT_FILE}}
 
 **Sprint identification:**
-- **GitHub mode** (feature and non-feature sprints): Run `gh issue list --state open --label "status:backlog" --limit 1000 --json labels --jq '[.[].labels[].name | select(startswith("sprint-"))] | sort_by(ltrimstr("sprint-") | tonumber) | last'` to find the highest-numbered open sprint. That sprint is the target. Sprint numbers are one repo-wide sequence. **Do not use `gh label list` — it returns labels alphabetically, so `sprint-3` sorts higher than `sprint-13`.**
-- **Strict mode, feature sprint:** Read `Product_Backlog.md` to find the sprint marked `🔲 Planned`. Use that sprint's `sprint-N` value as the target.
-- **Strict mode, non-feature sprint:** Glob `{{AGENT_DIR_PREFIX}}/agents/docs/stories/*.md`, collect all unique `**Sprint:**` field values, select the highest sprint number that has at least one story with `**Status:** backlog`. That sprint is the target.
+The orchestrator loads the `sprint-status` skill (`.mt-agent-devkit/skills/sprint-status/SKILL.md`) and takes the target sprint from its section 5.
 
 **Story fetch:**
 - **GitHub mode:** `gh issue list --label "sprint-N" --label "status:backlog" --state open`
