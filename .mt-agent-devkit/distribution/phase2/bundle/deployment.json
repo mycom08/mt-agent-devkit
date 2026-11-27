@@ -1851,8 +1851,8 @@
     {
       "id": "Sync_Devkit_Project_Workflow",
       "path": "assets/Sync_Devkit_Project_Workflow",
-      "sha256": "d8a27ada4912ad11fd8470ac241667108abd33e520de94ad4d9b76e2be68ade8",
-      "bytes": 3991,
+      "sha256": "cb097c0a85e5cb9ff3850f824f34e4856a4d7bdbab4e409b3db8ef7a3a385f02",
+      "bytes": 4828,
       "kind": "template"
     },
     {
@@ -1886,8 +1886,8 @@
     {
       "id": "claude/settings",
       "path": "assets/claude_settings",
-      "sha256": "37b8dc88c276adc5594a7557f8eac09e4dff849d294f7c9eb1ef30c8eb1abf6c",
-      "bytes": 291,
+      "sha256": "f0ec9b26d982c094c91ad9ca4020efb7184aa9c1243ab3d55deeb9d42d09252c",
+      "bytes": 576,
       "kind": "adapter"
     },
     {
@@ -2084,6 +2084,13 @@
       "path": "assets/antigravity_skill_local-verify",
       "sha256": "48c73e2d7fafc7445c16e8e26c6224af19da77efc922c957b91a7bd2c0094e1d",
       "bytes": 3372,
+      "kind": "adapter"
+    },
+    {
+      "id": "antigravity/hooks.json",
+      "path": "assets/antigravity_hooks.json",
+      "sha256": "a34362ad94176d7c4668bc0efc5af26ae66ea6ffc684f10ca22bd526e0559bab",
+      "bytes": 404,
       "kind": "adapter"
     },
     {
@@ -2369,8 +2376,8 @@
     {
       "id": "deployment.py",
       "path": "assets/deployment.py",
-      "sha256": "48c9fd83572caba2244d6e75144e17944d1fa626819651e9ac533d49741229cd",
-      "bytes": 37456,
+      "sha256": "aded2e83ce2dd4b2bdd799acb78be015df0971246a654a363e776aef23f7939a",
+      "bytes": 40196,
       "kind": "script"
     },
     {
@@ -2404,8 +2411,8 @@
     {
       "id": "lifecycle.py",
       "path": "assets/lifecycle.py",
-      "sha256": "ad6abc7d9d6971d5839cb396944b0a0760b6c4f7c910e18ef5d9d3eecbf4c686",
-      "bytes": 8093,
+      "sha256": "6009ed6bcffc9aa000d4837986477406efa51661650d959471d82880eefc681c",
+      "bytes": 8180,
       "kind": "script"
     },
     {
@@ -2425,15 +2432,15 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "53b856e2f067b7f13a19e75d9137e23035e43376ecd9cbf37076bf5659771d77",
-      "bytes": 35504,
+      "sha256": "272950926bfc6785415f45266925056998c5916381e5ce1c9db8e4d653d145a8",
+      "bytes": 36704,
       "kind": "script"
     },
     {
       "id": "Sync_Devkit_Workflow",
       "path": "assets/Sync_Devkit_Workflow",
-      "sha256": "d8a27ada4912ad11fd8470ac241667108abd33e520de94ad4d9b76e2be68ade8",
-      "bytes": 3991,
+      "sha256": "cb097c0a85e5cb9ff3850f824f34e4856a4d7bdbab4e409b3db8ef7a3a385f02",
+      "bytes": 4828,
       "kind": "template"
     },
     {
@@ -2497,6 +2504,13 @@
       "path": "assets/wait_work.ps1",
       "sha256": "377665e25592445d6cd66508b04431d2ae15a0eac79571928569ddafcfbcd3ef",
       "bytes": 107,
+      "kind": "script"
+    },
+    {
+      "id": "check_gh_posts.py",
+      "path": "assets/check_gh_posts.py",
+      "sha256": "a1dba0c50bbd9b62e8bd28702298c30c383a57236c385746b068f2d1b8017b14",
+      "bytes": 26193,
       "kind": "script"
     },
     {
@@ -9409,6 +9423,30 @@
       "required": true
     },
     {
+      "id": "antigravity/hooks",
+      "sources": [
+        "antigravity/hooks.json"
+      ],
+      "destination": ".agents/hooks.json",
+      "owner": "selected_provider",
+      "ownership": "provider_config",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "discovery",
+      "required": true
+    },
+    {
       "id": "antigravity/Provider_Adapter.md",
       "sources": [
         "antigravity/Provider_Adapter.md"
@@ -10804,6 +10842,32 @@
         "wait_work.ps1"
       ],
       "destination": ".mt-agent-devkit/scripts/wait_work.ps1",
+      "owner": "shared",
+      "ownership": "managed",
+      "profiles": [
+        "repo",
+        "project_root"
+      ],
+      "modes": [
+        "github",
+        "strict"
+      ],
+      "providers": [
+        "claude",
+        "antigravity",
+        "codex"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "content",
+      "required": true
+    },
+    {
+      "id": "check_gh_posts.py",
+      "sources": [
+        "check_gh_posts.py"
+      ],
+      "destination": ".mt-agent-devkit/scripts/check_gh_posts.py",
       "owner": "shared",
       "ownership": "managed",
       "profiles": [
@@ -18125,6 +18189,166 @@
       "required": false
     },
     {
+      "id": "retire/claude/repo/github/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/repo/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/github/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/claude/project_root/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".claude/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "claude"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/github/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/repo/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "repo"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/github/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "github"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
+      "id": "retire/antigravity/project_root/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+      "sources": [],
+      "destination": ".antigravity/agents/scripts/check_gh_posts.py",
+      "owner": "selected_provider",
+      "ownership": "managed",
+      "profiles": [
+        "project_root"
+      ],
+      "modes": [
+        "strict"
+      ],
+      "providers": [
+        "antigravity"
+      ],
+      "renderer": "copy",
+      "legacy_paths": [],
+      "phase": "retirement",
+      "required": false
+    },
+    {
       "id": "retire/shared/rules/Product_Owner_Rules_Bootstrap.md",
       "sources": [],
       "destination": ".mt-agent-devkit/rules/Product_Owner_Rules_Bootstrap.md",
@@ -22324,6 +22548,70 @@
         "path": ".antigravity/agents/scripts/wait_work.ps1",
         "after_verified_ids": [
           "wait_work.ps1",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/github/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".claude/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/repo/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".claude/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_repo/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/github/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".claude/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/claude/project_root/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".claude/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_project_root/CLAUDE.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/github/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".antigravity/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/repo/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".antigravity/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_repo/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/github/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".antigravity/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
+          "root_project_root/AGENTS.md"
+        ]
+      },
+      {
+        "logical_id": "retire/antigravity/project_root/strict/check_gh_posts.py/scripts/check_gh_posts.py",
+        "path": ".antigravity/agents/scripts/check_gh_posts.py",
+        "after_verified_ids": [
+          "check_gh_posts.py",
           "root_project_root/AGENTS.md"
         ]
       },

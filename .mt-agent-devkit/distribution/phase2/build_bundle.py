@@ -58,6 +58,20 @@ RETIRED_SURVIVORS = {
 RETIRED_RULES = tuple(RETIRED_SURVIVORS)
 # Defaults written once into a target's project-owned settings file.
 PROJECT_SETTINGS_DEFAULTS = {"po_execution": "subagent", "sprint_capacity": 60}
+# The comment hook (check_gh_posts.py). Claude runs hooks from any directory, so
+# its path is anchored; Antigravity runs them from `.agents/`. `|| exit 0` keeps a
+# hook that cannot start from blocking every shell command.
+def hook_command(root, provider):
+    script = '"' + root + '/.mt-agent-devkit/scripts/check_gh_posts.py" ' + provider
+    return "python3 " + script + " || python " + script + " || exit 0"
+
+
+def pre_tool_use(matcher, command):
+    return [{"matcher": matcher, "hooks": [{"type": "command", "command": command, "timeout": 10}]}]
+
+
+CLAUDE_PRE_TOOL_USE = pre_tool_use("Bash|PowerShell", hook_command("$CLAUDE_PROJECT_DIR", "claude"))
+ANTIGRAVITY_HOOKS = {"mt-agent-devkit-gh-posts": {"PreToolUse": pre_tool_use("run_command", hook_command("..", "antigravity"))}}
 # The installer substitutes no repository name, so an agent would run it literally.
 REPOSITORY_PLACEHOLDER = re.compile(r"\{(github-org|repo-name)\}")
 INSTRUCTION_FOLDERS = ("/rules/", "/skills/", "/workflows/", "/instructions/")
@@ -223,12 +237,15 @@ def build(root, destination):
             aid = asset(provider + "/skill/" + skill_name, content.encode(), "adapter")
             entry(provider + "/skill/" + skill_name, [aid], "." + provider + "/skills/" + skill_name + "/SKILL.md", profiles=("repo", "project_root"), owner="selected_provider", providers=(provider,), phase="discovery")
         if provider == "claude":
-            settings = {"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "python3 .mt-agent-devkit/scripts/version_notice.py || python .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}]}}
+            settings = {"permissions": {"allow": ["Bash(gh issue *)", "Bash(gh pr *)"]}, "hooks": {"SessionStart": [{"matcher": "startup|resume", "hooks": [{"type": "command", "command": "python3 .mt-agent-devkit/scripts/version_notice.py || python .mt-agent-devkit/scripts/version_notice.py", "timeout": 10}]}], "PreToolUse": CLAUDE_PRE_TOOL_USE}}
             aid = asset("claude/settings", (json.dumps(settings) + "\n").encode(), "adapter")
             entry("claude/settings", [aid], ".claude/settings.json", profiles=("repo", "project_root"), owner="selected_provider", ownership="provider_config", renderer="provider_settings", providers=(provider,), phase="discovery")
             skill = (root / ".mt-agent-devkit/contracts/Read_Section.md").read_bytes()
             aid = asset("claude/read-section", skill, "adapter")
             entry("claude/read-section", [aid], ".claude/skills/read-section/SKILL.md", profiles=("repo", "project_root"), owner="selected_provider", providers=(provider,), phase="discovery")
+        if provider == "antigravity":
+            aid = asset("antigravity/hooks.json", (json.dumps(ANTIGRAVITY_HOOKS, indent=2) + "\n").encode(), "adapter")
+            entry("antigravity/hooks", [aid], ".agents/hooks.json", profiles=("repo", "project_root"), owner="selected_provider", ownership="provider_config", providers=(provider,), phase="discovery")
         for name in ("Provider_Adapter.md", "capabilities.json"):
             content = (root / ("." + provider) / "harness" / name).read_text(encoding="utf-8-sig")
             if name == "Provider_Adapter.md":
@@ -271,7 +288,7 @@ def build(root, destination):
     entry("Gitignore", [aid], ".gitignore", profiles=("repo", "project_root"), owner="project", ownership="project_adapted", renderer="approved_adaptation")
     aid = asset("Shell_Attributes", b"*.sh text eol=lf\n", "contract")
     entry("Shell_Attributes", [aid], ".mt-agent-devkit/.gitattributes", profiles=("repo", "project_root"))
-    for name in ("read_section.py", "read_manifest.py", "wait_work.py", "wait_work.sh", "wait_work.ps1"):
+    for name in ("read_section.py", "read_manifest.py", "wait_work.py", "wait_work.sh", "wait_work.ps1", "check_gh_posts.py"):
         aid = asset(name, (root / ".mt-agent-devkit/scripts" / name).read_bytes(), "script")
         # Story manifests depend on role rules/records, which belong to each
         # repository harness. Project roots intentionally install no Scrum rules.
