@@ -6,6 +6,12 @@ never overwrites it. The top-level orchestrator resolves `po_execution` once at
 workflow start and pins the result as `**PO Execution:**` in the pipeline state;
 a resumed run uses its pinned value, never a re-read.
 
+`sprint_capacity` is the story points Plan Sprint may select, a positive integer
+(default 60). The orchestrator resolves it once at Plan Sprint Stage 0 and passes
+the number to the Product Owner. An absent file or key resolves to the default;
+any other value (strings, floats, booleans, zero and negatives included) also
+resolves to the default and is reported once.
+
 `po_execution` decides who performs Product Owner activities:
 
 - `subagent` (default): a spawned Product Owner agent, as before.
@@ -40,6 +46,7 @@ read here. The orchestrator resolves once at workflow start and pins the result.
 
 Usage:
   python .mt-agent-devkit/scripts/project_settings.py po_execution [--root .]
+  python .mt-agent-devkit/scripts/project_settings.py sprint_capacity [--root .]
   python .mt-agent-devkit/scripts/project_settings.py agent_models --role "<Role>" --policy <policy> [--root .]
     prints one JSON object of the set fields; {} means no override
 """
@@ -52,8 +59,7 @@ import sys
 
 SETTINGS_PATH = ".mt-agent-devkit/project_settings.json"
 PO_EXECUTION_VALUES = ("subagent", "orchestrator")
-DEFAULTS = {"po_execution": "subagent"}
-ALLOWED = {"po_execution": PO_EXECUTION_VALUES}
+DEFAULTS = {"po_execution": "subagent", "sprint_capacity": 60}
 AGENT_ROLES = ("Developer", "Technical Lead", "QA", "Product Owner", "Business Analyst", "UI/UX Designer")
 MODEL_POLICIES = ("implementation", "design-review", "standard", "closure")
 OVERRIDE_FIELDS = ("model", "effort")
@@ -73,7 +79,19 @@ def load(root: Path) -> tuple[dict, str | None]:
     return value, None
 
 
-def resolve(root: Path, key: str) -> tuple[str, str | None]:
+def _is_po_execution(value: object) -> bool:
+    return value in PO_EXECUTION_VALUES
+
+
+def _is_positive_integer(value: object) -> bool:
+    # `type` rather than `isinstance`: bool subclasses int, so `true` would pass as 1.
+    return type(value) is int and value > 0
+
+
+ACCEPTS = {"po_execution": _is_po_execution, "sprint_capacity": _is_positive_integer}
+
+
+def resolve(root: Path, key: str) -> tuple[str | int, str | None]:
     """Resolve one setting to an accepted value, plus at most one report line."""
     if key not in DEFAULTS:
         raise KeyError(key)
@@ -83,7 +101,7 @@ def resolve(root: Path, key: str) -> tuple[str, str | None]:
     if key not in settings:
         return DEFAULTS[key], None
     value = settings[key]
-    if value not in ALLOWED[key]:
+    if not ACCEPTS[key](value):
         shown = json.dumps(value)[:60]
         return DEFAULTS[key], f"unrecognised {key} value {shown} in {SETTINGS_PATH}; using {DEFAULTS[key]}"
     return value, None

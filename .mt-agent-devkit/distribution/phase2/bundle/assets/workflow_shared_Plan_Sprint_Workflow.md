@@ -5,7 +5,7 @@
 
 Triggered by: `"plan next sprint [feature-name]"` or `"/plan-sprint [feature-name]"` in {ENTRYPOINT}
 
-**Sprint Capacity:** 60 points (update this value to change capacity)
+**Sprint Capacity:** the project's `sprint_capacity` setting, in story points (Stage 0 step 3)
 
 ---
 
@@ -28,12 +28,13 @@ Before spawning any agent, the orchestrator resolves the sprint context.
    - **Argument provided** → set `feature_name = <argument>` (`none` means no feature). **GitHub mode:** no feature folder is required. **Strict mode:** verify `docs/feature/<feature_name>/plan/` exists — if not, stop and notify user
    - **No argument** → ask the user: "Which feature is this sprint for? Enter the feature name (e.g., `payments`) or `none` for a non-feature sprint."
 2. Store `feature_name` (or `none`) — this drives all path and label decisions in every subsequent stage
+3. Resolve `sprint_capacity` once with `python .mt-agent-devkit/scripts/project_settings.py sprint_capacity` (set in the project-owned `.mt-agent-devkit/project_settings.json`). Relay any stderr report to the user. Pass the printed number as `sprint_capacity` in every PO assignment of this run, spawned or resumed; add no state file for it
 
 ---
 
 ## Stage 1 — Current Sprint Verification (PO)
 
-1. **Spawn** Product Owner agent (**policy: standard**); save its `session_handle` as `po_session`; pass `feature_name` and name the `po-plan-sprint` skill in the assignment (**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline; see the PO touchpoint table in the orchestrator instructions)
+1. **Spawn** Product Owner agent (**policy: standard**); save its `session_handle` as `po_session`; pass `feature_name` and `sprint_capacity`, and name the `po-plan-sprint` skill in the assignment (**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline; see the PO touchpoint table in the orchestrator instructions)
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory) and loads the `po-core` and `po-plan-sprint` skills (`.mt-agent-devkit/skills/po-plan-sprint/SKILL.md`), plus the skills `po-plan-sprint` requires
 2a. **Sprint-label check (before any other planning step):** PO runs `sprint-status` section 6 (open-topic stories are skipped). No violation → continue. One or more → PO returns every violation and stops; the orchestrator reports them to the user and asks whether to continue planning. Continue → resume PO at step 3; otherwise **stop**. Never fix a violation silently: no label (strict mode: story `**Status:**` or `**Sprint:**` field) changes unless the user confirms that change.
 3. PO checks the active sprint with the `sprint-status` skill (`.mt-agent-devkit/skills/sprint-status/SKILL.md`): in-flight stories (section 1) and the current sprint number N (section 2)
@@ -62,7 +63,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
      - **GitHub mode:** run `gh issue list --label "status:backlog" --state open --limit 1000` as the backlog source
      - **Strict mode:** glob `{RUNTIME_ROOT}/docs/stories/*.md`, filter by `**Status:** backlog`; sort by story ID (ascending)
 2a. **Roadmap check (feature and non-feature sprints):** PO reads `docs/Project_Roadmap.md` and confirms its Now / Next / Later buckets match the sprint being planned. When a topic changes bucket or a new topic appears, PO edits that topic's one line and `Last updated`, committing straight to the base branch in github mode (per `po-plan-docs`) and locally on `sprint-N-dev` in strict mode. When the file is missing, report it and skip.
-3. PO selects stories up to **60 points** capacity:
+3. PO selects stories up to `sprint_capacity` points:
    - **If a roadmap exists** (for a feature, one under `plan/`): respect the roadmap's dependency graph and planned sprint order
    - **GitHub mode, feature without a `plan/` roadmap** (including an analysed one, roadmap in `roadmap/`): order by `phase-N` label, then `**Depends on:**` (a dependency must be done or in the same sprint), then priority label. The `Story Candidates` table in `roadmap/` is a cross-check only
    - **If no roadmap** (otherwise): order candidates by priority label (`Must-Have` first, then `Should-Have`, then `Nice-to-Have`)

@@ -116,6 +116,7 @@ backlog → open → ready → in-progress → review → testing → done
 | All workflow trigger mappings | `{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md` §Workflows |
 | Agent roles and instruction files | `{{ROOT_FILE}}` §Agent Roster |
 | Who runs each PO activity (`po_execution: subagent` or `orchestrator`) | `.mt-agent-devkit/project_settings.json`; routing in `{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md` §PO Touchpoints by `PO Execution` |
+| Story points per sprint (`sprint_capacity`, a positive integer, default 60) | `.mt-agent-devkit/project_settings.json`; resolved at Plan Sprint Stage 0 |
 | Model and effort per role or model policy (`agent_models`, for example `{"agent_models": {"Developer": {"model": "opus"} } }`) | `.mt-agent-devkit/project_settings.json`; precedence and fallback in `{{AGENT_DIR_PREFIX}}/agents/orchestrator_instructions.md` §Agent model overrides |
 | Strict-mode story format and operations | `{{AGENT_DIR_PREFIX}}/agents/rules/Strict_Mode_Story_Guide.md` |
 | CI/CD story validation (github mode only) | `{{AGENT_DIR_PREFIX}}/agents/rules/CICD_Validation_Guide.md` |

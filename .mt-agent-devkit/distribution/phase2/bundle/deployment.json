@@ -402,8 +402,8 @@
     {
       "id": "skills/po-plan-sprint",
       "path": "assets/skills_po-plan-sprint",
-      "sha256": "b17bb0e4e50b8db8747e549869d570d91d02a5271a664a82455755aed8d70f9c",
-      "bytes": 3169,
+      "sha256": "3da98426e1774e04555c1856f292d1d60f7562f6113dbbf631e9bf473e3b7a42",
+      "bytes": 3196,
       "kind": "template"
     },
     {
@@ -1592,8 +1592,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "1ea54dba88c6f7265773f1c912c978cada70d3d4d13fefcbdcfe7f273fd344a8",
-      "bytes": 15351,
+      "sha256": "2e85c27fac933341c9009877c3bb8ea23ced6632208f9e13789e9a77a7859b08",
+      "bytes": 15742,
       "kind": "template"
     },
     {
@@ -1781,8 +1781,8 @@
     {
       "id": "scripts/project_settings.py",
       "path": "assets/scripts_project_settings.py",
-      "sha256": "8bb6da341dad45325914d0d6e9c52e3f7654333e43ee4668dc38bd59b03976aa",
-      "bytes": 7716,
+      "sha256": "8d49df49c2b811fc28c409e79200c7ef223d5d98441b27f12a9fd2004707cf8f",
+      "bytes": 8501,
       "kind": "script"
     },
     {
@@ -2425,8 +2425,8 @@
     {
       "id": "build_bundle.py",
       "path": "assets/build_bundle.py",
-      "sha256": "c2b12bacc1f1e89fda34b2ca827492f2ac120f15701519171fec4c001645239e",
-      "bytes": 35481,
+      "sha256": "53b856e2f067b7f13a19e75d9137e23035e43376ecd9cbf37076bf5659771d77",
+      "bytes": 35504,
       "kind": "script"
     },
     {
@@ -2439,15 +2439,15 @@
     {
       "id": "Workflow_Guide",
       "path": "assets/Workflow_Guide",
-      "sha256": "d6cbd60d340128ed757f14a562e51bb45473080349776bcff78ba799ad2711c5",
-      "bytes": 5914,
+      "sha256": "1d3729ffc2b154a70dbddd1be302773d8ab9217e40ce299681073a48ad030572",
+      "bytes": 6070,
       "kind": "template"
     },
     {
       "id": "project_settings.json",
       "path": "assets/project_settings.json",
-      "sha256": "7d8c1e4e7ff2a7242699bd8be52874dc80dda55630dc941b2209e5e17b6f8e1b",
-      "bytes": 33,
+      "sha256": "7b66ee769c84159b7f5cb371296a2b79d5b960b2952d203ab799ff9a77a9e00e",
+      "bytes": 58,
       "kind": "contract"
     },
     {

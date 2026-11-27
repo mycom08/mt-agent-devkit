@@ -1729,7 +1729,7 @@ class PoExecutionSettingTests(unittest.TestCase):
             adaptations = {"CLAUDE.md": "# Fixture\n", ".mt-agent-devkit/context/Project_Priming.md": "# Fixture\n", ".mt-agent-devkit/context/Document_Index.md": "# Docs\n", ".gitignore": "# Ignore\n"}
             deployment.apply(target, deployment.plan(target, manifest, source, "github", "repo", bound, adaptations))
             settings = target / ".mt-agent-devkit/project_settings.json"
-            self.assertEqual(json.loads(settings.read_text(encoding="utf-8")), {"po_execution": "subagent"})
+            self.assertEqual(json.loads(settings.read_text(encoding="utf-8")), {"po_execution": "subagent", "sprint_capacity": 60})
             settings.write_text('{"po_execution": "orchestrator"}\n', encoding="utf-8")
             deployment.apply(target, deployment.plan(target, manifest, source, "github", "repo", bound, adaptations))
             deployment.verify(target)

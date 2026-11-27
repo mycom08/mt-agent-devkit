@@ -1,4 +1,4 @@
-"""ST-000291, ST-000322: po_execution and agent_models resolution from the project-owned settings file."""
+"""ST-000291, ST-000322, ST-000336: po_execution, agent_models and sprint_capacity resolution from the project-owned settings file."""
 import contextlib
 import importlib.util
 import io
@@ -156,7 +156,7 @@ class AgentModelsTests(unittest.TestCase):
     def test_po_execution_is_unchanged_by_agent_models(self):
         self.write({"po_execution": "orchestrator", "agent_models": {"Developer": {"model": "opus"}}})
         self.assertEqual(settings.resolve(self.root, "po_execution"), ("orchestrator", None))
-        self.assertEqual(settings.DEFAULTS, {"po_execution": "subagent"})
+        self.assertEqual(settings.DEFAULTS["po_execution"], "subagent")
         stdout, stderr = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr), self.assertRaises(SystemExit):
             settings.main(["po_execution", "--role", "Developer", "--root", str(self.root)])
@@ -167,6 +167,50 @@ class AgentModelsTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(ROOT / ".mt-agent-devkit/scripts/project_settings.py"), "agent_models", "--policy", "closure", "--root", str(self.root)],
                                 capture_output=True, text=True, check=True)
         self.assertEqual((json.loads(result.stdout), result.stderr), ({"model": "haiku"}, ""))
+
+
+class SprintCapacityTests(unittest.TestCase):
+    """ST-000336: the points limit Plan Sprint selects stories within."""
+
+    def setUp(self):
+        scratch = tempfile.TemporaryDirectory()
+        self.addCleanup(scratch.cleanup)
+        self.root = Path(scratch.name)
+        self.path = self.root / settings.SETTINGS_PATH
+        self.path.parent.mkdir(parents=True)
+
+    def cli(self):
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            self.assertEqual(settings.main(["sprint_capacity", "--root", str(self.root)]), 0)
+        return stdout.getvalue(), stderr.getvalue()
+
+    def test_absent_file_or_key_resolves_to_60_silently(self):
+        self.assertEqual(self.cli(), ("60\n", ""))
+        self.path.write_text('{"po_execution": "orchestrator"}', encoding="utf-8")
+        self.assertEqual(settings.resolve(self.root, "sprint_capacity"), (60, None))
+        self.assertEqual(self.cli(), ("60\n", ""))
+
+    def test_positive_integer_resolves_as_written(self):
+        for value in (1, 30, 60, 200):
+            with self.subTest(value=value):
+                self.path.write_text(json.dumps({"sprint_capacity": value}), encoding="utf-8")
+                self.assertEqual(settings.resolve(self.root, "sprint_capacity"), (value, None))
+                self.assertEqual(self.cli(), (f"{value}\n", ""))
+
+    def test_each_invalid_value_resolves_to_60_and_is_reported_once(self):
+        invalid = ('"30"', '"thirty"', "30.0", "30.5", "NaN", "0", "-5", "true", "false", "null", "[30]", '{"points": 30}')
+        files = [f'{{"sprint_capacity": {raw}}}' for raw in invalid] + ["not json", "[]", "30"]
+        for content in files:
+            with self.subTest(content=content):
+                self.path.write_text(content, encoding="utf-8")
+                value, report = settings.resolve(self.root, "sprint_capacity")
+                self.assertEqual(value, 60)
+                self.assertTrue(report)
+                stdout, stderr = self.cli()
+                self.assertEqual(stdout, "60\n")
+                self.assertEqual(len(stderr.strip().splitlines()), 1)
+                self.assertTrue(stderr.startswith("project_settings: "))
 
 
 if __name__ == "__main__":

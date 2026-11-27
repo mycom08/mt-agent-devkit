@@ -7,7 +7,7 @@ description: Product Owner Plan Next Sprint procedure - verify the current sprin
 
 **Requires:** `po-core`, `po-write-story`, `po-plan-docs`, `sprint-status`, `po-roadmap-drain` (only when a roadmap changes)
 
-Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules before starting; the orchestrator always passes `feature_name`.
+Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules before starting; the orchestrator always passes `feature_name` and `sprint_capacity` (points).
 
 > **Plan sprint never promotes to `status:ready`.** Every planned story becomes `status:open`. Promotion belongs only to `refine sprint` Stage 4, after implementers confirm all questions are resolved (`po-promote-ready`).
 
@@ -22,7 +22,7 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 1. **Check sprint labels first** (`sprint-status` section 6). Violations: report every one to the orchestrator and wait until the user chooses to continue; change no label without the user's confirmation.
    **Then verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report the story IDs to the orchestrator and stop.
-2. **Select stories:** `gh issue list --repo mycom08/mt-agent-devkit --label "status:backlog" --state open --limit 1000`; a feature adds `--label "feature:<feature_name>"`. No feature match: a `plan/` roadmap continues from that roadmap; otherwise report and stop, planning nothing.
+2. **Select stories** up to `sprint_capacity` points: `gh issue list --repo mycom08/mt-agent-devkit --label "status:backlog" --state open --limit 1000`; a feature adds `--label "feature:<feature_name>"`. No feature match: a `plan/` roadmap continues from that roadmap; otherwise report and stop, planning nothing.
    - Order: a `plan/` roadmap's dependency graph; a feature without one by `phase-N`, then `**Depends on:**` (done or in the same sprint), then priority; else `Must-Have`, `Should-Have`, `Nice-to-Have`.
 3. **Open questions:** for each selected story, check that AC is clear and testable. If questions exist, create `{RUNTIME_ROOT}/tmp/PO_questions.md` and report to the orchestrator.
 4. **Review answers:** after the orchestrator confirms answers are filled in, verify every `A:` field is complete before proceeding.
