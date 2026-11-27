@@ -364,43 +364,66 @@ class PrCreateRules(PrCreateCase):
                                       "PowerShell"), "cannot read body")
 
 
-class UnknownDirectory(PrCreateCase):
-    """A payload without a working directory, with the hook started in `.agents/`."""
+GOOD = 'gh pr create --base main --title "[ST-000012][X] Add" '
+STANDARD_FORM = GOOD + "--body-file .agents/working/tmp/ST-000012/pr_body.md"
 
-    def setUp(self):
-        super().setUp()
-        (self.cwd / ".agents").mkdir()
 
-    def ask(self, provider, command, cwd=None):
-        extra = {} if cwd is None else {"cwd" if provider == "claude" else "Cwd": cwd}
+class PayloadShapes:
+    """Every provider and payload shape against one story-branch project.
+
+    A project holds its own copy of the hook, as this repository and an install do.
+    """
+
+    def story_project(self, root):
+        subprocess.run(["git", "init", "--quiet", str(root)], check=True)
+        subprocess.run(["git", "-C", str(root), "symbolic-ref", "HEAD", "refs/heads/" + STORY_BRANCH], check=True)
+        for folder in (".agents/working/tmp/ST-000012", "sub"):
+            (root / folder).mkdir(parents=True, exist_ok=True)
+        (root / ".agents/working/tmp/ST-000012/pr_body.md").write_text("Closes #12\n", encoding="utf-8")
+        (root / "nolink.md").write_text("Adds a thing.\n", encoding="utf-8")
+
+    def denied(self, module, root, provider, shape, command):
+        extra = {} if shape is None else {"cwd" if provider == "claude" else "Cwd": str(root) if shape == "absolute" else shape}
         payload = ({"tool_name": "Bash", "tool_input": {"command": command}, **extra} if provider == "claude"
                    else {"toolCall": {"args": {"CommandLine": command, **extra}}})
-        result = subprocess.run([sys.executable, str(SCRIPT), provider], input=json.dumps(payload),
-                                cwd=self.cwd / ".agents", capture_output=True, text=True, check=True)
-        return '"deny"' in result.stdout
+        return '"deny"' in json.dumps(module.respond(provider, json.dumps(payload)))
 
-    def test_nothing_that_depends_on_the_directory_is_denied(self):
-        form = "gh pr create --base main " + TITLE + " --body-file .agents/working/tmp/ST-000012/pr_body.md"
-        head = "gh pr create --head ST-000012/x " + TITLE
-        for provider in ("claude", "antigravity"):
-            for cwd in (None, ".", ""):
-                for command in (form, "gh pr create --fill", "gh pr create --title wrong -F body.md",
-                                head + " -F body.md", head + " --body-file - < body.md",
-                                "cat body.md | " + head + " --body-file -", "cd sub && " + head + " -F body.md",
-                                "gh issue comment 1 --body-file body.md"):
-                    with self.subTest(provider=provider, cwd=cwd, command=command):
-                        self.assertFalse(self.ask(provider, command, cwd))
+    def assertMatrix(self, root):
+        module = load_module("matrix_hook", root / ".mt-agent-devkit/scripts/check_gh_posts.py")
+        absent, nolink = (root / "absent.md").as_posix(), (root / "nolink.md").as_posix()
+        allowed = (STANDARD_FORM, "gh pr create --head chore/x --fill", "cd sub/.. && " + STANDARD_FORM,
+                   "(cd sub); " + STANDARD_FORM)
+        denied = ("gh pr create --fill", 'gh pr create -t bad --body "Refs #12"',
+                  'gh pr create --title "[ST-000099][X] Add" --body "Refs #12"', GOOD + '--body "no link"',
+                  GOOD + '--body "$VAR"', GOOD + '--body "$(cat body.md)"', GOOD + "--body-file $VAR/body.md",
+                  GOOD + "-F " + absent, GOOD + "-F " + nolink, "(cd sub); gh pr create --fill",
+                  "pushd sub; popd; gh pr create --fill", "cd " + root.as_posix() + " && gh pr create --fill")
+        # Judged only where the payload says where the command runs.
+        needs_directory = (GOOD + "-F nolink.md", GOOD + "-F absent.md", GOOD + "--body-file - < nolink.md",
+                           "cd sub && gh pr create --fill")
+        previous = os.getcwd()
+        self.addCleanup(os.chdir, previous)
+        for start in (root / ".agents", root):
+            os.chdir(start)
+            for provider in ("claude", "antigravity"):
+                for shape in ("absolute", ".", None):
+                    expected = [(command, False) for command in allowed] + [(command, True) for command in denied]
+                    expected += [(command, shape == "absolute") for command in needs_directory]
+                    for command, answer in expected:
+                        with self.subTest(start=start.name, provider=provider, shape=shape, command=command):
+                            self.assertEqual(self.denied(module, root, provider, shape, command), answer)
+        os.chdir(previous)
 
-    def test_what_the_command_itself_shows_is_still_denied(self):
-        head = "gh pr create --head ST-000012/x "
-        absent = (self.cwd / "absent.md").as_posix()
-        for provider in ("claude", "antigravity"):
-            for command in (head + "--fill", head + TITLE + ' --body "no link"', head + TITLE + ' --body "$VAR"',
-                            head + TITLE + ' --body "$(cat body.md)"', head + TITLE + " --body-file $VAR/body.md",
-                            head + TITLE + " -F " + absent,
-                            "cd " + self.cwd.as_posix() + " && gh pr create " + TITLE + " -F absent.md"):
-                with self.subTest(provider=provider, command=command):
-                    self.assertTrue(self.ask(provider, command))
+
+class DevkitLayoutMatrix(PayloadShapes, unittest.TestCase):
+    def test_every_provider_and_payload_shape(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name).resolve()
+        self.story_project(root)
+        (root / ".mt-agent-devkit/scripts").mkdir(parents=True)
+        shutil.copy(SCRIPT, root / ".mt-agent-devkit/scripts")
+        self.assertMatrix(root)
 
 
 class StandardPrForm(PrCreateCase):
@@ -486,7 +509,7 @@ def load_module(name, path):
     return module
 
 
-class InstallAndSync(unittest.TestCase):
+class InstallAndSync(PayloadShapes, unittest.TestCase):
     """The hook reaches targets and a project's own hook settings survive."""
 
     # The last engine shipped before the hook: what an existing target syncs with.
@@ -668,7 +691,15 @@ class InstallAndSync(unittest.TestCase):
                         result = subprocess.run(["sh", "-c", commands[provider]], input=wrong, cwd=start,
                                                 env={**os.environ, "CLAUDE_PROJECT_DIR": str(self.target)},
                                                 capture_output=True, text=True, check=True)
-                        self.assertEqual('"deny"' in result.stdout, cwd is not None, result.stdout)
+                        self.assertIn('"deny"', result.stdout)
+
+    def test_installed_hook_judges_every_payload_shape(self):
+        for profile in ("repo", "project_root"):
+            with self.subTest(profile=profile):
+                self.setUp()
+                self.install(profile=profile)
+                self.story_project(self.target.resolve())
+                self.assertMatrix(self.target.resolve())
 
     def test_strict_mode_ignores_the_antigravity_hook_file(self):
         sys.path.insert(0, str(ROOT / ".mt-agent-devkit/distribution/phase2"))

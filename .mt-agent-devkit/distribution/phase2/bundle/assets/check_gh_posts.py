@@ -6,8 +6,10 @@ Usage (hook JSON on stdin): check_gh_posts.py [claude|antigravity]
 Always exits 0: only a JSON `deny` blocks a command. Anything that cannot be
 parsed or read passes, because the hook enforces rules and is not a sandbox. The
 one exception: on a story branch, a `gh pr create` body that cannot be read is denied.
-A working directory the hook does not know is never guessed: nothing that depends
-on it is denied.
+Without an absolute working directory in the payload, a relative body file cannot
+be placed, so its content is not judged. The branch is then read from the project
+holding this script; a command run from another worktree or repository is judged by
+that branch unless it moves there with an absolute `cd` or names `--head`.
 Standard library only.
 """
 import json
@@ -28,6 +30,8 @@ CREATE_SHORT_FLAGS = {"t": "--title", "b": "--body", "F": "--body-file", "H": "-
 CREATE_VALUE_FLAGS = set(CREATE_SHORT_FLAGS.values()) | {"--recover", "--hostname"}
 STORY_ID = re.compile(r"ST-\d{6}(?!\d)")
 ISSUE_LINK = re.compile(r"(?<![\w-])(?:closes|refs):?[ \t]+(?:[\w.-]+/[\w.-]+)?#\d+\b", re.I)
+# `<root>/.mt-agent-devkit/scripts/<this file>`, in this repository and in every install.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BODY_FIX = ("Write the body to a file with the file tool and pass `--body-file` with that literal path: "
             "no variables, `$(...)` or `cd`.")
 
@@ -355,27 +359,36 @@ class Workspace:
     """The files a body can come from, as they will be when the command runs."""
 
     def __init__(self, cwd):
-        self.directories = {(): cwd}  # per subshell scope; None when unknown
+        self.start = cwd          # the payload's working directory, None when not given
+        self.moves = {}           # where a `cd` led, per subshell scope; None when unknown
+        self.pushed = []          # (scope, directory before) for `popd`
         self.scope = ()
         self.unplaced = False     # a relative path could not be read for lack of a directory
         self.written = {}         # path -> text written earlier in this command, or None if unknown
         self.switched_to = None   # branch switched to earlier in this command, "" if unknown
 
+    def _moved_scope(self):
+        """The innermost scope whose `cd` applies here, or None when none happened."""
+        scopes = (self.scope[:length] for length in range(len(self.scope), -1, -1))
+        return next((scope for scope in scopes if scope in self.moves), None)
+
     @property
     def cwd(self):
-        scope = self.scope
-        while scope not in self.directories:
-            scope = scope[:-1]
-        return self.directories[scope]
+        scope = self._moved_scope()
+        return self.start if scope is None else self.moves[scope]
 
     def branch(self):
         """The branch the command will run on, or None when it cannot be known."""
         if self.switched_to is not None:
             return self.switched_to or None
-        if self.cwd is None:
+        directory = self.cwd
+        # An unmoved command with no directory in the payload still belongs to this project.
+        if directory is None and self._moved_scope() is None:
+            directory = PROJECT_ROOT
+        if directory is None:
             return None
         try:
-            result = subprocess.run(["git", "-C", self.cwd, "symbolic-ref", "--quiet", "--short", "HEAD"],
+            result = subprocess.run(["git", "-C", directory, "symbolic-ref", "--quiet", "--short", "HEAD"],
                                     capture_output=True, text=True, timeout=5)
         except (OSError, subprocess.SubprocessError):
             return None
@@ -408,10 +421,13 @@ class Workspace:
         words = program_words(command)
         name = program_name(words)
         arguments = [word for word in words[1:] if not word.text.startswith("-")]
-        if name in ("cd", "set-location", "pushd", "popd", "pop-location", "push-location"):
-            # `popd`, `cd -` and a bare `cd` lead somewhere the command text does not say.
-            known = arguments and name not in ("popd", "pop-location")
-            self.directories[self.scope] = self.resolve(arguments[0]) if known else None
+        if name in ("pushd", "push-location"):
+            self.pushed.append((self.scope, self.moves.get(self.scope, False)))
+        if name in ("cd", "set-location", "pushd", "push-location"):
+            # `cd -` and a bare `cd` lead somewhere the command text does not say.
+            self.moves[self.scope] = self.resolve(arguments[0]) if arguments else None
+        if name in ("popd", "pop-location"):
+            self._return_to_pushed()
         if name == "git":
             self._track_branch([word.text for word in words[1:]])
         for operator, target in command.redirects:
@@ -422,6 +438,16 @@ class Workspace:
         if name in ("tee", "set-content", "out-file", "add-content", "cp", "mv", "copy-item", "move-item"):
             for argument in arguments:
                 self._mark_written(argument, None)
+
+    def _return_to_pushed(self):
+        if not self.pushed or self.pushed[-1][0] != self.scope:
+            self.moves[self.scope] = None
+            return
+        previous = self.pushed.pop()[1]
+        if previous is False:
+            del self.moves[self.scope]
+        else:
+            self.moves[self.scope] = previous
 
     def _track_branch(self, arguments):
         while arguments and arguments[0].startswith("-"):

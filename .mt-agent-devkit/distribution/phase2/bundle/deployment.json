@@ -2509,8 +2509,8 @@
     {
       "id": "check_gh_posts.py",
       "path": "assets/check_gh_posts.py",
-      "sha256": "81e86a6310545cf00d955c2ac900dc308129c06cf9dfa1d844d5e390626ed510",
-      "bytes": 34338,
+      "sha256": "779d80dccf7b1a276ef7aa2c8f43ac017ecc7158e4c7fe59a9d53b0c02aa7559",
+      "bytes": 35813,
       "kind": "script"
     },
     {
