@@ -244,6 +244,159 @@ class ProviderEnvelopes(HookCase):
                     self.assertEqual(result.stdout, b"")
 
 
+STORY_BRANCH = "ST-000012/short-name"
+TITLE = '--title "[ST-000012][DEVKIT] Add a thing"'
+
+
+class PrCreateCase(HookCase):
+    def setUp(self):
+        super().setUp()
+        self.git("init", "--quiet")
+        self.on_branch(STORY_BRANCH)
+        (self.cwd / "body.md").write_text("Closes #12\n", encoding="utf-8")
+
+    def git(self, *arguments):
+        subprocess.run(["git", "-C", str(self.cwd), *arguments], check=True, capture_output=True)
+
+    def on_branch(self, name):
+        self.git("symbolic-ref", "HEAD", "refs/heads/" + name)
+
+    def create(self, arguments, tool="Bash"):
+        return self.claude("gh pr create " + arguments, tool)
+
+
+class PrCreateRules(PrCreateCase):
+    def test_missing_or_wrong_title_is_blocked(self):
+        for title in ("", "--fill", "--web", '--title "Add a thing"', '--title "[ST-000099][DEVKIT] Add"',
+                      '--title "[ST-000012] Add"', '--title "[ST-000012][DEVKIT]"', '-t "ST-000012: add"', "--title="):
+            with self.subTest(title=title):
+                self.assertDenied(self.create(title + " --body-file body.md"), "PR title")
+
+    def test_valid_spellings_pass(self):
+        for arguments in (TITLE + " --body-file body.md", TITLE + " -F body.md --draft", "-dF body.md " + TITLE,
+                          "--title='[ST-000012][My Feature] Add' --body-file=body.md",
+                          '-t"[ST-000012][DEVKIT] Add" -Fbody.md -B main -a me -l bug -r dev',
+                          TITLE + ' --body "Refs #12"', TITLE + " -b 'text\ncloses: o/r#12'",
+                          TITLE + ' --body "Closes #12 on $BRANCH"', TITLE + ' --body "Fix `x`.\n\nRefs #12"',
+                          '--title "$TITLE" --body-file body.md', '--title "[ST-000012][DEVKIT] $NAME" -F body.md',
+                          TITLE + " --body-file body.md 2>&1 | tail -1", TITLE + " $FLAGS"):
+            with self.subTest(arguments=arguments):
+                self.assertIsNone(self.create(arguments))
+
+    def test_other_ways_to_reach_a_readable_body_pass(self):
+        for command in ("gh pr new " + TITLE + " -F body.md", "gh -R o/r pr create " + TITLE + " -F body.md",
+                        "cat body.md | gh pr create " + TITLE + " --body-file -",
+                        "gh pr create " + TITLE + " --body-file - <<'EOF'\nRefs #12\nEOF",
+                        "cat > new.md <<'EOF'\nRefs #12\nEOF\ngh pr create " + TITLE + " --body-file new.md",
+                        'gh pr create ' + TITLE + ' --body "$(cat <<\'EOF\'\nRefs #12\nEOF\n)"',
+                        "git push -u origin HEAD && gh pr create " + TITLE + " -F body.md"):
+            with self.subTest(command=command):
+                self.assertIsNone(self.claude(command))
+
+    def test_commands_that_create_no_pr_pass(self):
+        for command in ("gh pr create --help", "gh pr create -h", "gh pr create --dry-run --fill",
+                        "echo gh pr create", "git commit -m 'gh pr create'", "# gh pr create",
+                        "gh pr view create", "gh issue create --title t --body x", "grep 'gh pr create' file"):
+            with self.subTest(command=command):
+                self.assertIsNone(self.claude(command))
+
+    def test_non_story_prs_are_skipped(self):
+        for branch in ("main", "analysis/feature", "ST-12/x", "ST-0000123/x"):
+            with self.subTest(branch=branch):
+                self.on_branch(branch)
+                self.assertIsNone(self.create('--body "$VAR"'))
+
+    def test_the_branch_follows_head_cd_and_checkout(self):
+        self.on_branch("main")
+        for command in ("gh pr create --head ST-000012/x", "gh pr create -H owner:ST-000012/x",
+                        "git checkout -b ST-000012/x && gh pr create", "git switch ST-000012/x; gh pr create"):
+            with self.subTest(command=command):
+                self.assertDenied(self.claude(command), "no PR title")
+        self.on_branch(STORY_BRANCH)
+        for command in ("gh pr create --head chore/x", "git checkout main && gh pr create",
+                        "git switch -c chore/x && gh pr create", 'cd "$DIR" && gh pr create'):
+            with self.subTest(command=command):
+                self.assertIsNone(self.claude(command))
+        self.assertDenied(self.claude("git checkout -- file && gh pr create"), "no PR title")
+
+    def test_outside_a_repository_nothing_is_checked(self):
+        shutil.rmtree(self.cwd / ".git")
+        self.assertIsNone(self.create("--fill"))
+
+    def test_unreadable_bodies_say_cannot_read_body(self):
+        for body, tool in (("--body-file $VAR/body.md", "Bash"), ('--body "$VAR"', "Bash"),
+                           ('--body "$(cat body.md)"', "Bash"), ("--body-file absent.md", "Bash"),
+                           ("--body $(cat body.md)", "Bash"), ("-b $body", "PowerShell"),
+                           ("--body (Get-Content body.md -Raw)", "PowerShell"), ("--body-file -", "Bash")):
+            with self.subTest(body=body):
+                answer = self.create(TITLE + " " + body, tool)
+                self.assertDenied(answer, "cannot read body")
+                reason = answer["hookSpecificOutput"]["permissionDecisionReason"]
+                self.assertIn("--body-file", reason)
+                self.assertNotIn("needs a `Closes", reason)
+
+    def test_a_readable_body_without_closes_or_refs_is_denied(self):
+        for text in ("Adds a thing.", "Fixes the thing in 12", "`Closes #12`", FENCE + "\nCloses #12\n" + FENCE,
+                     "<!-- Refs #12 -->", "Encloses #12"):
+            with self.subTest(text=text):
+                (self.cwd / "body.md").write_text(text, encoding="utf-8")
+                answer = self.create(TITLE + " --body-file body.md")
+                self.assertDenied(answer, "needs a `Closes #N` or `Refs #N`")
+                self.assertNotIn("cannot read", answer["hookSpecificOutput"]["permissionDecisionReason"])
+        for arguments in ("", " --fill"):
+            self.assertDenied(self.create(TITLE + arguments), "needs a `Closes")
+
+    def test_comment_rules_do_not_apply_to_pr_bodies(self):
+        (self.cwd / "body.md").write_text("Closes #12, follows #7 and `x` by @dev\n", encoding="utf-8")
+        self.assertIsNone(self.create(TITLE + " --body-file body.md"))
+
+
+class StandardPrForm(PrCreateCase):
+    """The one documented form, filled in as it says, passes on every supported provider."""
+
+    FORMS = (".mt-agent-devkit/skills/git-workflow/SKILL.md",
+             ".mt-agent-devkit/distribution/phase2/templates/skills/git-workflow/SKILL_template.md")
+
+    def documented_commands(self):
+        for path in self.FORMS:
+            lines = [line.strip() for line in (ROOT / path).read_text(encoding="utf-8").splitlines()
+                     if line.strip().startswith("gh pr create ")]
+            self.assertEqual(len(lines), 1, path)
+            yield lines[0]
+
+    def test_documented_form_passes_for_claude_and_antigravity(self):
+        for provider, root in (("claude", ".claude/agents/working"), ("antigravity", ".agents/working")):
+            for form in self.documented_commands():
+                command = form
+                for placeholder, value in (("{RUNTIME_ROOT}", root), ("<story>", "ST-000012"), ("XXXXXX", "000012"),
+                                           ("<feature-branch>", "feature/x"), ("[FEATURE]", "[Thing]")):
+                    command = command.replace(placeholder, value)
+                body = self.cwd / root / "tmp/ST-000012/pr_body.md"
+                body.parent.mkdir(parents=True, exist_ok=True)
+                body.write_text("Closes #12\n\nChecks: PASS\n", encoding="utf-8")
+                with self.subTest(provider=provider, command=command):
+                    if provider == "claude":
+                        self.assertIsNone(self.claude(command))
+                    else:
+                        payload = {"toolCall": {"args": {"CommandLine": command, "Cwd": str(self.cwd)}}}
+                        self.assertEqual(hook.respond(provider, json.dumps(payload)), {"decision": "allow"})
+                    body.write_text("no link\n", encoding="utf-8")
+                    self.assertDenied(self.claude(command), "needs a `Closes")
+
+    def test_antigravity_gets_the_pr_create_denial(self):
+        payload = {"toolCall": {"args": {"CommandLine": "gh pr create --fill", "Cwd": str(self.cwd)}}}
+        answer = hook.respond("antigravity", json.dumps(payload))
+        self.assertEqual(answer["decision"], "deny")
+        self.assertIn("no PR title", answer["reason"])
+
+    def test_analyze_requirements_draft_pr_uses_refs(self):
+        text = (ROOT / ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/"
+                "Analyze_Requirements_Workflow_Shared_template.md").read_text(encoding="utf-8")
+        line = next(line for line in text.splitlines() if "one docs PR" in line and "`--draft`" in line)
+        self.assertIn("`git-workflow`", line)
+        self.assertIn("`Refs #<issue-number>`", line)
+
+
 class InstalledConfigs(unittest.TestCase):
     """This repo's own hook configuration."""
 

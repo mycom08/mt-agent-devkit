@@ -94,7 +94,7 @@ The tracking story never gets a `status:*` or `sprint-N` label, so sprint planni
 2. Write `docs/feature/<feature-slug>/.gitignore` containing `tmp/`. An existing `.gitignore` only gains the `tmp/` line when it is missing. Add the local exclude line (Workflow Rules) too.
 3. Write `tmp/State.md` (format below) and save the input text to `tmp/Input.md`.
 4. Commit the `.gitignore`.
-5. **GitHub mode:** push the branch and open the round's one docs PR with `gh pr create --draft --base <default-branch>`. The body names the tracking story; it never says `Closes`. Every document change of this round goes through this PR; a later Correction Round opens its own.
+5. **GitHub mode:** push the branch, load the `git-workflow` skill and open the round's one docs PR with its form, adding `--draft`, with base `<default-branch>` and title `[ST-XXXXXX][FEATURE] Analyze requirements: <feature>`. The body names the tracking story as `Refs #<issue-number>`; it never says `Closes`. Every document change of this round goes through this PR; a later Correction Round opens its own.
 
 ---
 

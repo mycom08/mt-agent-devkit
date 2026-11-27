@@ -1,6 +1,6 @@
 ---
 name: git-workflow
-description: Git workflow for every implementer - branch preflight inspect and create, branch naming, Conventional Commits, [skip ci] by CI path filter, PR title and body, and post-QA merge sync. Load before creating a branch, committing or pushing.
+description: Git workflow for every implementer - branch preflight inspect and create, branch naming, Conventional Commits, [skip ci] by CI path filter, standard PR-create form and post-QA merge sync. Load before branching, committing, pushing or opening a PR.
 ---
 
 # Git Workflow
@@ -29,9 +29,18 @@ description: Git workflow for every implementer - branch preflight inspect and c
 
 ## 4. Pull Request
 
-1. Title: `[ST-XXXXXX][FEATURE] Story title`.
-2. Description: `Closes #<issue-number>` (or `Refs #<issue-number>` when not closing), the one-line check result note (`pre-pr-gate`) and any live-instruction override (`raise-question`).
+The only way any role, or the orchestrator, creates a PR:
+
+1. With the file tool, write the body to `{RUNTIME_ROOT}/tmp/<story>/pr_body.md`: `Closes #<issue-number>` (or `Refs #<issue-number>` when not closing), the one-line check result note (`pre-pr-gate`) and any live-instruction override (`raise-question`).
+2. Fill every placeholder and run it. No variables, `$(...)` or `cd`.
+
+   ```bash
+   gh pr create --base <feature-branch> --title "[ST-XXXXXX][FEATURE] Story title" --body-file {RUNTIME_ROOT}/tmp/<story>/pr_body.md
+   ```
+
 3. Wait for TL approval before merging; no merge without TL code review.
+
+**Hook:** on a story-ID branch, `gh pr create` is denied for a wrong or missing story title, a body without `Closes #N`/`Refs #N`, or an unreadable body ("cannot read body"). PR bodies are exempt from the bare-number ban.
 
 **Strict mode:** no PR; follow `Strict_Mode_Story_Guide.md` for review and merge.
 

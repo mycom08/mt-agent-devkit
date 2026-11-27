@@ -1,21 +1,33 @@
 #!/usr/bin/env python3
-"""Pre-tool hook enforcing the `comment` and `pr-review` skill rules on GitHub posts.
+"""Pre-tool hook enforcing the `comment`, `pr-review` and `git-workflow` skill rules on GitHub posts.
 
 Usage (hook JSON on stdin): check_gh_posts.py [claude|antigravity]
 
 Always exits 0: only a JSON `deny` blocks a command. Anything that cannot be
-parsed or read passes, because the hook enforces rules and is not a sandbox.
+parsed or read passes, because the hook enforces rules and is not a sandbox. The
+one exception: on a story branch, a `gh pr create` body that cannot be read is denied.
 Standard library only.
 """
 import json
 import os
 import re
+import subprocess
 import sys
 
 WORD_CAP = 200
 POSTING_COMMANDS = {("issue", "comment"), ("pr", "comment"), ("pr", "review")}
 SHELL_PREFIX_WORDS = {"if", "then", "elif", "else", "do", "while", "until", "!", "{", "time", "command", "env", "nohup"}
 VALUE_FLAGS = {"-R", "--repo", "--hostname"}
+PR_CREATE_COMMANDS = {("pr", "create"), ("pr", "new")}
+# The `gh pr create` flags that take a value.
+CREATE_SHORT_FLAGS = {"t": "--title", "b": "--body", "F": "--body-file", "H": "--head", "B": "--base",
+                      "a": "--assignee", "l": "--label", "m": "--milestone", "p": "--project",
+                      "r": "--reviewer", "T": "--template", "R": "--repo"}
+CREATE_VALUE_FLAGS = set(CREATE_SHORT_FLAGS.values()) | {"--recover", "--hostname"}
+STORY_ID = re.compile(r"ST-\d{6}(?!\d)")
+ISSUE_LINK = re.compile(r"(?<![\w-])(?:closes|refs):?[ \t]+(?:[\w.-]+/[\w.-]+)?#\d+\b", re.I)
+BODY_FIX = ("Write the body to a file with the file tool and pass `--body-file` with that literal path: "
+            "no variables, `$(...)` or `cd`.")
 
 
 class Unparseable(ValueError):
@@ -298,10 +310,11 @@ class ShellReader:
 # --- Finding the posts -------------------------------------------------------
 
 class Post:
-    def __init__(self, kind, approve, bodies):
-        self.kind = kind          # ("issue"|"pr", "comment"|"review")
+    def __init__(self, kind, approve, bodies, problems=()):
+        self.kind = kind          # ("issue"|"pr", "comment"|"review"|"create")
         self.approve = approve
-        self.bodies = bodies
+        self.bodies = bodies      # texts the comment rules apply to
+        self.problems = list(problems)
 
 
 def program_words(command):
@@ -324,6 +337,20 @@ class Workspace:
     def __init__(self, cwd):
         self.cwd = cwd
         self.written = {}         # path -> text written earlier in this command, or None if unknown
+        self.switched_to = None   # branch switched to earlier in this command, "" if unknown
+
+    def branch(self):
+        """The branch the command will run on, or None when it cannot be known."""
+        if self.switched_to is not None:
+            return self.switched_to or None
+        if self.cwd is None:
+            return None
+        try:
+            result = subprocess.run(["git", "-C", self.cwd, "symbolic-ref", "--quiet", "--short", "HEAD"],
+                                    capture_output=True, text=True, timeout=5)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return result.stdout.strip() or None
 
     def resolve(self, word):
         if word.dynamic or not word.text or self.cwd is None and not os.path.isabs(word.text):
@@ -349,6 +376,8 @@ class Workspace:
         arguments = [word for word in words[1:] if not word.text.startswith("-")]
         if name in ("cd", "set-location", "pushd") and arguments:
             self.cwd = self.resolve(arguments[0])
+        if name == "git":
+            self._track_branch([word.text for word in words[1:]])
         for operator, target in command.redirects:
             if operator.startswith("<") or operator == ">&":
                 continue
@@ -357,6 +386,18 @@ class Workspace:
         if name in ("tee", "set-content", "out-file", "add-content", "cp", "mv", "copy-item", "move-item"):
             for argument in arguments:
                 self._mark_written(argument, None)
+
+    def _track_branch(self, arguments):
+        while arguments and arguments[0].startswith("-"):
+            arguments = arguments[2 if arguments[0] in ("-C", "-c") else 1:]
+        if not arguments or arguments[0] not in ("checkout", "switch") or "--" in arguments:
+            return
+        rest = arguments[1:]
+        for flag, value in zip(rest, rest[1:]):
+            if flag in ("-b", "-B", "-c", "-C", "--create", "--orphan"):
+                self.switched_to = value
+                return
+        self.switched_to = next((value for value in rest if STORY_ID.search(value)), "")
 
     def _mark_written(self, target, text):
         path = self.resolve(target)
@@ -387,10 +428,110 @@ def piped_text(command, workspace):
     return None
 
 
+def gh_subcommand(words):
+    found, index = [], 1
+    while index < len(words) and len(found) < 2:
+        text = words[index].text
+        if text in VALUE_FLAGS:
+            index += 1
+        elif not text.startswith("-"):
+            found.append(text)
+        index += 1
+    return tuple(found)
+
+
+def create_flags(words):
+    """The flags of a `gh pr create`, and whether some argument is only known at run time."""
+    flags, unknown, index = {}, False, 1
+    while index < len(words):
+        word = words[index]
+        text = word.text
+        if text.startswith("--"):
+            name, has_value, value = text.partition("=")
+            if name not in CREATE_VALUE_FLAGS:
+                if value != "false":
+                    flags[name] = None
+            elif has_value:
+                flags[name] = Word(value, word.raw.partition("=")[2], word.dynamic)
+            else:
+                index += 1
+                flags[name] = words[index] if index < len(words) else None
+        elif text.startswith("-") and len(text) > 1:
+            for offset, letter in enumerate(text[1:], 1):
+                name = CREATE_SHORT_FLAGS.get(letter)
+                if not name:
+                    flags["-" + letter] = None
+                    continue
+                value = text[offset + 1:]
+                value = value[1:] if value.startswith("=") else value
+                if value:
+                    flags[name] = Word(value, value, word.dynamic)
+                else:
+                    index += 1
+                    flags[name] = words[index] if index < len(words) else None
+                break
+        elif word.dynamic and not text:
+            unknown = True
+        index += 1
+    return flags, unknown
+
+
+def title_problems(flags, unknown, stories):
+    expected = "`[%s][FEATURE] Title`" % stories[0]
+    if "--title" not in flags:
+        return [] if unknown else ["no PR title: pass `--title` as %s." % expected]
+    title = flags["--title"]
+    # A title only known at run time cannot be proved wrong.
+    if title is None or title.dynamic:
+        return []
+    pattern = r"\[(?:%s)\]\[[^\[\]]+\][ \t]+\S" % "|".join(stories)
+    if re.match(pattern, title.text):
+        return []
+    return ["wrong PR title: this branch's story needs %s." % expected]
+
+
+def body_problems(flags, unknown, command, workspace):
+    missing = "PR body needs a `Closes #N` or `Refs #N` line outside code."
+    name = next((flag for flag in ("--body-file", "--body") if flag in flags), None)
+    if name is None:
+        return [] if unknown else [missing + " " + BODY_FIX]
+    value = flags[name]
+    if value is None:
+        text, complete = None, False
+    elif name == "--body":
+        text, complete = value.text, not value.dynamic
+    else:
+        text = piped_text(command, workspace) if value.text == "-" else workspace.read(value)
+        complete = text is not None
+    if text is not None:
+        prose, _ = split_fences(text)
+        if ISSUE_LINK.search(without_code_and_links(prose)):
+            return []
+    if complete:
+        return [missing]
+    return ["cannot read body (`%s %s`): the hook reads only literal text and existing files. %s"
+            % (name, value.raw if value else "...", BODY_FIX)]
+
+
+def parse_pr_create(words, command, workspace):
+    flags, unknown = create_flags(words)
+    if {"--help", "-h", "--dry-run"} & set(flags):
+        return None
+    head = flags.get("--head")
+    branch = head.text.split(":", 1)[-1] if head and not head.dynamic else workspace.branch()
+    stories = list(dict.fromkeys(STORY_ID.findall(branch or "")))
+    if not stories:
+        return None
+    problems = title_problems(flags, unknown, stories) + body_problems(flags, unknown, command, workspace)
+    return Post(("pr", "create"), False, [], problems)
+
+
 def parse_gh(command, workspace):
     words = program_words(command)
     if program_name(words) != "gh":
         return None
+    if gh_subcommand(words) in PR_CREATE_COMMANDS:
+        return parse_pr_create(words, command, workspace)
     positional, flags, index = [], [], 1
     while index < len(words):
         text = words[index].text
@@ -578,6 +719,7 @@ def warnings_for(post, body):
 def evaluate(posts):
     denials, warnings = [], []
     for post in posts:
+        denials += post.problems
         if post.approve:
             denials.append("`gh pr review --approve` is not allowed: GitHub blocks self-approval. Post the verdict with `gh pr comment`.")
         for body in post.bodies:
@@ -606,7 +748,7 @@ def reply(provider, denials, warnings):
     """The provider's JSON answer, or None when saying nothing means pass."""
     reason = ""
     if denials:
-        reason = "Blocked by check_gh_posts (rules: `comment` skill):\n" + "\n".join("- " + item for item in denials)
+        reason = "Blocked by check_gh_posts (rules: `comment` and `git-workflow` skills):\n" + "\n".join("- " + item for item in denials)
     if warnings:
         reason += ("\n" if reason else "") + "check_gh_posts warning:\n" + "\n".join("- " + item for item in warnings)
     if provider == "antigravity":

@@ -96,7 +96,7 @@ If any applicable check fails, fix it before creating the PR.
 
 ## 6. Git Workflow
 
-Branch name, commits, `[skip ci]`, PR title and description, and merge sync follow the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`). UI/UX additions:
+Branch name, commits, `[skip ci]`, PR title and description, and merge sync follow the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`). Load it again before creating the PR and use its form. UI/UX additions:
 
 - **PR description** also carries the start command and the mock-only handoff note (§4)
 

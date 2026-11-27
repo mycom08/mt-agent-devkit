@@ -43,7 +43,7 @@ Skills live at `.mt-agent-devkit/skills/<name>/SKILL.md`; each skill is the only
 | A question or blocker comes up (tag BA or PO), or a live user instruction conflicts with the thread | `raise-question` |
 | Creating or moving a document or file | `project-docs` |
 | Before creating a branch, committing or pushing (implementer) | `git-workflow` |
-| Before opening a PR (implementer) | `change-metadata`, then `pre-pr-gate` |
+| Before opening a PR (implementer) | `change-metadata`, then `pre-pr-gate`, then `git-workflow` |
 | Tooling or environment blocker | `troubleshooting` |
 | Verification needs a secret you don't have | `credential-gate` |
 | Retrieving or writing a memory fact | `agent-memory` |

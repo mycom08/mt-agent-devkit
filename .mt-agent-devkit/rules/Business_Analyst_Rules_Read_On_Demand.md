@@ -9,7 +9,7 @@ Not loaded at spawn. Fetch a section only when its named trigger fires — see `
 
 ## 1. Pre-PR Gate (when acting as Implementer)
 
-When BA is the story Implementer, run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR. It is the same gate for every implementer: harness, template and workflow changes run the validators and are never exempt as docs-only.
+When BA is the story Implementer, load the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`) before creating the PR, and run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR. It is the same gate for every implementer: harness, template and workflow changes run the validators and are never exempt as docs-only.
 
 ---
 

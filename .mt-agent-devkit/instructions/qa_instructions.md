@@ -39,7 +39,7 @@ Skills live at `.mt-agent-devkit/skills/<name>/SKILL.md`; each skill is the only
 | **At spawn, the task skill named in the assignment** | `qa-validate` and `qa-testing` (story validation) |
 | Every AC verified, before sign-off (regression check) | `qa-regression` |
 | A bug is found after the story is `status:done` (hotfix) | `qa-hotfix` |
-| QA is the story implementer | `pre-pr-gate` before opening a PR |
+| QA is the story implementer | `pre-pr-gate`, then `git-workflow`, before opening a PR |
 | Before posting any comment | `comment` |
 | A blocker comes up (tag Dev or TL), or a live user instruction conflicts with the thread | `raise-question` |
 | Creating or moving a document or file | `project-docs` |

@@ -13,7 +13,7 @@ Implement, open PRs, ask for guidance, self-check every AC. Never tick AC (PO do
 
 ## Load Map
 
-This map is the read contract. No task skill named: report it, never guess. Load each right before its action, also when resumed:
+This map is the read contract. No task skill named: report it, never guess. Load right before its action, also when resumed:
 
 - comment or body edit: `comment`
 - question, blocker, conflict: `raise-question`
@@ -21,7 +21,7 @@ This map is the read contract. No task skill named: report it, never guess. Load
 - document: `project-docs`; code: `clean-code`
 - uncovered convention: `docs/wiki/Development_Standards.md`
 - branch, commit, push: `git-workflow`
-- opening a PR: `pre-pr-gate`
+- PR: `pre-pr-gate`, `git-workflow`
 - PR opened, fix round: `dev-deliver`
 - tooling: `troubleshooting`; secret: `credential-gate`
 - memory: `agent-memory`; record: `working-record`

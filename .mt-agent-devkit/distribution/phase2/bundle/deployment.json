@@ -101,8 +101,8 @@
     {
       "id": "rules/Business_Analyst_Rules.md",
       "path": "assets/rules_Business_Analyst_Rules.md",
-      "sha256": "20df02df02e5cf751d0693372cec0b61db0f203eacc81b2d7e45a207e349a99b",
-      "bytes": 3977,
+      "sha256": "56502820dd54aaac3dd428846143a0fd364257cd8466b3cd9e6b885eb0d62827",
+      "bytes": 4091,
       "kind": "template"
     },
     {
@@ -157,8 +157,8 @@
     {
       "id": "rules/UI_UX_Designer_Rules.md",
       "path": "assets/rules_UI_UX_Designer_Rules.md",
-      "sha256": "d1cf8a39864e2b6d901fb6f0a4fb4d4545f73a9ca62ca3098e9f0be2203d7fcc",
-      "bytes": 8895,
+      "sha256": "9da6d0fa2c33a8394e237b2fe6feb7e4dff2365622515f597a0ae4376d9b9a88",
+      "bytes": 8950,
       "kind": "template"
     },
     {
@@ -171,8 +171,8 @@
     {
       "id": "instructions/developer_instructions.md",
       "path": "assets/instructions_developer_instructions.md",
-      "sha256": "6e1fdb0a28d5daddceab114648700c3aa9906f4ddbf294a2ed53c67ac9fc9fb3",
-      "bytes": 4919,
+      "sha256": "480171319c2e4dd0c0a87619b1e8c437a2c20714a2f4405aa65874026352bacb",
+      "bytes": 4940,
       "kind": "template"
     },
     {
@@ -185,15 +185,15 @@
     {
       "id": "instructions/qa_instructions.md",
       "path": "assets/instructions_qa_instructions.md",
-      "sha256": "a1eba0e3a3e2b354d885458b7a29d7a3adf0717eedc8ca018ed84d1c6e7bc9f8",
-      "bytes": 4589,
+      "sha256": "29ef392bf3a00ab970b513de496325326b7752a94acfb76001619cc54d5fa4bb",
+      "bytes": 4611,
       "kind": "template"
     },
     {
       "id": "instructions/technical_lead_instructions.md",
       "path": "assets/instructions_technical_lead_instructions.md",
-      "sha256": "e17408b2c89ceb2c93868982ddd17cf46098ec79870a4217b35cf731772f6593",
-      "bytes": 4765,
+      "sha256": "2eff7e36aded199612a2381dd125333d00b7b18bf37142ce0cea29237ec9eee9",
+      "bytes": 4786,
       "kind": "template"
     },
     {
@@ -878,29 +878,29 @@
     {
       "id": "skills/git-workflow",
       "path": "assets/skills_git-workflow",
-      "sha256": "114ae1bea2326dd347c674b95bf9de6a4c57b221510bb3d655dd105546c9a9e1",
-      "bytes": 3460,
+      "sha256": "4335bc3bd44981376ae4a0117988f9981ada5672bce4b8ad27d1bee11fb8ae71",
+      "bytes": 3996,
       "kind": "template"
     },
     {
       "id": "claude/skill/git-workflow",
       "path": "assets/claude_skill_git-workflow",
-      "sha256": "6c315ec1eae83622647829e615cfb779fc266364ff4f90e2a62eb6b8fadff901",
-      "bytes": 398,
+      "sha256": "9948b592ccbd0d95160cd4c8826ff3521f876e6e2569272a092df9b264162d18",
+      "bytes": 409,
       "kind": "adapter"
     },
     {
       "id": "antigravity/skill/git-workflow",
       "path": "assets/antigravity_skill_git-workflow",
-      "sha256": "6c315ec1eae83622647829e615cfb779fc266364ff4f90e2a62eb6b8fadff901",
-      "bytes": 398,
+      "sha256": "9948b592ccbd0d95160cd4c8826ff3521f876e6e2569272a092df9b264162d18",
+      "bytes": 409,
       "kind": "adapter"
     },
     {
       "id": "codex/skill/git-workflow",
       "path": "assets/codex_skill_git-workflow",
-      "sha256": "6c315ec1eae83622647829e615cfb779fc266364ff4f90e2a62eb6b8fadff901",
-      "bytes": 398,
+      "sha256": "9948b592ccbd0d95160cd4c8826ff3521f876e6e2569272a092df9b264162d18",
+      "bytes": 409,
       "kind": "adapter"
     },
     {
@@ -1018,8 +1018,8 @@
     {
       "id": "skills/dev-core",
       "path": "assets/skills_dev-core",
-      "sha256": "d54e871a26a6c0f399bd39c1ea06b733efebd0b43cb5bf6dcc3aba1a67b65d4c",
-      "bytes": 1495,
+      "sha256": "36517aff10ecd1f59d74d02dfff52ce879006b7a1e5fd3fcd8a34407afe81ee3",
+      "bytes": 1496,
       "kind": "template"
     },
     {
@@ -1186,7 +1186,7 @@
     {
       "id": "skills/tl-core",
       "path": "assets/skills_tl-core",
-      "sha256": "8eac10ce12048433162598060b2b610f7b339cb0b1777646924b8f56e1b7ea5f",
+      "sha256": "ab1b7c036bb7e771b6f29f67b28b54c24025f51f8303ae82cf8e534a2d5c62dd",
       "bytes": 1600,
       "kind": "template"
     },
@@ -1298,8 +1298,8 @@
     {
       "id": "skills/tl-implement",
       "path": "assets/skills_tl-implement",
-      "sha256": "dda678ae1848f1610b0e763fd5577bb99ee7ba06f4f632c390630e8215ec39fb",
-      "bytes": 1745,
+      "sha256": "441f6f6d0c9d20f49895cf089a7353e8229c9ec029ed1b8a6aecc07ab307afe7",
+      "bytes": 1756,
       "kind": "template"
     },
     {
@@ -1354,8 +1354,8 @@
     {
       "id": "skills/qa-core",
       "path": "assets/skills_qa-core",
-      "sha256": "7b83d96375619a71ca75748654c8749c078288159c24e82ed8e73734a584a05f",
-      "bytes": 1418,
+      "sha256": "1f1b08df9cdd3f61ff801afce5b54928623181d322bed739c43a9fa121a5e001",
+      "bytes": 1434,
       "kind": "template"
     },
     {
@@ -1550,8 +1550,8 @@
     {
       "id": "workflow_shared/Analyze_Requirements_Workflow.md",
       "path": "assets/workflow_shared_Analyze_Requirements_Workflow.md",
-      "sha256": "465b51547070e3ce2dd18d17d5a68eb1163e45908f45cfcf80ed1da27a8cb864",
-      "bytes": 37206,
+      "sha256": "08d060ee4019183913bf55f71cb04b0e8829a4fce493b089928458e80dfe51fe",
+      "bytes": 37338,
       "kind": "template"
     },
     {
@@ -2509,8 +2509,8 @@
     {
       "id": "check_gh_posts.py",
       "path": "assets/check_gh_posts.py",
-      "sha256": "a1dba0c50bbd9b62e8bd28702298c30c383a57236c385746b068f2d1b8017b14",
-      "bytes": 26193,
+      "sha256": "0a0398bd4d950ca7291b61d9fa9b107dca1a7cf179650e73cc2d0ec090661d00",
+      "bytes": 32471,
       "kind": "script"
     },
     {

@@ -19,6 +19,6 @@ No task skill in the assignment: report it, never guess. Load right before the a
 
 - design: `tl-design`; PR review: `tl-review`; question: `tl-answer`; implementer: `tl-implement`; unfinished-story session end: `tl-anchor`
 - comment: `comment`; blocker (tag BA or PO): `raise-question`; document: `project-docs`
-- branch, commit, push: `git-workflow`; PR: `change-metadata`, `pre-pr-gate`
+- branch, commit, push, PR: `git-workflow`; PR also: `change-metadata`, `pre-pr-gate`
 - tooling: `troubleshooting`; secret: `credential-gate`; memory: `agent-memory`
 - Working Record (decisions, PR links, story IDs): `working-record`; retro: `retro-contribution`; handoff: `handoff`

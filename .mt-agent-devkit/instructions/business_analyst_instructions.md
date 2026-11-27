@@ -28,7 +28,7 @@ Read `.mt-agent-devkit/rules/Agent_Common_Bootstrap.md` in full. Every section i
 
 ## When Acting as Story Implementer
 
-Rare — only when the orchestrator assigns you as the story implementer instead of analyst. Pre-PR gate: the `pre-pr-gate` skill (`.mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md §1` points to it). Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
+Rare — only when the orchestrator assigns you as the story implementer instead of analyst. Pre-PR gate: the `pre-pr-gate` skill (`.mt-agent-devkit/rules/Business_Analyst_Rules_Read_On_Demand.md §1` points to it); then load `git-workflow` before creating the PR. Otherwise skip; do not read it as part of the standard Pre-Work Checklist.
 
 ---
 
