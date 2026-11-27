@@ -1558,7 +1558,7 @@ class SprintStatusSkillTests(unittest.TestCase):
             text = self.read(skill.format("sprint-status"))
             self.assertEqual("sprint-status", wrappers.skill_frontmatter(text)["name"])
             self.assertLessEqual(len(text.encode("utf-8")), 4000)
-            self.assertEqual(["1", "2", "3", "4", "5"], re.findall(r"^## (\d)\. ", text, re.M))
+            self.assertEqual(["1", "2", "3", "4", "5", "6"], re.findall(r"^## (\d)\. ", text, re.M))
         self.assertLessEqual(len(self.read(self.PHASE2 + "skills/po-plan-sprint/SKILL_template.md").encode("utf-8")), 3200)
         for provider in validator.PROVIDERS:
             entry = inventory[f".{provider}/skills/sprint-status/SKILL.md"]
@@ -1589,6 +1589,18 @@ class SprintStatusSkillTests(unittest.TestCase):
             for name, text in texts.items():
                 for rule in self.RULES:
                     self.assertNotIn(rule, text, f"{folder}{name}: {rule}")
+
+    def test_plan_sprint_checks_sprint_labels_first_and_never_fixes_silently(self):
+        for skill, folder in self.layers():
+            rules = self.read(skill.format("sprint-status")).split("## 6. ")[1]
+            self.assertIn("analysis-open-topic", rules)
+            self.assertIn("change", rules.splitlines()[-1])
+            self.assertIn("(`sprint-status` section 6)", self.read(skill.format("po-plan-sprint")))
+            text = self.workflow(folder, "Plan_Sprint_Workflow")
+            self.assertLess(text.index("`sprint-status` section 6"), text.index("3. PO checks the active sprint"))
+            for phrase in ("asks whether to continue planning", "Never fix a violation silently",
+                           "unless the user confirms"):
+                self.assertIn(phrase, text)
 
     def test_analyze_requirements_points_to_the_in_flight_check(self):
         text = self.read(self.ANALYZE)

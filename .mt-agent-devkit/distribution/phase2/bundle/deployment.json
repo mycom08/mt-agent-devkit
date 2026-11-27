@@ -402,8 +402,8 @@
     {
       "id": "skills/po-plan-sprint",
       "path": "assets/skills_po-plan-sprint",
-      "sha256": "e7f6343a86952e35468ca6073000641fabfb87f20d5dba4424d2bb08d0bc54fa",
-      "bytes": 3010,
+      "sha256": "b17bb0e4e50b8db8747e549869d570d91d02a5271a664a82455755aed8d70f9c",
+      "bytes": 3169,
       "kind": "template"
     },
     {
@@ -1522,29 +1522,29 @@
     {
       "id": "skills/sprint-status",
       "path": "assets/skills_sprint-status",
-      "sha256": "af3280324c508d4d88cae38df43bd252d838860b1ad7cca2f677cc0a0a0cd14a",
-      "bytes": 3265,
+      "sha256": "85ee804be4790268a8dfb200448a46d1eaeef7c46afaa5bf5760cb7ac70e12a1",
+      "bytes": 3880,
       "kind": "template"
     },
     {
       "id": "claude/skill/sprint-status",
       "path": "assets/claude_skill_sprint-status",
-      "sha256": "2753182863bc097b250b48435e7d4b89afd5e78f0e70a880211243db2464e8f6",
-      "bytes": 396,
+      "sha256": "b4b82e6b951ccfb746ca3f5d614b7c378424bfe70080028dcb050a64befa29ba",
+      "bytes": 419,
       "kind": "adapter"
     },
     {
       "id": "antigravity/skill/sprint-status",
       "path": "assets/antigravity_skill_sprint-status",
-      "sha256": "2753182863bc097b250b48435e7d4b89afd5e78f0e70a880211243db2464e8f6",
-      "bytes": 396,
+      "sha256": "b4b82e6b951ccfb746ca3f5d614b7c378424bfe70080028dcb050a64befa29ba",
+      "bytes": 419,
       "kind": "adapter"
     },
     {
       "id": "codex/skill/sprint-status",
       "path": "assets/codex_skill_sprint-status",
-      "sha256": "2753182863bc097b250b48435e7d4b89afd5e78f0e70a880211243db2464e8f6",
-      "bytes": 396,
+      "sha256": "b4b82e6b951ccfb746ca3f5d614b7c378424bfe70080028dcb050a64befa29ba",
+      "bytes": 419,
       "kind": "adapter"
     },
     {
@@ -1592,8 +1592,8 @@
     {
       "id": "workflow_shared/Plan_Sprint_Workflow.md",
       "path": "assets/workflow_shared_Plan_Sprint_Workflow.md",
-      "sha256": "eadad558d90b8f5fdcddeeea1bd78360e5b9689087ff699a35a7686e655f4234",
-      "bytes": 14737,
+      "sha256": "1ea54dba88c6f7265773f1c912c978cada70d3d4d13fefcbdcfe7f273fd344a8",
+      "bytes": 15351,
       "kind": "template"
     },
     {

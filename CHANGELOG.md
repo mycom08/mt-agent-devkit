@@ -30,6 +30,7 @@ own tag (e.g. `[Retro #52]`, `[Enhancement #55]`) in place of a story ID.
 
 - [ST-000368] Add `status:open` for planned, not yet refined stories; after upgrading, run the one-off migration in the Workflow Guide, which relabels only after you confirm.
 - [ST-000335] Sprint-state checks moved into a shared `sprint-status` skill used by Plan Sprint, Refine Sprint, Analyze Requirements, `po-plan-sprint` and `dev-refine`; this repo's Refine Sprint now picks the sprint like the shipped one.
+- [ST-000379] Plan Sprint checks sprint-label rules before planning, reports violations and asks before continuing.
 
 ### Bug Fixes
 

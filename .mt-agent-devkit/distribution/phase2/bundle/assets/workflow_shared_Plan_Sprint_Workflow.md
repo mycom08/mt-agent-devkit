@@ -35,6 +35,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 
 1. **Spawn** Product Owner agent (**policy: standard**); save its `session_handle` as `po_session`; pass `feature_name` and name the `po-plan-sprint` skill in the assignment (**forced spawn:** Plan Sprint always spawns a PO in both `PO Execution` modes and never runs inline; see the PO touchpoint table in the orchestrator instructions)
 2. PO reads its standard instruction files (`product_owner_instructions.md` + memory) and loads the `po-core` and `po-plan-sprint` skills (`.mt-agent-devkit/skills/po-plan-sprint/SKILL.md`), plus the skills `po-plan-sprint` requires
+2a. **Sprint-label check (before any other planning step):** PO runs `sprint-status` section 6 (open-topic stories are skipped). No violation → continue. One or more → PO returns every violation and stops; the orchestrator reports them to the user and asks whether to continue planning. Continue → resume PO at step 3; otherwise **stop**. Never fix a violation silently: no label (strict mode: story `**Status:**` or `**Sprint:**` field) changes unless the user confirms that change.
 3. PO checks the active sprint with the `sprint-status` skill (`.mt-agent-devkit/skills/sprint-status/SKILL.md`): in-flight stories (section 1) and the current sprint number N (section 2)
 4. Confirm the current sprint is done (`sprint-status` section 3)
 5. **If NOT done** → PO reports which stories are still open; orchestrator notifies user and **stops**
@@ -46,7 +47,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
    If any roadmap-defined story has no matching tracked issue/story, report it to the user as drift **before** proceeding to Stage 2 — this should be rare (the `po-roadmap-drain` authoring-time drain is the primary mechanism; this step only catches a roadmap that got out of sync some other way, e.g. a manual edit). Do not block Stage 2 on this — surface the gap, and if the user confirms, PO drains the missing stories on the spot using the same steps as the `po-roadmap-drain` skill before continuing.
 8. **If done** → proceed to Stage 2
 
-**Completion report:** PO returns max 5 bullets — current sprint status, any open stories, guard check result.
+**Completion report:** PO returns max 5 bullets (sprint-label violations are listed in full, outside this cap) — current sprint status, any open stories, guard check result.
 
 ---
 
@@ -133,7 +134,7 @@ Before spawning any agent, the orchestrator resolves the sprint context.
 - **Dependency order** — respect a roadmap's dependency graph; a GitHub-mode feature without a `plan/` roadmap orders by `phase-N`, `**Depends on:**`, then priority; otherwise priority label (`Must-Have` → `Should-Have` → `Nice-to-Have`)
 - **Loop limit** — max 3 question-answer cycles before escalating to user
 - **Completion reports** — each agent returns max 5 bullets; details go in Working Records. Agents may append an optional `**Observations:**` section for workflow friction (unclear instructions, rule gaps, uncovered edge cases); orchestrator appends each item to `plan_observations.md`, prefixed with the agent role
-- **Stop conditions** — current sprint not done; next sprint already planned; GitHub mode: a feature with no backlog stories and no `plan/` roadmap; questions unresolved after 3 cycles; scope decision requires user judgment
+- **Stop conditions** — the user declines to continue after sprint-label violations; current sprint not done; next sprint already planned; GitHub mode: a feature with no backlog stories and no `plan/` roadmap; questions unresolved after 3 cycles; scope decision requires user judgment
 - **Roadmap reconciliation backstop** — Stage 1 step 7 (features with a `plan/` roadmap only) checks every story the roadmap defines against tracked issues/stories via the `**Roadmap Source:**` marker, before Stage 2 selects candidates. This is a lightweight drift-catcher, not the primary drain mechanism — that happens at roadmap authoring time, see the `po-roadmap-drain` skill. On drift, PO drains the missing stories on the spot rather than blocking the plan.
 - **Observations** — whenever the orchestrator makes a judgment call not covered by this workflow, append a one-line bullet to `{RUNTIME_ROOT}/tmp/plan_observations.md` (create the file if it does not exist). These are reviewed at the end of Stage 4.
 <!-- SHARED-END -->

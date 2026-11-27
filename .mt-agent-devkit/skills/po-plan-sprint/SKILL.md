@@ -20,7 +20,8 @@ Read `.mt-agent-devkit/workflows/Plan_Sprint_Workflow.md` for the pipeline rules
 
 ## Steps
 
-1. **Verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report the story IDs to the orchestrator and stop.
+1. **Check sprint labels first** (`sprint-status` section 6). Violations: report every one to the orchestrator and wait until the user chooses to continue; change no label without the user's confirmation.
+   **Then verify the current sprint is done and the next one is not planned** (`sprint-status` sections 1 to 4). Any failure: report the story IDs to the orchestrator and stop.
 2. **Select stories:** `gh issue list --repo mycom08/mt-agent-devkit --label "status:backlog" --state open --limit 1000`; a feature adds `--label "feature:<feature_name>"`. No feature match: a `plan/` roadmap continues from that roadmap; otherwise report and stop, planning nothing.
    - Order: a `plan/` roadmap's dependency graph; a feature without one by `phase-N`, then `**Depends on:**` (done or in the same sprint), then priority; else `Must-Have`, `Should-Have`, `Nice-to-Have`.
 3. **Open questions:** for each selected story, check that AC is clear and testable. If questions exist, create `{RUNTIME_ROOT}/tmp/PO_questions.md` and report to the orchestrator.
