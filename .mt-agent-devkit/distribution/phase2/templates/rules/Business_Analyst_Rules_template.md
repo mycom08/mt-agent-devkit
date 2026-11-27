@@ -17,7 +17,7 @@ Do these **in order** before any analysis or documentation work:
 
 ## 2. Pre-PR Gate (when acting as Implementer)
 
-When BA is the story Implementer, run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR. It is the same gate for every implementer, including its PR check note: the build and unit tests always run, so no change is exempt as docs or config only.
+When BA is the story Implementer, run the `pre-pr-gate` skill (`.mt-agent-devkit/skills/pre-pr-gate/SKILL.md`) before opening a PR, then load the `git-workflow` skill (`.mt-agent-devkit/skills/git-workflow/SKILL.md`) and create it with its form. It is the same gate for every implementer, including its PR check note: the build and unit tests always run, so no change is exempt as docs or config only.
 
 ---
 

@@ -5,7 +5,7 @@ description: Technical Lead as story implementer - branch and PR procedure, pre-
 
 # TL Implement
 
-**Requires:** `git-workflow` (before creating the branch), `pre-pr-gate` (before the PR and each fix push), `comment` (before any comment or body edit)
+**Requires:** `git-workflow` (before creating the branch and the PR), `pre-pr-gate` (before the PR and each fix push), `comment` (before any comment or body edit)
 
 Rare: only when `**Assigned:** Technical Lead` and you run Stage 1 (implementation). You cannot approve your own work; a Developer does the peer review.
 

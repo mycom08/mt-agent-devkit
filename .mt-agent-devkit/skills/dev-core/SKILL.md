@@ -21,7 +21,7 @@ No task skill in the assignment: report that to the orchestrator, never guess. L
 - creating or moving a document: `project-docs`
 - writing code: `clean-code`
 - branch, commit, push: `git-workflow`
-- opening a PR: `change-metadata`, then `pre-pr-gate`
+- opening a PR: `change-metadata`, `pre-pr-gate`, `git-workflow`
 - PR opened, each fix round: `dev-deliver`
 - tooling blocker: `troubleshooting`; missing secret: `credential-gate`
 - memory fact: `agent-memory`; Working Record write: `working-record`

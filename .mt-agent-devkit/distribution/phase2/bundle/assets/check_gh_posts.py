@@ -1,21 +1,39 @@
 #!/usr/bin/env python3
-"""Pre-tool hook enforcing the `comment` and `pr-review` skill rules on GitHub posts.
+"""Pre-tool hook enforcing the `comment`, `pr-review` and `git-workflow` skill rules on GitHub posts.
 
 Usage (hook JSON on stdin): check_gh_posts.py [claude|antigravity]
 
 Always exits 0: only a JSON `deny` blocks a command. Anything that cannot be
-parsed or read passes, because the hook enforces rules and is not a sandbox.
+parsed or read passes, because the hook enforces rules and is not a sandbox. The
+one exception: on a story branch, a `gh pr create` body that cannot be read is denied.
+Without an absolute working directory in the payload, a relative body file cannot
+be placed, so its content is not judged. The branch is then read from the project
+holding this script; a command run from another worktree or repository is judged by
+that branch unless it moves there with an absolute `cd` or names `--head`.
 Standard library only.
 """
 import json
 import os
 import re
+import subprocess
 import sys
 
 WORD_CAP = 200
 POSTING_COMMANDS = {("issue", "comment"), ("pr", "comment"), ("pr", "review")}
 SHELL_PREFIX_WORDS = {"if", "then", "elif", "else", "do", "while", "until", "!", "{", "time", "command", "env", "nohup"}
 VALUE_FLAGS = {"-R", "--repo", "--hostname"}
+PR_CREATE_COMMANDS = {("pr", "create"), ("pr", "new")}
+# The `gh pr create` flags that take a value.
+CREATE_SHORT_FLAGS = {"t": "--title", "b": "--body", "F": "--body-file", "H": "--head", "B": "--base",
+                      "a": "--assignee", "l": "--label", "m": "--milestone", "p": "--project",
+                      "r": "--reviewer", "T": "--template", "R": "--repo"}
+CREATE_VALUE_FLAGS = set(CREATE_SHORT_FLAGS.values()) | {"--recover", "--hostname"}
+STORY_ID = re.compile(r"ST-\d{6}(?!\d)")
+ISSUE_LINK = re.compile(r"(?<![\w-])(?:closes|refs):?[ \t]+(?:[\w.-]+/[\w.-]+)?#\d+\b", re.I)
+# `<root>/.mt-agent-devkit/scripts/<this file>`, in this repository and in every install.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BODY_FIX = ("Write the body to a file with the file tool and pass `--body-file` with that literal path: "
+            "no variables, `$(...)` or `cd`.")
 
 
 class Unparseable(ValueError):
@@ -38,6 +56,7 @@ class Command:
         self.herestring = None
         self.redirects = []       # (operator, Word)
         self.piped_from = piped_from
+        self.scope = ()           # the bash subshells it runs in, outermost first
 
 
 class ShellReader:
@@ -50,6 +69,18 @@ class ShellReader:
         self.commands = []
         self.variables = {}
         self.position = 0
+        self.scope = []
+        self.subshells = 0
+
+    def _enter_subshell(self):
+        # PowerShell parentheses keep a `Set-Location`; bash subshells drop a `cd`.
+        if not self.powershell:
+            self.subshells += 1
+            self.scope.append(self.subshells)
+
+    def _leave_subshell(self):
+        if not self.powershell and self.scope:
+            self.scope.pop()
 
     def read(self):
         self._read_commands(nested=False)
@@ -68,6 +99,7 @@ class ShellReader:
             previous = None
             if current.words or current.redirects or current.heredoc is not None:
                 self._remember_assignment(current)
+                current.scope = tuple(self.scope)
                 self.commands.append(current)
                 previous = current
             current = Command(previous if piped else None)
@@ -115,12 +147,14 @@ class ShellReader:
                 self.position += 1
                 depth += 1
                 finish()
+                self._enter_subshell()
             elif char == ")":
                 self.position += 1
                 if nested and depth == 0:
                     break
                 depth -= 1
                 finish()
+                self._leave_subshell()
             else:
                 word = self._read_word()
                 if redirect == "<<<":
@@ -265,7 +299,9 @@ class ShellReader:
     def _read_expansion(self):
         if self._peek("$("):
             self.position += 2
+            self._enter_subshell()
             inner = self._read_commands(nested=True)
+            self._leave_subshell()
             # `$(cat <<'EOF' ... EOF)` is the usual way to pass a multi-line body.
             if len(inner) == 1 and [word.text for word in inner[0].words] == ["cat"] and inner[0].heredoc is not None:
                 return inner[0].heredoc.rstrip("\n"), False
@@ -298,10 +334,11 @@ class ShellReader:
 # --- Finding the posts -------------------------------------------------------
 
 class Post:
-    def __init__(self, kind, approve, bodies):
-        self.kind = kind          # ("issue"|"pr", "comment"|"review")
+    def __init__(self, kind, approve, bodies, problems=()):
+        self.kind = kind          # ("issue"|"pr", "comment"|"review"|"create")
         self.approve = approve
-        self.bodies = bodies
+        self.bodies = bodies      # texts the comment rules apply to
+        self.problems = list(problems)
 
 
 def program_words(command):
@@ -322,18 +359,55 @@ class Workspace:
     """The files a body can come from, as they will be when the command runs."""
 
     def __init__(self, cwd):
-        self.cwd = cwd
+        self.start = cwd          # the payload's working directory, None when not given
+        self.moves = {}           # where a `cd` led, per subshell scope; None when unknown
+        self.pushed = []          # (scope, directory before) for `popd`
+        self.scope = ()
+        self.unplaced = False     # a relative path could not be read for lack of a directory
         self.written = {}         # path -> text written earlier in this command, or None if unknown
+        self.switched_to = None   # branch switched to earlier in this command, "" if unknown
+
+    def _moved_scope(self):
+        """The innermost scope whose `cd` applies here, or None when none happened."""
+        scopes = (self.scope[:length] for length in range(len(self.scope), -1, -1))
+        return next((scope for scope in scopes if scope in self.moves), None)
+
+    @property
+    def cwd(self):
+        scope = self._moved_scope()
+        return self.start if scope is None else self.moves[scope]
+
+    def branch(self):
+        """The branch the command will run on, or None when it cannot be known."""
+        if self.switched_to is not None:
+            return self.switched_to or None
+        directory = self.cwd
+        # An unmoved command with no directory in the payload still belongs to this project.
+        if directory is None and self._moved_scope() is None:
+            directory = PROJECT_ROOT
+        if directory is None:
+            return None
+        try:
+            result = subprocess.run(["git", "-C", directory, "symbolic-ref", "--quiet", "--short", "HEAD"],
+                                    capture_output=True, text=True, timeout=5)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return result.stdout.strip() or None
 
     def resolve(self, word):
-        if word.dynamic or not word.text or self.cwd is None and not os.path.isabs(word.text):
+        if word.dynamic or not word.text:
             return None
         path = os.path.expanduser(word.text)
-        return os.path.normpath(path if os.path.isabs(path) else os.path.join(self.cwd, path))
+        if not os.path.isabs(path):
+            if self.cwd is None:
+                return None
+            path = os.path.join(self.cwd, path)
+        return os.path.normpath(path)
 
     def read(self, word):
         path = self.resolve(word)
         if path is None:
+            self.unplaced = self.unplaced or bool(word.text) and not word.dynamic
             return None
         if path in self.written:
             return self.written[path]
@@ -347,8 +421,15 @@ class Workspace:
         words = program_words(command)
         name = program_name(words)
         arguments = [word for word in words[1:] if not word.text.startswith("-")]
-        if name in ("cd", "set-location", "pushd") and arguments:
-            self.cwd = self.resolve(arguments[0])
+        if name in ("pushd", "push-location"):
+            self.pushed.append((self.scope, self.moves.get(self.scope, False)))
+        if name in ("cd", "set-location", "pushd", "push-location"):
+            # `cd -` and a bare `cd` lead somewhere the command text does not say.
+            self.moves[self.scope] = self.resolve(arguments[0]) if arguments else None
+        if name in ("popd", "pop-location"):
+            self._return_to_pushed()
+        if name == "git":
+            self._track_branch([word.text for word in words[1:]])
         for operator, target in command.redirects:
             if operator.startswith("<") or operator == ">&":
                 continue
@@ -357,6 +438,28 @@ class Workspace:
         if name in ("tee", "set-content", "out-file", "add-content", "cp", "mv", "copy-item", "move-item"):
             for argument in arguments:
                 self._mark_written(argument, None)
+
+    def _return_to_pushed(self):
+        if not self.pushed or self.pushed[-1][0] != self.scope:
+            self.moves[self.scope] = None
+            return
+        previous = self.pushed.pop()[1]
+        if previous is False:
+            del self.moves[self.scope]
+        else:
+            self.moves[self.scope] = previous
+
+    def _track_branch(self, arguments):
+        while arguments and arguments[0].startswith("-"):
+            arguments = arguments[2 if arguments[0] in ("-C", "-c") else 1:]
+        if not arguments or arguments[0] not in ("checkout", "switch") or "--" in arguments:
+            return
+        rest = arguments[1:]
+        for flag, value in zip(rest, rest[1:]):
+            if flag in ("-b", "-B", "-c", "-C", "--create", "--orphan"):
+                self.switched_to = value
+                return
+        self.switched_to = next((value for value in rest if STORY_ID.search(value)), "")
 
     def _mark_written(self, target, text):
         path = self.resolve(target)
@@ -387,10 +490,114 @@ def piped_text(command, workspace):
     return None
 
 
+def gh_subcommand(words):
+    found, index = [], 1
+    while index < len(words) and len(found) < 2:
+        text = words[index].text
+        if text in VALUE_FLAGS:
+            index += 1
+        elif not text.startswith("-"):
+            found.append(text)
+        index += 1
+    return tuple(found)
+
+
+def create_flags(words):
+    """The flags of a `gh pr create`, and whether some argument is only known at run time."""
+    flags, unknown, index = {}, False, 1
+    while index < len(words):
+        word = words[index]
+        text = word.text
+        if text.startswith("--"):
+            name, has_value, value = text.partition("=")
+            if name not in CREATE_VALUE_FLAGS:
+                if value != "false":
+                    flags[name] = None
+            elif has_value:
+                flags[name] = Word(value, word.raw.partition("=")[2], word.dynamic)
+            else:
+                index += 1
+                flags[name] = words[index] if index < len(words) else None
+        elif text.startswith("-") and len(text) > 1:
+            for offset, letter in enumerate(text[1:], 1):
+                name = CREATE_SHORT_FLAGS.get(letter)
+                if not name:
+                    flags["-" + letter] = None
+                    continue
+                value = text[offset + 1:]
+                value = value[1:] if value.startswith("=") else value
+                if value:
+                    flags[name] = Word(value, value, word.dynamic)
+                else:
+                    index += 1
+                    flags[name] = words[index] if index < len(words) else None
+                break
+        elif word.dynamic and not text:
+            unknown = True
+        index += 1
+    return flags, unknown
+
+
+def title_problems(flags, unknown, stories):
+    expected = "`[%s][FEATURE] Title`" % stories[0]
+    if "--title" not in flags:
+        return [] if unknown else ["no PR title: pass `--title` as %s." % expected]
+    title = flags["--title"]
+    # A title only known at run time cannot be proved wrong.
+    if title is None or title.dynamic:
+        return []
+    pattern = r"\[(?:%s)\]\[[^\[\]]+\][ \t]+\S" % "|".join(stories)
+    if re.match(pattern, title.text):
+        return []
+    return ["wrong PR title: this branch's story needs %s." % expected]
+
+
+def body_problems(flags, unknown, command, workspace):
+    missing = "PR body needs a `Closes #N` or `Refs #N` line outside code."
+    name = next((flag for flag in ("--body-file", "--body") if flag in flags), None)
+    if name is None:
+        return [] if unknown else [missing + " " + BODY_FIX]
+    value = flags[name]
+    if value is None:
+        text, complete = None, False
+    elif name == "--body":
+        text, complete = value.text, not value.dynamic
+    else:
+        workspace.unplaced = False
+        text = piped_text(command, workspace) if value.text == "-" else workspace.read(value)
+        # The file may well be readable where the command runs, which is not known here.
+        if text is None and workspace.unplaced:
+            return []
+        complete = text is not None
+    if text is not None:
+        prose, _ = split_fences(text)
+        if ISSUE_LINK.search(without_code_and_links(prose)):
+            return []
+    if complete:
+        return [missing]
+    return ["cannot read body (`%s %s`): the hook reads only literal text and existing files. %s"
+            % (name, value.raw if value else "...", BODY_FIX)]
+
+
+def parse_pr_create(words, command, workspace):
+    flags, unknown = create_flags(words)
+    if {"--help", "-h", "--dry-run"} & set(flags):
+        return None
+    head = flags.get("--head")
+    branch = head.text.split(":", 1)[-1] if head and not head.dynamic else workspace.branch()
+    stories = list(dict.fromkeys(STORY_ID.findall(branch or "")))
+    if not stories:
+        return None
+    problems = title_problems(flags, unknown, stories) + body_problems(flags, unknown, command, workspace)
+    return Post(("pr", "create"), False, [], problems)
+
+
 def parse_gh(command, workspace):
     words = program_words(command)
     if program_name(words) != "gh":
         return None
+    if gh_subcommand(words) in PR_CREATE_COMMANDS:
+        return parse_pr_create(words, command, workspace)
     positional, flags, index = [], [], 1
     while index < len(words):
         text = words[index].text
@@ -453,6 +660,7 @@ def find_posts(command_line, cwd, powershell):
     workspace = Workspace(cwd)
     posts = []
     for command in ShellReader(command_line, powershell).read():
+        workspace.scope = command.scope
         post = parse_gh(command, workspace)
         if post:
             posts.append(post)
@@ -578,6 +786,7 @@ def warnings_for(post, body):
 def evaluate(posts):
     denials, warnings = [], []
     for post in posts:
+        denials += post.problems
         if post.approve:
             denials.append("`gh pr review --approve` is not allowed: GitHub blocks self-approval. Post the verdict with `gh pr comment`.")
         for body in post.bodies:
@@ -606,7 +815,7 @@ def reply(provider, denials, warnings):
     """The provider's JSON answer, or None when saying nothing means pass."""
     reason = ""
     if denials:
-        reason = "Blocked by check_gh_posts (rules: `comment` skill):\n" + "\n".join("- " + item for item in denials)
+        reason = "Blocked by check_gh_posts (rules: `comment` and `git-workflow` skills):\n" + "\n".join("- " + item for item in denials)
     if warnings:
         reason += ("\n" if reason else "") + "check_gh_posts warning:\n" + "\n".join("- " + item for item in warnings)
     if provider == "antigravity":
@@ -631,7 +840,9 @@ def respond(provider, raw):
         provider = provider or ("antigravity" if "toolCall" in payload else "claude")
         command, cwd, powershell = read_request(provider, payload)
         if "gh" in command:
-            denials, warnings = evaluate(find_posts(command, cwd or os.getcwd(), powershell))
+            # The hook's own directory is not the command's: Antigravity starts it in `.agents/`.
+            directory = cwd if isinstance(cwd, str) and os.path.isabs(cwd) else None
+            denials, warnings = evaluate(find_posts(command, directory, powershell))
     except Exception:  # fail open: a hook defect must never stop shell commands
         denials, warnings = [], []
     return reply(provider, denials, warnings)

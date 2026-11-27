@@ -17,7 +17,7 @@ No task skill in the assignment: report it, never guess. Load right before the a
 
 - test strategy or design: `qa-test-docs`
 - validation: `qa-validate`, `qa-testing`; regression check: `qa-regression`; post-Done bug: `qa-hotfix`
-- QA as implementer: `pre-pr-gate`; live instruction conflict, blocker (tag Dev or TL): `raise-question`
+- QA as implementer: `pre-pr-gate`, `git-workflow`; live instruction conflict, blocker (tag Dev or TL): `raise-question`
 - comment: `comment`; document: `project-docs`
 - tooling: `troubleshooting`; secret: `credential-gate`; memory: `agent-memory`
 - Working Record (story IDs, validation results, AC status): `working-record`; retro: `retro-contribution`; handoff: `handoff`

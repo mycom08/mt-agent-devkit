@@ -43,7 +43,7 @@ Skills live at `.mt-agent-devkit/skills/<name>/SKILL.md`; each skill is the only
 | Creating or moving a document or file | `project-docs` |
 | Writing code, or a clean-code or refactor story | `clean-code` |
 | Before creating a branch, committing or pushing | `git-workflow` |
-| Before opening a PR | `change-metadata`, then `pre-pr-gate` |
+| Before opening a PR | `change-metadata`, then `pre-pr-gate`, then `git-workflow` |
 | After the PR opens, and on each fix round | `dev-deliver` |
 | Tooling or environment blocker | `troubleshooting` |
 | Verification needs a secret you don't have | `credential-gate` |
