@@ -15,7 +15,8 @@
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Plan_Sprint_Workflow_Shared_template.md": "[ST-000335] Sprint verification and next-sprint guard use the sprint-status skill.",
       ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Refine_Sprint_Workflow_Shared_template.md": "[ST-000335] Sprint identification uses the sprint-status skill.",
       ".mt-agent-devkit/distribution/phase2/templates/github/workflows/Refine_Sprint_Workflow_template.md": "[ST-000335] Header comment points to the sprint-status skill.",
-      ".mt-agent-devkit/distribution/phase2/templates/strict/workflows/Refine_Sprint_Workflow_template.md": "[ST-000335] Header comment points to the sprint-status skill."
+      ".mt-agent-devkit/distribution/phase2/templates/strict/workflows/Refine_Sprint_Workflow_template.md": "[ST-000335] Header comment points to the sprint-status skill.",
+      ".mt-agent-devkit/distribution/phase2/templates/shared/workflows/Analyze_Requirements_Workflow_Shared_template.md": "[ST-000335] Idle-sprint run condition uses the sprint-status skill."
     },
     "deployment": {
       "schema_version": 1,

@@ -422,7 +422,7 @@ Takes the feature slug, an open topic and the user's answer. It runs on a featur
 3. **Later:** change nothing; the topic stays open and the next run asks again.
 4. **Round already running:** when the feature's `docs/feature/<feature-slug>/tmp/State.md` exists and its `Stage` is not `done`, start no round. Tell the user to run `analyze requirements <feature-slug>` to resume it. The topic stays open.
 5. **Run conditions.** Both must hold, otherwise treat the answer as "later" and say which one failed:
-   - No story is mid-pipeline: `{{AGENT_DIR_PREFIX}}/agents/tmp/sprint_pipeline_state.md` records no story stage, and no open story is `status:in-progress`, `status:review` or `status:testing`, one query per label (strict mode: no story file has `**Status:**` `in-progress`, `review` or `testing`).
+   - No story is mid-pipeline: `{{AGENT_DIR_PREFIX}}/agents/tmp/sprint_pipeline_state.md` records no story stage, and no story is in flight (section 1 of the `sprint-status` skill, `.mt-agent-devkit/skills/sprint-status/SKILL.md`).
    - The working tree is clean (`git status --porcelain` prints nothing).
 6. **Run.** Take one answered feature at a time, checking steps 4 and 5 again before each. Record the current branch (`git branch --show-current`), then follow this workflow for the slug with its answers (Stage 0.3, then Correction Round).
 7. **Round finished** (`Stage: done`): switch back to the recorded branch. **Strict mode:** tell the user to merge the analysis branch (`Branch` in `tmp/State.md`) before starting any story the round created or changed.

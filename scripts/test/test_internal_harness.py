@@ -1536,6 +1536,9 @@ class SprintStatusSkillTests(unittest.TestCase):
     PHASE2 = ".mt-agent-devkit/distribution/phase2/templates/"
     CONSUMERS = {"po-plan-sprint": "(`sprint-status` sections 1 to 4)", "dev-refine": "(`sprint-status` section 5)"}
     # Fragments of the moved rules; each may appear only in the owner skill.
+    # Shipped only: this repo has no Analyze Requirements workflow.
+    ANALYZE = PHASE2 + "shared/workflows/Analyze_Requirements_Workflow_Shared_template.md"
+    IN_FLIGHT = ("status:in-progress", "status:review", "status:testing", "`in-progress`, `review`")
     RULES = ("status:in-progress", "sprint-{N+1}", "ltrimstr(\"sprint-\")", "In Progress`", "Planned` in", "gh label list",
              "Sprint_{N+1}_Overview.md` already", "highest `sprint-N`", "highest sprint number")
 
@@ -1586,6 +1589,14 @@ class SprintStatusSkillTests(unittest.TestCase):
             for name, text in texts.items():
                 for rule in self.RULES:
                     self.assertNotIn(rule, text, f"{folder}{name}: {rule}")
+
+    def test_analyze_requirements_points_to_the_in_flight_check(self):
+        text = self.read(self.ANALYZE)
+        condition = next(line for line in text.splitlines() if "No story is mid-pipeline" in line)
+        self.assertIn("section 1 of the `sprint-status` skill", condition)
+        self.assertIn(".mt-agent-devkit/skills/sprint-status/SKILL.md", condition)
+        for rule in self.IN_FLIGHT:
+            self.assertNotIn(rule, text, rule)
 
     def test_bundle_ships_the_skill_with_a_wrapper_per_provider(self):
         manifest = json.loads(self.read(".mt-agent-devkit/distribution/phase2/bundle/deployment.json"))
